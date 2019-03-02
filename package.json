@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && electron --noDevServer ./index.js",
+    "dev": "webpack-dev-server",
     "build": "webpack --config webpack.config.js"
   },
   "repository": {
@@ -34,11 +35,13 @@
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "dotenv": "^6.2.0",
     "electron-store": "^2.0.0",
+    "history": "^4.7.2",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
