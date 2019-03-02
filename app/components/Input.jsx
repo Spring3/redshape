@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const Input = styled.input`
+const TextInput = styled.input`
 
 `;
 
@@ -23,61 +23,43 @@ Labeled.defaultProps = {
   htmlFor: ''
 };
 
-const Email = ({ placeholder, onChange, id, name }) => (
-  <Input
-    type="email"
+const Input = ({ type, placeholder, onChange, onBlur, value, id, name }) => (
+  <TextInput
+    type={type}
     placeholder={placeholder}
     onChange={onChange}
+    onBlur={onBlur}
+    value={value}
     id={id}
     name={name}
   />
 );
 
-Email.propTypes = {
+Input.propTypes = {
+  type: PropTypes.string,
   placeholder: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
   id: PropTypes.string,
-  name: PropTypes.string
-};
-
-Email.defaultProps = {
-  placeholder: 'example@domain.com',
-  name: 'email',
-  id: ''
-};
-
-
-const Password = ({ placeholder, onChange, id, name }) => (
-  <Input
-    type="password"
-    placeholder={placeholder}
-    onChange={onChange}
-    id={id}
-    name={name}
-  />
-);
-
-Password.propTypes = {
-  placeholder: PropTypes.string,
+  name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  name: PropTypes.string
+  onBlur: PropTypes.func,
+  value: PropTypes.string
 };
 
-Password.defaultProps = {
-  placeholder: 'Password',
-  name: 'password',
-  id: ''
+Input.defaultProps = {
+  type: 'text',
+  placeholder: '',
+  id: '',
+  name: '',
+  onBlur: undefined,
+  value: undefined
 };
 
 export {
-  Email,
-  Labeled,
-  Password
+  Input,
+  Labeled
 };
 
 export default {
-  Email,
-  Labeled,
-  Password
+  Input,
+  Labeled
 };
