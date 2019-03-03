@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Input, Labeled } from '../components/Input';
 import { Formik } from 'formik';
 import Joi from 'joi';
-import RedmineAPI from '../redmine/api.js';
+const RedmineAPI = require('../redmine/api.js');
 
 const Grid = styled.div`
   display: grid;
@@ -17,17 +17,30 @@ const Grid = styled.div`
 `;
 
 class LoginView extends Component {
-  validate = ({ username, password, redmineDomain }) => ({
-    username: _.get(Joi.validate(username, Joi.string().required()), 'error.message'),
-    password: _.get(Joi.validate(password, Joi.string().required()), 'error.message'),
-    redmineDomain: _.get(Joi.validate(redmineDomain, Joi.string().uri().required()), 'error.message')
-  });
+  validate = ({ username, password, redmineDomain }) => {
+    const errors = {
+      username: Joi.validate(username, Joi.string().required()),
+      password: Joi.validate(password, Joi.string().required()),
+      redmineDomain: Joi.validate(redmineDomain, Joi.string().uri().required())
+    };
+    const results = {};
+    for (const [prop, validation] of Object.entries(errors)) {
+      if (validation.error) {
+        results[prop] = validation.error.message;
+      }
+    }
+    return results;
+  };
 
   onSubmit = (values, { setSubmitting }) => {
-    console.log('Submitted', values);
     const api = RedmineAPI.initialize(values.redmineDomain);
-    console.log('api', api);
-    return api.login(values).then(console.log).then(() => setSubmitting(false));
+    api.login(values).then((res) => {
+      console.log(res);
+      setSubmitting(false);
+    }).catch((error) => {
+      console.log(error);
+      setSubmitting(false);
+    });
   }
 
   render() {

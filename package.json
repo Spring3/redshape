@@ -26,6 +26,7 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-styled-components": "^1.10.0",
+    "electron-react-devtools": "^0.5.3",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
