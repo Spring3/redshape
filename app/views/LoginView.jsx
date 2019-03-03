@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Input, Labeled } from '../components/Input';
 import { Formik } from 'formik';
 import Joi from 'joi';
-const RedmineAPI = require('../redmine/api.js');
+import { Input, Labeled } from '../components/Input';
+import RedmineAPI from '../redmine/api.js';
+import storage from '../../common/storage';
 
 const Grid = styled.div`
   display: grid;
@@ -36,9 +37,6 @@ class LoginView extends Component {
     const api = RedmineAPI.initialize(values.redmineDomain);
     api.login(values).then((res) => {
       console.log(res);
-      setSubmitting(false);
-    }).catch((error) => {
-      console.log(error);
       setSubmitting(false);
     });
   }
@@ -103,7 +101,6 @@ class LoginView extends Component {
               <button type="submit" disabled={isSubmitting}>
               Submit
               </button>
-              <div>{JSON.stringify(errors)}</div>
             </form>
           )}
         </Formik>

@@ -42,6 +42,12 @@ if (config.mode === 'development') {
   config.devServer = {
     contentBase: path.resolve(__dirname, './dist'),
     publicPath: path.resolve(__dirname, '/'),
+    disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
+    },
     stats: {
       colors: true,
       chunks: false,

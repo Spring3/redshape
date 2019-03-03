@@ -1,17 +1,23 @@
 function RedmineAPI(redmineDomain) {
-  const json = res => res.json();
-  const handleError = msg => error => console.error(msg, error);
+  const json = res => res.json().then(data => ({ data }));
+  const handleError = msg => (error) => {
+    console.error(msg, error);
+    error.explanation = `${msg} : ${error.message}`; // eslint-disable-line
+    return { error };
+  };
 
   const headers = {
     'Content-Type': 'application/json',
-    Accept: 'application/json'
+    Accept: 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
   };
 
-  const request = (method, route, data, requestHeaders) => {
+  const request = (method, route, data, requestHeaders = {}) => {
     const requestConfig = {
       method,
-      headers: { ...headers, requestHeaders },
-      mode: 'no-cors',
+      headers: { ...headers, ...requestHeaders },
     };
 
     if (['PUT', 'POST'].includes(method)) {
@@ -25,8 +31,10 @@ function RedmineAPI(redmineDomain) {
     if (token) {
       headers['X-Redmine-API-Key'] = token;
     } else {
-      headers.Authorization = `Basic ${btoa(`${username}:${password}`)}`;
+      const hash = btoa(`${username}:${password}`);
+      headers.Authorization = `Basic ${hash}`;
     }
+    return this.users.current();
   };
 
   this.projects = {
@@ -139,7 +147,7 @@ function RedmineAPI(redmineDomain) {
   };
 
   this.time = {
-    submit: (issueId, date, hours, activityId, comment) => request('POST', '/time_entries.json', { 
+    submit: (issueId, date, hours, activityId, comment) => request('POST', '/time_entries.json', {
       time_entry: {
         issue_id: issueId,
         spent_on: date.toISOString(),

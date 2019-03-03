@@ -21,7 +21,10 @@ const initialize = () => {
   const windowConfig = {
     width: 1024,
     height: 768,
-    show: false
+    show: false,
+    webPreferences: {
+      webSecurity: false // to disable cors
+    }
   };
 
   let indexPath;
@@ -33,7 +36,7 @@ const initialize = () => {
       slashes: true
     });
   } else {
-    windowConfig.webPreferences = { nodeIntegration: false };
+    windowConfig.webPreferences.nodeIntegration = false;
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.resolve(__dirname, 'dist', 'index.html'),
