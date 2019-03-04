@@ -1,5 +1,10 @@
 function RedmineAPI(redmineDomain) {
-  const json = res => res.json().then(data => ({ data }));
+  const json = (res) => {
+    if (res.ok) {
+      return res.json().then(data => ({ data }));
+    }
+    throw new Error(`Error ${res.status} (${res.statusText})`);
+  };
   const handleError = msg => (error) => {
     console.error(msg, error);
     error.explanation = `${msg} : ${error.message}`; // eslint-disable-line

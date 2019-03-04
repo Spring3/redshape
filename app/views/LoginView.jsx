@@ -3,6 +3,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
+import { withRouter } from 'react-router-dom';
 import { Input, Labeled } from '../components/Input';
 import RedmineAPI from '../redmine/api.js';
 import storage from '../../common/storage';
@@ -18,6 +19,15 @@ const Grid = styled.div`
 `;
 
 class LoginView extends Component {
+  constructor(props) {
+    super(props);
+    const userData = storage.get('user');
+    if (userData) {
+      RedmineAPI.initialize(userData.redmineDomain).login({ token: userData.api_key });
+      props.history.push('/app');
+    }
+  }
+
   validate = ({ username, password, redmineDomain }) => {
     const errors = {
       username: Joi.validate(username, Joi.string().required()),
@@ -33,10 +43,22 @@ class LoginView extends Component {
     return results;
   };
 
-  onSubmit = (values, { setSubmitting }) => {
+  onSubmit = (values, { setSubmitting, setFieldError }) => {
     const api = RedmineAPI.initialize(values.redmineDomain);
-    api.login(values).then((res) => {
-      console.log(res);
+    api.login(values).then(({ data, error }) => {
+      if (error) {
+        setFieldError('request', error.explanation || error.message);
+        
+      } else {
+        const user = _.get(data, 'user');
+        if (user) {
+          storage.set('user', {
+            redmineDomain: values.redmineDomain,
+            ..._.pick(user, 'id', 'firstname', 'lastname', 'api_key')
+          });
+          this.props.history.push('/app');
+        }
+      }
       setSubmitting(false);
     });
   }
@@ -101,6 +123,7 @@ class LoginView extends Component {
               <button type="submit" disabled={isSubmitting}>
               Submit
               </button>
+              {errors.request && (<div>{errors.request}</div>) }
             </form>
           )}
         </Formik>
@@ -109,4 +132,4 @@ class LoginView extends Component {
   }
 }
 
-export default LoginView;
+export default withRouter(LoginView);
