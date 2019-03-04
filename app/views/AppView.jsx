@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import RedmineAPI from '../redmine/api';
 import storage from '../../common/storage';
 
 class AppView extends Component {
@@ -9,7 +10,13 @@ class AppView extends Component {
       userId: id,
       firstName,
       lastName
-    }
+    };
+  }
+
+  signout = () => {
+    RedmineAPI.instance().logout();
+    storage.delete('user');
+    this.props.history.push('/');
   }
 
   render() {
@@ -25,6 +32,7 @@ class AppView extends Component {
           <div>
             <span>Firstname Lastname</span>
             <img src="" alt="avatar" />
+            <button onClick={this.signout}>Sign out</button>
           </div>
         </nav>
         <aside>
