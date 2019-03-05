@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-
+import './index.css';
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
 

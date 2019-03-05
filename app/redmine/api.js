@@ -192,12 +192,6 @@ function RedmineAPI(redmineDomain) {
   this.logout = () => {
     delete headers['X-Redmine-API-Key'];
     delete headers.Authorization;
-    return fetch(`${redmineDomain}/logout`, {
-      method: 'post',
-      headers,
-      mode: 'no-cors'
-    }).then(res => res.json())
-      .catch(handleError(`Failed to log out from ${redmineDomain}`));
   };
 }
 

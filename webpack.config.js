@@ -3,6 +3,7 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { spawn } = require('child_process');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -18,12 +19,19 @@ const config = {
       {
         test: /\.jsx?$/,
         use: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
       }
     ]
   },
-  externals: [nodeExternals()],
+  externals: [nodeExternals({ whitelist: ['normalize.css'] })],
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.css']
   },
   stats: {
     colors: true,
@@ -32,6 +40,10 @@ const config = {
     modules: false
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      allChunks: true
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './app/index.html')
     })

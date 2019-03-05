@@ -8,14 +8,8 @@ import { Input, Labeled } from '../components/Input';
 import RedmineAPI from '../redmine/api.js';
 import storage from '../../common/storage';
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
-  grid-auto-rows: 200px;
-  grid-template-areas:
-    '. a a .'
-    '. a a .';
+const Container = styled.div`
+  display: flex;
 `;
 
 class LoginView extends Component {
@@ -65,7 +59,7 @@ class LoginView extends Component {
 
   render() {
     return (
-      <Grid>
+      <Container>
         <Formik
           initialValues={{ username: '', password: '', redmineDomain: '' }}
           validate={this.validate}
@@ -127,7 +121,7 @@ class LoginView extends Component {
             </form>
           )}
         </Formik>
-      </Grid>
+      </Container>
     );
   }
 }
