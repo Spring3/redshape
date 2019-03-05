@@ -2,15 +2,41 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const TextInput = styled.input`
+const StyledInput = styled.input`
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: 1px solid #FF7079;
+  min-height: 35px;
+  outline: none;
+  color: #FF7079;
+  font-weight: bold;
+  background: #FAFAFA;
 
+  &:hover {
+    border: 1px solid #FF7079;
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 0px 1px #FF7079;
+  }
+`;
+
+const FormGroup = styled.div`  
+  h4 {
+    margin-bottom: 10px;    
+    color: #A4A4A4;
+  }
 `;
 
 const Labeled = ({ label, htmlFor, children }) => (
-  <div className="form-group">
-    <label htmlFor={htmlFor}>{label}</label>
+  <FormGroup className="form-group">
+    <h4 htmlFor={htmlFor}>{label}</h4>
     {children}
-  </div>
+  </FormGroup>
 );
 
 Labeled.propTypes = {
@@ -24,7 +50,7 @@ Labeled.defaultProps = {
 };
 
 const Input = ({ type, placeholder, onChange, onBlur, value, id, name }) => (
-  <TextInput
+  <StyledInput
     type={type}
     placeholder={placeholder}
     onChange={onChange}

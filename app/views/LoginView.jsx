@@ -4,12 +4,32 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
-import { Input, Labeled } from '../components/Input';
 import RedmineAPI from '../redmine/api.js';
 import storage from '../../common/storage';
 
+import { Input, Labeled } from '../components/Input';
+import Button from '../components/Button';
+import ErrorMessage from '../components/ErrorMessage';
+
 const Container = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-rows: repeat(4, 25vh);
+  grid-template-columns: repeat(6, minmax(100px, 1fr));
+  align-items: center;
+  justify-items: center;
+`;
+
+const LoginForm = styled.form`
+  padding: 40px;
+  grid-column: 2 / 6;
+  grid-row: 2 / 4;
+  min-width: 300px;
+`;
+
+const Headline = styled.h1`
+  text-align: center;
+  font-size: 40px;
+  color: #FF7079;
 `;
 
 class LoginView extends Component {
@@ -41,7 +61,7 @@ class LoginView extends Component {
     const api = RedmineAPI.initialize(values.redmineDomain);
     api.login(values).then(({ data, error }) => {
       if (error) {
-        setFieldError('request', error.explanation || error.message);
+        setFieldError('request', error.message);
         
       } else {
         const user = _.get(data, 'user');
@@ -74,7 +94,8 @@ class LoginView extends Component {
             handleSubmit,
             isSubmitting
           }) => (
-            <form onSubmit={handleSubmit}>
+            <LoginForm onSubmit={handleSubmit}>
+              <Headline>Redtime</Headline>
               <Labeled
                 label="Login"
                 htmlFor="username"
@@ -87,7 +108,9 @@ class LoginView extends Component {
                   value={values.username}
                 />
               </Labeled>
-              {errors.username && touched.username && (<div>{errors.username}</div>) }
+              <ErrorMessage show={errors.username && touched.username}>
+                {errors.username}
+              </ErrorMessage>
               <Labeled
                 label="Password"
                 htmlFor="password"
@@ -100,7 +123,9 @@ class LoginView extends Component {
                   value={values.password}
                 />
               </Labeled>
-              {errors.password && touched.password && (<div>{errors.password}</div>) }
+              <ErrorMessage show={errors.password && touched.password}>
+                {errors.password}
+              </ErrorMessage>
               <Labeled
                 label="Remdine Host"
                 htmlFor="redmineDomain"
@@ -113,12 +138,20 @@ class LoginView extends Component {
                   value={values.host}
                 />
               </Labeled>
-              {errors.redmineDomain && touched.redmineDomain && (<div>{errors.redmineDomain}</div>) }
-              <button type="submit" disabled={isSubmitting}>
-              Submit
-              </button>
-              {errors.request && (<div>{errors.request}</div>) }
-            </form>
+              <ErrorMessage show={errors.redmineDomain && touched.redmineDomain}>
+                {errors.redmineDomain}
+              </ErrorMessage>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                block={true}
+              >
+                Submit
+              </Button>
+              <ErrorMessage show={errors.request}>
+                {errors.request}
+              </ErrorMessage>
+            </LoginForm>
           )}
         </Formik>
       </Container>
