@@ -4,12 +4,16 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
+import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
+
 import RedmineAPI from '../redmine/api.js';
 import storage from '../../common/storage';
 
 import { Input, Labeled } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
+import Link from '../components/Link';
+import Copyrights from '../components/Copyrights';
 
 const Container = styled.div`
   display: grid;
@@ -30,6 +34,20 @@ const Headline = styled.h1`
   text-align: center;
   font-size: 40px;
   color: #FF7079;
+`;
+
+const GHLinkContainer = styled.div`
+  grid-column: 6;
+  justify-self: end;
+  align-self: start;
+  margin: 20px 20px 0px 0px;
+`;
+
+const CopyrightsContainer = styled.div`
+  grid-row: 4;
+  grid-column: 2 / 6;
+  align-self: end;
+  margin-bottom: 20px;
 `;
 
 class LoginView extends Component {
@@ -80,6 +98,11 @@ class LoginView extends Component {
   render() {
     return (
       <Container>
+        <GHLinkContainer>
+          <Link type="external" href="https://github.com/Spring3/redtime">
+            <GithubCircleIcon color="#FF7079" size="30"/>
+          </Link>
+        </GHLinkContainer>
         <Formik
           initialValues={{ username: '', password: '', redmineDomain: '' }}
           validate={this.validate}
@@ -154,6 +177,9 @@ class LoginView extends Component {
             </LoginForm>
           )}
         </Formik>
+        <CopyrightsContainer>
+          <Copyrights />
+        </CopyrightsContainer>
       </Container>
     );
   }

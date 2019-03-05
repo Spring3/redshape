@@ -29,7 +29,7 @@ const config = {
       }
     ]
   },
-  externals: [nodeExternals({ whitelist: ['normalize.css'] })],
+  externals: [nodeExternals({ whitelist: ['mdi-react'] })],
   resolve: {
     extensions: ['.js', '.jsx', '.css']
   },
