@@ -7,13 +7,13 @@ const Grid = styled.div`
   height: 100%;
   display: grid;
   grid-template-rows: 70px auto 70px;
-  grid-template-columns: repeat(12, minmax(100px, 1fr));
+  grid-template-columns: repeat(12, minmax(70px, 1fr));
 `;
 
 const Navbar = styled.nav`
   background: teal;
   grid-row: 1;
-  grid-column: span 9;
+  grid-column: span 12;
 `;
 
 const Aside = styled.aside`
@@ -29,7 +29,7 @@ const Footer = styled.footer`
 
 const Content = styled.div`
   background: aliceblue;
-  grid-column: span 9;
+  grid-column: span 12;
   grid-row: 2;
 `;
 
@@ -83,13 +83,13 @@ class AppView extends Component {
           </ul>
         </Aside>
         <Navbar>
-          <ul>
+          <ul style={{ float: 'left' }}>
             <li>Hamburger</li>
             <li>Projects</li>
             <li>Tasks</li>
             <li>Issues</li>
           </ul>
-          <div>
+          <div style={{ float: 'right' }}>
             <span>Firstname Lastname</span>
             <img src="" alt="avatar" />
             <button onClick={this.signout}>Sign out</button>
