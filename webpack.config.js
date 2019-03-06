@@ -29,7 +29,7 @@ const config = {
       }
     ]
   },
-  externals: [nodeExternals({ whitelist: ['mdi-react'] })],
+  externals: [nodeExternals()],
   resolve: {
     extensions: ['.js', '.jsx', '.css']
   },
