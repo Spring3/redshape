@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import RedmineAPI from '../redmine/api';
-import storage from '../../common/storage';
+import storage from '../../modules/storage';
 
 const Grid = styled.div`
   height: 100%;
@@ -36,7 +36,11 @@ const Content = styled.div`
 class AppView extends Component {
   constructor(props) {
     super(props);
-    const { id, firstName, lastName } = storage.get('user');
+    const userData = storage.get('user');
+    if (!userData) {
+      props.history.push('/');
+    }
+    const { id, firstName, lastName } = userData;
     this.state = {
       userId: id,
       firstName,
@@ -45,8 +49,8 @@ class AppView extends Component {
   }
 
   signout = () => {
-    RedmineAPI.instance().logout();
     storage.delete('user');
+    RedmineAPI.instance().logout();
     this.props.history.push('/');
   }
 

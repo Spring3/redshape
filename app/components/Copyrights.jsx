@@ -12,7 +12,7 @@ export default () => (
     Created by&nbsp;
     <Link
       type="external"
-      href="https://www.linkedin.com/in/dvasylenko/"
+      href="https://github.com/Spring3"
     >
       Daniyil Vasylenko
     </Link>

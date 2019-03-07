@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
 import RedmineAPI from '../redmine/api.js';
-import storage from '../../common/storage';
+import storage from '../../modules/storage';
 
 import { Input, Labeled } from '../components/Input';
 import Button from '../components/Button';

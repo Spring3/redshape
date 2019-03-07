@@ -12,7 +12,7 @@ if (!process.env.ENCRYPTION_KEY) {
   fs.appendFileSync(path.resolve(__dirname, './.env'), `ENCRYPTION_KEY=${key}`);
   dotenv.load({ silent: true });
 }
-const { PORT, redmineDomain } = require('./common/config');
+const { PORT, redmineDomain } = require('./modules/config');
 
 let mainWindow;
 const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));

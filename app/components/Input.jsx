@@ -62,7 +62,7 @@ const Input = ({ type, placeholder, onChange, onBlur, value, id, name }) => (
 );
 
 Input.propTypes = {
-  type: PropTypes.string,
+  type: PropTypes.oneOf(['email', 'password', 'text']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
@@ -73,9 +73,9 @@ Input.propTypes = {
 
 Input.defaultProps = {
   type: 'text',
-  placeholder: '',
-  id: '',
-  name: '',
+  placeholder: undefined,
+  id: undefined,
+  name: undefined,
   onBlur: undefined,
   value: undefined
 };

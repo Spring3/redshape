@@ -23,13 +23,12 @@ const Link = ({ children, type, href }) => (
 );
 
 Link.propTypes = {
-  children: PropTypes.node,
-  type: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  type: PropTypes.oneOf(['external', undefined, null]),
   href: PropTypes.string.isRequired
 };
 
 Link.defaultProps = {
-  children: undefined,
   type: undefined
 };
 

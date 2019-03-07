@@ -31,8 +31,9 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ children, type, disabled, block }) => (
+const Button = ({ children, type, disabled, block, onClick }) => (
   <StyledButton
+    onClick={onClick}
     type={type}
     disabled={disabled}
     block={block}
@@ -43,15 +44,17 @@ const Button = ({ children, type, disabled, block }) => (
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  type: PropTypes.string,
+  type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
-  block: PropTypes.bool
+  block: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 Button.defaultProps = {
   type: 'button',
   disabled: false,
-  block: false
+  block: false,
+  onClick: undefined
 };
 
 export default Button;
