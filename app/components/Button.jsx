@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
@@ -31,12 +31,23 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ children, type, disabled, block, onClick }) => (
+const StyledLink = styled.a`
+  outline: none;
+  &:active,
+  &:focus,
+  &:visited {
+    background: transparent;
+  }
+`;
+
+
+const Button = ({ children, type, disabled, block, onClick, className }) => (
   <StyledButton
     onClick={onClick}
     type={type}
-    disabled={disabled}
+    disabled={disabled} 
     block={block}
+    className={className}
   >
     {children}
   </StyledButton>
@@ -44,17 +55,60 @@ const Button = ({ children, type, disabled, block, onClick }) => (
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['button', 'submit']),
+  type: PropTypes.oneOf(['button', 'submit', 'ghost']),
   disabled: PropTypes.bool,
   block: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  className: PropTypes.string
 };
 
 Button.defaultProps = {
   type: 'button',
   disabled: false,
   block: false,
-  onClick: undefined
+  onClick: undefined,
+  className: undefined
+};
+
+class GhostButton extends Component {
+  preventDefault = (e) => {
+    e.preventDefault();
+    e.persist();
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    }
+  }
+
+  render() {
+    const { children, disabled, className } = this.props;
+    return (
+      <StyledLink
+        onClick={this.preventDefault}
+        href="#"
+        disabled={disabled}
+        className={className}
+      >
+        {children}
+      </StyledLink>
+    );
+  }
+};
+
+GhostButton.propTypes = {
+  children: PropTypes.node.isRequired,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  className: PropTypes.string
+};
+
+GhostButton.defaultProps = {
+  disabled: false,
+  onClick: undefined,
+  className: undefined
+};
+
+export {
+  GhostButton
 };
 
 export default Button;

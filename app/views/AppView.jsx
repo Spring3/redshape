@@ -2,36 +2,100 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import RedmineAPI from '../redmine/api';
 import storage from '../../modules/storage';
+import { Input } from '../components/Input';
+import Button, { GhostButton } from '../components/Button';
+import MenuIcon from 'mdi-react/MenuIcon';
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 const Grid = styled.div`
   height: 100%;
   display: grid;
-  grid-template-rows: 70px auto 70px;
-  grid-template-columns: repeat(12, minmax(70px, 1fr));
+  grid-template-rows: 60px auto;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
 `;
 
 const Navbar = styled.nav`
-  background: teal;
+  border-top: 3px solid #FF7079;
   grid-row: 1;
   grid-column: span 12;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
 `;
 
 const Aside = styled.aside`
+  display: ${props => props.show ? 'block' : 'none'};
   background: tomato;
-  grid-row: 1 / 3;
+  grid-row: 1 / -1;
   grid-column: span 3;
+  padding-top: 25px;
 `;
 
-const Footer = styled.footer`
+const ActiveTimer = styled.div`
+  display: ${props => props.show ? 'block' : 'none'};
   background: sandybrown;
-  grid-column: 1 / -1;
 `;
 
 const Content = styled.div`
   background: aliceblue;
   grid-column: span 12;
-  grid-row: 2;
+  grid-row: 2 / -1;
 `;
+
+const MenuList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+
+  li {
+    display: inline;
+    margin: 0px 10px;
+    font-size: 14px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  li:first-child {
+    margin-left: 0;
+  }
+`;
+
+const Profile = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: inline;
+  }
+
+  li:first-child {
+    margin-right: 10px;
+  }
+`;
+
+const SignOutButton = styled(Button)`
+  margin: 0;
+  padding: 5px;
+  font-size: 14px;
+`;
+
+const Hamburger = styled.li`
+  && {
+    display: ${props => props.show ? 'initial' : 'none'};
+  }
+  padding: 0px;
+  margin: 0px;
+
+  svg {
+    vertical-align: middle;
+  }
+`
 
 class AppView extends Component {
   constructor(props) {
@@ -40,13 +104,21 @@ class AppView extends Component {
     if (!userData) {
       props.history.push('/');
     }
-    const { id, firstName, lastName } = userData;
+    const { id, firstname, lastname } = userData;
     this.state = {
       userId: id,
-      firstName,
-      lastName
+      firstname,
+      lastname,
+      showSidebar: false,
+      showFooter: false
     };
   }
+
+  toggleSidebar = () => {
+    this.setState({
+      showSidebar: !this.state.showSidebar
+    });
+  };
 
   signout = () => {
     storage.delete('user');
@@ -55,15 +127,20 @@ class AppView extends Component {
   }
 
   render() {
+    const { firstname, lastname, showSidebar, showFooter } = this.state;
     return (
       <Grid>
-        <Aside>
+        <Aside show={showSidebar}>
           <div>
+            <GhostButton onClick={this.toggleSidebar}><ArrowLeftIcon /></GhostButton>
             <h4>Time Log History</h4>
-            <button>X</button>
           </div>
           <div>
-            <input type="text" placeholder="search" />
+            <Input
+              type="text"
+              placeholder="search"
+              onChange={() => {}}
+            />
           </div>
           <ul>
             <li>
@@ -87,24 +164,28 @@ class AppView extends Component {
           </ul>
         </Aside>
         <Navbar>
-          <ul style={{ float: 'left' }}>
-            <li>Hamburger</li>
+          <MenuList>
+            <Hamburger show={!showSidebar}>
+              <GhostButton onClick={this.toggleSidebar}>
+                <MenuIcon />
+              </GhostButton>
+            </Hamburger>
             <li>Projects</li>
             <li>Tasks</li>
             <li>Issues</li>
-          </ul>
-          <div style={{ float: 'right' }}>
-            <span>Firstname Lastname</span>
-            <img src="" alt="avatar" />
-            <button onClick={this.signout}>Sign out</button>
-          </div>
+          </MenuList>
+          <Profile>
+            <li>{firstname} {lastname}</li>
+            <li><SignOutButton onClick={this.signout}>Sign out</SignOutButton></li>
+          </Profile>
         </Navbar>
-        <Content></Content>
-        <Footer>
-          <span>Task name</span>
-          <span>00:00:00</span>
-          <button>Stop</button>
-        </Footer>
+        <Content>
+          <ActiveTimer show={showFooter}>
+            <span>Task name</span>
+            <span>00:00:00</span>
+            <button>Stop</button>
+          </ActiveTimer>
+        </Content>
       </Grid>
     );
   }
