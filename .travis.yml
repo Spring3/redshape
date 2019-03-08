@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - lts/*
+before_install:
+  - cp .env.tpl .env
+cache: npm

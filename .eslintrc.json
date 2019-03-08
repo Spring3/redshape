@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "jest": true
     },
     "extends": "airbnb",
     "globals": {
@@ -19,6 +20,18 @@
         "react"
     ],
     "rules": {
-        "comma-dangle": "off"
+        "class-methods-use-this": "off",
+        "comma-dangle": "off",
+        "object-curly-newline": "warn",
+        "no-underscore-dangle": [ "error", {
+            "allow": ["__initialize", "__reset"]
+        }],
+        "jsx-a11y/label-has-for": [ 2, {
+            "required": {
+                "every": [ "nesting", "id" ]
+            },
+            "allowChildren": true
+        }],
+        "react/prefer-stateless-function": "off"
     }
 }
