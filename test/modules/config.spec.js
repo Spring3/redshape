@@ -1,26 +1,6 @@
-const mockHas = jest.fn();
-const mockGet = jest.fn();
+jest.mock('electron-store');
 
-jest.mock('electron-store', () => {
-  function Store({ encryptionKey }) {
-    this.encryptionKey = encryptionKey;
-    this.values = {
-      settings: {
-        PORT: '2222'
-      }
-    };
-
-    this.get = (key) => {
-      mockGet(key);
-      return this.values[key];
-    };
-    this.has = (key) => {
-      mockHas(key);
-      return Object.hasOwnProperty.call(this.values, key);
-    };
-  }
-  return Store;
-});
+const Store = require('electron-store');
 
 const standardEnv = {
   PORT: process.env.PORT,
@@ -29,6 +9,14 @@ const standardEnv = {
 };
 
 describe('Config', () => {
+  beforeAll(() => {
+    Store.__initialize({
+      settings: {
+        PORT: '2222'
+      }
+    });
+  });
+
   beforeEach(() => {
     Object.assign(process.env, {
       PORT: 1234,
@@ -37,16 +25,27 @@ describe('Config', () => {
     });
   });
 
-  afterAll(() => Object.assign(process.env, standardEnv));
+  afterAll(() => {
+    Object.assign(process.env, standardEnv);
+    Store.__reset();
+  });
 
   it('overwrite default env data with user settings', () => {
+    const storage = require('../../modules/storage.js'); // eslint-disable-line
+    const storageHasSpy = jest.spyOn(storage, 'has');
+    const storageGetSpy = jest.spyOn(storage, 'get');
+
     const config = require('../../modules/config.js'); // eslint-disable-line
+
     expect(config).toEqual({
       PORT: '2222',
       ENCRYPTION_KEY: 'test-key',
       NODE_ENV: 'test'
     });
-    expect(mockHas).toHaveBeenCalledWith('settings');
-    expect(mockGet).toHaveBeenCalledWith('settings');
+    expect(storageHasSpy).toHaveBeenCalledWith('settings');
+    expect(storageGetSpy).toHaveBeenCalledWith('settings');
+
+    storageHasSpy.mockRestore();
+    storageGetSpy.mockRestore();
   });
 });

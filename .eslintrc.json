@@ -20,8 +20,12 @@
         "react"
     ],
     "rules": {
+        "class-methods-use-this": "off",
         "comma-dangle": "off",
         "object-curly-newline": "warn",
+        "no-underscore-dangle": [ "error", {
+            "allow": ["__initialize", "__reset"]
+        }],
         "jsx-a11y/label-has-for": [ 2, {
             "required": {
                 "every": [ "nesting", "id" ]

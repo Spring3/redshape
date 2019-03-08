@@ -50,13 +50,19 @@ const CopyrightsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-class LoginView extends Component {
-  constructor(props) {
-    super(props);
+class LoginView extends Component {  
+  componentWillMount() {
     const userData = storage.get('user');
     if (userData) {
-      RedmineAPI.initialize(userData.redmineDomain).login({ token: userData.api_key });
-      props.history.push('/app');
+      RedmineAPI.initialize(userData.redmineDomain).login({ token: userData.api_key })
+      .then(({ data, error }) => {
+        const user = _.get(data, 'user');
+        if (user && !error) {
+          this.props.history.push('/app');
+        } else {
+          console.error(error);
+        }
+      });
     }
   }
 
@@ -69,7 +75,7 @@ class LoginView extends Component {
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
       if (validation.error) {
-        results[prop] = validation.error.message;
+        results[prop] = validation.error.message.replace('value', prop);
       }
     }
     return results;
@@ -171,7 +177,7 @@ class LoginView extends Component {
               >
                 Submit
               </Button>
-              <ErrorMessage show={errors.request}>
+              <ErrorMessage show={!!errors.request}>
                 {errors.request}
               </ErrorMessage>
             </LoginForm>
