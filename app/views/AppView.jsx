@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import RedmineAPI from '../redmine/api';
+import { Route } from 'react-router-dom';
+import withRedmine from '../redmine/Api';
 import storage from '../../modules/storage';
 import { Input } from '../components/Input';
 import Button, { GhostButton } from '../components/Button';
@@ -112,6 +113,8 @@ class AppView extends Component {
       showSidebar: false,
       showFooter: false
     };
+
+    console.log(this.props.redmineApi);
   }
 
   toggleSidebar = () => {
@@ -122,7 +125,7 @@ class AppView extends Component {
 
   signout = () => {
     storage.delete('user');
-    RedmineAPI.instance().logout();
+    this.props.redmineApi.logout();
     this.props.history.push('/');
   }
 
@@ -171,7 +174,7 @@ class AppView extends Component {
               </GhostButton>
             </Hamburger>
             <li>Projects</li>
-            <li>Tasks</li>
+            <li>Time</li>
             <li>Issues</li>
           </MenuList>
           <Profile>
@@ -180,6 +183,10 @@ class AppView extends Component {
           </Profile>
         </Navbar>
         <Content>
+          <Route path="/projects" />
+          <Route path="/time" />
+          <Route path="/issues" />
+          <Route path="/summary" />
           <ActiveTimer show={showFooter}>
             <span>Task name</span>
             <span>00:00:00</span>
@@ -191,4 +198,4 @@ class AppView extends Component {
   }
 }
 
-export default AppView;
+export default withRedmine(AppView);

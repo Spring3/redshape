@@ -1,3 +1,6 @@
+import storage from '../../modules/storage';
+import React, { Component } from 'react';
+
 function RedmineAPI(redmineDomain) {
   const json = (res) => {
     if (res.ok) {
@@ -39,7 +42,6 @@ function RedmineAPI(redmineDomain) {
       const hash = btoa(`${username}:${password}`);
       headers.Authorization = `Basic ${hash}`;
     }
-    return this.users.current();
   };
 
   this.projects = {
@@ -195,12 +197,46 @@ function RedmineAPI(redmineDomain) {
   };
 }
 
-let api;
 
-module.exports = {
-  initialize: (redmineDomain) => {
-    api = new RedmineAPI(redmineDomain);
-    return api;
-  },
-  instance: () => api
+const withRedmine = (BaseComponent) => {
+  class APIWrapper extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        apiInstance: undefined
+      };
+    }
+
+    componentWillMount() {
+      if (!this.state.apiInstance) {
+        const userData = storage.get('user');
+        if (userData) {
+          const { redmineDomain, api_key } = userData;
+          this.initialize(redmineDomain).login({ token: api_key });
+        }
+      }
+    }
+
+    initialize = (redmineDomain) => {
+      if (!redmineDomain) {
+        throw new Error('redmineDomain is required to initialize the api');
+      }
+      const apiInstance = new RedmineAPI(redmineDomain);
+      this.setState({ apiInstance });
+      return apiInstance;
+    }
+
+    render() {
+      return (
+        <BaseComponent
+          {...this.props}
+          redmineApi={this.state.apiInstance}
+          initializeRedmineApi={this.initialize}
+        />
+      );
+    }
+  }
+  return APIWrapper;
 };
+
+export default withRedmine;

@@ -31,6 +31,8 @@
     "babel-plugin-styled-components": "^1.10.0",
     "css-loader": "^2.1.0",
     "electron-react-devtools": "^0.5.3",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",

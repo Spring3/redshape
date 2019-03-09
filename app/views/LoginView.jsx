@@ -6,7 +6,7 @@ import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
-import RedmineAPI from '../redmine/api.js';
+import withRedmine from '../redmine/Api.jsx';
 import storage from '../../modules/storage';
 
 import { Input, Labeled } from '../components/Input';
@@ -52,10 +52,9 @@ const CopyrightsContainer = styled.div`
 
 class LoginView extends Component {  
   componentWillMount() {
-    const userData = storage.get('user');
-    if (userData) {
-      RedmineAPI.initialize(userData.redmineDomain).login({ token: userData.api_key })
-      .then(({ data, error }) => {
+    const { redmineApi } = this.props;
+    if (redmineApi) {
+      redmineApi.users.current().then(({ data, error }) => {
         const user = _.get(data, 'user');
         if (user && !error) {
           this.props.history.push('/app');
@@ -82,8 +81,9 @@ class LoginView extends Component {
   };
 
   onSubmit = (values, { setSubmitting, setFieldError }) => {
-    const api = RedmineAPI.initialize(values.redmineDomain);
-    api.login(values).then(({ data, error }) => {
+    const api = this.props.initializeRedmineApi(values.redmineDomain);
+    api.login(values);
+    api.users.current().then(({ data, error }) => {
       if (error) {
         setFieldError('request', error.message);
         
@@ -164,7 +164,7 @@ class LoginView extends Component {
                   placeholder="https://redmine.example.com"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.host}
+                  value={values.redmineDomain}
                 />
               </Labeled>
               <ErrorMessage show={errors.redmineDomain && touched.redmineDomain}>
@@ -191,4 +191,4 @@ class LoginView extends Component {
   }
 }
 
-export default withRouter(LoginView);
+export default withRedmine(withRouter(LoginView));
