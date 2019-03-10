@@ -172,7 +172,7 @@ class AppView extends Component {
                 <MenuIcon />
               </GhostButton>
             </Hamburger>
-            <li>Projects</li>
+            <li>My Page</li>
             <li>Time</li>
             <li>Issues</li>
           </MenuList>
@@ -182,9 +182,7 @@ class AppView extends Component {
           </Profile>
         </Navbar>
         <Content>
-          <Route path="/projects" />
           <Route path="/time" />
-          <Route path="/issues" />
           <Route path="/" component={SummaryPage} />
           <ActiveTimer show={showFooter}>
             <span>Task name</span>

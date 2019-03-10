@@ -6,7 +6,7 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   border-radius: 5px;
-  padding: 5px;
+  padding: 5px 10px;
   box-sizing: border-box;
   font-size: 14px;
   border: 1px solid #FF7079;
@@ -35,10 +35,18 @@ const FormGroup = styled.div`
   }
 `;
 
-const Labeled = ({ label, htmlFor, children, className }) => (
+const Labeled = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
   <FormGroup className={`form-group ${className}`}>
-    <h4 htmlFor={htmlFor}>{label}</h4>
-    {children}
+    { rightToLeft === true && (children) }
+    { inline === false
+      ? (
+        <h4 htmlFor={htmlFor}>{label}</h4>
+      )
+      : (
+        <label htmlFor={htmlFor}>{label}</label>
+      )
+    }
+    { rightToLeft === false && (children) }
   </FormGroup>
 );
 
@@ -47,11 +55,15 @@ Labeled.propTypes = {
   label: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  inline: PropTypes.bool,
+  rightToLeft: PropTypes.bool
 };
 
 Labeled.defaultProps = {
   htmlFor: '',
-  className: undefined
+  className: undefined,
+  inline: false,
+  rightToLeft: false
 };
 
 const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, disabled }) => {

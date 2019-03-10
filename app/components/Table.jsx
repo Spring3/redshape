@@ -3,10 +3,44 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const StyledTable = styled.table`
+  tbody {
+    text-align: center;
+    font-size: 14px;
+
+    tr {
+      th {
+        padding: 5px;
+        border: 2px solid transparent;
+        background: white;
+        
+        &:hover {
+          cursor: pointer;
+          background: #FF7079;
+          color: white;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+        
+        td {
+          background: #FF7079;
+          color: white;
+        }
+      }
+    }
+
+    tr:nth-child(even) {
+      background: #F2F2F2;
+    }
+  }
 `;
 
 const Table = ({ children }) => (
-  <StyledTable>
+  <StyledTable
+    cellPadding={10}
+    width="100%"
+  >
     <tbody>
       { children }
     </tbody>
