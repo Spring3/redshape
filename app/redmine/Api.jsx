@@ -64,7 +64,7 @@ function RedmineAPI(redmineDomain) {
         baseUrl += `&limit=${limit}`;
       }
 
-      return request('GET', baseUrl).handleError('Error when trying to get a list of issues');
+      return request('GET', baseUrl).catch(handleError('Error when trying to get a list of issues'));
     },
     statuses: () => request('GET', '/issue_statuses.json').catch(handleError('Error when trying to get the list of issue statuses')),
     trackers: () => request('GET', '/trackers.json').catch(handleError('Error when trying to get the list of issue trackers')),
@@ -74,66 +74,67 @@ function RedmineAPI(redmineDomain) {
     filter: () => {
       const filter = {};
       const options = {
-        issueId(ids) {
+        issue(ids) {
           filter.issue_id = Array.isArray(ids) ? ids.join(',') : ids;
-          return options;
+          return this;
         },
-        projectId(id) {
+        project(id) {
           filter.project_id = id;
-          return options;
+          return this;
         },
-        subprojectId(id) {
+        subproject(id) {
           filter.subprojectId = id;
-          return options;
+          return this;
         },
-        trackerId(id) {
+        tracker(id) {
           filter.tracker_id = id;
-          return options;
+          return this;
         },
-        statusId({ open, closed }) {
+        status({ open, closed }) {
           if (open && closed) {
             filter.status_id = '*';
           } else {
             filter.status_id = open ? 'open' : 'closed';
           }
-          return options;
+          return this;
         },
         assignee(id) {
           filter.assigned_to_id = id;
-          return options;
+          return this;
         },
         author(id) {
           filter.author_id = id;
-          return options;
+          return this;
         },
         title(str) {
-          filter.subject = `~${str}`;
-          return options;
+          filter.subject = encodeURIComponent(`~${str}`);
+          return this;
         },
         due(date) {
           filter.due_date = date.toISOString();
-          return options;
+          return this;
         },
         createdAt(date) {
           filter.created_on = date.toISOString();
-          return options;
+          return this;
         },
         createdBetween(startDate, endDate) {
-          filter.created_on = `><${startDate.toISOString()}|${endDate.toISOString()}`;
-          return options;
+          filter.created_on = encodeURIComponent(`><${startDate.toISOString()}|${endDate.toISOString()}`);
+          return this;
         },
         priority(id) {
           filter.priority_id = id;
-          return options;
+          return this;
         },
         build() {
           let str = '';
           for (const [key, value] of Object.entries(filter)) { // eslint-disable-line
             str += `&${key}=${value}`;
           }
-          return encodeURIComponent(str);
+          return str;
         }
       };
+      return options;
     }
   };
 
@@ -203,7 +204,8 @@ const withRedmine = (BaseComponent) => {
     constructor(props) {
       super(props);
       this.state = {
-        apiInstance: undefined
+        apiInstance: undefined,
+        userId: undefined
       };
     }
 

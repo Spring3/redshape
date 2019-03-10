@@ -25,6 +25,9 @@ const StyledInput = styled.input`
   }
 `;
 
+const StyledCheckbox = styled.input`
+`;
+
 const FormGroup = styled.div`  
   h4 {
     margin-bottom: 10px;    
@@ -32,8 +35,8 @@ const FormGroup = styled.div`
   }
 `;
 
-const Labeled = ({ label, htmlFor, children }) => (
-  <FormGroup className="form-group">
+const Labeled = ({ label, htmlFor, children, className }) => (
+  <FormGroup className={`form-group ${className}`}>
     <h4 htmlFor={htmlFor}>{label}</h4>
     {children}
   </FormGroup>
@@ -42,39 +45,64 @@ const Labeled = ({ label, htmlFor, children }) => (
 Labeled.propTypes = {
   htmlFor: PropTypes.string,
   label: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
 
 Labeled.defaultProps = {
-  htmlFor: ''
+  htmlFor: '',
+  className: undefined
 };
 
-const Input = ({ type, placeholder, onChange, onBlur, value, id, name }) => (
-  <StyledInput
-    type={type}
-    placeholder={placeholder}
-    onChange={onChange}
-    onBlur={onBlur}
-    value={value}
-    id={id}
-    name={name}
-  />
-);
+const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, disabled }) => {
+  if (type.toLowerCase() === 'checkbox') {
+    return (
+      <StyledCheckbox
+        type={type}
+        onChange={onChange}
+        onBlur={onBlur}
+        checked={checked}
+        disabled={disabled}
+        id={id}
+        name={name}
+      />
+    );
+  }
+  return (
+    <StyledInput
+      type={type}
+      placeholder={placeholder}
+      onChange={onChange}
+      onBlur={onBlur}
+      disabled={disabled}
+      value={value}
+      id={id}
+      name={name}
+    />
+  );
+};
 
 Input.propTypes = {
-  type: PropTypes.oneOf(['email', 'password', 'text']),
+  type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   onBlur: PropTypes.func,
-  value: PropTypes.string
+  value: PropTypes.string,
+  checked: (props, propName, componentName) => { // eslint-disable-line
+    if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
+      return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);
+    }
+  }
 };
 
 Input.defaultProps = {
   type: 'text',
   placeholder: undefined,
   id: undefined,
+  disabled: false,
   name: undefined,
   onBlur: undefined,
   value: undefined

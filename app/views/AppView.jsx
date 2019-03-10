@@ -7,6 +7,7 @@ import { Input } from '../components/Input';
 import Button, { GhostButton } from '../components/Button';
 import MenuIcon from 'mdi-react/MenuIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+import SummaryPage from './AppViewPages/SummaryPage';
 
 const Grid = styled.div`
   height: 100%;
@@ -113,8 +114,6 @@ class AppView extends Component {
       showSidebar: false,
       showFooter: false
     };
-
-    console.log(this.props.redmineApi);
   }
 
   toggleSidebar = () => {
@@ -186,7 +185,7 @@ class AppView extends Component {
           <Route path="/projects" />
           <Route path="/time" />
           <Route path="/issues" />
-          <Route path="/summary" />
+          <Route path="/" component={SummaryPage} />
           <ActiveTimer show={showFooter}>
             <span>Task name</span>
             <span>00:00:00</span>
