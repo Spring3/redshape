@@ -54,22 +54,17 @@ const MarginedDiv = styled.div`
 class SummaryPage extends Component {
   constructor(props) {
     super(props);
-    const userData = storage.get('user');
-    const { id } = userData;
-    this.state = {
-      userId: id,
-      showClosed: false,
-      issues: storage.get(`${id}.issuesAssignedToMe`, []),
-      issuesHeaders: [
-        { label: 'Id', isFixed: true, value: 'id' },
-        { label: 'Project', value: 'project' },
-        { label: 'Tracker', value: 'tracker' },
-        { label: 'Status', value: 'status' },
-        { label: 'Subject', isFixed: true, value: 'subject' },
-        { label: 'Priority', value: 'priority' },
-        { label: 'Estimation', value: 'estimation' }
-      ]
-    };
+
+    this.issuesHeaders = [
+      { label: 'Id', isFixed: true, value: 'id' },
+      { label: 'Project', value: 'project' },
+      { label: 'Tracker', value: 'tracker' },
+      { label: 'Status', value: 'status' },
+      { label: 'Subject', isFixed: true, value: 'subject' },
+      { label: 'Priority', value: 'priority' },
+      { label: 'Estimation', value: 'estimation' },
+      { label: 'Due Date', value: 'dueDate' }
+    ];
 
     this.issueMapping = {
       id: 'id',
@@ -78,16 +73,32 @@ class SummaryPage extends Component {
       status: 'status.name',
       subject: 'subject',
       priority: 'priority.name',
-      estimation: 'estimated_hours'
+      estimation: 'estimated_hours',
+      dueDate: 'due_date'
+    };
+
+    const userData = storage.get('user');
+    const { id } = userData;
+    
+    this.state = {
+      userId: id,
+      showClosed: false,
+      issues: storage.get(`${id}.issuesAssignedToMe`, []),
+      selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
+      search: undefined
     };
   }
 
   componentWillMount() {
+    this.fetchIssues();
+  }
+
+  fetchIssues = () => {
     const { redmineApi } = this.props;
-    const { userId } = this.state;
+    const { userId, showClosed } = this.state;
     const queryFilter = redmineApi.issues.filter()
       .assignee(userId)
-      .status({ open: true })
+      .status({ open: true, closed: showClosed })
       .build();
     redmineApi.issues.getAll(queryFilter)
       .then(({ data }) => {
@@ -102,8 +113,64 @@ class SummaryPage extends Component {
       });
   }
 
+  toggleClosedIssuesDisplay = () => {
+    const { showClosed } = this.state;
+    this.setState({
+      showClosed: !showClosed
+    }, this.fetchIssues);
+  }
+
+  onSearchChange = (e) => {
+    const value = e.target.value;
+    const { issues, selectedHeaders, issuesCache } = this.state;
+    if (value) {
+      this.setState({
+        issuesCache: issuesCache || issues,
+        issues: (issuesCache || issues).filter((issue) => {
+          const testedString = selectedHeaders.map(header => _.get(issue, this.issueMapping[header.value])).join(' ');
+          return new RegExp(value, 'gi').test(testedString);
+        })
+      })
+    } else {
+      this.setState({
+        issuesCache: undefined,
+        issues: issuesCache
+      });
+    }
+  }
+
+  orderTableHeaders = (headers) => {
+    const fixed = [];
+    const unfixed = [];
+    for (const header of headers) {
+      if (header.isFixed) {
+        fixed.push(header);
+      } else {
+        unfixed.push(header);
+      }
+    }
+    return [...fixed, ...unfixed];
+  }
+
+  onHeadersSelectChange = (value, { action, removedValue }) => {
+    switch (action) {
+      case 'remove-value':
+      case 'pop-value':
+        if (removedValue.isFixed) {
+          return;
+        }
+        break;
+      case 'clear':
+        value = this.issuesHeaders.filter(header => header.isFixed);
+        break;
+    }
+
+    const selectedHeaders = this.orderTableHeaders(value);
+    this.setState({ selectedHeaders });
+  }
+
   render() {
-    const { issues, issuesHeaders, showClosed } = this.state;
+    const { issues, selectedHeaders, showClosed } = this.state;
     return (
       <Grid>
         <IssuesSection>
@@ -113,8 +180,10 @@ class SummaryPage extends Component {
               <Select
                 name="headers"
                 components={makeAnimated()}
-                options={issuesHeaders}
-                value={issuesHeaders}
+                options={this.issuesHeaders}
+                defaultValue={selectedHeaders}
+                value={selectedHeaders}
+                onChange={this.onHeadersSelectChange}
                 isMulti={true}
               />
             </Labeled>
@@ -124,7 +193,7 @@ class SummaryPage extends Component {
                   type="text"
                   name="search"
                   placeholder="Search"
-                  onChange={() => {}}
+                  onChange={this.onSearchChange}
                 />
               </MarginedDiv>
               <div>
@@ -138,7 +207,7 @@ class SummaryPage extends Component {
                     name="showClosed"
                     type="checkbox"
                     checked={showClosed}
-                    onChange={() => {}}
+                    onChange={this.toggleClosedIssuesDisplay}
                   />
                 </Labeled>
               </div>
@@ -146,14 +215,14 @@ class SummaryPage extends Component {
           </div>
           <Table>
             <tr>
-              {issuesHeaders.map(header => (
+              {selectedHeaders.map(header => (
                 <th key={header.value}>{header.label}</th>
               ))}
             </tr>
             {issues.map(item => (
               <tr key={item.id}>
                 {
-                  issuesHeaders.map(header => (
+                  selectedHeaders.map(header => (
                     <td key={header.value}>{_.get(item, this.issueMapping[header.value])}</td>
                   ))
                 }
@@ -165,7 +234,7 @@ class SummaryPage extends Component {
           <h2>Time spent</h2>
         </TimeSpentSection>
         <ActivitySection>
-          <h2>Activity</h2>
+          <h2>Activity Stack</h2>
         </ActivitySection>
       </Grid>
     );

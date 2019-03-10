@@ -6,6 +6,9 @@ const StyledTable = styled.table`
   tbody {
     text-align: center;
     font-size: 14px;
+    overflow-y: scroll;
+    display: block;
+    max-height: 450px;
 
     tr {
       th {
@@ -18,6 +21,10 @@ const StyledTable = styled.table`
           background: #FF7079;
           color: white;
         }
+      }
+
+      th:last-child {
+        width: 90px;
       }
 
       &:hover {
