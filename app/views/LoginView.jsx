@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
@@ -7,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
 import withRedmine from '../redmine/Api.jsx';
-import storage from '../../modules/storage';
+import actions from '../actions';
 
 import { Input, Labeled } from '../components/Input';
 import Button from '../components/Button';
@@ -52,16 +53,9 @@ const CopyrightsContainer = styled.div`
 
 class LoginView extends Component {  
   componentWillMount() {
-    const { redmineApi } = this.props;
-    if (redmineApi) {
-      redmineApi.users.current().then(({ data, error }) => {
-        const user = _.get(data, 'user');
-        if (user && !error) {
-          this.props.history.push('/app');
-        } else {
-          console.error(error);
-        }
-      });
+    const { user } = this.props;
+    if (user.id) {
+      this.props.history.push('/app');
     }
   }
 
@@ -81,21 +75,16 @@ class LoginView extends Component {
   };
 
   onSubmit = (values, { setSubmitting, setFieldError }) => {
-    const api = this.props.initializeRedmineApi(values.redmineDomain);
+    const { initializeRedmineApi, persistLoginData } = this.props;
+    const api = initializeRedmineApi(values.redmineDomain);
     api.login(values);
     api.users.current().then(({ data, error }) => {
       if (error) {
         setFieldError('request', error.message);
-        
       } else {
-        const user = _.get(data, 'user');
-        if (user) {
-          storage.set('user', {
-            redmineDomain: values.redmineDomain,
-            ..._.pick(user, 'id', 'firstname', 'lastname', 'api_key')
-          });
-          this.props.history.push('/app');
-        }
+        const user = _.pick(_.get(data, 'user', {}), 'id', 'firstname', 'lastname', 'api_key');
+        persistLoginData({ ...user, redmineDomain: values.redmineDomain });
+        this.props.history.push('/app');
       }
       setSubmitting(false);
     });
@@ -191,4 +180,12 @@ class LoginView extends Component {
   }
 }
 
-export default withRedmine(withRouter(LoginView));
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+const mapDispatchToProps = dispatch => ({
+  persistLoginData: data => dispatch(actions.user.login(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRedmine(withRouter(LoginView)));

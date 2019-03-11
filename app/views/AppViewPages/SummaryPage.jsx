@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Select from 'react-select';
+import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
 import styled from 'styled-components';
+
 import withApi from '../../redmine/Api';
-import storage from '../../../modules/storage';
 import { Input, Labeled } from '../../components/Input';
 import Table from '../../components/Table';
 
@@ -76,28 +77,29 @@ class SummaryPage extends Component {
       estimation: 'estimated_hours',
       dueDate: 'due_date'
     };
-
-    const userData = storage.get('user');
-    const { id } = userData;
     
     this.state = {
-      userId: id,
       showClosed: false,
-      issues: storage.get(`${id}.issuesAssignedToMe`, []),
+      issues: [],
+      issuesCache: undefined, // issues: storage.get(`${id}.issuesAssignedToMe`, []),
       selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
       search: undefined
     };
   }
 
   componentWillMount() {
-    this.fetchIssues();
+    if (this.props.user.id) {
+      this.fetchIssues();
+    } else {
+      this.props.history.push('/');
+    }
   }
 
   fetchIssues = () => {
-    const { redmineApi } = this.props;
-    const { userId, showClosed } = this.state;
+    const { redmineApi, user } = this.props;
+    const { showClosed } = this.state;
     const queryFilter = redmineApi.issues.filter()
-      .assignee(userId)
+      .assignee(user.id)
       .status({ open: true, closed: showClosed })
       .build();
     redmineApi.issues.getAll(queryFilter)
@@ -108,7 +110,7 @@ class SummaryPage extends Component {
           this.setState({
             issues: [...issues]
           });
-          storage.set(`${userId}.issuesAssignedToMe`, issues);
+          // storage.set(`${userId}.issuesAssignedToMe`, issues);
         }
       });
   }
@@ -242,7 +244,24 @@ class SummaryPage extends Component {
 }
 
 SummaryPage.propTypes = {
-  redmineApi: PropTypes.object.isRequired
+  redmineApi: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+    redmineDomain: PropTypes.string.isRequired
+  }).isRequired
 };
 
-export default withApi(SummaryPage);
+const mapStateToprops = state => ({
+  user: state.user
+});
+
+const mapDispatchToProps = dispatch => ({
+
+});
+
+export default connect(mapStateToprops, mapDispatchToProps)(withApi(SummaryPage));

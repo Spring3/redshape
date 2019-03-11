@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Route } from 'react-router-dom';
-import withRedmine from '../redmine/Api';
-import storage from '../../modules/storage';
-import { Input } from '../components/Input';
-import Button, { GhostButton } from '../components/Button';
+import { connect } from 'react-redux';
+import { Route, withRouter } from 'react-router-dom';
 import MenuIcon from 'mdi-react/MenuIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+
+import actions from '../actions';
+import withRedmine from '../redmine/Api';
+import { Input } from '../components/Input';
+import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 
 const Grid = styled.div`
@@ -102,34 +105,33 @@ const Hamburger = styled.li`
 class AppView extends Component {
   constructor(props) {
     super(props);
-    const userData = storage.get('user');
-    if (!userData) {
+
+    if (!props.user.id) {
       props.history.push('/');
     }
-    const { id, firstname, lastname } = userData;
+
     this.state = {
-      userId: id,
-      firstname,
-      lastname,
       showSidebar: false,
       showFooter: false
     };
   }
 
   toggleSidebar = () => {
+    const { showSidebar } = this.state;
     this.setState({
-      showSidebar: !this.state.showSidebar
+      showSidebar: !showSidebar
     });
   };
 
   signout = () => {
-    storage.delete('user');
-    this.props.redmineApi.logout();
+    this.props.logout();
     this.props.history.push('/');
   }
 
   render() {
-    const { firstname, lastname, showSidebar, showFooter } = this.state;
+    const { showSidebar, showFooter } = this.state;
+    const { user = {} } = this.props;
+    const { firstname, lastname } = user;
     return (
       <Grid>
         <Aside show={showSidebar}>
@@ -195,4 +197,24 @@ class AppView extends Component {
   }
 }
 
-export default withRedmine(AppView);
+AppView.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+    redmineDomain: PropTypes.string.isRequired
+  }).isRequired
+}
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(actions.user.logout())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRedmine(withRouter(AppView)));
