@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/lib/animated';
 import styled from 'styled-components';
 
 import withApi from '../../redmine/Api';
-import { Input, Labeled } from '../../components/Input';
+import { Input, Label } from '../../components/Input';
 import Table from '../../components/Table';
 
 const Grid = styled.div`
@@ -178,7 +178,7 @@ class SummaryPage extends Component {
         <IssuesSection>
           <h2>Issues assigned to me</h2>
           <div>
-            <Labeled htmlFor="headers" label="Table Columns">
+            <Label htmlFor="headers" label="Table Columns">
               <Select
                 name="headers"
                 components={makeAnimated()}
@@ -188,7 +188,7 @@ class SummaryPage extends Component {
                 onChange={this.onHeadersSelectChange}
                 isMulti={true}
               />
-            </Labeled>
+            </Label>
             <FlexRow>
               <MarginedDiv>
                 <Input
@@ -199,7 +199,7 @@ class SummaryPage extends Component {
                 />
               </MarginedDiv>
               <div>
-                <Labeled
+                <Label
                   htmlFor="showClosed"
                   label="Show Closed"
                   inline={true}
@@ -211,7 +211,7 @@ class SummaryPage extends Component {
                     checked={showClosed}
                     onChange={this.toggleClosedIssuesDisplay}
                   />
-                </Labeled>
+                </Label>
               </div>
             </FlexRow>
           </div>

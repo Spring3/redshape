@@ -10,7 +10,7 @@ import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 import withRedmine from '../redmine/Api.jsx';
 import actions from '../actions';
 
-import { Input, Labeled } from '../components/Input';
+import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Link from '../components/Link';
@@ -114,7 +114,7 @@ class LoginView extends Component {
           }) => (
             <LoginForm onSubmit={handleSubmit}>
               <Headline>Redtime</Headline>
-              <Labeled
+              <Label
                 label="Login"
                 htmlFor="username"
               >
@@ -125,11 +125,11 @@ class LoginView extends Component {
                   onBlur={handleBlur}
                   value={values.username}
                 />
-              </Labeled>
+              </Label>
               <ErrorMessage show={errors.username && touched.username}>
                 {errors.username}
               </ErrorMessage>
-              <Labeled
+              <Label
                 label="Password"
                 htmlFor="password"
               >
@@ -140,11 +140,11 @@ class LoginView extends Component {
                   onBlur={handleBlur}
                   value={values.password}
                 />
-              </Labeled>
+              </Label>
               <ErrorMessage show={errors.password && touched.password}>
                 {errors.password}
               </ErrorMessage>
-              <Labeled
+              <Label
                 label="Remdine Host"
                 htmlFor="redmineDomain"
               >
@@ -155,7 +155,7 @@ class LoginView extends Component {
                   onBlur={handleBlur}
                   value={values.redmineDomain}
                 />
-              </Labeled>
+              </Label>
               <ErrorMessage show={errors.redmineDomain && touched.redmineDomain}>
                 {errors.redmineDomain}
               </ErrorMessage>

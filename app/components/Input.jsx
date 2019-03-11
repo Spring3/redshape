@@ -35,7 +35,7 @@ const FormGroup = styled.div`
   }
 `;
 
-const Labeled = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
+const Label = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
   <FormGroup className={`form-group ${className}`}>
     { rightToLeft === true && (children) }
     { inline === false
@@ -50,7 +50,7 @@ const Labeled = ({ label, htmlFor, children, className, inline, rightToLeft }) =
   </FormGroup>
 );
 
-Labeled.propTypes = {
+Label.propTypes = {
   htmlFor: PropTypes.string,
   label: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -59,7 +59,7 @@ Labeled.propTypes = {
   rightToLeft: PropTypes.bool
 };
 
-Labeled.defaultProps = {
+Label.defaultProps = {
   htmlFor: '',
   className: undefined,
   inline: false,
@@ -122,10 +122,10 @@ Input.defaultProps = {
 
 export {
   Input,
-  Labeled
+  Label
 };
 
 export default {
   Input,
-  Labeled
+  Label
 };
