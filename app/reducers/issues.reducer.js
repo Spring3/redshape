@@ -2,14 +2,14 @@ import _ from 'lodash';
 import { combineReducers } from 'redux';
 import { ISSUES_GET_ALL } from '../actions/issues.actions';
 
-const initialStateAll = {
+const initialState = {
   data: [],
   fetchedOffset: 0,
   isFetching: false,
   error: undefined
 };
 
-const issuesGetAll = (state = initialStateAll, action) => {
+const issuesGetAll = (state = initialState, action) => {
   switch (action.type) {
     case ISSUES_GET_ALL: {
       switch (action.status) {
