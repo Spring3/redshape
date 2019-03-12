@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
 import styled from 'styled-components';
 
-import withApi from '../../redmine/Api';
+import actions from '../../actions';
+import { IssueFilter } from '../../actions/helper';
 import { Input, Label } from '../../components/Input';
 import Table from '../../components/Table';
 
@@ -80,8 +81,8 @@ class SummaryPage extends Component {
     
     this.state = {
       showClosed: false,
-      issues: [],
-      issuesCache: undefined, // issues: storage.get(`${id}.issuesAssignedToMe`, []),
+      issues: props.issues,
+      // issues: storage.get(`${id}.issuesAssignedToMe`, []),
       selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
       search: undefined
     };
@@ -96,23 +97,30 @@ class SummaryPage extends Component {
   }
 
   fetchIssues = () => {
-    const { redmineApi, user } = this.props;
+    const { dispatch, user } = this.props;
     const { showClosed } = this.state;
-    const queryFilter = redmineApi.issues.filter()
+    const queryFilter = new IssueFilter()
       .assignee(user.id)
       .status({ open: true, closed: showClosed })
       .build();
-    redmineApi.issues.getAll(queryFilter)
-      .then(({ data }) => {
-        const { issues } = data;
-        console.log(issues);
-        if (Array.isArray(issues) && issues.length) {
-          this.setState({
-            issues: [...issues]
-          });
-          // storage.set(`${userId}.issuesAssignedToMe`, issues);
-        }
+    console.log(queryFilter);
+    dispatch(actions.issues.getAll(queryFilter))
+    .then(() => {
+      this.setState({
+        issues: this.props.issues
       });
+    });
+    // redmineApi.issues.getAll(queryFilter)
+    //   .then(({ data }) => {
+    //     const { issues } = data;
+    //     console.log(issues);
+    //     if (Array.isArray(issues) && issues.length) {
+    //       this.setState({
+    //         issues: [...issues]
+    //       });
+    //       // storage.set(`${userId}.issuesAssignedToMe`, issues);
+    //     }
+    //   });
   }
 
   toggleClosedIssuesDisplay = () => {
@@ -124,19 +132,18 @@ class SummaryPage extends Component {
 
   onSearchChange = (e) => {
     const value = e.target.value;
-    const { issues, selectedHeaders, issuesCache } = this.state;
+    const { issues } = this.props;
+    const { selectedHeaders } = this.state;
     if (value) {
       this.setState({
-        issuesCache: issuesCache || issues,
-        issues: (issuesCache || issues).filter((issue) => {
+        issues: issues.filter((issue) => {
           const testedString = selectedHeaders.map(header => _.get(issue, this.issueMapping[header.value])).join(' ');
           return new RegExp(value, 'gi').test(testedString);
         })
       })
     } else {
       this.setState({
-        issuesCache: undefined,
-        issues: issuesCache
+        issues
       });
     }
   }
@@ -244,24 +251,23 @@ class SummaryPage extends Component {
 }
 
 SummaryPage.propTypes = {
-  redmineApi: PropTypes.object.isRequired,
   user: PropTypes.shape({
     id: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
     ]).isRequired,
+    api_key: PropTypes.string.isRequired,
     firstname: PropTypes.string.isRequired,
     lastname: PropTypes.string.isRequired,
-    redmineDomain: PropTypes.string.isRequired
+    redmineEndpoint: PropTypes.string.isRequired
   }).isRequired
 };
 
 const mapStateToprops = state => ({
-  user: state.user
+  user: state.user,
+  issues: state.issues.all.data
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({ dispatch });
 
-});
-
-export default connect(mapStateToprops, mapDispatchToProps)(withApi(SummaryPage));
+export default connect(mapStateToprops, mapDispatchToProps)(SummaryPage);

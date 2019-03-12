@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Formik } from 'formik';
@@ -7,7 +8,6 @@ import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
-import withRedmine from '../redmine/Api.jsx';
 import actions from '../actions';
 
 import { Input, Label } from '../components/Input';
@@ -59,11 +59,11 @@ class LoginView extends Component {
     }
   }
 
-  validate = ({ username, password, redmineDomain }) => {
+  validate = ({ username, password, redmineEndpoint }) => {
     const errors = {
       username: Joi.validate(username, Joi.string().required()),
       password: Joi.validate(password, Joi.string().required()),
-      redmineDomain: Joi.validate(redmineDomain, Joi.string().uri().required())
+      redmineEndpoint: Joi.validate(redmineEndpoint, Joi.string().uri().required())
     };
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
@@ -74,16 +74,13 @@ class LoginView extends Component {
     return results;
   };
 
-  onSubmit = (values, { setSubmitting, setFieldError }) => {
-    const { initializeRedmineApi, persistLoginData } = this.props;
-    const api = initializeRedmineApi(values.redmineDomain);
-    api.login(values);
-    api.users.current().then(({ data, error }) => {
-      if (error) {
-        setFieldError('request', error.message);
-      } else {
-        const user = _.pick(_.get(data, 'user', {}), 'id', 'firstname', 'lastname', 'api_key');
-        persistLoginData({ ...user, redmineDomain: values.redmineDomain });
+  onSubmit = (values, { setSubmitting }) => {
+    const { dispatch } = this.props;
+    dispatch(actions.user.checkLogin(values))
+    .then(() => {
+      console.log(this.props);
+      const { loginError } = this.props;
+      if (!loginError) {
         this.props.history.push('/app');
       }
       setSubmitting(false);
@@ -91,6 +88,7 @@ class LoginView extends Component {
   }
 
   render() {
+    const { loginError } = this.props; 
     return (
       <Container>
         <GHLinkContainer>
@@ -99,7 +97,7 @@ class LoginView extends Component {
           </Link>
         </GHLinkContainer>
         <Formik
-          initialValues={{ username: '', password: '', redmineDomain: '' }}
+          initialValues={{ username: '', password: '', redmineEndpoint: '' }}
           validate={this.validate}
           onSubmit={this.onSubmit}
         >
@@ -146,18 +144,18 @@ class LoginView extends Component {
               </ErrorMessage>
               <Label
                 label="Remdine Host"
-                htmlFor="redmineDomain"
+                htmlFor="redmineEndpoint"
               >
                 <Input
-                  name="redmineDomain"
+                  name="redmineEndpoint"
                   placeholder="https://redmine.example.com"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.redmineDomain}
+                  value={values.redmineEndpoint}
                 />
               </Label>
-              <ErrorMessage show={errors.redmineDomain && touched.redmineDomain}>
-                {errors.redmineDomain}
+              <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
+                {errors.redmineEndpoint}
               </ErrorMessage>
               <Button
                 type="submit"
@@ -166,8 +164,8 @@ class LoginView extends Component {
               >
                 Submit
               </Button>
-              <ErrorMessage show={!!errors.request}>
-                {errors.request}
+              <ErrorMessage show={!!loginError}>
+                {loginError && loginError.message}
               </ErrorMessage>
             </LoginForm>
           )}
@@ -180,12 +178,25 @@ class LoginView extends Component {
   }
 }
 
+LoginView.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+    api_key: PropTypes.string.isRequired,
+    redmineEndpoint: PropTypes.string.isRequired
+  }),
+  loginError: PropTypes.instanceOf(Error)
+}
+
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  loginError: state.user.loginError
 });
 
-const mapDispatchToProps = dispatch => ({
-  persistLoginData: data => dispatch(actions.user.login(data))
-});
+const mapDispatchToProps = dispatch => ({ dispatch });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRedmine(withRouter(LoginView)));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView));

@@ -26,6 +26,9 @@
         "no-underscore-dangle": [ "error", {
             "allow": ["__initialize", "__reset"]
         }],
+        "camelcase": [ "error", {
+            "allow": ["api_key"]
+        }],
         "jsx-a11y/label-has-for": [ 2, {
             "required": {
                 "every": [ "nesting", "id" ]

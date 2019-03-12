@@ -7,7 +7,6 @@ import MenuIcon from 'mdi-react/MenuIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import actions from '../actions';
-import withRedmine from '../redmine/Api';
 import { Input } from '../components/Input';
 import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
@@ -124,8 +123,9 @@ class AppView extends Component {
   };
 
   signout = () => {
-    this.props.logout();
-    this.props.history.push('/');
+    const { logout, history } = this.props;
+    logout();
+    history.push('/');
   }
 
   render() {
@@ -205,7 +205,8 @@ AppView.propTypes = {
     ]).isRequired,
     firstname: PropTypes.string.isRequired,
     lastname: PropTypes.string.isRequired,
-    redmineDomain: PropTypes.string.isRequired
+    api_key: PropTypes.string.isRequired,
+    redmineEndpoint: PropTypes.string.isRequired
   }).isRequired
 }
 
@@ -217,4 +218,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRedmine(withRouter(AppView)));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AppView));
