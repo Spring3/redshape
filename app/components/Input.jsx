@@ -117,7 +117,8 @@ Input.defaultProps = {
   disabled: false,
   name: undefined,
   onBlur: undefined,
-  value: undefined
+  value: undefined,
+  checked: false
 };
 
 export {

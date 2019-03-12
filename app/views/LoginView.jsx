@@ -54,7 +54,7 @@ const CopyrightsContainer = styled.div`
 class LoginView extends Component {  
   componentWillMount() {
     const { user } = this.props;
-    if (user.id) {
+    if (user.id && user.api_key) {
       this.props.history.push('/app');
     }
   }
@@ -78,9 +78,8 @@ class LoginView extends Component {
     const { dispatch } = this.props;
     dispatch(actions.user.checkLogin(values))
     .then(() => {
-      console.log(this.props);
-      const { loginError } = this.props;
-      if (!loginError) {
+      const { loginError, user } = this.props;
+      if (!loginError && user.id) {
         this.props.history.push('/app');
       }
       setSubmitting(false);

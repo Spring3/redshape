@@ -1,38 +1,27 @@
 import React from 'react';
 import { HashRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import { render, fireEvent, cleanup, wait } from 'react-testing-library';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
 import actions from '../../actions';
+import { USER_LOGIN } from '../../actions/user.actions';
+import { notify } from '../../actions/helper';
 
 jest.mock('electron-store');
 
 import storage from '../../../modules/storage';
 import LoginView from '../LoginView';
 
-const mockStore = configureStore();
+const mockStore = configureStore([thunk]);
 
 describe('Login view', () => {
   afterEach(() => {
     cleanup();
     fetch.resetMocks();
     storage.clear();
-  });
-
-  it('should check the storage for user credentials', () => {
-    const store = mockStore({ user: {} });
-    const storageGetSpy = jest.spyOn(storage, 'get');
-    render(
-      <Provider store={store}>
-        <HashRouter><LoginView /></HashRouter>
-      </Provider>
-    );
-    expect(storageGetSpy).toHaveBeenCalledWith('user');
-
-    storageGetSpy.mockRestore();
-    store.clearActions();
   });
 
   it('should render the link to github', () => {
@@ -67,9 +56,9 @@ describe('Login view', () => {
     expect(passwordInput).toBeTruthy();
     expect(passwordInput.getAttribute('name')).toBe('password');
 
-    const redmineDomainInput = form.querySelector('input[name="redmineDomain"]');
-    expect(redmineDomainInput).toBeTruthy();
-    expect(redmineDomainInput.getAttribute('type')).toBe('text');
+    const redmineEndpointInput = form.querySelector('input[name="redmineEndpoint"]');
+    expect(redmineEndpointInput).toBeTruthy();
+    expect(redmineEndpointInput.getAttribute('type')).toBe('text');
 
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeTruthy();
@@ -152,17 +141,17 @@ describe('Login view', () => {
         <HashRouter><LoginView /></HashRouter>
       </Provider>
     );
-    const redmineInput = document.querySelector('input[name="redmineDomain"]');
+    const redmineInput = document.querySelector('input[name="redmineEndpoint"]');
     expect(redmineInput).toBeTruthy();
     fireEvent.focus(redmineInput);
     fireEvent.blur(redmineInput);
     let error;
     return wait(() => {
-      error = getByText('"redmineDomain" is not allowed to be empty');
+      error = getByText('"redmineEndpoint" is not allowed to be empty');
       expect(error).toBeTruthy();
       fireEvent.change(redmineInput, { target: { value: 'url' } });
     }).then(() => wait(() => {
-      error = getByText('"redmineDomain" must be a valid uri');
+      error = getByText('"redmineEndpoint" must be a valid uri');
       expect(error).toBeTruthy();
       fireEvent.change(redmineInput, { target: { value: 'https://redmine.domain' } });
     }).then(() => wait(() => {
@@ -174,16 +163,16 @@ describe('Login view', () => {
   });
 
   it('should redirect to the AppView if user credentials already exist', async () => {
-    const store = mockStore({
+    const storeData = {
       user: {
         id: 1,
         firstname: 'firstname',
         lastname: 'lastname',
-        api_key: '123abc',
-        redmineDomain: 'https://redmine.domain'
+        api_key: 'api_key',
+        redmineEndpoint: 'https://redmine.domain'
       }
-    });
-    const storageGetSpy = jest.spyOn(storage, 'get');
+    };
+    const store = mockStore(storeData);
     const historyMock = {
       location: {
         pathname: '/'
@@ -191,26 +180,14 @@ describe('Login view', () => {
       listen: () => () => {},
       push: jest.fn()
     };
-    const storeData = {
-      user: {
-        id: 1,
-        firstname: 'firstname',
-        lastname: 'lastname',
-        api_key: 'api_key',
-        redmineDomain: 'https://redmine.domain'
-      }
-    };
-    storage.set('user', { ...storeData.user });
+
     render(
       <Provider store={store}>
         <Router history={historyMock}><LoginView /></Router>
       </Provider>
     );
     await wait(() => {
-      expect(storageGetSpy).toHaveBeenCalledWith('user');
       expect(store.getActions().length).toBe(0);
-
-      storageGetSpy.mockRestore();
       store.clearActions();
     });
   });
@@ -232,21 +209,15 @@ describe('[integration] LoginView', () => {
     );
     const form = wrapper.find('LoginView');
     expect(form.exists()).toBeTruthy();
-    expect(form.prop('redmineApi')).toBe(undefined);
-    expect(form.prop('initializeRedmineApi')).toBeTruthy();
-    const redmineInitializeSpy = jest.spyOn(form.props(), 'initializeRedmineApi');
     const submitButton = wrapper.find('button[type="submit"]');
     expect(submitButton.exists()).toBeTruthy();
     submitButton.simulate('submit');
     setTimeout(() => {
       const error = wrapper.find('ErrorMessage').findWhere(item => /is not allowed to be empty/.test(item.text()));
       expect(error.exists()).toBeTruthy();
-      expect(redmineInitializeSpy).not.toHaveBeenCalled();
       expect(storageSetSpy).not.toHaveBeenCalled();
-      expect(form.prop('redmineApi')).toBe(undefined);
       expect(store.getActions().length).toBe(0);
 
-      redmineInitializeSpy.mockRestore();
       storageSetSpy.mockRestore();
       store.clearActions();
       done();
@@ -255,6 +226,7 @@ describe('[integration] LoginView', () => {
 
   it('should make a redmine api request on submit', (done) => {
     const store = mockStore({ user: {} });
+    const loginActionSpy = jest.spyOn(actions.user, 'checkLogin');
     const wrapper = mount(
       <Provider store={store}>
         <HashRouter><LoginView /></HashRouter>
@@ -262,8 +234,6 @@ describe('[integration] LoginView', () => {
     );
     const form = wrapper.find('LoginView');
     expect(form.exists()).toBeTruthy();
-    expect(form.prop('redmineApi')).toBe(undefined);
-    expect(form.prop('initializeRedmineApi')).toBeTruthy();
 
     const userData = {
       id: '123',
@@ -280,23 +250,23 @@ describe('[integration] LoginView', () => {
     expect(inputs.length).toBe(3);
     const usernameInput = inputs.at(0);
     const passwordInput = inputs.at(1);
-    const redmineDomainInput = inputs.at(2);
+    const redmineEndpointInput = inputs.at(2);
     expect(usernameInput.prop('name')).toBe('username');
     expect(passwordInput.prop('name')).toBe('password');
-    expect(redmineDomainInput.prop('name')).toBe('redmineDomain');
+    expect(redmineEndpointInput.prop('name')).toBe('redmineEndpoint');
 
     const returnedValues = {
       username: 'username',
       password: 'password',
-      redmineDomain: 'https://redmine.domain'
+      redmineEndpoint: 'https://redmine.domain'
     };
 
     usernameInput.simulate('change', { persist: () => {}, target: { value: returnedValues.username, name: 'username' } });
     passwordInput.simulate('change', { persist: () => {}, target: { value: returnedValues.password, name: 'password' } });
-    redmineDomainInput.simulate('change', { persist: () => {}, target: { name: 'redmineDomain', value: returnedValues.redmineDomain } });
+    redmineEndpointInput.simulate('change', { persist: () => {}, target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint } });
     expect(wrapper.find('input[name="username"]').prop('value')).toBe(returnedValues.username);
     expect(wrapper.find('input[name="password"]').prop('value')).toBe(returnedValues.password);
-    expect(wrapper.find('input[name="redmineDomain"]').prop('value')).toBe(returnedValues.redmineDomain);
+    expect(wrapper.find('input[name="redmineEndpoint"]').prop('value')).toBe(returnedValues.redmineEndpoint);
 
     submit.simulate('submit');
 
@@ -304,27 +274,33 @@ describe('[integration] LoginView', () => {
       wrapper.update();
       const errors = wrapper.find('ErrorMessage').findWhere(item => /is not allowed to be empty/.test(item.text()));
       expect(errors.exists()).toBeFalsy();
+
       expect(fetch.mock.calls.length).toBe(1);
-      expect(fetch.mock.calls[0][0]).toBe(`${returnedValues.redmineDomain}/users/current.json`);
+      expect(fetch.mock.calls[0][0]).toBe(`${returnedValues.redmineEndpoint}/users/current.json`);
       expect(fetch.mock.calls[0][1].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
       expect(fetch.mock.calls[0][1].method).toBe('GET');
-      expect(wrapper.find('LoginView').prop('redmineApi')).toBeTruthy();
 
+      expect(loginActionSpy).toHaveBeenCalledWith(returnedValues);
       const reduxActions = store.getActions();
-      expect(reduxActions.length).toBe(1);
-      expect(reduxActions[0]).toEqual(actions.user.login({
-        ...userData,
-        redmineDomain: returnedValues.redmineDomain
+      expect(reduxActions.length).toBe(2);
+      expect(reduxActions[0]).toEqual(notify.start(USER_LOGIN));
+      expect(reduxActions[1]).toEqual(notify.ok(USER_LOGIN, {
+        user: {
+          ...userData,
+          redmineEndpoint: returnedValues.redmineEndpoint
+        }
       }));
 
       store.clearActions();
+      loginActionSpy.mockRestore();
       done();
     }, 100);
   });
 
   it('should display the error if one raised during the request', async () => {
-    const store = mockStore({ user: {} });
-    const storageSetSpy = jest.spyOn(storage, 'set');
+    // simulating error since reducers are not called
+    const store = mockStore({ user: { loginError: new Error('Something went wrong') } });
+    const loginActionSpy = jest.spyOn(actions.user, 'checkLogin');
     const wrapper = mount(
       <Provider store={store}>
         <HashRouter><LoginView /></HashRouter>
@@ -332,21 +308,19 @@ describe('[integration] LoginView', () => {
     );
     const form = wrapper.find('LoginView');
     expect(form.exists()).toBeTruthy();
-    expect(form.prop('redmineApi')).toBe(undefined);
-    expect(form.prop('initializeRedmineApi')).toBeTruthy();
 
-    fetch.mockResponses([
-      new Error('Something went wrong'), { status: 500 }
-    ]);
+    const expectedError = new Error('Something went wrong');
+
+    fetch.mockReject(expectedError);
 
     const inputs = wrapper.find('input');
     expect(inputs.length).toBe(3);
     const usernameInput = inputs.at(0);
     const passwordInput = inputs.at(1);
-    const redmineDomainInput = inputs.at(2);
+    const redmineEndpointInput = inputs.at(2);
     expect(usernameInput.prop('name')).toBe('username');
     expect(passwordInput.prop('name')).toBe('password');
-    expect(redmineDomainInput.prop('name')).toBe('redmineDomain');
+    expect(redmineEndpointInput.prop('name')).toBe('redmineEndpoint');
 
     const submitButton = wrapper.find('button[type="submit"]');
     expect(submitButton.exists()).toBeTruthy();
@@ -354,32 +328,35 @@ describe('[integration] LoginView', () => {
     const returnedValues = {
       username: 'username',
       password: 'password',
-      redmineDomain: 'https://redmine.domain'
+      redmineEndpoint: 'https://redmine.domain'
     };
 
     usernameInput.simulate('change', { persist: () => {}, target: { value: returnedValues.username, name: 'username' } });
     passwordInput.simulate('change', { persist: () => {}, target: { value: returnedValues.password, name: 'password' } });
-    redmineDomainInput.simulate('change', { persist: () => {}, target: { name: 'redmineDomain', value: returnedValues.redmineDomain } });
+    redmineEndpointInput.simulate('change', { persist: () => {}, target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint } });
     expect(wrapper.find('input[name="username"]').prop('value')).toBe(returnedValues.username);
     expect(wrapper.find('input[name="password"]').prop('value')).toBe(returnedValues.password);
-    expect(wrapper.find('input[name="redmineDomain"]').prop('value')).toBe(returnedValues.redmineDomain);
+    expect(wrapper.find('input[name="redmineEndpoint"]').prop('value')).toBe(returnedValues.redmineEndpoint);
 
     submitButton.simulate('submit');
 
     await wait(() => {
       wrapper.update();
+      expect(loginActionSpy).toHaveBeenCalledWith(returnedValues);
       expect(fetch.mock.calls.length).toBe(1);
-      expect(fetch.mock.calls[0][0]).toBe(`${returnedValues.redmineDomain}/users/current.json`);
+      expect(fetch.mock.calls[0][0]).toBe(`${returnedValues.redmineEndpoint}/users/current.json`);
       expect(fetch.mock.calls[0][1].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
       expect(fetch.mock.calls[0][1].method).toBe('GET');
-      expect(storageSetSpy).not.toHaveBeenCalled();
-      expect(wrapper.find('LoginView').prop('redmineApi')).toBeTruthy();
-      const error = wrapper.find('ErrorMessage').findWhere(item => /Error 500/.test(item.text()));
+
+      const error = wrapper.find('ErrorMessage').findWhere(item => /Something went wrong/.test(item.text()));
       expect(error.exists()).toBeTruthy();
-      expect(store.getActions().length).toBe(0);
+      const reduxActions = store.getActions();
+      expect(reduxActions.length).toBe(2);
+      expect(reduxActions[0]).toEqual(notify.start(USER_LOGIN));
+      expect(reduxActions[1]).toEqual(notify.nok(USER_LOGIN, expectedError));
 
       store.clearActions();
-      storageSetSpy.mockRestore();
+      loginActionSpy.mockRestore();
     });
   });
 });
