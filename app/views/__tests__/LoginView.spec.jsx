@@ -3,6 +3,7 @@ import { HashRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { render, fireEvent, cleanup, wait } from 'react-testing-library';
+import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
@@ -22,6 +23,16 @@ describe('Login view', () => {
     cleanup();
     fetch.resetMocks();
     storage.clear();
+  });
+
+  it('should match the snapshot', () => {
+    const store = mockStore({ user: {} });
+    const tree = renderer.create(
+      <Provider store={store}>
+        <HashRouter><LoginView /></HashRouter>
+      </Provider>
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   it('should render the link to github', () => {

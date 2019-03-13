@@ -105,7 +105,7 @@ class AppView extends Component {
   constructor(props) {
     super(props);
 
-    if (!props.user.id) {
+    if (!props.user.id || !props.user.api_key) {
       props.history.push('/');
     }
 

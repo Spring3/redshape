@@ -1,0 +1,993 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppView should match the snapshot 1`] = `
+.c3 {
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: 1px solid #FF7079;
+  min-height: 35px;
+  outline: none;
+  color: #FF7079;
+  font-weight: bold;
+  background: #FAFAFA;
+}
+
+.c3:hover {
+  border: 1px solid #FF7079;
+}
+
+.c3:focus {
+  box-shadow: 0px 0px 0px 1px #FF7079;
+}
+
+.c13 h4 {
+  margin-bottom: 10px;
+  color: #A4A4A4;
+}
+
+.c9 {
+  padding: 10px 5px;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  box-shadow: 0px 0px 0px 2px #FF7079;
+  color: #FF7079;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  width: auto;
+  margin: 25px auto 0px auto;
+}
+
+.c9:hover,
+.c9:focus {
+  cursor: pointer;
+  background: #FF7079;
+  border: 2px solid #FF7079;
+  box-shadow: 0px 0px 0px 2px #EF6069;
+  color: white;
+}
+
+.c9:active {
+  background: #EF6069;
+}
+
+.c2 {
+  outline: none;
+}
+
+.c2:active,
+.c2:focus,
+.c2:visited {
+  background: transparent;
+}
+
+.c16 tbody {
+  text-align: center;
+  font-size: 14px;
+  overflow-y: scroll;
+  display: block;
+  max-height: 450px;
+}
+
+.c16 tbody tr th {
+  padding: 5px;
+  border: 2px solid transparent;
+  background: white;
+}
+
+.c16 tbody tr th:hover {
+  cursor: pointer;
+  background: #FF7079;
+  color: white;
+}
+
+.c16 tbody tr th:last-child {
+  width: 90px;
+}
+
+.c16 tbody tr:hover {
+  cursor: pointer;
+}
+
+.c16 tbody tr:hover td {
+  background: #FF7079;
+  color: white;
+}
+
+.c16 tbody tr:nth-child(even) {
+  background: #F2F2F2;
+}
+
+.c11 {
+  display: grid;
+  padding: 20px;
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  grid-auto-rows: 100px;
+  grid-auto-flow: dense;
+  grid-gap: 20px;
+}
+
+.c12 {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  grid-column: span 8;
+  grid-row: span 6;
+}
+
+.c17 {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
+.c18 {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  grid-column: span 3;
+  grid-row: span 4;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c15 {
+  margin: 20px 10px 20px 0px;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.c0 {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60px auto;
+  grid-template-columns: repeat(auto-fit,minmax(70px,1fr));
+}
+
+.c4 {
+  border-top: 3px solid #FF7079;
+  grid-row: 1;
+  grid-column: span 12;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0px 20px;
+}
+
+.c1 {
+  display: none;
+  background: tomato;
+  grid-row: 1 / -1;
+  grid-column: span 3;
+  padding-top: 25px;
+}
+
+.c19 {
+  display: none;
+  background: sandybrown;
+}
+
+.c10 {
+  background: aliceblue;
+  grid-column: span 12;
+  grid-row: 2 / -1;
+}
+
+.c5 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c5 li {
+  display: inline;
+  margin: 0px 10px;
+  font-size: 14px;
+}
+
+.c5 li:hover {
+  cursor: pointer;
+}
+
+.c5 li:first-child {
+  margin-left: 0;
+}
+
+.c7 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c7 li {
+  display: inline;
+}
+
+.c7 li:first-child {
+  margin-right: 10px;
+}
+
+.c8 {
+  margin: 0;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.c6 {
+  padding: 0px;
+  margin: 0px;
+}
+
+.c6.c6 {
+  display: initial;
+}
+
+.c6 svg {
+  vertical-align: middle;
+}
+
+<div
+  className="c0"
+>
+  <aside
+    className="c1"
+  >
+    <div>
+      <a
+        className="c2"
+        disabled={false}
+        href="#"
+        onClick={[Function]}
+      >
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+          />
+        </svg>
+      </a>
+      <h4>
+        Time Log History
+      </h4>
+    </div>
+    <div>
+      <input
+        className="c3"
+        disabled={false}
+        onChange={[Function]}
+        placeholder="search"
+        type="text"
+      />
+    </div>
+    <ul>
+      <li>
+        <span>
+          Entry Name
+        </span>
+        <span>
+          1.0 hours
+        </span>
+        <span>
+          1 day(s) ago
+        </span>
+        <button>
+          Edit
+        </button>
+      </li>
+      <li>
+        <span>
+          Entry Name
+        </span>
+        <span>
+          1.5 hours
+        </span>
+        <span>
+          1 day(s) ago
+        </span>
+        <button>
+          Edit
+        </button>
+      </li>
+      <li>
+        <span>
+          Entry Name
+        </span>
+        <span>
+          1.3 hours
+        </span>
+        <span>
+          3 day(s) ago
+        </span>
+        <button>
+          Edit
+        </button>
+      </li>
+    </ul>
+  </aside>
+  <nav
+    className="c4"
+  >
+    <ul
+      className="c5"
+    >
+      <li
+        className="c6"
+      >
+        <a
+          className="c2"
+          disabled={false}
+          href="#"
+          onClick={[Function]}
+        >
+          <svg
+            className="mdi-icon "
+            fill="currentColor"
+            height={24}
+            viewBox="0 0 24 24"
+            width={24}
+          >
+            <path
+              d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
+            />
+          </svg>
+        </a>
+      </li>
+      <li>
+        My Page
+      </li>
+      <li>
+        Time
+      </li>
+      <li>
+        Issues
+      </li>
+    </ul>
+    <ul
+      className="c7"
+    >
+      <li>
+        firstname
+         
+        lastname
+      </li>
+      <li>
+        <button
+          className="c8 c9"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          Sign out
+        </button>
+      </li>
+    </ul>
+  </nav>
+  <div
+    className="c10"
+  >
+    <div
+      className="c11"
+    >
+      <section
+        className="c12"
+      >
+        <h2>
+          Issues assigned to me
+        </h2>
+        <div>
+          <div
+            className="form-group undefined c13"
+          >
+            <h4
+              htmlFor="headers"
+            >
+              Table Columns
+            </h4>
+            <div
+              className="css-10nd86i"
+              onKeyDown={[Function]}
+            >
+              <div
+                className="css-vj8t7z"
+                onMouseDown={[Function]}
+                onTouchEnd={[Function]}
+              >
+                <div
+                  className="css-1hwfws3"
+                >
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Id
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Subject
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Project
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Tracker
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Status
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Priority
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Estimation
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={
+                      Object {
+                        "overflow": "hidden",
+                        "whiteSpace": "nowrap",
+                        "width": "auto",
+                      }
+                    }
+                  >
+                    <div
+                      className="css-xwjg1b"
+                    >
+                      <div
+                        className="css-12jo7m5"
+                      >
+                        Due Date
+                      </div>
+                      <div
+                        className="css-1alnv5e"
+                        onClick={[Function]}
+                        onMouseDown={[Function]}
+                        onTouchEnd={[Function]}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="css-19bqh2r"
+                          focusable="false"
+                          height={14}
+                          viewBox="0 0 20 20"
+                          width={14}
+                        >
+                          <path
+                            d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="css-1g6gooi"
+                  >
+                    <div
+                      className=""
+                      style={
+                        Object {
+                          "display": "inline-block",
+                        }
+                      }
+                    >
+                      <input
+                        aria-autocomplete="list"
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={false}
+                        id="react-select-2-input"
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        spellCheck="false"
+                        style={
+                          Object {
+                            "background": 0,
+                            "border": 0,
+                            "boxSizing": "content-box",
+                            "color": "inherit",
+                            "fontSize": "inherit",
+                            "opacity": 1,
+                            "outline": 0,
+                            "padding": 0,
+                            "width": "1px",
+                          }
+                        }
+                        tabIndex="0"
+                        type="text"
+                        value=""
+                      />
+                      <div
+                        style={
+                          Object {
+                            "height": 0,
+                            "left": 0,
+                            "overflow": "scroll",
+                            "position": "absolute",
+                            "top": 0,
+                            "visibility": "hidden",
+                            "whiteSpace": "pre",
+                          }
+                        }
+                      >
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="css-1wy0on6"
+                >
+                  <div
+                    aria-hidden="true"
+                    className="css-1ep9fjw"
+                    onMouseDown={[Function]}
+                    onTouchEnd={[Function]}
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="css-19bqh2r"
+                      focusable="false"
+                      height={20}
+                      viewBox="0 0 20 20"
+                      width={20}
+                    >
+                      <path
+                        d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                      />
+                    </svg>
+                  </div>
+                  <span
+                    className="css-d8oujb"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="css-1ep9fjw"
+                    onMouseDown={[Function]}
+                    onTouchEnd={[Function]}
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="css-19bqh2r"
+                      focusable="false"
+                      height={20}
+                      viewBox="0 0 20 20"
+                      width={20}
+                    >
+                      <path
+                        d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="id"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="subject"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="project"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="tracker"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="status"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="priority"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="estimation"
+                />
+                <input
+                  name="headers"
+                  type="hidden"
+                  value="dueDate"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="c14"
+          >
+            <div
+              className="c15"
+            >
+              <input
+                className="c3"
+                disabled={false}
+                name="search"
+                onChange={[Function]}
+                placeholder="Search"
+                type="text"
+              />
+            </div>
+            <div>
+              <div
+                className="form-group undefined c13"
+              >
+                <input
+                  checked={false}
+                  className=""
+                  disabled={false}
+                  name="showClosed"
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <label
+                  htmlFor="showClosed"
+                >
+                  Show Closed
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table
+          cellPadding={10}
+          className="c16"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <th>
+                Id
+              </th>
+              <th>
+                Subject
+              </th>
+              <th>
+                Project
+              </th>
+              <th>
+                Tracker
+              </th>
+              <th>
+                Status
+              </th>
+              <th>
+                Priority
+              </th>
+              <th>
+                Estimation
+              </th>
+              <th>
+                Due Date
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section
+        className="c17"
+      >
+        <h2>
+          Time spent
+        </h2>
+      </section>
+      <section
+        className="c18"
+      >
+        <h2>
+          Activity Stack
+        </h2>
+      </section>
+    </div>
+    <div
+      className="c19"
+    >
+      <span>
+        Task name
+      </span>
+      <span>
+        00:00:00
+      </span>
+      <button>
+        Stop
+      </button>
+    </div>
+  </div>
+</div>
+`;
