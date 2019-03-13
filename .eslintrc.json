@@ -23,6 +23,7 @@
         "class-methods-use-this": "off",
         "comma-dangle": "off",
         "object-curly-newline": "warn",
+        "no-plusplus": "off",
         "no-underscore-dangle": [ "error", {
             "allow": ["__initialize", "__reset"]
         }],
