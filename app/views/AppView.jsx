@@ -90,9 +90,6 @@ const SignOutButton = styled(Button)`
 `;
 
 const Hamburger = styled.li`
-  && {
-    display: ${props => props.show ? 'initial' : 'none'};
-  }
   padding: 0px;
   margin: 0px;
 
@@ -169,7 +166,7 @@ class AppView extends Component {
         </Aside>
         <Navbar>
           <MenuList>
-            <Hamburger show={!showSidebar}>
+            <Hamburger id="hamburger">
               <GhostButton onClick={this.toggleSidebar}>
                 <MenuIcon />
               </GhostButton>
@@ -180,7 +177,7 @@ class AppView extends Component {
           </MenuList>
           <Profile>
             <li>{firstname} {lastname}</li>
-            <li><SignOutButton onClick={this.signout}>Sign out</SignOutButton></li>
+            <li><SignOutButton id="signout" onClick={this.signout}>Sign out</SignOutButton></li>
           </Profile>
         </Navbar>
         <Content>

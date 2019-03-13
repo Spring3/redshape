@@ -256,10 +256,6 @@ exports[`AppView should match the snapshot 1`] = `
   margin: 0px;
 }
 
-.c6.c6 {
-  display: initial;
-}
-
 .c6 svg {
   vertical-align: middle;
 }
@@ -355,6 +351,7 @@ exports[`AppView should match the snapshot 1`] = `
     >
       <li
         className="c6"
+        id="hamburger"
       >
         <a
           className="c2"
@@ -397,6 +394,7 @@ exports[`AppView should match the snapshot 1`] = `
         <button
           className="c8 c9"
           disabled={false}
+          id="signout"
           onClick={[Function]}
           type="button"
         >

@@ -89,11 +89,7 @@ class SummaryPage extends Component {
   }
 
   componentWillMount() {
-    if (this.props.user.id) {
-      this.fetchIssues();
-    } else {
-      this.props.history.push('/');
-    }
+    this.fetchIssues();
   }
 
   fetchIssues = () => {

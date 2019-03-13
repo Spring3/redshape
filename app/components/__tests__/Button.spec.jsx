@@ -10,6 +10,7 @@ describe('Button Component', () => {
     const { getByText } = render(<Button>Submit</Button>);
     const button = getByText('Submit');
     expect(button).toBeTruthy();
+    expect(button).not.toHaveStyleRule('id');
     expect(button.getAttribute('type')).toBe('button');
     expect(button).not.toHaveAttribute('disabled');
     expect(button).toHaveStyleRule('width', 'auto');
@@ -84,6 +85,16 @@ describe('Button Component', () => {
     expect(greenButton).toHaveStyleRule('color', 'green');
   });
 
+  it('should apply the given id', () => {
+    const { getByText } = render(
+      <div>
+        <Button id="test">Click me</Button>
+      </div>
+    );
+    const button = getByText('Click me');
+    expect(button.getAttribute('id')).toBe('test');
+  });
+
   describe('Ghost button', () => {
     it('should be a link', async () => {
       const clickHandler = jest.fn();
@@ -112,6 +123,16 @@ describe('Button Component', () => {
       const yellowButton = getByText('Or better me');
       expect(ghostButton).toHaveStyleRule('color', undefined);
       expect(yellowButton).toHaveStyleRule('color', 'yellow');
+    });
+
+    it('should apply the given id', () => {
+      const { getByText } = render(
+        <div>
+          <GhostButton id="test">Click me</GhostButton>
+        </div>
+      );
+      const button = getByText('Click me');
+      expect(button.getAttribute('id')).toBe('test');
     });
   });
 });

@@ -41,8 +41,9 @@ const StyledLink = styled.a`
 `;
 
 
-const Button = ({ children, type, disabled, block, onClick, className }) => (
+const Button = ({ id, children, type, disabled, block, onClick, className }) => (
   <StyledButton
+    id={id}
     onClick={onClick}
     type={type}
     disabled={disabled} 
@@ -54,6 +55,10 @@ const Button = ({ children, type, disabled, block, onClick, className }) => (
 );
 
 Button.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['button', 'submit', 'ghost']),
   disabled: PropTypes.bool,
@@ -63,6 +68,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  id: undefined,
   type: 'button',
   disabled: false,
   block: false,
@@ -80,9 +86,10 @@ class GhostButton extends Component {
   }
 
   render() {
-    const { children, disabled, className } = this.props;
+    const { id, children, disabled, className } = this.props;
     return (
       <StyledLink
+        id={id}
         onClick={this.preventDefault}
         href="#"
         disabled={disabled}
@@ -95,6 +102,10 @@ class GhostButton extends Component {
 };
 
 GhostButton.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
@@ -102,6 +113,7 @@ GhostButton.propTypes = {
 };
 
 GhostButton.defaultProps = {
+  id: undefined,
   disabled: false,
   onClick: undefined,
   className: undefined
