@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
-import RedmineAPI from '../redmine/api.js';
-import storage from '../../modules/storage';
+import actions from '../actions';
 
-import { Input, Labeled } from '../components/Input';
+import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Link from '../components/Link';
@@ -52,25 +53,17 @@ const CopyrightsContainer = styled.div`
 
 class LoginView extends Component {  
   componentWillMount() {
-    const userData = storage.get('user');
-    if (userData) {
-      RedmineAPI.initialize(userData.redmineDomain).login({ token: userData.api_key })
-      .then(({ data, error }) => {
-        const user = _.get(data, 'user');
-        if (user && !error) {
-          this.props.history.push('/app');
-        } else {
-          console.error(error);
-        }
-      });
+    const { user } = this.props;
+    if (user.id && user.api_key) {
+      this.props.history.push('/app');
     }
   }
 
-  validate = ({ username, password, redmineDomain }) => {
+  validate = ({ username, password, redmineEndpoint }) => {
     const errors = {
       username: Joi.validate(username, Joi.string().required()),
       password: Joi.validate(password, Joi.string().required()),
-      redmineDomain: Joi.validate(redmineDomain, Joi.string().uri().required())
+      redmineEndpoint: Joi.validate(redmineEndpoint, Joi.string().uri().required())
     };
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
@@ -81,27 +74,20 @@ class LoginView extends Component {
     return results;
   };
 
-  onSubmit = (values, { setSubmitting, setFieldError }) => {
-    const api = RedmineAPI.initialize(values.redmineDomain);
-    api.login(values).then(({ data, error }) => {
-      if (error) {
-        setFieldError('request', error.message);
-        
-      } else {
-        const user = _.get(data, 'user');
-        if (user) {
-          storage.set('user', {
-            redmineDomain: values.redmineDomain,
-            ..._.pick(user, 'id', 'firstname', 'lastname', 'api_key')
-          });
-          this.props.history.push('/app');
-        }
+  onSubmit = (values, { setSubmitting }) => {
+    const { dispatch } = this.props;
+    dispatch(actions.user.checkLogin(values))
+    .then(() => {
+      const { loginError, user } = this.props;
+      if (!loginError && user.id) {
+        this.props.history.push('/app');
       }
       setSubmitting(false);
     });
   }
 
   render() {
+    const { loginError } = this.props; 
     return (
       <Container>
         <GHLinkContainer>
@@ -110,7 +96,7 @@ class LoginView extends Component {
           </Link>
         </GHLinkContainer>
         <Formik
-          initialValues={{ username: '', password: '', redmineDomain: '' }}
+          initialValues={{ username: '', password: '', redmineEndpoint: '' }}
           validate={this.validate}
           onSubmit={this.onSubmit}
         >
@@ -125,7 +111,7 @@ class LoginView extends Component {
           }) => (
             <LoginForm onSubmit={handleSubmit}>
               <Headline>Redtime</Headline>
-              <Labeled
+              <Label
                 label="Login"
                 htmlFor="username"
               >
@@ -136,11 +122,11 @@ class LoginView extends Component {
                   onBlur={handleBlur}
                   value={values.username}
                 />
-              </Labeled>
+              </Label>
               <ErrorMessage show={errors.username && touched.username}>
                 {errors.username}
               </ErrorMessage>
-              <Labeled
+              <Label
                 label="Password"
                 htmlFor="password"
               >
@@ -151,24 +137,24 @@ class LoginView extends Component {
                   onBlur={handleBlur}
                   value={values.password}
                 />
-              </Labeled>
+              </Label>
               <ErrorMessage show={errors.password && touched.password}>
                 {errors.password}
               </ErrorMessage>
-              <Labeled
+              <Label
                 label="Remdine Host"
-                htmlFor="redmineDomain"
+                htmlFor="redmineEndpoint"
               >
                 <Input
-                  name="redmineDomain"
+                  name="redmineEndpoint"
                   placeholder="https://redmine.example.com"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.host}
+                  value={values.redmineEndpoint}
                 />
-              </Labeled>
-              <ErrorMessage show={errors.redmineDomain && touched.redmineDomain}>
-                {errors.redmineDomain}
+              </Label>
+              <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
+                {errors.redmineEndpoint}
               </ErrorMessage>
               <Button
                 type="submit"
@@ -177,8 +163,8 @@ class LoginView extends Component {
               >
                 Submit
               </Button>
-              <ErrorMessage show={!!errors.request}>
-                {errors.request}
+              <ErrorMessage show={!!loginError}>
+                {loginError && loginError.message}
               </ErrorMessage>
             </LoginForm>
           )}
@@ -191,4 +177,25 @@ class LoginView extends Component {
   }
 }
 
-export default withRouter(LoginView);
+LoginView.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+    api_key: PropTypes.string.isRequired,
+    redmineEndpoint: PropTypes.string.isRequired
+  }),
+  loginError: PropTypes.instanceOf(Error)
+}
+
+const mapStateToProps = state => ({
+  user: state.user,
+  loginError: state.user.loginError
+});
+
+const mapDispatchToProps = dispatch => ({ dispatch });
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView));

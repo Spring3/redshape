@@ -22,6 +22,7 @@ const initialize = () => {
     width: 1024,
     height: 768,
     show: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       webSecurity: false // to disable cors
     }

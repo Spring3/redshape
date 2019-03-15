@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login view should match the snapshot 1`] = `
+.c6 {
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: 1px solid #FF7079;
+  min-height: 35px;
+  outline: none;
+  color: #FF7079;
+  font-weight: bold;
+  background: #FAFAFA;
+}
+
+.c6:hover {
+  border: 1px solid #FF7079;
+}
+
+.c6:focus {
+  box-shadow: 0px 0px 0px 1px #FF7079;
+}
+
+.c5 h4 {
+  margin-bottom: 10px;
+  color: #A4A4A4;
+}
+
+.c8 {
+  padding: 10px 5px;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  box-shadow: 0px 0px 0px 2px #FF7079;
+  color: #FF7079;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  margin: 25px auto 0px auto;
+}
+
+.c8:hover,
+.c8:focus {
+  cursor: pointer;
+  background: #FF7079;
+  border: 2px solid #FF7079;
+  box-shadow: 0px 0px 0px 2px #EF6069;
+  color: white;
+}
+
+.c8:active {
+  background: #EF6069;
+}
+
+.c7 {
+  margin: 15px auto 5px auto;
+  font-size: 14px;
+  background: #FF7079;
+  color: white;
+  padding: 2px;
+  display: none;
+}
+
+.c2 {
+  color: #FF7079;
+  font-size: 14px;
+  padding: 2px;
+}
+
+.c11 {
+  color: #FF7079;
+  font-size: 14px;
+  padding: 2px;
+}
+
+.c11:hover {
+  background: #FF7079;
+  color: white;
+}
+
+.c10 {
+  color: #FF7079;
+}
+
+.c0 {
+  display: grid;
+  grid-template-rows: repeat(4,25vh);
+  grid-template-columns: repeat(6,minmax(100px,1fr));
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.c3 {
+  padding: 40px;
+  grid-column: 2 / 6;
+  grid-row: 2 / 4;
+  min-width: 300px;
+}
+
+.c4 {
+  text-align: center;
+  font-size: 40px;
+  color: #FF7079;
+}
+
+.c1 {
+  grid-column: 6;
+  justify-self: end;
+  -webkit-align-self: start;
+  -ms-flex-item-align: start;
+  align-self: start;
+  margin: 20px 20px 0px 0px;
+}
+
+.c9 {
+  grid-row: 4;
+  grid-column: 2 / 6;
+  -webkit-align-self: end;
+  -ms-flex-item-align: end;
+  align-self: end;
+  margin-bottom: 20px;
+}
+
+<div
+  className="c0"
+>
+  <div
+    className="c1"
+  >
+    <a
+      className="c2"
+      href="https://github.com/Spring3/redtime"
+      rel="noopener noreferer"
+      type="external"
+    >
+      <svg
+        className="mdi-icon "
+        fill="#FF7079"
+        height="30"
+        viewBox="0 0 24 24"
+        width="30"
+      >
+        <path
+          d="M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z"
+        />
+      </svg>
+    </a>
+  </div>
+  <form
+    className="c3"
+    onSubmit={[Function]}
+  >
+    <h1
+      className="c4"
+    >
+      Redtime
+    </h1>
+    <div
+      className="form-group undefined c5"
+    >
+      <h4
+        htmlFor="username"
+      >
+        Login
+      </h4>
+      <input
+        className="c6"
+        disabled={false}
+        name="username"
+        onBlur={[Function]}
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
+    <p
+      className="c7"
+    />
+    <div
+      className="form-group undefined c5"
+    >
+      <h4
+        htmlFor="password"
+      >
+        Password
+      </h4>
+      <input
+        className="c6"
+        disabled={false}
+        name="password"
+        onBlur={[Function]}
+        onChange={[Function]}
+        type="password"
+        value=""
+      />
+    </div>
+    <p
+      className="c7"
+    />
+    <div
+      className="form-group undefined c5"
+    >
+      <h4
+        htmlFor="redmineEndpoint"
+      >
+        Remdine Host
+      </h4>
+      <input
+        className="c6"
+        disabled={false}
+        name="redmineEndpoint"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="https://redmine.example.com"
+        type="text"
+        value=""
+      />
+    </div>
+    <p
+      className="c7"
+    />
+    <button
+      className="c8"
+      disabled={false}
+      type="submit"
+    >
+      Submit
+    </button>
+    <p
+      className="c7"
+    />
+  </form>
+  <div
+    className="c9"
+  >
+    <p
+      className="c10"
+    >
+      Created by 
+      <a
+        className="c11"
+        href="https://github.com/Spring3"
+        rel="noopener noreferer"
+        type="external"
+      >
+        Daniyil Vasylenko
+      </a>
+    </p>
+  </div>
+</div>
+`;

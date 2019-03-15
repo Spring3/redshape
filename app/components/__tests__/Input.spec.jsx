@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from 'react-testing-library';
-import { Input, Labeled } from '../Input';
+import { Input, Label } from '../Input';
 
 afterEach(cleanup);
 
@@ -15,6 +15,7 @@ describe('Input component', () => {
     expect(input.getAttribute('id')).toBeFalsy();
     expect(input.getAttribute('name')).toBeFalsy();
     expect(input.getAttribute('value')).toBeFalsy();
+    expect(input.hasAttribute('disabled')).toBe(false);
   });
 
   it('should support different types', () => {
@@ -29,6 +30,9 @@ describe('Input component', () => {
 
     rerender(<Input type="password" onChange={changeHandler} />);
     expect(input.getAttribute('type')).toBe('password');
+
+    rerender(<Input type="checkbox" onChange={changeHandler} />);
+    expect(document.querySelector('input[type="checkbox"]')).toBeTruthy();
   });
 
   it('should take the placeholder', () => {
@@ -66,6 +70,16 @@ describe('Input component', () => {
     expect(input.getAttribute('value')).toBe('test@example.com');
   });
 
+  it('should become disabled', async () => {
+    const changeHandler = jest.fn();
+    const { rerender } = render(<Input onChange={changeHandler} />);
+    const input = document.querySelector('input');
+    expect(input).toBeTruthy();
+    expect(input.hasAttribute('disabled')).toBe(false);
+    rerender(<Input disabled={true} onChange={changeHandler} />);
+    expect(input.hasAttribute('disabled')).toBe(true);
+  });
+
   it('should call the onChange handler when the value is typed', () => {
     const changeHandler = jest.fn().mockImplementation((event) => {
       expect(event).toBeTruthy();
@@ -88,22 +102,72 @@ describe('Input component', () => {
     expect(blurHandler).toHaveBeenCalledTimes(1);
   });
 
-  it('should wrap the input with label', () => {
-    const changeHandler = jest.fn();
-    render(
-      <Labeled htmlFor="username" label="Username">
-        <Input name="username" onChange={changeHandler} />
-      </Labeled>
-    );
-    const formGroup = document.querySelectorAll('.form-group');
-    expect(formGroup.length).toBe(1);
-    const item = formGroup[0];
-    expect(item.classList.contains('form-group')).toBeTruthy();
-    expect(item.firstChild.nodeName).toBe('H4');
-    const h4 = item.firstChild;
-    expect(h4.innerHTML).toBe('Username');
-    expect(h4.getAttribute('for')).toBe('username');
-    expect(item.lastChild.nodeName).toBe('INPUT');
-    expect(item.lastChild.getAttribute('name')).toBe('username');
+  describe('label', () => {
+    it('should wrap the input with label', () => {
+      const changeHandler = jest.fn();
+      render(
+        <Label htmlFor="username" label="Username">
+          <Input name="username" onChange={changeHandler} />
+        </Label>
+      );
+      const results = document.querySelectorAll('.form-group');
+      expect(results.length).toBe(1);
+      const wrapper = results[0];
+      expect(wrapper.classList.contains('form-group')).toBeTruthy();
+      expect(wrapper.firstChild.nodeName).toBe('H4');
+      const h4 = wrapper.firstChild;
+      expect(h4.innerHTML).toBe('Username');
+      expect(h4.getAttribute('for')).toBe('username');
+      expect(wrapper.lastChild.nodeName).toBe('INPUT');
+      expect(wrapper.lastChild.getAttribute('name')).toBe('username');
+    });
+
+    it('should be displayed either inline or as block', () => {
+      const { rerender } = render(
+        <Label htmlFor="test" label="Test" inline={true}>
+          <button type="button">Click me</button>
+        </Label>
+      );
+      const results = document.querySelectorAll('.form-group');
+      expect(results.length).toBe(1);
+      const wrapper = results[0];
+      const label = wrapper.firstChild;
+      const input = wrapper.lastChild;
+      expect(label.nodeName).toBe('LABEL');
+      expect(input.nodeName).toBe('BUTTON');
+
+      rerender(
+        <Label htmlFor="test" label="Test" inline={false}>
+          <button type="button">Click me</button>
+        </Label>
+      );
+
+      expect(wrapper.firstChild.nodeName).toBe('H4');
+      expect(wrapper.lastChild.nodeName).toBe('BUTTON');
+    });
+
+    it('should be displayed either left to right or right to left', () => {
+      const { rerender } = render(
+        <Label htmlFor="test" label="Test" rightToLeft={true}>
+          <button type="button">Click me</button>
+        </Label>
+      );
+      const results = document.querySelectorAll('.form-group');
+      expect(results.length).toBe(1);
+      const wrapper = results[0];
+      expect(wrapper.firstChild.nodeName).toBe('BUTTON');
+      expect(wrapper.lastChild.nodeName).toBe('H4');
+      expect(wrapper.lastChild.innerHTML).toBe('Test');
+
+      rerender(
+        <Label htmlFor="test" label="Test" rightToLeft={false}>
+          <button type="button">Click me</button>
+        </Label>
+      );
+
+      expect(wrapper.firstChild.nodeName).toBe('H4');
+      expect(wrapper.firstChild.innerHTML).toBe('Test');
+      expect(wrapper.lastChild.nodeName).toBe('BUTTON');
+    });
   });
 });

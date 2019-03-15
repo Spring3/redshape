@@ -6,7 +6,7 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   border-radius: 5px;
-  padding: 5px;
+  padding: 5px 10px;
   box-sizing: border-box;
   font-size: 14px;
   border: 1px solid #FF7079;
@@ -25,6 +25,9 @@ const StyledInput = styled.input`
   }
 `;
 
+const StyledCheckbox = styled.input`
+`;
+
 const FormGroup = styled.div`  
   h4 {
     margin-bottom: 10px;    
@@ -32,60 +35,98 @@ const FormGroup = styled.div`
   }
 `;
 
-const Labeled = ({ label, htmlFor, children }) => (
-  <FormGroup className="form-group">
-    <h4 htmlFor={htmlFor}>{label}</h4>
-    {children}
+const Label = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
+  <FormGroup className={`form-group ${className}`}>
+    { rightToLeft === true && (children) }
+    { inline === false
+      ? (
+        <h4 htmlFor={htmlFor}>{label}</h4>
+      )
+      : (
+        <label htmlFor={htmlFor}>{label}</label>
+      )
+    }
+    { rightToLeft === false && (children) }
   </FormGroup>
 );
 
-Labeled.propTypes = {
+Label.propTypes = {
   htmlFor: PropTypes.string,
   label: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  inline: PropTypes.bool,
+  rightToLeft: PropTypes.bool
 };
 
-Labeled.defaultProps = {
-  htmlFor: ''
+Label.defaultProps = {
+  htmlFor: '',
+  className: undefined,
+  inline: false,
+  rightToLeft: false
 };
 
-const Input = ({ type, placeholder, onChange, onBlur, value, id, name }) => (
-  <StyledInput
-    type={type}
-    placeholder={placeholder}
-    onChange={onChange}
-    onBlur={onBlur}
-    value={value}
-    id={id}
-    name={name}
-  />
-);
+const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, disabled }) => {
+  if (type.toLowerCase() === 'checkbox') {
+    return (
+      <StyledCheckbox
+        type={type}
+        onChange={onChange}
+        onBlur={onBlur}
+        checked={checked}
+        disabled={disabled}
+        id={id}
+        name={name}
+      />
+    );
+  }
+  return (
+    <StyledInput
+      type={type}
+      placeholder={placeholder}
+      onChange={onChange}
+      onBlur={onBlur}
+      disabled={disabled}
+      value={value}
+      id={id}
+      name={name}
+    />
+  );
+};
 
 Input.propTypes = {
-  type: PropTypes.oneOf(['email', 'password', 'text']),
+  type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   onBlur: PropTypes.func,
-  value: PropTypes.string
+  value: PropTypes.string,
+  checked: (props, propName, componentName) => { // eslint-disable-line
+    if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
+      return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);
+    }
+  }
 };
 
 Input.defaultProps = {
   type: 'text',
   placeholder: undefined,
   id: undefined,
+  disabled: false,
   name: undefined,
   onBlur: undefined,
-  value: undefined
+  value: undefined,
+  checked: false
 };
 
 export {
   Input,
-  Labeled
+  Label
 };
 
 export default {
   Input,
-  Labeled
+  Label
 };

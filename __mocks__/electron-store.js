@@ -28,9 +28,7 @@ class Store {
     values[key] = value;
   }
 
-  __reset = () => {
-    Store.__reset();
-  }
+  clear = () => Store.__reset();
 }
 
 module.exports = Store;
