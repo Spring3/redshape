@@ -21,6 +21,10 @@ const StyledTable = styled.table`
           background: #FF7079;
           color: white;
         }
+
+        svg {
+          vertical-align: middle;
+        }
       }
 
       th:last-child {

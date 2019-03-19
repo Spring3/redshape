@@ -5,6 +5,8 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
 import styled from 'styled-components';
+import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
+import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
 import actions from '../../actions';
 import { IssueFilter } from '../../actions/helper';
@@ -59,32 +61,23 @@ class SummaryPage extends Component {
 
     this.issuesHeaders = [
       { label: 'Id', isFixed: true, value: 'id' },
-      { label: 'Project', value: 'project' },
-      { label: 'Tracker', value: 'tracker' },
-      { label: 'Status', value: 'status' },
+      { label: 'Project', value: 'project.name' },
+      { label: 'Tracker', value: 'tracker.name' },
+      { label: 'Status', value: 'status.name' },
       { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Priority', value: 'priority' },
-      { label: 'Estimation', value: 'estimation' },
-      { label: 'Due Date', value: 'dueDate' }
+      { label: 'Priority', value: 'priority.name' },
+      { label: 'Estimation', value: 'estimated_hours' },
+      { label: 'Due Date', value: 'due_date' }
     ];
-
-    this.issueMapping = {
-      id: 'id',
-      project: 'project.name',
-      tracker: 'tracker.name',
-      status: 'status.name',
-      subject: 'subject',
-      priority: 'priority.name',
-      estimation: 'estimated_hours',
-      dueDate: 'due_date'
-    };
     
     this.state = {
       showClosed: false,
       issues: props.issues,
       // issues: storage.get(`${id}.issuesAssignedToMe`, []),
       selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
-      search: undefined
+      search: undefined,
+      sortBy: undefined,
+      sortDirection: undefined
     };
   }
 
@@ -133,7 +126,7 @@ class SummaryPage extends Component {
     if (value) {
       this.setState({
         issues: issues.filter((issue) => {
-          const testedString = selectedHeaders.map(header => _.get(issue, this.issueMapping[header.value])).join(' ');
+          const testedString = selectedHeaders.map(header => _.get(issue, header.value)).join(' ');
           return new RegExp(value, 'gi').test(testedString);
         })
       })
@@ -174,8 +167,27 @@ class SummaryPage extends Component {
     this.setState({ selectedHeaders });
   }
 
+  sortTable = (by) => { 
+    return (e) => {
+      const { sortBy, sortDirection, issues } = this.state;
+      if (sortBy !== by) {
+        this.setState({
+          sortBy: by,
+          sortDirection: 'asc',
+          issues: _.orderBy(issues, [by], ['asc'])
+        });
+      } else {
+        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        this.setState({
+          sortDirection: newSortDirection,
+          issues: _.orderBy(issues, [sortBy], [newSortDirection])
+        });
+      }
+    };
+  }
+
   render() {
-    const { issues, selectedHeaders, showClosed } = this.state;
+    const { issues, selectedHeaders, showClosed, sortBy, sortDirection } = this.state;
     return (
       <Grid>
         <IssuesSection>
@@ -221,14 +233,22 @@ class SummaryPage extends Component {
           <Table>
             <tr>
               {selectedHeaders.map(header => (
-                <th key={header.value}>{header.label}</th>
+                <th key={header.value} onClick={this.sortTable(header.value)}>
+                  {header.label}&nbsp;
+                  { sortBy === header.value && sortDirection === 'asc' && (  
+                    <SortAscendingIcon size={14}/>
+                  )}
+                  { sortBy === header.value && sortDirection === 'desc' && (  
+                    <SortDescendingIcon size={14}/>
+                  )}
+                </th>
               ))}
             </tr>
             {issues.map(item => (
               <tr key={item.id}>
                 {
                   selectedHeaders.map(header => (
-                    <td key={header.value}>{_.get(item, this.issueMapping[header.value])}</td>
+                    <td key={header.value}>{_.get(item, header.value)}</td>
                   ))
                 }
               </tr>

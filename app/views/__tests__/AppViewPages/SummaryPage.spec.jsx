@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { render, fireEvent, cleanup, wait } from 'react-testing-library';
 import { mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
@@ -60,7 +59,6 @@ const fixtures = {
 
 describe('AppView -> Summary Page', () => {
   afterEach(() => {
-    cleanup();
     fetch.resetMocks();
   });
 
