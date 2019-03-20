@@ -82,6 +82,7 @@ class SummaryPage extends Component {
   }
 
   componentWillMount() {
+    console.log(this.props.history);
     this.fetchIssues();
   }
 
@@ -186,6 +187,11 @@ class SummaryPage extends Component {
     };
   }
 
+  showIssueDetails(id) {
+    this.props.history.push(`/app/issue/${id}/`);
+    console.log(this.props.history);
+  }
+
   render() {
     const { issues, selectedHeaders, showClosed, sortBy, sortDirection } = this.state;
     return (
@@ -245,7 +251,7 @@ class SummaryPage extends Component {
               ))}
             </tr>
             {issues.map(item => (
-              <tr key={item.id}>
+              <tr key={item.id} onClick={this.showIssueDetails.bind(this, item.id)}>
                 {
                   selectedHeaders.map(header => (
                     <td key={header.value}>{_.get(item, header.value)}</td>

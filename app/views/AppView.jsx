@@ -10,6 +10,7 @@ import actions from '../actions';
 import { Input } from '../components/Input';
 import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
+import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 
 const Grid = styled.div`
   height: 100%;
@@ -106,6 +107,8 @@ class AppView extends Component {
       props.history.push('/');
     }
 
+    console.log(props.history);
+
     this.state = {
       showSidebar: false,
       showFooter: false
@@ -127,7 +130,7 @@ class AppView extends Component {
 
   render() {
     const { showSidebar, showFooter } = this.state;
-    const { user = {} } = this.props;
+    const { user = {}, match } = this.props;
     const { firstname, lastname } = user;
     return (
       <Grid>
@@ -181,8 +184,9 @@ class AppView extends Component {
           </Profile>
         </Navbar>
         <Content>
-          <Route path="/time" />
-          <Route path="/" component={SummaryPage} />
+          <Route exact path={match.path} component={SummaryPage} />
+          <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
+          <Route path={`${match.path}/time`} />
           <ActiveTimer show={showFooter}>
             <span>Task name</span>
             <span>00:00:00</span>
@@ -204,6 +208,9 @@ AppView.propTypes = {
     lastname: PropTypes.string.isRequired,
     api_key: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
+  }).isRequired,
+  match: PropTypes.shape({
+    path: PropTypes.string.isRequired
   }).isRequired
 }
 
