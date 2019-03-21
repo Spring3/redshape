@@ -27,7 +27,7 @@ const StyledTable = styled.table`
         }
       }
 
-      th:last-child {
+      th.due-date {
         width: 90px;
       }
 

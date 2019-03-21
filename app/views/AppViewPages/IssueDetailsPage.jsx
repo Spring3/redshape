@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import moment from 'moment';
+
+import actions from '../../actions';
 
 const Grid = styled.div`
   display: grid;
@@ -34,19 +37,41 @@ const ActivitySection = styled(Section)`
   grid-row: span 4;
 `;
 
-class IssueDetailsPage extends Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-    this.state = {
-      issues: props.issues
-      // issues: storage.get(`${id}.issuesAssignedToMe`, []),
-    };
+const ColumnList = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  float: left;
+  padding-right: 20px;
+
+  li {
+    columns: 2;
+    padding: 5px 0px 5px 0px;
   }
 
+  li div {
+    width: 150px;
+  }
+
+  li div:first-child {
+    font-weight: bold;
+  }
+`;
+
+const SmallNotice = styled.p`
+  font-size: 12px;
+`;
+
+const Wrapper = styled.div`
+  display: inline-block;
+  width: 100%;
+`;
+
+class IssueDetailsPage extends Component { 
   componentWillMount() {
-    console.log(this.props.history);
-    this.fetchIssues();
+    const { dispatch, match } = this.props;
+    dispatch(actions.issues.get(match.params.id));
   }
 
   fetchIssues = () => {
@@ -76,11 +101,73 @@ class IssueDetailsPage extends Component {
   }
 
   render() {
-    return (
+    const { issueDetails } = this.props;
+    console.log(issueDetails);
+    return issueDetails.id
+    ? (
       <Grid>
         <MainSection>
-          <h2>Issue Details</h2>
+          <h2>
+            <span>#{issueDetails.id}&nbsp;</span>
+            {issueDetails.subject}
+          </h2>
+          <SmallNotice>
+            Created by
+            <a href="#"> {issueDetails.author.name} </a>
+            <span>{moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
+          </SmallNotice>
+          {issueDetails.closed_on && (
+           <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
+          )}
+          <label>Status:</label>
+          <ul>
+            <li>Pending</li>
+            <li>in-Test</li>
+          </ul>
+          <Wrapper>
+            <ColumnList>
+              <li>
+                <div>Priority: </div>
+                <div>{issueDetails.priority.name}</div>
+              </li>
+              <li>
+                <div>Assignee: </div>
+                <div>{issueDetails.assigned_to.name}</div>
+              </li>
+              <li>
+                <div>Target version: </div>
+                <div>{issueDetails.fixed_version.name}</div>
+              </li>
+              <li>
+                <div>Due Date: </div>
+                <div>{issueDetails.due_date}</div>
+              </li>
+              </ColumnList>
+              <ColumnList>
+              <li>
+                <div>Tracker: </div>
+                <div>{issueDetails.tracker.name}</div>
+              </li>
+              <li>
+                <div>Estimated hours: </div>
+                <div>{issueDetails.total_estimated_hours}</div>
+              </li>
+              <li>
+                <div>Total time spent: </div>
+                <div>{issueDetails.total_spent_hours}</div>
+              </li>
+              <li>
+                <div>Time spent by me: </div>
+                <div>{issueDetails.spent_hours}</div>
+              </li>
+            </ColumnList>
+          </Wrapper>
+          <span>% Done: {issueDetails.done_ratio}</span>
           <div>
+            <h3>Description</h3>
+            <pre>
+              {issueDetails.description}
+            </pre>
           </div>
         </MainSection>
         <TimeSpentSection>
@@ -90,26 +177,17 @@ class IssueDetailsPage extends Component {
           <h2>Activity Stack</h2>
         </ActivitySection>
       </Grid>
-    );
+    )
+    : null;
   }
 }
 
 IssueDetailsPage.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    api_key: PropTypes.string.isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }).isRequired
+  issueDetails: PropTypes.object.isRequired
 };
 
 const mapStateToprops = state => ({
-  user: state.user,
-  issues: state.issues.all.data
+  issueDetails: state.issues.details.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });

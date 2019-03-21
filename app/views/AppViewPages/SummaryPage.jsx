@@ -239,7 +239,11 @@ class SummaryPage extends Component {
           <Table>
             <tr>
               {selectedHeaders.map(header => (
-                <th key={header.value} onClick={this.sortTable(header.value)}>
+                <th
+                  key={header.value}
+                  className={header.value === 'due_date' ? 'due-date' : ''}
+                  onClick={this.sortTable(header.value)}
+                >
                   {header.label}&nbsp;
                   { sortBy === header.value && sortDirection === 'asc' && (  
                     <SortAscendingIcon size={14}/>
@@ -287,7 +291,7 @@ SummaryPage.propTypes = {
 
 const mapStateToprops = state => ({
   user: state.user,
-  issues: state.issues.all.data
+  issues: state.issues.assignedToMe.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });
