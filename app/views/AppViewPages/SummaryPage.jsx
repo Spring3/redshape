@@ -82,7 +82,6 @@ class SummaryPage extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.history);
     this.fetchIssues();
   }
 

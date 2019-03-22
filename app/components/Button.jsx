@@ -38,6 +38,10 @@ const StyledLink = styled.a`
   &:visited {
     background: transparent;
   }
+
+  svg {
+    vertical-align: middle;
+  }
 `;
 
 

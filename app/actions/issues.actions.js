@@ -44,7 +44,7 @@ const get = id => (dispatch, getState) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({
-    url: `${redmineEndpoint}/issues/${id}.json?include=attachments,children,relations`,
+    url: `${redmineEndpoint}/issues/${id}.json?include=attachments,children,relations,journals,changesets`,
     token: api_key,
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {
