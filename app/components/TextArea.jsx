@@ -5,6 +5,11 @@ import styled from 'styled-components';
 const StyledTextArea = styled.textarea`
   font-size: 14px;
   font-family: inherit;
+  resize: none;
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  outline: none;
 `;
 
 const TextArea = ({

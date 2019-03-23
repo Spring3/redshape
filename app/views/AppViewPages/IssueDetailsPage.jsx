@@ -16,7 +16,7 @@ const Grid = styled.div`
   display: grid;
   padding: 20px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-auto-rows: 100px;
+  grid-auto-rows: minmax(100px, auto);
   grid-auto-flow: dense;
   grid-gap: 20px;
 `;
@@ -108,11 +108,13 @@ class IssueDetailsPage extends Component {
 
   componentWillMount() {
     const { dispatch, match } = this.props;
-    dispatch(actions.issues.getAllStatuses());
     dispatch(actions.issues.get(match.params.id));
   }
 
   onCommentChange = (e) => {
+    const element = e.target;
+    element.style.height = 'auto';
+    element.style.height = `${element.scrollHeight}px`;
     this.setState({
       comment: e.target.value
     });
@@ -153,110 +155,112 @@ class IssueDetailsPage extends Component {
       ? (
         <Grid>
           <MainSection>
-            <GhostButton onClick={history.goBack.bind(this)}>
-              <ArrowLeftIcon />
-            </GhostButton>
-            <IssueHeader>
-              <span>#{issueDetails.id}&nbsp;</span>
-              {issueDetails.subject}
-            </IssueHeader>
-            <SmallNotice>
-              Created by 
-              <a href="#">{issueDetails.author.name}</a>
-              <span> {moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
-            </SmallNotice>
-            {issueDetails.closed_on && (
-            <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
-            )}
-            <Wrapper>
-              <ColumnList>
-                <li>
-                  <div>Tracker: </div>
-                  <div>{issueDetails.tracker.name}</div>
-                </li>
-                <li>
-                  <div>Status:</div>
-                  <div>{issueDetails.status.name}</div>
-                </li>
-                <li>
-                  <div>Priority: </div>
-                  <div>{issueDetails.priority.name}</div>
-                </li>
-                <li>
-                  <div>Assignee: </div>
-                  <div>{issueDetails.assigned_to.name}</div>
-                </li>
-                <li>
-                  <div>Target version: </div>
-                  <div>{_.get(issueDetails, 'fixed_version.name')}</div>
-                </li>
-                <li>
-                  <div>Progress: </div>
-                  <div>
-                    <Progressbar
-                      percent={issueDetails.done_ratio}
-                      background="grey"
-                      color="white"
-                    />
-                  </div>
-                </li>
-              </ColumnList>
-              <ColumnList>
-                <li>
-                  <div>Start Date: </div>
-                  <div>{issueDetails.start_date}</div>
-                </li>
-                <li>
-                  <div>Due Date: </div>
-                  <div>{issueDetails.due_date}</div>
-                </li>
-                <li>
-                  <div>Estimated hours: </div>
-                  <div>{issueDetails.total_estimated_hours}</div>
-                </li>
-                <li>
-                  <div>Total time spent: </div>
-                  <div>{issueDetails.total_spent_hours.toFixed(2)}</div>
-                </li>
-                <li>
-                  <div>Time spent by me: </div>
-                  <div>{issueDetails.spent_hours.toFixed(2)}</div>
-                </li>
-                <li>
-                  <div>Time cap: </div>
-                  <div>
-                    <Progressbar
-                      percent={issueDetails.total_spent_hours / issueDetails.total_estimated_hours * 100}
-                      background="grey"
-                      color="white"
-                    />
-                  </div>
-                </li>
-              </ColumnList>
-            </Wrapper>
             <div>
-              <h3>Description</h3>
-              <DescriptionText>
-                {issueDetails.description}
-              </DescriptionText>
-            </div>
-            <div>
-              <h3>Comments</h3>
-              <Comments>
-                {issueDetails.journals.filter(entry => entry.notes).map(entry => (
-                  <li key={entry.id}>
-                    <div>{entry.user.name} ({entry.created_on})</div>
-                    <DescriptionText>{entry.notes}</DescriptionText>
+              <GhostButton onClick={history.goBack.bind(this)}>
+                <ArrowLeftIcon />
+              </GhostButton>
+              <IssueHeader>
+                <span>#{issueDetails.id}&nbsp;</span>
+                {issueDetails.subject}
+              </IssueHeader>
+              <SmallNotice>
+                Created by&nbsp;
+                <a href="#">{issueDetails.author.name}</a>
+                <span> {moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
+              </SmallNotice>
+              {issueDetails.closed_on && (
+              <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
+              )}
+              <Wrapper>
+                <ColumnList>
+                  <li>
+                    <div>Tracker: </div>
+                    <div>{issueDetails.tracker.name}</div>
                   </li>
-                ))}
-              </Comments>
-              <TextArea
-                name="comment"
-                value={this.state.comment}
-                onChange={this.onCommentChange}
-                rows="5"
-              />
-              <Button><SendIcon /></Button>
+                  <li>
+                    <div>Status:</div>
+                    <div>{issueDetails.status.name}</div>
+                  </li>
+                  <li>
+                    <div>Priority: </div>
+                    <div>{issueDetails.priority.name}</div>
+                  </li>
+                  <li>
+                    <div>Assignee: </div>
+                    <div>{issueDetails.assigned_to.name}</div>
+                  </li>
+                  <li>
+                    <div>Target version: </div>
+                    <div>{_.get(issueDetails, 'fixed_version.name')}</div>
+                  </li>
+                  <li>
+                    <div>Progress: </div>
+                    <div>
+                      <Progressbar
+                        percent={issueDetails.done_ratio}
+                        background="grey"
+                        color="white"
+                      />
+                    </div>
+                  </li>
+                </ColumnList>
+                <ColumnList>
+                  <li>
+                    <div>Start Date: </div>
+                    <div>{issueDetails.start_date}</div>
+                  </li>
+                  <li>
+                    <div>Due Date: </div>
+                    <div>{issueDetails.due_date}</div>
+                  </li>
+                  <li>
+                    <div>Estimated hours: </div>
+                    <div>{issueDetails.total_estimated_hours}</div>
+                  </li>
+                  <li>
+                    <div>Total time spent: </div>
+                    <div>{issueDetails.total_spent_hours.toFixed(2)}</div>
+                  </li>
+                  <li>
+                    <div>Time spent by me: </div>
+                    <div>{issueDetails.spent_hours.toFixed(2)}</div>
+                  </li>
+                  <li>
+                    <div>Time cap: </div>
+                    <div>
+                      <Progressbar
+                        percent={issueDetails.total_spent_hours / issueDetails.total_estimated_hours * 100}
+                        background="grey"
+                        color="white"
+                      />
+                    </div>
+                  </li>
+                </ColumnList>
+              </Wrapper>
+              <div>
+                <h3>Description</h3>
+                <DescriptionText>
+                  {issueDetails.description}
+                </DescriptionText>
+              </div>
+              <div>
+                <h3>Comments</h3>
+                <Comments>
+                  {issueDetails.journals.filter(entry => entry.notes).map(entry => (
+                    <li key={entry.id}>
+                      <div>{entry.user.name} ({entry.created_on})</div>
+                      <DescriptionText>{entry.notes}</DescriptionText>
+                    </li>
+                  ))}
+                </Comments>
+                <TextArea
+                  name="comment"
+                  value={this.state.comment}
+                  onChange={this.onCommentChange}
+                  rows="5"
+                />
+                <Button><SendIcon /></Button>
+              </div>
             </div>
           </MainSection>
           <TimeSpentSection>

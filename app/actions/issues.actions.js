@@ -11,7 +11,7 @@ const getAll = (filter, offset, limit) => (dispatch, getState) => {
   const { user = {} } = getState();
   const { redmineEndpoint, api_key } = user;
 
-  let url = `${redmineEndpoint}/issues.json?include=attachments,children`;
+  let url = `${redmineEndpoint}/issues.json?include=attachments,children,relations,journals`;
 
   if (filter) {
     url += filter;
@@ -44,7 +44,7 @@ const get = id => (dispatch, getState) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({
-    url: `${redmineEndpoint}/issues/${id}.json?include=attachments,children,relations,journals,changesets`,
+    url: `${redmineEndpoint}/issues/${id}.json?include=attachments,children,relations,journals`,
     token: api_key,
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {
