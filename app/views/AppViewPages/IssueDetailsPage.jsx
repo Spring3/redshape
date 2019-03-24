@@ -11,6 +11,7 @@ import Button, { GhostButton } from '../../components/Button';
 import TextArea from '../../components/TextArea';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
+import MarkdownEditor from '../../components/MarkdownEditor';
 
 const Grid = styled.div`
   display: grid;
@@ -111,14 +112,7 @@ class IssueDetailsPage extends Component {
     dispatch(actions.issues.get(match.params.id));
   }
 
-  onCommentChange = (e) => {
-    const element = e.target;
-    element.style.height = 'auto';
-    element.style.height = `${element.scrollHeight}px`;
-    this.setState({
-      comment: e.target.value
-    });
-  };
+  onCommentChange = comment => this.setState({ comment });
 
   publishComment = () => {
 
@@ -253,13 +247,17 @@ class IssueDetailsPage extends Component {
                     </li>
                   ))}
                 </Comments>
-                <TextArea
+                <MarkdownEditor
+                  onChange={this.onCommentChange}
+                  preview={true}
+                />
+                {/* <TextArea
                   name="comment"
                   value={this.state.comment}
                   onChange={this.onCommentChange}
                   rows="5"
-                />
-                <Button><SendIcon /></Button>
+                /> */}
+                {/* <!-- <Button><SendIcon /></Button> --> */}
               </div>
             </div>
           </MainSection>
@@ -277,10 +275,10 @@ IssueDetailsPage.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-const mapStateToprops = state => ({
+const mapStateToProps = state => ({
   issueDetails: state.issues.details.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });
 
-export default connect(mapStateToprops, mapDispatchToProps)(IssueDetailsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);

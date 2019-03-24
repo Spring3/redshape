@@ -19,18 +19,19 @@ const TextArea = ({
   disabled,
   id,
   value,
-  className
+  className,
+  forwardedRef
 }) => (
   <StyledTextArea
+    ref={forwardedRef}
     name={name}
     onChange={onChange}
     rows={rows}
     disabled={disabled}
     id={id}
     className={className}
-  >
-    {value}
-  </StyledTextArea>
+    value={value}
+  />
 );
 
 TextArea.propTypes = {
@@ -49,7 +50,8 @@ TextArea.propTypes = {
     PropTypes.number
   ]),
   className: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.string,
+  forwardedRef: PropTypes.object
 };
 
 TextArea.defaultProps = {
@@ -58,7 +60,8 @@ TextArea.defaultProps = {
   disabled: false,
   id: undefined,
   className: undefined,
-  value: undefined
+  value: undefined,
+  forwardedRef: undefined
 };
 
-export default TextArea;
+export default React.forwardRef((props, ref) => <TextArea forwardedRef={ref} {...props} />);
