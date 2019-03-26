@@ -8,7 +8,6 @@ import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 import SendIcon from 'mdi-react/SendIcon';
 
 import Button, { GhostButton } from '../../components/Button';
-import TextArea from '../../components/TextArea';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
 import MarkdownEditor from '../../components/MarkdownEditor';
@@ -34,8 +33,7 @@ const MainSection = styled(Section)`
 `;
 
 const TimeSpentSection = styled(Section)`
-  grid-column: span 3;
-  grid-row: span 2;
+  width: 350px;
 `;
 
 const ColumnList = styled.ul`
@@ -99,6 +97,11 @@ const Comments = styled.ul`
   }
 `;
 
+const FlexRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 class IssueDetailsPage extends Component { 
   constructor(props) {
     super(props);
@@ -149,88 +152,95 @@ class IssueDetailsPage extends Component {
       ? (
         <Grid>
           <MainSection>
+            <FlexRow>
+              <div>
+                <GhostButton onClick={history.goBack.bind(this)}>
+                  <ArrowLeftIcon />
+                </GhostButton>
+                <IssueHeader>
+                  <span>#{issueDetails.id}&nbsp;</span>
+                  {issueDetails.subject}
+                </IssueHeader>
+                <SmallNotice>
+                  Created by&nbsp;
+                  <a href="#">{issueDetails.author.name}</a>
+                  <span> {moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
+                </SmallNotice>
+                {issueDetails.closed_on && (
+                <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
+                )}
+                <Wrapper>
+                  <ColumnList>
+                    <li>
+                      <div>Tracker: </div>
+                      <div>{issueDetails.tracker.name}</div>
+                    </li>
+                    <li>
+                      <div>Status:</div>
+                      <div>{issueDetails.status.name}</div>
+                    </li>
+                    <li>
+                      <div>Priority: </div>
+                      <div>{issueDetails.priority.name}</div>
+                    </li>
+                    <li>
+                      <div>Assignee: </div>
+                      <div>{issueDetails.assigned_to.name}</div>
+                    </li>
+                    <li>
+                      <div>Target version: </div>
+                      <div>{_.get(issueDetails, 'fixed_version.name')}</div>
+                    </li>
+                    <li>
+                      <div>Progress: </div>
+                      <div>
+                        <Progressbar
+                          percent={issueDetails.done_ratio}
+                          background="grey"
+                          color="white"
+                        />
+                      </div>
+                    </li>
+                  </ColumnList>
+                  <ColumnList>
+                    <li>
+                      <div>Start Date: </div>
+                      <div>{issueDetails.start_date}</div>
+                    </li>
+                    <li>
+                      <div>Due Date: </div>
+                      <div>{issueDetails.due_date}</div>
+                    </li>
+                    <li>
+                      <div>Estimated hours: </div>
+                      <div>{issueDetails.total_estimated_hours}</div>
+                    </li>
+                    <li>
+                      <div>Total time spent: </div>
+                      <div>{issueDetails.total_spent_hours.toFixed(2)}</div>
+                    </li>
+                    <li>
+                      <div>Time spent by me: </div>
+                      <div>{issueDetails.spent_hours.toFixed(2)}</div>
+                    </li>
+                    <li>
+                      <div>Time cap: </div>
+                      <div>
+                        <Progressbar
+                          percent={issueDetails.total_spent_hours / issueDetails.total_estimated_hours * 100}
+                          background="grey"
+                          color="white"
+                        />
+                      </div>
+                    </li>
+                  </ColumnList>
+                </Wrapper>
+              </div>
+              <TimeSpentSection>
+                <h2>Time spent</h2>
+              </TimeSpentSection>
+            </FlexRow>
             <div>
-              <GhostButton onClick={history.goBack.bind(this)}>
-                <ArrowLeftIcon />
-              </GhostButton>
-              <IssueHeader>
-                <span>#{issueDetails.id}&nbsp;</span>
-                {issueDetails.subject}
-              </IssueHeader>
-              <SmallNotice>
-                Created by&nbsp;
-                <a href="#">{issueDetails.author.name}</a>
-                <span> {moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
-              </SmallNotice>
-              {issueDetails.closed_on && (
-              <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
-              )}
-              <Wrapper>
-                <ColumnList>
-                  <li>
-                    <div>Tracker: </div>
-                    <div>{issueDetails.tracker.name}</div>
-                  </li>
-                  <li>
-                    <div>Status:</div>
-                    <div>{issueDetails.status.name}</div>
-                  </li>
-                  <li>
-                    <div>Priority: </div>
-                    <div>{issueDetails.priority.name}</div>
-                  </li>
-                  <li>
-                    <div>Assignee: </div>
-                    <div>{issueDetails.assigned_to.name}</div>
-                  </li>
-                  <li>
-                    <div>Target version: </div>
-                    <div>{_.get(issueDetails, 'fixed_version.name')}</div>
-                  </li>
-                  <li>
-                    <div>Progress: </div>
-                    <div>
-                      <Progressbar
-                        percent={issueDetails.done_ratio}
-                        background="grey"
-                        color="white"
-                      />
-                    </div>
-                  </li>
-                </ColumnList>
-                <ColumnList>
-                  <li>
-                    <div>Start Date: </div>
-                    <div>{issueDetails.start_date}</div>
-                  </li>
-                  <li>
-                    <div>Due Date: </div>
-                    <div>{issueDetails.due_date}</div>
-                  </li>
-                  <li>
-                    <div>Estimated hours: </div>
-                    <div>{issueDetails.total_estimated_hours}</div>
-                  </li>
-                  <li>
-                    <div>Total time spent: </div>
-                    <div>{issueDetails.total_spent_hours.toFixed(2)}</div>
-                  </li>
-                  <li>
-                    <div>Time spent by me: </div>
-                    <div>{issueDetails.spent_hours.toFixed(2)}</div>
-                  </li>
-                  <li>
-                    <div>Time cap: </div>
-                    <div>
-                      <Progressbar
-                        percent={issueDetails.total_spent_hours / issueDetails.total_estimated_hours * 100}
-                        background="grey"
-                        color="white"
-                      />
-                    </div>
-                  </li>
-                </ColumnList>
-              </Wrapper>
               <div>
                 <h3>Description</h3>
                 <DescriptionText>
@@ -242,7 +252,7 @@ class IssueDetailsPage extends Component {
                 <Comments>
                   {issueDetails.journals.filter(entry => entry.notes).map(entry => (
                     <li key={entry.id}>
-                      <div>{entry.user.name} ({entry.created_on})</div>
+                      <div>{entry.user.name} <span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
                       <DescriptionText>{entry.notes}</DescriptionText>
                     </li>
                   ))}
@@ -251,6 +261,12 @@ class IssueDetailsPage extends Component {
                   onChange={this.onCommentChange}
                   preview={true}
                 />
+                <Button
+                  type="button"
+                  onClick={this.postComment}
+                >
+                  Publish <SendIcon />
+                </Button>
                 {/* <TextArea
                   name="comment"
                   value={this.state.comment}
@@ -261,9 +277,6 @@ class IssueDetailsPage extends Component {
               </div>
             </div>
           </MainSection>
-          <TimeSpentSection>
-            <h2>Time spent</h2>
-          </TimeSpentSection>
         </Grid>
       )
       : null;

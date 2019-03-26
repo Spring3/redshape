@@ -12,6 +12,10 @@ const StyledButton = styled.button`
   font-size: 14px;
   outline: none;
 
+  svg {
+    vertical-align: middle;
+  }
+
   ${props => css`
     width: ${props.block ? '100%' : 'auto'};
     margin: 25px auto 0px auto;

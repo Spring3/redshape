@@ -15,6 +15,7 @@ import FormatListNumberedIcon from 'mdi-react/FormatListNumberedIcon';
 import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
+import PageNextOutlineIcon from 'mdi-react/PageNextOutlineIcon';
 
 import TextArea from './TextArea';
 
@@ -53,7 +54,8 @@ class MarkdownEditor extends Component {
 
     this.state = {
       value: props.initialValue,
-      textareaHeight: 15
+      textareaHeight: 15,
+      showPreview: props.preview
     };
 
     this.textareaRef = React.createRef();
@@ -150,9 +152,15 @@ class MarkdownEditor extends Component {
     this.adjustTextAreaHeight();
   }
 
+  togglePreview = () => {
+    this.setState({
+      showPreview: !this.state.showPreview
+    });
+  }
+
   render() {
-    const { className, id, preview } = this.props;
-    const { value, textareaHeight } = this.state;
+    const { className, id } = this.props;
+    const { value, textareaHeight, showPreview } = this.state;
     console.log(textareaHeight);
     return (
       <div
@@ -173,14 +181,15 @@ class MarkdownEditor extends Component {
           <MarkdownOption onClick={this.makeQuote}><FormatQuoteCloseIcon /></MarkdownOption>
           <MarkdownOption onClick={this.makeLink}><LinkVariantIcon /></MarkdownOption>
           <MarkdownOption onClick={this.makeImage}><ImageOutlineIcon /></MarkdownOption>
+          <MarkdownOption onClick={this.togglePreview}><PageNextOutlineIcon /></MarkdownOption>
         </MarkdownOptionsList>
         <ModifiedTextArea
           ref={this.textareaRef}
           onChange={this.onTextAreaTyped}
           value={value}
-          preview={preview}
+          preview={showPreview}
         />
-        { preview && (
+        { showPreview && (
           <Preview srcDoc={this.converter.makeHtml(value)}  height={`${textareaHeight + 20}px`} />
         )}
       </div>

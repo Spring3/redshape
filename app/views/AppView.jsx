@@ -128,6 +128,11 @@ class AppView extends Component {
     history.push('/');
   }
 
+  openSummaryPage = () => {
+    const { history } = this.props;
+    history.push('/app/');
+  }
+
   render() {
     const { showSidebar, showFooter } = this.state;
     const { user = {}, match } = this.props;
@@ -174,12 +179,12 @@ class AppView extends Component {
                 <MenuIcon />
               </GhostButton>
             </Hamburger>
-            <li>My Page</li>
+            <li onClick={this.openSummaryPage}>Summary</li>
             <li>Time</li>
             <li>Issues</li>
           </MenuList>
           <Profile>
-            <li>{firstname} {lastname}</li>
+            <li onClick={this.openSummaryPage}>{firstname} {lastname}</li>
             <li><SignOutButton id="signout" onClick={this.signout}>Sign out</SignOutButton></li>
           </Profile>
         </Navbar>
