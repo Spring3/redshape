@@ -56,7 +56,7 @@ TextArea.propTypes = {
 
 TextArea.defaultProps = {
   name: undefined,
-  rows: 2,
+  rows: 1,
   disabled: false,
   id: undefined,
   className: undefined,

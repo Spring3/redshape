@@ -97,6 +97,15 @@ const Comments = styled.ul`
   }
 `;
 
+const List = styled.ul`
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    display: block;
+  }
+`;
+
 const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -111,14 +120,20 @@ class IssueDetailsPage extends Component {
   }
 
   componentWillMount() {
-    const { dispatch, match } = this.props;
+    const { dispatch, match, user } = this.props;
     dispatch(actions.issues.get(match.params.id));
+    dispatch(actions.tracking.getAll(user.id, match.params.id));
   }
 
   onCommentChange = comment => this.setState({ comment });
 
   publishComment = () => {
 
+  }
+
+  toggleTracking = () => {
+    const { dispatch, issueDetails } = this.props;
+    dispatch(actions.tracking.trackingStart(issueDetails));
   }
 
   // const { dispatch, user } = this.props;
@@ -146,7 +161,7 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { issueDetails, history } = this.props;
+    const { issueDetails, issueTime, history } = this.props;
     console.log(issueDetails);
     return issueDetails.id
       ? (
@@ -159,7 +174,13 @@ class IssueDetailsPage extends Component {
                 </GhostButton>
                 <IssueHeader>
                   <span>#{issueDetails.id}&nbsp;</span>
-                  {issueDetails.subject}
+                  <span>{issueDetails.subject}</span>
+                  &nbsp;
+                  <Button
+                    onClick={this.toggleTracking}
+                  >
+                    Track Time
+                  </Button>
                 </IssueHeader>
                 <SmallNotice>
                   Created by&nbsp;
@@ -238,6 +259,16 @@ class IssueDetailsPage extends Component {
               </div>
               <TimeSpentSection>
                 <h2>Time spent</h2>
+                <List>
+                  {issueTime.map(timeEntry => (
+                    <li key={timeEntry.id}>
+                      <div>{timeEntry.comments}</div>
+                      <div>{timeEntry.hours} hours</div>
+                      <div>{timeEntry.user.name}</div>
+                      <div>{timeEntry.spent_on}</div>
+                    </li>
+                  ))}
+                </List>
               </TimeSpentSection>
             </FlexRow>
             <div>
@@ -285,11 +316,15 @@ class IssueDetailsPage extends Component {
 
 IssueDetailsPage.propTypes = {
   issueDetails: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  issueTime: PropTypes.arrayOf(PropTypes.object).isRequired,
+  user: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  issueDetails: state.issues.details.data
+  user: state.user,
+  issueDetails: state.issues.current.data,
+  issueTime: state.issues.time.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });

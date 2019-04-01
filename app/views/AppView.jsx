@@ -8,6 +8,7 @@ import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import actions from '../actions';
 import { Input } from '../components/Input';
+import Timer from '../components/Timer';
 import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
@@ -35,11 +36,6 @@ const Aside = styled.aside`
   grid-row: 1 / -1;
   grid-column: span 3;
   padding-top: 25px;
-`;
-
-const ActiveTimer = styled.div`
-  display: ${props => props.show ? 'block' : 'none'};
-  background: sandybrown;
 `;
 
 const Content = styled.div`
@@ -110,8 +106,7 @@ class AppView extends Component {
     console.log(props.history);
 
     this.state = {
-      showSidebar: false,
-      showFooter: false
+      showSidebar: false
     };
   }
 
@@ -134,9 +129,17 @@ class AppView extends Component {
   }
 
   render() {
-    const { showSidebar, showFooter } = this.state;
-    const { user = {}, match } = this.props;
+    const { showSidebar } = this.state;
+    const {
+      user = {},
+      match,
+      tracking,
+      trackingStop,
+      trackingPause,
+      trackingContinue
+    } = this.props;
     const { firstname, lastname } = user;
+
     return (
       <Grid>
         <Aside show={showSidebar}>
@@ -191,12 +194,15 @@ class AppView extends Component {
         <Content>
           <Route exact path={match.path} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
-          <Route path={`${match.path}/time`} />
-          <ActiveTimer show={showFooter}>
-            <span>Task name</span>
-            <span>00:00:00</span>
-            <button>Stop</button>
-          </ActiveTimer>
+          <Timer
+            isEnabled={tracking.isTracking}
+            isPaused={tracking.isPaused}
+            initialValue={tracking.duration}
+            text={tracking.issue.subject}
+            onStop={trackingStop}
+            onPause={trackingPause}
+            onContinue={trackingContinue}
+          />
         </Content>
       </Grid>
     );
@@ -214,17 +220,31 @@ AppView.propTypes = {
     api_key: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
   }).isRequired,
+  tracking: PropTypes.shape({
+    isTracking: PropTypes.bool.isRequired,
+    issue: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }).isRequired,
+    startDate: PropTypes.string,
+    duration: PropTypes.number
+  }).isRequired,
+  trackedIssueName: PropTypes.string,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  tracking: state.tracking
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(actions.user.logout())
+  logout: () => dispatch(actions.user.logout()),
+  trackingPause: value => dispatch(actions.tracking.trackingPause(value)),
+  trackingContinue: () => dispatch(actions.tracking.trackingContinue()),
+  trackingStop: value => dispatch(actions.tracking.trackingStop(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AppView));

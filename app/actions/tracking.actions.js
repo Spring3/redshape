@@ -1,5 +1,10 @@
+import _ from 'lodash';
 import request, { notify } from './helper';
 
+export const TRACKING_START = 'TRACKING_START';
+export const TRACKING_STOP = 'TRACKING_STOP';
+export const TRACKING_PAUSE = 'TRACKING_PAUSE';
+export const TRACKING_CONTINUE = 'TRACKING_CONTINUE';
 export const TIME_SUBMIT = 'TIME_SUBMIT';
 export const TIME_UPDATE = 'TIME_UPDATE';
 export const TIME_GET_ALL = 'TIME_GET_ALL';
@@ -57,10 +62,9 @@ const update = (entryId, issueId, date, hours, activityId, comment) => (dispatch
     });
 };
 
-const getAll = (offset, limit, userId, projectId, issueId) => (dispatch, getState) => {
+const getAll = (userId, issueId, projectId, offset, limit) => (dispatch, getState) => {
   const { user = {} } = getState();
   const { redmineEndpoint, api_key } = user;
-  let url = `${redmineEndpoint}/time_entries.json?`;
   const params = {
     offset,
     limit,
@@ -69,11 +73,8 @@ const getAll = (offset, limit, userId, projectId, issueId) => (dispatch, getStat
     issue_id: issueId
   };
 
-  for (const [key, value] of Object.entries(params)) { // eslint-disable-line
-    if (value) {
-      url += `&${key}=${value}`;
-    }
-  }
+  const queryParams = new URLSearchParams(_(params).pickBy().value()).toString();
+  const url = `${redmineEndpoint}/time_entries.json?${queryParams}`;
 
   dispatch(notify.start(TIME_GET_ALL));
 
@@ -87,8 +88,17 @@ const getAll = (offset, limit, userId, projectId, issueId) => (dispatch, getStat
     });
 };
 
+const trackingStart = issue => ({ type: TRACKING_START, issue });
+const trackingStop = value => ({ type: TRACKING_STOP, duration: value });
+const trackingPause = value => ({ type: TRACKING_PAUSE, duration: value });
+const trackingContinue = () => ({ type: TRACKING_CONTINUE });
+
 export default {
   submit,
   update,
-  getAll
+  getAll,
+  trackingStart,
+  trackingStop,
+  trackingPause,
+  trackingContinue
 };

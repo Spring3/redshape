@@ -33,11 +33,6 @@ const IssuesSection = styled(Section)`
   grid-row: span 6;
 `;
 
-const TimeSpentSection = styled(Section)`
-  grid-column: span 3;
-  grid-row: span 2;
-`;
-
 const ActivitySection = styled(Section)`
   grid-column: span 3;
   grid-row: span 4;
@@ -264,9 +259,6 @@ class SummaryPage extends Component {
             ))}
           </Table>
         </IssuesSection>
-        <TimeSpentSection>
-          <h2>Time spent</h2>
-        </TimeSpentSection>
         <ActivitySection>
           <h2>Activity Stack</h2>
         </ActivitySection>
@@ -288,11 +280,11 @@ SummaryPage.propTypes = {
   }).isRequired
 };
 
-const mapStateToprops = state => ({
+const mapStateToProps = state => ({
   user: state.user,
   issues: state.issues.assignedToMe.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });
 
-export default connect(mapStateToprops, mapDispatchToProps)(SummaryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);

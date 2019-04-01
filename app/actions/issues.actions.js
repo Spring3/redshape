@@ -53,24 +53,6 @@ const get = id => (dispatch, getState) => {
     });
 };
 
-const updateStatus = (issueId, status_id, comment) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
-  dispatch(notify.start(ISSUES_UPDATE));
-
-  return request({
-    url: `${redmineEndpoint}/issues/${issueId}.json`,
-    data: { notes: comment, status_id },
-    method: 'PUT',
-    token: api_key
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_UPDATE, data)))
-    .catch((error) => {
-      console.error(`Error when trying to update the status of an issue with id ${issueId}`, error);
-      dispatch(notify.nok(ISSUES_UPDATE, error));
-    });
-};
-
 const assign = (issueId, assignee, comment) => (dispatch, getState) => {
   const { user = {} } = getState();
   const { redmineEndpoint, api_key } = user;
@@ -124,7 +106,6 @@ const getAllTrackers = (dispatch, getState) => {
 export default {
   getAll,
   get,
-  updateStatus,
   assign,
   getAllStatuses,
   getAllTrackers
