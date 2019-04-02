@@ -176,8 +176,15 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { issueDetails, issueTime, history, user } = this.props;
+    const { issueDetails, issueTime, history, user, projects } = this.props;
     const { selectedTimeEntry } = this.state;
+    const selectedEntryProject = selectedTimeEntry ? projects[selectedTimeEntry.project.id] : undefined;
+    let selectOptions = [];
+    if (selectedEntryProject) {
+      selectOptions = selectedEntryProject.activities.map(({ id, name }) => ({ value: id, label: name }));
+    }
+    console.log(projects);
+    console.log(selectOptions);
     console.log(issueDetails);
     return issueDetails.id
       ? (
@@ -335,7 +342,11 @@ class IssueDetailsPage extends Component {
               <div>
                 <div>Author: {selectedTimeEntry.user.name}</div>
                 <div>Project: {selectedTimeEntry.project.name}</div>
-                <div>Activity: {selectedTimeEntry.activity.name}</div>
+                <div>Activity</div>
+                <Select
+                  options={selectOptions}
+                  defaultValue={selectOptions.find(option => option.value === selectedTimeEntry.activity.id)}
+                />
                 <div>Time: {selectedTimeEntry.hours} hours</div>
                 <div>Date: {selectedTimeEntry.spent_on}</div>
                 <h3>Comment</h3>
@@ -363,13 +374,15 @@ IssueDetailsPage.propTypes = {
   issueDetails: PropTypes.object.isRequired,
   issueTime: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
+  projects: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.user,
   issueDetails: state.issues.current.data,
-  issueTime: state.issues.time.data
+  issueTime: state.issues.time.data,
+  projects: state.projects.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });

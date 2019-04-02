@@ -10,6 +10,21 @@ const initialState = {
   error: undefined
 };
 
+const convertProjectsArray = (projectPages = []) => {
+  const result = {};
+  projectPages.forEach((projectPage) => {
+    const projects = _.get(projectPage, 'projects', []);
+    projects.forEach(({ id, name, time_entry_activities }) => {
+      result[id] = {
+        id,
+        name,
+        activities: time_entry_activities
+      };
+    });
+  });
+  return result;
+};
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case PROJECT_GET_ALL: {
@@ -17,22 +32,30 @@ export default (state = initialState, action) => {
         case 'START': {
           return { ...state, isFetching: true };
         }
-        case 'OK': {
-          const projects = _.get(action.data, 'projects', []).reduce((acc, project) => {
-            const { id, time_entry_activities } = project;
-            acc[id] = {
-              id,
-              activities: time_entry_activities
-            };
-            return acc;
-          }, {});
-          storage.set('projects', projects);
+        case 'PAGE_NEXT': {
+          const projects = convertProjectsArray(action.data);
           return {
             ...state,
-            isFetching: false,
-            data: projects,
+            data: {
+              ...state.data,
+              ...projects
+            },
             error: undefined
           };
+        }
+        case 'OK': {
+          const projects = convertProjectsArray(action.data);
+          const nextState = {
+            ...state,
+            isFetching: false,
+            data: {
+              ...state.data,
+              ...projects
+            },
+            error: undefined
+          };
+          storage.set('projects', nextState);
+          return nextState;
         }
         case 'NOK': {
           return { ...state, isFetching: false, error: action.data };

@@ -111,6 +111,7 @@ const request = ({
 
 const notify = {
   start: type => ({ type, status: 'START' }),
+  paginate: (type, data) => ({ type, data, status: 'PAGE_NEXT' }),
   ok: (type, data) => ({ type, data, status: 'OK' }),
   nok: (type, data) => ({ type, data, status: 'NOK' })
 };
