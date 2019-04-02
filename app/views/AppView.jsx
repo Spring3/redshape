@@ -12,6 +12,7 @@ import Timer from '../components/Timer';
 import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import storage from '../../modules/storage';
 
 const Grid = styled.div`
   height: 100%;
@@ -110,6 +111,10 @@ class AppView extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.getProjectData();
+  }
+
   toggleSidebar = () => {
     const { showSidebar } = this.state;
     this.setState({
@@ -126,6 +131,13 @@ class AppView extends Component {
   openSummaryPage = () => {
     const { history } = this.props;
     history.push('/app/');
+  }
+
+  onTrackingStop = (value) => {
+    return this.props.trackingStop(value)
+      .then(() => {
+        storage.delete('time_tracking');
+      });
   }
 
   render() {
@@ -183,7 +195,6 @@ class AppView extends Component {
               </GhostButton>
             </Hamburger>
             <li onClick={this.openSummaryPage}>Summary</li>
-            <li>Time</li>
             <li>Issues</li>
           </MenuList>
           <Profile>
@@ -199,7 +210,7 @@ class AppView extends Component {
             isPaused={tracking.isPaused}
             initialValue={tracking.duration}
             text={tracking.issue.subject}
-            onStop={trackingStop}
+            onStop={this.onTrackingStop}
             onPause={trackingPause}
             onContinue={trackingContinue}
           />
@@ -244,7 +255,8 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
   trackingPause: value => dispatch(actions.tracking.trackingPause(value)),
   trackingContinue: () => dispatch(actions.tracking.trackingContinue()),
-  trackingStop: value => dispatch(actions.tracking.trackingStop(value))
+  trackingStop: value => dispatch(actions.tracking.trackingStop(value)),
+  getProjectData: () => dispatch(actions.projects.getAll())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AppView));

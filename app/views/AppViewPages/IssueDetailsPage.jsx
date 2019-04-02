@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import Select from 'react-select';
+import Modal from 'react-responsive-modal';
 import styled from 'styled-components';
 import moment from 'moment';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
@@ -136,6 +138,19 @@ class IssueDetailsPage extends Component {
     dispatch(actions.tracking.trackingStart(issueDetails));
   }
 
+  showTimeEntryModal = (timeEntry) => () => {
+    console.log(timeEntry);
+    this.setState({
+      selectedTimeEntry: timeEntry
+    });
+  }
+
+  handleTimeEntryModalClose = () => {
+    this.setState({
+      selectedTimeEntry: undefined
+    });
+  }
+
   // const { dispatch, user } = this.props;
   // const queryFilter = new IssueFilter()
   //   .assignee(user.id)
@@ -161,7 +176,8 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { issueDetails, issueTime, history } = this.props;
+    const { issueDetails, issueTime, history, user } = this.props;
+    const { selectedTimeEntry } = this.state;
     console.log(issueDetails);
     return issueDetails.id
       ? (
@@ -259,13 +275,15 @@ class IssueDetailsPage extends Component {
               </div>
               <TimeSpentSection>
                 <h2>Time spent</h2>
+                <Button onClick={this.addTime}>Add</Button>
                 <List>
                   {issueTime.map(timeEntry => (
-                    <li key={timeEntry.id}>
+                    <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
                       <div>{timeEntry.comments}</div>
                       <div>{timeEntry.hours} hours</div>
                       <div>{timeEntry.user.name}</div>
                       <div>{timeEntry.spent_on}</div>
+                      <Button onClick={this.removeTimeEntry}>Remove</Button>
                     </li>
                   ))}
                 </List>
@@ -308,6 +326,33 @@ class IssueDetailsPage extends Component {
               </div>
             </div>
           </MainSection>
+          { !!selectedTimeEntry && (
+            <Modal
+              open={!!selectedTimeEntry}
+              onClose={this.handleTimeEntryModalClose}
+              center={true}
+            >
+              <div>
+                <div>Author: {selectedTimeEntry.user.name}</div>
+                <div>Project: {selectedTimeEntry.project.name}</div>
+                <div>Activity: {selectedTimeEntry.activity.name}</div>
+                <div>Time: {selectedTimeEntry.hours} hours</div>
+                <div>Date: {selectedTimeEntry.spent_on}</div>
+                <h3>Comment</h3>
+                <MarkdownEditor
+                  onChange={this.onCommentChange}
+                  value={selectedTimeEntry.comments}
+                  preview={true}
+                />
+                { selectedTimeEntry.user.id === user.id && (
+                  <div>
+                    <Button onClick={() => {}}>Submit</Button>
+                    <Button onclick={() => {}}>Delete</Button>
+                  </div>
+                )}
+              </div>
+            </Modal>
+          )}
         </Grid>
       )
       : null;
