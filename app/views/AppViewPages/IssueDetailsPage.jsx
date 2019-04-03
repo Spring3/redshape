@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import Select from 'react-select';
-import Modal from 'react-responsive-modal';
 import styled from 'styled-components';
 import moment from 'moment';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 import SendIcon from 'mdi-react/SendIcon';
 
+import TimeEntryModal from '../../components/TimeEntryModal';
 import Button, { GhostButton } from '../../components/Button';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
@@ -117,7 +116,9 @@ class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: undefined
+      selectedTimeEntry: undefined,
+      comments: undefined,
+      showAddNewEntryModal: false
     };
   }
 
@@ -127,11 +128,11 @@ class IssueDetailsPage extends Component {
     dispatch(actions.tracking.getAll(user.id, match.params.id));
   }
 
-  onCommentChange = comment => this.setState({ comment });
-
   publishComment = () => {
 
   }
+
+  onCommentsChange = comments => this.setState({ comments });
 
   toggleTracking = () => {
     const { dispatch, issueDetails } = this.props;
@@ -140,8 +141,15 @@ class IssueDetailsPage extends Component {
 
   showTimeEntryModal = (timeEntry) => () => {
     console.log(timeEntry);
+    timeEntry.issue.name = this.props.issueDetails.subject;
     this.setState({
       selectedTimeEntry: timeEntry
+    });
+  }
+
+  toggleAddNewEntryModal = () => {
+    this.setState({
+      showAddNewEntryModal: !this.state.showAddNewEntryModal
     });
   }
 
@@ -176,16 +184,8 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { issueDetails, issueTime, history, user, projects } = this.props;
-    const { selectedTimeEntry } = this.state;
-    const selectedEntryProject = selectedTimeEntry ? projects[selectedTimeEntry.project.id] : undefined;
-    let selectOptions = [];
-    if (selectedEntryProject) {
-      selectOptions = selectedEntryProject.activities.map(({ id, name }) => ({ value: id, label: name }));
-    }
-    console.log(projects);
-    console.log(selectOptions);
-    console.log(issueDetails);
+    const { issueDetails, issueTime, history } = this.props;
+    const { selectedTimeEntry, showAddNewEntryModal } = this.state;
     return issueDetails.id
       ? (
         <Grid>
@@ -282,7 +282,7 @@ class IssueDetailsPage extends Component {
               </div>
               <TimeSpentSection>
                 <h2>Time spent</h2>
-                <Button onClick={this.addTime}>Add</Button>
+                <Button onClick={this.toggleAddNewEntryModal}>Add</Button>
                 <List>
                   {issueTime.map(timeEntry => (
                     <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
@@ -314,7 +314,7 @@ class IssueDetailsPage extends Component {
                   ))}
                 </Comments>
                 <MarkdownEditor
-                  onChange={this.onCommentChange}
+                  onChange={this.onCommentsChange}
                   preview={true}
                 />
                 <Button
@@ -334,35 +334,27 @@ class IssueDetailsPage extends Component {
             </div>
           </MainSection>
           { !!selectedTimeEntry && (
-            <Modal
-              open={!!selectedTimeEntry}
-              onClose={this.handleTimeEntryModalClose}
-              center={true}
-            >
-              <div>
-                <div>Author: {selectedTimeEntry.user.name}</div>
-                <div>Project: {selectedTimeEntry.project.name}</div>
-                <div>Activity</div>
-                <Select
-                  options={selectOptions}
-                  defaultValue={selectOptions.find(option => option.value === selectedTimeEntry.activity.id)}
-                />
-                <div>Time: {selectedTimeEntry.hours} hours</div>
-                <div>Date: {selectedTimeEntry.spent_on}</div>
-                <h3>Comment</h3>
-                <MarkdownEditor
-                  onChange={this.onCommentChange}
-                  value={selectedTimeEntry.comments}
-                  preview={true}
-                />
-                { selectedTimeEntry.user.id === user.id && (
-                  <div>
-                    <Button onClick={() => {}}>Submit</Button>
-                    <Button onclick={() => {}}>Delete</Button>
-                  </div>
-                )}
-              </div>
-            </Modal>
+            <TimeEntryModal
+              timeEntry={selectedTimeEntry}
+              show={!!selectedTimeEntry}
+              projectId={issueDetails.project.id}
+              onCancel={this.handleTimeEntryModalClose}
+              onUpdate={this.handleTimeEntryUpdate}
+              onDelete={this.handleTimeEntryDelete}
+            />
+          )}
+          { showAddNewEntryModal && (
+            <TimeEntryModal
+              user={issueDetails.author}
+              issue={{
+                id: issueDetails.id,
+                name: issueDetails.subject
+              }}
+              projectId={issueDetails.project.id}
+              show={showAddNewEntryModal}
+              onCancel={this.toggleAddNewEntryModal}
+              onAdd={this.handleTimeEntryAdd}
+            />
           )}
         </Grid>
       )
@@ -374,15 +366,13 @@ IssueDetailsPage.propTypes = {
   issueDetails: PropTypes.object.isRequired,
   issueTime: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
-  projects: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.user,
   issueDetails: state.issues.current.data,
-  issueTime: state.issues.time.data,
-  projects: state.projects.data
+  issueTime: state.issues.time.data
 });
 
 const mapDispatchToProps = dispatch => ({ dispatch });

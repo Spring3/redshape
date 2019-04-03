@@ -95,14 +95,17 @@ const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, 
 };
 
 Input.propTypes = {
-  type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox']),
+  type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox', 'number']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   onBlur: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   checked: (props, propName, componentName) => { // eslint-disable-line
     if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
       return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);

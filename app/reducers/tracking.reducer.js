@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {
   TRACKING_START,
   TRACKING_STOP,
