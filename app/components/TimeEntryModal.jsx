@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 import Select from 'react-select';
-import DatePicker from 'react-date-picker';
+import DatePickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
 import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
@@ -62,7 +63,7 @@ class TimeEntryModal extends Component {
             />
           </Label>
           <Label htmlFor="date" label="Date">
-            <DatePicker
+            <DatePickerInput
               name="date"
               value={new Date(spent_on)}
               onChange={this.onDateChange}

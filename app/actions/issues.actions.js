@@ -1,9 +1,11 @@
+import moment from 'moment';
 import request, { notify } from './helper';
 
 export const ISSUES_GET_ALL = 'ISSUES_GET_ALL';
 export const ISSUES_GET = 'ISSUES_GET';
 export const ISSUES_UPDATE = 'ISSUES_UPDATE';
 export const ISSUES_ASSIGN = 'ISSUES_ASSIGN';
+export const ISSUES_COMMENT_SEND = 'ISSUES_COMMENT_SEND';
 export const ISSUES_STATUSES_GET_ALL = 'ISSUES_STATUSES_GET_ALL';
 export const ISSUES_TRACKERS_GET_ALL = 'ISSUES_TRACKERS_GET_ALL';
 
@@ -32,7 +34,7 @@ const getAll = (filter, offset, limit) => (dispatch, getState) => {
     token: api_key  
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data)))
     .catch((error) => {
-      console.error('Error when trying to get a list of issues', error);
+      console.error('Error when trying to get a list of issues:', error.message);
       dispatch(notify.nok(ISSUES_GET_ALL, error));
     });
 };
@@ -48,26 +50,72 @@ const get = id => (dispatch, getState) => {
     token: api_key,
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {
-      console.error(`Error when trying to get the issue with id ${id}`, error);
+      console.error(`Error when trying to get the issue with id ${id}:`, error.message);
       dispatch(notify.nok(ISSUES_GET, error));
     });
 };
 
-const assign = (issueId, assignee, comment) => (dispatch, getState) => {
+const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
   const { redmineEndpoint, api_key } = user;
 
-  dispatch(notify.start(ISSUES_ASSIGN));
+  const actionId = 'comments';
+
+  dispatch(notify.start(ISSUES_COMMENT_SEND, actionId));
 
   return request({
     url: `${redmineEndpoint}/issues/${issueId}.json`,
-    data: { notes: comment, assigned_to_id: assignee},
+    data: {
+      issue: {
+        notes: comments
+      }
+    },
     method: 'PUT',
     token: api_key,
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_ASSIGN, data)))
+  }).then(() => dispatch(
+    notify.ok(
+      ISSUES_COMMENT_SEND,
+      {
+        created_on: moment().toLocaleString(),
+        details: [],
+        id: Date.now(),
+        notes: comments,
+        private_notes: false,
+        user: {
+          id: user.id,
+          name: `${user.firstname} ${user.lastname}`
+        }
+      },
+      actionId
+    )
+  ))
     .catch((error) => {
-      console.error(`Error when trying to assign the issue with id ${issueId}`, error);
-      dispatch(notify.nok(ISSUES_ASSIGN, error));
+      console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
+      dispatch(notify.nok(ISSUES_COMMENT_SEND, error, actionId));
+    });
+};
+
+const assign = (issueId, assignee) => (dispatch, getState) => {
+  const { user = {} } = getState();
+  const { redmineEndpoint, api_key } = user;
+
+  const actionId = 'assignee';
+
+  dispatch(notify.start(ISSUES_ASSIGN, actionId));
+
+  return request({
+    url: `${redmineEndpoint}/issues/${issueId}.json`,
+    data: {
+      issue: {
+        assigned_to_id: assignee
+      }
+    },
+    method: 'PUT',
+    token: api_key,
+  }).then(({ data }) => dispatch(notify.ok(ISSUES_ASSIGN, data, actionId)))
+    .catch((error) => {
+      console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
+      dispatch(notify.nok(ISSUES_ASSIGN, error, actionId));
     });
 };
 
@@ -82,7 +130,7 @@ const getAllStatuses = () => (dispatch, getState) => {
     token: api_key
   }).then(({ data }) => dispatch(notify.ok(ISSUES_STATUSES_GET_ALL, data)))
     .catch((error) => {
-      console.error('Error when trying to get the list of issue statuses', error);
+      console.error('Error when trying to get the list of issue statuses:', error.message);
       dispatch(notify.nok(ISSUES_STATUSES_GET_ALL, error));
     });
 };
@@ -98,7 +146,7 @@ const getAllTrackers = (dispatch, getState) => {
     token: api_key
   }).then(({ data }) => dispatch(notify.ok(ISSUES_TRACKERS_GET_ALL, data)))
     .catch((error) => {
-      console.error('Error when trying to get the list of issue trackers', error);
+      console.error('Error when trying to get the list of issue trackers:', error.message);
       dispatch(notify.nok(ISSUES_TRACKERS_GET_ALL, error));
     });
 };
@@ -106,6 +154,7 @@ const getAllTrackers = (dispatch, getState) => {
 export default {
   getAll,
   get,
+  sendComments,
   assign,
   getAllStatuses,
   getAllTrackers

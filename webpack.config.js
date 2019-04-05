@@ -29,7 +29,9 @@ const config = {
       }
     ]
   },
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i]
+  })],
   resolve: {
     extensions: ['.js', '.jsx', '.css']
   },

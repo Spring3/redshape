@@ -98,22 +98,24 @@ const request = ({
   }
 
   if (!['GET', 'DELETE'].includes(method)) {
-    requestConfig.body = data;
+    requestConfig.body = typeof data === 'string' ? data : JSON.stringify(data);
   }
 
   return fetch(url, requestConfig).then((res) => {
     if (res.ok) {
-      return res.json().then(obj => ({ data: obj }));
+      return res.text()
+        .then(text => (text ? JSON.parse(text) : text))
+        .then(obj => ({ data: obj }));
     }
     return Promise.reject(new Error(`Error ${res.status} (${res.statusText})`));
   });
 };
 
 const notify = {
-  start: type => ({ type, status: 'START' }),
-  paginate: (type, data) => ({ type, data, status: 'PAGE_NEXT' }),
-  ok: (type, data) => ({ type, data, status: 'OK' }),
-  nok: (type, data) => ({ type, data, status: 'NOK' })
+  start: (type, id) => ({ type, status: 'START', id }),
+  paginate: (type, data, id) => ({ type, data, status: 'PAGE_NEXT', id }),
+  ok: (type, data, id) => ({ type, data, status: 'OK', id }),
+  nok: (type, data, id) => ({ type, data, status: 'NOK', id })
 };
 
 export {

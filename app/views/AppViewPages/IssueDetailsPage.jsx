@@ -123,20 +123,24 @@ class IssueDetailsPage extends Component {
   }
 
   componentWillMount() {
-    const { dispatch, match, user } = this.props;
-    dispatch(actions.issues.get(match.params.id));
-    dispatch(actions.tracking.getAll(user.id, match.params.id));
+    const { match, user, fetchIssueDetails, fetchIssueTimeEntries } = this.props;
+    fetchIssueDetails(match.params.id);
+    fetchIssueTimeEntries(user.id, match.params.id);
   }
 
   publishComment = () => {
-
+    console.log('Sending the comments');
+    if (this.state.comments) {
+      const { match, sendComments } = this.props;
+      sendComments(match.params.id, this.state.comments);
+    }
   }
 
   onCommentsChange = comments => this.setState({ comments });
 
   toggleTracking = () => {
-    const { dispatch, issueDetails } = this.props;
-    dispatch(actions.tracking.trackingStart(issueDetails));
+    const { issueDetails, startTimeTracking } = this.props;
+    startTimeTracking(issueDetails);
   }
 
   showTimeEntryModal = (timeEntry) => () => {
@@ -186,6 +190,7 @@ class IssueDetailsPage extends Component {
   render() {
     const { issueDetails, issueTime, history } = this.props;
     const { selectedTimeEntry, showAddNewEntryModal } = this.state;
+    console.log(issueDetails);
     return issueDetails.id
       ? (
         <Grid>
@@ -319,7 +324,7 @@ class IssueDetailsPage extends Component {
                 />
                 <Button
                   type="button"
-                  onClick={this.postComment}
+                  onClick={this.publishComment}
                 >
                   Publish <SendIcon />
                 </Button>
@@ -366,7 +371,10 @@ IssueDetailsPage.propTypes = {
   issueDetails: PropTypes.object.isRequired,
   issueTime: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  fetchIssueDetails: PropTypes.func.isRequired,
+  fetchIssueTimeEntries: PropTypes.func.isRequired,
+  startTimeTracking: PropTypes.func.isRequired,
+  sendComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -375,6 +383,11 @@ const mapStateToProps = state => ({
   issueTime: state.issues.time.data
 });
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({
+  fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
+  fetchIssueTimeEntries: (userId, issueId) => dispatch(actions.tracking.getAll(userId, issueId)),
+  startTimeTracking: issueDetails => dispatch(actions.tracking.trackingStart(issueDetails)),
+  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);
