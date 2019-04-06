@@ -6,8 +6,7 @@ export const initialState = {
   isFetching: false,
   loginError: undefined,
   id: undefined,
-  firstname: undefined,
-  lastname: undefined,
+  name: undefined,
   redmineEndpoint: undefined,
   api_key: undefined
 };
@@ -19,7 +18,9 @@ const handleUserLogin = (state, action) => {
     }
     case 'OK': {
       const userData = _.get(action.data, 'user', {});
-      const payload = _.pick(userData, 'id', 'firstname', 'lastname', 'redmineEndpoint', 'api_key');
+      const { firstname, lastname } = userData;
+      const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key');
+      payload.name = `${firstname} ${lastname}`;
       storage.set('user', payload);
       return { ...state, ...payload, isFetching: false, loginError: undefined };
     }

@@ -12,6 +12,7 @@ import Timer from '../components/Timer';
 import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import TimeEntryModal from '../components/TimeEntryModal';
 import storage from '../../modules/storage';
 
 const Grid = styled.div`
@@ -104,8 +105,6 @@ class AppView extends Component {
       props.history.push('/');
     }
 
-    console.log(props.history);
-
     this.state = {
       showSidebar: false
     };
@@ -134,10 +133,8 @@ class AppView extends Component {
   }
 
   onTrackingStop = (value) => {
-    return this.props.trackingStop(value)
-      .then(() => {
-        storage.delete('time_tracking');
-      });
+    this.props.trackingStop(value);
+    storage.delete('time_tracking');
   }
 
   render() {
@@ -146,11 +143,10 @@ class AppView extends Component {
       user = {},
       match,
       tracking,
-      trackingStop,
       trackingPause,
       trackingContinue
     } = this.props;
-    const { firstname, lastname } = user;
+    const { name } = user;
 
     return (
       <Grid>
@@ -198,7 +194,7 @@ class AppView extends Component {
             <li>Issues</li>
           </MenuList>
           <Profile>
-            <li onClick={this.openSummaryPage}>{firstname} {lastname}</li>
+            <li onClick={this.openSummaryPage}>{name}</li>
             <li><SignOutButton id="signout" onClick={this.signout}>Sign out</SignOutButton></li>
           </Profile>
         </Navbar>
@@ -214,6 +210,10 @@ class AppView extends Component {
             onPause={trackingPause}
             onContinue={trackingContinue}
           />
+          <TimeEntryModal
+            onCancel={() => {}}
+            onAdd={() => {}}
+          />
         </Content>
       </Grid>
     );
@@ -226,19 +226,17 @@ AppView.propTypes = {
       PropTypes.string,
       PropTypes.number
     ]).isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     api_key: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
   }).isRequired,
   tracking: PropTypes.shape({
     isTracking: PropTypes.bool.isRequired,
+    duration: PropTypes.number.isRequired,
     issue: PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-    }).isRequired,
-    startDate: PropTypes.string,
-    duration: PropTypes.number
+    }).isRequired
   }).isRequired,
   trackedIssueName: PropTypes.string,
   match: PropTypes.shape({

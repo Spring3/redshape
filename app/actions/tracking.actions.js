@@ -88,9 +88,9 @@ const getAll = (userId, issueId, projectId, offset, limit) => (dispatch, getStat
     });
 };
 
-const trackingStart = issue => ({ type: TRACKING_START, issue });
-const trackingStop = value => ({ type: TRACKING_STOP, duration: value });
-const trackingPause = value => ({ type: TRACKING_PAUSE, duration: value });
+const trackingStart = issue => ({ type: TRACKING_START, data: { issue } });
+const trackingStop = duration => ({ type: TRACKING_STOP, data: { duration } });
+const trackingPause = duration => ({ type: TRACKING_PAUSE, data: { duration } });
 const trackingContinue = () => ({ type: TRACKING_CONTINUE });
 
 export default {

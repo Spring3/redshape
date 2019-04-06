@@ -129,7 +129,6 @@ class IssueDetailsPage extends Component {
   }
 
   publishComment = () => {
-    console.log('Sending the comments');
     if (this.state.comments) {
       const { match, sendComments } = this.props;
       sendComments(match.params.id, this.state.comments);
@@ -138,14 +137,13 @@ class IssueDetailsPage extends Component {
 
   onCommentsChange = comments => this.setState({ comments });
 
-  toggleTracking = () => {
-    const { issueDetails, startTimeTracking } = this.props;
-    startTimeTracking(issueDetails);
+  startTimeTracking = () => {
+    const { selectedIssue, startTimeTracking } = this.props;
+    startTimeTracking(selectedIssue);
   }
 
   showTimeEntryModal = (timeEntry) => () => {
-    console.log(timeEntry);
-    timeEntry.issue.name = this.props.issueDetails.subject;
+    timeEntry.issue.name = this.props.selectedIssue.subject;
     this.setState({
       selectedTimeEntry: timeEntry
     });
@@ -188,10 +186,10 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { issueDetails, issueTime, history } = this.props;
+    const { spentTime, selectedIssue, history } = this.props;
     const { selectedTimeEntry, showAddNewEntryModal } = this.state;
-    console.log(issueDetails);
-    return issueDetails.id
+    console.log(selectedIssue);
+    return selectedIssue.id
       ? (
         <Grid>
           <MainSection>
@@ -201,50 +199,50 @@ class IssueDetailsPage extends Component {
                   <ArrowLeftIcon />
                 </GhostButton>
                 <IssueHeader>
-                  <span>#{issueDetails.id}&nbsp;</span>
-                  <span>{issueDetails.subject}</span>
+                  <span>#{selectedIssue.id}&nbsp;</span>
+                  <span>{selectedIssue.subject}</span>
                   &nbsp;
                   <Button
-                    onClick={this.toggleTracking}
+                    onClick={this.startTimeTracking}
                   >
                     Track Time
                   </Button>
                 </IssueHeader>
                 <SmallNotice>
                   Created by&nbsp;
-                  <a href="#">{issueDetails.author.name}</a>
-                  <span> {moment().diff(issueDetails.created_on, 'days')} day(s) ago</span>
+                  <a href="#">{selectedIssue.author.name}</a>
+                  <span> {moment().diff(selectedIssue.created_on, 'days')} day(s) ago</span>
                 </SmallNotice>
-                {issueDetails.closed_on && (
-                <SmallNotice>Closed on <span>{issueDetails.closed_on}</span></SmallNotice> 
+                {selectedIssue.closed_on && (
+                <SmallNotice>Closed on <span>{selectedIssue.closed_on}</span></SmallNotice> 
                 )}
                 <Wrapper>
                   <ColumnList>
                     <li>
                       <div>Tracker: </div>
-                      <div>{issueDetails.tracker.name}</div>
+                      <div>{selectedIssue.tracker.name}</div>
                     </li>
                     <li>
                       <div>Status:</div>
-                      <div>{issueDetails.status.name}</div>
+                      <div>{selectedIssue.status.name}</div>
                     </li>
                     <li>
                       <div>Priority: </div>
-                      <div>{issueDetails.priority.name}</div>
+                      <div>{selectedIssue.priority.name}</div>
                     </li>
                     <li>
                       <div>Assignee: </div>
-                      <div>{issueDetails.assigned_to.name}</div>
+                      <div>{selectedIssue.assigned_to.name}</div>
                     </li>
                     <li>
                       <div>Target version: </div>
-                      <div>{_.get(issueDetails, 'fixed_version.name')}</div>
+                      <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
                     </li>
                     <li>
                       <div>Progress: </div>
                       <div>
                         <Progressbar
-                          percent={issueDetails.done_ratio}
+                          percent={selectedIssue.done_ratio}
                           background="grey"
                           color="white"
                         />
@@ -254,29 +252,29 @@ class IssueDetailsPage extends Component {
                   <ColumnList>
                     <li>
                       <div>Start Date: </div>
-                      <div>{issueDetails.start_date}</div>
+                      <div>{selectedIssue.start_date}</div>
                     </li>
                     <li>
                       <div>Due Date: </div>
-                      <div>{issueDetails.due_date}</div>
+                      <div>{selectedIssue.due_date}</div>
                     </li>
                     <li>
                       <div>Estimated hours: </div>
-                      <div>{issueDetails.total_estimated_hours}</div>
+                      <div>{selectedIssue.total_estimated_hours}</div>
                     </li>
                     <li>
                       <div>Total time spent: </div>
-                      <div>{issueDetails.total_spent_hours.toFixed(2)}</div>
+                      <div>{selectedIssue.total_spent_hours.toFixed(2)}</div>
                     </li>
                     <li>
                       <div>Time spent by me: </div>
-                      <div>{issueDetails.spent_hours.toFixed(2)}</div>
+                      <div>{selectedIssue.spent_hours.toFixed(2)}</div>
                     </li>
                     <li>
                       <div>Time cap: </div>
                       <div>
                         <Progressbar
-                          percent={issueDetails.total_spent_hours / issueDetails.total_estimated_hours * 100}
+                          percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
                           background="grey"
                           color="white"
                         />
@@ -289,7 +287,7 @@ class IssueDetailsPage extends Component {
                 <h2>Time spent</h2>
                 <Button onClick={this.toggleAddNewEntryModal}>Add</Button>
                 <List>
-                  {issueTime.map(timeEntry => (
+                  {spentTime.map(timeEntry => (
                     <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
                       <div>{timeEntry.comments}</div>
                       <div>{timeEntry.hours} hours</div>
@@ -305,13 +303,13 @@ class IssueDetailsPage extends Component {
               <div>
                 <h3>Description</h3>
                 <DescriptionText>
-                  {issueDetails.description}
+                  {selectedIssue.description}
                 </DescriptionText>
               </div>
               <div>
                 <h3>Comments</h3>
                 <Comments>
-                  {issueDetails.journals.filter(entry => entry.notes).map(entry => (
+                  {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
                     <li key={entry.id}>
                       <div>{entry.user.name} <span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
                       <DescriptionText>{entry.notes}</DescriptionText>
@@ -338,7 +336,7 @@ class IssueDetailsPage extends Component {
               </div>
             </div>
           </MainSection>
-          { !!selectedTimeEntry && (
+          {/* { !!selectedTimeEntry && (
             <TimeEntryModal
               timeEntry={selectedTimeEntry}
               show={!!selectedTimeEntry}
@@ -360,7 +358,7 @@ class IssueDetailsPage extends Component {
               onCancel={this.toggleAddNewEntryModal}
               onAdd={this.handleTimeEntryAdd}
             />
-          )}
+          )} */}
         </Grid>
       )
       : null;
@@ -368,8 +366,8 @@ class IssueDetailsPage extends Component {
 }
 
 IssueDetailsPage.propTypes = {
-  issueDetails: PropTypes.object.isRequired,
-  issueTime: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  spentTime: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
@@ -379,14 +377,15 @@ IssueDetailsPage.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.user,
-  issueDetails: state.issues.current.data,
-  issueTime: state.issues.time.data
+  selectedIssue: state.issues.selected.data,
+  spentTime: state.issues.selected.spentTime.data,
+  timeTracking: state.tracking
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
   fetchIssueTimeEntries: (userId, issueId) => dispatch(actions.tracking.getAll(userId, issueId)),
-  startTimeTracking: issueDetails => dispatch(actions.tracking.trackingStart(issueDetails)),
+  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
   sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
 });
 

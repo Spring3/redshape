@@ -15,8 +15,6 @@ class TimeEntryModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: _.get(props, 'timeEntry.user', props.user || {}),
-      issue: _.get(props, 'timeEntry.issue', props.issue || {}),
       activity: _.get(props, 'timeEntry.activity', {}),
       hours: _.get(props, 'timeEntry.hours'),
       comments: _.get(props, 'timeEntry.comments'),
@@ -30,28 +28,27 @@ class TimeEntryModal extends Component {
 
   onDateChange = date => this.setState({ spent_on: date });
   onHoursChange = e => this.setState({ hours: e.target.value });
-  onCommentChange = comment => this.setState({ comment });
+  onCommentsChange = comment => this.setState({ comments });
+  onActivityChange = activity => this.setState({ activity: { id: activity.value, name: activity.label } });
 
-  render() {
-    const { projectActivities, onCancel, show, onUpdate, onDelete, onAdd } = this.props;
-    const { user, issue, activity, hours, comments, spent_on } = this.state;
+  onAdd = () => {};
+  onUpdate = () => {};
+  onDelete = () => {};
+
+  renderBlankForm() {
+    const { user, selectedIssue } = this.props;
     return (
-      <Modal
-        open={!!show}
-        onClose={onCancel}
-        center={true}
-      >
-        <div>
-          <Label htmlFor="author" label="Author">
+      <Fragment>
+        <Label htmlFor="author" label="Author">
             <div name="author">{user.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">#{issue.id}&nbsp;{issue.name}</div>
+            <div name="issue">#{selectedIssue.id}&nbsp;{selectedIssue.subject}</div>
           </Label>
           <Label htmlFor="activity" label="Activity">
             <Select
               options={this.projectActivities}
-              defaultValue={this.projectActivities.find(option => option.value === activity.id)}
+              onChange={this.onActivityChange}
             />
           </Label>
           <Label htmlFor="time" label="Time">
@@ -71,21 +68,128 @@ class TimeEntryModal extends Component {
           </Label>
           <h3>Comment</h3>
           <MarkdownEditor
-            onChange={this.onCommentChange}
+            onChange={this.onCommentsChange}
             initialValue={comments}
             preview={true}
           />
-          {this.props.timeEntry && user.id === this.props.timeEntry.user.id && (
+          <div>
+            <Button onClick={this.onAdd}>Add</Button>
+          </div>
+      </Fragment>
+    );
+  }
+
+  renderTimeEntry() {
+    const { timeEntry, user } = this.props;
+    const { activity, hours, comments, spent_on } = this.state;
+    return (
+      <Fragment>
+        <Label htmlFor="author" label="Author">
+            <div name="author">{user.name}</div>
+          </Label>
+          <Label htmlFor="issue" label="Issue">
+            <div name="issue">#{timeEntry.issue.id}&nbsp;{timeEntry.issue.name}</div>
+          </Label>
+          <Label htmlFor="activity" label="Activity">
+            <Select
+              options={this.projectActivities}
+              defaultValue={this.projectActivities.find(option => option.value === activity.id)}
+              onChange={this.onActivityChange}
+            />
+          </Label>
+          <Label htmlFor="time" label="Time">
+            <Input
+              type="number"
+              name="time"
+              value={hours}
+              onChange={this.onHoursChange}
+            />
+          </Label>
+          <Label htmlFor="date" label="Date">
+            <DatePickerInput
+              name="date"
+              value={new Date(spent_on)}
+              onChange={this.onDateChange}
+            />
+          </Label>
+          <h3>Comment</h3>
+          <MarkdownEditor
+            onChange={this.onCommentsChange}
+            initialValue={comments}
+            preview={true}
+          />
+          {timeEntry && user.id === timeEntry.user.id && (
             <div>
-              <Button onClick={onUpdate}>Update</Button>
-              <Button onclick={onDelete}>Delete</Button>
+              <Button onClick={this.onUpdate}>Update</Button>
+              <Button onclick={this.onDelete}>Delete</Button>
             </div>
           )}
-          { !this.props.timeEntry && (
-            <div>
-              <Button onClick={onAdd}>Add</Button>
-            </div>
-          )}
+      </Fragment>
+    );
+  }
+
+  renderEntrySubmitionForm() {
+    const { user, tracking } = this.props;
+    const { issue, duration, created_on } = tracking;
+    const durationHours = (duration / 3600000).toFixed(2);
+    return (
+      <Fragment>
+        <Label htmlFor="author" label="Author">
+            <div name="author">{user.name}</div>
+          </Label>
+          <Label htmlFor="issue" label="Issue">
+            <div name="issue">#{issue.id}&nbsp;{issue.subject}</div>
+          </Label>
+          <Label htmlFor="activity" label="Activity">
+            <Select
+              options={this.projectActivities}
+              onChange={this.onActivityChange}
+            />
+          </Label>
+          <Label htmlFor="time" label="Time">
+            <Input
+              type="number"
+              name="time"
+              disabled={true}
+              value={durationHours}
+              onChange={this.onHoursChange}
+            />
+          </Label>
+          <Label htmlFor="date" label="Date">
+            <DatePickerInput
+              name="date"
+              value={new Date(created_on)}
+              disabled={true}
+              onChange={this.onDateChange}
+            />
+          </Label>
+          <h3>Comment</h3>
+          <MarkdownEditor
+            onChange={this.onCommentsChange}
+            preview={true}
+          />
+          <div>
+            <Button onClick={this.onAdd}>Add</Button>
+          </div>
+      </Fragment>
+    );
+  }
+
+  render() {
+    const { show, tracking, timeEntry, selectedIssue, onClose } = this.props;
+    const hasTimeEntrySelected = !!(selectedIssue && timeEntry);
+    const finishedTracking = !hasTimeEntrySelected && tracking.duration && !tracking.isTracking && !tracking.isPaused;
+    const open = show || hasTimeEntrySelected || finishedTracking;
+    return (
+      <Modal
+        open={!!open}
+        onClose={onClose}
+        center={true}
+      >
+        <div>
+          {hasTimeEntrySelected && !finishedTracking && this.renderTimeEntry()}
+          {finishedTracking && !hasTimeEntrySelected && this.renderEntrySubmitionForm()}
+          {show && !hasTimeEntrySelected && !finishedTracking && this.renderBlankForm()}
         </div>
       </Modal>
     );
@@ -93,8 +197,35 @@ class TimeEntryModal extends Component {
 }
 
 TimeEntryModal.propTypes = {
-  projects: PropTypes.object.isRequired,
-  projectId: PropTypes.number.isRequired,
+  projects: PropTypes.shape({
+    activities: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired).isRequired
+  }).isRequired,
+  tracking: PropTypes.shape({
+    issue: PropTypes.shape({
+      id: PropTypes.number,
+      journals: PropTypes.arrayOf(PropTypes.shape({
+        created_on: PropTypes.string,
+        details: PropTypes.arrayOf(PropTypes.object),
+        id: PropTypes.number.isRequired,
+        notes: PropTypes.string,
+        private_notes: PropTypes.bool,
+        usr: PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired
+        }).isRequired
+      }))
+    }).isRequired,
+    isTracking: PropTypes.bool.isRequired,
+    isPaused: PropTypes.bool.isRequired,
+    duration: PropTypes.number.isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  }).isRequired,
   timeEntry: PropTypes.shape({
     activity: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -118,15 +249,23 @@ TimeEntryModal.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired
   }),
-  show: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func,
-  onDelete: PropTypes.func,
-  onAdd: PropTypes.func
+  selectedIssue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  }),
+  onClose: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired
+  // onUpdate: PropTypes.func,
+  // onDelete: PropTypes.func,
+  // onAdd: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-  projects: state.projects.data
+  projects: state.projects.data,
+  tracking: state.tracking,
+  user: state.user,
+  selectedIssue: state.issues.selected.data,
+  spentTime: state.issues.selected.spentTime
 });
 
 export default connect(mapStateToProps)(TimeEntryModal);

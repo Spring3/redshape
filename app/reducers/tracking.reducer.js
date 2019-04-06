@@ -16,14 +16,16 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case TRACKING_START: {
-      const nextState = state.isTracking
-        ? state
-        : {
-          issue: action.issue,
-          isTracking: true,
-          isPaused: false,
-          duration: 0
-        };
+      if (state.isTracking) {
+        return state;
+      }
+      const { issue } = action.data;
+      const nextState = {
+        issue,
+        isTracking: true,
+        isPaused: false,
+        duration: 0
+      };
       storage.set('time_tracking', nextState);
       return nextState;
     }
@@ -32,7 +34,7 @@ export default (state = initialState, action) => {
         ...state,
         isTracking: false,
         isPaused: false,
-        duration: action.duration
+        duration: action.data.duration
       };
       storage.set('time_tracking', nextState);
       return nextState;
@@ -41,7 +43,7 @@ export default (state = initialState, action) => {
       const nextState = {
         ...state,
         isPaused: true,
-        duration: action.duration
+        duration: action.data.duration
       };
       storage.set('time_tracking', nextState);
       return nextState;
