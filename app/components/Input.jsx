@@ -87,7 +87,7 @@ const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, 
       onChange={onChange}
       onBlur={onBlur}
       disabled={disabled}
-      value={value}
+      value={type === 'number' ? parseFloat(`${value}`.replace(',', '.')) : value}
       id={id}
       name={name}
     />

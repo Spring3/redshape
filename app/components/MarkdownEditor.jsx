@@ -62,6 +62,14 @@ class MarkdownEditor extends Component {
     this.converter = new showdown.Converter();
   }
 
+  componentDidUpdate(oldProps) {
+    if (this.props.initialValue !== oldProps.initialValue) {
+      this.setState({
+        value: this.props.initialValue
+      });
+    }
+  }
+
   applyMarkdown = (symbolStart, symbolEnd) => {
     const { onChange } = this.props;
     const textarea = this.textareaRef.current;

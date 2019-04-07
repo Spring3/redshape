@@ -7,11 +7,11 @@ import moment from 'moment';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 import SendIcon from 'mdi-react/SendIcon';
 
-import TimeEntryModal from '../../components/TimeEntryModal';
 import Button, { GhostButton } from '../../components/Button';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
 import MarkdownEditor from '../../components/MarkdownEditor';
+import TimeEntryModal from '../../components/TimeEntryModal';
 
 const Grid = styled.div`
   display: grid;
@@ -117,8 +117,8 @@ class IssueDetailsPage extends Component {
     super(props);
     this.state = {
       selectedTimeEntry: undefined,
-      comments: undefined,
-      showAddNewEntryModal: false
+      showTimeEntryModal: false,
+      comments: undefined
     };
   }
 
@@ -143,21 +143,19 @@ class IssueDetailsPage extends Component {
   }
 
   showTimeEntryModal = (timeEntry) => () => {
-    timeEntry.issue.name = this.props.selectedIssue.subject;
+    if (timeEntry) {
+      timeEntry.issue.name = this.props.selectedIssue.subject;
+    }
     this.setState({
-      selectedTimeEntry: timeEntry
+      selectedTimeEntry: timeEntry,
+      showTimeEntryModal: true
     });
   }
 
-  toggleAddNewEntryModal = () => {
+  closeTimeEntryModal = () => {
     this.setState({
-      showAddNewEntryModal: !this.state.showAddNewEntryModal
-    });
-  }
-
-  handleTimeEntryModalClose = () => {
-    this.setState({
-      selectedTimeEntry: undefined
+      selectedTimeEntry: undefined,
+      showTimeEntryModal: false
     });
   }
 
@@ -187,7 +185,7 @@ class IssueDetailsPage extends Component {
 
   render() {
     const { spentTime, selectedIssue, history } = this.props;
-    const { selectedTimeEntry, showAddNewEntryModal } = this.state;
+    const { selectedTimeEntry, showTimeEntryModal } = this.state;
     console.log(selectedIssue);
     return selectedIssue.id
       ? (
@@ -285,7 +283,7 @@ class IssueDetailsPage extends Component {
               </div>
               <TimeSpentSection>
                 <h2>Time spent</h2>
-                <Button onClick={this.toggleAddNewEntryModal}>Add</Button>
+                <Button onClick={this.showTimeEntryModal()}>Add</Button>
                 <List>
                   {spentTime.map(timeEntry => (
                     <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
@@ -336,17 +334,13 @@ class IssueDetailsPage extends Component {
               </div>
             </div>
           </MainSection>
-          {/* { !!selectedTimeEntry && (
-            <TimeEntryModal
-              timeEntry={selectedTimeEntry}
-              show={!!selectedTimeEntry}
-              projectId={issueDetails.project.id}
-              onCancel={this.handleTimeEntryModalClose}
-              onUpdate={this.handleTimeEntryUpdate}
-              onDelete={this.handleTimeEntryDelete}
-            />
-          )}
-          { showAddNewEntryModal && (
+          <TimeEntryModal
+            isOpen={showTimeEntryModal}
+            isEditable={true}
+            timeEntry={selectedTimeEntry}
+            onClose={this.closeTimeEntryModal}
+          />
+          {/* { showAddNewEntryModal && (
             <TimeEntryModal
               user={issueDetails.author}
               issue={{

@@ -60,6 +60,7 @@ class Timer extends Component {
   }
 
   onStop = () => {
+    console.log('STOP', this.state);
     this.props.onStop(this.state.value);
     this.setState({
       isPaused: false,

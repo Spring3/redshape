@@ -106,7 +106,8 @@ class AppView extends Component {
     }
 
     this.state = {
-      showSidebar: false
+      showSidebar: false,
+      showTimeEntryModal: false
     };
   }
 
@@ -133,12 +134,21 @@ class AppView extends Component {
   }
 
   onTrackingStop = (value) => {
+    this.setState({
+      showTimeEntryModal: true
+    });
     this.props.trackingStop(value);
     storage.delete('time_tracking');
   }
 
+  closeTimeEntryModal = () => {
+    this.setState({
+      showTimeEntryModal: false
+    });
+  }
+
   render() {
-    const { showSidebar } = this.state;
+    const { showSidebar, showTimeEntryModal } = this.state;
     const {
       user = {},
       match,
@@ -211,7 +221,9 @@ class AppView extends Component {
             onContinue={trackingContinue}
           />
           <TimeEntryModal
-            onCancel={() => {}}
+            isOpen={showTimeEntryModal}
+            isEditable={false}
+            onClose={this.closeTimeEntryModal}
             onAdd={() => {}}
           />
         </Content>
