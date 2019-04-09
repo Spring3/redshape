@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -66,33 +66,45 @@ Label.defaultProps = {
   rightToLeft: false
 };
 
-const Input = ({ type, checked, placeholder, onChange, onBlur, value, id, name, disabled }) => {
-  if (type.toLowerCase() === 'checkbox') {
-    return (
-      <StyledCheckbox
-        type={type}
-        onChange={onChange}
-        onBlur={onBlur}
-        checked={checked}
-        disabled={disabled}
-        id={id}
-        name={name}
-      />
-    );
+class Input extends PureComponent {
+  ensureNumber = (value) => {
+    if (typeof value === 'string') {
+      if (/,|./.test(value)) {
+        return parseFloat(value.replace(',', '.'));
+      }
+      return parseInt(value, 10);
+    }
+    return value;
   }
-  return (
-    <StyledInput
-      type={type}
-      placeholder={placeholder}
-      onChange={onChange}
-      onBlur={onBlur}
-      disabled={disabled}
-      value={type === 'number' ? parseFloat(`${value}`.replace(',', '.')) : value}
-      id={id}
-      name={name}
-    />
-  );
-};
+
+  render() {
+    const { type, checked, placeholder, onChange, onBlur, value, id, name, disabled } = this.props;
+    return type.toLowerCase() === 'checkbox'
+      ? (
+        <StyledCheckbox
+          type={type}
+          onChange={onChange}
+          onBlur={onBlur}
+          checked={checked}
+          disabled={disabled}
+          id={id}
+          name={name}
+        />
+      )
+      : (
+        <StyledInput
+          type={type}
+          placeholder={placeholder}
+          onChange={onChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          value={type === 'number' ? this.ensureNumber(value) : value}
+          id={id}
+          name={name}
+        />
+      );
+  }
+}
 
 Input.propTypes = {
   type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox', 'number']),

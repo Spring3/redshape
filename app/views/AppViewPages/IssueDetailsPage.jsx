@@ -184,9 +184,10 @@ class IssueDetailsPage extends Component {
   //   });
 
   render() {
-    const { spentTime, selectedIssue, history } = this.props;
+    const { spentTime, selectedIssue, history, user } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
-    console.log(selectedIssue);
+    console.log('selectedIssue', selectedIssue);
+    console.log('spentTime', spentTime);
     return selectedIssue.id
       ? (
         <Grid>
@@ -291,7 +292,11 @@ class IssueDetailsPage extends Component {
                       <div>{timeEntry.hours} hours</div>
                       <div>{timeEntry.user.name}</div>
                       <div>{timeEntry.spent_on}</div>
-                      <Button onClick={this.removeTimeEntry}>Remove</Button>
+                      {
+                        user.id === timeEntry.user.id && (
+                          <Button onClick={this.removeTimeEntry}>Remove</Button>
+                        )
+                      }
                     </li>
                   ))}
                 </List>
@@ -378,7 +383,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
-  fetchIssueTimeEntries: (userId, issueId) => dispatch(actions.tracking.getAll(userId, issueId)),
+  fetchIssueTimeEntries: (userId, issueId) => dispatch(actions.time.getAll(userId, issueId)),
   startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
   sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
 });

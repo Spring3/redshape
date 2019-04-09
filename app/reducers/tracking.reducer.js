@@ -2,8 +2,7 @@ import {
   TRACKING_START,
   TRACKING_STOP,
   TRACKING_PAUSE,
-  TRACKING_CONTINUE,
-  TRACKING_RESET
+  TRACKING_CONTINUE
 } from '../actions/tracking.actions';
 import storage from '../../modules/storage';
 
@@ -37,7 +36,6 @@ export default (state = initialState, action) => {
         isPaused: false,
         duration: action.data.duration
       };
-      console.log('STOP', nextState);
       storage.set('time_tracking', nextState);
       return nextState;
     }

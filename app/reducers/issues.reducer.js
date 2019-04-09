@@ -6,8 +6,11 @@ import {
   ISSUES_COMMENT_SEND
 } from '../actions/issues.actions';
 import {
+  TIME_ADD,
+  TIME_UPDATE,
+  TIME_DELETE,
   TIME_GET_ALL
-} from '../actions/tracking.actions';
+} from '../actions/time.actions';
 
 
 const issuesGetAllReducer = (state = {
@@ -135,6 +138,57 @@ const selectedIssueReducer = (state = {
             error: action.data
           }
         };
+      }
+      return state;
+    }
+    case TIME_ADD: {
+      if (action.status === 'OK') {
+        const timeEntry = _.get(action.data, 'time_entry', {});
+        const issueId = _.get(timeEntry, 'issue.id');
+        if (issueId === state.data.id) {
+          return {
+            ...state,
+            spentTime: {
+              ...state.spentTime,
+              data: [
+                timeEntry,
+                ...state.spentTime.data
+              ]
+            }
+          };
+        }
+      }
+      return state;
+    }
+    case TIME_UPDATE: {
+      if (action.status === 'OK') {
+        const issueId = _.get(action.data, 'issue.id');
+        if (issueId === state.data.id) {
+          return {
+            ...state,
+            spentTime: {
+              ...state.spentTime,
+              data: [...state.spentTime.data].map(
+                entry => (entry.id === action.data.id ? action.data : entry)
+              )
+            }
+          };
+        }
+      }
+      return state;
+    }
+    case TIME_DELETE: {
+      if (action.status === 'OK') {
+        const { issueId, timeEntryId } = action.data;
+        if (issueId === state.data.id) {
+          return {
+            ...state,
+            spentTime: {
+              ...state.spentTime,
+              data: [...state.spentTime.data.filter(({ id }) => id !== timeEntryId)]
+            }
+          };
+        }
       }
       return state;
     }
