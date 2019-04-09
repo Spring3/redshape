@@ -159,35 +159,17 @@ class IssueDetailsPage extends Component {
     });
   }
 
-  // const { dispatch, user } = this.props;
-  // const queryFilter = new IssueFilter()
-  //   .assignee(user.id)
-  //   .status({ open: true})
-  //   .build();
-  // console.log(queryFilter);
-  // dispatch(actions.issues.getAll(queryFilter))
-  // .then(() => {
-  //   this.setState({
-  //     issues: this.props.issues
-  //   });
-  // });
-  // redmineApi.issues.getAll(queryFilter)
-  //   .then(({ data }) => {
-  //     const { issues } = data;
-  //     console.log(issues);
-  //     if (Array.isArray(issues) && issues.length) {
-  //       this.setState({
-  //         issues: [...issues]
-  //       });
-  //       // storage.set(`${userId}.issuesAssignedToMe`, issues);
-  //     }
-  //   });
+  removeTimeEntry = (timeEntryId) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { selectedIssue } = this.props;
+    this.props.removeTimeEntry(timeEntryId, selectedIssue.id);
+  }
 
   render() {
     const { spentTime, selectedIssue, history, user } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
     console.log('selectedIssue', selectedIssue);
-    console.log('spentTime', spentTime);
     return selectedIssue.id
       ? (
         <Grid>
@@ -294,7 +276,7 @@ class IssueDetailsPage extends Component {
                       <div>{timeEntry.spent_on}</div>
                       {
                         user.id === timeEntry.user.id && (
-                          <Button onClick={this.removeTimeEntry}>Remove</Button>
+                          <Button onClick={this.removeTimeEntry(timeEntry.id)}>Remove</Button>
                         )
                       }
                     </li>
@@ -329,13 +311,6 @@ class IssueDetailsPage extends Component {
                 >
                   Publish <SendIcon />
                 </Button>
-                {/* <TextArea
-                  name="comment"
-                  value={this.state.comment}
-                  onChange={this.onCommentChange}
-                  rows="5"
-                /> */}
-                {/* <!-- <Button><SendIcon /></Button> --> */}
               </div>
             </div>
           </MainSection>
@@ -345,19 +320,6 @@ class IssueDetailsPage extends Component {
             timeEntry={selectedTimeEntry}
             onClose={this.closeTimeEntryModal}
           />
-          {/* { showAddNewEntryModal && (
-            <TimeEntryModal
-              user={issueDetails.author}
-              issue={{
-                id: issueDetails.id,
-                name: issueDetails.subject
-              }}
-              projectId={issueDetails.project.id}
-              show={showAddNewEntryModal}
-              onCancel={this.toggleAddNewEntryModal}
-              onAdd={this.handleTimeEntryAdd}
-            />
-          )} */}
         </Grid>
       )
       : null;
@@ -385,7 +347,8 @@ const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
   fetchIssueTimeEntries: (userId, issueId) => dispatch(actions.time.getAll(userId, issueId)),
   startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
-  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
+  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
+  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.time.remove(timeEntryId, issueId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);

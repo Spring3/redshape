@@ -1,28 +1,35 @@
 import React, { PureComponent } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 const StyledInput = styled.input`
   display: block;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 5px 10px;
   box-sizing: border-box;
   font-size: 14px;
-  border: 1px solid #FF7079;
   min-height: 35px;
   outline: none;
-  color: #FF7079;
   font-weight: bold;
-  background: #FAFAFA;
+  
+  ${({ theme }) => css`
+    border: 1px solid ${theme.main};
+    color: ${theme.main};
+    background: white;
 
-  &:hover {
-    border: 1px solid #FF7079;
-  }
+    &:hover {
+      border: 1px solid ${theme.mainDark};
+    }
 
-  &:focus {
-    box-shadow: 0px 0px 0px 1px #FF7079;
-  }
+    &:focus {
+      box-shadow: 0px 0px 0px 1px ${theme.mainDark};
+    }
+
+    &::placeholder {
+      color: ${theme.minorText};
+    }
+  `}}
 `;
 
 const StyledCheckbox = styled.input`
@@ -31,7 +38,7 @@ const StyledCheckbox = styled.input`
 const FormGroup = styled.div`  
   h4 {
     margin-bottom: 10px;    
-    color: #A4A4A4;
+    color: ${props => props.theme.minorText};
   }
 `;
 

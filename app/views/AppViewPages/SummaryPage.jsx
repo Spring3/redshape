@@ -87,24 +87,12 @@ class SummaryPage extends Component {
       .assignee(user.id)
       .status({ open: true, closed: showClosed })
       .build();
-    console.log(queryFilter);
     dispatch(actions.issues.getAll(queryFilter))
     .then(() => {
       this.setState({
         issues: this.props.issues
       });
     });
-    // redmineApi.issues.getAll(queryFilter)
-    //   .then(({ data }) => {
-    //     const { issues } = data;
-    //     console.log(issues);
-    //     if (Array.isArray(issues) && issues.length) {
-    //       this.setState({
-    //         issues: [...issues]
-    //       });
-    //       // storage.set(`${userId}.issuesAssignedToMe`, issues);
-    //     }
-    //   });
   }
 
   toggleClosedIssuesDisplay = () => {
@@ -183,7 +171,6 @@ class SummaryPage extends Component {
 
   showIssueDetails(id) {
     this.props.history.push(`/app/issue/${id}/`);
-    console.log(this.props.history);
   }
 
   render() {
@@ -215,13 +202,13 @@ class SummaryPage extends Component {
               </MarginedDiv>
               <div>
                 <Label
-                  htmlFor="showClosed"
-                  label="Show Closed"
+                  htmlFor="includeClosed"
+                  label="Include Closed"
                   inline={true}
                   rightToLeft={true}
                 >
                   <Input
-                    name="showClosed"
+                    name="includeClosed"
                     type="checkbox"
                     checked={showClosed}
                     onChange={this.toggleClosedIssuesDisplay}
@@ -274,8 +261,7 @@ SummaryPage.propTypes = {
       PropTypes.number
     ]).isRequired,
     api_key: PropTypes.string.isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
   }).isRequired
 };

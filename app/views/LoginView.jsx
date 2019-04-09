@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
@@ -34,7 +34,7 @@ const LoginForm = styled.form`
 const Headline = styled.h1`
   text-align: center;
   font-size: 40px;
-  color: #FF7079;
+  color: ${props => props.theme.main};
 `;
 
 const GHLinkContainer = styled.div`
@@ -87,12 +87,12 @@ class LoginView extends Component {
   }
 
   render() {
-    const { loginError } = this.props; 
+    const { loginError, theme } = this.props; 
     return (
       <Container>
         <GHLinkContainer>
           <Link type="external" href="https://github.com/Spring3/redtime">
-            <GithubCircleIcon color="#FF7079" size="30"/>
+            <GithubCircleIcon color={theme.main} size="30"/>
           </Link>
         </GHLinkContainer>
         <Formik
@@ -142,7 +142,7 @@ class LoginView extends Component {
                 {errors.password}
               </ErrorMessage>
               <Label
-                label="Remdine Host"
+                label="Redmine Endpoint"
                 htmlFor="redmineEndpoint"
               >
                 <Input
@@ -183,8 +183,7 @@ LoginView.propTypes = {
       PropTypes.string,
       PropTypes.number
     ]).isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     api_key: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
   }),
@@ -198,4 +197,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({ dispatch });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView)));

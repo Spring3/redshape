@@ -1,0 +1,9 @@
+export default {
+  bgLight: '#FAFAFA',
+  bg: '#FFFFFF',
+  main: '#FF7079',
+  mainDark: '#EF6069',
+  minorText: '#A4A4A4',
+  normalText: '#3F3844',
+  hoverText: '#FFFFFF'
+};
