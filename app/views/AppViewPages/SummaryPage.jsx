@@ -51,6 +51,10 @@ const GridRow = styled.div`
   grid-column: 1/-1;
 `;
 
+const MarginedDiv = styled.div`
+  margin-top: 10px;
+`;
+
 const styles = {
   container: (base, state) => {
     return { ...base };
@@ -86,7 +90,8 @@ class SummaryPage extends Component {
     ];
     
     this.state = {
-      showClosed: false,
+      showClosedIssues: props.settings.showClosedIssues,
+      useColors: props.settings.useColors,
       issues: props.issues,
       selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
       search: undefined,
@@ -100,25 +105,33 @@ class SummaryPage extends Component {
   }
 
   fetchIssues = () => {
-    const { dispatch, user } = this.props;
-    const { showClosed } = this.state;
+    const { fetchIssues, user } = this.props;
+    const { showClosedIssues } = this.state;
     const queryFilter = new IssueFilter()
       .assignee(user.id)
-      .status({ open: true, closed: showClosed })
+      .status({ open: true, closed: showClosedIssues })
       .build();
-    dispatch(actions.issues.getAll(queryFilter))
-    .then(() => {
-      this.setState({
-        issues: this.props.issues
-      });
-    });
+    fetchIssues(queryFilter).then(() => this.setState({ issues: this.props.issues }));
   }
 
   toggleClosedIssuesDisplay = () => {
-    const { showClosed } = this.state;
+    const { settingsShowClosedIssues } = this.props;
+    const { showClosedIssues } = this.state;
+    settingsShowClosedIssues(!showClosedIssues);
     this.setState({
-      showClosed: !showClosed
-    }, this.fetchIssues);
+      showClosedIssues: !showClosedIssues
+    }, () => {
+      this.fetchIssues();
+    });
+  }
+
+  toggleUseColors = () => {
+    const { settingsUseColors } = this.props;
+    const { useColors } = this.state;
+    settingsUseColors(!useColors);
+    this.setState({
+      useColors: !useColors
+    });
   }
 
   onSearchChange = (e) => {
@@ -133,9 +146,7 @@ class SummaryPage extends Component {
         })
       })
     } else {
-      this.setState({
-        issues
-      });
+      this.setState({ issues });
     }
   }
 
@@ -194,24 +205,36 @@ class SummaryPage extends Component {
 
   render() {
     const { theme } = this.props;
-    const { issues, selectedHeaders, showClosed, sortBy, sortDirection } = this.state;
+    const { issues, selectedHeaders, sortBy, sortDirection, showClosedIssues, useColors } = this.state;
     return (
       <Grid>
         <IssuesSection>
           <h2>Issues assigned to me</h2>
           <OptionsGrid>
-            <Label htmlFor="queryOptions" label="Options">
-              <div id="queryOptions">
+            <div>
+              <Label htmlFor="queryOptions" label="Options">
+                <div id="queryOptions">
+                  <label>
+                    <Input
+                      type="checkbox"
+                      checked={showClosedIssues}
+                      onChange={this.toggleClosedIssuesDisplay}
+                    />
+                    <span>Include Closed</span>
+                  </label>
+                </div>
+              </Label>
+              <MarginedDiv>
                 <label>
                   <Input
                     type="checkbox"
-                    checked={showClosed}
-                    onChange={this.toggleClosedIssuesDisplay}
+                    checked={useColors}
+                    onChange={this.toggleUseColors}
                   />
-                  <span>Include Closed</span>
+                  <span>Use Colors</span>
                 </label>
-              </div>
-            </Label>
+              </MarginedDiv>
+            </div>
             <Label htmlFor="headers" label="Table Columns">
               <Select
                 name="headers"
@@ -289,14 +312,26 @@ SummaryPage.propTypes = {
     api_key: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     redmineEndpoint: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  settings: PropTypes.shape({
+    showClosedIssues: PropTypes.bool.isRequired,
+    useColors: PropTypes.bool.isRequired
+  }).isRequired,
+  settingsShowClosedIssues: PropTypes.func.isRequired,
+  settingsUseColors: PropTypes.func.isRequired,
+  fetchIssues: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.user,
-  issues: state.issues.assignedToMe.data
+  issues: state.issues.assignedToMe.data,
+  settings: state.settings
 });
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({
+  fetchIssues: filter => dispatch(actions.issues.getAll(filter)),
+  settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
+  settingsUseColors: value => dispatch(actions.settings.setUseColors(value))   
+});
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));

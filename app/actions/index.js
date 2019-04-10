@@ -3,9 +3,7 @@ import trackingActions from './tracking.actions';
 import issuesActions from './issues.actions';
 import projectActions from './project.actions';
 import timeActions from './time.actions';
-
-export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
-const updateSettings = data => ({ type: UPDATE_SETTINGS, data });
+import settingsActions from './settings.actions';
 
 export default {
   user: userActions,
@@ -13,7 +11,5 @@ export default {
   tracking: trackingActions,
   projects: projectActions,
   time: timeActions,
-  settings: {
-    update: updateSettings
-  }
+  settings: settingsActions
 };

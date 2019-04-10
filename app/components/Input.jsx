@@ -48,31 +48,37 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 const checkedStyles = css`
-  background: #FF7079;
+  background: ${props => props.theme.main};
+  border-color: ${props => props.theme.main};
 `
 const uncheckedStyles = css`
   background: white;
+  border-color: ${props => props.theme.main};
 `
 
 const disabledStyles = css`
  background: grey;
+ border-color: ${props => props.theme.bgLight};
 `
 
 const StyledCheckbox = styled.div`
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: ${props => props.checked ? 'salmon' : 'papayawhip'}
+  background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
   border-radius: 3px;
   transition: all 150ms;
-
-  ${HiddenCheckbox}:focus + & {
-    box-shadow: 0 0 0 3px pink;
-  }
+  border: 3px solid transparent;
 
   svg {
     visibility: ${props => props.checked ? 'visible' : 'hidden'};
+    position: relative;
     vertical-align: middle;
+    bottom: 5px;
+  }
+
+  ${HiddenCheckbox}:focus + & {
+    box-shadow: 0px 0px 5px 1px ${props => props.theme.mainLight};
   }
 
   ${props => props.checked ? checkedStyles : uncheckedStyles};
@@ -83,6 +89,11 @@ const StyledCheckbox = styled.div`
 const CheckboxContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
+
+  & + span {
+    margin-left: 10px;
+    vertical-align: middle;
+  }
 `
 
 const FormGroup = styled.div`  
@@ -148,7 +159,7 @@ class Input extends PureComponent {
             name={name}
           />
           <StyledCheckbox checked={checked}>
-            <CheckIcon />
+            <CheckIcon size="18" color='white' />
           </StyledCheckbox>
         </CheckboxContainer>
       )

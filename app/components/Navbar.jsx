@@ -83,7 +83,7 @@ class NavigationBar extends Component {
       <Navbar>
         <ul>
           <li>
-            <Link to="/app" push={true}>
+            <Link to="/app">
               Summary
             </Link>
           </li>
