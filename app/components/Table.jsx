@@ -12,14 +12,11 @@ const StyledTable = styled.table`
 
     tr {
       th {
-        padding: 5px;
-        border: 2px solid transparent;
-        background: white;
-        
+        padding: 15px;
+        font-weight: 900;
         &:hover {
           cursor: pointer;
-          background: #FF7079;
-          color: white;
+          color: ${props => props.theme.main};
         }
 
         svg {
@@ -31,25 +28,26 @@ const StyledTable = styled.table`
         width: 90px;
       }
 
+      td {
+        padding: 15px;
+        font-weight: 500;
+      }
+
       &:hover {
         cursor: pointer;
         
         td {
-          background: #FF7079;
-          color: white;
+          background: ${props => props.theme.bgLight};
         }
       }
-    }
-
-    tr:nth-child(even) {
-      background: #F2F2F2;
     }
   }
 `;
 
 const Table = ({ children }) => (
   <StyledTable
-    cellPadding={10}
+    cellPadding={0}
+    cellSpacing={0}
     width="100%"
   >
     <tbody>

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
@@ -38,17 +38,37 @@ const ActivitySection = styled(Section)`
   grid-row: span 4;
 `;
 
-
-const FlexRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const OptionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: minmax(200px, auto) 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+  margin-bottom: 20px;
 `;
 
-const MarginedDiv = styled.div`
-  margin: 20px 10px 20px 0px;
-  flex-grow: 1
+const GridRow = styled.div`
+  grid-column: 1/-1;
 `;
+
+const styles = {
+  container: (base, state) => {
+    return { ...base };
+  },
+  multiValue: (base, state) => {
+    return state.data.isFixed
+      ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
+      : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' };
+  },
+  multiValueLabel: (base, state) => {
+    return state.data.isFixed
+      ? { ...base, paddingRight: 6, color: '#A4A4A4' }
+      : base;
+  },
+  multiValueRemove: (base, state) => {
+    return state.data.isFixed ? { ...base, display: 'none' } : base;
+  }
+};
 
 class SummaryPage extends Component {
   constructor(props) {
@@ -68,7 +88,6 @@ class SummaryPage extends Component {
     this.state = {
       showClosed: false,
       issues: props.issues,
-      // issues: storage.get(`${id}.issuesAssignedToMe`, []),
       selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
       search: undefined,
       sortBy: undefined,
@@ -174,49 +193,56 @@ class SummaryPage extends Component {
   }
 
   render() {
+    const { theme } = this.props;
     const { issues, selectedHeaders, showClosed, sortBy, sortDirection } = this.state;
     return (
       <Grid>
         <IssuesSection>
           <h2>Issues assigned to me</h2>
-          <div>
+          <OptionsGrid>
+            <Label htmlFor="queryOptions" label="Options">
+              <div id="queryOptions">
+                <label>
+                  <Input
+                    type="checkbox"
+                    checked={showClosed}
+                    onChange={this.toggleClosedIssuesDisplay}
+                  />
+                  <span>Include Closed</span>
+                </label>
+              </div>
+            </Label>
             <Label htmlFor="headers" label="Table Columns">
               <Select
                 name="headers"
+                styles={styles}
                 components={makeAnimated()}
                 options={this.issuesHeaders}
                 defaultValue={selectedHeaders}
                 value={selectedHeaders}
                 onChange={this.onHeadersSelectChange}
                 isMulti={true}
+                isClearable={false}
+                theme={(defaultTheme) => ({
+                  ...defaultTheme,
+                  borderRadius: 3,
+                  colors: {
+                  ...defaultTheme.colors,
+                    primary: theme.main,
+                  },
+                })
+              }
               />
             </Label>
-            <FlexRow>
-              <MarginedDiv>
-                <Input
-                  type="text"
-                  name="search"
-                  placeholder="Search"
-                  onChange={this.onSearchChange}
-                />
-              </MarginedDiv>
-              <div>
-                <Label
-                  htmlFor="includeClosed"
-                  label="Include Closed"
-                  inline={true}
-                  rightToLeft={true}
-                >
-                  <Input
-                    name="includeClosed"
-                    type="checkbox"
-                    checked={showClosed}
-                    onChange={this.toggleClosedIssuesDisplay}
-                  />
-                </Label>
-              </div>
-            </FlexRow>
-          </div>
+            <GridRow>
+              <Input
+                type="text"
+                name="search"
+                placeholder="Search"
+                onChange={this.onSearchChange}
+              />
+            </GridRow>
+          </OptionsGrid>
           <Table>
             <tr>
               {selectedHeaders.map(header => (
@@ -273,4 +299,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({ dispatch });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));

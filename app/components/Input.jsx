@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
+import CheckIcon from 'mdi-react/CheckIcon';
 
 const StyledInput = styled.input`
   display: block;
@@ -14,16 +15,17 @@ const StyledInput = styled.input`
   font-weight: bold;
   
   ${({ theme }) => css`
-    border: 1px solid ${theme.main};
+    border: 1px solid ${theme.minorText};
     color: ${theme.main};
     background: white;
 
     &:hover {
-      border: 1px solid ${theme.mainDark};
+      border: 1px solid ${theme.main};
     }
 
     &:focus {
-      box-shadow: 0px 0px 0px 1px ${theme.mainDark};
+      border-color: ${theme.main};
+      box-shadow: 0px 0px 0px 1px ${theme.main};
     }
 
     &::placeholder {
@@ -32,8 +34,56 @@ const StyledInput = styled.input`
   `}}
 `;
 
-const StyledCheckbox = styled.input`
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  border: 0;
+  clip: rect(0 0 0 0);
+  clippath: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 `;
+
+const checkedStyles = css`
+  background: #FF7079;
+`
+const uncheckedStyles = css`
+  background: white;
+`
+
+const disabledStyles = css`
+ background: grey;
+`
+
+const StyledCheckbox = styled.div`
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: ${props => props.checked ? 'salmon' : 'papayawhip'}
+  border-radius: 3px;
+  transition: all 150ms;
+
+  ${HiddenCheckbox}:focus + & {
+    box-shadow: 0 0 0 3px pink;
+  }
+
+  svg {
+    visibility: ${props => props.checked ? 'visible' : 'hidden'};
+    vertical-align: middle;
+  }
+
+  ${props => props.checked ? checkedStyles : uncheckedStyles};
+
+  ${props => props.disabled ? disabledStyles : null};
+`
+
+const CheckboxContainer = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+`
 
 const FormGroup = styled.div`  
   h4 {
@@ -85,18 +135,22 @@ class Input extends PureComponent {
   }
 
   render() {
-    const { type, checked, placeholder, onChange, onBlur, value, id, name, disabled } = this.props;
+    const { type, checked, className, placeholder, onChange, onBlur, value, id, name, disabled } = this.props;
     return type.toLowerCase() === 'checkbox'
       ? (
-        <StyledCheckbox
-          type={type}
-          onChange={onChange}
-          onBlur={onBlur}
-          checked={checked}
-          disabled={disabled}
-          id={id}
-          name={name}
-        />
+        <CheckboxContainer className={className}>
+          <HiddenCheckbox
+            onChange={onChange}
+            onBlur={onBlur}
+            checked={checked}
+            disabled={disabled}
+            id={id}
+            name={name}
+          />
+          <StyledCheckbox checked={checked}>
+            <CheckIcon />
+          </StyledCheckbox>
+        </CheckboxContainer>
       )
       : (
         <StyledInput

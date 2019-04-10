@@ -24,7 +24,6 @@ const Grid = styled.div`
 `;
 
 const Content = styled.div`
-  background: ${props => props.theme.bgLight};
   grid-column: span 12;
   grid-row: 2 / -1;
 `;
