@@ -66,9 +66,9 @@ const StyledCheckbox = styled.div`
   width: 16px;
   height: 16px;
   background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
-  border-radius: 3px;
   transition: all 150ms;
   border: 3px solid transparent;
+  border-radius: 3px;
 
   svg {
     visibility: ${props => props.checked ? 'visible' : 'hidden'};

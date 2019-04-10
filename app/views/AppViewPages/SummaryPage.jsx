@@ -90,14 +90,17 @@ class SummaryPage extends Component {
     ];
     
     this.state = {
-      showClosedIssues: props.settings.showClosedIssues,
-      useColors: props.settings.useColors,
       issues: props.issues,
-      selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
       search: undefined,
       sortBy: undefined,
       sortDirection: undefined
     };
+  }
+
+  componentDidUpdate(oldProps) {
+    if (oldProps.settings.showClosedIssues !== this.props.settings.showClosedIssues) {
+      this.fetchIssues();
+    }
   }
 
   componentWillMount() {
@@ -105,8 +108,8 @@ class SummaryPage extends Component {
   }
 
   fetchIssues = () => {
-    const { fetchIssues, user } = this.props;
-    const { showClosedIssues } = this.state;
+    const { fetchIssues, user, settings } = this.props;
+    const { showClosedIssues } = settings;
     const queryFilter = new IssueFilter()
       .assignee(user.id)
       .status({ open: true, closed: showClosedIssues })
@@ -115,23 +118,15 @@ class SummaryPage extends Component {
   }
 
   toggleClosedIssuesDisplay = () => {
-    const { settingsShowClosedIssues } = this.props;
-    const { showClosedIssues } = this.state;
+    const { settingsShowClosedIssues, settings } = this.props;
+    const { showClosedIssues } = settings;
     settingsShowClosedIssues(!showClosedIssues);
-    this.setState({
-      showClosedIssues: !showClosedIssues
-    }, () => {
-      this.fetchIssues();
-    });
   }
 
   toggleUseColors = () => {
-    const { settingsUseColors } = this.props;
-    const { useColors } = this.state;
+    const { settingsUseColors, settings } = this.props;
+    const { useColors } = settings;
     settingsUseColors(!useColors);
-    this.setState({
-      useColors: !useColors
-    });
   }
 
   onSearchChange = (e) => {
@@ -150,19 +145,6 @@ class SummaryPage extends Component {
     }
   }
 
-  orderTableHeaders = (headers) => {
-    const fixed = [];
-    const unfixed = [];
-    for (const header of headers) {
-      if (header.isFixed) {
-        fixed.push(header);
-      } else {
-        unfixed.push(header);
-      }
-    }
-    return [...fixed, ...unfixed];
-  }
-
   onHeadersSelectChange = (value, { action, removedValue }) => {
     switch (action) {
       case 'remove-value':
@@ -171,13 +153,9 @@ class SummaryPage extends Component {
           return;
         }
         break;
-      case 'clear':
-        value = this.issuesHeaders.filter(header => header.isFixed);
-        break;
     }
 
-    const selectedHeaders = this.orderTableHeaders(value);
-    this.setState({ selectedHeaders });
+    this.props.settingsChangeIssueHeaders(value);
   }
 
   sortTable = (by) => { 
@@ -204,8 +182,9 @@ class SummaryPage extends Component {
   }
 
   render() {
-    const { theme } = this.props;
-    const { issues, selectedHeaders, sortBy, sortDirection, showClosedIssues, useColors } = this.state;
+    const { theme, settings } = this.props;
+    const { issues, sortBy, sortDirection } = this.state;
+    const { showClosedIssues, useColors, issueHeaders } = settings;
     return (
       <Grid>
         <IssuesSection>
@@ -241,8 +220,8 @@ class SummaryPage extends Component {
                 styles={styles}
                 components={makeAnimated()}
                 options={this.issuesHeaders}
-                defaultValue={selectedHeaders}
-                value={selectedHeaders}
+                defaultValue={issueHeaders}
+                value={issueHeaders}
                 onChange={this.onHeadersSelectChange}
                 isMulti={true}
                 isClearable={false}
@@ -268,7 +247,7 @@ class SummaryPage extends Component {
           </OptionsGrid>
           <Table>
             <tr>
-              {selectedHeaders.map(header => (
+              {issueHeaders.map(header => (
                 <th
                   key={header.value}
                   className={header.value === 'due_date' ? 'due-date' : ''}
@@ -287,7 +266,7 @@ class SummaryPage extends Component {
             {issues.map(item => (
               <tr key={item.id} onClick={this.showIssueDetails.bind(this, item.id)}>
                 {
-                  selectedHeaders.map(header => (
+                  issueHeaders.map(header => (
                     <td key={header.value}>{_.get(item, header.value)}</td>
                   ))
                 }
@@ -315,10 +294,16 @@ SummaryPage.propTypes = {
   }).isRequired,
   settings: PropTypes.shape({
     showClosedIssues: PropTypes.bool.isRequired,
-    useColors: PropTypes.bool.isRequired
+    useColors: PropTypes.bool.isRequired,
+    issueHeaders: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+      isFixed: PropTypes.bool
+    }).isRequired).isRequired,
   }).isRequired,
   settingsShowClosedIssues: PropTypes.func.isRequired,
   settingsUseColors: PropTypes.func.isRequired,
+  settingsChangeIssueHeaders: PropTypes.func.isRequired,
   fetchIssues: PropTypes.func.isRequired
 };
 
@@ -331,7 +316,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchIssues: filter => dispatch(actions.issues.getAll(filter)),
   settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
-  settingsUseColors: value => dispatch(actions.settings.setUseColors(value))   
+  settingsUseColors: value => dispatch(actions.settings.setUseColors(value)),
+  settingsChangeIssueHeaders: issueHeaders => dispatch(actions.settings.setIssueHeaders(issueHeaders))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));
