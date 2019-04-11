@@ -24,7 +24,7 @@ const Grid = styled.div`
 
 const Section = styled.section`
   background: white;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   border-radius: 5px;
 `;
 
@@ -78,7 +78,7 @@ const ColorfulSpan = styled.span`
   ${
     props => props.color
     ? css `
-      padding: 2px;
+      padding-bottom: 2px;
       background: linear-gradient(to bottom,transparent 0,transparent 90%,${props.color} 90%,${props.color} 100%);
     `
     : null
@@ -203,10 +203,10 @@ class SummaryPage extends Component {
   }
 
   paint = (item, mapping) => {
-    const { theme } = this.props;
+    const { theme, settings } = this.props;
     const textValue = _.get(item, mapping);
     
-    const color = (typeof textValue === 'string'
+    const color = (settings.useColors && typeof textValue === 'string'
       ? colorMap[textValue.toLowerCase()]
       : undefined);
     return (
@@ -301,7 +301,7 @@ class SummaryPage extends Component {
                 {
                   issueHeaders.map(header => (
                     <td key={header.value}>
-                      {useColors ? this.paint(item, header.value) : _.get(item, header.value)}
+                      {this.paint(item, header.value)}
                     </td>
                   ))
                 }

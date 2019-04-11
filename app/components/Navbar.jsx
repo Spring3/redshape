@@ -94,7 +94,7 @@ class NavigationBar extends Component {
       <Navbar>
         <ul>
           <li>
-            <NavLink to="/app">
+            <NavLink to="/app/summary">
               Summary
             </NavLink>
           </li>
@@ -102,7 +102,7 @@ class NavigationBar extends Component {
         </ul>
         <ul>
           <li>
-            <Link to="/app">
+            <Link to="/app/summary">
               {name}
             </Link>
           </li>

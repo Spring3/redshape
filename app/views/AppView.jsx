@@ -72,7 +72,7 @@ class AppView extends Component {
         { (!user.id || !user.api_key) ? (<Redirect to="/" />) : null }
         <Navbar />
         <Content>
-          <Route exact path={match.path} component={SummaryPage} />
+          <Route exact path={`${match.path}/summary`} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
           <Timer
             isEnabled={tracking.isTracking}

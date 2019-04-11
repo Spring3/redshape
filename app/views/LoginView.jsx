@@ -51,11 +51,16 @@ const CopyrightsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+const SubmitButton = styled(Button)`
+  padding: 10px 5px;
+  margin: 25px auto 0px auto;
+`;
+
 class LoginView extends Component {  
   componentWillMount() {
     const { user } = this.props;
     if (user.id && user.api_key) {
-      this.props.history.push('/app');
+      this.props.history.push('/app/summary');
     }
   }
 
@@ -80,7 +85,7 @@ class LoginView extends Component {
     .then(() => {
       const { loginError, user } = this.props;
       if (!loginError && user.id) {
-        this.props.history.push('/app');
+        this.props.history.push('/app/summary');
       }
       setSubmitting(false);
     });
@@ -156,13 +161,13 @@ class LoginView extends Component {
               <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
                 {errors.redmineEndpoint}
               </ErrorMessage>
-              <Button
+              <SubmitButton
                 type="submit"
                 disabled={isSubmitting}
                 block={true}
               >
                 Submit
-              </Button>
+              </SubmitButton>
               <ErrorMessage show={!!loginError}>
                 {loginError && loginError.message}
               </ErrorMessage>

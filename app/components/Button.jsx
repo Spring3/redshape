@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 const StyledButton = styled.button`
-  padding: 10px 5px;
   border-radius: 3px;
   border: 2px solid transparent;
   font-weight: bold;
@@ -14,7 +13,6 @@ const StyledButton = styled.button`
     box-shadow: 0px 0px 0px 2px ${props.theme.main};
     color: ${props.theme.main};
     width: ${props.block ? '100%' : 'auto'};
-    margin: 25px auto 0px auto;
   `}
 
   svg {

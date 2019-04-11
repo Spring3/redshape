@@ -63,11 +63,13 @@ const ColumnList = styled.ul`
 
 const SmallNotice = styled.p`
   font-size: 12px;
+  margin-top: 0px;
 `;
 
 const Wrapper = styled.div`
   display: inline-block;
   width: 100%;
+  margin-top: 10px;
 `;
 
 const IssueHeader = styled.h2`
@@ -263,6 +265,12 @@ class IssueDetailsPage extends Component {
                     </li>
                   </ColumnList>
                 </Wrapper>
+                <div>
+                  <h3>Description</h3>
+                  <DescriptionText>
+                    {selectedIssue.description}
+                  </DescriptionText>
+                </div>
               </div>
               <TimeSpentSection>
                 <h2>Time spent</h2>
@@ -285,33 +293,25 @@ class IssueDetailsPage extends Component {
               </TimeSpentSection>
             </FlexRow>
             <div>
-              <div>
-                <h3>Description</h3>
-                <DescriptionText>
-                  {selectedIssue.description}
-                </DescriptionText>
-              </div>
-              <div>
-                <h3>Comments</h3>
-                <Comments>
-                  {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
-                    <li key={entry.id}>
-                      <div>{entry.user.name} <span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
-                      <DescriptionText>{entry.notes}</DescriptionText>
-                    </li>
-                  ))}
-                </Comments>
-                <MarkdownEditor
-                  onChange={this.onCommentsChange}
-                  preview={true}
-                />
-                <Button
-                  type="button"
-                  onClick={this.publishComment}
-                >
-                  Publish <SendIcon />
-                </Button>
-              </div>
+              <h3>Comments</h3>
+              <Comments>
+                {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
+                  <li key={entry.id}>
+                    <div>{entry.user.name} <span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
+                    <DescriptionText>{entry.notes}</DescriptionText>
+                  </li>
+                ))}
+              </Comments>
+              <MarkdownEditor
+                onChange={this.onCommentsChange}
+                preview={true}
+              />
+              <Button
+                type="button"
+                onClick={this.publishComment}
+              >
+                Publish <SendIcon />
+              </Button>
             </div>
           </MainSection>
           <TimeEntryModal
