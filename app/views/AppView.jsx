@@ -14,6 +14,7 @@ import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
+import DragArea from '../components/DragArea';
 import storage from '../../modules/storage';
 
 const Grid = styled.div`
@@ -67,6 +68,7 @@ class AppView extends Component {
 
     return (
       <Grid>
+        <DragArea />
         { (!user.id || !user.api_key) ? (<Redirect to="/" />) : null }
         <Navbar />
         <Content>
