@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
-import styled, { withTheme } from 'styled-components';
+import styled, { withTheme, css } from 'styled-components';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
@@ -55,7 +55,7 @@ const MarginedDiv = styled.div`
   margin-top: 10px;
 `;
 
-const styles = {
+const selectStyles = {
   container: (base, state) => {
     return { ...base };
   },
@@ -74,6 +74,26 @@ const styles = {
   }
 };
 
+const ColorfulSpan = styled.span`
+  ${
+    props => props.color
+    ? css `
+      padding: 2px;
+      background: linear-gradient(to bottom,transparent 0,transparent 90%,${props.color} 90%,${props.color} 100%);
+    `
+    : null
+  }
+`;
+
+const colorMap = {
+  'closed': 'red',
+  'high': 'red',
+  'open': 'green',
+  'low': 'green',
+  'pending': 'yellow',
+  'normal': 'yellow'
+};
+
 class SummaryPage extends Component {
   constructor(props) {
     super(props);
@@ -88,6 +108,7 @@ class SummaryPage extends Component {
       { label: 'Estimation', value: 'estimated_hours' },
       { label: 'Due Date', value: 'due_date' }
     ];
+
     
     this.state = {
       issues: props.issues,
@@ -181,6 +202,18 @@ class SummaryPage extends Component {
     this.props.history.push(`/app/issue/${id}/`);
   }
 
+  paint = (item, mapping) => {
+    const { theme } = this.props;
+    const textValue = _.get(item, mapping);
+    
+    const color = (typeof textValue === 'string'
+      ? colorMap[textValue.toLowerCase()]
+      : undefined);
+    return (
+      <ColorfulSpan color={theme[color]}>{textValue}</ColorfulSpan>
+    );
+  }
+
   render() {
     const { theme, settings } = this.props;
     const { issues, sortBy, sortDirection } = this.state;
@@ -217,7 +250,7 @@ class SummaryPage extends Component {
             <Label htmlFor="headers" label="Table Columns">
               <Select
                 name="headers"
-                styles={styles}
+                styles={selectStyles}
                 components={makeAnimated()}
                 options={this.issuesHeaders}
                 defaultValue={issueHeaders}
@@ -267,7 +300,9 @@ class SummaryPage extends Component {
               <tr key={item.id} onClick={this.showIssueDetails.bind(this, item.id)}>
                 {
                   issueHeaders.map(header => (
-                    <td key={header.value}>{_.get(item, header.value)}</td>
+                    <td key={header.value}>
+                      {useColors ? this.paint(item, header.value) : _.get(item, header.value)}
+                    </td>
                   ))
                 }
               </tr>

@@ -7,7 +7,7 @@ export default {
   minorText: '#A4A4A4',
   normalText: '#3F3844',
   hoverText: '#FFFFFF',
-  red: 'salmon',
-  yellow: '#FBCB38',
-  green: '#6CCA51'
+  red: '#FF634D',
+  yellow: '#FFDA77',
+  green: '#A3EB6A'
 };

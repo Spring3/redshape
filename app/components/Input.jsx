@@ -67,14 +67,14 @@ const StyledCheckbox = styled.div`
   height: 16px;
   background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
   transition: background .15s;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   border-radius: 3px;
 
   svg {
     visibility: ${props => props.checked ? 'visible' : 'hidden'};
     position: relative;
     vertical-align: middle;
-    bottom: 5px;
+    bottom: 3px;
   }
 
   ${HiddenCheckbox}:focus + & {
