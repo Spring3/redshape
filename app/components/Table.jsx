@@ -13,7 +13,11 @@ const StyledTable = styled.table`
     tr {
       th {
         padding: 15px;
+        position: sticky;
+        top: 0;
+        background: ${props => props.theme.bg};
         font-weight: 900;
+        transition: color ease .25s;
         &:hover {
           cursor: pointer;
           color: ${props => props.theme.main};
@@ -31,6 +35,7 @@ const StyledTable = styled.table`
       td {
         padding: 15px;
         font-weight: 500;
+        transition: background ease .15s;
       }
 
       &:hover {

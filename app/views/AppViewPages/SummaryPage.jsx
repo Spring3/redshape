@@ -131,12 +131,12 @@ class SummaryPage extends Component {
 
   onSearchChange = (e) => {
     const value = e.target.value;
-    const { issues } = this.props;
-    const { selectedHeaders } = this.state;
+    const { issues, settings } = this.props;
+    const { issueHeaders } = settings;
     if (value) {
       this.setState({
         issues: issues.filter((issue) => {
-          const testedString = selectedHeaders.map(header => _.get(issue, header.value)).join(' ');
+          const testedString = issueHeaders.map(header => _.get(issue, header.value)).join(' ');
           return new RegExp(value, 'gi').test(testedString);
         })
       })
