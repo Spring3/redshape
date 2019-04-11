@@ -66,7 +66,7 @@ const StyledCheckbox = styled.div`
   width: 16px;
   height: 16px;
   background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
-  transition: all 150ms;
+  transition: background .15s;
   border: 3px solid transparent;
   border-radius: 3px;
 

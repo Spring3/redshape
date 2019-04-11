@@ -38,7 +38,6 @@ const StyledButton = styled.button`
 `;
 
 const StyledLink = styled.a`
-  outline: none;
   &:active,
   &:focus,
   &:visited {
@@ -96,7 +95,7 @@ class GhostButton extends Component {
   }
 
   render() {
-    const { id, children, disabled, className } = this.props;
+    const { id, children, disabled, className, tabIndex } = this.props;
     return (
       <StyledLink
         id={id}
@@ -104,6 +103,7 @@ class GhostButton extends Component {
         href="#"
         disabled={disabled}
         className={className}
+        tabIndex={tabIndex}
       >
         {children}
       </StyledLink>
@@ -119,7 +119,8 @@ GhostButton.propTypes = {
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  tabIndex: PropTypes.number
 };
 
 GhostButton.defaultProps = {

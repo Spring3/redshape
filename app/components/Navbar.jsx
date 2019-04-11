@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import actions from '../actions';
@@ -14,7 +14,7 @@ const Navbar = styled.nav`
   right: 0px;
   z-index: 2;
   height: 50px;
-  background: ${props => props.theme.bg};
+  background: linear-gradient(to bottom, ${props => props.theme.bg} 85%, transparent);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,21 +31,31 @@ const Navbar = styled.nav`
       display: inline;
       font-size: 15px;
       font-weight: bold;
-      color: ${props => props.theme.normalText};
-
-      a {
-        text-decoration: none;
-        color: ${props => props.theme.normalText};
-      }
-      
-      &:hover {
-        cursor: pointer;
-        color: ${props => props.theme.main};
+      ${({theme}) => css`
+        color: ${theme.normalText};
+        transition: color .25s ease;
 
         a {
-          color: ${props => props.theme.main};
+          text-decoration: none;
+          color: ${theme.normalText};
+          transition: color .25s ease;
+          padding-bottom: 5px;
         }
-      }
+
+        a.active {
+          color: ${theme.main};
+          border-bottom: 2px solid ${theme.main};
+        }
+        
+        &:hover {
+          cursor: pointer;
+          color: ${theme.main};
+
+          a {
+            color: ${theme.main};
+          }
+        }
+      `}
     }
   }
 
@@ -77,15 +87,16 @@ class NavigationBar extends Component {
   }
 
   render() {
-    const { user = {} } = this.props;
+    const { user = {}, history } = this.props;
+    console.log(history);
     const { name } = user;
     return (
       <Navbar>
         <ul>
           <li>
-            <Link to="/app">
+            <NavLink to="/app">
               Summary
-            </Link>
+            </NavLink>
           </li>
           <li>Issues</li>
         </ul>
@@ -130,4 +141,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavigationBar));
