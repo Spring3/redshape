@@ -83,7 +83,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
         private_notes: false,
         user: {
           id: user.id,
-          name: `${user.firstname} ${user.lastname}`
+          name: user.name
         }
       },
       actionId

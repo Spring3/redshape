@@ -297,7 +297,7 @@ class IssueDetailsPage extends Component {
               <Comments>
                 {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
                   <li key={entry.id}>
-                    <div>{entry.user.name} <span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
+                    <div>{entry.user.name}<span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
                     <DescriptionText>{entry.notes}</DescriptionText>
                   </li>
                 ))}
