@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
-  background: lightgrey;
+  background: ${props => props.theme.bgLight};
   position: relative;
   border-radius: 5px;
   height: ${props => props.height}px;

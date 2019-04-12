@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 import moment from 'moment';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
@@ -10,6 +10,7 @@ import SendIcon from 'mdi-react/SendIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 
+import Link from '../../components/Link';
 import Button, { GhostButton } from '../../components/Button';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
@@ -65,6 +66,10 @@ const SmallNotice = styled.p`
   font-size: 12px;
   margin-top: 0px;
   color: ${props => props.theme.minorText};
+
+  a {
+    font-size: inherit !important;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -266,7 +271,7 @@ class IssueDetailsPage extends Component {
   }
 
   render() {
-    const { spentTime, selectedIssue, history, user, timeTracking } = this.props;
+    const { spentTime, selectedIssue, history, user, timeTracking, theme } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
     return selectedIssue.id
       ? (
@@ -291,7 +296,7 @@ class IssueDetailsPage extends Component {
                 </HeaderContainer>
                 <SmallNotice>
                   Created by&nbsp;
-                  <a href="#">{selectedIssue.author.name}</a>
+                  <Link>{selectedIssue.author.name}</Link>
                   <span> {moment().diff(selectedIssue.created_on, 'days')} day(s) ago</span>
                 </SmallNotice>
                 {selectedIssue.closed_on && (
@@ -324,8 +329,7 @@ class IssueDetailsPage extends Component {
                       <div>
                         <Progressbar
                           percent={selectedIssue.done_ratio}
-                          background="grey"
-                          color="white"
+                          background={theme.green}
                         />
                       </div>
                     </li>
@@ -356,8 +360,7 @@ class IssueDetailsPage extends Component {
                       <div>
                         <Progressbar
                           percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
-                          background="grey"
-                          color="white"
+                          background={theme.yellow}
                         />
                       </div>
                     </li>
@@ -461,4 +464,4 @@ const mapDispatchToProps = dispatch => ({
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.time.remove(timeEntryId, issueId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));
