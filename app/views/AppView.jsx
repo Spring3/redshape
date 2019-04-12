@@ -57,7 +57,7 @@ class AppView extends Component {
   }
 
   render() {
-    const { showSidebar, showTimeEntryModal } = this.state;
+    const { showTimeEntryModal } = this.state;
     const {
       user,
       match,

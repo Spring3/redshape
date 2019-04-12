@@ -111,7 +111,7 @@ class SummaryPage extends Component {
 
     
     this.state = {
-      issues: props.issues,
+      issues: props.issues.data,
       search: undefined,
       sortBy: undefined,
       sortDirection: undefined
@@ -135,7 +135,7 @@ class SummaryPage extends Component {
       .assignee(user.id)
       .status({ open: true, closed: showClosedIssues })
       .build();
-    fetchIssues(queryFilter).then(() => this.setState({ issues: this.props.issues }));
+    fetchIssues(queryFilter).then(() => this.setState({ issues: this.props.issues.data }));
   }
 
   toggleClosedIssuesDisplay = () => {
@@ -156,13 +156,13 @@ class SummaryPage extends Component {
     const { issueHeaders } = settings;
     if (value) {
       this.setState({
-        issues: issues.filter((issue) => {
+        issues: issues.data.filter((issue) => {
           const testedString = issueHeaders.map(header => _.get(issue, header.value)).join(' ');
           return new RegExp(value, 'gi').test(testedString);
         })
       })
     } else {
-      this.setState({ issues });
+      this.setState({ issues: issues.data });
     }
   }
 
@@ -229,6 +229,7 @@ class SummaryPage extends Component {
                   <label>
                     <Input
                       type="checkbox"
+                      disabled={this.props.issues.isFetching}
                       checked={showClosedIssues}
                       onChange={this.toggleClosedIssuesDisplay}
                     />
@@ -336,6 +337,11 @@ SummaryPage.propTypes = {
       isFixed: PropTypes.bool
     }).isRequired).isRequired,
   }).isRequired,
+  issues: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.instanceOf(Error)
+  }).isRequired,
   settingsShowClosedIssues: PropTypes.func.isRequired,
   settingsUseColors: PropTypes.func.isRequired,
   settingsChangeIssueHeaders: PropTypes.func.isRequired,
@@ -344,7 +350,7 @@ SummaryPage.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.user,
-  issues: state.issues.assignedToMe.data,
+  issues: state.issues.assignedToMe,
   settings: state.settings
 });
 

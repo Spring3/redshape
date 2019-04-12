@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import moment from 'moment';
+
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 import SendIcon from 'mdi-react/SendIcon';
+import PlusIcon from 'mdi-react/PlusIcon';
+import CloseIcon from 'mdi-react/CloseIcon';
 
 import Button, { GhostButton } from '../../components/Button';
 import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
 import MarkdownEditor from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
+import { animationSlideRight } from '../../animations';
 
 const Grid = styled.div`
   display: grid;
@@ -26,27 +30,23 @@ const Section = styled.section`
   background: white;
   padding: 20px;
   border-radius: 5px;
-`;
-
-const MainSection = styled(Section)`
   grid-column: span 8;
   grid-row: span 6;
 `;
 
-const TimeSpentSection = styled(Section)`
-  width: 350px;
-`;
-
 const ColumnList = styled.ul`
   list-style-type: none;
+  font-weight: 500;
   margin: 0;
   padding: 0;
   width: auto;
   float: left;
   padding-right: 20px;
+  border-radius: 3px;
 
   li {
     columns: 2;
+    margin-bottom: 10px;
     padding: 5px 0px 5px 0px;
     display: flex;
     align-items: center;
@@ -64,6 +64,7 @@ const ColumnList = styled.ul`
 const SmallNotice = styled.p`
   font-size: 12px;
   margin-top: 0px;
+  color: ${props => props.theme.minorText};
 `;
 
 const Wrapper = styled.div`
@@ -72,9 +73,56 @@ const Wrapper = styled.div`
   margin-top: 10px;
 `;
 
-const IssueHeader = styled.h2`
-  min-width: 1;
-  width: auto;
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  h2 {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  h2.padded {
+    margin-left: 15px;
+  }
+`;
+
+const IconButton = styled(GhostButton)`
+  svg {
+    border-radius: 3px;
+    ${({theme}) => css`
+      color: ${theme.main};
+      border: 2px solid transparent;
+      transition: all ease ${theme.transitionTime};
+
+      &:hover {
+        color: ${theme.main};
+        border: 2px solid ${theme.main};
+      }
+    `}
+  }
+`;
+
+const BackButton = styled(IconButton)`
+  svg {
+    animation: ${animationSlideRight} 2s ease-in infinite;
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+`;
+
+const CloseButton = styled(GhostButton)`
+  svg {
+    ${({theme}) => css`
+      color: ${theme.bgLight};
+      transition: color ease ${theme.transitionTime};
+
+      &:hover {
+        color: ${theme.main};
+      }
+    `}
+  }
 `;
 
 const DescriptionText = styled.pre`
@@ -100,18 +148,67 @@ const Comments = styled.ul`
   }
 `;
 
-const List = styled.ul`
-  list-style-type: none;
-  padding: 0;
-
-  li {
-    display: block;
-  }
-`;
-
 const FlexRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+`;
+
+const TimeEntriesContainer = styled.div`
+  background: white;
+  padding-top: 35px;
+  width: 370px;
+`;
+
+const TimeEntriesList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  padding: 5px;
+  overflow-y: scroll;
+  max-height: 600px;
+
+  li {
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 3px;
+
+    div:first-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      a {
+        visibility: hidden;
+      }
+
+      div {
+        span {
+          margin-right: 5px;
+        }
+        span:first-child,
+        span:last-child {
+          font-weight: bold;
+        }
+      }
+    }
+
+    p {
+      margin-bottom: 0px;
+    }
+
+    &:hover {
+      box-shadow: 0px 0px 10px #E0E0E0;
+
+      div:first-child {
+        a {
+          visibility: visible;
+        }
+      }
+    }
+  }
 `;
 
 class IssueDetailsPage extends Component { 
@@ -169,35 +266,36 @@ class IssueDetailsPage extends Component {
   }
 
   render() {
-    const { spentTime, selectedIssue, history, user } = this.props;
+    const { spentTime, selectedIssue, history, user, timeTracking } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
-    console.log('selectedIssue', selectedIssue);
     return selectedIssue.id
       ? (
         <Grid>
-          <MainSection>
+          <Section>
             <FlexRow>
               <div>
-                <GhostButton onClick={history.goBack.bind(this)}>
-                  <ArrowLeftIcon />
-                </GhostButton>
-                <IssueHeader>
-                  <span>#{selectedIssue.id}&nbsp;</span>
-                  <span>{selectedIssue.subject}</span>
-                  &nbsp;
-                  <Button
-                    onClick={this.startTimeTracking}
-                  >
-                    Track Time
-                  </Button>
-                </IssueHeader>
+                <BackButton onClick={history.goBack.bind(this)}>
+                  <ArrowLeftIcon size={30} />
+                </BackButton>
+                <HeaderContainer>
+                  <h2>
+                    <span>#{selectedIssue.id}&nbsp;</span>
+                    <span>{selectedIssue.subject}</span>
+                  </h2>
+                  { !timeTracking.isTracking || timeTracking.issue.id !== selectedIssue.id
+                    ? (
+                      <Button onClick={this.startTimeTracking}>Track Time</Button>
+                    )
+                    : null
+                  }
+                </HeaderContainer>
                 <SmallNotice>
                   Created by&nbsp;
                   <a href="#">{selectedIssue.author.name}</a>
                   <span> {moment().diff(selectedIssue.created_on, 'days')} day(s) ago</span>
                 </SmallNotice>
                 {selectedIssue.closed_on && (
-                <SmallNotice>Closed on <span>{selectedIssue.closed_on}</span></SmallNotice> 
+                  <SmallNotice>Closed on <span>{selectedIssue.closed_on}</span></SmallNotice> 
                 )}
                 <Wrapper>
                   <ColumnList>
@@ -271,49 +369,61 @@ class IssueDetailsPage extends Component {
                     {selectedIssue.description}
                   </DescriptionText>
                 </div>
+                <div>
+                  <h3>Comments</h3>
+                  <Comments>
+                    {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
+                      <li key={entry.id}>
+                        <div>{entry.user.name}<span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
+                        <DescriptionText>{entry.notes}</DescriptionText>
+                      </li>
+                    ))}
+                  </Comments>
+                  <MarkdownEditor
+                    onChange={this.onCommentsChange}
+                    preview={true}
+                  />
+                  <Button
+                    type="button"
+                    onClick={this.publishComment}
+                  >
+                    Publish <SendIcon />
+                  </Button>
+                </div>
               </div>
-              <TimeSpentSection>
-                <h2>Time spent</h2>
-                <Button onClick={this.showTimeEntryModal()}>Add</Button>
-                <List>
+              <TimeEntriesContainer>
+                <HeaderContainer>
+                  <h2 className="padded">Time spent</h2>
+                  <IconButton onClick={this.showTimeEntryModal()}>
+                    <PlusIcon size={27} />
+                  </IconButton>
+                </HeaderContainer>
+                <TimeEntriesList>
                   {spentTime.map(timeEntry => (
                     <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
-                      <div>{timeEntry.comments}</div>
-                      <div>{timeEntry.hours} hours</div>
-                      <div>{timeEntry.user.name}</div>
-                      <div>{timeEntry.spent_on}</div>
-                      {
-                        user.id === timeEntry.user.id && (
-                          <Button onClick={this.removeTimeEntry(timeEntry.id)}>Remove</Button>
-                        )
-                      }
+                      <div>
+                        <div>
+                          <span>{timeEntry.user.name}</span>
+                          <span>{timeEntry.spent_on}</span>
+                          <span>{timeEntry.hours} hours</span>
+                        </div>
+                        {
+                          user.id === timeEntry.user.id && (
+                            <CloseButton
+                              onClick={this.removeTimeEntry(timeEntry.id)}
+                            >
+                              <CloseIcon />
+                            </CloseButton>
+                          )
+                        }
+                      </div>
+                      <p>{timeEntry.comments}</p>
                     </li>
                   ))}
-                </List>
-              </TimeSpentSection>
+                </TimeEntriesList>
+              </TimeEntriesContainer>
             </FlexRow>
-            <div>
-              <h3>Comments</h3>
-              <Comments>
-                {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
-                  <li key={entry.id}>
-                    <div>{entry.user.name}<span>({`${moment().diff(entry.created_on, 'days')} day(s) ago`})</span></div>
-                    <DescriptionText>{entry.notes}</DescriptionText>
-                  </li>
-                ))}
-              </Comments>
-              <MarkdownEditor
-                onChange={this.onCommentsChange}
-                preview={true}
-              />
-              <Button
-                type="button"
-                onClick={this.publishComment}
-              >
-                Publish <SendIcon />
-              </Button>
-            </div>
-          </MainSection>
+          </Section>
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={true}

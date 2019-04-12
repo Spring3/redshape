@@ -33,12 +33,12 @@ const Navbar = styled.nav`
       font-weight: bold;
       ${({theme}) => css`
         color: ${theme.normalText};
-        transition: color .25s ease;
+        transition: color ease ${theme.transitionTime};
 
         a {
           text-decoration: none;
           color: ${theme.normalText};
-          transition: color .25s ease;
+          transition: color ease ${theme.transitionTime};
           padding-bottom: 5px;
         }
 

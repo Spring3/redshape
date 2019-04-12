@@ -15,6 +15,7 @@ const StyledInput = styled.input`
   font-weight: bold;
   
   ${({ theme }) => css`
+    transition: background ${theme.transitionTime};
     border: 1px solid ${theme.minorText};
     color: ${theme.main};
     background: white;
@@ -51,14 +52,10 @@ const checkedStyles = css`
   background: ${props => props.theme.main};
   border-color: ${props => props.theme.main};
 `
+
 const uncheckedStyles = css`
   background: white;
   border-color: ${props => props.theme.main};
-`
-
-const disabledStyles = css`
- background: grey;
- border-color: ${props => props.theme.bgLight};
 `
 
 const StyledCheckbox = styled.div`
@@ -66,9 +63,10 @@ const StyledCheckbox = styled.div`
   width: 16px;
   height: 16px;
   background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
-  transition: background .15s;
+  transition: background ${props => props.theme.transitionTime};
   border: 2px solid transparent;
   border-radius: 3px;
+  cursor: pointer;
 
   svg {
     visibility: ${props => props.checked ? 'visible' : 'hidden'};
@@ -77,13 +75,17 @@ const StyledCheckbox = styled.div`
     bottom: 3px;
   }
 
+  ${HiddenCheckbox}:not(:disabled):hover + &,
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0px 0px 5px 1px ${props => props.theme.mainLight};
   }
 
-  ${props => props.checked ? checkedStyles : uncheckedStyles};
+  ${HiddenCheckbox}:disabled + & {
+    background: ${props => props.theme.bgLight};
+    border-color: lightgrey;
+  }
 
-  ${props => props.disabled ? disabledStyles : null};
+  ${props => props.checked ? checkedStyles : uncheckedStyles};
 `
 
 const CheckboxContainer = styled.div`

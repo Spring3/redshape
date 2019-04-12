@@ -4,28 +4,21 @@ import styled, { css } from 'styled-components';
 
 const StyledButton = styled.button`
   border-radius: 3px;
-  border: 2px solid transparent;
   font-weight: bold;
   font-size: 14px;
   outline: none;
 
   ${props => css`
-    box-shadow: 0px 0px 0px 2px ${props.theme.main};
+    border: 2px solid ${props.theme.main};    
     color: ${props.theme.main};
     width: ${props.block ? '100%' : 'auto'};
   `}
-
-  svg {
-    vertical-align: middle;
-  }
   
   ${props => css`
     &:hover,
     &:focus {
       cursor: pointer;
-      background: ${props.theme.main};
-      border: 2px solid ${props.theme.main};
-      box-shadow: 0px 0px 0px 2px ${props.theme.mainDark};
+      background: ${props.theme.main}; 
       color: ${props.theme.hoverText};
     }
     &:active {
