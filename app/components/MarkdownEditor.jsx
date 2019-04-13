@@ -42,11 +42,7 @@ const ModifiedTextArea = styled(TextArea)`
   width: ${props => props.preview ? '47%' : '100%'}
 `;
 
-const Preview = styled.iframe`
-  float: right;
-  width: 47%;
-  border: none
-`;
+const converter = new showdown.Converter();
 
 class MarkdownEditor extends Component {
   constructor (props) {
@@ -59,7 +55,6 @@ class MarkdownEditor extends Component {
     };
 
     this.textareaRef = React.createRef();
-    this.converter = new showdown.Converter();
   }
 
   componentDidUpdate(oldProps) {
@@ -191,15 +186,19 @@ class MarkdownEditor extends Component {
           <MarkdownOption onClick={this.makeImage}><ImageOutlineIcon /></MarkdownOption>
           <MarkdownOption onClick={this.togglePreview}><PageNextOutlineIcon /></MarkdownOption>
         </MarkdownOptionsList>
-        <ModifiedTextArea
-          ref={this.textareaRef}
-          onChange={this.onTextAreaTyped}
-          value={value}
-          preview={showPreview}
-        />
-        { showPreview && (
-          <Preview srcDoc={this.converter.makeHtml(value)}  height={`${textareaHeight + 20}px`} />
-        )}
+        { showPreview
+          ? (
+            <MarkdownText markdownText={value} />
+          )
+          : (
+            <ModifiedTextArea
+              ref={this.textareaRef}
+              onChange={this.onTextAreaTyped}
+              value={value}
+              preview={showPreview}
+            />
+          )
+        }
       </div>
     );
   }
@@ -221,6 +220,45 @@ MarkdownEditor.defaultProps = {
   id: undefined,
   initialValue: '',
   preview: false
+};
+
+
+export class MarkdownText extends Component {
+  constructor(props) {
+    super(props);
+    this.iframeRef = React.createRef();
+  }
+
+  adjustIframeHeight = () => {
+    const iframe = this.iframeRef.current;
+    if (iframe) {
+      iframe.height = iframe.contentDocument.body.scrollHeight + 50;
+    }
+  }
+
+  render () {
+    const { markdownText, className } = this.props;
+    return (
+      <iframe
+        ref={this.iframeRef}
+        className={className}
+        frameborder="0"
+        width="100%"
+        srcDoc={converter.makeHtml(markdownText)}
+        onLoad={this.adjustIframeHeight}
+      />
+    );
+  }
+};
+
+MarkdownText.propTypes = {
+  markdownText: PropTypes.string,
+  className: PropTypes.string
+};
+
+MarkdownText.defaultProps = {
+  markdownText: undefined,
+  className: undefined
 };
 
 export default MarkdownEditor;

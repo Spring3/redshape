@@ -105,15 +105,24 @@ const FormGroup = styled.div`
   }
 `;
 
+
+const H4Label = styled.h4`
+  color: ${props => props.theme.minorText};
+`;
+
+const StyledLabel = styled.label`
+  color: ${props => props.theme.minorText};
+`;
+
 const Label = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
   <FormGroup className={`form-group ${className}`}>
     { rightToLeft === true && (children) }
     { inline === false
       ? (
-        <h4 htmlFor={htmlFor}>{label}</h4>
+        <H4Label htmlFor={htmlFor}>{label}</H4Label>
       )
       : (
-        <label htmlFor={htmlFor}>{label}</label>
+        <StyledLabel htmlFor={htmlFor}>{label}</StyledLabel>
       )
     }
     { rightToLeft === false && (children) }

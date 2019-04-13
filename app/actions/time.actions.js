@@ -99,13 +99,12 @@ const remove = (timeEntryId, issueId) => (dispatch, getState) => {
     });
 };
 
-const getAll = (userId, issueId, projectId, offset, limit) => (dispatch, getState) => {
+const getAll = (issueId, projectId, offset, limit) => (dispatch, getState) => {
   const { user = {} } = getState();
   const { redmineEndpoint, api_key } = user;
   const params = {
     offset,
     limit,
-    user_id: userId,
     project_id: projectId,
     issue_id: issueId
   };
