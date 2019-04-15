@@ -15,6 +15,7 @@ import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Link from '../components/Link';
 import Copyrights from '../components/Copyrights';
+import DragArea from '../components/DragArea';
 
 const Container = styled.div`
   display: grid;
@@ -95,6 +96,7 @@ class LoginView extends Component {
     const { loginError, theme } = this.props; 
     return (
       <Container>
+        <DragArea />
         <GHLinkContainer>
           <Link type="external" href="https://github.com/Spring3/redtime">
             <GithubCircleIcon color={theme.main} size="30"/>

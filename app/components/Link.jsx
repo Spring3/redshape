@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { openExternalUrl } from '../../modules/utils';
+
 const StyledLink = styled.a`
   color: ${props => props.theme.main};
   font-size: 14px;
@@ -14,11 +16,13 @@ const StyledLink = styled.a`
 `;
 
 class Link extends PureComponent {
-  onClick = e => {
-    e.preventDefault();
-    const { onClick } = this.props;
-    if (onClick) {
-      onClick(e);
+  onClick = (event) => {
+    event.preventDefault();
+    const { onClick, type, href } = this.props;
+    if (type === 'external') {
+      openExternalUrl(href);
+    } else if (onClick) {
+      onClick(event);
     }
   }
   render() {

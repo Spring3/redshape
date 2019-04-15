@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon';
@@ -42,7 +42,17 @@ const ModifiedTextArea = styled(TextArea)`
   width: ${props => props.preview ? '47%' : '100%'}
 `;
 
-const converter = new showdown.Converter();
+const converter = new showdown.Converter({
+  strikethrough: true,
+  tables: true,
+  tasklists: true,
+  smoothLivePreview: true,
+  disableForced4SpacesIndentedSublists: true,
+  simpleLineBreaks: true,
+  openLinksInNewWindow: true,
+  emoji: true,
+  metadata: true
+});
 
 class MarkdownEditor extends Component {
   constructor (props) {
@@ -161,10 +171,12 @@ class MarkdownEditor extends Component {
     });
   }
 
+
+  // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
     const { className, id } = this.props;
     const { value, textareaHeight, showPreview } = this.state;
-    console.log(textareaHeight);
+    console.log('textareaHeight', textareaHeight);
     return (
       <div
         className={className}
@@ -223,29 +235,58 @@ MarkdownEditor.defaultProps = {
 };
 
 
-export class MarkdownText extends Component {
+class MarkdownText extends Component {
   constructor(props) {
     super(props);
     this.iframeRef = React.createRef();
+
+    const { theme } = props;
+    this.genericStyles = `
+      body {
+        margin: 0;
+        font-family: Roboto,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;
+        font-size: 14px;
+        color: ${theme.normalText};
+      }
+
+      a {
+        color: ${theme.main};
+        font-size: 14px;
+        padding: 2px;
+        cursor: pointer;
+      }
+
+      a:hover {
+        background: ${theme.main};
+        color: ${theme.hoverText};
+      }
+    `;
   }
 
-  adjustIframeHeight = () => {
+  adjustIframe = () => {
     const iframe = this.iframeRef.current;
     if (iframe) {
-      iframe.height = iframe.contentDocument.body.scrollHeight + 50;
+      iframe.height = iframe.contentDocument.body.scrollHeight + 30;
+      const css = document.createElement('style');
+      css.type = 'text/css';
+      css.innerText = this.genericStyles;
+      iframe.contentDocument.head.appendChild(css);
     }
   }
 
   render () {
     const { markdownText, className } = this.props;
+    console.log('Before', markdownText);
+    const markdown = converter.makeHtml(markdownText);
+    console.log('After', markdown);
     return (
       <iframe
         ref={this.iframeRef}
         className={className}
-        frameborder="0"
+        frameBorder="0"
         width="100%"
-        srcDoc={converter.makeHtml(markdownText)}
-        onLoad={this.adjustIframeHeight}
+        srcDoc={markdown}
+        onLoad={this.adjustIframe}
       />
     );
   }
@@ -259,6 +300,12 @@ MarkdownText.propTypes = {
 MarkdownText.defaultProps = {
   markdownText: undefined,
   className: undefined
+};
+
+MarkdownText = withTheme(MarkdownText);
+
+export {
+  MarkdownText
 };
 
 export default MarkdownEditor;
