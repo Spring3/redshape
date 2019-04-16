@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled, { withTheme, css } from 'styled-components';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
-import actions from '../../actions';
 import Table from '../Table';
 
 const ColorfulSpan = styled.span`
@@ -126,4 +126,4 @@ const mapStateToProps = state => ({
   issueHeaders: state.settings.issueHeaders,
 });
 
-export default withTheme(connect(mapStateToProps)(IssuesTable));
+export default withRouter(withTheme(connect(mapStateToProps)(IssuesTable)));

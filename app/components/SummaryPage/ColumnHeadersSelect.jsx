@@ -28,7 +28,7 @@ const selectStyles = {
   }
 };
 
-class TableColumnsSelect extends Component {
+class ColumnHeadersSelect extends Component {
   constructor(props) {
     super(props);
 
@@ -86,7 +86,7 @@ class TableColumnsSelect extends Component {
   }
 }
 
-TableColumnsSelect.propTypes = {
+ColumnHeadersSelect.propTypes = {
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
@@ -103,4 +103,4 @@ const mapDispatchToProps = dispatch => ({
   settingsChangeIssueHeaders: issueHeaders => dispatch(actions.settings.setIssueHeaders(issueHeaders))
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TableColumnsSelect));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(ColumnHeadersSelect));

@@ -9,7 +9,7 @@ import actions from '../../actions';
 import { Input } from '../../components/Input';
 import IssuesTable from '../../components/SummaryPage/IssuesTable';
 import OptionsBlock from '../../components/SummaryPage/OptionsBlock';
-import TableColumnsSelect from '../../components/SummaryPage/TableColumnsSelect';
+import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
 
 const Grid = styled.div`
   display: grid;
@@ -106,7 +106,7 @@ class SummaryPage extends Component {
           <h2>Issues assigned to me</h2>
           <OptionsGrid>
             <OptionsBlock />
-            <TableColumnsSelect />
+            <ColumnHeadersSelect />
             <GridRow>
               <Input
                 type="text"
