@@ -1,9 +1,17 @@
-const { shell } = require('electron').remote;
+const { remote } = require('electron');
+const xss = require('xss');
 
-const openExternalUrl = url => fetch(url, { method: 'HEAD' })
-  .then(() => shell.openExternal(url))
+const { shell } = remote;
+
+const openExternalUrl = url => ((url && url.startsWith('http'))
+  ? fetch(url, { method: 'HEAD' })
+  : Promise.reject(new Error('Intercepted suspicious url', url))
+).then(() => shell.openExternal(url))
   .catch(error => console.error('Error when opening external url', url, error.message));
 
+const xssFilter = input => xss(input);
+
 module.exports = {
-  openExternalUrl
+  openExternalUrl,
+  xssFilter
 };

@@ -17,6 +17,8 @@ import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import PageNextOutlineIcon from 'mdi-react/PageNextOutlineIcon';
 
+import { openExternalUrl, xssFilter } from '../../modules/utils';
+
 import TextArea from './TextArea';
 
 const MarkdownOptionsList = styled.ul`
@@ -49,7 +51,6 @@ const converter = new showdown.Converter({
   smoothLivePreview: true,
   disableForced4SpacesIndentedSublists: true,
   simpleLineBreaks: true,
-  openLinksInNewWindow: true,
   emoji: true,
   metadata: true
 });
@@ -263,6 +264,12 @@ class MarkdownText extends Component {
     `;
   }
 
+  interceptIframeRedirect = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openExternalUrl(e.target.href);
+  }
+
   adjustIframe = () => {
     const iframe = this.iframeRef.current;
     if (iframe) {
@@ -271,14 +278,16 @@ class MarkdownText extends Component {
       css.type = 'text/css';
       css.innerText = this.genericStyles;
       iframe.contentDocument.head.appendChild(css);
+      for (const elem of iframe.contentDocument.body.querySelectorAll(['a', 'img', 'button', 'input'])) {
+        elem.removeEventListener('click', this.interceptIframeRedirect);
+        elem.addEventListener('click', this.interceptIframeRedirect);
+      }
     }
   }
 
   render () {
     const { markdownText, className } = this.props;
-    console.log('Before', markdownText);
-    const markdown = converter.makeHtml(markdownText);
-    console.log('After', markdown);
+    const markdown = xssFilter(converter.makeHtml(markdownText));
     return (
       <iframe
         ref={this.iframeRef}
