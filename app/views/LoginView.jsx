@@ -59,8 +59,8 @@ const SubmitButton = styled(Button)`
 
 class LoginView extends Component {  
   componentWillMount() {
-    const { user } = this.props;
-    if (user.id && user.api_key) {
+    const { userId, apy_key } = this.props;
+    if (userId && api_key) {
       this.props.history.push('/app/summary');
     }
   }
@@ -81,11 +81,10 @@ class LoginView extends Component {
   };
 
   onSubmit = (values, { setSubmitting }) => {
-    const { dispatch } = this.props;
-    dispatch(actions.user.checkLogin(values))
-    .then(() => {
-      const { loginError, user } = this.props;
-      if (!loginError && user.id) {
+    const { checkLogin } = this.props;
+    checkLogin(values).then(() => {
+      const { loginError, userId } = this.props;
+      if (!loginError && userId) {
         this.props.history.push('/app/summary');
       }
       setSubmitting(false);
@@ -185,23 +184,23 @@ class LoginView extends Component {
 }
 
 LoginView.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    name: PropTypes.string.isRequired,
-    api_key: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }),
-  loginError: PropTypes.instanceOf(Error)
+  userId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  api_key: PropTypes.string,
+  loginError: PropTypes.instanceOf(Error),
+  checkLogin: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  userId: state.user.id,
+  api_key: state.user.api_key,
   loginError: state.user.loginError
 });
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({
+  checkLogin: credentials => dispatch(actions.user.checkLogin(credentials))
+});
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView)));

@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import Select from 'react-select';
+import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import makeAnimated from 'react-select/lib/animated';
-import styled, { withTheme, css } from 'styled-components';
-import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
-import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
+import styled from 'styled-components';
 
-import actions from '../../actions';
 import { IssueFilter } from '../../actions/helper';
-import { Input, Label } from '../../components/Input';
-import Table from '../../components/Table';
+import actions from '../../actions';
+import { Input } from '../../components/Input';
+import IssuesTable from '../../components/SummaryPage/IssuesTable';
+import OptionsBlock from '../../components/SummaryPage/OptionsBlock';
+import TableColumnsSelect from '../../components/SummaryPage/TableColumnsSelect';
 
 const Grid = styled.div`
   display: grid;
@@ -51,225 +49,64 @@ const GridRow = styled.div`
   grid-column: 1/-1;
 `;
 
-const MarginedDiv = styled.div`
-  margin-top: 10px;
-`;
-
-const selectStyles = {
-  container: (base, state) => {
-    return { ...base };
-  },
-  multiValue: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
-      : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' };
-  },
-  multiValueLabel: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, paddingRight: 6, color: '#A4A4A4' }
-      : base;
-  },
-  multiValueRemove: (base, state) => {
-    return state.data.isFixed ? { ...base, display: 'none' } : base;
-  }
-};
-
-const ColorfulSpan = styled.span`
-  ${
-    props => props.color
-    ? css `
-      padding-bottom: 2px;
-      background: linear-gradient(to bottom,transparent 0,transparent 90%,${props.color} 90%,${props.color} 100%);
-    `
-    : null
-  }
-`;
-
-const colorMap = {
-  'closed': 'red',
-  'high': 'red',
-  'open': 'green',
-  'low': 'green',
-  'pending': 'yellow',
-  'normal': 'yellow'
-};
-
 class SummaryPage extends Component {
   constructor(props) {
     super(props);
 
-    this.issuesHeaders = [
-      { label: 'Id', isFixed: true, value: 'id' },
-      { label: 'Project', value: 'project.name' },
-      { label: 'Tracker', value: 'tracker.name' },
-      { label: 'Status', value: 'status.name' },
-      { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Priority', value: 'priority.name' },
-      { label: 'Estimation', value: 'estimated_hours' },
-      { label: 'Due Date', value: 'due_date' }
-    ];
-
-    
     this.state = {
-      issues: props.issues.data,
       search: undefined,
       sortBy: undefined,
       sortDirection: undefined
     };
-  }
 
-  componentDidUpdate(oldProps) {
-    if (oldProps.settings.showClosedIssues !== this.props.settings.showClosedIssues) {
-      this.fetchIssues();
-    }
+    this.deboucedFetch = debounce(this.fetchIssues, 500);
   }
 
   componentWillMount() {
     this.fetchIssues();
   }
 
-  fetchIssues = () => {
-    const { fetchIssues, user, settings } = this.props;
-    const { showClosedIssues } = settings;
+  componentDidUpdate(oldProps) {
+    if (oldProps.showClosedIssues !== this.props.showClosedIssues) {
+      this.fetchIssues();
+    }
+  }
+
+  fetchIssues = (sortBy, sortDirection) => {
+    const { search } = this.state;
+    const { userId, showClosedIssues } = this.props;
     const queryFilter = new IssueFilter()
-      .assignee(user.id)
+      .assignee(userId)
       .status({ open: true, closed: showClosedIssues })
+      .title(search)
+      .sort(sortBy, sortDirection)
       .build();
-    fetchIssues(queryFilter).then(() => this.setState({ issues: this.props.issues.data }));
-  }
-
-  toggleClosedIssuesDisplay = () => {
-    const { settingsShowClosedIssues, settings } = this.props;
-    const { showClosedIssues } = settings;
-    settingsShowClosedIssues(!showClosedIssues);
-  }
-
-  toggleUseColors = () => {
-    const { settingsUseColors, settings } = this.props;
-    const { useColors } = settings;
-    settingsUseColors(!useColors);
+    this.props.fetchIssues(queryFilter);
   }
 
   onSearchChange = (e) => {
-    const value = e.target.value;
-    const { issues, settings } = this.props;
-    const { issueHeaders } = settings;
-    if (value) {
-      this.setState({
-        issues: issues.data.filter((issue) => {
-          const testedString = issueHeaders.map(header => _.get(issue, header.value)).join(' ');
-          return new RegExp(value, 'gi').test(testedString);
-        })
-      })
-    } else {
-      this.setState({ issues: issues.data });
-    }
+    this.setState({
+      search: e.target.value
+    });
+    this.deboucedFetch();
   }
 
-  onHeadersSelectChange = (value, { action, removedValue }) => {
-    switch (action) {
-      case 'remove-value':
-      case 'pop-value':
-        if (removedValue.isFixed) {
-          return;
-        }
-        break;
-    }
-
-    this.props.settingsChangeIssueHeaders(value);
-  }
-
-  sortTable = (by) => { 
-    return (e) => {
-      const { sortBy, sortDirection, issues } = this.state;
-      if (sortBy !== by) {
-        this.setState({
-          sortBy: by,
-          sortDirection: 'asc',
-          issues: _.orderBy(issues, [by], ['asc'])
-        });
-      } else {
-        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-        this.setState({
-          sortDirection: newSortDirection,
-          issues: _.orderBy(issues, [sortBy], [newSortDirection])
-        });
-      }
-    };
-  }
-
-  showIssueDetails(id) {
-    this.props.history.push(`/app/issue/${id}/`);
-  }
-
-  paint = (item, mapping) => {
-    const { theme, settings } = this.props;
-    const textValue = _.get(item, mapping);
-    
-    const color = (settings.useColors && typeof textValue === 'string'
-      ? colorMap[textValue.toLowerCase()]
-      : undefined);
-    return (
-      <ColorfulSpan color={theme[color]}>{textValue}</ColorfulSpan>
-    );
+  onSort = (sortBy, sortDirection) => {
+    this.setState({
+      sortBy: sortBy,
+      sortDirection: sortDirection
+    });
+    this.deboucedFetch(sortBy, direction)
   }
 
   render() {
-    const { theme, settings } = this.props;
-    const { issues, sortBy, sortDirection } = this.state;
-    const { showClosedIssues, useColors, issueHeaders } = settings;
     return (
       <Grid>
         <IssuesSection>
           <h2>Issues assigned to me</h2>
           <OptionsGrid>
-            <div>
-              <Label htmlFor="queryOptions" label="Options">
-                <div id="queryOptions">
-                  <label>
-                    <Input
-                      type="checkbox"
-                      disabled={this.props.issues.isFetching}
-                      checked={showClosedIssues}
-                      onChange={this.toggleClosedIssuesDisplay}
-                    />
-                    <span>Include Closed</span>
-                  </label>
-                </div>
-              </Label>
-              <MarginedDiv>
-                <label>
-                  <Input
-                    type="checkbox"
-                    checked={useColors}
-                    onChange={this.toggleUseColors}
-                  />
-                  <span>Use Colors</span>
-                </label>
-              </MarginedDiv>
-            </div>
-            <Label htmlFor="headers" label="Table Columns">
-              <Select
-                name="headers"
-                styles={selectStyles}
-                components={makeAnimated()}
-                options={this.issuesHeaders}
-                defaultValue={issueHeaders}
-                value={issueHeaders}
-                onChange={this.onHeadersSelectChange}
-                isMulti={true}
-                isClearable={false}
-                theme={(defaultTheme) => ({
-                  ...defaultTheme,
-                  borderRadius: 3,
-                  colors: {
-                  ...defaultTheme.colors,
-                    primary: theme.main,
-                  },
-                })
-              }
-              />
-            </Label>
+            <OptionsBlock />
+            <TableColumnsSelect />
             <GridRow>
               <Input
                 type="text"
@@ -279,36 +116,9 @@ class SummaryPage extends Component {
               />
             </GridRow>
           </OptionsGrid>
-          <Table>
-            <tr>
-              {issueHeaders.map(header => (
-                <th
-                  key={header.value}
-                  className={header.value === 'due_date' ? 'due-date' : ''}
-                  onClick={this.sortTable(header.value)}
-                >
-                  {header.label}&nbsp;
-                  { sortBy === header.value && sortDirection === 'asc' && (  
-                    <SortAscendingIcon size={14}/>
-                  )}
-                  { sortBy === header.value && sortDirection === 'desc' && (  
-                    <SortDescendingIcon size={14}/>
-                  )}
-                </th>
-              ))}
-            </tr>
-            {issues.map(item => (
-              <tr key={item.id} onClick={this.showIssueDetails.bind(this, item.id)}>
-                {
-                  issueHeaders.map(header => (
-                    <td key={header.value}>
-                      {this.paint(item, header.value)}
-                    </td>
-                  ))
-                }
-              </tr>
-            ))}
-          </Table>
+          <IssuesTable
+            onSort={this.onSort}
+          />
         </IssuesSection>
         <ActivitySection>
           <h2>Activity Stack</h2>
@@ -319,46 +129,21 @@ class SummaryPage extends Component {
 }
 
 SummaryPage.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    api_key: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }).isRequired,
-  settings: PropTypes.shape({
-    showClosedIssues: PropTypes.bool.isRequired,
-    useColors: PropTypes.bool.isRequired,
-    issueHeaders: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      isFixed: PropTypes.bool
-    }).isRequired).isRequired,
-  }).isRequired,
-  issues: PropTypes.shape({
-    isFetching: PropTypes.bool.isRequired,
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
-    error: PropTypes.instanceOf(Error)
-  }).isRequired,
-  settingsShowClosedIssues: PropTypes.func.isRequired,
-  settingsUseColors: PropTypes.func.isRequired,
-  settingsChangeIssueHeaders: PropTypes.func.isRequired,
+  userId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
+  showClosedIssues: PropTypes.bool.isRequired,
   fetchIssues: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
-  issues: state.issues.assignedToMe,
-  settings: state.settings
+  userId: state.user.id,
+  showClosedIssues: state.settings.showClosedIssues
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssues: filter => dispatch(actions.issues.getAll(filter)),
-  settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
-  settingsUseColors: value => dispatch(actions.settings.setUseColors(value)),
-  settingsChangeIssueHeaders: issueHeaders => dispatch(actions.settings.setIssueHeaders(issueHeaders))
+  fetchIssues: filter => dispatch(actions.issues.getAll(filter))
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);

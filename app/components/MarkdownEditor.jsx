@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
@@ -15,7 +15,6 @@ import FormatListNumberedIcon from 'mdi-react/FormatListNumberedIcon';
 import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
-import PageNextOutlineIcon from 'mdi-react/PageNextOutlineIcon';
 
 import { openExternalUrl, xssFilter } from '../../modules/utils';
 
@@ -85,9 +84,7 @@ const MarkdownOption = styled.li`
   }
 `;
 
-const ModifiedTextArea = styled(TextArea)`
-  width: ${props => props.preview ? '47%' : '100%'}
-`;
+const ModifiedTextArea = styled(TextArea)``;
 
 const converter = new showdown.Converter({
   strikethrough: true,
@@ -100,13 +97,12 @@ const converter = new showdown.Converter({
   metadata: true
 });
 
-class MarkdownEditor extends Component {
+class MarkdownEditor extends PureComponent {
   constructor (props) {
     super(props);
 
     this.state = {
       value: props.initialValue,
-      textareaHeight: 15,
       showPreview: props.preview
     };
 
@@ -198,9 +194,6 @@ class MarkdownEditor extends Component {
     const element = this.textareaRef.current;
     element.style.height = 'auto';
     element.style.height = `${element.scrollHeight}px`;
-    this.setState({
-      textareaHeight: element.style.height
-    });
   }
 
   onTextAreaTyped = (e) => {
@@ -221,8 +214,7 @@ class MarkdownEditor extends Component {
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
     const { className, id } = this.props;
-    const { value, textareaHeight, showPreview } = this.state;
-    console.log('textareaHeight', textareaHeight);
+    const { value, showPreview } = this.state;
     return (
       <Wrapper
         className={className}
@@ -296,7 +288,6 @@ class MarkdownEditor extends Component {
               ref={this.textareaRef}
               onChange={this.onTextAreaTyped}
               value={value}
-              preview={showPreview}
             />
           )
         }
@@ -324,7 +315,7 @@ MarkdownEditor.defaultProps = {
 };
 
 
-class MarkdownText extends Component {
+class MarkdownText extends PureComponent {
   constructor(props) {
     super(props);
     this.iframeRef = React.createRef();

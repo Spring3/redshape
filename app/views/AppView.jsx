@@ -3,14 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import MenuIcon from 'mdi-react/MenuIcon';
-import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import actions from '../actions';
-import { Input } from '../components/Input';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
-import Button, { GhostButton } from '../components/Button';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
@@ -43,25 +39,23 @@ class AppView extends Component {
   }
 
   onTrackingStop = (value) => {
-    this.setState({
-      showTimeEntryModal: true
-    });
+    this.setState({ showTimeEntryModal: true });
     this.props.trackingStop(value);
     storage.delete('time_tracking');
   }
 
-  closeTimeEntryModal = () => {
-    this.setState({
-      showTimeEntryModal: false
-    });
-  }
+  closeTimeEntryModal = () => this.setState({ showTimeEntryModal: false })
 
   render() {
     const { showTimeEntryModal } = this.state;
     const {
-      user,
+      userId,
+      api_key,
       match,
-      tracking,
+      isTimerTracking,
+      isTimerPaused,
+      trackedDuration,
+      trackedIssueTitle,
       trackingPause,
       trackingContinue
     } = this.props;
@@ -69,16 +63,16 @@ class AppView extends Component {
     return (
       <Grid>
         <DragArea />
-        { (!user.id || !user.api_key) ? (<Redirect to="/" />) : null }
+        { (!userId || !api_key) ? (<Redirect to="/" />) : null }
         <Navbar />
         <Content>
           <Route exact path={`${match.path}/summary`} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
           <Timer
-            isEnabled={tracking.isTracking}
-            isPaused={tracking.isPaused}
-            initialValue={tracking.duration}
-            text={tracking.issue.subject}
+            isEnabled={isTimerTracking}
+            isPaused={isTimerPaused}
+            initialValue={trackedDuration}
+            text={trackedIssueTitle}
             onStop={this.onTrackingStop}
             onPause={trackingPause}
             onContinue={trackingContinue}
@@ -95,32 +89,32 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    name: PropTypes.string.isRequired,
-    api_key: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }).isRequired,
-  tracking: PropTypes.shape({
-    isTracking: PropTypes.bool.isRequired,
-    duration: PropTypes.number.isRequired,
-    issue: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-    }).isRequired
-  }).isRequired,
-  trackedIssueName: PropTypes.string,
+  userId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
+  api_key: PropTypes.string.isRequired,
+  isTimerTracking: PropTypes.bool.isRequired,
+  isTimerPaused: PropTypes.bool.isRequired,
+  trackedDuration: PropTypes.number.isRequired,
+  trackedIssueTitle: PropTypes.string,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  logout: PropTypes.func.isRequired,
+  trackingPause: PropTypes.func.isRequired,
+  trackingContinue: PropTypes.func.isRequired,
+  trackingStop: PropTypes.func.isRequired,
+  getProjectData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
-  tracking: state.tracking
+  userId: state.user.id,
+  api_key: state.user.api_key,
+  isTrackingTime: state.tracking.isTracking,
+  isTimerPaused: state.tracking.isPaused,
+  trackedDuration: state.tracking.duration,
+  trackedIssueTitle: state.tracking.issue.subject
 });
 
 const mapDispatchToProps = dispatch => ({

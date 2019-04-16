@@ -41,7 +41,9 @@ function IssueFilter () {
   };
 
   this.title = (str) => {
-    filter.subject = encodeURIComponent(`~${str}`);
+    if (str) {
+      filter.subject = encodeURIComponent(`~${str}`);
+    }
     return this;
   };
 
@@ -62,6 +64,13 @@ function IssueFilter () {
 
   this.priority = (id) => {
     filter.priority_id = id;
+    return this;
+  };
+
+  this.sort = (by, direction) => {
+    if (by && direction) {
+      filter.sort = `${by}:${direction}`;
+    }
     return this;
   };
 

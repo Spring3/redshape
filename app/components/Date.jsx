@@ -59,12 +59,12 @@ class DateComponent extends PureComponent {
       const precision = (daysAgo === 0
         ? 'today'
         : daysAgo > 1
-          ? 'days'
-          : 'day'
+          ? `${daysAgo} days ago`
+          : `${daysAgo} day ago`
       );
       const displayedValue = daysAgo > 30
         ? date
-        : `${daysAgo} ${precision} ago`;
+        : precision;
       return (
         <StyledDate>
           <span className={className}>{displayedValue}</span>
