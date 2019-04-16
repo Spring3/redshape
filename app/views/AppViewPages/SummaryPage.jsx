@@ -72,8 +72,8 @@ class SummaryPage extends Component {
     }
   }
 
-  fetchIssues = (sortBy, sortDirection) => {
-    const { search } = this.state;
+  fetchIssues = () => {
+    const { search, sortBy, sortDirection } = this.state;
     const { userId, showClosedIssues } = this.props;
     const queryFilter = new IssueFilter()
       .assignee(userId)
@@ -96,7 +96,7 @@ class SummaryPage extends Component {
       sortBy: sortBy,
       sortDirection: sortDirection
     });
-    this.deboucedFetch(sortBy, direction)
+    this.deboucedFetch();
   }
 
   render() {

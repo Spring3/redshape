@@ -84,7 +84,9 @@ const MarkdownOption = styled.li`
   }
 `;
 
-const ModifiedTextArea = styled(TextArea)``;
+const ModifiedTextArea = styled(TextArea)`
+  padding: 5px;
+`;
 
 const converter = new showdown.Converter({
   strikethrough: true,

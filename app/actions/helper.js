@@ -42,7 +42,7 @@ function IssueFilter () {
 
   this.title = (str) => {
     if (str) {
-      filter.subject = encodeURIComponent(`~${str}`);
+      filter.subject = encodeURIComponent(`~${str.trim()}`);
     }
     return this;
   };
@@ -69,7 +69,10 @@ function IssueFilter () {
 
   this.sort = (by, direction) => {
     if (by && direction) {
-      filter.sort = `${by}:${direction}`;
+      const column = by.indexOf('.') !== -1
+        ? by.substring(0, by.indexOf('.'))
+        : by;
+      filter.sort = `${column}:${direction}`;
     }
     return this;
   };
