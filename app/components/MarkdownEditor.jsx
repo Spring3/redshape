@@ -20,23 +20,68 @@ import PageNextOutlineIcon from 'mdi-react/PageNextOutlineIcon';
 import { openExternalUrl, xssFilter } from '../../modules/utils';
 
 import TextArea from './TextArea';
+import Button from './Button';
+
+const Wrapper = styled.div`
+`;
 
 const MarkdownOptionsList = styled.ul`
   list-style-type: none;
   margin: 0;
   padding: 5px 0px;
+  width: 100%;
+
+  li:first-child {
+    margin-left: 0;
+  }
+
+  li:last-child {
+    float: right;
+    margin-right: 0;
+  }
 `;
 
 const MarkdownOption = styled.li`
   display: inline;
   margin-right: 10px;
+  position: relative;
+  cursor: pointer;
 
-  &:hover {
-    cursor: pointer;
+  span.tooltip {
+    position: absolute;
+    display: inline-block;
+    width: 100px;
+    border-radius: 3px;
+    left: -40px;
+    top: -35px;
+    padding: 5px;
+    background: ${props => props.theme.bg};
+    color: ${props => props.theme.mainDark};
+    text-align: center;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity ease ${props => props.theme.transitionTime};
+    box-shadow: 0px 2px 7px ${props => props.theme.minorText};
   }
 
-  svg {
-    vertical-align: middle;
+  span.tooltip::after {
+    content: ' ';
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border: 2px solid black;
+    border-width: 5px;
+    border-color: ${props => props.theme.bg} transparent transparent transparent;
+  }
+
+  &:hover {
+    svg {
+      color: ${props => props.theme.main} !important;
+    }
+
+    span.tooltip {
+      opacity: 1;
+    }
   }
 `;
 
@@ -179,25 +224,68 @@ class MarkdownEditor extends Component {
     const { value, textareaHeight, showPreview } = this.state;
     console.log('textareaHeight', textareaHeight);
     return (
-      <div
+      <Wrapper
         className={className}
         id={id}
       >
         <MarkdownOptionsList>
-          <MarkdownOption onClick={this.makeBold}><FormatBoldIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeItalic}><FormatItalicIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeUnderlined}><FormatUnderlineIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeStrikethrough}><FormatStrikethroughIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeCode}><CodeTagsIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeh1}><FormatHeader1Icon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeh2}><FormatHeader2Icon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeh3}><FormatHeader3Icon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeBulletedList}><FormatListBulletedIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeNumberedList}><FormatListNumberedIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeQuote}><FormatQuoteCloseIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeLink}><LinkVariantIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.makeImage}><ImageOutlineIcon /></MarkdownOption>
-          <MarkdownOption onClick={this.togglePreview}><PageNextOutlineIcon /></MarkdownOption>
+          <MarkdownOption onClick={this.makeBold}>
+            <FormatBoldIcon />
+            <span className="tooltip">Bold text</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeItalic}>
+            <FormatItalicIcon />
+            <span className="tooltip">Italic text</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeUnderlined}>
+            <FormatUnderlineIcon />
+            <span className="tooltip">Underlined text</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeStrikethrough}>
+            <FormatStrikethroughIcon />
+            <span className="tooltip">Crossed out text</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeCode}>
+            <CodeTagsIcon />
+            <span className="tooltip">Code block</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeh1}>
+            <FormatHeader1Icon />
+            <span className="tooltip">XL Header</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeh2}>
+            <FormatHeader2Icon />
+            <span className="tooltip">L Header</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeh3}>
+            <FormatHeader3Icon />
+            <span className="tooltip">M Header</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeBulletedList}>
+            <FormatListBulletedIcon />
+            <span className="tooltip">Bulleted List</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeNumberedList}>
+            <FormatListNumberedIcon />
+            <span className="tooltip">Ordered List</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeQuote}>
+            <FormatQuoteCloseIcon />
+            <span className="tooltip">Quote block</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeLink}>
+            <LinkVariantIcon />
+            <span className="tooltip">Hyperlink</span>
+          </MarkdownOption>
+          <MarkdownOption onClick={this.makeImage}>
+            <ImageOutlineIcon />
+            <span className="tooltip">Embeded Image</span>
+          </MarkdownOption>
+          <MarkdownOption>
+            <Button onClick={this.togglePreview}>
+              Preview
+            </Button>
+          </MarkdownOption>
         </MarkdownOptionsList>
         { showPreview
           ? (
@@ -212,7 +300,7 @@ class MarkdownEditor extends Component {
             />
           )
         }
-      </div>
+      </Wrapper>
     );
   }
 }
@@ -247,6 +335,7 @@ class MarkdownText extends Component {
         margin: 0;
         font-family: Roboto,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;
         font-size: 14px;
+        font-weight: 500;
         color: ${theme.normalText};
       }
 
@@ -260,6 +349,15 @@ class MarkdownText extends Component {
       a:hover {
         background: ${theme.main};
         color: ${theme.hoverText};
+      }
+
+      blockquote {
+        border-left: 4px solid ${theme.mainLight};
+        border-radius: 0px 3px 3px 0px;
+        margin-left: 25px;
+        padding: 3px 3px 3px 20px;
+        background: ${theme.bg};
+        color: ${theme.minorText};
       }
     `;
   }

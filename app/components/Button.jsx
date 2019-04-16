@@ -29,14 +29,17 @@ const StyledButton = styled.button`
 `;
 
 const StyledLink = styled.a`
+  text-decoration: none;
+  color: ${props => props.theme.mainLight};
+
+  &:hover {
+    color: ${props => props.theme.main};
+  }
+
   &:active,
   &:focus,
   &:visited {
     background: transparent;
-  }
-
-  svg {
-    vertical-align: middle;
   }
 `;
 

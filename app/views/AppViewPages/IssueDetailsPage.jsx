@@ -122,27 +122,33 @@ const Comments = styled.ul`
   padding: 0;
   
   li {
-    display: block;
     background: ${props => props.theme.bgLight};
-    padding: 20px;
+    display: block;
     border-radius: 3px;
     margin-bottom: 20px;
 
     div.commentsHeader {
       display: flex;
       justify-content: space-between;
+      padding: 20px;
+      border-bottom: 2px solid ${props => props.theme.bg};
 
       span {
         font-weight: bold;
+        ${({theme}) => css`
+          color: ${theme.minorText};
+          transition: color ease ${theme.transitionTime};
+
+          &:hover {
+            color: ${theme.normalText};
+          }
+        `}
       }
 
-      span.date {
-        color: ${props => props.theme.minorText};
-      }
     }
 
-    div:last-child {
-      margin: 10px auto;
+    iframe {
+      padding: 5px 20px 0px 20px;
     }
   }
 `;
@@ -384,7 +390,7 @@ class IssueDetailsPage extends Component {
                   {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
                     <li key={entry.id}>
                       <div className="commentsHeader">
-                        <span>{entry.user.name}</span>
+                        <span className="username">{entry.user.name}</span>
                         <DateComponent className="date" date={entry.created_on} />
                       </div>
                       <MarkdownText markdownText={entry.notes} />
