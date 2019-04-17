@@ -16,7 +16,7 @@ import storage from '../../modules/storage';
 const Grid = styled.div`
   height: 100%;
   display: grid;
-  grid-template-rows: 60px auto;
+  grid-template-rows: 60px auto 80px;
   grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
 `;
 
@@ -111,7 +111,7 @@ AppView.propTypes = {
 const mapStateToProps = state => ({
   userId: state.user.id,
   api_key: state.user.api_key,
-  isTrackingTime: state.tracking.isTracking,
+  isTimerTracking: state.tracking.isTracking,
   isTimerPaused: state.tracking.isPaused,
   trackedDuration: state.tracking.duration,
   trackedIssueTitle: state.tracking.issue.subject

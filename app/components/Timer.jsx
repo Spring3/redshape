@@ -1,16 +1,57 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import PlayIcon from 'mdi-react/PlayIcon';
 import PauseIcon from 'mdi-react/PauseIcon';
 import StopIcon from 'mdi-react/StopIcon';
 
-import Button from './Button';
+import { GhostButton } from './Button';
 
 const ActiveTimer = styled.div`
-  display: block;
-  background: sandybrown;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: ${props => props.theme.bg};
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 0px 15px ${props => props.theme.bgLight};
+
+  div.buttons {
+    margin: 0 20px;
+  }
+
+  div.issueName,
+  div.time {
+    margin: 0 20px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  div.buttons {
+    a {
+      padding: 10px 0px;
+
+      &:hover {
+        background: ${props => props.theme.bgLight};
+      }
+    }
+
+    a:first-child {
+      margin-right: 20px;
+    }
+  }
+
+  div.time {
+    color: ${props => props.theme.main};
+  }
+`;
+
+const StyledButton = styled(GhostButton)`
+  padding: 0px;
 `;
 
 class Timer extends Component {
@@ -69,30 +110,40 @@ class Timer extends Component {
   }
 
   render() {
-    const { value } = this.state;
-    const { isEnabled, text } = this.props;
+    const { value, isPaused } = this.state;
+    const { isEnabled, text, theme } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
     return isEnabled
       ? (
         <ActiveTimer>
-          <span>{text}</span>
-          <span>{timeString}</span>
-          <div>
-            <Button
-              onClick={this.onPause}
-            >
-              <PauseIcon />
-            </Button>
-            <Button
+          <div className="buttons">
+            <StyledButton
               onClick={this.onStop}
             >
-              <StopIcon />
-            </Button>
-            <Button
-              onClick={this.onContinue}
-            >
-              <PlayIcon />
-            </Button>
+              <StopIcon size={35} />
+            </StyledButton>
+            { isPaused && (
+                <StyledButton
+                  onClick={this.onContinue}
+                >
+                  <PlayIcon size={35} />
+                </StyledButton>
+              )
+            }
+            { !isPaused && (
+                <StyledButton
+                  onClick={this.onPause}
+                >
+                  <PauseIcon size={35} />
+                </StyledButton>
+              )
+            }
+          </div>
+          <div className="issueName">
+            <span>{text}</span>
+          </div>
+          <div className="time">
+            <span>{timeString}</span>
           </div>
         </ActiveTimer>
       )
@@ -117,4 +168,4 @@ Timer.defaultProps = {
   text: ''
 };
 
-export default Timer;
+export default withTheme(Timer);

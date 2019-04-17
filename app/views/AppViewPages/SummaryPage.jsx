@@ -18,6 +18,7 @@ const Grid = styled.div`
   grid-auto-rows: 100px;
   grid-auto-flow: dense;
   grid-gap: 20px;
+  margin-bottom: 60px;
 `;
 
 const Section = styled.section`

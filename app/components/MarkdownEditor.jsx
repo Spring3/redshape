@@ -230,7 +230,7 @@ class MarkdownEditor extends PureComponent {
     if ((e.metaKey || e.ctrlKey) && e.keyCode === KEY_ENTER) {
       const { onSubmit } = this.props;
       if (onSubmit) {
-        onSubmit(this.state.value);
+        onSubmit(xssFilter(this.state.value));
         this.setState({
           value: undefined
         });

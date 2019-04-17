@@ -11,6 +11,8 @@ const StyledButton = styled.button`
   ${props => css`
     border: 2px solid ${props.theme.main};    
     color: ${props.theme.main};
+    transition: color ease ${props.theme.transitionTime};
+    transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
   `}
   
@@ -31,6 +33,7 @@ const StyledButton = styled.button`
 const StyledLink = styled.a`
   text-decoration: none;
   color: ${props => props.theme.mainLight};
+  transition: color ease ${props => props.theme.transitionTime};
 
   &:hover {
     color: ${props => props.theme.main};

@@ -27,6 +27,7 @@ const Flex = styled.div`
 const Section = styled.section`
   background: white;
   padding: 20px;
+  margin-bottom: 60px;
 `;
 
 const ColumnList = styled.ul`
