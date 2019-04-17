@@ -19,7 +19,8 @@ const TextArea = ({
   id,
   value,
   className,
-  forwardedRef
+  forwardedRef,
+  onKeyDown
 }) => (
   <StyledTextArea
     ref={forwardedRef}
@@ -30,6 +31,7 @@ const TextArea = ({
     id={id}
     className={className}
     value={value}
+    onKeyDown={onKeyDown}
   />
 );
 
@@ -50,7 +52,8 @@ TextArea.propTypes = {
   ]),
   className: PropTypes.string,
   value: PropTypes.string,
-  forwardedRef: PropTypes.object
+  forwardedRef: PropTypes.object,
+  onKeyDown: PropTypes.func
 };
 
 TextArea.defaultProps = {

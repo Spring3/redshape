@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
-import SendIcon from 'mdi-react/SendIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 
@@ -17,6 +16,8 @@ import MarkdownEditor, { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
 import DateComponent from '../../components/Date';
 import { animationSlideRight } from '../../animations';
+
+import { platform } from '../../../modules/config';
 
 const Flex = styled.div`
   display: flex;
@@ -111,12 +112,6 @@ const BackButton = styled(IconButton)`
   }
 `;
 
-const DescriptionText = styled.pre`
-  white-space: pre-wrap;
-  font-family: inherit;
-  font-size: inherit;
-`;
-
 const Comments = styled.ul`
   list-style-type: none;
   padding: 0;
@@ -133,17 +128,23 @@ const Comments = styled.ul`
       padding: 20px;
       border-bottom: 2px solid ${props => props.theme.bg};
 
-      span {
-        font-weight: bold;
-        ${({theme}) => css`
+      ${({theme}) => css`
+        span:first-child {
+          font-weight: bold;
+          color: ${theme.normalText};
+        }
+
+        span:last-child {
+          font-weight: bold;
           color: ${theme.minorText};
           transition: color ease ${theme.transitionTime};
+          text-align: center;
 
           &:hover {
             color: ${theme.normalText};
           }
-        `}
-      }
+        }
+      `}
 
     }
 
@@ -151,6 +152,12 @@ const Comments = styled.ul`
       padding: 5px 20px 0px 20px;
     }
   }
+`;
+
+const CommentsForm = styled.div`
+  padding: 20px;
+  border-radius: 3px;
+  border: 2px solid ${props => props.theme.bgLight};
 `;
 
 const IssueDetails = styled.div`
@@ -233,8 +240,7 @@ class IssueDetailsPage extends Component {
     super(props);
     this.state = {
       selectedTimeEntry: undefined,
-      showTimeEntryModal: false,
-      comments: undefined
+      showTimeEntryModal: false
     };
   }
 
@@ -244,14 +250,12 @@ class IssueDetailsPage extends Component {
     fetchIssueTimeEntries(match.params.id);
   }
 
-  publishComment = () => {
-    if (this.state.comments) {
+  publishComment = (comments) => {
+    if (comments) {
       const { match, sendComments } = this.props;
-      sendComments(match.params.id, this.state.comments);
+      sendComments(match.params.id, comments);
     }
   }
-
-  onCommentsChange = comments => this.setState({ comments });
 
   startTimeTracking = () => {
     const { selectedIssue, startTimeTracking } = this.props;
@@ -286,6 +290,7 @@ class IssueDetailsPage extends Component {
     const { spentTime, selectedIssue, history, user, timeTracking, theme } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
     console.log(selectedIssue);
+    console.log(platform);
     return selectedIssue.id
       ? (
         <Section>
@@ -380,9 +385,7 @@ class IssueDetailsPage extends Component {
               </Wrapper>
               <div>
                 <h3>Description</h3>
-                <DescriptionText>
-                  {selectedIssue.description}
-                </DescriptionText>
+                <MarkdownText markdownText={selectedIssue.description} />
               </div>
               <div>
                 <h3>Comments</h3>
@@ -397,15 +400,22 @@ class IssueDetailsPage extends Component {
                     </li>
                   ))}
                 </Comments>
-                <MarkdownEditor
-                  onChange={this.onCommentsChange}
-                />
-                <Button
-                  type="button"
-                  onClick={this.publishComment}
-                >
-                  Publish <SendIcon />
-                </Button>
+                <CommentsForm>
+                  <MarkdownEditor
+                    onSubmit={this.publishComment}
+                  />
+                  <p>
+                    <SmallNotice>
+                      Press
+                      {
+                        platform === 'darwin'
+                        ? (<Link> Cmd + Enter</Link>)
+                        : (<Link> Ctrl + Enter</Link>)
+                      }
+                      to send
+                    </SmallNotice>
+                  </p>
+                </CommentsForm>
               </div>
             </IssueDetails>
             <TimeEntriesContainer>

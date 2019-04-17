@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
+import throttle from 'lodash/throttle';
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon';
 import FormatUnderlineIcon from 'mdi-react/FormatUnderlineIcon';
@@ -21,12 +22,9 @@ import { openExternalUrl, xssFilter } from '../../modules/utils';
 import TextArea from './TextArea';
 import Button from './Button';
 
-const Wrapper = styled.div`
-`;
-
 const MarkdownOptionsList = styled.ul`
   list-style-type: none;
-  margin: 0;
+  margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 
@@ -85,7 +83,18 @@ const MarkdownOption = styled.li`
 `;
 
 const ModifiedTextArea = styled(TextArea)`
-  padding: 5px;
+  padding: 10px;
+  border-radius: 3px;
+  outline: none;
+  border: 1px solid ${props => props.theme.minorText};
+
+  &:hover {
+    border-color: ${props => props.theme.main};
+  }
+
+  &:focus {
+    border: 2px solid ${props => props.theme.main};
+  }
 `;
 
 const converter = new showdown.Converter({
@@ -96,8 +105,10 @@ const converter = new showdown.Converter({
   disableForced4SpacesIndentedSublists: true,
   simpleLineBreaks: true,
   emoji: true,
-  metadata: true
+  simplifiedAutoLink: true
 });
+
+const KEY_ENTER = 13;
 
 class MarkdownEditor extends PureComponent {
   constructor (props) {
@@ -195,14 +206,17 @@ class MarkdownEditor extends PureComponent {
   adjustTextAreaHeight = () => {
     const element = this.textareaRef.current;
     element.style.height = 'auto';
-    element.style.height = `${element.scrollHeight}px`;
+    element.style.height = `${element.scrollHeight + 5}px`;
   }
 
   onTextAreaTyped = (e) => {
     this.setState({
       value: e.target.value
     });
-    this.props.onChange(e.target.value);
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange(e.target.value);
+    }
     this.adjustTextAreaHeight();
   }
 
@@ -212,13 +226,25 @@ class MarkdownEditor extends PureComponent {
     });
   }
 
+  onKeyDown = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === KEY_ENTER) {
+      const { onSubmit } = this.props;
+      if (onSubmit) {
+        onSubmit(this.state.value);
+        this.setState({
+          value: undefined
+        });
+      }
+    }
+  }
+
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
     const { className, id } = this.props;
     const { value, showPreview } = this.state;
     return (
-      <Wrapper
+      <div
         className={className}
         id={id}
       >
@@ -289,24 +315,26 @@ class MarkdownEditor extends PureComponent {
             <ModifiedTextArea
               ref={this.textareaRef}
               onChange={this.onTextAreaTyped}
+              onKeyDown={this.onKeyDown}
               value={value}
             />
           )
         }
-      </Wrapper>
+      </div>
     );
   }
 }
 
 MarkdownEditor.propTypes = {
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   className: PropTypes.string,
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
   ]),
   initialValue: PropTypes.string,
-  preview: PropTypes.bool
+  preview: PropTypes.bool,
+  onSubmit: PropTypes.func
 };
 
 MarkdownEditor.defaultProps = {
@@ -316,6 +344,10 @@ MarkdownEditor.defaultProps = {
   preview: false
 };
 
+const Iframe = styled.iframe`
+  box-sizing: border-box;
+  overflow: hidden;
+`;
 
 class MarkdownText extends PureComponent {
   constructor(props) {
@@ -352,7 +384,18 @@ class MarkdownText extends PureComponent {
         background: ${theme.bg};
         color: ${theme.minorText};
       }
+
+      p {
+        min-width: 100%;
+        width: 0;
+      }
     `;
+
+    this.throttledAdjustIframeSize = throttle(this.adjustIframeSize, 300);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.throttledAdjustIframeSize);
   }
 
   interceptIframeRedirect = (e) => {
@@ -361,10 +404,16 @@ class MarkdownText extends PureComponent {
     openExternalUrl(e.target.href);
   }
 
+  adjustIframeSize = () => {
+    const iframe = this.iframeRef.current;
+    if (iframe) {
+      iframe.height = iframe.contentDocument.body.scrollHeight + 35;
+    }
+  }
+
   adjustIframe = () => {
     const iframe = this.iframeRef.current;
     if (iframe) {
-      iframe.height = iframe.contentDocument.body.scrollHeight + 30;
       const css = document.createElement('style');
       css.type = 'text/css';
       css.innerText = this.genericStyles;
@@ -373,6 +422,8 @@ class MarkdownText extends PureComponent {
         elem.removeEventListener('click', this.interceptIframeRedirect);
         elem.addEventListener('click', this.interceptIframeRedirect);
       }
+      this.adjustIframeSize();
+      window.addEventListener('resize', this.throttledAdjustIframeSize);
     }
   }
 
@@ -380,7 +431,7 @@ class MarkdownText extends PureComponent {
     const { markdownText, className } = this.props;
     const markdown = xssFilter(converter.makeHtml(markdownText));
     return (
-      <iframe
+      <Iframe
         ref={this.iframeRef}
         className={className}
         frameBorder="0"

@@ -4,10 +4,11 @@ const _ = require('lodash');
 let config;
 
 // main process
-const { env } = (process || remote.process);
+const mainProcess = (process || remote.process);
 
 if (!config) {
-  config = _.pick(env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
+  config = _.pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
+  config.platform = mainProcess.platform;
 }
 
 module.exports = config;

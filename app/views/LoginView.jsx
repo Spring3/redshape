@@ -59,7 +59,7 @@ const SubmitButton = styled(Button)`
 
 class LoginView extends Component {  
   componentWillMount() {
-    const { userId, apy_key } = this.props;
+    const { userId, api_key } = this.props;
     if (userId && api_key) {
       this.props.history.push('/app/summary');
     }
