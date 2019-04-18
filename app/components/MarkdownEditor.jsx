@@ -122,12 +122,21 @@ class MarkdownEditor extends PureComponent {
     this.textareaRef = React.createRef();
   }
 
-  componentDidUpdate(oldProps) {
+  componentDidUpdate(oldProps, oldState) {
     if (this.props.initialValue !== oldProps.initialValue) {
       this.setState({
         value: this.props.initialValue
       });
     }
+
+    if (oldState.value !== this.state.value
+      || ((oldState.showPreview !== this.state.showPreview) && !this.state.showPreview)) {
+      this.adjustTextAreaHeight();
+    }
+  }
+
+  componentDidMount() {
+    this.adjustTextAreaHeight();
   }
 
   applyMarkdown = (symbolStart, symbolEnd) => {
@@ -136,17 +145,16 @@ class MarkdownEditor extends PureComponent {
     const currentValue = this.state.value;
     let newValue;
     if (textarea.selectionStart === textarea.selectionEnd) {
-      this.adjustTextAreaHeight();
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${symbolEnd}${currentValue.substring(textarea.selectionStart)}`;
       this.setState({
         value: newValue 
-      }, () => this.adjustTextAreaHeight());
+      });
       onChange(newValue);
     } else {
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${currentValue.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${currentValue.substring(textarea.selectionEnd)}`;
       this.setState({
         value: newValue
-      }, () => this.adjustTextAreaHeight());
+      });
       onChange(newValue);
     }
   }
@@ -217,7 +225,6 @@ class MarkdownEditor extends PureComponent {
     if (onChange) {
       onChange(e.target.value);
     }
-    this.adjustTextAreaHeight();
   }
 
   togglePreview = () => {
@@ -385,9 +392,14 @@ class MarkdownText extends PureComponent {
         color: ${theme.minorText};
       }
 
-      p {
+      p, pre {
         min-width: 100%;
         width: 0;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        word-break: keep-all;
       }
     `;
 
