@@ -9,6 +9,6 @@ export default {
   hoverText: '#FFFFFF',
   red: '#FF634D',
   yellow: '#FFDA77',
-  green: '#A3EB6A',
+  green: '#6CCA51',
   transitionTime: '.2s'
 };

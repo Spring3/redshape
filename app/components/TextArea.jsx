@@ -8,6 +8,7 @@ const StyledTextArea = styled.textarea`
   overflow: hidden;
   height: auto;
   width: 100%;
+  line-height: 1.5rem;
   box-sizing: border-box;
 `;
 

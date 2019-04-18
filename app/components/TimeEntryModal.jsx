@@ -21,6 +21,18 @@ const FlexRow = styled.div`
   justify-content: space-between;
 `;
 
+const OptionButtons = styled.div`
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid ${props => props.theme.bgLight};
+  display: flex;
+  justify-content: space-between;
+  
+  button {
+    padding: 8px 15px;
+  }
+`;
+
 const selectStyles = {
   container: (base, state) => {
     return { ...base };
@@ -211,7 +223,6 @@ class TimeEntryModal extends Component {
         spent_on: timeEntry.spent_on,
         activity: timeEntry.activity
       }).then(() => {
-        console.log('Updated');
         onClose();
       })
     } else {
@@ -310,15 +321,30 @@ class TimeEntryModal extends Component {
           </Label>
           {timeEntry.id && currentUser.id === timeEntry.user.id
             ? (
-              <div>
-                <Button onClick={this.onUpdate}>Submit</Button>
-                <Button onClick={this.onDelete}>Delete</Button>
-              </div>
+              <OptionButtons>
+                <Button
+                  onClick={this.onUpdate}
+                  palette='success'
+                >
+                Submit
+                </Button>
+                <Button
+                  onClick={this.onDelete}
+                  palette='danger'
+                >
+                Delete
+                </Button>
+              </OptionButtons>
             )
             : (
-              <div>
-                <Button onClick={this.onAdd}>Submit</Button>
-              </div>
+              <OptionButtons>
+                <Button
+                  onClick={this.onAdd}
+                  palette='success'
+                >
+                Submit
+                </Button>
+              </OptionButtons>
             )
           }
         </Fragment>
