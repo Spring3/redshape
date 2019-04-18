@@ -6,7 +6,9 @@ import trackingReducer from './tracking.reducer';
 import projectReducer from './project.reducer';
 import timeReducer from './time.reducer';
 
-export default combineReducers({
+import { USER_LOGOUT } from '../actions/user.actions';
+
+const appReducer = combineReducers({
   user: usersReducer,
   settings: settingsReducer,
   issues: issuesReducer,
@@ -14,3 +16,13 @@ export default combineReducers({
   tracking: trackingReducer,
   time: timeReducer
 });
+
+export default (state, action) => {
+  switch (action.type) {
+    case USER_LOGOUT: {
+      return appReducer(undefined, action);
+    }
+    default:
+      return appReducer(state, action);
+  }
+};
