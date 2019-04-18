@@ -79,7 +79,7 @@ function IssueFilter () {
     return this;
   };
 
-  this.build = () => new URLSearchParams(filter).toString();
+  this.build = () => ({ ...filter });
 }
 
 const handleReject = (e) => {
@@ -130,12 +130,13 @@ const login = ({
 }) => {
   const defaultConfig = axios.getDefaultConfig();
   return axios.default.request({
+    baseURL: redmineEndpoint,
     timeout: defaultConfig.timeout,
     headers: {
       ...defaultConfig.headers,
       ...(headers || {})
     },
-    url: `${redmineEndpoint}${url}`,
+    url,
     method: 'GET'
   }).then((res) => {
     axios.reset();

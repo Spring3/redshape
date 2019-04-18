@@ -1,18 +1,17 @@
-import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import * as axios from '../../../modules/request';
 
-import request, { IssueFilter, notify, login, reset } from '../helper';
+import request, { IssueFilter, notify, login } from '../helper';
 
 jest.mock('electron-store');
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(axios.default);
 
 describe('Helper module', () => {
   it('should expose all the necesary items', () => {
     expect(request).toBeDefined();
     expect(notify).toBeDefined();
     expect(login).toBeDefined();
-    expect(reset).toBeDefined();
     expect(IssueFilter).toBeDefined();
   });
 
@@ -114,8 +113,10 @@ describe('Helper module', () => {
     afterEach(() => axiosMock.reset());
 
     it('should initialize the axios instance if fullfilled', async () => {
+      expect(axios.getInstance()).toBe(undefined);
+
       try {
-        await request({ url: '123abc' });
+        await request({ url: '/test' });
         throw new Error('SHOULD NOT RESOLVE');
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
@@ -130,19 +131,22 @@ describe('Helper module', () => {
 
       axiosMock.onGet('/user').reply(200, () => Promise.resolve(response));
 
-      const res = await login({
+      const result = await login({
         redmineEndpoint: 'redmine.test.com',
         url: '/user'
       });
 
+      expect(axios.getInstance()).toBeDefined();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].data).toEqual(response);
-      expect(res).toEqual(response);
+      expect(result).toEqual(response);
 
-      axiosMock.onGet('/123abc').reply(200, () => Promise.resolve());
-      await expect(request({ url: '/123abc' })).resolves.toEqual(undefined);
+      const axiosInstanceMock = new MockAdapter(axios.getInstnace());
+      axiosInstanceMock.onGet('/test').reply(200, () => Promise.resolve());
+      await expect(request({ url: '/test' })).resolves.toEqual(undefined);
 
-      expect(axiosMock.history.get.length).toBe(2);
+      expect(axiosInstanceMock.history.get.length).toBe(1);
+      console.log(axiosInstanceMock.history.get);
     });
 
     it('should throw if failed', () => {

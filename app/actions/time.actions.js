@@ -91,20 +91,18 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
 };
 
 const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
-  const params = {
+  const query = _({
     offset,
     limit,
     project_id: projectId,
     issue_id: issueId
-  };
-
-  const queryParams = new URLSearchParams(_(params).pickBy().value()).toString();
-  const url = `/time_entries.json?${queryParams}`;
+  }).pickBy().value();
 
   dispatch(notify.start(TIME_GET_ALL));
 
   return request({
-    url,
+    url: '/time_entries.json',
+    query,
     id: `getIssueTimeEntries:${issueId}:${offset}`
   }).then(({ data }) => dispatch(notify.ok(TIME_GET_ALL, data)))
     .catch((error) => {

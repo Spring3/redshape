@@ -9,23 +9,32 @@ export const ISSUES_STATUSES_GET_ALL = 'ISSUES_STATUSES_GET_ALL';
 export const ISSUES_TRACKERS_GET_ALL = 'ISSUES_TRACKERS_GET_ALL';
 
 const getAll = (filter, offset, limit) => (dispatch) => {
-  let url = '/issues.json?include=attachments,children,relations,journals';
+  let query = {
+    include: 'attachments,children,relations,journals'
+  };
 
   if (filter) {
-    url += `&${filter}`;
+    query = {
+      ...query,
+      ...filter
+    };
   }
 
   if (offset) {
-    url += `&offset=${offset}`;
+    query.offset = offset;
   }
 
   if (limit) {
-    url += `&limit=${limit}`;
+    query.limit = limit;
   }
 
   dispatch(notify.start(ISSUES_GET_ALL));
 
-  return request({ url, id: 'getAllIssues' })
+  return request({
+    url: '/issues.json',
+    id: 'getAllIssues',
+    query
+  })
     .then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data)))
     .catch((error) => {
       console.error('Error when trying to get a list of issues:', error.message);
@@ -37,7 +46,10 @@ const get = id => (dispatch) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({
-    url: `/issues/${id}.json?include=attachments,children,relations,journals`,
+    url: `/issues/${id}.json`,
+    query: {
+      include: 'attachments,children,relations,journals'
+    },
     id: `getIssueDetails:${id}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {

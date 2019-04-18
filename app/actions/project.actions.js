@@ -6,7 +6,11 @@ const getAll = () => async (dispatch) => {
   dispatch(notify.start(PROJECT_GET_ALL));
 
   const requestPage = (offset = 0) => request({
-    url: `/projects.json?include=time_entry_activities&offset=${offset}`,
+    url: '/projects.json',
+    query: {
+      include: 'time_entry_activities',
+      offset
+    },
     id: `getProjects:${offset}`
   }).then(({ data }) => data);
 
