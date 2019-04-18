@@ -12,7 +12,7 @@ const getAll = (filter, offset, limit) => (dispatch) => {
   let url = '/issues.json?include=attachments,children,relations,journals';
 
   if (filter) {
-    url += filter;
+    url += `&${filter}`;
   }
 
   if (offset) {

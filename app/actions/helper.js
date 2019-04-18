@@ -1,6 +1,4 @@
-import axios, { CancelToken } from 'axios';
-
-import storage from '../../modules/storage';
+import * as axios from '../../modules/request';
 
 function IssueFilter () {
   const filter = {};
@@ -81,70 +79,12 @@ function IssueFilter () {
     return this;
   };
 
-  this.build = () => {
-    let str = '';
-    for (const [key, value] of Object.entries(filter)) { // eslint-disable-line
-      str += `&${key}=${value}`;
-    }
-    return str;
-  };
-}
-
-const TWENTY_SECONDS = 20000;
-const pendingRequests = {};
-
-
-const allowToBeCancelled = (headers, requestId) => {
-  if (!requestId) {
-    return headers;
-  }
-
-  if (pendingRequests[requestId]) {
-    pendingRequests[requestId].cancel();
-  }
-  const source = CancelToken.source();
-  const newHeaders = {
-    ...headers,
-    cancelToken: source.token
-  };
-  pendingRequests[requestId] = source;
-  return newHeaders;
-};
-
-const commonAxiosConfig = {
-  timeout: TWENTY_SECONDS,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-  }
-};
-
-let axiosInstance;
-
-if (storage.has('user')) {
-  const axiosConfig = {
-    timeout: commonAxiosConfig.timeout,
-    headers: {
-      ...commonAxiosConfig.headers
-    }
-  };
-  const { api_key, redmineEndpoint } = storage.get('user');
-  if (api_key) {
-    axiosConfig.headers['X-Redmine-API-Key'] = api_key;
-  }
-  if (redmineEndpoint) {
-    axiosConfig.baseURL = redmineEndpoint;
-  }
-
-  axiosInstance = axios.create(axiosConfig);
+  this.build = () => new URLSearchParams(filter).toString();
 }
 
 const handleReject = (e) => {
   // if this request was not cancelled
-  if (!axios.isCancel(e)) {
+  if (!axios.default.isCancel(e)) {
     return Promise.reject(new Error(`Error ${e.status} (${e.statusText || e.message})`));
   }
   console.log('Request was cancelled');
@@ -162,7 +102,7 @@ const request = ({
   const requestConfig = {
     url,
     method,
-    headers: allowToBeCancelled(headers || {}, id)
+    headers: axios.makeCancellable(headers || {}, id)
   };
 
   if (!['GET', 'DELETE'].includes(method)) {
@@ -173,47 +113,39 @@ const request = ({
     requestConfig.params = query;
   }
 
-  if (!axiosInstance) {
+  if (!axios.getInstance()) {
     return Promise.reject(new Error('401 - Unauthorized'));
   }
 
-  return axiosInstance(requestConfig)
+  return axios.getInstance().request(requestConfig)
     .then(res => ({ data: res.data }))
     .catch(handleReject)
-    .finally(() => delete pendingRequests[id]);
-};
-
-const reset = () => {
-  axiosInstance = null;
+    .finally(() => delete axios.pendingRequests[id]);
 };
 
 const login = ({
   redmineEndpoint,
   url,
-  headers = {}
-}) => axios({
-  timeout: commonAxiosConfig.timeout,
-  headers: {
-    ...commonAxiosConfig.headers,
-    ...headers
-  },
-  url: `${redmineEndpoint}${url}`,
-  method: 'GET'
-}).then((res) => {
-  const { api_key } = res.data.user || {};
-  if (api_key) {
-    reset();
-    axiosInstance = axios.create({
-      baseURL: redmineEndpoint,
-      timeout: commonAxiosConfig.timeout,
-      headers: {
-        ...commonAxiosConfig.headers,
-        'X-Redmine-API-Key': api_key
-      }
-    });
-  }
-  return { data: res.data };
-});
+  headers
+}) => {
+  const defaultConfig = axios.getDefaultConfig();
+  return axios.default.request({
+    timeout: defaultConfig.timeout,
+    headers: {
+      ...defaultConfig.headers,
+      ...(headers || {})
+    },
+    url: `${redmineEndpoint}${url}`,
+    method: 'GET'
+  }).then((res) => {
+    axios.reset();
+    const { api_key } = res.data.user || {};
+    if (api_key) {
+      axios.initialize(redmineEndpoint, api_key);
+    }
+    return { data: res.data };
+  });
+};
 
 const notify = {
   start: (type, id) => ({ type, status: 'START', id }),
@@ -226,8 +158,7 @@ const notify = {
 export {
   IssueFilter,
   notify,
-  login,
-  reset
+  login
 };
 
 export default request;

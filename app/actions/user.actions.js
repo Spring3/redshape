@@ -1,4 +1,5 @@
-import request, { reset, login, notify } from './helper';
+import request, { login, notify } from './helper';
+import { reset } from '../../modules/request';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
