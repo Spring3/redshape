@@ -6,14 +6,26 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 import Select from 'react-select';
-import DatePickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import styled, { withTheme } from 'styled-components';
 
 import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
 import MarkdownEditor from '../components/MarkdownEditor';
 import ErrorMessage from '../components/ErrorMessage';
+import DatePicker from '../components/DatePicker';
+
 import actions from '../actions';
+
+const FlexRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const selectStyles = {
+  container: (base, state) => {
+    return { ...base };
+  }
+};
 
 class TimeEntryModal extends Component {
   constructor(props) {
@@ -223,8 +235,8 @@ class TimeEntryModal extends Component {
   };
 
   render() {
-    const { currentUser, isOpen, isEditable, onClose } = this.props;
-    const { timeEntry, projectActivities, validationErrors, hasErrors } = this.state;
+    const { currentUser, isOpen, isEditable, onClose, theme } = this.props;
+    const { timeEntry, projectActivities, validationErrors } = this.state;
     const { hours, comments, spent_on } = timeEntry;
     const defaultActivity = projectActivities.find(option => option.value === timeEntry.activity.id) || null;
     return (
@@ -243,42 +255,59 @@ class TimeEntryModal extends Component {
           <Label htmlFor="activity" label="Activity">
             <Select
               options={projectActivities}
+              styles={selectStyles}
               value={defaultActivity}
               onChange={this.onActivityChange}
+              isClearable={false}
+              theme={(defaultTheme) => ({
+                ...defaultTheme,
+                borderRadius: 3,
+                colors: {
+                  ...defaultTheme.colors,
+                  primary: theme.main,
+                },
+              })
+              }
             />
           </Label>
           <ErrorMessage show={validationErrors.activity}>
             {validationErrors.activity}
           </ErrorMessage>
-          <Label htmlFor="hours" label="Hours">
-            <Input
-              type="number"
-              name="hours"
-              value={hours}
-              disabled={!isEditable}
-              onChange={this.onHoursChange}
+          <FlexRow>
+            <div>
+              <Label htmlFor="hours" label="Hours">
+                <Input
+                  type="number"
+                  name="hours"
+                  value={hours}
+                  disabled={!isEditable}
+                  onChange={this.onHoursChange}
+                />
+              </Label>
+              <ErrorMessage show={validationErrors.hours}>
+                {validationErrors.hours}
+              </ErrorMessage>
+            </div>
+            <div>
+              <Label htmlFor="spent_on" label="Date">
+                <DatePicker
+                  name="date"
+                  value={new Date(spent_on)}
+                  isDisabled={!isEditable}
+                  onChange={this.onDateChange}
+                />
+              </Label>
+              <ErrorMessage show={validationErrors.spent_on}>
+                {validationErrors.spent_on}
+              </ErrorMessage>
+            </div>
+          </FlexRow>
+          <Label label="Comments" htmlFor="comments">
+            <MarkdownEditor
+              onChange={this.onCommentsChange}
+              initialValue={comments}
             />
           </Label>
-          <ErrorMessage show={validationErrors.hours}>
-            {validationErrors.hours}
-          </ErrorMessage>
-          <Label htmlFor="spent_on" label="Date">
-            <DatePickerInput
-              name="date"
-              value={new Date(spent_on)}
-              disabled={!isEditable}
-              onChange={this.onDateChange}
-            />
-          </Label>
-          <ErrorMessage show={validationErrors.spent_on}>
-            {validationErrors.spent_on}
-          </ErrorMessage>
-          <h3>Comment</h3>
-          <MarkdownEditor
-            onChange={this.onCommentsChange}
-            initialValue={comments}
-            preview={true}
-          />
           {timeEntry.id && currentUser.id === timeEntry.user.id
             ? (
               <div>
@@ -375,4 +404,4 @@ const mapDispatchToProps = dispatch => ({
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.time.remove(timeEntryId, issueId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal);
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

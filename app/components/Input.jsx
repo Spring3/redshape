@@ -157,7 +157,21 @@ class Input extends PureComponent {
   }
 
   render() {
-    const { type, checked, className, placeholder, onChange, onBlur, value, id, name, disabled } = this.props;
+    const {
+      type,
+      checked,
+      className,
+      placeholder,
+      onChange,
+      onBlur,
+      onFocus,
+      onKeyUp,
+      onClick,
+      value,
+      id,
+      name,
+      disabled
+    } = this.props;
     return type.toLowerCase() === 'checkbox'
       ? (
         <CheckboxContainer className={className}>
@@ -180,6 +194,9 @@ class Input extends PureComponent {
           placeholder={placeholder}
           onChange={onChange}
           onBlur={onBlur}
+          onFocus={onFocus}
+          onKeyUp={onKeyUp}
+          onClick={onClick}
           disabled={disabled}
           value={type === 'number' ? this.ensureNumber(value) : value}
           id={id}
@@ -197,6 +214,9 @@ Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
+  onKeyUp: PropTypes.func,
+  onClick: PropTypes.func,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number

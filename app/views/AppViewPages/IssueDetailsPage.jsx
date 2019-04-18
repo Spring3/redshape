@@ -290,8 +290,6 @@ class IssueDetailsPage extends Component {
   render() {
     const { spentTime, selectedIssue, history, user, timeTracking, theme } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
-    console.log(selectedIssue);
-    console.log(platform);
     return selectedIssue.id
       ? (
         <Section>
