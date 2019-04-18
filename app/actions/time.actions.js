@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import request, { notify } from './helper';
 import moment from 'moment';
+import request, { notify } from './helper';
 
 export const TIME_ADD = 'TIME_ADD';
 export const TIME_UPDATE = 'TIME_UPDATE';
@@ -9,14 +9,12 @@ export const TIME_GET_ALL = 'TIME_GET_ALL';
 
 const add = timeEntry => (dispatch, getState) => {
   const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
 
   dispatch(notify.start(TIME_ADD));
 
   return request({
-    url: `${redmineEndpoint}/time_entries.json`,
+    url: '/time_entries.json',
     method: 'POST',
-    token: api_key,
     data: {
       time_entry: {
         issue_id: timeEntry.issue.id,
@@ -35,9 +33,7 @@ const add = timeEntry => (dispatch, getState) => {
     });
 };
 
-const update = (timeEntry, changes) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
+const update = (timeEntry, changes) => (dispatch) => {
   const mergeable = _.pick(changes, 'comments', 'hours');
 
   const updates = {
@@ -55,9 +51,8 @@ const update = (timeEntry, changes) => (dispatch, getState) => {
   dispatch(notify.start(TIME_UPDATE));
 
   return request({
-    url: `${redmineEndpoint}/time_entries/${timeEntry.id}.json`,
+    url: `/time_entries/${timeEntry.id}.json`,
     method: 'PUT',
-    token: api_key,
     data: {
       time_entry: updates
     },
@@ -79,19 +74,15 @@ const update = (timeEntry, changes) => (dispatch, getState) => {
     });
 };
 
-const remove = (timeEntryId, issueId) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
+const remove = (timeEntryId, issueId) => (dispatch) => {
   dispatch(notify.start(TIME_DELETE));
   if (!issueId) {
     dispatch(notify.nok(TIME_DELETE, new Error('issueId is required to delete the time entry')));
   }
 
   return request({
-    url: `${redmineEndpoint}/time_entries/${timeEntryId}.json`,
-    method: 'DELETE',
-    token: api_key
+    url: `/time_entries/${timeEntryId}.json`,
+    method: 'DELETE'
   }).then(() => dispatch(notify.ok(TIME_DELETE, { timeEntryId, issueId })))
     .catch((error) => {
       console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
@@ -99,9 +90,7 @@ const remove = (timeEntryId, issueId) => (dispatch, getState) => {
     });
 };
 
-const getAll = (issueId, projectId, offset, limit) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
+const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
   const params = {
     offset,
     limit,
@@ -110,13 +99,13 @@ const getAll = (issueId, projectId, offset, limit) => (dispatch, getState) => {
   };
 
   const queryParams = new URLSearchParams(_(params).pickBy().value()).toString();
-  const url = `${redmineEndpoint}/time_entries.json?${queryParams}`;
+  const url = `/time_entries.json?${queryParams}`;
 
   dispatch(notify.start(TIME_GET_ALL));
 
   return request({
     url,
-    token: api_key,
+    id: `getIssueTimeEntries:${issueId}:${offset}`
   }).then(({ data }) => dispatch(notify.ok(TIME_GET_ALL, data)))
     .catch((error) => {
       console.error('Error when trying to get he list of time entries', error);

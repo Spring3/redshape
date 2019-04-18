@@ -53,6 +53,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "dotenv": "^6.2.0",
     "electron": "^4.0.6",
     "electron-store": "^2.0.0",
@@ -63,7 +64,6 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
-    "react-date-picker": "^7.5.0",
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.3",
     "react-redux": "^6.0.1",

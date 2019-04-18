@@ -88,7 +88,6 @@ class NavigationBar extends Component {
 
   render() {
     const { user = {}, history } = this.props;
-    console.log(history);
     const { name } = user;
     return (
       <Navbar>

@@ -239,7 +239,7 @@ class MarkdownEditor extends PureComponent {
       if (onSubmit) {
         onSubmit(xssFilter(this.state.value));
         this.setState({
-          value: undefined
+          value: ''
         });
       }
     }

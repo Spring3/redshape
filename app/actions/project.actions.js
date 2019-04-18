@@ -2,15 +2,12 @@ import request, { notify } from './helper';
 
 export const PROJECT_GET_ALL = 'PROJECT_GET_ALL';
 
-const getAll = () => async (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
+const getAll = () => async (dispatch) => {
   dispatch(notify.start(PROJECT_GET_ALL));
 
   const requestPage = (offset = 0) => request({
-    url: `${redmineEndpoint}/projects.json?include=time_entry_activities&offset=${offset}`,
-    token: api_key
+    url: `/projects.json?include=time_entry_activities&offset=${offset}`,
+    id: `getProjects:${offset}`
   }).then(({ data }) => data);
 
   return requestPage()
