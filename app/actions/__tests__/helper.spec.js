@@ -130,34 +130,46 @@ describe('Helper module', () => {
         }
       };
 
-      console.log(response);
+      axiosMock.onGet('/user').replyOnce(() => Promise.resolve([200, response]));
 
-      axiosMock.onGet('/user').reply(200, response);
-
-      console.log(response);
-      const result = await login({
+      await expect(login({
         redmineEndpoint: 'redmine.test.com',
         url: '/user'
-      });
-      console.log(response);
+      })).resolves.toEqual({ data: response });
+
 
       expect(axios.getInstance()).toBeDefined();
       expect(axiosMock.history.get.length).toBe(1);
-      console.log(axiosMock.history.get);
-      console.log(response);
-      expect(axiosMock.history.get[0].data).toEqual(response);
-      expect(result).toEqual(response);
-      
-      const axiosInstanceMock = new MockAdapter(axios.getInstnace());
-      console.log(axiosInstanceMock.history.get);
-      axiosInstanceMock.onGet('/test').reply(200, () => Promise.resolve());
-      await expect(request({ url: '/test' })).resolves.toEqual(undefined);
+      expect(axiosMock.history.get[0].url).toBe('redmine.test.com/user');
 
+      const axiosInstanceMock = new MockAdapter(axios.getInstance());
+      axiosInstanceMock.onGet('/test').replyOnce(() => Promise.resolve([200, undefined]));
+
+      await expect(request({ url: '/test' })).resolves.toEqual({ data: undefined });
       expect(axiosInstanceMock.history.get.length).toBe(1);
+      expect(axiosInstanceMock.history.get[0].url).toBe('redmine.test.com/test');
+
+      axiosInstanceMock.restore();
+      axios.reset();
     });
 
-    it('should throw if failed', () => {
+    it('should throw if failed', async () => {
+      expect(axios.getInstance()).toBe(undefined);
 
+      const error = new Error('Test response error');
+      axiosMock.onGet('/user').replyOnce(() => Promise.reject(error));
+
+      try {
+        await login({
+          redmineEndpoint: 'redmine.test.com',
+          url: '/user'
+        });
+      } catch (e) {
+        expect(e).toEqual(error);
+      }
+
+      expect(axios.getInstance()).toBe(undefined);
+      expect(axiosMock.history.get.length).toBe(1);
     });
   });
 });

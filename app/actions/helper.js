@@ -83,6 +83,7 @@ function IssueFilter () {
 }
 
 const handleReject = (e) => {
+  console.log('EEEE', e);
   // if this request was not cancelled
   if (!axios.default.isCancel(e)) {
     return Promise.reject(new Error(`Error ${e.status} (${e.statusText || e.message})`));
@@ -118,9 +119,14 @@ const request = ({
   }
 
   return axios.getInstance().request(requestConfig)
-    .then(res => ({ data: res.data }))
-    .catch(handleReject)
-    .finally(() => delete axios.pendingRequests[id]);
+    .then((res) => {
+      delete axios.pendingRequests[id];
+      return ({ data: res.data });
+    })
+    .catch((error) => {
+      delete axios.pendingRequests[id];
+      return handleReject(error);
+    });
 };
 
 const login = ({

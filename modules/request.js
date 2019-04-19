@@ -53,7 +53,7 @@ const initialize = (redmineEndpoint, token) => {
 };
 
 const getInstance = () => instance;
-const reset = () => { instance = null; };
+const reset = () => { instance = undefined; };
 
 if (storage.has('user')) {
   const { api_key, redmineEndpoint } = storage.get('user');
