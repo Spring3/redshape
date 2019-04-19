@@ -51,8 +51,9 @@ describe('Helper module', () => {
         .priority(1)
         .sort('name', 'asc')
         .build();
-      expect(typeof filter).toBe('string');
-      expect(filter).toBe(new URLSearchParams({
+
+      expect(typeof filter).toBe('object');
+      expect(filter).toEqual({
         issue_id: '123,456',
         project_id: 'projectId',
         subprojectId: 'subprojectId',
@@ -65,7 +66,7 @@ describe('Helper module', () => {
         created_on: date.toISOString(),
         priority_id: 1,
         sort: 'name:asc'
-      }).toString());
+      });
     });
   });
 
@@ -129,24 +130,30 @@ describe('Helper module', () => {
         }
       };
 
-      axiosMock.onGet('/user').reply(200, () => Promise.resolve(response));
+      console.log(response);
 
+      axiosMock.onGet('/user').reply(200, response);
+
+      console.log(response);
       const result = await login({
         redmineEndpoint: 'redmine.test.com',
         url: '/user'
       });
+      console.log(response);
 
       expect(axios.getInstance()).toBeDefined();
       expect(axiosMock.history.get.length).toBe(1);
+      console.log(axiosMock.history.get);
+      console.log(response);
       expect(axiosMock.history.get[0].data).toEqual(response);
       expect(result).toEqual(response);
-
+      
       const axiosInstanceMock = new MockAdapter(axios.getInstnace());
+      console.log(axiosInstanceMock.history.get);
       axiosInstanceMock.onGet('/test').reply(200, () => Promise.resolve());
       await expect(request({ url: '/test' })).resolves.toEqual(undefined);
 
       expect(axiosInstanceMock.history.get.length).toBe(1);
-      console.log(axiosInstanceMock.history.get);
     });
 
     it('should throw if failed', () => {
