@@ -3,10 +3,7 @@ import request, { notify } from './helper';
 
 export const ISSUES_GET_ALL = 'ISSUES_GET_ALL';
 export const ISSUES_GET = 'ISSUES_GET';
-export const ISSUES_UPDATE = 'ISSUES_UPDATE';
-export const ISSUES_COMMENT_SEND = 'ISSUES_COMMENT_SEND';
-export const ISSUES_STATUSES_GET_ALL = 'ISSUES_STATUSES_GET_ALL';
-export const ISSUES_TRACKERS_GET_ALL = 'ISSUES_TRACKERS_GET_ALL';
+export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
 
 const getAll = (filter, offset, limit) => (dispatch) => {
   let query = {
@@ -62,7 +59,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
   const actionId = 'comments';
 
-  dispatch(notify.start(ISSUES_COMMENT_SEND, actionId));
+  dispatch(notify.start(ISSUES_COMMENTS_SEND, actionId));
 
   return request({
     url: `/issues/${issueId}.json`,
@@ -74,7 +71,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
     method: 'PUT'
   }).then(() => dispatch(
     notify.ok(
-      ISSUES_COMMENT_SEND,
+      ISSUES_COMMENTS_SEND,
       {
         created_on: moment().toLocaleString(),
         details: [],
@@ -91,40 +88,12 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
   ))
     .catch((error) => {
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
-      dispatch(notify.nok(ISSUES_COMMENT_SEND, error, actionId));
-    });
-};
-
-const getAllStatuses = () => (dispatch) => {
-  dispatch(notify.start(ISSUES_STATUSES_GET_ALL));
-
-  return request({
-    url: '/issue_statuses.json',
-    id: 'getAllIssueStatuses'
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_STATUSES_GET_ALL, data)))
-    .catch((error) => {
-      console.error('Error when trying to get the list of issue statuses:', error.message);
-      dispatch(notify.nok(ISSUES_STATUSES_GET_ALL, error));
-    });
-};
-
-const getAllTrackers = (dispatch) => {
-  dispatch(notify.start(ISSUES_TRACKERS_GET_ALL));
-
-  return request({
-    url: '/trackers.json',
-    id: 'getAllIssueTrackers'
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_TRACKERS_GET_ALL, data)))
-    .catch((error) => {
-      console.error('Error when trying to get the list of issue trackers:', error.message);
-      dispatch(notify.nok(ISSUES_TRACKERS_GET_ALL, error));
+      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, actionId));
     });
 };
 
 export default {
   getAll,
   get,
-  sendComments,
-  getAllStatuses,
-  getAllTrackers
+  sendComments
 };

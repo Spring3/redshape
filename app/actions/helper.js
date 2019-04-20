@@ -83,12 +83,16 @@ function IssueFilter () {
 }
 
 const handleReject = (e) => {
-  console.log('EEEE', e);
   // if this request was not cancelled
   if (!axios.default.isCancel(e)) {
-    return Promise.reject(new Error(`Error ${e.status} (${e.statusText || e.message})`));
+    let errorMessage = 'Error';
+    if (e.status) {
+      errorMessage = `${errorMessage} ${e.status}`;
+    }
+    errorMessage = `${errorMessage} (${e.statusText || e.message})`;
+
+    return Promise.reject(new Error(errorMessage));
   }
-  console.log('Request was cancelled');
   return undefined;
 };
 

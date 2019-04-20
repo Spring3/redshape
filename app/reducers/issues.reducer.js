@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import {
   ISSUES_GET_ALL,
   ISSUES_GET,
-  ISSUES_COMMENT_SEND
+  ISSUES_COMMENTS_SEND
 } from '../actions/issues.actions';
 import {
   TIME_ADD,
@@ -64,7 +64,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case ISSUES_COMMENT_SEND: {
+    case ISSUES_COMMENTS_SEND: {
       if (action.status === 'START') {
         return {
           ...state,

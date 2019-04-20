@@ -113,7 +113,7 @@ describe('Helper module', () => {
   describe('Login', () => {
     afterEach(() => axiosMock.reset());
 
-    it('should initialize the axios instance if fullfilled', async () => {
+    it('should initialize the axios instance if fullfilled and correctly handle responses', async () => {
       expect(axios.getInstance()).toBe(undefined);
 
       try {
@@ -145,9 +145,20 @@ describe('Helper module', () => {
       const axiosInstanceMock = new MockAdapter(axios.getInstance());
       axiosInstanceMock.onGet('/test').replyOnce(() => Promise.resolve([200, undefined]));
 
+      const error = new Error('Test request error');
+      error.status = 500;
+      axiosInstanceMock.onGet('/errortest').replyOnce(() => Promise.reject(error));
+
       await expect(request({ url: '/test' })).resolves.toEqual({ data: undefined });
       expect(axiosInstanceMock.history.get.length).toBe(1);
       expect(axiosInstanceMock.history.get[0].url).toBe('redmine.test.com/test');
+
+      try {
+        await request({ url: '/errortest' });
+      } catch (e) {
+        expect(e).toBeInstanceOf(Error);
+        expect(e.message).toBe('Error 500 (Test request error)');
+      }
 
       axiosInstanceMock.restore();
       axios.reset();
