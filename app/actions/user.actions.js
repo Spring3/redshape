@@ -3,7 +3,6 @@ import { reset } from '../../modules/request';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
-export const USER_GET_ALL = 'USER_GET_ALL';
 export const USER_GET_CURRENT = 'USER_GET_CURRENT';
 
 const logout = () => {

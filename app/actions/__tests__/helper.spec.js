@@ -9,30 +9,30 @@ const axiosMock = new MockAdapter(axios.default);
 
 describe('Helper module', () => {
   it('should expose all the necesary items', () => {
-    expect(request).toBeDefined();
-    expect(notify).toBeDefined();
-    expect(login).toBeDefined();
-    expect(IssueFilter).toBeDefined();
+    expect(request).toBeTruthy();
+    expect(notify).toBeTruthy();
+    expect(login).toBeTruthy();
+    expect(IssueFilter).toBeTruthy();
   });
 
   describe('IssueFilter', () => {
     it('should provide a builder for issue related query params per Redmine API', () => {
       const filter = new IssueFilter();
-      expect(filter).toBeDefined();
-      expect(filter.issue).toBeDefined();
-      expect(filter.project).toBeDefined();
-      expect(filter.subproject).toBeDefined();
-      expect(filter.tracker).toBeDefined();
-      expect(filter.status).toBeDefined();
-      expect(filter.assignee).toBeDefined();
-      expect(filter.author).toBeDefined();
-      expect(filter.title).toBeDefined();
-      expect(filter.due).toBeDefined();
-      expect(filter.createdAt).toBeDefined();
-      expect(filter.createdBetween).toBeDefined();
-      expect(filter.priority).toBeDefined();
-      expect(filter.sort).toBeDefined();
-      expect(filter.build).toBeDefined();
+      expect(filter).toBeTruthy();
+      expect(filter.issue).toBeTruthy();
+      expect(filter.project).toBeTruthy();
+      expect(filter.subproject).toBeTruthy();
+      expect(filter.tracker).toBeTruthy();
+      expect(filter.status).toBeTruthy();
+      expect(filter.assignee).toBeTruthy();
+      expect(filter.author).toBeTruthy();
+      expect(filter.title).toBeTruthy();
+      expect(filter.due).toBeTruthy();
+      expect(filter.createdAt).toBeTruthy();
+      expect(filter.createdBetween).toBeTruthy();
+      expect(filter.priority).toBeTruthy();
+      expect(filter.sort).toBeTruthy();
+      expect(filter.build).toBeTruthy();
     });
 
     it('should eventually build a query param string', () => {
@@ -72,11 +72,11 @@ describe('Helper module', () => {
 
   describe('Notifier', () => {
     it('should populate the action with status', () => {
-      expect(notify.start).toBeDefined();
-      expect(notify.paginate).toBeDefined();
-      expect(notify.ok).toBeDefined();
-      expect(notify.nok).toBeDefined();
-      expect(notify.cancel).toBeDefined();
+      expect(notify.start).toBeTruthy();
+      expect(notify.paginate).toBeTruthy();
+      expect(notify.ok).toBeTruthy();
+      expect(notify.nok).toBeTruthy();
+      expect(notify.cancel).toBeTruthy();
 
       const TEST_ACTION = 'TEST_ACTION';
 
@@ -138,7 +138,7 @@ describe('Helper module', () => {
       })).resolves.toEqual({ data: response });
 
 
-      expect(axios.getInstance()).toBeDefined();
+      expect(axios.getInstance()).toBeTruthy();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe('redmine.test.com/user');
 

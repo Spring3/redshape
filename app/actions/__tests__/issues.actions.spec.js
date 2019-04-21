@@ -10,7 +10,7 @@ const token = 'multipass';
 describe('Issue actions', () => {
   beforeAll(() => {
     axios.initialize(redmineEndpoint, token);
-    expect(axios.getInstance()).toBeDefined();
+    expect(axios.getInstance()).toBeTruthy();
     axiosMock = new MockAdapter(axios.getInstance());
   });
 
@@ -24,14 +24,14 @@ describe('Issue actions', () => {
   });
 
   it('should expose the necessary actions', () => {
-    expect(issuesActions).toBeDefined();
-    expect(issuesActions.ISSUES_GET_ALL).toBeDefined();
-    expect(issuesActions.ISSUES_GET).toBeDefined();
-    expect(issuesActions.ISSUES_COMMENTS_SEND).toBeDefined();
+    expect(issuesActions).toBeTruthy();
+    expect(issuesActions.ISSUES_GET_ALL).toBeTruthy();
+    expect(issuesActions.ISSUES_GET).toBeTruthy();
+    expect(issuesActions.ISSUES_COMMENTS_SEND).toBeTruthy();
 
-    expect(issuesActions.default.getAll).toBeDefined();
-    expect(issuesActions.default.get).toBeDefined();
-    expect(issuesActions.default.sendComments).toBeDefined();
+    expect(issuesActions.default.getAll).toBeTruthy();
+    expect(issuesActions.default.get).toBeTruthy();
+    expect(issuesActions.default.sendComments).toBeTruthy();
   });
 
   describe('getAll action', () => {

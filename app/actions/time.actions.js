@@ -34,7 +34,7 @@ const add = timeEntry => (dispatch, getState) => {
 };
 
 const update = (timeEntry, changes) => (dispatch) => {
-  const mergeable = _.pick(changes, 'comments', 'hours');
+  const mergeable = _.pick(changes, 'comments', 'hours', {});
 
   const updates = {
     ...mergeable
