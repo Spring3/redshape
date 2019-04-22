@@ -115,13 +115,13 @@ class GhostButton extends Component {
   preventDefault = (e) => {
     e.preventDefault();
     e.persist();
-    if (this.props.onClick) {
+    if (this.props.onClick && !this.props.disabled) {
       this.props.onClick(e);
     }
   }
 
   render() {
-    const { id, children, disabled, className, tabIndex } = this.props;
+    const { id, children, disabled, className } = this.props;
     return (
       <StyledLink
         id={id}
@@ -129,7 +129,6 @@ class GhostButton extends Component {
         href="#"
         disabled={disabled}
         className={className}
-        tabIndex={tabIndex}
       >
         {children}
       </StyledLink>
@@ -146,7 +145,6 @@ GhostButton.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   className: PropTypes.string,
-  tabIndex: PropTypes.number
 };
 
 GhostButton.defaultProps = {
