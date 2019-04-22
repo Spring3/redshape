@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const StyledError = styled.p`
@@ -8,16 +8,15 @@ const StyledError = styled.p`
   background: #FF7079;
   color: white;
   padding: 2px;
-
-  ${props => css`
-    display: ${props.show ? 'inline-block' : 'none'};
-  `}
+  display: inline-block;
 `;
 
 const ErrorMessage = ({ children, show }) => (
-  <StyledError show={show}>
-    {children}
-  </StyledError>
+  show ? (
+    <StyledError>
+      {children}
+    </StyledError>
+  ) : null
 );
 
 ErrorMessage.propTypes = {

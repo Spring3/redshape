@@ -1,13 +1,15 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from 'react-testing-library';
+import styled from 'styled-components';
 import { Input, Label } from '../Input';
+import theme from '../../theme';
 
 afterEach(cleanup);
 
 describe('Input component', () => {
   it('should be text input by default', () => {
     const changeHandler = jest.fn();
-    render(<Input onChange={changeHandler} />);
+    render(<Input theme={theme} onChange={changeHandler} />);
     const input = document.querySelector('input[type="text"]');
     expect(input).toBeTruthy();
     expect(input.getAttribute('type')).toBe('text');
@@ -25,58 +27,110 @@ describe('Input component', () => {
     expect(input).toBeTruthy();
     expect(input.getAttribute('type')).toBe('text');
 
-    rerender(<Input type="email" onChange={changeHandler} />);
+    rerender(<Input theme={theme} type="email" onChange={changeHandler} />);
     expect(input.getAttribute('type')).toBe('email');
 
-    rerender(<Input type="password" onChange={changeHandler} />);
+    rerender(<Input theme={theme} type="password" onChange={changeHandler} />);
     expect(input.getAttribute('type')).toBe('password');
 
-    rerender(<Input type="checkbox" onChange={changeHandler} />);
+    rerender(<Input theme={theme} type="checkbox" onChange={changeHandler} />);
     expect(document.querySelector('input[type="checkbox"]')).toBeTruthy();
+
+    rerender(<Input theme={theme} type="number" onChange={changeHandler} />);
+    expect(document.querySelector('input[type="number"]')).toBeTruthy();
   });
 
   it('should take the placeholder', () => {
     const changeHandler = jest.fn();
-    const { getByPlaceholderText, rerender } = render(<Input placeholder="example text" onChange={changeHandler} />);
+    const { getByPlaceholderText, rerender } = render(
+      <Input
+        theme={theme}
+        placeholder="example text"
+        onChange={changeHandler}
+      />
+    );
     const input = getByPlaceholderText('example text');
     expect(input).toBeTruthy();
     expect(input.getAttribute('placeholder')).toBe('example text');
 
-    rerender(<Input placeholder="email@example.com" onChange={changeHandler} />);
+    rerender(
+      <Input
+        theme={theme}
+        placeholder="email@example.com"
+        onChange={changeHandler}
+      />
+    );
     expect(input.getAttribute('placeholder')).toBe('email@example.com');
   });
 
   it('should set the name and id', () => {
     const changeHandler = jest.fn();
-    const { rerender } = render(<Input name="test" id="id1" onChange={changeHandler} />);
+    const { rerender } = render(
+      <Input
+        theme={theme}
+        name="test"
+        id="id1"
+        onChange={changeHandler}
+      />
+    );
     const input = document.querySelector('#id1');
     expect(input).toBeTruthy();
     expect(input.getAttribute('id')).toBe('id1');
     expect(input.getAttribute('name')).toBe('test');
 
-    rerender(<Input name="another" id="id2" onChange={changeHandler} />);
+    rerender(
+      <Input
+        theme={theme}
+        name="another"
+        id="id2"
+        onChange={changeHandler}
+      />
+    );
     expect(input.getAttribute('id')).toBe('id2');
     expect(input.getAttribute('name')).toBe('another');
   });
 
   it('should set the value', () => {
     const changeHandler = jest.fn();
-    const { rerender } = render(<Input value="email@example.com" onChange={changeHandler} />);
+    const { rerender } = render(
+      <Input
+        theme={theme}
+        value="email@example.com"
+        onChange={changeHandler}
+      />
+    );
     const input = document.querySelector('input');
     expect(input).toBeTruthy();
     expect(input.getAttribute('value')).toBe('email@example.com');
 
-    rerender(<Input value="test@example.com" onChange={changeHandler} />);
+    rerender(
+      <Input
+        theme={theme}
+        value="test@example.com"
+        onChange={changeHandler}
+      />
+    );
     expect(input.getAttribute('value')).toBe('test@example.com');
   });
 
   it('should become disabled', async () => {
     const changeHandler = jest.fn();
-    const { rerender } = render(<Input onChange={changeHandler} />);
+    const { rerender } = render(
+      <Input
+        theme={theme}
+        onChange={changeHandler}
+      />
+    );
     const input = document.querySelector('input');
     expect(input).toBeTruthy();
     expect(input.hasAttribute('disabled')).toBe(false);
-    rerender(<Input disabled={true} onChange={changeHandler} />);
+    rerender(
+      <Input
+        theme={theme}
+        disabled={true}
+        onChange={changeHandler}
+      />
+    );
     expect(input.hasAttribute('disabled')).toBe(true);
   });
 
@@ -85,7 +139,7 @@ describe('Input component', () => {
       expect(event).toBeTruthy();
       expect(event.target.value).toBe('test');
     });
-    render(<Input onChange={changeHandler} />);
+    render(<Input theme={theme} onChange={changeHandler} />);
     const input = document.querySelector('input');
     expect(input).toBeTruthy();
     fireEvent.change(input, { target: { value: 'test' } });
@@ -95,7 +149,7 @@ describe('Input component', () => {
   it('should call the onBlur handler', () => {
     const changeHandler = jest.fn();
     const blurHandler = jest.fn();
-    render(<Input onChange={changeHandler} onBlur={blurHandler} />);
+    render(<Input theme={theme} onChange={changeHandler} onBlur={blurHandler} />);
     const input = document.querySelector('input');
     expect(input).toBeTruthy();
     fireEvent.blur(input);
@@ -106,8 +160,8 @@ describe('Input component', () => {
     it('should wrap the input with label', () => {
       const changeHandler = jest.fn();
       render(
-        <Label htmlFor="username" label="Username">
-          <Input name="username" onChange={changeHandler} />
+        <Label theme={theme} htmlFor="username" label="Username">
+          <Input theme={theme} name="username" onChange={changeHandler} />
         </Label>
       );
       const results = document.querySelectorAll('.form-group');
@@ -124,7 +178,7 @@ describe('Input component', () => {
 
     it('should be displayed either inline or as block', () => {
       const { rerender } = render(
-        <Label htmlFor="test" label="Test" inline={true}>
+        <Label theme={theme} htmlFor="test" label="Test" inline={true}>
           <button type="button">Click me</button>
         </Label>
       );
@@ -137,7 +191,7 @@ describe('Input component', () => {
       expect(input.nodeName).toBe('BUTTON');
 
       rerender(
-        <Label htmlFor="test" label="Test" inline={false}>
+        <Label theme={theme} htmlFor="test" label="Test" inline={false}>
           <button type="button">Click me</button>
         </Label>
       );
@@ -148,7 +202,7 @@ describe('Input component', () => {
 
     it('should be displayed either left to right or right to left', () => {
       const { rerender } = render(
-        <Label htmlFor="test" label="Test" rightToLeft={true}>
+        <Label theme={theme} htmlFor="test" label="Test" rightToLeft={true}>
           <button type="button">Click me</button>
         </Label>
       );
@@ -160,7 +214,7 @@ describe('Input component', () => {
       expect(wrapper.lastChild.innerHTML).toBe('Test');
 
       rerender(
-        <Label htmlFor="test" label="Test" rightToLeft={false}>
+        <Label theme={theme} htmlFor="test" label="Test" rightToLeft={false}>
           <button type="button">Click me</button>
         </Label>
       );
