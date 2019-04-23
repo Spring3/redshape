@@ -146,15 +146,13 @@ class MarkdownEditor extends PureComponent {
     let newValue;
     if (textarea.selectionStart === textarea.selectionEnd) {
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${symbolEnd}${currentValue.substring(textarea.selectionStart)}`;
-      this.setState({
-        value: newValue 
-      });
-      onChange(newValue);
     } else {
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${currentValue.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${currentValue.substring(textarea.selectionEnd)}`;
-      this.setState({
-        value: newValue
-      });
+    }
+    this.setState({
+      value: newValue 
+    });
+    if (onChange) {
       onChange(newValue);
     }
   }
@@ -213,8 +211,10 @@ class MarkdownEditor extends PureComponent {
 
   adjustTextAreaHeight = () => {
     const element = this.textareaRef.current;
-    element.style.height = 'auto';
-    element.style.height = `${element.scrollHeight + 5}px`;
+    if (element) {
+      element.style.height = 'auto';
+      element.style.height = `${element.scrollHeight + 5}px`;
+    }
   }
 
   onTextAreaTyped = (e) => {

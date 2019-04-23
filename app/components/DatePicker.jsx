@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 
 import MenuLeftIcon from 'mdi-react/MenuLeftIcon';
 import MenuRightIcon from 'mdi-react/MenuRightIcon';
@@ -136,7 +136,6 @@ const StyledDatePicker = styled.div`
     padding-top: 0.5em;
   }
 
-  /* Default modifiers */
 
   .DayPicker-Day--today {
     color: ${props => props.theme.main};
@@ -148,7 +147,6 @@ const StyledDatePicker = styled.div`
     cursor: default;
   }
 
-  /* Example modifiers */
 
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
@@ -163,8 +161,6 @@ const StyledDatePicker = styled.div`
       background-color: ${props => props.theme.bgLight};
       color: ${props => props.theme.normalText};
   }
-
-  /* DayPickerInput */
 
   .DayPickerInput {
     display: inline-block;
@@ -191,8 +187,8 @@ class DatePicker extends Component {
     const { theme, value, name, isDisabled, onChange } = this.props;
     return (
       <StyledDatePicker
-        buttonLeft={renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)}
-        buttonRight={renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)}
+        buttonLeft={encodeURIComponent(renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
+        buttonRight={encodeURIComponent(renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
       >
         <DayPickerInput
           styles={this.styles}
@@ -221,7 +217,7 @@ DatePicker.propTypes = {
 DatePicker.defaultProps = {
   value: new Date(),
   isDisabled: false,
-  name: undefined
+  name: null
 };
 
 export default withTheme(DatePicker);

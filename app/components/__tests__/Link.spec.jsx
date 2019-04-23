@@ -1,29 +1,13 @@
 import React from 'react';
-import MockAdapter from 'axios-mock-adapter';
 import { render, cleanup } from 'react-testing-library';
 import { mount } from 'enzyme';
 
-import Link from '../Link';
 import utils from '../../../modules/utils';
-import * as axios from '../../../modules/request';
+import Link from '../Link';
 
 jest.mock('electron');
 
-
-let axiosMock;
-
-beforeAll(() => {
-  axiosMock = new MockAdapter(axios.default);
-});
-
-afterEach(() => {
-  cleanup();
-  axiosMock.reset();
-});
-
-afterAll(() => {
-  axiosMock.restore();
-});
+afterEach(cleanup);
 
 describe('Link Component', () => {
   it('should render an hyperlink', () => {
@@ -43,16 +27,12 @@ describe('Link Component', () => {
     wrapper.simulate('click');
     expect(click).toHaveBeenCalled();
 
-    axiosMock.onHead('google.com').replyOnce(() => Promise.resolve([204, {}]));
-
-    const shellSpy = jest.spyOn(utils, 'openExternalUrl');
+    const shellSpy = jest.spyOn(utils, 'openExternalUrl').mockImplementationOnce(() => Promise.resolve());
 
     wrapper = mount(
       <Link href="https://google.com" type="external" />
     );
     wrapper.simulate('click');
     expect(shellSpy).toHaveBeenCalledWith(wrapper.prop('href'));
-    console.log(axiosMock.history);
-    expect(axiosMock.history.head.length).toBe(1);
   });
 });

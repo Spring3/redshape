@@ -60,7 +60,7 @@ class DateComponent extends PureComponent {
         ? 'today'
         : daysAgo > 1
           ? `${daysAgo} days ago`
-          : `${daysAgo} day ago`
+          : `yesterday`
       );
       const displayedValue = daysAgo > 30
         ? date

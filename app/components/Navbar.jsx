@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import actions from '../actions';
@@ -87,7 +87,7 @@ class NavigationBar extends Component {
   }
 
   render() {
-    const { user = {}, history } = this.props;
+    const { user = {} } = this.props;
     const { name } = user;
     return (
       <Navbar>
@@ -140,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout())
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavigationBar));
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
