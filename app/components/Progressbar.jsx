@@ -29,12 +29,13 @@ const Progress = styled.div`
 `;
 
 const Progressbar = ({ percent, background, id, className, height }) => {
-  const percentage = isFinite(percent) ? percent : 0;
+  const percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
   return (
-    <Wrapper>
+    <Wrapper
+      id={id}
+      className={className}
+    >
       <Background
-        id={id}
-        className={className}
         height={height}
       >
         <Progress

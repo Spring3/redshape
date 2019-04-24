@@ -45,5 +45,6 @@ describe('Date component', () => {
   it('should not display if a date was not given', () => {
     const wrapper = shallow(<DateComponent />);
     expect(wrapper.exists(DateComponent)).toBe(false);
+    expect(wrapper.children().length).toBe(0);
   });
 });

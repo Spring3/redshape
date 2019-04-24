@@ -37,7 +37,6 @@ const initialize = () => {
       slashes: true
     });
   } else {
-    windowConfig.webPreferences.nodeIntegration = false;
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.resolve(__dirname, 'dist', 'index.html'),

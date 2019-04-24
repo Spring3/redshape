@@ -5,7 +5,7 @@ import ErrorMessage from '../ErrorMessage';
 describe('ErrorMessage component', () => {
   it('should not dispay it by default', () => {
     const wrapper = shallow(<ErrorMessage>Error</ErrorMessage>);
-    expect(wrapper.find('ErrorMessage').exists()).toBe(false);
+    expect(wrapper.find(ErrorMessage).exists()).toBe(false);
   });
 
   it('should be displayed if show property is set to true', () => {

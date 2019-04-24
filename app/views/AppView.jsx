@@ -38,26 +38,21 @@ class AppView extends Component {
     this.props.getProjectData();
   }
 
-  onTrackingStop = (value) => {
+  onTrackingStop = () => {
     this.setState({ showTimeEntryModal: true });
-    this.props.trackingStop(value);
     storage.delete('time_tracking');
   }
 
-  closeTimeEntryModal = () => this.setState({ showTimeEntryModal: false })
+  closeTimeEntryModal = () => {
+    this.setState({ showTimeEntryModal: false });
+  }
 
   render() {
     const { showTimeEntryModal } = this.state;
     const {
       userId,
       api_key,
-      match,
-      isTimerTracking,
-      isTimerPaused,
-      trackedDuration,
-      trackedIssueTitle,
-      trackingPause,
-      trackingContinue
+      match
     } = this.props;
 
     return (
@@ -68,15 +63,7 @@ class AppView extends Component {
         <Content>
           <Route exact path={`${match.path}/summary`} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
-          <Timer
-            isEnabled={isTimerTracking}
-            isPaused={isTimerPaused}
-            initialValue={trackedDuration}
-            text={trackedIssueTitle}
-            onStop={this.onTrackingStop}
-            onPause={trackingPause}
-            onContinue={trackingContinue}
-          />
+          <Timer onStop={this.onTrackingStop} />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={false}
@@ -94,34 +81,20 @@ AppView.propTypes = {
     PropTypes.number
   ]).isRequired,
   api_key: PropTypes.string.isRequired,
-  isTimerTracking: PropTypes.bool.isRequired,
-  isTimerPaused: PropTypes.bool.isRequired,
-  trackedDuration: PropTypes.number.isRequired,
-  trackedIssueTitle: PropTypes.string,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired,
   logout: PropTypes.func.isRequired,
-  trackingPause: PropTypes.func.isRequired,
-  trackingContinue: PropTypes.func.isRequired,
-  trackingStop: PropTypes.func.isRequired,
   getProjectData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   userId: state.user.id,
   api_key: state.user.api_key,
-  isTimerTracking: state.tracking.isTracking,
-  isTimerPaused: state.tracking.isPaused,
-  trackedDuration: state.tracking.duration,
-  trackedIssueTitle: state.tracking.issue.subject
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
-  trackingPause: value => dispatch(actions.tracking.trackingPause(value)),
-  trackingContinue: () => dispatch(actions.tracking.trackingContinue()),
-  trackingStop: value => dispatch(actions.tracking.trackingStop(value)),
   getProjectData: () => dispatch(actions.projects.getAll())
 });
 
