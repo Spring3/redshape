@@ -6,8 +6,6 @@ import moment from 'moment';
 import styled, { css, withTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
-import PlusIcon from 'mdi-react/PlusIcon';
-import CloseIcon from 'mdi-react/CloseIcon';
 
 import Link from '../../components/Link';
 import Button, { GhostButton } from '../../components/Button';
@@ -15,6 +13,7 @@ import actions from '../../actions';
 import Progressbar from '../../components/Progressbar';
 import MarkdownEditor, { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
+import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import DateComponent from '../../components/Date';
 import { animationSlideRight } from '../../animations';
 
@@ -73,20 +72,6 @@ const Wrapper = styled.div`
   display: inline-block;
   width: 100%;
   margin-top: 10px;
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  h2 {
-    display: inline-block;
-    margin-right: 10px;
-  }
-
-  h2.padded {
-    margin-left: 15px;
-  }
 `;
 
 const IconButton = styled(GhostButton)`
@@ -166,94 +151,19 @@ const IssueDetails = styled.div`
   flex-grow: 1;
 `;
 
-const TimeEntriesContainer = styled.div`
-  background: white;
-  padding-top: 35px;
-`;
-
-const TimeEntriesList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  padding: 5px;
-  overflow-y: scroll;
-  max-height: 600px;
-
-  li {
-    cursor: pointer;
-    display: block;
-    padding: 10px;
-    border-radius: 3px;
-    border: 2px solid transparent;
-
-    div:first-child {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      a {
-        margin-left: 10px;
-        visibility: hidden;
-      }
-
-      div {
-        flex-grow: 1;
-        display: flex;
-        justify-content: space-between;
-        span.date {
-          margin-right: 5px;
-          color: ${props => props.theme.minorText};
-        }
-
-        span.username,
-        span.time {
-          margin-right: 5px;
-          font-weight: bold;
-          color: ${props => props.theme.normalText};
-        }
-      }
-    }
-
-    p {
-      margin-bottom: 0px;
-      min-width: 100%;
-      width: 0;
-      min-width: 320px;
-    }
-
-    &:hover {
-      background: ${props => props.theme.bgLight};
-
-      div:first-child {
-        a {
-          visibility: visible;
-        }
-      }
-    }
-  }
-
-  li:not(:first-child) {
-    margin: 20px auto;
-  }
-`;
-
 class IssueDetailsPage extends Component { 
   constructor(props) {
     super(props);
     this.state = {
+      activities: [],
       selectedTimeEntry: undefined,
       showTimeEntryModal: false
     };
-    this.getProjectActivities = _.memoize((projectId) => {
-      const activities = _.get(props.projects[projectId], 'activities', []);
-      return activities.map(({ id, name }) => ({ value: id, label: name }));
-    });
   }
 
   componentWillMount() {
-    const { match, fetchIssueDetails, fetchIssueTimeEntries } = this.props;
+    const { match, fetchIssueDetails } = this.props;
     fetchIssueDetails(match.params.id);
-    fetchIssueTimeEntries(match.params.id);
   }
 
   publishComment = (comments) => {
@@ -263,19 +173,14 @@ class IssueDetailsPage extends Component {
     }
   }
 
-  startTimeTracking = () => {
-    const { selectedIssue, startTimeTracking } = this.props;
-    startTimeTracking(selectedIssue);
-  }
-
-  showTimeEntryModal = (timeEntry) => () => {
-    const { selectedIssue, user } = this.props;
+  showTimeEntryModal = (timeEntry) => {
+    const { selectedIssue, userId, userName, projects } = this.props;
     const selectedTimeEntry = timeEntry
       ? timeEntry
       : {
         user: {
-          id: user.id,
-          name: user.name
+          id: userId,
+          name: userName
         },
         issue: {
           id: selectedIssue.id
@@ -289,7 +194,9 @@ class IssueDetailsPage extends Component {
         spent_on: moment().format('YYYY-MM-DD')
       };
     selectedTimeEntry.issue.name = selectedIssue.subject;
+    const activities = _.get(projects[selectedIssue.project.id], 'activities', []);
     this.setState({
+      activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       selectedTimeEntry,
       showTimeEntryModal: true
     });
@@ -297,21 +204,15 @@ class IssueDetailsPage extends Component {
 
   closeTimeEntryModal = () => {
     this.setState({
+      activities: [],
       selectedTimeEntry: undefined,
       showTimeEntryModal: false
     });
   }
 
-  removeTimeEntry = (timeEntryId) => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { selectedIssue } = this.props;
-    this.props.removeTimeEntry(timeEntryId, selectedIssue.id);
-  }
-
   render() {
-    const { spentTime, selectedIssue, history, user, isTimerEnabled, trackedIssueId, theme } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal } = this.state;
+    const { selectedIssue, history, userId, theme } = this.props;
+    const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
     return selectedIssue.id
       ? (
         <Section>
@@ -320,18 +221,10 @@ class IssueDetailsPage extends Component {
               <BackButton onClick={history.goBack.bind(this)}>
                 <ArrowLeftIcon size={30} />
               </BackButton>
-              <HeaderContainer>
-                <h2>
-                  <span>#{selectedIssue.id}&nbsp;</span>
-                  <span>{selectedIssue.subject}</span>
-                </h2>
-                {!isTimerEnabled || trackedIssueId !== selectedIssue.id
-                  ? (
-                    <Button onClick={this.startTimeTracking}>Track Time</Button>
-                  )
-                  : null
-                }
-              </HeaderContainer>
+              <h2>
+                <span>#{selectedIssue.id}&nbsp;</span>
+                <span>{selectedIssue.subject}</span>
+              </h2>
               <SmallNotice>
                 Created by&nbsp;
                   <Link>{selectedIssue.author.name}</Link>
@@ -439,44 +332,16 @@ class IssueDetailsPage extends Component {
                 </CommentsForm>
               </div>
             </IssueDetails>
-            <TimeEntriesContainer>
-              <HeaderContainer>
-                <h2 className="padded">Time spent</h2>
-                <IconButton onClick={this.showTimeEntryModal()}>
-                  <PlusIcon size={27} />
-                </IconButton>
-              </HeaderContainer>
-              <TimeEntriesList>
-                {spentTime.map(timeEntry => (
-                  <li key={timeEntry.id} onClick={this.showTimeEntryModal(timeEntry)}>
-                    <div>
-                      <div>
-                        <span className="username">{timeEntry.user.name}</span>
-                        <span className="time">{timeEntry.hours} hours</span>
-                        <DateComponent className="date" date={timeEntry.spent_on} />
-                      </div>
-                      {
-                        user.id === timeEntry.user.id && (
-                          <GhostButton
-                            onClick={this.removeTimeEntry(timeEntry.id)}
-                          >
-                            <CloseIcon color={theme.normalText} />
-                          </GhostButton>
-                        )
-                      }
-                    </div>
-                    <p>{timeEntry.comments}</p>
-                  </li>
-                ))}
-              </TimeEntriesList>
-            </TimeEntriesContainer>
+            <TimeEntries
+              showTimeEntryModal={this.showTimeEntryModal}
+            />
           </Flex>
           { selectedTimeEntry && (
             <TimeEntryModal
               isOpen={showTimeEntryModal}
               isEditable={true}
-              activities={this.getProjectActivities(selectedTimeEntry.project.id)}
-              isUserAuthor={selectedTimeEntry.user.id === user.id}
+              activities={activities}
+              isUserAuthor={selectedTimeEntry.user.id === userId}
               timeEntry={selectedTimeEntry}
               onClose={this.closeTimeEntryModal}
             />
@@ -488,32 +353,37 @@ class IssueDetailsPage extends Component {
 }
 
 IssueDetailsPage.propTypes = {
-  selectedIssue: PropTypes.object.isRequired,
-  spentTime: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedIssue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    subject: PropTypes.string.isRequired,
+    journals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    project: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    author: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
+  userId: PropTypes.number.isRequired,
+  userName: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
-  fetchIssueTimeEntries: PropTypes.func.isRequired,
   startTimeTracking: PropTypes.func.isRequired,
-  sendComments: PropTypes.func.isRequired,
-  isTimerEnabled: PropTypes.bool.isRequired,
-  trackedIssueId: PropTypes.number,
+  sendComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   projects: state.projects.data,
-  user: state.user,
-  selectedIssue: state.issues.selected.data,
-  spentTime: state.issues.selected.spentTime.data,
-  isTimerEnabled: state.tracking.isEnabled,
-  trackedIssueId: state.tracking.issue.id
+  userId: state.user.id,
+  userName: state.user.name,
+  selectedIssue: state.issues.selected.data
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
-  fetchIssueTimeEntries: (issueId) => dispatch(actions.timeEntry.getAll(issueId)),
-  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
-  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
-  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
+  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));

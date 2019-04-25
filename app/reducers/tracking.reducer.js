@@ -2,7 +2,8 @@ import {
   TRACKING_START,
   TRACKING_STOP,
   TRACKING_PAUSE,
-  TRACKING_CONTINUE
+  TRACKING_CONTINUE,
+  TRACKING_RESET
 } from '../actions/tracking.actions';
 import storage from '../../modules/storage';
 
@@ -55,6 +56,10 @@ export default (state = initialState, action) => {
       };
       storage.set('time_tracking', nextState);
       return nextState;
+    }
+    case TRACKING_RESET: {
+      storage.delete('time_tracking');
+      return initialState;
     }
     default:
       return state;

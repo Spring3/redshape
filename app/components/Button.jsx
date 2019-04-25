@@ -33,8 +33,18 @@ const StyledLink = styled.a`
   color: ${props => props.theme.mainLight};
   transition: color ease ${props => props.theme.transitionTime};
 
-  &:hover {
-    color: ${props => props.theme.main};
+  ${props => {
+      if (!props.disabled) {
+        return css`
+          &:hover {
+            color: ${props => props.theme.main};
+          }
+        `;
+      }
+      return css`
+        color: ${props => props.theme.minorText};
+      `
+    }
   }
 
   &:active,

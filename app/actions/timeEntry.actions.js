@@ -2,15 +2,15 @@ import _ from 'lodash';
 import moment from 'moment';
 import request, { notify } from './helper';
 
-export const TIME_ENTRY_ADD = 'TIME_ENTRY_ADD';
+export const TIME_ENTRY_PUBLISH = 'TIME_ENTRY_PUBLISH';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
 
-const add = timeEntry => (dispatch, getState) => {
+const publish = timeEntry => (dispatch, getState) => {
   const { user = {} } = getState();
 
-  dispatch(notify.start(TIME_ENTRY_ADD));
+  dispatch(notify.start(TIME_ENTRY_PUBLISH));
 
   return request({
     url: '/time_entries.json',
@@ -26,10 +26,10 @@ const add = timeEntry => (dispatch, getState) => {
       }
     }
   })
-    .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_ADD, data)))
+    .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_PUBLISH, data)))
     .catch((error) => {
       console.error('Error when submitting the time entry', error);
-      dispatch(notify.nok(TIME_ENTRY_ADD, error));
+      dispatch(notify.nok(TIME_ENTRY_PUBLISH, error));
     });
 };
 
@@ -112,7 +112,7 @@ const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
 };
 
 export default {
-  add,
+  publish,
   update,
   remove,
   getAll

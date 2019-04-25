@@ -1,5 +1,5 @@
 import {
-  TIME_ENTRY_ADD,
+  TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE
 } from '../actions/timeEntry.actions';
@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case TIME_ENTRY_DELETE:
     case TIME_ENTRY_UPDATE:
-    case TIME_ENTRY_ADD: {
+    case TIME_ENTRY_PUBLISH: {
       if (action.status === 'START') {
         return { ...state, isFetching: true };
       }
@@ -25,6 +25,7 @@ export default (state = initialState, action) => {
       }
       return state;
     }
+    
     default:
       return state;
   }

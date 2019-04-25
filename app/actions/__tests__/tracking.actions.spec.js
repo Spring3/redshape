@@ -7,11 +7,13 @@ describe('Time tracking actions', () => {
     expect(trackingActions.TRACKING_STOP).toBeTruthy();
     expect(trackingActions.TRACKING_PAUSE).toBeTruthy();
     expect(trackingActions.TRACKING_CONTINUE).toBeTruthy();
+    expect(trackingActions.TRACKING_RESET).toBeTruthy();
 
     expect(trackingActions.default.trackingStart).toBeTruthy();
     expect(trackingActions.default.trackingStop).toBeTruthy();
     expect(trackingActions.default.trackingPause).toBeTruthy();
     expect(trackingActions.default.trackingContinue).toBeTruthy();
+    expect(trackingActions.default.trackingReset).toBeTruthy();
 
     expect(trackingActions.default.trackingStart({})).toEqual({
       type: trackingActions.TRACKING_START,
@@ -36,6 +38,10 @@ describe('Time tracking actions', () => {
 
     expect(trackingActions.default.trackingContinue()).toEqual({
       type: trackingActions.TRACKING_CONTINUE
+    });
+
+    expect(trackingActions.default.trackingReset()).toEqual({
+      type: trackingActions.TRACKING_RESET
     });
   });
 });

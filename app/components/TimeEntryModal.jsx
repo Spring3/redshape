@@ -137,7 +137,7 @@ class TimeEntryModal extends Component {
     const { timeEntry } = this.state;
     const result = this.validateTimeEntry(timeEntry, this.validationSchema);
     if (!result.hasErrors) {
-      this.props.addTimeEntry({
+      this.props.publishTimeEntry({
         activity: timeEntry.activity,
         comments: timeEntry.comments,
         hours: timeEntry.hours,
@@ -306,7 +306,7 @@ TimeEntryModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool,
-  addTimeEntry: PropTypes.func.isRequired,
+  publishTimeEntry: PropTypes.func.isRequired,
   updateTimeEntry: PropTypes.func.isRequired
 };
 
@@ -315,7 +315,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTimeEntry: timeEntry => dispatch(actions.timeEntry.add(timeEntry)),
+  publishTimeEntry: timeEntry => dispatch(actions.timeEntry.publish(timeEntry)),
   updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes))
 });
 

@@ -6,7 +6,7 @@ import {
   ISSUES_COMMENTS_SEND
 } from '../actions/issues.actions';
 import {
-  TIME_ENTRY_ADD,
+  TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE,
   TIME_ENTRY_GET_ALL
@@ -141,7 +141,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case TIME_ENTRY_ADD: {
+    case TIME_ENTRY_PUBLISH: {
       if (action.status === 'OK') {
         const timeEntry = _.get(action.data, 'time_entry', {});
         const issueId = _.get(timeEntry, 'issue.id');

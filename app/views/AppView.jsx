@@ -72,6 +72,7 @@ class AppView extends Component {
 
   closeTimeEntryModal = () => {
     this.setState({ showTimeEntryModal: false });
+    this.props.resetTimer();
   }
 
   render() {
@@ -112,6 +113,7 @@ AppView.propTypes = {
     path: PropTypes.string.isRequired
   }).isRequired,
   logout: PropTypes.func.isRequired,
+  resetTimer: PropTypes.func.isRequired,
   getProjectData: PropTypes.func.isRequired,
   projects: PropTypes.shape({
     activities: PropTypes.arrayOf(PropTypes.shape({
@@ -130,7 +132,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
-  getProjectData: () => dispatch(actions.projects.getAll())
+  getProjectData: () => dispatch(actions.projects.getAll()),
+  resetTimer: () => dispatch(actions.tracking.trackingReset())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppView);
