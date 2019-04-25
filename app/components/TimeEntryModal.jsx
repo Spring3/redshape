@@ -43,8 +43,7 @@ class TimeEntryModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectActivities: [],
-      timeEntry: {
+      timeEntry: props.timeEntry || {
         activity: {},
         user: {},
         issue: {},
@@ -56,77 +55,82 @@ class TimeEntryModal extends Component {
       hasErrors: false,
       validationErrors: {}
     };
+
+    this.validationSchema = {
+      activity: activity => Joi.validate(activity.id, Joi.number().integer().positive().required()),
+      hours: hours => Joi.validate(hours, Joi.number().positive().precision(2).required()),
+      comments: comments => Joi.validate(comments, Joi.string().required().allow('')),
+      spent_on: spent_on => Joi.validate(spent_on, Joi.string().required())
+    };
   }
 
   componentDidUpdate(oldProps) {
     if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
-      const { timeEntry, selectedIssue, projects, tracking, userName, userId } = this.props;
+      const { timeEntry } = this.props;
 
-      // viewing existing time entry
       if (timeEntry) {
-        const project = projects[timeEntry.project.id];
         this.setState({
-          projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
           timeEntry,
           wasModified: false,
           hasErrors: false,
           validationErrors: {}
         }); 
         // adding a new time entry when the timer has stopped
-      } else if (!tracking.isTracking && !tracking.isPaused && tracking.duration) {
-        const project = projects[tracking.issue.project.id];
-        this.setState({
-          projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
-          timeEntry: {
-            activity: {},
-            issue: {
-              id: tracking.issue.id,
-              name: tracking.issue.subject
-            },
-            hours: (tracking.duration / 3600000).toFixed(2),
-            comments: '',
-            project: {
-              id: tracking.issue.project.id,
-              name: tracking.issue.project.name
-            },
-            spent_on: moment().format('YYYY-MM-DD'),
-            user: {
-              id: userId,
-              name: userName
-            }
-          },
-          wasModified: false,
-          hasErrors: false,
-          validationErrors: {}
-        });
-        // adding a new time entry manually
-      } else if (!timeEntry && selectedIssue) {
-        const project = projects[selectedIssue.project.id];
-        this.setState({
-          projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
-          timeEntry: {
-            activity: {},
-            issue: {
-              id: selectedIssue.id,
-              name: selectedIssue.subject
-            },
-            hours: 0,
-            comments: '',
-            project: {
-              id: selectedIssue.project.id,
-              name: selectedIssue.project.name
-            },
-            spent_on: moment().format('YYYY-MM-DD'),
-            user: {
-              id: userId,
-              name: userName
-            }
-          },
-          wasModified: false,
-          hasErrors: false,
-          validationErrors: {}
-        });
       }
+      // else if (!tracking.isTracking && !tracking.isPaused && tracking.duration) {
+      //   const project = projects[tracking.issue.project.id];
+      //   this.setState({
+      //     projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
+      //     timeEntry: {
+      //       activity: {},
+      //       issue: {
+      //         id: tracking.issue.id,
+      //         name: tracking.issue.subject
+      //       },
+      //       hours: (tracking.duration / 3600000).toFixed(2),
+      //       comments: '',
+      //       project: {
+      //         id: tracking.issue.project.id,
+      //         name: tracking.issue.project.name
+      //       },
+      //       spent_on: moment().format('YYYY-MM-DD'),
+      //       user: {
+      //         id: userId,
+      //         name: userName
+      //       }
+      //     },
+      //     wasModified: false,
+      //     hasErrors: false,
+      //     validationErrors: {}
+      //   });
+      //   // adding a new time entry manually
+      // } else if (!timeEntry && selectedIssue) {
+      //   const project = projects[selectedIssue.project.id];
+      //   this.setState({
+      //     projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
+      //     timeEntry: {
+      //       activity: {},
+      //       issue: {
+      //         id: selectedIssue.id,
+      //         name: selectedIssue.subject
+      //       },
+      //       hours: 0,
+      //       comments: '',
+      //       project: {
+      //         id: selectedIssue.project.id,
+      //         name: selectedIssue.project.name
+      //       },
+      //       spent_on: moment().format('YYYY-MM-DD'),
+      //       user: {
+      //         id: userId,
+      //         name: userName
+      //       }
+      //     },
+      //     wasModified: false,
+      //     hasErrors: false,
+      //     validationErrors: {}
+      //   });
+      // }
     }
   }
 
@@ -137,6 +141,7 @@ class TimeEntryModal extends Component {
     },
     wasModified: true
   });
+
   onHoursChange = e => this.setState({
     timeEntry: {
       ...this.state.timeEntry,
@@ -144,6 +149,7 @@ class TimeEntryModal extends Component {
     },
     wasModified: true
   });
+
   onCommentsChange = comments => this.setState({
     timeEntry: {
       ...this.state.timeEntry,
@@ -151,6 +157,7 @@ class TimeEntryModal extends Component {
     },
     wasModified: true
   });
+
   onActivityChange = activity => {
     this.setState({
       timeEntry: {
@@ -161,8 +168,7 @@ class TimeEntryModal extends Component {
     });
   };
 
-  validateTimeEntry = (schema) => {
-    const { timeEntry } = this.state;
+  validateTimeEntry = (timeEntry, schema) => {
     const errors = {};
     let hasErrors = false;
     for (const [prop, validate] of Object.entries(schema)) {
@@ -184,67 +190,53 @@ class TimeEntryModal extends Component {
 
   onAdd = () => {
     const { timeEntry } = this.state;
-    const { addTimeEntry, onClose } = this.props;
-    const result = this.validateTimeEntry({
-      activity: activity => Joi.validate(activity.id, Joi.number().integer().positive().required()),
-      hours: hours => Joi.validate(hours, Joi.number().positive().precision(2).required()),
-      comments: comments => Joi.validate(comments, Joi.string().required().allow('')),
-      spent_on: spent_on => Joi.validate(spent_on, Joi.string().required())
-    });
+    const result = this.validateTimeEntry(timeEntry, this.validationSchema);
     if (!result.hasErrors) {
-      addTimeEntry({
+      this.props.addTimeEntry({
         activity: timeEntry.activity,
         comments: timeEntry.comments,
         hours: timeEntry.hours,
         issue: timeEntry.issue,
         spent_on: timeEntry.spent_on,
         user: timeEntry.user
-      }).then(() => onClose());
+      }).then(() => this.props.onClose());
     }
   };
 
   onUpdate = () => {
     const { wasModified, timeEntry } = this.state;
-    const { onClose, updateTimeEntry } = this.props;
-    const result = this.validateTimeEntry({
-      activity: activity => Joi.validate(activity.id, Joi.number().integer().positive().required()),
-      hours: hours => Joi.validate(hours, Joi.number().positive().precision(2).required()),
-      comments: comments => Joi.validate(comments, Joi.string().required().allow('')),
-      spent_on: spent_on => Joi.validate(spent_on, Joi.string().required())
-    });
+    const result = this.validateTimeEntry(timeEntry, this.validationSchema);
     if (!result.hasErrors && wasModified) {
-      updateTimeEntry(this.props.timeEntry, {
+      this.props.updateTimeEntry(timeEntry, {
         comments: timeEntry.comments,
         hours: timeEntry.hours,
         spent_on: timeEntry.spent_on,
         activity: timeEntry.activity
-      }).then(() => {
-        onClose();
-      })
-    } else {
-      onClose();
+      }).then(() => this.props.onClose())
+    } else if (!result.hasErrors && !wasModified) {
+      this.props.onClose();
     }
   };
 
-  onDelete = () => {
-    const { onClose, removeTimeEntry, userId } = this.props;
-    const { timeEntry } = this.state;
-    const result = this.validateTimeEntry({
-      id: id => Joi.validate(id, Joi.number().integer().positive().required())
-    });
+  // onDelete = () => {
+  //   const { onClose, removeTimeEntry, isUserAuthor } = this.props;
+  //   const { timeEntry } = this.state;
+  //   const result = this.validateTimeEntry(timeEntry, {
+  //     id: id => Joi.validate(id, Joi.number().integer().positive().required())
+  //   });
 
-    if (!result.hasErrors && timeEntry.user.id === userId) {
-      removeTimeEntry(timeEntry.id, timeEntry.issue.id).then(() => {
-        onClose();
-      });
-    }
-  };
+  //   if (!result.hasErrors && isUserAuthor) {
+  //     removeTimeEntry(timeEntry.id, timeEntry.issue.id).then(() => {
+  //       onClose();
+  //     });
+  //   }
+  // };
 
   render() {
-    const { userId, isOpen, isEditable, onClose, theme } = this.props;
-    const { timeEntry, projectActivities, validationErrors } = this.state;
-    const { hours, comments, spent_on } = timeEntry;
-    const defaultActivity = projectActivities.find(option => option.value === timeEntry.activity.id) || null;
+    const { activities, isUserAuthor, isOpen, isEditable, onClose, theme } = this.props;
+    const { timeEntry, validationErrors } = this.state;
+    const { hours, comments, spent_on, activity } = timeEntry;
+    const selectedActivity = { id: activity.id, label: activity.name };
     return (
       <Modal
         open={!!isOpen}
@@ -260,9 +252,9 @@ class TimeEntryModal extends Component {
           </Label>
           <Label htmlFor="activity" label="Activity">
             <Select
-              options={projectActivities}
+              options={activities}
               styles={selectStyles}
-              value={defaultActivity}
+              value={selectedActivity}
               onChange={this.onActivityChange}
               isClearable={false}
               theme={(defaultTheme) => ({
@@ -314,7 +306,7 @@ class TimeEntryModal extends Component {
               initialValue={comments}
             />
           </Label>
-          {timeEntry.id && userId === timeEntry.user.id
+          {timeEntry.id && isUserAuthor
             ? (
               <OptionButtons>
                 <Button
@@ -323,12 +315,12 @@ class TimeEntryModal extends Component {
                 >
                 Submit
                 </Button>
-                <Button
+                {/* <Button
                   onClick={this.onDelete}
                   palette='danger'
                 >
                 Delete
-                </Button>
+                </Button> */}
               </OptionButtons>
             )
             : (
@@ -349,14 +341,11 @@ class TimeEntryModal extends Component {
 }
 
 TimeEntryModal.propTypes = {
-  projects: PropTypes.shape({
-    activities: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired).isRequired
-  }).isRequired,
-  userName: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  activities: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  }).isRequired).isRequired,
+  isUserAuthor: PropTypes.bool.isRequired,
   timeEntry: PropTypes.shape({
     activity: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -379,23 +368,6 @@ TimeEntryModal.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired
   }),
-  selectedIssue: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
-  }),
-  tracking: PropTypes.shape({
-    issue: PropTypes.shape({
-      id: PropTypes.number,
-      subject: PropTypes.string,
-      project: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }),
-    }).isRequired,
-    isTracking: PropTypes.bool.isRequired,
-    isPaused: PropTypes.bool.isRequired,
-    duration: PropTypes.number.isRequired
-  }),
   time: PropTypes.shape({
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)
@@ -404,23 +376,16 @@ TimeEntryModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool,
   addTimeEntry: PropTypes.func.isRequired,
-  updateTimeEntry: PropTypes.func.isRequired,
-  removeTimeEntry: PropTypes.func.isRequired
+  updateTimeEntry: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  projects: state.projects.data,
-  userName: state.user.name,
-  userId: state.user.id,
-  selectedIssue: state.issues.selected.data,
-  tracking: state.tracking,
   time: state.timeEntry
 });
 
 const mapDispatchToProps = dispatch => ({
   addTimeEntry: timeEntry => dispatch(actions.timeEntry.add(timeEntry)),
-  updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
-  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
+  updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

@@ -79,11 +79,15 @@ class AppView extends Component {
             onContinue={continueTimer}
             onStop={this.onTrackingStop}
           />
-          <TimeEntryModal
+          {/* <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={false}
             onClose={this.closeTimeEntryModal}
-          />
+            activities={this.getProjectActivities(selectedTimeEntry.project.id)}
+            isUserAuthor={selectedTimeEntry.user.id === user.id}
+            timeEntry={selectedTimeEntry}
+            onClose={this.closeTimeEntryModal}
+          /> */}
         </Content>
       </Grid>
     );
@@ -91,10 +95,7 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
-  userId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
+  userId: PropTypes.number.isRequired,
   api_key: PropTypes.string.isRequired,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired

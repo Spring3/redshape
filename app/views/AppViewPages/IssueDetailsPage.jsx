@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import styled, { css, withTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
@@ -243,6 +244,10 @@ class IssueDetailsPage extends Component {
       selectedTimeEntry: undefined,
       showTimeEntryModal: false
     };
+    this.getProjectActivities = _.memoize((projectId) => {
+      const activities = _.get(props.projects[projectId], 'activities', []);
+      return activities.map(({ id, name }) => ({ value: id, label: name }));
+    });
   }
 
   componentWillMount() {
@@ -264,11 +269,28 @@ class IssueDetailsPage extends Component {
   }
 
   showTimeEntryModal = (timeEntry) => () => {
-    if (timeEntry) {
-      timeEntry.issue.name = this.props.selectedIssue.subject;
-    }
+    const { selectedIssue, user } = this.props;
+    const selectedTimeEntry = timeEntry
+      ? timeEntry
+      : {
+        user: {
+          id: user.id,
+          name: user.name
+        },
+        issue: {
+          id: selectedIssue.id
+        },
+        activity: {},
+        project: {
+          id: selectedIssue.project.id,
+          name: selectedIssue.project.name
+        },
+        hours: 0,
+        spent_on: moment().format('YYYY-MM-DD')
+      };
+    selectedTimeEntry.issue.name = selectedIssue.subject;
     this.setState({
-      selectedTimeEntry: timeEntry,
+      selectedTimeEntry,
       showTimeEntryModal: true
     });
   }
@@ -449,12 +471,16 @@ class IssueDetailsPage extends Component {
               </TimeEntriesList>
             </TimeEntriesContainer>
           </Flex>
-          <TimeEntryModal
-            isOpen={showTimeEntryModal}
-            isEditable={true}
-            timeEntry={selectedTimeEntry}
-            onClose={this.closeTimeEntryModal}
-          />
+          { selectedTimeEntry && (
+            <TimeEntryModal
+              isOpen={showTimeEntryModal}
+              isEditable={true}
+              activities={this.getProjectActivities(selectedTimeEntry.project.id)}
+              isUserAuthor={selectedTimeEntry.user.id === user.id}
+              timeEntry={selectedTimeEntry}
+              onClose={this.closeTimeEntryModal}
+            />
+          )}
         </Section>
       )
       : null;
@@ -472,6 +498,7 @@ IssueDetailsPage.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  projects: state.projects.data,
   user: state.user,
   selectedIssue: state.issues.selected.data,
   spentTime: state.issues.selected.spentTime.data,
