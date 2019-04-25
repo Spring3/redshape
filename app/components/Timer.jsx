@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import PlayIcon from 'mdi-react/PlayIcon';
@@ -19,7 +18,7 @@ const ActiveTimer = styled.div`
   bottom: 0;
   width: 100%;
   background: ${props => props.theme.bg};
-  display: flex;
+  display: ${props => props.isEnabled ? 'flex' : 'none'};
   align-items: center;
   box-shadow: 0px 0px 15px ${props => props.theme.bgLight};
 
@@ -62,7 +61,7 @@ class Timer extends Component {
     super(props);
 
     this.state = {
-      value: props.trackedDuration || props.initialValue
+      value: props.trackedTime || props.initialValue || 0
     };
 
     this.interval = props.isEnabled && !props.isPaused
@@ -75,12 +74,17 @@ class Timer extends Component {
     this.setState({ value: value + 1000 });
   }
 
+  stopInterval = () => {
+    clearInterval(this.interval);
+    this.interval = undefined;
+  }
+
   cleanup = () => {
     const { isEnabled, isPaused } = this.props;
     if (isEnabled && !isPaused) {
-      this.props.pauseTimer(this.state.value);
+      this.props.onPause(this.state.value);
     }
-    clearInterval(this.interval);
+    this.stopInterval();
     window.removeEventListener('beforeunload', this.cleanup);
   }
 
@@ -95,7 +99,7 @@ class Timer extends Component {
   componentDidUpdate(oldProps) {
     const { isEnabled } = this.props;
     if (isEnabled !== oldProps.isEnabled) {
-      clearInterval(this.interval);
+      this.stopInterval();
       // if was disabled, but now is enabled
       if (isEnabled) {
         this.interval = setInterval(this.tick, 1000);
@@ -106,23 +110,20 @@ class Timer extends Component {
   }
 
   onPause = () => {
-    clearInterval(this.interval);
-    this.props.pauseTimer(this.state.value);
+    this.stopInterval();
+    const { value } = this.state;
+    this.props.onPause(value);
   }
 
-  onContinue = () => {
-    this.props.continueTimer();
+  onContinue = () => { 
     this.interval = setInterval(this.tick, 1000);
+    this.props.onContinue();
   }
 
   onStop = () => {
-    clearInterval(this.interval);
+    this.stopInterval();
     const { value } = this.state;
-    const { stopTimer, onStop } = this.props;
-    stopTimer(value);
-    if (onStop) {
-      onStop(value);
-    }
+    this.props.onStop(value);
     this.setState({ value: 0 });
   }
 
@@ -130,41 +131,39 @@ class Timer extends Component {
     const { value } = this.state;
     const { isEnabled, issueTitle, isPaused } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
-    return isEnabled
-      ? (
-        <ActiveTimer>
-          <div className="buttons">
-            <StyledButton
-              onClick={this.onStop}
-            >
-              <StopIcon size={35} />
-            </StyledButton>
-            { isPaused && (
-                <StyledButton
-                  onClick={this.onContinue}
-                >
-                  <PlayIcon size={35} />
-                </StyledButton>
-              )
-            }
-            { !isPaused && (
-                <StyledButton
-                  onClick={this.onPause}
-                >
-                  <PauseIcon size={35} />
-                </StyledButton>
-              )
-            }
-          </div>
-          <div className="issueName">
-            <span>{issueTitle}</span>
-          </div>
-          <div className="time">
-            <span>{timeString}</span>
-          </div>
-        </ActiveTimer>
-      )
-      : null;
+    return (
+      <ActiveTimer isEnabled={isEnabled}>
+        <div className="buttons">
+          <StyledButton
+            onClick={this.onStop}
+          >
+            <StopIcon size={35} />
+          </StyledButton>
+          { isPaused && (
+              <StyledButton
+                onClick={this.onContinue}
+              >
+                <PlayIcon size={35} />
+              </StyledButton>
+            )
+          }
+          { !isPaused && (
+              <StyledButton
+                onClick={this.onPause}
+              >
+                <PauseIcon size={35} />
+              </StyledButton>
+            )
+          }
+        </div>
+        <div className="issueName">
+          <span>{issueTitle}</span>
+        </div>
+        <div className="time">
+          <span>{timeString}</span>
+        </div>
+      </ActiveTimer>
+    );
   }
 }
 
@@ -173,31 +172,17 @@ Timer.propTypes = {
   isPaused: PropTypes.bool,
   initialValue: PropTypes.number,
   issueTitle: PropTypes.string,
-  trackedDuration: PropTypes.number,
+  trackedTime: PropTypes.number,
   onStop: PropTypes.func.isRequired,
-  pauseTimer: PropTypes.func.isRequired,
-  continueTimer: PropTypes.func.isRequired,
-  stopTimer: PropTypes.func.isRequired
+  onPause: PropTypes.func.isRequired,
+  onContinue: PropTypes.func.isRequired
 };
 
 Timer.defaultProps = {
   initialValue: 0,
   isEnabled: false,
   isPaused: false,
-  text: ''
+  issueTitle: ''
 };
 
-const mapStateToProps = state => ({
-  isEnabled: state.tracking.isTracking,
-  isPaused: state.tracking.isPaused,
-  issueTitle: state.tracking.issue.subject,
-  trackedDuration: state.tracking.duration
-});
-
-const mapDispatchToProps = dispatch => ({
-  pauseTimer: value => dispatch(actions.tracking.trackingPause(value)),
-  continueTimer: () => dispatch(actions.tracking.trackingContinue()),
-  stopTimer: value => dispatch(actions.tracking.trackingStop(value))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Timer);
+export default Timer;

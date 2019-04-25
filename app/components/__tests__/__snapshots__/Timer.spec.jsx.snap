@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Timer component should match the snapshot 1`] = `
+.c2 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-transition: color ease;
+  transition: color ease;
+}
+
+.c2:active,
+.c2:focus,
+.c2:visited {
+  background: transparent;
+}
+
+.c0 {
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  box-shadow: 0px 0px 15px;
+}
+
+.c0 div.buttons {
+  margin: 0 20px;
+}
+
+.c0 div.issueName,
+.c0 div.time {
+  margin: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.c0 div.buttons a {
+  padding: 10px 0px;
+}
+
+.c0 div.buttons a:first-child {
+  margin-right: 20px;
+}
+
+.c1 {
+  padding: 0px;
+}
+
+<div
+  className="c0"
+>
+  <div
+    className="buttons"
+  >
+    <a
+      className="c1 c2"
+      disabled={false}
+      href="#"
+      onClick={[Function]}
+    >
+      <svg
+        className="mdi-icon "
+        fill="currentColor"
+        height={35}
+        viewBox="0 0 24 24"
+        width={35}
+      >
+        <path
+          d="M18,18H6V6H18V18Z"
+        />
+      </svg>
+    </a>
+    <a
+      className="c1 c2"
+      disabled={false}
+      href="#"
+      onClick={[Function]}
+    >
+      <svg
+        className="mdi-icon "
+        fill="currentColor"
+        height={35}
+        viewBox="0 0 24 24"
+        width={35}
+      >
+        <path
+          d="M8,5.14V19.14L19,12.14L8,5.14Z"
+        />
+      </svg>
+    </a>
+  </div>
+  <div
+    className="issueName"
+  >
+    <span>
+      
+    </span>
+  </div>
+  <div
+    className="time"
+  >
+    <span>
+      00:00:00
+    </span>
+  </div>
+</div>
+`;

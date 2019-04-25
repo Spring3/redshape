@@ -38,7 +38,8 @@ class AppView extends Component {
     this.props.getProjectData();
   }
 
-  onTrackingStop = () => {
+  onTrackingStop = (value) => {
+    this.props.stopTimer(value);
     this.setState({ showTimeEntryModal: true });
     storage.delete('time_tracking');
   }
@@ -52,7 +53,13 @@ class AppView extends Component {
     const {
       userId,
       api_key,
-      match
+      match,
+      isTimerEnabled,
+      isTimerPaused,
+      timerIssueTitle,
+      trackedDuration,
+      pauseTimer,
+      continueTimer
     } = this.props;
 
     return (
@@ -63,7 +70,15 @@ class AppView extends Component {
         <Content>
           <Route exact path={`${match.path}/summary`} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
-          <Timer onStop={this.onTrackingStop} />
+          <Timer
+            isEnabled={isTimerEnabled}
+            isPaused={isTimerPaused}
+            issueTitle={timerIssueTitle}
+            trackedTime={trackedDuration}
+            onPause={pauseTimer}
+            onContinue={continueTimer}
+            onStop={this.onTrackingStop}
+          />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={false}
@@ -85,17 +100,31 @@ AppView.propTypes = {
     path: PropTypes.string.isRequired
   }).isRequired,
   logout: PropTypes.func.isRequired,
-  getProjectData: PropTypes.func.isRequired
-}
+  getProjectData: PropTypes.func.isRequired,
+  isTimerEnabled: PropTypes.bool.isRequired,
+  isTimerPaused: PropTypes.bool.isRequired,
+  timerIssueTitle: PropTypes.string,
+  trackedDuration: PropTypes.number,
+  pauseTimer: PropTypes.func.isRequired,
+  continueTimer: PropTypes.func.isRequired,
+  stopTimer: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => ({
   userId: state.user.id,
   api_key: state.user.api_key,
+  isTimerEnabled: state.tracking.isTracking,
+  isTimerPaused: state.tracking.isPaused,
+  timerIssueTitle: state.tracking.issue.subject,
+  trackedDuration: state.tracking.duration
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
-  getProjectData: () => dispatch(actions.projects.getAll())
+  getProjectData: () => dispatch(actions.projects.getAll()),
+  pauseTimer: value => dispatch(actions.tracking.trackingPause(value)),
+  continueTimer: () => dispatch(actions.tracking.trackingContinue()),
+  stopTimer: value => dispatch(actions.tracking.trackingStop(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppView);

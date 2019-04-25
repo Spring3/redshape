@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Button, { GhostButton } from '../Button';
 import theme from '../../theme';
 
+// using mount instead of shallow due to https://github.com/airbnb/enzyme/issues/1908
+
 describe('Button Component', () => {
   afterEach(reactTesting.cleanup);
 
