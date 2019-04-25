@@ -74,63 +74,8 @@ class TimeEntryModal extends Component {
           wasModified: false,
           hasErrors: false,
           validationErrors: {}
-        }); 
-        // adding a new time entry when the timer has stopped
+        });
       }
-      // else if (!tracking.isTracking && !tracking.isPaused && tracking.duration) {
-      //   const project = projects[tracking.issue.project.id];
-      //   this.setState({
-      //     projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
-      //     timeEntry: {
-      //       activity: {},
-      //       issue: {
-      //         id: tracking.issue.id,
-      //         name: tracking.issue.subject
-      //       },
-      //       hours: (tracking.duration / 3600000).toFixed(2),
-      //       comments: '',
-      //       project: {
-      //         id: tracking.issue.project.id,
-      //         name: tracking.issue.project.name
-      //       },
-      //       spent_on: moment().format('YYYY-MM-DD'),
-      //       user: {
-      //         id: userId,
-      //         name: userName
-      //       }
-      //     },
-      //     wasModified: false,
-      //     hasErrors: false,
-      //     validationErrors: {}
-      //   });
-      //   // adding a new time entry manually
-      // } else if (!timeEntry && selectedIssue) {
-      //   const project = projects[selectedIssue.project.id];
-      //   this.setState({
-      //     projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
-      //     timeEntry: {
-      //       activity: {},
-      //       issue: {
-      //         id: selectedIssue.id,
-      //         name: selectedIssue.subject
-      //       },
-      //       hours: 0,
-      //       comments: '',
-      //       project: {
-      //         id: selectedIssue.project.id,
-      //         name: selectedIssue.project.name
-      //       },
-      //       spent_on: moment().format('YYYY-MM-DD'),
-      //       user: {
-      //         id: userId,
-      //         name: userName
-      //       }
-      //     },
-      //     wasModified: false,
-      //     hasErrors: false,
-      //     validationErrors: {}
-      //   });
-      // }
     }
   }
 
@@ -217,20 +162,6 @@ class TimeEntryModal extends Component {
       this.props.onClose();
     }
   };
-
-  // onDelete = () => {
-  //   const { onClose, removeTimeEntry, isUserAuthor } = this.props;
-  //   const { timeEntry } = this.state;
-  //   const result = this.validateTimeEntry(timeEntry, {
-  //     id: id => Joi.validate(id, Joi.number().integer().positive().required())
-  //   });
-
-  //   if (!result.hasErrors && isUserAuthor) {
-  //     removeTimeEntry(timeEntry.id, timeEntry.issue.id).then(() => {
-  //       onClose();
-  //     });
-  //   }
-  // };
 
   render() {
     const { activities, isUserAuthor, isOpen, isEditable, onClose, theme } = this.props;

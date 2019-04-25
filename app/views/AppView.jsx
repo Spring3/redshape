@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import _ from 'lodash';
+import moment from 'moment';
 
 import actions from '../actions';
 import Navbar from '../components/Navbar';
@@ -30,8 +32,14 @@ class AppView extends Component {
     super(props);
 
     this.state = {
-      showTimeEntryModal: false
+      activities: [],
+      showTimeEntryModal: false,
+      timeEntry: null
     };
+
+    this.getProjectActivities = _.memoize((projectId) => {
+      
+    });
   }
 
   componentWillMount() {
@@ -39,8 +47,31 @@ class AppView extends Component {
   }
 
   onTrackingStop = (value) => {
-    this.props.stopTimer(value);
-    this.setState({ showTimeEntryModal: true });
+    const { stopTimer, trackedIssue, trackedDuration, userId, userName, projects } = this.props;
+    const activities = _.get(projects[trackedIssue.project.id], 'activities', []);
+    this.setState({
+      activities: activities.map(({ id, name }) => ({ value: id, label: name })),
+      showTimeEntryModal: true,
+      timeEntry: {
+        activity: {},
+        issue: {
+          id: trackedIssue.id,
+          name: trackedIssue.subject
+        },
+        hours: (trackedDuration / 360000).toFixed(2),
+        comments: '',
+        project: {
+          id: trackedIssue.project.id,
+          name: trackedIssue.project.name
+        },
+        spent_on: moment().format('YYYY-MM-DD'),
+        user: {
+          id: userId,
+          name: userName
+        }
+      }
+    });
+    stopTimer(value);
     storage.delete('time_tracking');
   }
 
@@ -49,14 +80,14 @@ class AppView extends Component {
   }
 
   render() {
-    const { showTimeEntryModal } = this.state;
+    const { showTimeEntryModal, timeEntry, activities } = this.state;
     const {
       userId,
       api_key,
       match,
       isTimerEnabled,
       isTimerPaused,
-      timerIssueTitle,
+      trackedIssue,
       trackedDuration,
       pauseTimer,
       continueTimer
@@ -73,21 +104,21 @@ class AppView extends Component {
           <Timer
             isEnabled={isTimerEnabled}
             isPaused={isTimerPaused}
-            issueTitle={timerIssueTitle}
+            issueTitle={_.get(trackedIssue, 'subject')}
             trackedTime={trackedDuration}
             onPause={pauseTimer}
             onContinue={continueTimer}
             onStop={this.onTrackingStop}
           />
-          {/* <TimeEntryModal
+          <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={false}
             onClose={this.closeTimeEntryModal}
-            activities={this.getProjectActivities(selectedTimeEntry.project.id)}
-            isUserAuthor={selectedTimeEntry.user.id === user.id}
-            timeEntry={selectedTimeEntry}
+            activities={activities}
+            isUserAuthor={true}
+            timeEntry={timeEntry}
             onClose={this.closeTimeEntryModal}
-          /> */}
+          />
         </Content>
       </Grid>
     );
@@ -96,6 +127,7 @@ class AppView extends Component {
 
 AppView.propTypes = {
   userId: PropTypes.number.isRequired,
+  userName: PropTypes.string.isRequired,
   api_key: PropTypes.string.isRequired,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
@@ -104,7 +136,28 @@ AppView.propTypes = {
   getProjectData: PropTypes.func.isRequired,
   isTimerEnabled: PropTypes.bool.isRequired,
   isTimerPaused: PropTypes.bool.isRequired,
-  timerIssueTitle: PropTypes.string,
+  trackedIssue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    subject: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    project: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    activity: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
+  projects: PropTypes.shape({
+    activities: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired).isRequired
+  }).isRequired,
   trackedDuration: PropTypes.number,
   pauseTimer: PropTypes.func.isRequired,
   continueTimer: PropTypes.func.isRequired,
@@ -113,10 +166,12 @@ AppView.propTypes = {
 
 const mapStateToProps = state => ({
   userId: state.user.id,
+  userName: state.user.name,
   api_key: state.user.api_key,
+  projects: state.projects.data,
   isTimerEnabled: state.tracking.isTracking,
   isTimerPaused: state.tracking.isPaused,
-  timerIssueTitle: state.tracking.issue.subject,
+  trackedIssue: state.tracking.issue,
   trackedDuration: state.tracking.duration
 });
 
