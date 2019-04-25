@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import moment from 'moment';
 import { notify } from '../helper';
-import * as timeActions from '../time.actions';
+import * as timeEntryActions from '../timeEntry.actions';
 import * as axios from '../../../modules/request';
 
 const redmineEndpoint = 'redmine.test.com';
@@ -25,16 +25,16 @@ describe('Time actions', () => {
   });
 
   it('should expose all the necessary actions', () => {
-    expect(timeActions).toBeTruthy();
-    expect(timeActions.TIME_ADD).toBeTruthy();
-    expect(timeActions.TIME_UPDATE).toBeTruthy();
-    expect(timeActions.TIME_DELETE).toBeTruthy();
-    expect(timeActions.TIME_GET_ALL).toBeTruthy();
+    expect(timeEntryActions).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_ADD).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_UPDATE).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_DELETE).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_GET_ALL).toBeTruthy();
 
-    expect(timeActions.default.add).toBeTruthy();
-    expect(timeActions.default.update).toBeTruthy();
-    expect(timeActions.default.remove).toBeTruthy();
-    expect(timeActions.default.getAll).toBeTruthy();
+    expect(timeEntryActions.default.add).toBeTruthy();
+    expect(timeEntryActions.default.update).toBeTruthy();
+    expect(timeEntryActions.default.remove).toBeTruthy();
+    expect(timeEntryActions.default.getAll).toBeTruthy();
   });
 
   describe('add action', () => {
@@ -68,7 +68,7 @@ describe('Time actions', () => {
       const dispatch = jest.fn();
       const getState = jest.fn().mockReturnValue(state);
       axiosMock.onPost('/time_entries.json').replyOnce(() => Promise.resolve([200, response]));
-      await timeActions.default.add(timeEntry)(dispatch, getState);
+      await timeEntryActions.default.add(timeEntry)(dispatch, getState);
 
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
@@ -85,8 +85,8 @@ describe('Time actions', () => {
       }));
       expect(axiosMock.history.post[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_ADD));
-      expect(dispatch).toBeCalledWith(notify.ok(timeActions.TIME_ADD, response));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_ADD));
+      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_ADD, response));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -115,13 +115,13 @@ describe('Time actions', () => {
       const dispatch = jest.fn();
       const getState = jest.fn().mockReturnValue(state);
       axiosMock.onPost('/time_entries.json').replyOnce(() => Promise.reject(response));
-      await timeActions.default.add(timeEntry)(dispatch, getState);
+      await timeEntryActions.default.add(timeEntry)(dispatch, getState);
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
       expect(axiosMock.history.post[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_ADD));
-      expect(dispatch).toBeCalledWith(notify.nok(timeActions.TIME_ADD, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_ADD));
+      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_ADD, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 
@@ -156,7 +156,7 @@ describe('Time actions', () => {
 
       const dispatch = jest.fn();
       axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.resolve([200, response]));
-      await timeActions.default.update(timeEntry, changes)(dispatch);
+      await timeEntryActions.default.update(timeEntry, changes)(dispatch);
 
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
@@ -170,8 +170,8 @@ describe('Time actions', () => {
       }));
       expect(axiosMock.history.put[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_UPDATE));
-      expect(dispatch).toBeCalledWith(notify.ok(timeActions.TIME_UPDATE, {
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
+      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_UPDATE, {
         ...timeEntry,
         spent_on: moment(changes.spent_on).format('YYYY-MM-DD'),
         comments: changes.comments,
@@ -200,12 +200,12 @@ describe('Time actions', () => {
       response.status = 500;
       const dispatch = jest.fn();
       axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.reject(response));
-      await timeActions.default.update(timeEntry, {})(dispatch);
+      await timeEntryActions.default.update(timeEntry, {})(dispatch);
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_UPDATE));
-      expect(dispatch).toBeCalledWith(notify.nok(timeActions.TIME_UPDATE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
+      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_UPDATE, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 
@@ -217,14 +217,14 @@ describe('Time actions', () => {
 
       const dispatch = jest.fn();
       axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).replyOnce(() => Promise.resolve([200, response]));
-      await timeActions.default.remove(timeEntryId, issueId)(dispatch);
+      await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
 
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
       expect(axiosMock.history.delete[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_DELETE));
-      expect(dispatch).toBeCalledWith(notify.ok(timeActions.TIME_DELETE, { timeEntryId, issueId }));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
+      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_DELETE, { timeEntryId, issueId }));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -235,12 +235,12 @@ describe('Time actions', () => {
 
       const dispatch = jest.fn();
       axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).replyOnce(() => Promise.reject(response));
-      await timeActions.default.remove(timeEntryId, issueId)(dispatch);
+      await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_DELETE));
-      expect(dispatch).toBeCalledWith(notify.nok(timeActions.TIME_DELETE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
+      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_DELETE, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 
@@ -257,7 +257,7 @@ describe('Time actions', () => {
 
       const dispatch = jest.fn();
       axiosMock.onGet('/time_entries.json').replyOnce(() => Promise.resolve([200, response]));
-      await timeActions.default.getAll(issueId, projectId, offset, limit)(dispatch);
+      await timeEntryActions.default.getAll(issueId, projectId, offset, limit)(dispatch);
 
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
@@ -269,8 +269,8 @@ describe('Time actions', () => {
       });
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.ok(timeActions.TIME_GET_ALL, response));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
+      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_GET_ALL, response));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -278,12 +278,12 @@ describe('Time actions', () => {
       response.status = 500;
       const dispatch = jest.fn();
       axiosMock.onGet('/time_entries.json').replyOnce(() => Promise.reject(response));
-      await timeActions.default.getAll(1, 2, 3, 4)(dispatch);
+      await timeEntryActions.default.getAll(1, 2, 3, 4)(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeActions.TIME_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.nok(timeActions.TIME_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
+      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 });

@@ -60,7 +60,7 @@ class TimeEntryModal extends Component {
 
   componentDidUpdate(oldProps) {
     if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
-      const { timeEntry, selectedIssue, projects, tracking, currentUser } = this.props;
+      const { timeEntry, selectedIssue, projects, tracking, userName, userId } = this.props;
 
       // viewing existing time entry
       if (timeEntry) {
@@ -75,7 +75,6 @@ class TimeEntryModal extends Component {
         // adding a new time entry when the timer has stopped
       } else if (!tracking.isTracking && !tracking.isPaused && tracking.duration) {
         const project = projects[tracking.issue.project.id];
-        console.log('TRACKING', tracking);
         this.setState({
           projectActivities: _.get(project, 'activities', []).map(({ id, name }) => ({ value: id, label: name })),
           timeEntry: {
@@ -92,8 +91,8 @@ class TimeEntryModal extends Component {
             },
             spent_on: moment().format('YYYY-MM-DD'),
             user: {
-              id: currentUser.id,
-              name: currentUser.name
+              id: userId,
+              name: userName
             }
           },
           wasModified: false,
@@ -119,8 +118,8 @@ class TimeEntryModal extends Component {
             },
             spent_on: moment().format('YYYY-MM-DD'),
             user: {
-              id: currentUser.id,
-              name: currentUser.name
+              id: userId,
+              name: userName
             }
           },
           wasModified: false,
@@ -200,10 +199,7 @@ class TimeEntryModal extends Component {
         issue: timeEntry.issue,
         spent_on: timeEntry.spent_on,
         user: timeEntry.user
-      }).then(() => {
-        console.log('Added');
-        onClose();
-      });
+      }).then(() => onClose());
     }
   };
 
@@ -231,22 +227,21 @@ class TimeEntryModal extends Component {
   };
 
   onDelete = () => {
-    const { onClose, removeTimeEntry, currentUser } = this.props;
+    const { onClose, removeTimeEntry, userId } = this.props;
     const { timeEntry } = this.state;
     const result = this.validateTimeEntry({
       id: id => Joi.validate(id, Joi.number().integer().positive().required())
     });
 
-    if (!result.hasErrors && timeEntry.user.id === currentUser.id) {
+    if (!result.hasErrors && timeEntry.user.id === userId) {
       removeTimeEntry(timeEntry.id, timeEntry.issue.id).then(() => {
-        console.log('Removed');
         onClose();
       });
     }
   };
 
   render() {
-    const { currentUser, isOpen, isEditable, onClose, theme } = this.props;
+    const { userId, isOpen, isEditable, onClose, theme } = this.props;
     const { timeEntry, projectActivities, validationErrors } = this.state;
     const { hours, comments, spent_on } = timeEntry;
     const defaultActivity = projectActivities.find(option => option.value === timeEntry.activity.id) || null;
@@ -319,7 +314,7 @@ class TimeEntryModal extends Component {
               initialValue={comments}
             />
           </Label>
-          {timeEntry.id && currentUser.id === timeEntry.user.id
+          {timeEntry.id && userId === timeEntry.user.id
             ? (
               <OptionButtons>
                 <Button
@@ -360,10 +355,8 @@ TimeEntryModal.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired).isRequired
   }).isRequired,
-  currentUser: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
-  }).isRequired,
+  userName: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
   timeEntry: PropTypes.shape({
     activity: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -381,7 +374,6 @@ TimeEntryModal.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired,
     spent_on: PropTypes.string.isRequired,
-    updated_on: PropTypes.string.isRequired,
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
@@ -418,16 +410,17 @@ TimeEntryModal.propTypes = {
 
 const mapStateToProps = state => ({
   projects: state.projects.data,
-  currentUser: state.user,
+  userName: state.user.name,
+  userId: state.user.id,
   selectedIssue: state.issues.selected.data,
   tracking: state.tracking,
-  time: state.time
+  time: state.timeEntry
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTimeEntry: timeEntry => dispatch(actions.time.add(timeEntry)),
-  updateTimeEntry: (timeEntry, changes) => dispatch(actions.time.update(timeEntry, changes)),
-  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.time.remove(timeEntryId, issueId))
+  addTimeEntry: timeEntry => dispatch(actions.timeEntry.add(timeEntry)),
+  updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
+  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

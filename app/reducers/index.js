@@ -4,7 +4,7 @@ import settingsReducer from './settings.reducer';
 import issuesReducer from './issues.reducer';
 import trackingReducer from './tracking.reducer';
 import projectReducer from './project.reducer';
-import timeReducer from './time.reducer';
+import timeEntryReducer from './timeEntry.reducer';
 
 import { USER_LOGOUT } from '../actions/user.actions';
 
@@ -14,7 +14,7 @@ const appReducer = combineReducers({
   issues: issuesReducer,
   projects: projectReducer,
   tracking: trackingReducer,
-  time: timeReducer
+  timeEntry: timeEntryReducer
 });
 
 export default (state, action) => {

@@ -1,8 +1,8 @@
 import {
-  TIME_ADD,
-  TIME_UPDATE,
-  TIME_DELETE
-} from '../actions/time.actions';
+  TIME_ENTRY_ADD,
+  TIME_ENTRY_UPDATE,
+  TIME_ENTRY_DELETE
+} from '../actions/timeEntry.actions';
 
 const initialState = {
   isFetching: false,
@@ -11,9 +11,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case TIME_DELETE:
-    case TIME_UPDATE:
-    case TIME_ADD: {
+    case TIME_ENTRY_DELETE:
+    case TIME_ENTRY_UPDATE:
+    case TIME_ENTRY_ADD: {
       if (action.status === 'START') {
         return { ...state, isFetching: true };
       }

@@ -6,11 +6,11 @@ import {
   ISSUES_COMMENTS_SEND
 } from '../actions/issues.actions';
 import {
-  TIME_ADD,
-  TIME_UPDATE,
-  TIME_DELETE,
-  TIME_GET_ALL
-} from '../actions/time.actions';
+  TIME_ENTRY_ADD,
+  TIME_ENTRY_UPDATE,
+  TIME_ENTRY_DELETE,
+  TIME_ENTRY_GET_ALL
+} from '../actions/timeEntry.actions';
 
 
 const issuesGetAllReducer = (state = {
@@ -110,7 +110,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case TIME_GET_ALL: {
+    case TIME_ENTRY_GET_ALL: {
       if (action.status === 'START') {
         return {
           ...state,
@@ -141,7 +141,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case TIME_ADD: {
+    case TIME_ENTRY_ADD: {
       if (action.status === 'OK') {
         const timeEntry = _.get(action.data, 'time_entry', {});
         const issueId = _.get(timeEntry, 'issue.id');
@@ -160,7 +160,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case TIME_UPDATE: {
+    case TIME_ENTRY_UPDATE: {
       if (action.status === 'OK') {
         const issueId = _.get(action.data, 'issue.id');
         if (issueId === state.data.id) {
@@ -177,7 +177,7 @@ const selectedIssueReducer = (state = {
       }
       return state;
     }
-    case TIME_DELETE: {
+    case TIME_ENTRY_DELETE: {
       if (action.status === 'OK') {
         const { issueId, timeEntryId } = action.data;
         if (issueId === state.data.id) {

@@ -480,10 +480,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
-  fetchIssueTimeEntries: (issueId) => dispatch(actions.time.getAll(issueId)),
+  fetchIssueTimeEntries: (issueId) => dispatch(actions.timeEntry.getAll(issueId)),
   startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
   sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
-  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.time.remove(timeEntryId, issueId))
+  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));

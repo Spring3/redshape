@@ -2,15 +2,15 @@ import _ from 'lodash';
 import moment from 'moment';
 import request, { notify } from './helper';
 
-export const TIME_ADD = 'TIME_ADD';
-export const TIME_UPDATE = 'TIME_UPDATE';
-export const TIME_DELETE = 'TIME_DELETE';
-export const TIME_GET_ALL = 'TIME_GET_ALL';
+export const TIME_ENTRY_ADD = 'TIME_ENTRY_ADD';
+export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
+export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
+export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
 
 const add = timeEntry => (dispatch, getState) => {
   const { user = {} } = getState();
 
-  dispatch(notify.start(TIME_ADD));
+  dispatch(notify.start(TIME_ENTRY_ADD));
 
   return request({
     url: '/time_entries.json',
@@ -26,10 +26,10 @@ const add = timeEntry => (dispatch, getState) => {
       }
     }
   })
-    .then(({ data }) => dispatch(notify.ok(TIME_ADD, data)))
+    .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_ADD, data)))
     .catch((error) => {
       console.error('Error when submitting the time entry', error);
-      dispatch(notify.nok(TIME_ADD, error));
+      dispatch(notify.nok(TIME_ENTRY_ADD, error));
     });
 };
 
@@ -48,7 +48,7 @@ const update = (timeEntry, changes) => (dispatch) => {
     updates.spent_on = moment(changes.spent_on).format('YYYY-MM-DD');
   }
 
-  dispatch(notify.start(TIME_UPDATE));
+  dispatch(notify.start(TIME_ENTRY_UPDATE));
 
   return request({
     url: `/time_entries/${timeEntry.id}.json`,
@@ -66,27 +66,27 @@ const update = (timeEntry, changes) => (dispatch) => {
     if (changes.activity) {
       updatedTimeEntry.activity = changes.activity;
     }
-    return dispatch(notify.ok(TIME_UPDATE, updatedTimeEntry));
+    return dispatch(notify.ok(TIME_ENTRY_UPDATE, updatedTimeEntry));
   })
     .catch((error) => {
       console.error('Error when updating the time entry', error);
-      dispatch(notify.nok(TIME_UPDATE, error));
+      dispatch(notify.nok(TIME_ENTRY_UPDATE, error));
     });
 };
 
 const remove = (timeEntryId, issueId) => (dispatch) => {
-  dispatch(notify.start(TIME_DELETE));
+  dispatch(notify.start(TIME_ENTRY_DELETE));
   if (!issueId) {
-    dispatch(notify.nok(TIME_DELETE, new Error('issueId is required to delete the time entry')));
+    dispatch(notify.nok(TIME_ENTRY_DELETE, new Error('issueId is required to delete the time entry')));
   }
 
   return request({
     url: `/time_entries/${timeEntryId}.json`,
     method: 'DELETE'
-  }).then(() => dispatch(notify.ok(TIME_DELETE, { timeEntryId, issueId })))
+  }).then(() => dispatch(notify.ok(TIME_ENTRY_DELETE, { timeEntryId, issueId })))
     .catch((error) => {
       console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
-      dispatch(notify.nok(TIME_DELETE, error));
+      dispatch(notify.nok(TIME_ENTRY_DELETE, error));
     });
 };
 
@@ -98,16 +98,16 @@ const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
     issue_id: issueId
   }).pickBy().value();
 
-  dispatch(notify.start(TIME_GET_ALL));
+  dispatch(notify.start(TIME_ENTRY_GET_ALL));
 
   return request({
     url: '/time_entries.json',
     query,
     id: `getIssueTimeEntries:${issueId}:${offset}`
-  }).then(({ data }) => dispatch(notify.ok(TIME_GET_ALL, data)))
+  }).then(({ data }) => dispatch(notify.ok(TIME_ENTRY_GET_ALL, data)))
     .catch((error) => {
       console.error('Error when trying to get he list of time entries', error);
-      dispatch(notify.nok(TIME_GET_ALL, error));
+      dispatch(notify.nok(TIME_ENTRY_GET_ALL, error));
     });
 };
 

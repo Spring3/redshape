@@ -2,7 +2,7 @@ import userActions from './user.actions';
 import trackingActions from './tracking.actions';
 import issuesActions from './issues.actions';
 import projectActions from './project.actions';
-import timeActions from './time.actions';
+import timeEntryActions from './timeEntry.actions';
 import settingsActions from './settings.actions';
 
 export default {
@@ -10,6 +10,6 @@ export default {
   issues: issuesActions,
   tracking: trackingActions,
   projects: projectActions,
-  time: timeActions,
+  timeEntry: timeEntryActions,
   settings: settingsActions
 };
