@@ -7,25 +7,43 @@ const StyledButton = styled.button`
   font-weight: bold;
   font-size: 14px;
   outline: none;
-
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  
   ${props => css`
-    border: 2px solid ${props.palette.light};    
-    color: ${props.palette.light};
     transition: color ease ${props.theme.transitionTime};
     transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
-
-    &:hover,
-    &:focus {
-      cursor: pointer;
-      background: ${props.palette.light}; 
-      color: ${props.theme.hoverText};
-    }
-    &:active {
-      background: ${props.palette.dark};
-    }
   `}
 
+  ${props => {
+    if (!props.disabled) {
+      return css`
+        border: 2px solid ${props.palette.light};    
+        color: ${props.palette.light};
+    
+        &:hover,
+        &:focus {
+          background: ${props.palette.light}; 
+          color: ${props.theme.hoverText};
+        }
+        &:active {
+          background: ${props.palette.dark};
+        }
+      `;
+    }
+    return css`
+      border: 2px solid ${props.theme.minorText};    
+      color: ${props.theme.minorText};
+      
+      &:hover,
+      &:focus {
+        color: ${props.theme.minorText};
+      }
+    `
+  }
+}
 `;
 
 const StyledLink = styled.a`

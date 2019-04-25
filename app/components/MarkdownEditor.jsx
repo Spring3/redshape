@@ -21,6 +21,7 @@ import { openExternalUrl, xssFilter } from '../../modules/utils';
 
 import TextArea from './TextArea';
 import Button from './Button';
+import Tooltip from './Tooltip';
 
 const MarkdownOptionsList = styled.ul`
   list-style-type: none;
@@ -38,46 +39,43 @@ const MarkdownOptionsList = styled.ul`
   }
 `;
 
+// span.tooltip {
+//   position: absolute;
+//   display: inline-block;
+//   width: 100px;
+//   border-radius: 3px;
+//   left: -40px;
+//   top: -35px;
+//   padding: 5px;
+//   background: ${props => props.theme.bg};
+//   color: ${props => props.theme.mainDark};
+//   text-align: center;
+//   font-size: 12px;
+//   opacity: 0;
+//   transition: opacity ease ${props => props.theme.transitionTime};
+//   box-shadow: 0px 2px 7px ${props => props.theme.minorText};
+// }
+
+// span.tooltip::after {
+//   content: ' ';
+//   position: absolute;
+//   top: 100%;
+//   left: 50px;
+//   border: 2px solid black;
+//   border-width: 5px;
+//   border-color: ${props => props.theme.bg} transparent transparent transparent;
+// }
+
+
 const MarkdownOption = styled.li`
   display: inline;
   margin-right: 10px;
   position: relative;
-  cursor: pointer;
-
-  span.tooltip {
-    position: absolute;
-    display: inline-block;
-    width: 100px;
-    border-radius: 3px;
-    left: -40px;
-    top: -35px;
-    padding: 5px;
-    background: ${props => props.theme.bg};
-    color: ${props => props.theme.mainDark};
-    text-align: center;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity ease ${props => props.theme.transitionTime};
-    box-shadow: 0px 2px 7px ${props => props.theme.minorText};
-  }
-
-  span.tooltip::after {
-    content: ' ';
-    position: absolute;
-    top: 100%;
-    left: 50px;
-    border: 2px solid black;
-    border-width: 5px;
-    border-color: ${props => props.theme.bg} transparent transparent transparent;
-  }
+  cursor: pointer;  
 
   &:hover {
     svg {
       color: ${props => props.theme.main} !important;
-    }
-
-    span.tooltip {
-      opacity: 1;
     }
   }
 `;
@@ -257,56 +255,69 @@ class MarkdownEditor extends PureComponent {
       >
         <MarkdownOptionsList>
           <MarkdownOption onClick={this.makeBold}>
-            <FormatBoldIcon />
-            <span className="tooltip">Bold text</span>
+            <Tooltip text="Bold text">
+              <FormatBoldIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeItalic}>
-            <FormatItalicIcon />
-            <span className="tooltip">Italic text</span>
+            <Tooltip text="Italic text">
+              <FormatItalicIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeUnderlined}>
-            <FormatUnderlineIcon />
-            <span className="tooltip">Underlined text</span>
+            <Tooltip text="Underlined text">
+              <FormatUnderlineIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeStrikethrough}>
-            <FormatStrikethroughIcon />
-            <span className="tooltip">Crossed out text</span>
+            <Tooltip text="Crossed out text">
+              <FormatStrikethroughIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeCode}>
-            <CodeTagsIcon />
-            <span className="tooltip">Code block</span>
+            <Tooltip text="Code block">
+              <CodeTagsIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeh1}>
-            <FormatHeader1Icon />
-            <span className="tooltip">XL Header</span>
+            <Tooltip text="XL Header">
+              <FormatHeader1Icon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeh2}>
-            <FormatHeader2Icon />
-            <span className="tooltip">L Header</span>
+            <Tooltip text="L Header">
+              <FormatHeader2Icon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeh3}>
-            <FormatHeader3Icon />
-            <span className="tooltip">M Header</span>
+            <Tooltip text="M Header">
+              <FormatHeader3Icon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeBulletedList}>
-            <FormatListBulletedIcon />
-            <span className="tooltip">Bulleted List</span>
+            <Tooltip text="Bulleted List">
+              <FormatListBulletedIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeNumberedList}>
-            <FormatListNumberedIcon />
-            <span className="tooltip">Ordered List</span>
+            <Tooltip text="Ordered List">
+              <FormatListNumberedIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeQuote}>
-            <FormatQuoteCloseIcon />
-            <span className="tooltip">Quote block</span>
+            <Tooltip text="Quote block">
+              <FormatQuoteCloseIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeLink}>
-            <LinkVariantIcon />
-            <span className="tooltip">Hyperlink</span>
+            <Tooltip text="Hyperlink">
+              <LinkVariantIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption onClick={this.makeImage}>
-            <ImageOutlineIcon />
-            <span className="tooltip">Embeded Image</span>
+            <Tooltip text="Embeded Image">
+              <ImageOutlineIcon />
+            </Tooltip>
           </MarkdownOption>
           <MarkdownOption>
             <Button onClick={this.togglePreview}>

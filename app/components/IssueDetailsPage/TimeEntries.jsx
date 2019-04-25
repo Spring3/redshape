@@ -8,7 +8,7 @@ import PlusIcon from 'mdi-react/PlusIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
-import { GhostButton } from '../../components/Button';
+import Button, { GhostButton } from '../../components/Button';
 import DateComponent from '../../components/Date';
 import actions from '../../actions';
 
@@ -22,48 +22,26 @@ const HeaderContainer = styled.div`
   h2 {
     display: inline-block;
     margin-left: 15px;
-    margin-right: 10px;
+    margin-right: 15px;
   }
 
-  div {
-    margin-right: 10px;
+  & > div {
+    margin-right: 15px;
     background: ${props => props.theme.bgLight};
     padding: 0px 5px;
     border-radius: 3px;
 
-    a {
-      margin-left: 10px;
+    button {
+      background: ${props => props.theme.bgLight};
+      margin: 0px 5px;
     }
-  }
-`;
-
-const IconButton = styled(GhostButton)`
-  svg {
-    border-radius: 3px;
-    border: 2px solid transparent;
-    transition: all ease ${props => props.theme.transitionTime};
-
-    ${(props) => {
-      if (!props.disabled) {
-        return css`
-          color: ${props.theme.main};
-    
-          &:hover {
-            color: ${props.theme.main};
-            border: 2px solid ${props.theme.main};
-          }
-        `
-      }
-      return css`
-        color: ${props.theme.minorText};
-      `
-    }}
   }
 `;
 
 const TimeEntriesContainer = styled.div`
   background: white;
   padding-top: 35px;
+  max-height: 450px;
 `;
 
 const TimeEntriesList = styled.ul`
@@ -71,7 +49,7 @@ const TimeEntriesList = styled.ul`
   padding: 0;
   margin: 0;
   overflow-y: scroll;
-  max-height: 600px;
+  max-height: 400px;
 
   li {
     cursor: pointer;
@@ -95,15 +73,16 @@ const TimeEntriesList = styled.ul`
         flex-grow: 1;
         display: flex;
         justify-content: space-between;
+        span.time,
         span.date {
           margin-right: 5px;
+          font-size: 12px;
           color: ${props => props.theme.minorText};
         }
 
-        span.username,
-        span.time {
-          margin-right: 5px;
+        span.username {
           font-weight: bold;
+          margin-right: 5px;
           color: ${props => props.theme.normalText};
         }
       }
@@ -125,10 +104,6 @@ const TimeEntriesList = styled.ul`
         }
       }
     }
-  }
-
-  li:not(:first-child) {
-    
   }
 `;
 
@@ -167,14 +142,16 @@ class TimeEntries extends Component {
         <HeaderContainer>
           <h2 className="padded">Time spent</h2>
           <div>
-            <IconButton onClick={this.openModal()}>
-              <PlusIcon size={27} />
-            </IconButton>
-            <IconButton
+            <Button onClick={this.openModal()}>
+              <PlusIcon size={22} />
+              <span>Add</span>
+            </Button>
+            <Button
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
               onClick={this.startTimeTracking}>
-              <TimerIcon size={27} />
-            </IconButton>
+              <TimerIcon size={22} />
+              <span>Track</span>
+            </Button>
           </div>
         </HeaderContainer>
         <TimeEntriesList>

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MarkdownEditor component should match the snapshot 1`] = `
-.c4 {
+.c7 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -11,7 +11,7 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   box-sizing: border-box;
 }
 
-.c2 {
+.c5 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -25,15 +25,57 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   width: auto;
 }
 
-.c2:hover,
-.c2:focus {
+.c5:hover,
+.c5:focus {
   cursor: pointer;
   background: #FF7079;
   color: #FFFFFF;
 }
 
-.c2:active {
+.c5:active {
   background: #EF6069;
+}
+
+.c4 {
+  position: absolute;
+  display: none;
+  border-radius: 3px;
+  top: -50px;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  padding: 5px;
+  background: #FFFFFF;
+  color: #EF6069;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0px 2px 7px #909090;
+}
+
+.c4::after {
+  content: ' ';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  border: 2px solid black;
+  border-width: 5px;
+  border-color: #FFFFFF transparent transparent transparent;
+}
+
+.c2 {
+  display: inline-block;
+  position: relative;
+}
+
+.c2:hover .c3 {
+  display: block;
 }
 
 .c0 {
@@ -59,54 +101,22 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c1 span.tooltip {
-  position: absolute;
-  display: inline-block;
-  width: 100px;
-  border-radius: 3px;
-  left: -40px;
-  top: -35px;
-  padding: 5px;
-  background: #FFFFFF;
-  color: #EF6069;
-  text-align: center;
-  font-size: 12px;
-  opacity: 0;
-  -webkit-transition: opacity ease .2s;
-  transition: opacity ease .2s;
-  box-shadow: 0px 2px 7px #909090;
-}
-
-.c1 span.tooltip::after {
-  content: ' ';
-  position: absolute;
-  top: 100%;
-  left: 50px;
-  border: 2px solid black;
-  border-width: 5px;
-  border-color: #FFFFFF transparent transparent transparent;
-}
-
 .c1:hover svg {
   color: #FF7079 !important;
 }
 
-.c1:hover span.tooltip {
-  opacity: 1;
-}
-
-.c3 {
+.c6 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #909090;
 }
 
-.c3:hover {
+.c6:hover {
   border-color: #FF7079;
 }
 
-.c3:focus {
+.c6:focus {
   border: 2px solid #FF7079;
 }
 
@@ -118,280 +128,332 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M13.5,15.5H10V12.5H13.5C14.33,12.5 15,13.17 15,14C15,14.83 14.33,15.5 13.5,15.5M10,6.5H13C13.83,6.5 14.5,7.17 14.5,8C14.5,8.83 13.83,9.5 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Bold text
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M13.5,15.5H10V12.5H13.5C14.33,12.5 15,13.17 15,14C15,14.83 14.33,15.5 13.5,15.5M10,6.5H13C13.83,6.5 14.5,7.17 14.5,8C14.5,8.83 13.83,9.5 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Bold text
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Italic text
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Italic text
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M5,21H19V19H5V21M12,17C15.31,17 18,14.31 18,11V3H15.5V11C15.5,12.93 13.93,14.5 12,14.5C10.07,14.5 8.5,12.93 8.5,11V3H6V11C6,14.31 8.69,17 12,17Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Underlined text
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M5,21H19V19H5V21M12,17C15.31,17 18,14.31 18,11V3H15.5V11C15.5,12.93 13.93,14.5 12,14.5C10.07,14.5 8.5,12.93 8.5,11V3H6V11C6,14.31 8.69,17 12,17Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Underlined text
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M3,14H21V12H3M5,4V7H10V10H14V7H19V4M10,19H14V16H10V19Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Crossed out text
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M3,14H21V12H3M5,4V7H10V10H14V7H19V4M10,19H14V16H10V19Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Crossed out text
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Code block
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Code block
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M14,18V16H16V6.31L13.5,7.75V5.44L16,4H18V16H20V18H14Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        XL Header
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M14,18V16H16V6.31L13.5,7.75V5.44L16,4H18V16H20V18H14Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          XL Header
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M21,18H15C13.9,18 13,17.1 13,16C13,15.47 13.2,15 13.54,14.64L18.41,9.41C18.78,9.05 19,8.55 19,8C19,6.9 18.1,6 17,6C15.9,6 15,6.9 15,8H13C13,5.79 14.79,4 17,4C19.21,4 21,5.79 21,8C21,9.1 20.55,10.1 19.83,10.83L15,16H21V18Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        L Header
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M21,18H15C13.9,18 13,17.1 13,16C13,15.47 13.2,15 13.54,14.64L18.41,9.41C18.78,9.05 19,8.55 19,8C19,6.9 18.1,6 17,6C15.9,6 15,6.9 15,8H13C13,5.79 14.79,4 17,4C19.21,4 21,5.79 21,8C21,9.1 20.55,10.1 19.83,10.83L15,16H21V18Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          L Header
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M15,4H19C20.1,4 21,4.9 21,6V16C21,17.1 20.1,18 19,18H15C13.9,18 13,17.1 13,16V15H15V16H19V12H15V10H19V6H15V7H13V6C13,4.9 13.9,4 15,4Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        M Header
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M15,4H19C20.1,4 21,4.9 21,6V16C21,17.1 20.1,18 19,18H15C13.9,18 13,17.1 13,16V15H15V16H19V12H15V10H19V6H15V7H13V6C13,4.9 13.9,4 15,4Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          M Header
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5C4.83,4.5 5.5,5.17 5.5,6C5.5,6.83 4.83,7.5 4,7.5C3.17,7.5 2.5,6.83 2.5,6C2.5,5.17 3.17,4.5 4,4.5M4,10.5C4.83,10.5 5.5,11.17 5.5,12C5.5,12.83 4.83,13.5 4,13.5C3.17,13.5 2.5,12.83 2.5,12C2.5,11.17 3.17,10.5 4,10.5M7,19V17H21V19H7M4,16.5C4.83,16.5 5.5,17.17 5.5,18C5.5,18.83 4.83,19.5 4,19.5C3.17,19.5 2.5,18.83 2.5,18C2.5,17.17 3.17,16.5 4,16.5Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Bulleted List
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5C4.83,4.5 5.5,5.17 5.5,6C5.5,6.83 4.83,7.5 4,7.5C3.17,7.5 2.5,6.83 2.5,6C2.5,5.17 3.17,4.5 4,4.5M4,10.5C4.83,10.5 5.5,11.17 5.5,12C5.5,12.83 4.83,13.5 4,13.5C3.17,13.5 2.5,12.83 2.5,12C2.5,11.17 3.17,10.5 4,10.5M7,19V17H21V19H7M4,16.5C4.83,16.5 5.5,17.17 5.5,18C5.5,18.83 4.83,19.5 4,19.5C3.17,19.5 2.5,18.83 2.5,18C2.5,17.17 3.17,16.5 4,16.5Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Bulleted List
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M7,13V11H21V13H7M7,19V17H21V19H7M7,7V5H21V7H7M3,8V5H2V4H4V8H3M2,17V16H5V20H2V19H4V18.5H3V17.5H4V17H2M4.25,10C4.66,10 5,10.34 5,10.75C5,10.95 4.92,11.14 4.79,11.27L3.12,13H5V14H2V13.08L4,11H2V10H4.25Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Ordered List
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M7,13V11H21V13H7M7,19V17H21V19H7M7,7V5H21V7H7M3,8V5H2V4H4V8H3M2,17V16H5V20H2V19H4V18.5H3V17.5H4V17H2M4.25,10C4.66,10 5,10.34 5,10.75C5,10.95 4.92,11.14 4.79,11.27L3.12,13H5V14H2V13.08L4,11H2V10H4.25Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Ordered List
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Quote block
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Quote block
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Hyperlink
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Hyperlink
+        </p>
+      </div>
     </li>
     <li
       className="c1"
       onClick={[Function]}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={24}
-        viewBox="0 0 24 24"
-        width={24}
+      <div
+        className="c2"
       >
-        <path
-          d="M19,19H5V5H19M19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"
-        />
-      </svg>
-      <span
-        className="tooltip"
-      >
-        Embeded Image
-      </span>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={24}
+          viewBox="0 0 24 24"
+          width={24}
+        >
+          <path
+            d="M19,19H5V5H19M19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"
+          />
+        </svg>
+        <p
+          className="tooltip c3 c4"
+        >
+          Embeded Image
+        </p>
+      </div>
     </li>
     <li
       className="c1"
     >
       <button
-        className="c2"
+        className="c5"
         disabled={false}
         onClick={[Function]}
         type="button"
@@ -401,7 +463,7 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
     </li>
   </ul>
   <textarea
-    className="c3 c4"
+    className="c6 c7"
     disabled={false}
     onChange={[Function]}
     onKeyDown={[Function]}

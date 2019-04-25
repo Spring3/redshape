@@ -8,16 +8,16 @@ import styled, { css, withTheme } from 'styled-components';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import Link from '../../components/Link';
-import Button, { GhostButton } from '../../components/Button';
-import actions from '../../actions';
+import { GhostButton } from '../../components/Button';
 import Progressbar from '../../components/Progressbar';
-import MarkdownEditor, { MarkdownText } from '../../components/MarkdownEditor';
+import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
+import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { animationSlideRight } from '../../animations';
 
-import { platform } from '../../../modules/config';
+import actions from '../../actions';
 
 const Flex = styled.div`
   display: flex;
@@ -99,54 +99,6 @@ const BackButton = styled(IconButton)`
   }
 `;
 
-const Comments = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  
-  li {
-    background: ${props => props.theme.bgLight};
-    display: block;
-    border-radius: 3px;
-    margin-bottom: 20px;
-
-    div.commentsHeader {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-      border-bottom: 2px solid ${props => props.theme.bg};
-
-      ${({theme}) => css`
-        span:first-child {
-          font-weight: bold;
-          color: ${theme.normalText};
-        }
-
-        span:last-child {
-          font-weight: bold;
-          color: ${theme.minorText};
-          transition: color ease ${theme.transitionTime};
-          text-align: center;
-
-          &:hover {
-            color: ${theme.normalText};
-          }
-        }
-      `}
-
-    }
-
-    iframe {
-      padding: 5px 20px 0px 20px;
-    }
-  }
-`;
-
-const CommentsForm = styled.div`
-  padding: 20px;
-  border-radius: 3px;
-  border: 2px solid ${props => props.theme.bgLight};
-`;
-
 const IssueDetails = styled.div`
   flex-grow: 1;
 `;
@@ -159,18 +111,13 @@ class IssueDetailsPage extends Component {
       selectedTimeEntry: undefined,
       showTimeEntryModal: false
     };
+
+    this.getComments = _.memoize(issueId => this.props.selectedIssue.journals.filter(entry => entry.notes));
   }
 
   componentWillMount() {
     const { match, fetchIssueDetails } = this.props;
     fetchIssueDetails(match.params.id);
-  }
-
-  publishComment = (comments) => {
-    if (comments) {
-      const { match, sendComments } = this.props;
-      sendComments(match.params.id, comments);
-    }
   }
 
   showTimeEntryModal = (timeEntry) => {
@@ -211,7 +158,7 @@ class IssueDetailsPage extends Component {
   }
 
   render() {
-    const { selectedIssue, history, userId, theme } = this.props;
+    const { selectedIssue, history, userId, theme, postComments } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
     return selectedIssue.id
       ? (
@@ -301,41 +248,16 @@ class IssueDetailsPage extends Component {
                 <h3>Description</h3>
                 <MarkdownText markdownText={selectedIssue.description} />
               </div>
-              <div>
-                <h3>Comments</h3>
-                <Comments>
-                  {selectedIssue.journals.filter(entry => entry.notes).map(entry => (
-                    <li key={entry.id}>
-                      <div className="commentsHeader">
-                        <span className="username">{entry.user.name}</span>
-                        <DateComponent className="date" date={entry.created_on} />
-                      </div>
-                      <MarkdownText markdownText={entry.notes} />
-                    </li>
-                  ))}
-                </Comments>
-                <CommentsForm>
-                  <MarkdownEditor
-                    onSubmit={this.publishComment}
-                  />
-                  <p>
-                    <SmallNotice>
-                      Press
-                      {
-                        platform === 'darwin'
-                        ? (<Link> Cmd + Enter</Link>)
-                        : (<Link> Ctrl + Enter</Link>)
-                      }
-                      to send
-                    </SmallNotice>
-                  </p>
-                </CommentsForm>
-              </div>
             </IssueDetails>
             <TimeEntries
               showTimeEntryModal={this.showTimeEntryModal}
             />
           </Flex>
+          <CommentsSection
+            journalEntries={this.getComments(selectedIssue.id)}
+            publishComments={postComments}
+            issueId={selectedIssue.id}
+          />
           { selectedTimeEntry && (
             <TimeEntryModal
               isOpen={showTimeEntryModal}
@@ -357,6 +279,7 @@ IssueDetailsPage.propTypes = {
     id: PropTypes.number.isRequired,
     subject: PropTypes.string.isRequired,
     journals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    description: PropTypes.string,
     project: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
@@ -371,7 +294,7 @@ IssueDetailsPage.propTypes = {
   user: PropTypes.object.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   startTimeTracking: PropTypes.func.isRequired,
-  sendComments: PropTypes.func.isRequired
+  postComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -383,7 +306,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
-  sendComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
+  postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));
