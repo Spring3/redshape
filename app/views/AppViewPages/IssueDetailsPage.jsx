@@ -310,7 +310,7 @@ class IssueDetailsPage extends Component {
   }
 
   render() {
-    const { spentTime, selectedIssue, history, user, timeTracking, theme } = this.props;
+    const { spentTime, selectedIssue, history, user, isTimerEnabled, trackedIssueId, theme } = this.props;
     const { selectedTimeEntry, showTimeEntryModal } = this.state;
     return selectedIssue.id
       ? (
@@ -325,7 +325,7 @@ class IssueDetailsPage extends Component {
                   <span>#{selectedIssue.id}&nbsp;</span>
                   <span>{selectedIssue.subject}</span>
                 </h2>
-                {!timeTracking.isTracking || timeTracking.issue.id !== selectedIssue.id
+                {!isTimerEnabled || trackedIssueId !== selectedIssue.id
                   ? (
                     <Button onClick={this.startTimeTracking}>Track Time</Button>
                   )
@@ -494,7 +494,9 @@ IssueDetailsPage.propTypes = {
   fetchIssueDetails: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
   startTimeTracking: PropTypes.func.isRequired,
-  sendComments: PropTypes.func.isRequired
+  sendComments: PropTypes.func.isRequired,
+  isTimerEnabled: PropTypes.bool.isRequired,
+  trackedIssueId: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
@@ -502,7 +504,8 @@ const mapStateToProps = state => ({
   user: state.user,
   selectedIssue: state.issues.selected.data,
   spentTime: state.issues.selected.spentTime.data,
-  timeTracking: state.tracking
+  isTimerEnabled: state.tracking.isEnabled,
+  trackedIssueId: state.tracking.issue.id
 });
 
 const mapDispatchToProps = dispatch => ({

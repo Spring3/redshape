@@ -35,19 +35,15 @@ class AppView extends Component {
       activities: [],
       showTimeEntryModal: false,
       timeEntry: null
-    };
-
-    this.getProjectActivities = _.memoize((projectId) => {
-      
-    });
+    }; 
   }
 
   componentWillMount() {
     this.props.getProjectData();
   }
 
-  onTrackingStop = (value) => {
-    const { stopTimer, trackedIssue, trackedDuration, userId, userName, projects } = this.props;
+  onTrackingStop = (value, trackedIssue) => {
+    const { userId, userName, projects } = this.props;
     const activities = _.get(projects[trackedIssue.project.id], 'activities', []);
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
@@ -58,7 +54,7 @@ class AppView extends Component {
           id: trackedIssue.id,
           name: trackedIssue.subject
         },
-        hours: (trackedDuration / 360000).toFixed(2),
+        hours: (value / 360000).toFixed(2),
         comments: '',
         project: {
           id: trackedIssue.project.id,
@@ -71,7 +67,6 @@ class AppView extends Component {
         }
       }
     });
-    stopTimer(value);
     storage.delete('time_tracking');
   }
 
@@ -81,17 +76,7 @@ class AppView extends Component {
 
   render() {
     const { showTimeEntryModal, timeEntry, activities } = this.state;
-    const {
-      userId,
-      api_key,
-      match,
-      isTimerEnabled,
-      isTimerPaused,
-      trackedIssue,
-      trackedDuration,
-      pauseTimer,
-      continueTimer
-    } = this.props;
+    const { userId, api_key, match } = this.props;
 
     return (
       <Grid>
@@ -102,12 +87,6 @@ class AppView extends Component {
           <Route exact path={`${match.path}/summary`} component={SummaryPage} />
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
           <Timer
-            isEnabled={isTimerEnabled}
-            isPaused={isTimerPaused}
-            issueTitle={_.get(trackedIssue, 'subject')}
-            trackedTime={trackedDuration}
-            onPause={pauseTimer}
-            onContinue={continueTimer}
             onStop={this.onTrackingStop}
           />
           <TimeEntryModal
@@ -134,53 +113,24 @@ AppView.propTypes = {
   }).isRequired,
   logout: PropTypes.func.isRequired,
   getProjectData: PropTypes.func.isRequired,
-  isTimerEnabled: PropTypes.bool.isRequired,
-  isTimerPaused: PropTypes.bool.isRequired,
-  trackedIssue: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    subject: PropTypes.string.isRequired,
-    author: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    project: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    activity: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired,
   projects: PropTypes.shape({
     activities: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired).isRequired
-  }).isRequired,
-  trackedDuration: PropTypes.number,
-  pauseTimer: PropTypes.func.isRequired,
-  continueTimer: PropTypes.func.isRequired,
-  stopTimer: PropTypes.func.isRequired
+  }).isRequired
 };
 
 const mapStateToProps = state => ({
   userId: state.user.id,
   userName: state.user.name,
   api_key: state.user.api_key,
-  projects: state.projects.data,
-  isTimerEnabled: state.tracking.isTracking,
-  isTimerPaused: state.tracking.isPaused,
-  trackedIssue: state.tracking.issue,
-  trackedDuration: state.tracking.duration
+  projects: state.projects.data
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
-  getProjectData: () => dispatch(actions.projects.getAll()),
-  pauseTimer: value => dispatch(actions.tracking.trackingPause(value)),
-  continueTimer: () => dispatch(actions.tracking.trackingContinue()),
-  stopTimer: value => dispatch(actions.tracking.trackingStop(value))
+  getProjectData: () => dispatch(actions.projects.getAll())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppView);

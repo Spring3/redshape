@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import PlayIcon from 'mdi-react/PlayIcon';
@@ -82,7 +83,7 @@ class Timer extends Component {
   cleanup = () => {
     const { isEnabled, isPaused } = this.props;
     if (isEnabled && !isPaused) {
-      this.props.onPause(this.state.value);
+      this.onPause();
     }
     this.stopInterval();
     window.removeEventListener('beforeunload', this.cleanup);
@@ -111,25 +112,37 @@ class Timer extends Component {
 
   onPause = () => {
     this.stopInterval();
+    const { onPause, trackedIssue, pauseTimer } = this.props;
     const { value } = this.state;
-    this.props.onPause(value);
+    pauseTimer(value);
+    if (onPause) {
+      onPause(value, trackedIssue)
+    }
   }
 
   onContinue = () => { 
     this.interval = setInterval(this.tick, 1000);
-    this.props.onContinue();
+    const { onContinue, trackedIssue, continueTimer } = this.props;
+    continueTimer();
+    if (onContinue) {
+      onContinue(trackedIssue);
+    }
   }
 
   onStop = () => {
     this.stopInterval();
     const { value } = this.state;
-    this.props.onStop(value);
+    const { onStop, trackedIssue, stopTimer } = this.props;
+    stopTimer(value);
+    if (onStop) {
+      onStop(value, trackedIssue);
+    }
     this.setState({ value: 0 });
   }
 
   render() {
     const { value } = this.state;
-    const { isEnabled, issueTitle, isPaused } = this.props;
+    const { isEnabled, trackedIssue, isPaused } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
       <ActiveTimer isEnabled={isEnabled}>
@@ -157,7 +170,7 @@ class Timer extends Component {
           }
         </div>
         <div className="issueName">
-          <span>{issueTitle}</span>
+          <span>{trackedIssue.subject}</span>
         </div>
         <div className="time">
           <span>{timeString}</span>
@@ -171,11 +184,29 @@ Timer.propTypes = {
   isEnabled: PropTypes.bool,
   isPaused: PropTypes.bool,
   initialValue: PropTypes.number,
-  issueTitle: PropTypes.string,
+  trackedIssue: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    subject: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    project: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    activity: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
   trackedTime: PropTypes.number,
-  onStop: PropTypes.func.isRequired,
-  onPause: PropTypes.func.isRequired,
-  onContinue: PropTypes.func.isRequired
+  onStop: PropTypes.func,
+  onPause: PropTypes.func,
+  onContinue: PropTypes.func,
+  pauseTimer: PropTypes.func.isRequired,
+  continueTimer: PropTypes.func.isRequired,
+  stopTimer: PropTypes.func.isRequired
 };
 
 Timer.defaultProps = {
@@ -185,4 +216,17 @@ Timer.defaultProps = {
   issueTitle: ''
 };
 
-export default Timer;
+const mapStateToProps = state => ({
+  isEnabled: state.tracking.isEnabled,
+  isPaused: state.tracking.isPaused,
+  trackedTime: state.tracking.duration,
+  trackedIssue: state.tracking.issue,
+});
+
+const mapDispatchToProps = dispatch => ({
+  pauseTimer: value => dispatch(actions.tracking.trackingPause(value)),
+  continueTimer: () => dispatch(actions.tracking.trackingContinue()),
+  stopTimer: value => dispatch(actions.tracking.trackingStop(value))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);

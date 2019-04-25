@@ -8,7 +8,7 @@ import storage from '../../modules/storage';
 
 const initialState = {
   issue: {},
-  isTracking: false,
+  isEnabled: false,
   isPaused: false,
   duration: 0
 };
@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
       const { issue } = action.data;
       const nextState = {
         issue,
-        isTracking: true,
+        isEnabled: true,
         isPaused: false,
         duration: 0
       };
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
     case TRACKING_STOP: {
       const nextState = {
         ...state,
-        isTracking: false,
+        isEnabled: false,
         isPaused: false,
         duration: action.data.duration
       };
