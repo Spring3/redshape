@@ -122,7 +122,7 @@ IssuesTable.propTypes = {
 
 const mapStateToProps = state => ({
   useColors: state.settings.useColors,
-  userTasks: state.issues.assignedToMe.data,
+  userTasks: state.issues.all.data,
   issueHeaders: state.settings.issueHeaders,
 });
 

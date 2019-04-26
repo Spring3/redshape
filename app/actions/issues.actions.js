@@ -4,6 +4,7 @@ import request, { notify } from './helper';
 export const ISSUES_GET_ALL = 'ISSUES_GET_ALL';
 export const ISSUES_GET = 'ISSUES_GET';
 export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
+export const ISSUES_RESET_SELECTION = 'ISSUES_RESET_SELECTION';
 
 const getAll = (filter, offset, limit) => (dispatch) => {
   let query = {
@@ -92,8 +93,11 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
     });
 };
 
+const resetSelected = () => ({ type: ISSUES_RESET_SELECTION });
+
 export default {
   getAll,
   get,
-  sendComments
+  sendComments,
+  resetSelected
 };
