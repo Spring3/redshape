@@ -38,6 +38,11 @@ const HeaderContainer = styled.div`
   }
 `;
 
+const FlexButton = styled(Button) `
+  display: inline-flex;
+  align-items: center;
+`;
+
 const TimeEntriesContainer = styled.div`
   background: white;
   padding-top: 35px;
@@ -142,16 +147,16 @@ class TimeEntries extends Component {
         <HeaderContainer>
           <h2 className="padded">Time spent</h2>
           <div>
-            <Button onClick={this.openModal()}>
+            <FlexButton onClick={this.openModal()}>
               <PlusIcon size={22} />
               <span>Add</span>
-            </Button>
-            <Button
+            </FlexButton>
+            <FlexButton
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
               onClick={this.startTimeTracking}>
               <TimerIcon size={22} />
               <span>Track</span>
-            </Button>
+            </FlexButton>
           </div>
         </HeaderContainer>
         <TimeEntriesList>

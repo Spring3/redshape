@@ -7,8 +7,7 @@ const StyledButton = styled.button`
   font-weight: bold;
   font-size: 14px;
   outline: none;
-  display: inline-flex;
-  align-items: center;
+  text-align: center;
   cursor: pointer;
   
   ${props => css`

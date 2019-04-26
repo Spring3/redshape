@@ -21,10 +21,13 @@ const initialize = () => {
   const windowConfig = {
     width: 1024,
     height: 768,
+    minWidth: 744,
+    // icon: `${__dirname}/assets/icon.ico`,
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      webSecurity: false // to disable cors
+      webSecurity: false, // to disable cors
+      nodeIntegration: true
     }
   };
 
