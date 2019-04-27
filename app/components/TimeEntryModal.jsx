@@ -241,22 +241,18 @@ class TimeEntryModal extends Component {
             ? (
               <OptionButtons>
                 <Button
+                  id="btn-update"
                   onClick={this.onUpdate}
                   palette='success'
                 >
                 Submit
                 </Button>
-                {/* <Button
-                  onClick={this.onDelete}
-                  palette='danger'
-                >
-                Delete
-                </Button> */}
               </OptionButtons>
             )
             : (
               <OptionButtons>
                 <Button
+                  id="btn-add"
                   onClick={this.onAdd}
                   palette='success'
                 >
