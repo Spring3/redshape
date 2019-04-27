@@ -48,7 +48,7 @@ class Tooltip extends Component {
     const { className, children, text } = this.props;
     return (
       <TooltipContainer
-        className={className}        
+        className={className}
       >
         {children}
         <TooltipText className="tooltip">{text}</TooltipText>
