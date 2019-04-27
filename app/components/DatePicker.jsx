@@ -158,7 +158,7 @@ const StyledDatePicker = styled.div`
 
   .DayPicker:not(.DayPicker--interactionDisabled)
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-      background-color: ${props => props.theme.bgLight};
+      background-color: ${props => props.theme.bgDark};
       color: ${props => props.theme.normalText};
   }
 

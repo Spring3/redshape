@@ -42,7 +42,7 @@ const StyledTable = styled.table`
         cursor: pointer;
         
         td {
-          background: ${props => props.theme.bgLight};
+          background: ${props => props.theme.bgDark};
         }
       }
     }

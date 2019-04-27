@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const Background = styled.div`
-  background: ${props => props.theme.bgLight};
+  background: ${props => props.theme.bgDark};
   position: relative;
   border-radius: 5px;
   height: ${props => props.height}px;

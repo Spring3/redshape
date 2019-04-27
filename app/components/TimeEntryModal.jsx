@@ -24,7 +24,7 @@ const FlexRow = styled.div`
 const OptionButtons = styled.div`
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 2px solid ${props => props.theme.bgLight};
+  border-top: 2px solid ${props => props.theme.bgDark};
   display: flex;
   justify-content: space-between;
   

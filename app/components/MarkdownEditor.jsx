@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
 import throttle from 'lodash/throttle';
+
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon';
 import FormatUnderlineIcon from 'mdi-react/FormatUnderlineIcon';
@@ -16,11 +17,12 @@ import FormatListNumberedIcon from 'mdi-react/FormatListNumberedIcon';
 import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
+import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 
 import { openExternalUrl, xssFilter } from '../../modules/utils';
 
 import TextArea from './TextArea';
-import Button from './Button';
+import Button, { GhostButton } from './Button';
 import Tooltip from './Tooltip';
 
 const MarkdownOptionsList = styled.ul`
@@ -38,34 +40,6 @@ const MarkdownOptionsList = styled.ul`
     margin-right: 0;
   }
 `;
-
-// span.tooltip {
-//   position: absolute;
-//   display: inline-block;
-//   width: 100px;
-//   border-radius: 3px;
-//   left: -40px;
-//   top: -35px;
-//   padding: 5px;
-//   background: ${props => props.theme.bg};
-//   color: ${props => props.theme.mainDark};
-//   text-align: center;
-//   font-size: 12px;
-//   opacity: 0;
-//   transition: opacity ease ${props => props.theme.transitionTime};
-//   box-shadow: 0px 2px 7px ${props => props.theme.minorText};
-// }
-
-// span.tooltip::after {
-//   content: ' ';
-//   position: absolute;
-//   top: 100%;
-//   left: 50px;
-//   border: 2px solid black;
-//   border-width: 5px;
-//   border-color: ${props => props.theme.bg} transparent transparent transparent;
-// }
-
 
 const MarkdownOption = styled.li`
   display: inline;
@@ -320,9 +294,10 @@ class MarkdownEditor extends PureComponent {
             </Tooltip>
           </MarkdownOption>
           <MarkdownOption>
-            <Button onClick={this.togglePreview}>
-              Preview
-            </Button>
+            <GhostButton onClick={this.togglePreview}>
+              <CardBulletedOutlineIcon size={27} />
+              &nbsp;Preview
+            </GhostButton>
           </MarkdownOption>
         </MarkdownOptionsList>
         { showPreview
@@ -406,6 +381,7 @@ class MarkdownText extends PureComponent {
       p, pre {
         min-width: 100%;
         width: 0;
+        line-height: 2;
       }
 
       pre {

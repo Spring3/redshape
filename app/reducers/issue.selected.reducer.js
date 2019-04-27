@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 import {
   ISSUES_GET,
-  ISSUES_COMMENTS_SEND
+  ISSUES_COMMENTS_SEND,
+  ISSUES_RESET_SELECTION
 } from '../actions/issues.actions';
 
 import {
@@ -26,6 +27,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case ISSUES_RESET_SELECTION: {
+      return initialState;
+    }
     case ISSUES_GET: {
       if (action.status === 'START') {
         return { ...state, isFetching: true };

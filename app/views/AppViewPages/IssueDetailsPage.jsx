@@ -120,6 +120,10 @@ class IssueDetailsPage extends Component {
     fetchIssueDetails(match.params.id);
   }
 
+  componentWillUnmount() {
+    this.props.resetSelectedIssue();
+  }
+
   showTimeEntryModal = (timeEntry) => {
     const { selectedIssue, userId, userName, projects } = this.props;
     const selectedTimeEntry = timeEntry
@@ -293,8 +297,8 @@ IssueDetailsPage.propTypes = {
   userName: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
-  startTimeTracking: PropTypes.func.isRequired,
-  postComments: PropTypes.func.isRequired
+  postComments: PropTypes.func.isRequired,
+  resetSelectedIssue: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -306,7 +310,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
-  postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments))
+  postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
+  resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));

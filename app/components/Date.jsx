@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import moment from 'moment';
 
 const verticalSlideFadeOut = keyframes`
@@ -38,17 +38,20 @@ const StyledDate = styled.span`
 
   span:last-child {
     opacity: 0;
+    display: ${props => props.animated ? 'inherit' : 'none'};
   }
 
-  &:focus > span:first-child,
-  &:hover > span:first-child {
-    animation: ${verticalSlideFadeOut} .5s ease forwards;
-  }
+  ${props => props.animated && css`
+    &:focus > span:first-child,
+    &:hover > span:first-child {
+      animation: ${verticalSlideFadeOut} .5s ease forwards;
+    }
 
-  &:focus > span:first-child,
-  &:hover > span:last-child {
-    animation: ${fadeIn} .5s ease forwards;
-  }
+    &:focus > span:first-child,
+    &:hover > span:last-child {
+      animation: ${fadeIn} .5s ease forwards;
+    }
+  `}
 `;
 
 class DateComponent extends PureComponent {
@@ -62,11 +65,12 @@ class DateComponent extends PureComponent {
           ? `${daysAgo} days ago`
           : `yesterday`
       );
-      const displayedValue = daysAgo > 30
-        ? date
-        : precision;
+      const shouldBeAnimated = (daysAgo > 0 && daysAgo < 30);
+      const displayedValue = shouldBeAnimated
+        ? precision
+        : moment(date).format('MMM DD YYYY');
       return (
-        <StyledDate>
+        <StyledDate animated={shouldBeAnimated}>
           <span className={className}>{displayedValue}</span>
           <span className={className}>{moment(date).format('MMM DD YYYY')}</span>
         </StyledDate>

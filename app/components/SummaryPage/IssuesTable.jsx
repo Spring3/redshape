@@ -8,6 +8,7 @@ import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
 import Table from '../Table';
+import Date from '../Date';
 
 const ColorfulSpan = styled.span`
   ${
@@ -23,6 +24,8 @@ const ColorfulSpan = styled.span`
 const colorMap = {
   'closed': 'red',
   'high': 'red',
+  'immediate': 'red',
+  'critical': 'red',
   'open': 'green',
   'low': 'green',
   'pending': 'yellow',
@@ -98,7 +101,10 @@ class IssuesTable extends Component {
             {
               issueHeaders.map(header => (
                 <td key={header.value}>
-                  {this.paint(task, header.value)}
+                  {header.value === 'due_date'
+                    ? (<Date date={_get(task, header.value)} />)
+                    : this.paint(task, header.value)
+                  }
                 </td>
               ))
             }

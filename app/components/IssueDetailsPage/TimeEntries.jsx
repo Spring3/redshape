@@ -16,7 +16,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${props => props.theme.bgLight};
+  background: ${props => props.theme.bgDark};
   border-radius: 3px;
 
   h2 {
@@ -27,12 +27,12 @@ const HeaderContainer = styled.div`
 
   & > div {
     margin-right: 15px;
-    background: ${props => props.theme.bgLight};
+    background: ${props => props.theme.bgDark};
     padding: 0px 5px;
     border-radius: 3px;
 
     button {
-      background: ${props => props.theme.bgLight};
+      background: ${props => props.theme.bgDark};
       margin: 0px 5px;
     }
   }
@@ -41,12 +41,16 @@ const HeaderContainer = styled.div`
 const FlexButton = styled(Button) `
   display: inline-flex;
   align-items: center;
+  ${props => css`
+    background: ${props.theme.mainLight};
+  `}
 `;
 
 const TimeEntriesContainer = styled.div`
   background: white;
   padding-top: 35px;
   max-height: 450px;
+  min-width: 340px;
 `;
 
 const TimeEntriesList = styled.ul`
@@ -97,11 +101,12 @@ const TimeEntriesList = styled.ul`
       margin-bottom: 0px;
       min-width: 100%;
       width: 0;
+      line-height: 2;
       min-width: 320px;
     }
 
     &:hover {
-      background: ${props => props.theme.bgLight};
+      background: ${props => props.theme.bgDark};
 
       div:first-child {
         a {
@@ -149,13 +154,13 @@ class TimeEntries extends Component {
           <div>
             <FlexButton onClick={this.openModal()}>
               <PlusIcon size={22} />
-              <span>Add</span>
+              <span>&nbsp;Add</span>
             </FlexButton>
             <FlexButton
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
               onClick={this.startTimeTracking}>
               <TimerIcon size={22} />
-              <span>Track</span>
+              <span>&nbsp;Track</span>
             </FlexButton>
           </div>
         </HeaderContainer>

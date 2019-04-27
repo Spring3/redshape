@@ -21,7 +21,7 @@ const ActiveTimer = styled.div`
   background: ${props => props.theme.bg};
   display: ${props => props.isEnabled ? 'flex' : 'none'};
   align-items: center;
-  box-shadow: 0px 0px 15px ${props => props.theme.bgLight};
+  box-shadow: 0px 0px 15px ${props => props.theme.bgDark};
 
   div.buttons {
     margin: 0 20px;
@@ -39,7 +39,7 @@ const ActiveTimer = styled.div`
       padding: 10px 0px;
 
       &:hover {
-        background: ${props => props.theme.bgLight};
+        background: ${props => props.theme.bgDark};
       }
     }
 

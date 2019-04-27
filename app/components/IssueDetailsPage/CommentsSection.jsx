@@ -30,7 +30,7 @@ const Comments = styled.ul`
   padding: 0;
   
   li {
-    background: ${props => props.theme.bgLight};
+    background: ${props => props.theme.bgDark};
     display: block;
     border-radius: 3px;
     margin-bottom: 20px;
@@ -71,7 +71,7 @@ const CommentsForm = styled.div`
   margin-top: 40px;
   padding: 20px;
   border-radius: 3px;
-  border: 2px solid ${props => props.theme.bgLight};
+  border: 2px solid ${props => props.theme.bgDark};
 `;
 
 class CommentsSection extends Component {

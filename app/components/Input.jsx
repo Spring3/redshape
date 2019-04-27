@@ -62,7 +62,7 @@ const StyledCheckbox = styled.div`
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: ${props => props.checked ? props.theme.main : props.theme.bgLight}
+  background: ${props => props.checked ? props.theme.main : props.theme.bgDark}
   transition: background ${props => props.theme.transitionTime};
   border: 2px solid transparent;
   border-radius: 3px;
@@ -81,7 +81,7 @@ const StyledCheckbox = styled.div`
   }
 
   ${HiddenCheckbox}:disabled + & {
-    background: ${props => props.theme.bgLight};
+    background: ${props => props.theme.bgDark};
     border-color: lightgrey;
   }
 

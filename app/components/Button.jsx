@@ -8,7 +8,6 @@ const StyledButton = styled.button`
   font-size: 14px;
   outline: none;
   text-align: center;
-  cursor: pointer;
   
   ${props => css`
     transition: color ease ${props.theme.transitionTime};
@@ -21,11 +20,16 @@ const StyledButton = styled.button`
       return css`
         border: 2px solid ${props.palette.light};    
         color: ${props.palette.light};
+        cursor: pointer;
     
         &:hover,
         &:focus {
           background: ${props.palette.light}; 
           color: ${props.theme.hoverText};
+
+          svg {
+            fill: ${props.theme.hoverText};
+          }
         }
         &:active {
           background: ${props.palette.dark};
@@ -35,10 +39,9 @@ const StyledButton = styled.button`
     return css`
       border: 2px solid ${props.theme.minorText};    
       color: ${props.theme.minorText};
-      
-      &:hover,
-      &:focus {
-        color: ${props.theme.minorText};
+
+      svg {
+        fill: ${props.theme.minorText};
       }
     `
   }
@@ -47,19 +50,27 @@ const StyledButton = styled.button`
 
 const StyledLink = styled.a`
   text-decoration: none;
-  color: ${props => props.theme.mainLight};
+  color: ${props => props.theme.main};
   transition: color ease ${props => props.theme.transitionTime};
 
   ${props => {
       if (!props.disabled) {
         return css`
           &:hover {
-            color: ${props => props.theme.main};
+            color: ${props.theme.mainDark};
+
+            svg {
+              fill: ${props.theme.mainDark}
+            }
           }
         `;
       }
       return css`
-        color: ${props => props.theme.minorText};
+        color: ${props.theme.minorText};
+        
+        svg {
+          fill: ${props.theme.minorText};
+        }
       `
     }
   }
