@@ -153,6 +153,9 @@ class Input extends PureComponent {
       }
       return parseInt(value, 10);
     }
+    if (isNaN(value) || !isFinite(value)) {
+      return undefined;
+    }
     return value;
   }
 

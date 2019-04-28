@@ -1,14 +1,47 @@
 import _ from 'lodash';
 import moment from 'moment';
+import Joi from 'joi';
 import request, { notify } from './helper';
 
+export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
+export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
 export const TIME_ENTRY_PUBLISH = 'TIME_ENTRY_PUBLISH';
+export const TIME_ENTRY_UPDATE_VALIDATION_FAILED = 'TIME_ENTRY_UPDATE_VALIDATION_FAILED';
+export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION_PASSED';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
 
-const publish = timeEntry => (dispatch, getState) => {
-  const { user = {} } = getState();
+const validateBeforePublish = (timeEntry) => {
+  const validationSchema = {
+    activity: Joi.object().keys({
+      id: Joi.number().integer().positive().required()
+    }).unknown().required(),
+    issue: Joi.object().keys({
+      id: Joi.number().integer().positive().required()
+    }).unknown().required(),
+    hours: Joi.number().positive().precision(2).required(),
+    comments: Joi.string().required().allow(''),
+    spent_on: Joi.string().required()
+  };
+
+  const validationResult = Joi.validate(timeEntry, validationSchema);
+  return validationResult.error
+    ? {
+      type: TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
+      data: validationResult.error
+    }
+    : { type: TIME_ENTRY_PUBLISH_VALIDATION_PASSED };
+};
+
+const publish = timeEntryData => (dispatch, getState) => {
+  dispatch(validateBeforePublish(timeEntryData));
+
+  const { user = {}, timeEntry = {} } = getState();
+
+  if (timeEntry.error && timeEntry.error.isJoi) {
+    return Promise.resolve();
+  }
 
   dispatch(notify.start(TIME_ENTRY_PUBLISH));
 
@@ -17,12 +50,12 @@ const publish = timeEntry => (dispatch, getState) => {
     method: 'POST',
     data: {
       time_entry: {
-        issue_id: timeEntry.issue.id,
-        spent_on: moment(timeEntry.spent_on).format('YYYY-MM-DD'),
-        hours: timeEntry.hours,
-        activity_id: timeEntry.activity.id,
-        comments: timeEntry.comments,
-        user_id: user.id || timeEntry.user.id
+        issue_id: timeEntryData.issue.id,
+        spent_on: moment(timeEntryData.spent_on).format('YYYY-MM-DD'),
+        hours: timeEntryData.hours,
+        activity_id: timeEntryData.activity.id,
+        comments: timeEntryData.comments,
+        user_id: user.id || timeEntryData.user.id
       }
     }
   })
@@ -33,7 +66,36 @@ const publish = timeEntry => (dispatch, getState) => {
     });
 };
 
-const update = (timeEntry, changes) => (dispatch) => {
+const validateBeforeUpdate = (changes, dispatch) => {
+  const validationSchema = {
+    activity: Joi.object().keys({
+      id: Joi.number().integer().positive().required()
+    }).unknown().required(),
+    hours: Joi.number().positive().precision(2).required(),
+    comments: Joi.string().required().allow(''),
+    spent_on: Joi.string().required()
+  };
+
+  const validationResult = Joi.validate(changes, validationSchema);
+  if (validationResult.error) {
+    dispatch({
+      type: TIME_ENTRY_UPDATE_VALIDATION_FAILED,
+      data: validationResult.error
+    });
+    return false;
+  }
+  return true;
+};
+
+const update = (originalTimeEntry, changes) => (dispatch, getState) => {
+  dispatch(validateBeforeUpdate(changes));
+
+  const { timeEntry = {} } = getState();
+
+  if (timeEntry.error && timeEntry.error.isJoi) {
+    return Promise.resolve();
+  }
+
   const mergeable = _.pick(changes, 'comments', 'hours', {});
 
   const updates = {
@@ -51,14 +113,14 @@ const update = (timeEntry, changes) => (dispatch) => {
   dispatch(notify.start(TIME_ENTRY_UPDATE));
 
   return request({
-    url: `/time_entries/${timeEntry.id}.json`,
+    url: `/time_entries/${originalTimeEntry.id}.json`,
     method: 'PUT',
     data: {
       time_entry: updates
     },
   }).then(() => {
     const updatedTimeEntry = {
-      ...timeEntry,
+      ...originalTimeEntry,
       spent_on: updates.spent_on,
       comments: updates.comments,
       hours: updates.hours,
@@ -115,5 +177,7 @@ export default {
   publish,
   update,
   remove,
-  getAll
+  getAll,
+  validateBeforePublish,
+  validateBeforeUpdate
 };

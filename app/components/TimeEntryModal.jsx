@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Joi from 'joi';
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -47,20 +46,11 @@ class TimeEntryModal extends Component {
         activity: {},
         user: {},
         issue: {},
-        hours: 0,
+        hours: undefined,
         comments: undefined,
         spent_on: moment().format('YYYY-MM-DD')
       },
-      wasModified: false,
-      hasErrors: false,
-      validationErrors: {}
-    };
-
-    this.validationSchema = {
-      activity: activity => Joi.validate(activity.id, Joi.number().integer().positive().required()),
-      hours: hours => Joi.validate(hours, Joi.number().positive().precision(2).required()),
-      comments: comments => Joi.validate(comments, Joi.string().required().allow('')),
-      spent_on: spent_on => Joi.validate(spent_on, Joi.string().required())
+      wasModified: false
     };
   }
 
@@ -71,11 +61,30 @@ class TimeEntryModal extends Component {
       if (timeEntry) {
         this.setState({
           timeEntry,
-          wasModified: false,
-          hasErrors: false,
-          validationErrors: {}
+          wasModified: false
         });
       }
+    }
+  }
+
+  runValidation = () => {
+    const { validateBeforePublish, validateBeforeUpdate } = this.props;
+    const { timeEntry } = this.state;
+    if (timeEntry.id) {
+      validateBeforeUpdate({
+        comments: timeEntry.comments,
+        hours: timeEntry.hours,
+        spent_on: timeEntry.spent_on,
+        activity: timeEntry.activity
+      });
+    } else {
+      validateBeforePublish({
+        activity: timeEntry.activity,
+        comments: timeEntry.comments,
+        hours: timeEntry.hours,
+        issue: timeEntry.issue,
+        spent_on: timeEntry.spent_on
+      });
     }
   }
 
@@ -90,7 +99,7 @@ class TimeEntryModal extends Component {
   onHoursChange = e => this.setState({
     timeEntry: {
       ...this.state.timeEntry,
-      hours: parseFloat(e.target.value.replace(',', '.'))
+      hours: e.target.value ? parseFloat(e.target.value.replace(',', '.')) : e.target.value
     },
     wasModified: true
   });
@@ -113,61 +122,56 @@ class TimeEntryModal extends Component {
     });
   };
 
-  validateTimeEntry = (timeEntry, schema) => {
-    const errors = {};
-    let hasErrors = false;
-    for (const [prop, validate] of Object.entries(schema)) {
-      const value = timeEntry[prop];
-      const validation = validate(value);
-      if (validation.error) {
-        errors[prop] = validation.error.message.replace('value', prop);
-        hasErrors = true;
-      }
-    }
-    const result = {
-      hasErrors,
-      validationErrors: errors
-    };
-
-    this.setState(result);
-    return result;
-  }
-
   onAdd = () => {
     const { timeEntry } = this.state;
-    const result = this.validateTimeEntry(timeEntry, this.validationSchema);
-    if (!result.hasErrors) {
-      this.props.publishTimeEntry({
-        activity: timeEntry.activity,
-        comments: timeEntry.comments,
-        hours: timeEntry.hours,
-        issue: timeEntry.issue,
-        spent_on: timeEntry.spent_on,
-        user: timeEntry.user
-      }).then(() => this.props.onClose());
-    }
+    this.props.publishTimeEntry({
+      activity: timeEntry.activity,
+      comments: timeEntry.comments,
+      hours: timeEntry.hours,
+      issue: timeEntry.issue,
+      spent_on: timeEntry.spent_on
+    }).then(() => {
+      if (!this.props.time.error) {
+        this.props.onClose()
+      }
+    });
   };
 
   onUpdate = () => {
     const { wasModified, timeEntry } = this.state;
-    const result = this.validateTimeEntry(timeEntry, this.validationSchema);
-    if (!result.hasErrors && wasModified) {
+    if (wasModified) {
       this.props.updateTimeEntry(timeEntry, {
         comments: timeEntry.comments,
         hours: timeEntry.hours,
         spent_on: timeEntry.spent_on,
         activity: timeEntry.activity
-      }).then(() => this.props.onClose())
-    } else if (!result.hasErrors && !wasModified) {
+      }).then(() => {
+        if (!this.props.time.error) {
+          this.props.onClose();
+        }
+      })
+    } else {
       this.props.onClose();
     }
   };
 
+  getErrorMessage = (error) => {
+    if (!error) return null;
+    return error.message.replace(new RegExp(error.context.key, 'g'), error.path[0]);
+  }
+
   render() {
-    const { activities, isUserAuthor, isOpen, isEditable, onClose, theme } = this.props;
-    const { timeEntry, validationErrors } = this.state;
+    const { activities, isUserAuthor, isOpen, isEditable, onClose, theme, time } = this.props;
+    const { timeEntry, wasModified } = this.state;
     const { hours, comments, spent_on, activity } = timeEntry;
-    const selectedActivity = { id: activity.id, label: activity.name };
+    const selectedActivity = { id: activity.id, label: activity.name }; 
+    const validationErrors = time.error && time.error.isJoi
+      ? {
+        activity: time.error.details.find(error => error.path[0] === 'activity'),
+        hours: time.error.details.find(error => error.path[0] === 'hours'),
+        spentOn: time.error.details.find(error => error.path[0] === 'spent_on')
+      }
+      : {};
     return (
       <Modal
         open={!!isOpen}
@@ -186,6 +190,7 @@ class TimeEntryModal extends Component {
               options={activities}
               styles={selectStyles}
               value={selectedActivity}
+              onBlur={this.runValidation}
               onChange={this.onActivityChange}
               isClearable={false}
               theme={(defaultTheme) => ({
@@ -199,8 +204,8 @@ class TimeEntryModal extends Component {
               }
             />
           </Label>
-          <ErrorMessage show={validationErrors.activity}>
-            {validationErrors.activity}
+          <ErrorMessage show={!!validationErrors.activity}>
+            {this.getErrorMessage(validationErrors.activity)}
           </ErrorMessage>
           <FlexRow>
             <div>
@@ -209,12 +214,13 @@ class TimeEntryModal extends Component {
                   type="number"
                   name="hours"
                   value={hours}
+                  onBlur={this.runValidation}
                   disabled={!isEditable}
                   onChange={this.onHoursChange}
                 />
               </Label>
-              <ErrorMessage show={validationErrors.hours}>
-                {validationErrors.hours}
+              <ErrorMessage show={!!validationErrors.hours}>
+                {this.getErrorMessage(validationErrors.hours)}
               </ErrorMessage>
             </div>
             <div>
@@ -223,11 +229,12 @@ class TimeEntryModal extends Component {
                   name="date"
                   value={new Date(spent_on)}
                   isDisabled={!isEditable}
+                  onBlur={this.runValidation}
                   onChange={this.onDateChange}
                 />
               </Label>
-              <ErrorMessage show={validationErrors.spent_on}>
-                {validationErrors.spent_on}
+              <ErrorMessage show={!!validationErrors.spentOn}>
+                {this.getErrorMessage(validationErrors.spentOn)}
               </ErrorMessage>
             </div>
           </FlexRow>
@@ -242,6 +249,7 @@ class TimeEntryModal extends Component {
               <OptionButtons>
                 <Button
                   id="btn-update"
+                  disabled={!wasModified}
                   onClick={this.onUpdate}
                   palette='success'
                 >
@@ -253,6 +261,7 @@ class TimeEntryModal extends Component {
               <OptionButtons>
                 <Button
                   id="btn-add"
+                  disabled={!wasModified}
                   onClick={this.onAdd}
                   palette='success'
                 >
@@ -312,7 +321,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   publishTimeEntry: timeEntry => dispatch(actions.timeEntry.publish(timeEntry)),
-  updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes))
+  updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
+  validateBeforePublish: timeEntry => dispatch(actions.timeEntry.validateBeforePublish(timeEntry)),
+  validateBeforeUpdate: changes => dispatch(actions.timeEntry.validateBeforeUpdate(changes))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

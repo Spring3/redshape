@@ -22,8 +22,21 @@ import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 import { openExternalUrl, xssFilter } from '../../modules/utils';
 
 import TextArea from './TextArea';
-import Button, { GhostButton } from './Button';
+import { GhostButton } from './Button';
 import Tooltip from './Tooltip';
+
+const MarkdownOption = styled.li`
+  display: inline;
+  margin-right: 10px;
+  position: relative;
+  cursor: pointer;  
+
+  &:hover {
+    svg {
+      color: ${props => props.theme.main} !important;
+    }
+  }
+`;
 
 const MarkdownOptionsList = styled.ul`
   list-style-type: none;
@@ -39,17 +52,12 @@ const MarkdownOptionsList = styled.ul`
     float: right;
     margin-right: 0;
   }
-`;
 
-const MarkdownOption = styled.li`
-  display: inline;
-  margin-right: 10px;
-  position: relative;
-  cursor: pointer;  
-
-  &:hover {
-    svg {
-      color: ${props => props.theme.main} !important;
+  ${MarkdownOption}:last-child {
+    bottom: 1px;
+    a {
+      display: flex;
+      align-items: center;
     }
   }
 `;
@@ -92,18 +100,17 @@ class MarkdownEditor extends PureComponent {
     };
 
     this.textareaRef = React.createRef();
+    this.throttledAdjustTextAreaHeight = throttle(this.adjustTextAreaHeight, 150);
   }
 
   componentDidUpdate(oldProps, oldState) {
     if (this.props.initialValue !== oldProps.initialValue) {
-      this.setState({
-        value: this.props.initialValue
-      });
+      this.setState({ value: this.props.initialValue });
     }
 
     if (oldState.value !== this.state.value
       || ((oldState.showPreview !== this.state.showPreview) && !this.state.showPreview)) {
-      this.adjustTextAreaHeight();
+      this.throttledAdjustTextAreaHeight();
     }
   }
 
@@ -190,9 +197,7 @@ class MarkdownEditor extends PureComponent {
   }
 
   onTextAreaTyped = (e) => {
-    this.setState({
-      value: e.target.value
-    });
+    this.setState({ value: e.target.value });
     const { onChange } = this.props;
     if (onChange) {
       onChange(e.target.value);
@@ -296,7 +301,7 @@ class MarkdownEditor extends PureComponent {
           <MarkdownOption>
             <GhostButton onClick={this.togglePreview}>
               <CardBulletedOutlineIcon size={27} />
-              &nbsp;Preview
+              <span>&nbsp;Preview</span>
             </GhostButton>
           </MarkdownOption>
         </MarkdownOptionsList>
