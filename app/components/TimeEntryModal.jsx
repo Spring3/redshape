@@ -249,7 +249,6 @@ class TimeEntryModal extends Component {
               <OptionButtons>
                 <Button
                   id="btn-update"
-                  disabled={!wasModified}
                   onClick={this.onUpdate}
                   palette='success'
                 >

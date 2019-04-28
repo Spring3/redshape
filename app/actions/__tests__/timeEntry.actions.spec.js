@@ -26,18 +26,140 @@ describe('Time actions', () => {
 
   it('should expose all the necessary actions', () => {
     expect(timeEntryActions).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_PUBLISH).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_UPDATE).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_DELETE).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_GET_ALL).toBeTruthy();
 
+    expect(timeEntryActions.default.validateBeforePublish).toBeTruthy();
     expect(timeEntryActions.default.publish).toBeTruthy();
+    expect(timeEntryActions.default.validateBeforeUpdate).toBeTruthy();
     expect(timeEntryActions.default.update).toBeTruthy();
     expect(timeEntryActions.default.remove).toBeTruthy();
     expect(timeEntryActions.default.getAll).toBeTruthy();
   });
 
-  describe('add action', () => {
+  describe('validateBeforePublish action', () => {
+    it('should pass through the validation if the format is correct', () => {
+      expect(timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: 1
+        },
+        issue: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: 'Yolo',
+        spent_on: '2011-01-01'
+      })).toEqual({ type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED });
+    });
+
+    
+    it('should fail if activity.id is not a number', () => {
+      const validation = timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: undefined
+        }
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['activity', 'id']);
+    });
+
+    it('should fail if issue.id is not a number', () => {
+      const validation = timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: 1
+        },
+        issue: {
+          id: undefined
+        }
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['issue', 'id']);
+    });
+
+    it('should fail if hours is not a positive number', () => {
+      const validation = timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: 1
+        },
+        issue: {
+          id: 1
+        },
+        hours: -15.2
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['hours']);
+    });
+
+    it('should fail if comments is not a string', () => {
+      const validation = timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: 1
+        },
+        issue: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: undefined
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['comments']);
+    });
+
+    it('should fail if spent_on is not a string', () => {
+      const validation = timeEntryActions.default.validateBeforePublish({
+        activity: {
+          id: 1
+        },
+        issue: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: '',
+        spent_on: new Date()
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['spent_on']);
+    });
+  });
+
+  describe('publish action', () => {
+    it('should not make a request if the validation failed', async () => {
+      const state = {
+        user: {
+          id: 1,
+          name: 'John Wayne'
+        }
+      };
+
+      const timeEntry = {
+        issue: {
+          id: 1
+        },
+        spent_on: new Date(),
+        hours: 1.5,
+        activity: {
+          id: 1
+        },
+        comments: 'Hello world',
+        user: {
+          id: 1
+        }
+      };
+
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue(state);
+      await timeEntryActions.default.publish(timeEntry)(dispatch, getState);
+
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch.mock.calls[0][0].type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+    });
+
     it('should make request and return the response with correct actions', async () => {
       const response = {
         time_entry: {}
@@ -54,7 +176,7 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
-        spent_on: new Date(),
+        spent_on: '2011-01-01',
         hours: 1.5,
         activity: {
           id: 1
@@ -84,9 +206,12 @@ describe('Time actions', () => {
         }
       }));
       expect(axiosMock.history.post[0].headers['X-Redmine-API-Key']).toBe(token);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_PUBLISH));
-      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_PUBLISH, response));
+      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED
+      });
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_PUBLISH));
+      expect(dispatch).toHaveBeenCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_PUBLISH, response));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -94,7 +219,7 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
-        spent_on: new Date(),
+        spent_on: '2011-01-01',
         hours: 1.5,
         activity: {
           id: 1
@@ -119,16 +244,78 @@ describe('Time actions', () => {
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
       expect(axiosMock.history.post[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_PUBLISH));
-      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_PUBLISH, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED
+      });
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_PUBLISH));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_PUBLISH, new Error(`Error ${response.status} (${response.message})`)));
+    });
+  });
+
+  describe('validateBeforeUpdate action', () => {
+    it('should pass through the validation if the format is correct', () => {
+      expect(timeEntryActions.default.validateBeforeUpdate({
+        activity: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: 'Yolo',
+        spent_on: '2011-01-01'
+      })).toEqual({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
+    });
+
+    
+    it('should fail if activity.id is not a number', () => {
+      const validation = timeEntryActions.default.validateBeforeUpdate({
+        activity: {
+          id: undefined,
+          name: undefined
+        }
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['activity', 'id']);
+    });
+
+    it('should fail if hours is not a positive number', () => {
+      const validation = timeEntryActions.default.validateBeforeUpdate({
+        activity: {
+          id: 1
+        },
+        hours: -15.2
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['hours']);
+    });
+
+    it('should fail if comments is not a string', () => {
+      const validation = timeEntryActions.default.validateBeforeUpdate({
+        activity: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: undefined
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['comments']);
+    });
+
+    it('should fail if spent_on is not a string', () => {
+      const validation = timeEntryActions.default.validateBeforeUpdate({
+        activity: {
+          id: 1
+        },
+        hours: 15.2,
+        comments: '',
+        spent_on: new Date()
+      });
+      expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+      expect(validation.data.details[0].path).toEqual(['spent_on']);
     });
   });
 
   describe('update action', () => {
-    it('should make request and return the response with correct actions', async () => {
-      const response = {};
-
+    it('should not make a request if the validation failed', async () => {
       const timeEntry = {
         id: 1,
         issue: {
@@ -155,6 +342,41 @@ describe('Time actions', () => {
       };
 
       const dispatch = jest.fn();
+      await timeEntryActions.default.update(timeEntry, changes)(dispatch);
+
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch.mock.calls[0][0].type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+    });
+
+    it('should make request and return the response with correct actions', async () => {
+      const response = {};
+
+      const timeEntry = {
+        id: 1,
+        issue: {
+          id: 1
+        },
+        spent_on: '2011-01-01',
+        hours: 1.5,
+        activity: {
+          id: 1
+        },
+        comments: 'Hello world',
+        user: {
+          id: 1
+        }
+      };
+
+      const changes = {
+        comments: 'I win',
+        hours: 1.5,
+        activity: {
+          id: 2
+        },
+        spent_on: '2011-01-01'
+      };
+
+      const dispatch = jest.fn();
       axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.resolve([200, response]));
       await timeEntryActions.default.update(timeEntry, changes)(dispatch);
 
@@ -169,9 +391,10 @@ describe('Time actions', () => {
         }
       }));
       expect(axiosMock.history.put[0].headers['X-Redmine-API-Key']).toBe(token);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
-      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_UPDATE, {
+      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenCalledWith({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
+      expect(dispatch).toHaveBeenCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_UPDATE, {
         ...timeEntry,
         spent_on: moment(changes.spent_on).format('YYYY-MM-DD'),
         comments: changes.comments,
@@ -186,7 +409,7 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
-        spent_on: new Date(),
+        spent_on: '2011-01-01',
         hours: 1.5,
         activity: {
           id: 1
@@ -196,16 +419,26 @@ describe('Time actions', () => {
           id: 1
         }
       };
+
+      const changes = {
+        comments: 'I win',
+        hours: 1.5,
+        activity: {
+          id: 2
+        },
+        spent_on: '2011-01-01'
+      };
       const response = new Error('Whoops');
       response.status = 500;
       const dispatch = jest.fn();
       axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.reject(response));
-      await timeEntryActions.default.update(timeEntry, {})(dispatch);
+      await timeEntryActions.default.update(timeEntry, changes)(dispatch);
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
-      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_UPDATE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenCalledWith({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_UPDATE, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 
@@ -222,9 +455,9 @@ describe('Time actions', () => {
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
       expect(axiosMock.history.delete[0].headers['X-Redmine-API-Key']).toBe(token);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
-      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_DELETE, { timeEntryId, issueId }));
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
+      expect(dispatch).toHaveBeenCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_DELETE, { timeEntryId, issueId }));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -238,9 +471,9 @@ describe('Time actions', () => {
       await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
-      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_DELETE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_DELETE, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 
@@ -268,9 +501,9 @@ describe('Time actions', () => {
         issue_id: issueId
       });
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_GET_ALL, response));
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
+      expect(dispatch).toHaveBeenCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_GET_ALL, response));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -281,9 +514,9 @@ describe('Time actions', () => {
       await timeEntryActions.default.getAll(1, 2, 3, 4)(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
-      expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 });

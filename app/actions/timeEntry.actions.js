@@ -13,17 +13,19 @@ export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
 
 const validateBeforePublish = (timeEntry) => {
-  const validationSchema = {
+  const validationSchema = Joi.object().keys({
     activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required()
+      id: Joi.number().integer().positive().required(),
+      name: Joi.string()
     }).unknown().required(),
     issue: Joi.object().keys({
-      id: Joi.number().integer().positive().required()
+      id: Joi.number().integer().positive().required(),
+      name: Joi.string()
     }).unknown().required(),
     hours: Joi.number().positive().precision(2).required(),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
-  };
+  }).unknown().required();
 
   const validationResult = Joi.validate(timeEntry, validationSchema);
   return validationResult.error
@@ -35,14 +37,14 @@ const validateBeforePublish = (timeEntry) => {
 };
 
 const publish = timeEntryData => (dispatch, getState) => {
-  dispatch(validateBeforePublish(timeEntryData));
+  const validationAction = validateBeforePublish(timeEntryData);
+  dispatch(validationAction);
 
-  const { user = {}, timeEntry = {} } = getState();
-
-  if (timeEntry.error && timeEntry.error.isJoi) {
+  if (validationAction.type === TIME_ENTRY_PUBLISH_VALIDATION_FAILED) {
     return Promise.resolve();
   }
 
+  const { user = {} } = getState();
   dispatch(notify.start(TIME_ENTRY_PUBLISH));
 
   return request({
@@ -66,33 +68,32 @@ const publish = timeEntryData => (dispatch, getState) => {
     });
 };
 
-const validateBeforeUpdate = (changes, dispatch) => {
-  const validationSchema = {
+const validateBeforeUpdate = (changes) => {
+  const validationSchema = Joi.object().keys({
     activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required()
+      id: Joi.number().integer().positive().required(),
+      name: Joi.string()
     }).unknown().required(),
     hours: Joi.number().positive().precision(2).required(),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
-  };
+  }).unknown().required();
 
   const validationResult = Joi.validate(changes, validationSchema);
-  if (validationResult.error) {
-    dispatch({
+  return validationResult.error
+    ? {
       type: TIME_ENTRY_UPDATE_VALIDATION_FAILED,
       data: validationResult.error
-    });
-    return false;
-  }
-  return true;
+    }
+    : { type: TIME_ENTRY_UPDATE_VALIDATION_PASSED };
 };
 
-const update = (originalTimeEntry, changes) => (dispatch, getState) => {
-  dispatch(validateBeforeUpdate(changes));
-
-  const { timeEntry = {} } = getState();
-
-  if (timeEntry.error && timeEntry.error.isJoi) {
+const update = (originalTimeEntry, changes) => (dispatch) => {
+  const validateAction = validateBeforeUpdate(changes);
+  dispatch(validateAction);
+ 
+  if (validateAction.type === TIME_ENTRY_UPDATE_VALIDATION_FAILED) {
+    console.log(validateAction);
     return Promise.resolve();
   }
 

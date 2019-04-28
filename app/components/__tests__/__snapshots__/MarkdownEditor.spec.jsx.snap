@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MarkdownEditor component should match the snapshot 1`] = `
-.c7 {
+.c8 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -11,32 +11,29 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   box-sizing: border-box;
 }
 
-.c5 {
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 14px;
-  outline: none;
-  border: 2px solid #FF7079;
+.c6 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
   color: #FF7079;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
-  -webkit-transition: background ease .2s;
-  transition: background ease .2s;
-  width: auto;
 }
 
-.c5:hover,
-.c5:focus {
-  cursor: pointer;
-  background: #FF7079;
-  color: #FFFFFF;
+.c6:hover {
+  color: #EF6069;
 }
 
-.c5:active {
-  background: #EF6069;
+.c6:hover svg {
+  fill: #EF6069;
 }
 
-.c4 {
+.c6:active,
+.c6:focus,
+.c6:visited {
+  background: transparent;
+}
+
+.c5 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -55,7 +52,7 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   box-shadow: 0px 2px 7px #909090;
 }
 
-.c4::after {
+.c5::after {
   content: ' ';
   position: absolute;
   top: 100%;
@@ -69,13 +66,24 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c2 {
+.c3 {
   display: inline-block;
   position: relative;
 }
 
-.c2:hover .c3 {
+.c3:hover .c4 {
   display: block;
+}
+
+.c2 {
+  display: inline;
+  margin-right: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.c2:hover svg {
+  color: #FF7079 !important;
 }
 
 .c0 {
@@ -94,29 +102,33 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   margin-right: 0;
 }
 
-.c1 {
-  display: inline;
-  margin-right: 10px;
-  position: relative;
-  cursor: pointer;
+.c0 .c1:last-child {
+  bottom: 1px;
 }
 
-.c1:hover svg {
-  color: #FF7079 !important;
+.c0 .c1:last-child a {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
-.c6 {
+.c7 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #909090;
 }
 
-.c6:hover {
+.c7:hover {
   border-color: #FF7079;
 }
 
-.c6:focus {
+.c7:focus {
   border: 2px solid #FF7079;
 }
 
@@ -125,11 +137,11 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
     className="c0"
   >
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -143,18 +155,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Bold text
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -168,18 +180,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Italic text
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -193,18 +205,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Underlined text
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -218,18 +230,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Crossed out text
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -243,18 +255,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Code block
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -268,18 +280,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           XL Header
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -293,18 +305,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           L Header
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -318,18 +330,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           M Header
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -343,18 +355,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Bulleted List
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -368,18 +380,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Ordered List
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -393,18 +405,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Quote block
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -418,18 +430,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Hyperlink
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
       onClick={[Function]}
     >
       <div
-        className="c2"
+        className="c3"
       >
         <svg
           className="mdi-icon "
@@ -443,27 +455,40 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <p
-          className="tooltip c3 c4"
+          className="tooltip c4 c5"
         >
           Embeded Image
         </p>
       </div>
     </li>
     <li
-      className="c1"
+      className="c1 c2"
     >
-      <button
-        className="c5"
+      <a
+        className="c6"
         disabled={false}
+        href="#"
         onClick={[Function]}
-        type="button"
       >
-        Preview
-      </button>
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={27}
+          viewBox="0 0 24 24"
+          width={27}
+        >
+          <path
+            d="M12,15H10V13H12V15M18,15H14V13H18V15M8,11H6V9H8V11M18,11H10V9H18V11M20,20H4C2.9,20 2,19.1 2,18V6C2,4.9 2.9,4 4,4H20C21.1,4 22,4.9 22,6V18C22,19.1 21.1,20 20,20M4,6V18H20V6H4Z"
+          />
+        </svg>
+        <span>
+           Preview
+        </span>
+      </a>
     </li>
   </ul>
   <textarea
-    className="c6 c7"
+    className="c7 c8"
     disabled={false}
     onChange={[Function]}
     onKeyDown={[Function]}
