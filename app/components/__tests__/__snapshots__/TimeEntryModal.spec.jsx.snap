@@ -63,12 +63,20 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   -webkit-transition: background ease .2s;
   transition: background ease .2s;
   width: auto;
-  border: 2px solid #909090;
-  color: #909090;
+  border: 2px solid #6CCA51;
+  color: #6CCA51;
+  cursor: pointer;
 }
 
-.c15 svg {
-  fill: #909090;
+.c15:hover,
+.c15:focus {
+  background: #6CCA51;
+  color: #FFFFFF;
+}
+
+.c15:hover svg,
+.c15:focus svg {
+  fill: #FFFFFF;
 }
 
 .c11 {
@@ -717,12 +725,20 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   -webkit-transition: background ease .2s;
   transition: background ease .2s;
   width: auto;
-  border: 2px solid #909090;
-  color: #909090;
+  border: 2px solid #6CCA51;
+  color: #6CCA51;
+  cursor: pointer;
 }
 
-.c15 svg {
-  fill: #909090;
+.c15:hover,
+.c15:focus {
+  background: #6CCA51;
+  color: #FFFFFF;
+}
+
+.c15:hover svg,
+.c15:focus svg {
+  fill: #FFFFFF;
 }
 
 .c11 {
@@ -1591,7 +1607,6 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                         >
                           <button
                             class="c15"
-                            disabled=""
                             id="btn-update"
                             type="button"
                           >
@@ -5785,14 +5800,13 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                               className="c14"
                             >
                               <WithTheme(Button)
-                                disabled={true}
                                 id="btn-update"
                                 onClick={[Function]}
                                 palette="success"
                               >
                                 <Button
                                   block={false}
-                                  disabled={true}
+                                  disabled={false}
                                   id="btn-update"
                                   onClick={[Function]}
                                   palette="success"
@@ -5816,7 +5830,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 >
                                   <Button__StyledButton
                                     block={false}
-                                    disabled={true}
+                                    disabled={false}
                                     id="btn-update"
                                     onClick={[Function]}
                                     palette={
@@ -5829,7 +5843,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                   >
                                     <StyledComponent
                                       block={false}
-                                      disabled={true}
+                                      disabled={false}
                                       forwardedComponent={
                                         Object {
                                           "$$typeof": Symbol(react.forward_ref),
@@ -5868,7 +5882,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     >
                                       <button
                                         className="c15"
-                                        disabled={true}
+                                        disabled={false}
                                         id="btn-update"
                                         onClick={[Function]}
                                         type="button"

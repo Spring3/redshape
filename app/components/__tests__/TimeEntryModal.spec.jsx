@@ -85,7 +85,7 @@ describe('TimeEntryModal Component', () => {
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
-  it('should set wasModified to true if date was modified', () => {
+  it('should set wasModified to true if any of the editable data was modified', () => {
     const props = {
       activities: [{
         id: 1,
@@ -253,6 +253,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      user: {
+        id: 1
       }
     };
     const store = mockStore(state);
@@ -269,9 +272,11 @@ describe('TimeEntryModal Component', () => {
 
     expect(wrapper.exists('#btn-add')).toBe(true);
     const actionSpy = jest.spyOn(actions.default, 'publish');
+    modal.setState({ wasModified: true });
     wrapper.find('#btn-add').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0].type).toEqual(actions.TIME_ENTRY_PUBLISH);
+    expect(store.getActions().length).toBe(2);
+    expect(store.getActions()[0].type).toEqual(actions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED);
+    expect(store.getActions()[1].type).toEqual(actions.TIME_ENTRY_PUBLISH);
 
     expect(actionSpy).toHaveBeenCalled();
   });
@@ -314,9 +319,13 @@ describe('TimeEntryModal Component', () => {
       isEditable: true
     };
     const state = {
+      wasModified: true,
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      user: {
+        id: 1
       }
     };
     const store = mockStore(state);
@@ -335,8 +344,9 @@ describe('TimeEntryModal Component', () => {
     expect(wrapper.exists('#btn-update')).toBe(true);
     const actionSpy = jest.spyOn(actions.default, 'update');
     wrapper.find('#btn-update').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0].type).toEqual(actions.TIME_ENTRY_UPDATE);
+    expect(store.getActions().length).toBe(2);
+    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_PASSED);
+    expect(store.getActions()[1].type).toBe(actions.TIME_ENTRY_UPDATE);
 
     expect(actionSpy).toHaveBeenCalled();
   });
@@ -459,5 +469,128 @@ describe('TimeEntryModal Component', () => {
 
     expect(wrapper.exists('#btn-add')).toBe(true);
     expect(wrapper.exists('#btn-update')).toBe(false);
+  });
+
+  it('should not add if validation failed', () => {
+    const props = {
+      activities: [{
+        id: 1,
+        name: 'Development'
+      }, {
+        id: 2,
+        name: 'Testing'
+      }],
+      isUserAuthor: true,
+      timeEntry: {
+        activity: {
+          id: 1,
+          name: 'Development'
+        },
+        comments: 'Hello world',
+        created_on: '2011-01-01',
+        hours: 10,
+        issue: {
+          id: 1,
+          name: 'Cover a modal with tests'
+        },
+        project: {
+          id: 1,
+          name: 'Testing Project'
+        },
+        spent_on: new Date(),
+        user: {
+          id: 1,
+          name: 'John Wayne'
+        }
+      },
+      onClose: jest.fn(),
+      isOpen: true,
+      isEditable: true
+    };
+    const state = {
+      timeEntry: {
+        isFetching: false,
+        error: undefined
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <TimeEntryModal {...props} />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    const modal = wrapper.find('TimeEntryModal').instance();
+    expect(modal).toBeTruthy();
+    modal.setState({ wasModified: true });
+
+    expect(wrapper.exists('#btn-add')).toBe(true);
+    wrapper.find('#btn-add').hostNodes().simulate('click');
+    expect(store.getActions().length).toBe(1);
+    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+  });
+
+  it('should not update if validation failed', () => {
+    const props = {
+      activities: [{
+        id: 1,
+        name: 'Development'
+      }, {
+        id: 2,
+        name: 'Testing'
+      }],
+      isUserAuthor: true,
+      timeEntry: {
+        id: 1,
+        activity: {
+          id: 1,
+          name: 'Development'
+        },
+        comments: 'Hello world',
+        created_on: '2011-01-01',
+        hours: 10,
+        issue: {
+          id: 1,
+          name: 'Cover a modal with tests'
+        },
+        project: {
+          id: 1,
+          name: 'Testing Project'
+        },
+        spent_on: new Date(),
+        user: {
+          id: 1,
+          name: 'John Wayne'
+        }
+      },
+      onClose: jest.fn(),
+      isOpen: true,
+      isEditable: true
+    };
+    const state = {
+      timeEntry: {
+        isFetching: false,
+        error: undefined
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <TimeEntryModal {...props} />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    const modal = wrapper.find('TimeEntryModal').instance();
+    expect(modal).toBeTruthy();
+    modal.setState({ wasModified: true });
+
+    expect(wrapper.exists('#btn-update')).toBe(true);
+    wrapper.find('#btn-update').hostNodes().simulate('click');
+    expect(store.getActions().length).toBe(1);
+    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
   });
 });

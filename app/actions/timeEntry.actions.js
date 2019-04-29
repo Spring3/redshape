@@ -91,9 +91,8 @@ const validateBeforeUpdate = (changes) => {
 const update = (originalTimeEntry, changes) => (dispatch) => {
   const validateAction = validateBeforeUpdate(changes);
   dispatch(validateAction);
- 
+
   if (validateAction.type === TIME_ENTRY_UPDATE_VALIDATION_FAILED) {
-    console.log(validateAction);
     return Promise.resolve();
   }
 
