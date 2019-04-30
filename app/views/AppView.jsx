@@ -35,7 +35,7 @@ class AppView extends Component {
       activities: [],
       showTimeEntryModal: false,
       timeEntry: null
-    }; 
+    };
   }
 
   componentWillMount() {
@@ -71,7 +71,7 @@ class AppView extends Component {
   }
 
   closeTimeEntryModal = () => {
-    this.setState({ showTimeEntryModal: false });
+    this.setState({ showTimeEntryModal: false, timeEntry: null });
     this.props.resetTimer();
   }
 
