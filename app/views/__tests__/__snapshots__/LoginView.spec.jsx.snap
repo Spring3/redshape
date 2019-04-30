@@ -1,88 +1,119 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Login view should match the snapshot 1`] = `
-.c6 {
+.c8 {
   display: block;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 5px 10px;
   box-sizing: border-box;
   font-size: 14px;
-  border: 1px solid #FF7079;
   min-height: 35px;
   outline: none;
-  color: #FF7079;
   font-weight: bold;
-  background: #FAFAFA;
+  -webkit-transition: background .2s;
+  transition: background .2s;
+  border: 1px solid #909090;
+  color: #FF7079;
+  background: white;
 }
 
-.c6:hover {
+.c8:hover {
   border: 1px solid #FF7079;
 }
 
-.c6:focus {
+.c8:focus {
+  border-color: #FF7079;
   box-shadow: 0px 0px 0px 1px #FF7079;
 }
 
-.c5 h4 {
+.c8::-webkit-input-placeholder {
+  color: #909090;
+}
+
+.c8::-moz-placeholder {
+  color: #909090;
+}
+
+.c8:-ms-input-placeholder {
+  color: #909090;
+}
+
+.c8::placeholder {
+  color: #909090;
+}
+
+.c6 h4 {
   margin-bottom: 10px;
-  color: #A4A4A4;
-}
-
-.c8 {
-  padding: 10px 5px;
-  border-radius: 5px;
-  border: 2px solid transparent;
-  box-shadow: 0px 0px 0px 2px #FF7079;
-  color: #FF7079;
-  font-weight: bold;
-  font-size: 14px;
-  outline: none;
-  width: 100%;
-  margin: 25px auto 0px auto;
-}
-
-.c8:hover,
-.c8:focus {
-  cursor: pointer;
-  background: #FF7079;
-  border: 2px solid #FF7079;
-  box-shadow: 0px 0px 0px 2px #EF6069;
-  color: white;
-}
-
-.c8:active {
-  background: #EF6069;
+  color: #909090;
 }
 
 .c7 {
-  margin: 15px auto 5px auto;
-  font-size: 14px;
-  background: #FF7079;
-  color: white;
-  padding: 2px;
-  display: none;
-}
-
-.c2 {
-  color: #FF7079;
-  font-size: 14px;
-  padding: 2px;
-}
-
-.c11 {
-  color: #FF7079;
-  font-size: 14px;
-  padding: 2px;
-}
-
-.c11:hover {
-  background: #FF7079;
-  color: white;
+  color: #909090;
 }
 
 .c10 {
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  text-align: center;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+  -webkit-transition: background ease .2s;
+  transition: background ease .2s;
+  width: 100%;
+  border: 2px solid #FF7079;
   color: #FF7079;
+  cursor: pointer;
+}
+
+.c10:hover,
+.c10:focus {
+  background: #FF7079;
+  color: #FFFFFF;
+}
+
+.c10:hover svg,
+.c10:focus svg {
+  fill: #FFFFFF;
+}
+
+.c10:active {
+  background: #EF6069;
+}
+
+.c3 {
+  color: #FF7079;
+  font-size: 14px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.c13 {
+  color: #FF7079;
+  font-size: 14px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.c13:hover {
+  background: #FF7079;
+  color: #FFFFFF;
+}
+
+.c12 {
+  color: #FF7079;
+}
+
+.c1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 23px;
+  z-index: 3;
+  -webkit-app-region: drag;
 }
 
 .c0 {
@@ -96,20 +127,20 @@ exports[`Login view should match the snapshot 1`] = `
   justify-items: center;
 }
 
-.c3 {
+.c4 {
   padding: 40px;
   grid-column: 2 / 6;
   grid-row: 2 / 4;
   min-width: 300px;
 }
 
-.c4 {
+.c5 {
   text-align: center;
   font-size: 40px;
   color: #FF7079;
 }
 
-.c1 {
+.c2 {
   grid-column: 6;
   justify-self: end;
   -webkit-align-self: start;
@@ -118,7 +149,7 @@ exports[`Login view should match the snapshot 1`] = `
   margin: 20px 20px 0px 0px;
 }
 
-.c9 {
+.c11 {
   grid-row: 4;
   grid-column: 2 / 6;
   -webkit-align-self: end;
@@ -127,15 +158,24 @@ exports[`Login view should match the snapshot 1`] = `
   margin-bottom: 20px;
 }
 
+.c9 {
+  padding: 10px 5px;
+  margin: 25px auto 0px auto;
+}
+
 <div
   className="c0"
 >
   <div
     className="c1"
+  />
+  <div
+    className="c2"
   >
     <a
-      className="c2"
+      className="c3"
       href="https://github.com/Spring3/redtime"
+      onClick={[Function]}
       rel="noopener noreferer"
       type="external"
     >
@@ -153,24 +193,25 @@ exports[`Login view should match the snapshot 1`] = `
     </a>
   </div>
   <form
-    className="c3"
+    className="c4"
     onSubmit={[Function]}
   >
     <h1
-      className="c4"
+      className="c5"
     >
       Redtime
     </h1>
     <div
-      className="form-group undefined c5"
+      className="form-group undefined c6"
     >
       <h4
+        className="c7"
         htmlFor="username"
       >
         Login
       </h4>
       <input
-        className="c6"
+        className="c8"
         disabled={false}
         name="username"
         onBlur={[Function]}
@@ -179,19 +220,17 @@ exports[`Login view should match the snapshot 1`] = `
         value=""
       />
     </div>
-    <p
-      className="c7"
-    />
     <div
-      className="form-group undefined c5"
+      className="form-group undefined c6"
     >
       <h4
+        className="c7"
         htmlFor="password"
       >
         Password
       </h4>
       <input
-        className="c6"
+        className="c8"
         disabled={false}
         name="password"
         onBlur={[Function]}
@@ -200,19 +239,17 @@ exports[`Login view should match the snapshot 1`] = `
         value=""
       />
     </div>
-    <p
-      className="c7"
-    />
     <div
-      className="form-group undefined c5"
+      className="form-group undefined c6"
     >
       <h4
+        className="c7"
         htmlFor="redmineEndpoint"
       >
-        Remdine Host
+        Redmine Endpoint
       </h4>
       <input
-        className="c6"
+        className="c8"
         disabled={false}
         name="redmineEndpoint"
         onBlur={[Function]}
@@ -222,30 +259,25 @@ exports[`Login view should match the snapshot 1`] = `
         value=""
       />
     </div>
-    <p
-      className="c7"
-    />
     <button
-      className="c8"
+      className="c9 c10"
       disabled={false}
       type="submit"
     >
       Submit
     </button>
-    <p
-      className="c7"
-    />
   </form>
   <div
-    className="c9"
+    className="c11"
   >
     <p
-      className="c10"
+      className="c12"
     >
       Created by 
       <a
-        className="c11"
+        className="c13"
         href="https://github.com/Spring3"
+        onClick={[Function]}
         rel="noopener noreferer"
         type="external"
       >
