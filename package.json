@@ -8,7 +8,7 @@
     "dev": "webpack-dev-server",
     "build": "webpack --config webpack.config.js",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"
   },
   "repository": {
     "type": "git",
