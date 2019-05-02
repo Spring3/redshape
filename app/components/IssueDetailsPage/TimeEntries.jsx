@@ -239,7 +239,7 @@ TimeEntries.propTypes = {
 
 const mapStateToProps = state => ({
   userId: state.user.id,
-  usrName: state.user.name,
+  userName: state.user.name,
   spentTime: state.issues.selected.spentTime.data,
   selectedIssue: state.issues.selected.data,
   isTimerEnabled: state.tracking.isEnabled,
