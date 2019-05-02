@@ -288,6 +288,27 @@ IssueDetailsPage.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired,
+    priority: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    assigned_to: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).siRequired,
+    done_ratio: PropTypes.number.isRequired,
+    start_date: PropTypes.string.isRequired,
+    due_date: PropTypes.string.isRequired,
+    total_estimated_hours: PropTypes.number,
+    spent_hours: PropTypes.number,
+    tracker: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    status: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
     author: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
@@ -295,7 +316,6 @@ IssueDetailsPage.propTypes = {
   }).isRequired,
   userId: PropTypes.number.isRequired,
   userName: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired

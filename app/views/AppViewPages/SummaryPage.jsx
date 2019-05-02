@@ -88,16 +88,14 @@ class SummaryPage extends Component {
   onSearchChange = (e) => {
     this.setState({
       search: e.target.value
-    });
-    this.deboucedFetch();
+    }, () => this.deboucedFetch());
   }
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
       sortBy: sortBy,
       sortDirection: sortDirection
-    });
-    this.deboucedFetch();
+    }, () => this.deboucedFetch());
   }
 
   render() {
