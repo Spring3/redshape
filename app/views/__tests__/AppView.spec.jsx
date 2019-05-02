@@ -35,7 +35,6 @@ describe('AppView', () => {
     const stub = axios.getInstance();
     getInstanceStub = jest.spyOn(axios, 'getInstance').mockReturnValue(stub);
     axiosMock = new MockAdapter(stub);
-    axiosMock.onGet('*').reply(() => Promise.resolve([200]));
   });
 
   afterEach(() => {
@@ -48,6 +47,7 @@ describe('AppView', () => {
   });
 
   it('should match the snapshot', () => {
+    axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
     const store = mockStore({
       user: {
         id: 1,
@@ -100,6 +100,7 @@ describe('AppView', () => {
 
   describe('[integration] AppView', () => {
     it('should fetch projects data on mount', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
       const store = mockStore({
         user: {
           id: 1,
@@ -166,6 +167,7 @@ describe('AppView', () => {
     });
 
     it('should logout when a user clicks the button', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
       const store = mockStore({
         user: {
           id: 1,
@@ -240,6 +242,7 @@ describe('AppView', () => {
     });
 
     it('should open the modal with a new timeEntry if timer stops and wipe the storage', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
       const state = {
         user: {
           id: 1,
@@ -294,7 +297,6 @@ describe('AppView', () => {
       };
 
       const storageSpy = jest.spyOn(storage, 'delete');
-      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [] }]));
 
       const wrapper = mount(
         <Provider store={store}>

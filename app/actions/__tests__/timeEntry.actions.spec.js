@@ -11,7 +11,6 @@ let axiosMock;
 describe('Time actions', () => {
   beforeAll(() => {
     axios.initialize(redmineEndpoint, token);
-    expect(axios.getInstance()).toBeTruthy();
     axiosMock = new MockAdapter(axios.getInstance());
   });
 
@@ -189,7 +188,7 @@ describe('Time actions', () => {
 
       const dispatch = jest.fn();
       const getState = jest.fn().mockReturnValue(state);
-      axiosMock.onPost('/time_entries.json').replyOnce(() => Promise.resolve([200, response]));
+      axiosMock.onPost('/time_entries.json').reply(() => Promise.resolve([200, response]));
       await timeEntryActions.default.publish(timeEntry)(dispatch, getState);
 
       expect(getState).toHaveBeenCalledTimes(1);
@@ -239,7 +238,7 @@ describe('Time actions', () => {
       response.status = 500;
       const dispatch = jest.fn();
       const getState = jest.fn().mockReturnValue(state);
-      axiosMock.onPost('/time_entries.json').replyOnce(() => Promise.reject(response));
+      axiosMock.onPost('/time_entries.json').reply(() => Promise.reject(response));
       await timeEntryActions.default.publish(timeEntry)(dispatch, getState);
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
@@ -377,7 +376,7 @@ describe('Time actions', () => {
       };
 
       const dispatch = jest.fn();
-      axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.resolve([200, response]));
+      axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).reply(() => Promise.resolve([200, response]));
       await timeEntryActions.default.update(timeEntry, changes)(dispatch);
 
       expect(axiosMock.history.put.length).toBe(1);
@@ -431,7 +430,7 @@ describe('Time actions', () => {
       const response = new Error('Whoops');
       response.status = 500;
       const dispatch = jest.fn();
-      axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).replyOnce(() => Promise.reject(response));
+      axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).reply(() => Promise.reject(response));
       await timeEntryActions.default.update(timeEntry, changes)(dispatch);
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
@@ -449,7 +448,7 @@ describe('Time actions', () => {
       const issueId = 1;
 
       const dispatch = jest.fn();
-      axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).replyOnce(() => Promise.resolve([200, response]));
+      axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).reply(() => Promise.resolve([200, response]));
       await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
 
       expect(axiosMock.history.delete.length).toBe(1);
@@ -467,7 +466,7 @@ describe('Time actions', () => {
       const issueId = 1;
 
       const dispatch = jest.fn();
-      axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).replyOnce(() => Promise.reject(response));
+      axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).reply(() => Promise.reject(response));
       await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
@@ -489,7 +488,7 @@ describe('Time actions', () => {
       const limit = 1;
 
       const dispatch = jest.fn();
-      axiosMock.onGet('/time_entries.json').replyOnce(() => Promise.resolve([200, response]));
+      axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200, response]));
       await timeEntryActions.default.getAll(issueId, projectId, offset, limit)(dispatch);
 
       expect(axiosMock.history.get.length).toBe(1);
@@ -510,7 +509,7 @@ describe('Time actions', () => {
       const response = new Error('Whoops');
       response.status = 500;
       const dispatch = jest.fn();
-      axiosMock.onGet('/time_entries.json').replyOnce(() => Promise.reject(response));
+      axiosMock.onGet('/time_entries.json').reply(() => Promise.reject(response));
       await timeEntryActions.default.getAll(1, 2, 3, 4)(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);

@@ -6,7 +6,7 @@ import {
   SETTINGS_ISSUE_HEADERS
 } from '../actions/settings.actions';
 
-const initialState = {
+export const initialState = {
   useCors: false,
   showClosedIssues: false,
   useColors: false,
@@ -25,7 +25,7 @@ const initialState = {
 const orderTableHeaders = (headers) => {
   const fixed = [];
   const unfixed = [];
-  for (const header of headers) {
+  for (const header of headers) { // eslint-disable-line
     if (header.isFixed) {
       fixed.push(header);
     } else {

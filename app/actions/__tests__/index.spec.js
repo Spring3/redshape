@@ -7,7 +7,7 @@ describe('Actions aggregator', () => {
     expect(actions.issues).toBeTruthy();
     expect(actions.tracking).toBeTruthy();
     expect(actions.projects).toBeTruthy();
-    expect(actions.time).toBeTruthy();
+    expect(actions.timeEntry).toBeTruthy();
     expect(actions.settings).toBeTruthy();
   });
 });

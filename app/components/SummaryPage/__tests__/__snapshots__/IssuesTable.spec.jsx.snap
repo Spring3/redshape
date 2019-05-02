@@ -204,10 +204,10 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           className="c3"
         >
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
         </span>
       </td>
@@ -271,10 +271,10 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           className="c3"
         >
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
         </span>
       </td>
@@ -338,10 +338,10 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           className="c3"
         >
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
           <span>
-            May 02 2019
+            Jan 01 2011
           </span>
         </span>
       </td>

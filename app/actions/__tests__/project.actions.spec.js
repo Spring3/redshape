@@ -10,7 +10,6 @@ let axiosMock;
 describe('Project actions', () => {
   beforeAll(() => {
     axios.initialize(redmineEndpoint, token);
-    expect(axios.getInstance()).toBeTruthy();
     axiosMock = new MockAdapter(axios.getInstance());
   });
 

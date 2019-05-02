@@ -40,7 +40,7 @@ const state = {
           subject: 'Task #1',
           priority: { name: 'High' },
           estimated_hours: '10',
-          due_date: new Date().toISOString()
+          due_date: '2011-01-01'
         },
         {
           id: 2,
@@ -50,7 +50,7 @@ const state = {
           subject: 'Task #2',
           priority: { name: 'Normal' },
           estimated_hours: '5',
-          due_date: new Date().toISOString()
+          due_date: '2011-01-01'
         },
         {
           id: 3,
@@ -60,7 +60,7 @@ const state = {
           subject: 'Task #3',
           priority: { name: 'Low' },
           estimated_hours: '2',
-          due_date: new Date().toISOString()
+          due_date: '2011-01-01'
         }
       ]
     }
@@ -73,7 +73,7 @@ describe('SummaryPage => IssuesTable component', () => {
   beforeAll(() => {
     initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(getInstance());
-    axiosMock.onAny('.json').reply(() => Promise.resolve([200]));
+    axiosMock.onAny('*').reply(() => Promise.resolve([200]));
   });
 
   afterEach(() => {
@@ -87,11 +87,12 @@ describe('SummaryPage => IssuesTable component', () => {
 
   it('should match the snapshot', () => {
     const store = mockStore(state);
+    const onSort = jest.fn();
     const tree = renderer.create(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
-            <IssuesTable />
+            <IssuesTable onSort={onSort} />
           </ThemeProvider>
         </HashRouter>
       </Provider>

@@ -5,9 +5,21 @@ import request, { IssueFilter, notify, login } from '../helper';
 
 jest.mock('electron-store');
 
-const axiosMock = new MockAdapter(axios.default);
+let axiosMock;
 
 describe('Helper module', () => {
+  beforeAll(() => {
+    axiosMock = new MockAdapter(axios.default);
+  });
+
+  afterEach(() => {
+    axiosMock.reset();
+  });
+
+  afterAll(() => {
+    axiosMock.restore();
+  });
+
   it('should expose all the necesary items', () => {
     expect(request).toBeTruthy();
     expect(notify).toBeTruthy();
@@ -111,8 +123,6 @@ describe('Helper module', () => {
   });
 
   describe('Login', () => {
-    afterEach(() => axiosMock.reset());
-
     it('should initialize the axios instance if fullfilled and correctly handle responses', async () => {
       expect(axios.getInstance()).toBe(undefined);
 

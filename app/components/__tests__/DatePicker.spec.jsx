@@ -6,7 +6,13 @@ import theme from '../../theme';
 
 describe('Date Picker', () => {
   it('should match the snapshot', () => {
-    const tree = renderer.create(<DatePicker theme={theme} onChange={() => {}} />).toJSON();
+    const tree = renderer.create(
+      <DatePicker
+        theme={theme}
+        value={123456789}
+        onChange={() => {}}
+      />
+    ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

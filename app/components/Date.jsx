@@ -58,14 +58,14 @@ class DateComponent extends PureComponent {
   render() {
     const { date, className } = this.props;
     if (date) {
-      const daysAgo = moment().diff(date, 'days');
+      const daysAgo = moment().endOf('day').diff(moment(date).endOf('day'), 'days');
       const precision = (daysAgo === 0
         ? 'today'
         : daysAgo > 1
           ? `${daysAgo} days ago`
           : `yesterday`
       );
-      const shouldBeAnimated = (daysAgo > 0 && daysAgo < 30);
+      const shouldBeAnimated = (daysAgo >= 0 && daysAgo <= 30);
       const displayedValue = shouldBeAnimated
         ? precision
         : moment(date).format('MMM DD YYYY');

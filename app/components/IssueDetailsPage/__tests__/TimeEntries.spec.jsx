@@ -19,11 +19,10 @@ const mockStore = configureStore([thunk]);
 
 let axiosMock;
 
-describe('IssueDetails => ThemeEntries componnet', () => {
+describe('IssueDetails => TimeEntries componnet', () => {
   beforeAll(() => {
     initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(getInstance());
-    axiosMock.onAny('.json').reply(() => Promise.resolve([200]));
   });
 
   afterEach(() => {
@@ -36,6 +35,7 @@ describe('IssueDetails => ThemeEntries componnet', () => {
   });
 
   it('should match the snapshot', () => {
+    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
     const state = {
       user: {
         id: 1,
@@ -100,6 +100,7 @@ describe('IssueDetails => ThemeEntries componnet', () => {
   });
 
   it('should fetch the time entries for the selected issue on mount', () => {
+    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
     const state = {
       user: {
         id: 1,
@@ -151,6 +152,7 @@ describe('IssueDetails => ThemeEntries componnet', () => {
   });
 
   it('should be able to request the time entry modal', () => {
+    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
     const state = {
       user: {
         id: 1,
@@ -206,6 +208,7 @@ describe('IssueDetails => ThemeEntries componnet', () => {
   });
 
   it('should start the tracking on button click', () => {
+    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
     const state = {
       user: {
         id: 1,
@@ -257,6 +260,8 @@ describe('IssueDetails => ThemeEntries componnet', () => {
   });
 
   it('should remove the time entry if the button is clicked', () => {
+    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
+    axiosMock.onDelete('/time_entries/1.json').reply(() => Promise.resolve([200]));
     const state = {
       user: {
         id: 1,

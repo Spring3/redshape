@@ -10,7 +10,6 @@ const token = 'multipass';
 describe('Issue actions', () => {
   beforeAll(() => {
     axios.initialize(redmineEndpoint, token);
-    expect(axios.getInstance()).toBeTruthy();
     axiosMock = new MockAdapter(axios.getInstance());
   });
 

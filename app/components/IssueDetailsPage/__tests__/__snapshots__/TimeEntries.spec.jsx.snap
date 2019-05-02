@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IssueDetails => ThemeEntries componnet should match the snapshot 1`] = `
+exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 .c3 {
   border-radius: 3px;
   font-weight: bold;

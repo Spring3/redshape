@@ -9,17 +9,17 @@ import { mount } from 'enzyme';
 
 import * as actions from '../../actions/timeEntry.actions';
 import theme from '../../theme';
+import { initialize, getInstance, reset } from '../../../modules/request';
 import TimeEntryModal from '../TimeEntryModal';
-import { initialize, getInstance } from '../../../modules/request';
 
 let axiosMock;
 const mockStore = configureStore([thunk]);
 
 describe('TimeEntryModal Component', () => {
   beforeAll(() => {
+    reset();
     initialize('redmine.test.test', 'multipass');
     axiosMock = new MockAdapter(getInstance());
-    axiosMock.onAny().reply(() => Promise.resolve([200, { }]));
   });
 
   afterEach(() => {
@@ -28,6 +28,7 @@ describe('TimeEntryModal Component', () => {
 
   afterAll(() => {
     axiosMock.restore();
+    reset();
   });
 
 
@@ -213,7 +214,8 @@ describe('TimeEntryModal Component', () => {
     expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
   });
 
-  it('should add a new time entry', () => {
+  it('should add a new time entry', (done) => {
+    axiosMock.onPost('/time_entries.json').reply(() => Promise.resolve([200, {}]));
     const props = {
       activities: [{
         id: 1,
@@ -274,14 +276,20 @@ describe('TimeEntryModal Component', () => {
     const actionSpy = jest.spyOn(actions.default, 'publish');
     modal.setState({ wasModified: true });
     wrapper.find('#btn-add').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(2);
-    expect(store.getActions()[0].type).toEqual(actions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED);
-    expect(store.getActions()[1].type).toEqual(actions.TIME_ENTRY_PUBLISH);
+    setTimeout(() => {
+      // validation passed, time_entry_publish - start, time_entry_publish - ok
+      expect(store.getActions().length).toBe(3);
+      expect(store.getActions()[0].type).toEqual(actions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED);
+      expect(store.getActions()[1].type).toEqual(actions.TIME_ENTRY_PUBLISH);
 
-    expect(actionSpy).toHaveBeenCalled();
+      expect(actionSpy).toHaveBeenCalled();
+      expect(axiosMock.history.post.length).toBe(1);
+      done();
+    }, 50);
   });
 
-  it('should update the existing time entry', () => {
+  it('should update the existing time entry', (done) => {
+    axiosMock.onPut('/time_entries/1.json').reply(() => Promise.resolve([200, {}]));
     const props = {
       activities: [{
         id: 1,
@@ -344,14 +352,19 @@ describe('TimeEntryModal Component', () => {
     expect(wrapper.exists('#btn-update')).toBe(true);
     const actionSpy = jest.spyOn(actions.default, 'update');
     wrapper.find('#btn-update').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(2);
-    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_PASSED);
-    expect(store.getActions()[1].type).toBe(actions.TIME_ENTRY_UPDATE);
+    setTimeout(() => {
+      // validation passed, time_entry_update - start, time_entry_update - ok
+      expect(store.getActions().length).toBe(3);
+      expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_PASSED);
+      expect(store.getActions()[1].type).toBe(actions.TIME_ENTRY_UPDATE);
 
-    expect(actionSpy).toHaveBeenCalled();
+      expect(actionSpy).toHaveBeenCalled();
+      expect(axiosMock.history.put.length).toBe(1);
+      done();
+    }, 50);
   });
 
-  it('should not update the time entry was not modified', () => {
+  it('should not update the time entry was not modified', (done) => {
     const props = {
       activities: [{
         id: 1,
@@ -410,9 +423,13 @@ describe('TimeEntryModal Component', () => {
     expect(wrapper.exists('#btn-update')).toBe(true);
     const actionSpy = jest.spyOn(actions.default, 'update');
     wrapper.find('#btn-update').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(0);
+    setTimeout(() => {
+      expect(store.getActions().length).toBe(0);
 
-    expect(actionSpy).not.toHaveBeenCalled();
+      expect(actionSpy).not.toHaveBeenCalled();
+      expect(axiosMock.history.put.length).toBe(0);
+      done();
+    }, 50);
   });
 
   it('should not display the update buttons if user is not the author', () => {
@@ -471,7 +488,7 @@ describe('TimeEntryModal Component', () => {
     expect(wrapper.exists('#btn-update')).toBe(false);
   });
 
-  it('should not add if validation failed', () => {
+  it('should not add if validation failed', (done) => {
     const props = {
       activities: [{
         id: 1,
@@ -528,11 +545,15 @@ describe('TimeEntryModal Component', () => {
 
     expect(wrapper.exists('#btn-add')).toBe(true);
     wrapper.find('#btn-add').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+    setTimeout(() => {
+      expect(store.getActions().length).toBe(1);
+      expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
+      expect(axiosMock.history.post.length).toBe(0);
+      done();
+    }, 50);
   });
 
-  it('should not update if validation failed', () => {
+  it('should not update if validation failed', (done) => {
     const props = {
       activities: [{
         id: 1,
@@ -590,7 +611,11 @@ describe('TimeEntryModal Component', () => {
 
     expect(wrapper.exists('#btn-update')).toBe(true);
     wrapper.find('#btn-update').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+    setTimeout(() => {
+      expect(store.getActions().length).toBe(1);
+      expect(store.getActions()[0].type).toBe(actions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
+      expect(axiosMock.history.put.length).toBe(0);
+      done();
+    }, 50);
   });
 });

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import PropTypes from 'prop-types';
-import styled, { css, withTheme } from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import MenuLeftIcon from 'mdi-react/MenuLeftIcon';
 import MenuRightIcon from 'mdi-react/MenuRightIcon';

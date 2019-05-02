@@ -53,7 +53,7 @@ describe('MarkdownEditor component', () => {
     );
     expect(wrapper.exists('button'));
     expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(false);
-    wrapper.find('button').simulate('click');
+    wrapper.find('GhostButton').simulate('click');
     wrapper.update();
     expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(true);
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IssueDetails => ThemeEntries componnet should match the snapshot 1`] = `
+exports[`SummaryPage => ColumnHeadersSelect componnet should match the snapshot 1`] = `
 .c0 h4 {
   margin-bottom: 10px;
   color: #909090;

@@ -168,7 +168,7 @@ const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
     id: `getIssueTimeEntries:${issueId}:${offset}`
   }).then(({ data }) => dispatch(notify.ok(TIME_ENTRY_GET_ALL, data)))
     .catch((error) => {
-      console.error('Error when trying to get he list of time entries', error);
+      console.error('Error when trying to get the list of time entries', error);
       dispatch(notify.nok(TIME_ENTRY_GET_ALL, error));
     });
 };

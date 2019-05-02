@@ -12,7 +12,6 @@ describe('User actions', () => {
   beforeAll(() => {
     axiosMock = new MockAdapter(axios.default);
     axios.initialize(redmineEndpoint, token);
-    expect(axios.getInstance()).toBeTruthy();
     axiosInstanceMock = new MockAdapter(axios.getInstance());
   });
 

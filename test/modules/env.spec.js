@@ -20,7 +20,8 @@ describe('ENV', () => {
     expect(env).toEqual({
       PORT: '1234',
       ENCRYPTION_KEY: 'test-key',
-      NODE_ENV: 'test'
+      NODE_ENV: 'test',
+      platform: 'darwin'
     });
   });
 });

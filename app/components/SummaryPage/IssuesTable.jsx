@@ -42,20 +42,18 @@ class IssuesTable extends Component {
     };
   }
 
-  sortTable = (by) => { 
-    return () => {
-      const { onSort } = this.props;
-      const { sortBy, sortDirection } = this.state;
-      if (sortBy !== by) {
-        this.setState({
-          sortBy: by,
-          sortDirection: 'asc'
-        }, () => onSort(by, 'asc'));
-      } else {
-        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-        this.setState({ sortDirection: newSortDirection }, () => onSort(by, newSortDirection));
-      }
-    };
+  sortTable = (by) => () => {
+    const { onSort } = this.props;
+    const { sortBy, sortDirection } = this.state;
+    if (sortBy !== by) {
+      this.setState({
+        sortBy: by,
+        sortDirection: 'asc'
+      }, () => onSort(by, 'asc'));
+    } else {
+      const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      this.setState({ sortDirection: newSortDirection }, () => onSort(by, newSortDirection));
+    }
   }
 
   showIssueDetails(id) {
@@ -87,7 +85,7 @@ class IssuesTable extends Component {
               onClick={this.sortTable(header.value)}
             >
               {header.label}&nbsp;
-                  {sortBy === header.value && sortDirection === 'asc' && (
+              {sortBy === header.value && sortDirection === 'asc' && (
                 <SortAscendingIcon size={14} />
               )}
               {sortBy === header.value && sortDirection === 'desc' && (
@@ -102,7 +100,7 @@ class IssuesTable extends Component {
               issueHeaders.map(header => (
                 <td key={header.value}>
                   {header.value === 'due_date'
-                    ? (<Date date={_get(task, header.value)} />)
+                    ? <Date date={_get(task, header.value)} />
                     : this.paint(task, header.value)
                   }
                 </td>

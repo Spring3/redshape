@@ -3,7 +3,7 @@ import {
   ISSUES_GET_ALL
 } from '../actions/issues.actions';
 
-const initialState = {
+export const initialState = {
   data: [],
   fetchedOffset: 0,
   isFetching: false,
