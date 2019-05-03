@@ -1,15 +1,15 @@
 import userActions from './user.actions';
-import timeActions from './time.actions';
+import trackingActions from './tracking.actions';
 import issuesActions from './issues.actions';
-
-export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
-const updateSettings = data => ({ type: UPDATE_SETTINGS, data });
+import projectActions from './project.actions';
+import timeEntryActions from './timeEntry.actions';
+import settingsActions from './settings.actions';
 
 export default {
   user: userActions,
   issues: issuesActions,
-  time: timeActions,
-  settings: {
-    update: updateSettings
-  }
+  tracking: trackingActions,
+  projects: projectActions,
+  timeEntry: timeEntryActions,
+  settings: settingsActions
 };

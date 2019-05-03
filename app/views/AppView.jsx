@@ -2,192 +2,103 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Route, withRouter } from 'react-router-dom';
-import MenuIcon from 'mdi-react/MenuIcon';
-import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+import { Route, Redirect } from 'react-router-dom';
+import _ from 'lodash';
+import moment from 'moment';
 
 import actions from '../actions';
-import { Input } from '../components/Input';
-import Button, { GhostButton } from '../components/Button';
+import Navbar from '../components/Navbar';
+import Timer from '../components/Timer';
 import SummaryPage from './AppViewPages/SummaryPage';
+import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import TimeEntryModal from '../components/TimeEntryModal';
+import DragArea from '../components/DragArea';
+import storage from '../../modules/storage';
 
 const Grid = styled.div`
   height: 100%;
   display: grid;
-  grid-template-rows: 60px auto;
+  grid-template-rows: 60px auto 80px;
   grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
 `;
 
-const Navbar = styled.nav`
-  border-top: 3px solid #FF7079;
-  grid-row: 1;
-  grid-column: span 12;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px 20px;
-`;
-
-const Aside = styled.aside`
-  display: ${props => props.show ? 'block' : 'none'};
-  background: tomato;
-  grid-row: 1 / -1;
-  grid-column: span 3;
-  padding-top: 25px;
-`;
-
-const ActiveTimer = styled.div`
-  display: ${props => props.show ? 'block' : 'none'};
-  background: sandybrown;
-`;
-
 const Content = styled.div`
-  background: aliceblue;
   grid-column: span 12;
   grid-row: 2 / -1;
 `;
-
-const MenuList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-
-  li {
-    display: inline;
-    margin: 0px 10px;
-    font-size: 14px;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  li:first-child {
-    margin-left: 0;
-  }
-`;
-
-const Profile = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    display: inline;
-  }
-
-  li:first-child {
-    margin-right: 10px;
-  }
-`;
-
-const SignOutButton = styled(Button)`
-  margin: 0;
-  padding: 5px;
-  font-size: 14px;
-`;
-
-const Hamburger = styled.li`
-  padding: 0px;
-  margin: 0px;
-
-  svg {
-    vertical-align: middle;
-  }
-`
 
 class AppView extends Component {
   constructor(props) {
     super(props);
 
-    if (!props.user.id || !props.user.api_key) {
-      props.history.push('/');
-    }
-
     this.state = {
-      showSidebar: false,
-      showFooter: false
+      activities: [],
+      showTimeEntryModal: false,
+      timeEntry: null
     };
   }
 
-  toggleSidebar = () => {
-    const { showSidebar } = this.state;
-    this.setState({
-      showSidebar: !showSidebar
-    });
-  };
+  componentWillMount() {
+    this.props.getProjectData();
+  }
 
-  signout = () => {
-    const { logout, history } = this.props;
-    logout();
-    history.push('/');
+  onTrackingStop = (value, trackedIssue) => {
+    const { userId, userName, projects } = this.props;
+    const activities = _.get(projects[trackedIssue.project.id], 'activities', []);
+    this.setState({
+      activities: activities.map(({ id, name }) => ({ value: id, label: name })),
+      showTimeEntryModal: true,
+      timeEntry: {
+        activity: {},
+        issue: {
+          id: trackedIssue.id,
+          name: trackedIssue.subject
+        },
+        hours: (value / 360000).toFixed(2),
+        comments: '',
+        project: {
+          id: trackedIssue.project.id,
+          name: trackedIssue.project.name
+        },
+        spent_on: moment().format('YYYY-MM-DD'),
+        user: {
+          id: userId,
+          name: userName
+        }
+      }
+    });
+    storage.delete('time_tracking');
+  }
+
+  closeTimeEntryModal = () => {
+    this.setState({ showTimeEntryModal: false, timeEntry: null });
+    this.props.resetTimer();
   }
 
   render() {
-    const { showSidebar, showFooter } = this.state;
-    const { user = {} } = this.props;
-    const { firstname, lastname } = user;
+    const { showTimeEntryModal, timeEntry, activities } = this.state;
+    const { userId, api_key, match } = this.props;
+
     return (
       <Grid>
-        <Aside show={showSidebar}>
-          <div>
-            <GhostButton onClick={this.toggleSidebar}><ArrowLeftIcon /></GhostButton>
-            <h4>Time Log History</h4>
-          </div>
-          <div>
-            <Input
-              type="text"
-              placeholder="search"
-              onChange={() => {}}
-            />
-          </div>
-          <ul>
-            <li>
-              <span>Entry Name</span>
-              <span>1.0 hours</span>
-              <span>1 day(s) ago</span>
-              <button>Edit</button>
-            </li>
-            <li>
-              <span>Entry Name</span>
-              <span>1.5 hours</span>
-              <span>1 day(s) ago</span>
-              <button>Edit</button>
-            </li>
-            <li>
-              <span>Entry Name</span>
-              <span>1.3 hours</span>
-              <span>3 day(s) ago</span>
-              <button>Edit</button>
-            </li>
-          </ul>
-        </Aside>
-        <Navbar>
-          <MenuList>
-            <Hamburger id="hamburger">
-              <GhostButton onClick={this.toggleSidebar}>
-                <MenuIcon />
-              </GhostButton>
-            </Hamburger>
-            <li>My Page</li>
-            <li>Time</li>
-            <li>Issues</li>
-          </MenuList>
-          <Profile>
-            <li>{firstname} {lastname}</li>
-            <li><SignOutButton id="signout" onClick={this.signout}>Sign out</SignOutButton></li>
-          </Profile>
-        </Navbar>
+        <DragArea />
+        { (!userId || !api_key) ? (<Redirect to="/" />) : null }
+        <Navbar />
         <Content>
-          <Route path="/time" />
-          <Route path="/" component={SummaryPage} />
-          <ActiveTimer show={showFooter}>
-            <span>Task name</span>
-            <span>00:00:00</span>
-            <button>Stop</button>
-          </ActiveTimer>
+          <Route exact path={`${match.path}/summary`} component={SummaryPage} />
+          <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
+          <Timer
+            onStop={this.onTrackingStop}
+          />
+          <TimeEntryModal
+            isOpen={showTimeEntryModal}
+            isEditable={false}
+            onClose={this.closeTimeEntryModal}
+            activities={activities}
+            isUserAuthor={true}
+            timeEntry={timeEntry}
+            onClose={this.closeTimeEntryModal}
+          />
         </Content>
       </Grid>
     );
@@ -195,24 +106,34 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
-    api_key: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
+  userId: PropTypes.number.isRequired,
+  userName: PropTypes.string.isRequired,
+  api_key: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    path: PropTypes.string.isRequired
+  }).isRequired,
+  logout: PropTypes.func.isRequired,
+  resetTimer: PropTypes.func.isRequired,
+  getProjectData: PropTypes.func.isRequired,
+  projects: PropTypes.shape({
+    activities: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired).isRequired
   }).isRequired
-}
+};
 
 const mapStateToProps = state => ({
-  user: state.user
+  userId: state.user.id,
+  userName: state.user.name,
+  api_key: state.user.api_key,
+  projects: state.projects.data
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(actions.user.logout())
+  logout: () => dispatch(actions.user.logout()),
+  getProjectData: () => dispatch(actions.projects.getAll()),
+  resetTimer: () => dispatch(actions.tracking.trackingReset())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AppView));
+export default connect(mapStateToProps, mapDispatchToProps)(AppView);

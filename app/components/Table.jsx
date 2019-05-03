@@ -12,40 +12,47 @@ const StyledTable = styled.table`
 
     tr {
       th {
-        padding: 5px;
-        border: 2px solid transparent;
-        background: white;
-        
+        padding: 15px;
+        position: sticky;
+        top: 0;
+        background: ${props => props.theme.bg};
+        font-weight: 900;
+        transition: color ease ${props => props.theme.transitionTime};
         &:hover {
           cursor: pointer;
-          background: #FF7079;
-          color: white;
+          color: ${props => props.theme.main};
+        }
+
+        svg {
+          vertical-align: middle;
         }
       }
 
-      th:last-child {
+      th.due-date {
         width: 90px;
+      }
+
+      td {
+        padding: 15px;
+        font-weight: 500;
+        transition: background ease ${props => props.theme.transitionTime};
       }
 
       &:hover {
         cursor: pointer;
         
         td {
-          background: #FF7079;
-          color: white;
+          background: ${props => props.theme.bgDark};
         }
       }
-    }
-
-    tr:nth-child(even) {
-      background: #F2F2F2;
     }
   }
 `;
 
 const Table = ({ children }) => (
   <StyledTable
-    cellPadding={10}
+    cellPadding={0}
+    cellSpacing={0}
     width="100%"
   >
     <tbody>

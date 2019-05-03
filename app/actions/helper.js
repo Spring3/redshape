@@ -1,3 +1,5 @@
+import * as axios from '../../modules/request';
+
 function IssueFilter () {
   const filter = {};
 
@@ -41,7 +43,9 @@ function IssueFilter () {
   };
 
   this.title = (str) => {
-    filter.subject = encodeURIComponent(`~${str}`);
+    if (str) {
+      filter.subject = encodeURIComponent(`~${str.trim()}`);
+    }
     return this;
   };
 
@@ -65,59 +69,107 @@ function IssueFilter () {
     return this;
   };
 
-  this.build = () => {
-    let str = '';
-    for (const [key, value] of Object.entries(filter)) { // eslint-disable-line
-      str += `&${key}=${value}`;
+  this.sort = (by, direction) => {
+    if (by && direction) {
+      const column = by.indexOf('.') !== -1
+        ? by.substring(0, by.indexOf('.'))
+        : by;
+      filter.sort = `${column}:${direction}`;
     }
-    return str;
+    return this;
   };
+
+  this.build = () => ({ ...filter });
 }
+
+const handleReject = (e) => {
+  // if this request was not cancelled
+  if (!axios.default.isCancel(e)) {
+    let errorMessage = 'Error';
+    if (e.status) {
+      errorMessage = `${errorMessage} ${e.status}`;
+    }
+    errorMessage = `${errorMessage} (${e.statusText || e.message})`;
+
+    return Promise.reject(new Error(errorMessage));
+  }
+  return undefined;
+};
 
 const request = ({
   url,
   method = 'GET',
   data,
-  requestHeaders = {},
-  token,
+  headers,
+  query,
+  id
 }) => {
   const requestConfig = {
+    url,
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-      ...requestHeaders
-    },
+    headers: axios.makeCancellable(headers || {}, id)
   };
 
-  if (token) {
-    requestConfig.headers['X-Redmine-API-Key'] = token;
-  }
-
   if (!['GET', 'DELETE'].includes(method)) {
-    requestConfig.body = data;
+    requestConfig.data = typeof data === 'string' ? data : JSON.stringify(data);
   }
 
-  return fetch(url, requestConfig).then((res) => {
-    if (res.ok) {
-      return res.json().then(obj => ({ data: obj }));
+  if (query) {
+    requestConfig.params = query;
+  }
+
+  if (!axios.getInstance()) {
+    return Promise.reject(new Error('401 - Unauthorized'));
+  }
+
+  return axios.getInstance().request(requestConfig)
+    .then((res) => {
+      delete axios.pendingRequests[id];
+      return ({ data: res.data });
+    })
+    .catch((error) => {
+      delete axios.pendingRequests[id];
+      return handleReject(error);
+    });
+};
+
+const login = ({
+  redmineEndpoint,
+  url,
+  headers
+}) => {
+  const defaultConfig = axios.getDefaultConfig();
+  return axios.default.request({
+    baseURL: redmineEndpoint,
+    timeout: defaultConfig.timeout,
+    headers: {
+      ...defaultConfig.headers,
+      ...(headers || {})
+    },
+    url,
+    method: 'GET'
+  }).then((res) => {
+    axios.reset();
+    const { api_key } = res.data.user || {};
+    if (api_key) {
+      axios.initialize(redmineEndpoint, api_key);
     }
-    return Promise.reject(new Error(`Error ${res.status} (${res.statusText})`));
+    return { data: res.data };
   });
 };
 
 const notify = {
-  start: type => ({ type, status: 'START' }),
-  ok: (type, data) => ({ type, data, status: 'OK' }),
-  nok: (type, data) => ({ type, data, status: 'NOK' })
+  start: (type, id) => ({ type, status: 'START', id }),
+  paginate: (type, data, id) => ({ type, data, status: 'PAGE_NEXT', id }),
+  ok: (type, data, id) => ({ type, data, status: 'OK', id }),
+  nok: (type, data, id) => ({ type, data, status: 'NOK', id }),
+  cancel: type => ({ type, status: 'CANCELLED' })
 };
 
 export {
   IssueFilter,
-  notify
+  notify,
+  login
 };
 
 export default request;

@@ -8,6 +8,8 @@ const initialState = storage.store;
 
 export default createStore(reducers, {
   user: initialState.user,
-  settings: initialState.settings
+  settings: initialState.settings,
+  projects: initialState.projects,
+  tracking: initialState.time_tracking
 },
 applyMiddleware(thunk));

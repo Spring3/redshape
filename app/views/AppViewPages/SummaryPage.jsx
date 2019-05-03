@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import Select from 'react-select';
+import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import makeAnimated from 'react-select/lib/animated';
 import styled from 'styled-components';
 
-import actions from '../../actions';
 import { IssueFilter } from '../../actions/helper';
-import { Input, Label } from '../../components/Input';
-import Table from '../../components/Table';
+import actions from '../../actions';
+import { Input } from '../../components/Input';
+import IssuesTable from '../../components/SummaryPage/IssuesTable';
+import OptionsBlock from '../../components/SummaryPage/OptionsBlock';
+import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
 
 const Grid = styled.div`
   display: grid;
@@ -18,11 +18,12 @@ const Grid = styled.div`
   grid-auto-rows: 100px;
   grid-auto-flow: dense;
   grid-gap: 20px;
+  margin-bottom: 60px;
 `;
 
 const Section = styled.section`
   background: white;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   border-radius: 5px;
 `;
 
@@ -31,213 +32,93 @@ const IssuesSection = styled(Section)`
   grid-row: span 6;
 `;
 
-const TimeSpentSection = styled(Section)`
-  grid-column: span 3;
-  grid-row: span 2;
-`;
-
 const ActivitySection = styled(Section)`
   grid-column: span 3;
   grid-row: span 4;
 `;
 
-
-const FlexRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const OptionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: minmax(200px, auto) 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+  margin-bottom: 20px;
 `;
 
-const MarginedDiv = styled.div`
-  margin: 20px 10px 20px 0px;
-  flex-grow: 1
+const GridRow = styled.div`
+  grid-column: 1/-1;
 `;
 
 class SummaryPage extends Component {
   constructor(props) {
     super(props);
 
-    this.issuesHeaders = [
-      { label: 'Id', isFixed: true, value: 'id' },
-      { label: 'Project', value: 'project' },
-      { label: 'Tracker', value: 'tracker' },
-      { label: 'Status', value: 'status' },
-      { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Priority', value: 'priority' },
-      { label: 'Estimation', value: 'estimation' },
-      { label: 'Due Date', value: 'dueDate' }
-    ];
-
-    this.issueMapping = {
-      id: 'id',
-      project: 'project.name',
-      tracker: 'tracker.name',
-      status: 'status.name',
-      subject: 'subject',
-      priority: 'priority.name',
-      estimation: 'estimated_hours',
-      dueDate: 'due_date'
-    };
-    
     this.state = {
-      showClosed: false,
-      issues: props.issues,
-      // issues: storage.get(`${id}.issuesAssignedToMe`, []),
-      selectedHeaders: this.orderTableHeaders(this.issuesHeaders),
-      search: undefined
+      search: undefined,
+      sortBy: undefined,
+      sortDirection: undefined
     };
+
+    this.deboucedFetch = debounce(this.fetchIssues, 500);
   }
 
   componentWillMount() {
     this.fetchIssues();
   }
 
-  fetchIssues = () => {
-    const { dispatch, user } = this.props;
-    const { showClosed } = this.state;
-    const queryFilter = new IssueFilter()
-      .assignee(user.id)
-      .status({ open: true, closed: showClosed })
-      .build();
-    console.log(queryFilter);
-    dispatch(actions.issues.getAll(queryFilter))
-    .then(() => {
-      this.setState({
-        issues: this.props.issues
-      });
-    });
-    // redmineApi.issues.getAll(queryFilter)
-    //   .then(({ data }) => {
-    //     const { issues } = data;
-    //     console.log(issues);
-    //     if (Array.isArray(issues) && issues.length) {
-    //       this.setState({
-    //         issues: [...issues]
-    //       });
-    //       // storage.set(`${userId}.issuesAssignedToMe`, issues);
-    //     }
-    //   });
+  componentDidUpdate(oldProps) {
+    if (oldProps.showClosedIssues !== this.props.showClosedIssues) {
+      this.fetchIssues();
+    }
   }
 
-  toggleClosedIssuesDisplay = () => {
-    const { showClosed } = this.state;
-    this.setState({
-      showClosed: !showClosed
-    }, this.fetchIssues);
+  fetchIssues = () => {
+    const { search, sortBy, sortDirection } = this.state;
+    const { userId, showClosedIssues } = this.props;
+    const queryFilter = new IssueFilter()
+      .assignee(userId)
+      .status({ open: true, closed: showClosedIssues })
+      .title(search)
+      .sort(sortBy, sortDirection)
+      .build();
+    this.props.fetchIssues(queryFilter);
   }
 
   onSearchChange = (e) => {
-    const value = e.target.value;
-    const { issues } = this.props;
-    const { selectedHeaders } = this.state;
-    if (value) {
-      this.setState({
-        issues: issues.filter((issue) => {
-          const testedString = selectedHeaders.map(header => _.get(issue, this.issueMapping[header.value])).join(' ');
-          return new RegExp(value, 'gi').test(testedString);
-        })
-      })
-    } else {
-      this.setState({
-        issues
-      });
-    }
+    this.setState({
+      search: e.target.value
+    }, () => this.deboucedFetch());
   }
 
-  orderTableHeaders = (headers) => {
-    const fixed = [];
-    const unfixed = [];
-    for (const header of headers) {
-      if (header.isFixed) {
-        fixed.push(header);
-      } else {
-        unfixed.push(header);
-      }
-    }
-    return [...fixed, ...unfixed];
-  }
-
-  onHeadersSelectChange = (value, { action, removedValue }) => {
-    switch (action) {
-      case 'remove-value':
-      case 'pop-value':
-        if (removedValue.isFixed) {
-          return;
-        }
-        break;
-      case 'clear':
-        value = this.issuesHeaders.filter(header => header.isFixed);
-        break;
-    }
-
-    const selectedHeaders = this.orderTableHeaders(value);
-    this.setState({ selectedHeaders });
+  onSort = (sortBy, sortDirection) => {
+    this.setState({
+      sortBy: sortBy,
+      sortDirection: sortDirection
+    }, () => this.deboucedFetch());
   }
 
   render() {
-    const { issues, selectedHeaders, showClosed } = this.state;
     return (
       <Grid>
         <IssuesSection>
           <h2>Issues assigned to me</h2>
-          <div>
-            <Label htmlFor="headers" label="Table Columns">
-              <Select
-                name="headers"
-                components={makeAnimated()}
-                options={this.issuesHeaders}
-                defaultValue={selectedHeaders}
-                value={selectedHeaders}
-                onChange={this.onHeadersSelectChange}
-                isMulti={true}
+          <OptionsGrid>
+            <OptionsBlock />
+            <ColumnHeadersSelect />
+            <GridRow>
+              <Input
+                type="text"
+                name="search"
+                placeholder="Search"
+                onChange={this.onSearchChange}
               />
-            </Label>
-            <FlexRow>
-              <MarginedDiv>
-                <Input
-                  type="text"
-                  name="search"
-                  placeholder="Search"
-                  onChange={this.onSearchChange}
-                />
-              </MarginedDiv>
-              <div>
-                <Label
-                  htmlFor="showClosed"
-                  label="Show Closed"
-                  inline={true}
-                  rightToLeft={true}
-                >
-                  <Input
-                    name="showClosed"
-                    type="checkbox"
-                    checked={showClosed}
-                    onChange={this.toggleClosedIssuesDisplay}
-                  />
-                </Label>
-              </div>
-            </FlexRow>
-          </div>
-          <Table>
-            <tr>
-              {selectedHeaders.map(header => (
-                <th key={header.value}>{header.label}</th>
-              ))}
-            </tr>
-            {issues.map(item => (
-              <tr key={item.id}>
-                {
-                  selectedHeaders.map(header => (
-                    <td key={header.value}>{_.get(item, this.issueMapping[header.value])}</td>
-                  ))
-                }
-              </tr>
-            ))}
-          </Table>
+            </GridRow>
+          </OptionsGrid>
+          <IssuesTable
+            onSort={this.onSort}
+          />
         </IssuesSection>
-        <TimeSpentSection>
-          <h2>Time spent</h2>
-        </TimeSpentSection>
         <ActivitySection>
           <h2>Activity Stack</h2>
         </ActivitySection>
@@ -247,23 +128,21 @@ class SummaryPage extends Component {
 }
 
 SummaryPage.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    api_key: PropTypes.string.isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }).isRequired
+  userId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
+  showClosedIssues: PropTypes.bool.isRequired,
+  fetchIssues: PropTypes.func.isRequired
 };
 
-const mapStateToprops = state => ({
-  user: state.user,
-  issues: state.issues.all.data
+const mapStateToProps = state => ({
+  userId: state.user.id,
+  showClosedIssues: state.settings.showClosedIssues
 });
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({
+  fetchIssues: filter => dispatch(actions.issues.getAll(filter))
+});
 
-export default connect(mapStateToprops, mapDispatchToProps)(SummaryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);

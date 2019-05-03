@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tooltip component should match the snapshot 1`] = `
+.c2 {
+  position: absolute;
+  display: none;
+  border-radius: 3px;
+  top: -50px;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  padding: 5px;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0px 2px 7px;
+}
+
+.c2::after {
+  content: ' ';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  border: 2px solid black;
+  border-width: 5px;
+  border-color: transparent transparent transparent;
+}
+
+.c0 {
+  display: inline-block;
+  position: relative;
+}
+
+.c0:hover .c1 {
+  display: block;
+}
+
+<div
+  className="container c0"
+>
+  <i
+    className="test"
+  />
+  <p
+    className="tooltip c1 c2"
+  >
+    Hello world
+  </p>
+</div>
+`;

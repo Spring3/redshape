@@ -1,131 +1,103 @@
+import moment from 'moment';
 import request, { notify } from './helper';
 
 export const ISSUES_GET_ALL = 'ISSUES_GET_ALL';
 export const ISSUES_GET = 'ISSUES_GET';
-export const ISSUES_UPDATE = 'ISSUES_UPDATE';
-export const ISSUES_ASSIGN = 'ISSUES_ASSIGN';
-export const ISSUES_STATUSES_GET_ALL = 'ISSUES_STATUSES_GET_ALL';
-export const ISSUES_TRACKERS_GET_ALL = 'ISSUES_TRACKERS_GET_ALL';
+export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
+export const ISSUES_RESET_SELECTION = 'ISSUES_RESET_SELECTION';
 
-const getAll = (filter, offset, limit) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
-  let url = `${redmineEndpoint}/issues.json?include=attachments,children`;
+const getAll = (filter, offset, limit) => (dispatch) => {
+  let query = {
+    include: 'attachments,children,relations,journals'
+  };
 
   if (filter) {
-    url += filter;
+    query = {
+      ...query,
+      ...filter
+    };
   }
 
   if (offset) {
-    url += `&offset=${offset}`;
+    query.offset = offset;
   }
 
   if (limit) {
-    url += `&limit=${limit}`;
+    query.limit = limit;
   }
 
   dispatch(notify.start(ISSUES_GET_ALL));
 
   return request({
-    url,
-    token: api_key  
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data)))
+    url: '/issues.json',
+    id: 'getAllIssues',
+    query
+  })
+    .then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data)))
     .catch((error) => {
-      console.error('Error when trying to get a list of issues', error);
+      console.error('Error when trying to get a list of issues:', error.message);
       dispatch(notify.nok(ISSUES_GET_ALL, error));
     });
 };
 
-const get = id => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
+const get = id => (dispatch) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({
-    url: `${redmineEndpoint}/issues/${id}.json?include=attachments,children,relations`,
-    token: api_key,
+    url: `/issues/${id}.json`,
+    query: {
+      include: 'attachments,children,relations,journals'
+    },
+    id: `getIssueDetails:${id}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {
-      console.error(`Error when trying to get the issue with id ${id}`, error);
+      console.error(`Error when trying to get the issue with id ${id}:`, error.message);
       dispatch(notify.nok(ISSUES_GET, error));
     });
 };
 
-const updateStatus = (issueId, status_id, comment) => (dispatch, getState) => {
+const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
+  const actionId = 'comments';
 
-  dispatch(notify.start(ISSUES_UPDATE));
+  dispatch(notify.start(ISSUES_COMMENTS_SEND, actionId));
 
   return request({
-    url: `${redmineEndpoint}/issues/${issueId}.json`,
-    data: { notes: comment, status_id },
-    method: 'PUT',
-    token: api_key
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_UPDATE, data)))
+    url: `/issues/${issueId}.json`,
+    data: {
+      issue: {
+        notes: comments
+      }
+    },
+    method: 'PUT'
+  }).then(() => dispatch(
+    notify.ok(
+      ISSUES_COMMENTS_SEND,
+      {
+        created_on: moment().toLocaleString(),
+        details: [],
+        id: Date.now(),
+        notes: comments,
+        private_notes: false,
+        user: {
+          id: user.id,
+          name: user.name
+        }
+      },
+      actionId
+    )
+  ))
     .catch((error) => {
-      console.error(`Error when trying to update the status of an issue with id ${issueId}`, error);
-      dispatch(notify.nok(ISSUES_UPDATE, error));
+      console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
+      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, actionId));
     });
 };
 
-const assign = (issueId, assignee, comment) => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
-  dispatch(notify.start(ISSUES_ASSIGN));
-
-  return request({
-    url: `${redmineEndpoint}/issues/${issueId}.json`,
-    data: { notes: comment, assigned_to_id: assignee},
-    method: 'PUT',
-    token: api_key,
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_ASSIGN, data)))
-    .catch((error) => {
-      console.error(`Error when trying to assign the issue with id ${issueId}`, error);
-      dispatch(notify.nok(ISSUES_ASSIGN, error));
-    });
-};
-
-const getAllStatuses = () => (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
-  dispatch(notify.start(ISSUES_STATUSES_GET_ALL));
-
-  return request({
-    url: `${redmineEndpoint}/issue_statuses.json`,
-    token: api_key
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_STATUSES_GET_ALL, data)))
-    .catch((error) => {
-      console.error('Error when trying to get the list of issue statuses', error);
-      dispatch(notify.nok(ISSUES_STATUSES_GET_ALL, error));
-    });
-};
-
-const getAllTrackers = (dispatch, getState) => {
-  const { user = {} } = getState();
-  const { redmineEndpoint, api_key } = user;
-
-  dispatch(notify.start(ISSUES_TRACKERS_GET_ALL));
-
-  return request({
-    url: `${redmineEndpoint}/trackers.json'`,
-    token: api_key
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_TRACKERS_GET_ALL, data)))
-    .catch((error) => {
-      console.error('Error when trying to get the list of issue trackers', error);
-      dispatch(notify.nok(ISSUES_TRACKERS_GET_ALL, error));
-    });
-};
+const resetSelected = () => ({ type: ISSUES_RESET_SELECTION });
 
 export default {
   getAll,
   get,
-  updateStatus,
-  assign,
-  getAllStatuses,
-  getAllTrackers
+  sendComments,
+  resetSelected
 };

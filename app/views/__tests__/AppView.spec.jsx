@@ -1,29 +1,57 @@
 import React from 'react';
+import moment from 'moment';
 import { HashRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { render, fireEvent, cleanup, wait } from 'react-testing-library';
 import { mount } from 'enzyme';
+import MockAdapter from 'axios-mock-adapter';
 import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
+import { ThemeProvider } from 'styled-components';
+
 import { USER_LOGOUT } from '../../actions/user.actions';
+import { PROJECT_GET_ALL } from '../../actions/project.actions';
+import { TRACKING_RESET } from '../../actions/tracking.actions';
+import * as axios from '../../../modules/request';
+import theme from '../../theme';
 
 import AppView from '../AppView';
 
+jest.mock('electron-store');
+
+import storage from '../../../modules/storage';
+
 const mockStore = configureStore([thunk]);
+const redmineEndpoint = 'redmine.test.test';
+const token = 'multipass';
+
+let axiosMock;
+let getInstanceStub;
 
 describe('AppView', () => {
+  beforeAll(() => {
+    axios.reset();
+    axios.initialize(redmineEndpoint, token);
+    const stub = axios.getInstance();
+    getInstanceStub = jest.spyOn(axios, 'getInstance').mockReturnValue(stub);
+    axiosMock = new MockAdapter(stub);
+  });
+
   afterEach(() => {
-    cleanup();
-    fetch.resetMocks();
+    axiosMock.reset();
+  });
+
+  afterAll(() => {
+    axiosMock.restore();
+    getInstanceStub.restore();
   });
 
   it('should match the snapshot', () => {
+    axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
     const store = mockStore({
       user: {
         id: 1,
-        firstname: 'firstname',
-        lastname: 'lastname',
+        name: 'John Wayne',
         redmineEndpoint: 'https://redmine.domain',
         api_key: '123abc'
       },
@@ -31,24 +59,52 @@ describe('AppView', () => {
         all: {
           data: []
         }
+      },
+      projects: {
+        data: {
+          activities: [
+            { id: 1, name: 'Activity 1' },
+            { id: 2, name: 'Activity 2' }
+          ]
+        }
+      },
+      tracking: {
+        isEnabled: false,
+        issue: {
+          subject: 'Test issue'
+        }
+      },
+      timeEntry: {
+        isFetching: false,
+        error: undefined
       }
     });
     const tree = renderer.create(
       <Provider store={store}>
-        <HashRouter><AppView /></HashRouter>
+        <HashRouter>
+          <AppView
+            match={
+              {
+                isExact: false,
+                params: {},
+                path: undefined,
+                url: '/app'
+              }
+            }
+          />
+        </HashRouter>
       </Provider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   describe('[integration] AppView', () => {
-    it('should open / close the side bar', () => {
-      fetch.mockResponse(JSON.stringify({ ok: false, status: 400, statusText: 'Bad Request' }));
+    it('should fetch projects data on mount', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
       const store = mockStore({
         user: {
           id: 1,
-          firstname: 'firstname',
-          lastname: 'lastname',
+          name: 'John Wayne',
           redmineEndpoint: 'https://redmine.domain',
           api_key: '123abc'
         },
@@ -56,61 +112,24 @@ describe('AppView', () => {
           all: {
             data: []
           }
-        }
-      });
-      const wrapper = mount(
-        <Provider store={store}>
-          <HashRouter>
-            <AppView />
-          </HashRouter>
-        </Provider>
-      );
-
-      let view = wrapper.find('AppView');
-      expect(view.exists()).toBeTruthy();
-      expect(view.state('showSidebar')).toBe(false);
-      expect(view.state('showFooter')).toBe(false);
-
-      let aside = wrapper.find('aside');
-      expect(aside.exists()).toBeTruthy();
-      expect(aside).toHaveStyleRule('display', 'none');
-
-      let hamburgerButton = wrapper.find('li#hamburger').childAt(0);
-      expect(hamburgerButton.exists()).toBeTruthy();
-
-      hamburgerButton.simulate('click');
-      wrapper.update();
-
-      view = wrapper.find('AppView');
-      aside = wrapper.find('aside');
-      hamburgerButton = wrapper.find('li#hamburger').childAt(0);
-
-      expect(aside).not.toHaveStyleRule('display', 'none');
-      expect(view.state('showSidebar')).toBe(true);
-
-      hamburgerButton.simulate('click');
-      wrapper.update();
-
-      view = wrapper.find('AppView');
-      aside = wrapper.find('aside');
-      expect(aside).toHaveStyleRule('display', 'none');
-      expect(view.state('showSidebar')).toBe(false);
-    });
-
-    it('should have a button to log out', () => {
-      fetch.mockResponse(JSON.stringify({ ok: false, status: 400, statusText: 'Bad Request' }));
-      const store = mockStore({
-        user: {
-          id: 1,
-          firstname: 'firstname',
-          lastname: 'lastname',
-          redmineEndpoint: 'https://redmine.domain',
-          api_key: '123abc'
         },
-        issues: {
-          all: {
-            data: []
+        projects: {
+          data: {
+            activities: [
+              { id: 1, name: 'Activity 1' },
+              { id: 2, name: 'Activity 2' }
+            ]
           }
+        },
+        tracking: {
+          isEnabled: false,
+          issue: {
+            subject: 'Test issue'
+          }
+        },
+        timeEntry: {
+          isFetching: false,
+          error: undefined
         }
       });
 
@@ -119,13 +138,93 @@ describe('AppView', () => {
           pathname: '/app'
         },
         listen: () => () => {},
-        push: jest.fn()
+        push: jest.fn(),
+        createHref: () => {
+          historyMock.push('/');
+          window.location.path = '/';
+        }
       };
 
       const wrapper = mount(
         <Provider store={store}>
           <Router history={historyMock}>
-            <AppView />
+            <AppView
+              match={
+                {
+                  isExact: false,
+                  params: {},
+                  path: undefined,
+                  url: '/app'
+                }
+              }
+            />
+          </Router>
+        </Provider>
+      );
+
+      expect(store.getActions().length).toBeGreaterThan(0);
+      expect(store.getActions()[0].type).toBe(PROJECT_GET_ALL);
+    });
+
+    it('should logout when a user clicks the button', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+      const store = mockStore({
+        user: {
+          id: 1,
+          name: 'John Wayne',
+          redmineEndpoint: 'https://redmine.domain',
+          api_key: '123abc'
+        },
+        issues: {
+          all: {
+            data: []
+          }
+        },
+        projects: {
+          data: {
+            activities: [
+              { id: 1, name: 'Activity 1' },
+              { id: 2, name: 'Activity 2' }
+            ]
+          }
+        },
+        tracking: {
+          isEnabled: false,
+          issue: {
+            subject: 'Test issue'
+          }
+        },
+        timeEntry: {
+          isFetching: false,
+          error: undefined
+        }
+      });
+
+      const historyMock = {
+        location: {
+          pathname: '/app'
+        },
+        listen: () => () => {},
+        push: jest.fn(),
+        createHref: () => {
+          historyMock.push('/');
+          window.location.path = '/';
+        }
+      };
+
+      const wrapper = mount(
+        <Provider store={store}>
+          <Router history={historyMock}>
+            <AppView
+              match={
+                {
+                  isExact: false,
+                  params: {},
+                  path: undefined,
+                  url: '/app'
+                }
+              }
+            />
           </Router>
         </Provider>
       );
@@ -140,6 +239,115 @@ describe('AppView', () => {
       const actions = store.getActions();
       expect(actions.length).toBeGreaterThan(0);
       expect(actions.pop()).toEqual({ type: USER_LOGOUT });
+    });
+
+    it('should open the modal with a new timeEntry if timer stops and wipe the storage', () => {
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+      const state = {
+        user: {
+          id: 1,
+          name: 'John Wayne',
+          redmineEndpoint: 'https://redmine.domain',
+          api_key: '123abc'
+        },
+        issues: {
+          all: {
+            data: []
+          }
+        },
+        projects: {
+          data: {
+            1: {
+              activities: [
+                { id: 1, name: 'Activity 1' },
+                { id: 2, name: 'Activity 2' }
+              ]
+            }
+          }
+        },
+        tracking: {
+          isEnabled: false,
+          duration: 41000,
+          issue: {
+            id: 321,
+            subject: 'Test issue',
+            project: {
+              id: 1,
+              name: 'Project 1'
+            }
+          }
+        },
+        timeEntry: {
+          isFetching: false,
+          error: undefined
+        }
+      };
+      const store = mockStore(state);
+
+      const historyMock = {
+        location: {
+          pathname: '/app'
+        },
+        listen: () => () => {},
+        push: jest.fn(),
+        createHref: () => {
+          historyMock.push('/');
+          window.location.path = '/';
+        }
+      };
+
+      const storageSpy = jest.spyOn(storage, 'delete');
+
+      const wrapper = mount(
+        <Provider store={store}>
+          <Router history={historyMock}>
+            <ThemeProvider theme={theme}>
+              <AppView
+                match={
+                  {
+                    isExact: false,
+                    params: {},
+                    path: undefined,
+                    url: '/app'
+                  }
+                }
+              />
+            </ThemeProvider>
+          </Router>
+        </Provider>
+      );
+
+      const view = wrapper.find('AppView').instance();
+      expect(view).toBeTruthy();
+
+      view.onTrackingStop(state.tracking.duration, state.tracking.issue);
+      expect(view.state.showTimeEntryModal).toBe(true);
+      expect(view.state.timeEntry).toEqual({
+        activity: {},
+        issue: {
+          id: state.tracking.issue.id,
+          name: state.tracking.issue.subject
+        },
+        hours: (state.tracking.duration / 360000).toFixed(2),
+        comments: '',
+        project: {
+          id: state.tracking.issue.project.id,
+          name: state.tracking.issue.project.name
+        },
+        spent_on: moment().format('YYYY-MM-DD'),
+        user: {
+          id: state.user.id,
+          name: state.user.name
+        }
+      });
+      expect(storageSpy).toHaveBeenCalledWith('time_tracking');
+
+      view.closeTimeEntryModal();
+      expect(view.state.showTimeEntryModal).toBe(false);
+      expect(view.state.timeEntry).toBe(null);
+      expect(store.getActions().find(action => action.type === TRACKING_RESET)).toBeDefined();
+
+      storageSpy.mockRestore();
     });
   });
 });

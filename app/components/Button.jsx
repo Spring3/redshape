@@ -1,38 +1,80 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 
 const StyledButton = styled.button`
-  padding: 10px 5px;
-  border-radius: 5px;
-  border: 2px solid transparent;
-  box-shadow: 0px 0px 0px 2px #FF7079;
-  color: #FF7079;
+  border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
   outline: none;
-
+  text-align: center;
+  
   ${props => css`
+    transition: color ease ${props.theme.transitionTime};
+    transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
-    margin: 25px auto 0px auto;
   `}
 
-  &:hover,
-  &:focus {
-    cursor: pointer;
-    background: #FF7079;
-    border: 2px solid #FF7079;
-    box-shadow: 0px 0px 0px 2px #EF6069;
-    color: white;
-  }
+  ${props => {
+    if (!props.disabled) {
+      return css`
+        border: 2px solid ${props.palette.light};    
+        color: ${props.palette.light};
+        cursor: pointer;
+    
+        &:hover,
+        &:focus {
+          background: ${props.palette.light}; 
+          color: ${props.theme.hoverText};
 
-  &:active {
-    background: #EF6069;
+          svg {
+            fill: ${props.theme.hoverText};
+          }
+        }
+        &:active {
+          background: ${props.palette.dark};
+        }
+      `;
+    }
+    return css`
+      border: 2px solid ${props.theme.minorText};    
+      color: ${props.theme.minorText};
+
+      svg {
+        fill: ${props.theme.minorText};
+      }
+    `
   }
+}
 `;
 
 const StyledLink = styled.a`
-  outline: none;
+  text-decoration: none;
+  color: ${props => props.theme.main};
+  transition: color ease ${props => props.theme.transitionTime};
+
+  ${props => {
+      if (!props.disabled) {
+        return css`
+          &:hover {
+            color: ${props.theme.mainDark};
+
+            svg {
+              fill: ${props.theme.mainDark}
+            }
+          }
+        `;
+      }
+      return css`
+        color: ${props.theme.minorText};
+        
+        svg {
+          fill: ${props.theme.minorText};
+        }
+      `
+    }
+  }
+
   &:active,
   &:focus,
   &:visited {
@@ -41,30 +83,61 @@ const StyledLink = styled.a`
 `;
 
 
-const Button = ({ id, children, type, disabled, block, onClick, className }) => (
-  <StyledButton
-    id={id}
-    onClick={onClick}
-    type={type}
-    disabled={disabled} 
-    block={block}
-    className={className}
-  >
-    {children}
-  </StyledButton>
-);
+const getColorPalette = (palette, theme) => {
+  switch (palette) {
+    case 'success':
+      return {
+        light: theme.green,
+        dark: theme.darkGreen
+      };
+    case 'warning':
+      return {
+        light: theme.yellow,
+        dark: theme.darkYellow
+      };
+    case 'danger':
+      return {
+        light: theme.red,
+        dark: theme.darkRed
+      };
+    default:
+      return {
+        light: theme.main,
+        dark: theme.mainDark
+      };
+  }
+}
+
+
+const Button = ({ theme, id, children, type, disabled, block, onClick, className, palette }) => {
+  return (
+    <StyledButton
+      id={id}
+      palette={getColorPalette(palette, theme)}
+      onClick={onClick}
+      type={type}
+      disabled={disabled} 
+      block={block}
+      className={className}
+    >
+      {children}
+    </StyledButton>
+  );
+};
 
 Button.propTypes = {
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
   ]),
+  theme: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['button', 'submit', 'ghost']),
+  type: PropTypes.oneOf(['button', 'submit' ]),
   disabled: PropTypes.bool,
   block: PropTypes.bool,
   onClick: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  palette: PropTypes.oneOf(['success', 'warning', 'danger'])
 };
 
 Button.defaultProps = {
@@ -80,7 +153,7 @@ class GhostButton extends Component {
   preventDefault = (e) => {
     e.preventDefault();
     e.persist();
-    if (this.props.onClick) {
+    if (this.props.onClick && !this.props.disabled) {
       this.props.onClick(e);
     }
   }
@@ -109,7 +182,7 @@ GhostButton.propTypes = {
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 GhostButton.defaultProps = {
@@ -123,4 +196,4 @@ export {
   GhostButton
 };
 
-export default Button;
+export default withTheme(Button);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
 import Joi from 'joi';
 import { withRouter } from 'react-router-dom';
@@ -15,6 +15,7 @@ import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Link from '../components/Link';
 import Copyrights from '../components/Copyrights';
+import DragArea from '../components/DragArea';
 
 const Container = styled.div`
   display: grid;
@@ -34,7 +35,7 @@ const LoginForm = styled.form`
 const Headline = styled.h1`
   text-align: center;
   font-size: 40px;
-  color: #FF7079;
+  color: ${props => props.theme.main};
 `;
 
 const GHLinkContainer = styled.div`
@@ -51,11 +52,16 @@ const CopyrightsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+const SubmitButton = styled(Button)`
+  padding: 10px 5px;
+  margin: 25px auto 0px auto;
+`;
+
 class LoginView extends Component {  
   componentWillMount() {
-    const { user } = this.props;
-    if (user.id && user.api_key) {
-      this.props.history.push('/app');
+    const { userId, api_key } = this.props;
+    if (userId && api_key) {
+      this.props.history.push('/app/summary');
     }
   }
 
@@ -75,24 +81,24 @@ class LoginView extends Component {
   };
 
   onSubmit = (values, { setSubmitting }) => {
-    const { dispatch } = this.props;
-    dispatch(actions.user.checkLogin(values))
-    .then(() => {
-      const { loginError, user } = this.props;
-      if (!loginError && user.id) {
-        this.props.history.push('/app');
+    const { checkLogin } = this.props;
+    checkLogin(values).then(() => {
+      const { loginError, userId } = this.props;
+      if (!loginError && userId) {
+        this.props.history.push('/app/summary');
       }
       setSubmitting(false);
     });
   }
 
   render() {
-    const { loginError } = this.props; 
+    const { loginError, theme } = this.props; 
     return (
       <Container>
+        <DragArea />
         <GHLinkContainer>
           <Link type="external" href="https://github.com/Spring3/redtime">
-            <GithubCircleIcon color="#FF7079" size="30"/>
+            <GithubCircleIcon color={theme.main} size="30"/>
           </Link>
         </GHLinkContainer>
         <Formik
@@ -142,7 +148,7 @@ class LoginView extends Component {
                 {errors.password}
               </ErrorMessage>
               <Label
-                label="Remdine Host"
+                label="Redmine Endpoint"
                 htmlFor="redmineEndpoint"
               >
                 <Input
@@ -156,13 +162,13 @@ class LoginView extends Component {
               <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
                 {errors.redmineEndpoint}
               </ErrorMessage>
-              <Button
+              <SubmitButton
                 type="submit"
                 disabled={isSubmitting}
                 block={true}
               >
                 Submit
-              </Button>
+              </SubmitButton>
               <ErrorMessage show={!!loginError}>
                 {loginError && loginError.message}
               </ErrorMessage>
@@ -178,24 +184,23 @@ class LoginView extends Component {
 }
 
 LoginView.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired,
-    firstname: PropTypes.string.isRequired,
-    lastname: PropTypes.string.isRequired,
-    api_key: PropTypes.string.isRequired,
-    redmineEndpoint: PropTypes.string.isRequired
-  }),
-  loginError: PropTypes.instanceOf(Error)
+  userId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  api_key: PropTypes.string,
+  loginError: PropTypes.instanceOf(Error),
+  checkLogin: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  userId: state.user.id,
+  api_key: state.user.api_key,
   loginError: state.user.loginError
 });
 
-const mapDispatchToProps = dispatch => ({ dispatch });
+const mapDispatchToProps = dispatch => ({
+  checkLogin: credentials => dispatch(actions.user.checkLogin(credentials))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView)));

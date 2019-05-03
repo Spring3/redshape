@@ -1,6 +1,11 @@
 import React from 'react';
 import { render, cleanup } from 'react-testing-library';
+import { mount } from 'enzyme';
+
+import utils from '../../../modules/utils';
 import Link from '../Link';
+
+jest.mock('electron');
 
 afterEach(cleanup);
 
@@ -11,5 +16,23 @@ describe('Link Component', () => {
     expect(item).toBeTruthy();
     expect(item.getAttribute('href')).toBe('https://google.com');
     expect(item.innerHTML).toBe('Google');
+  });
+
+  it('should handle click event', () => {
+    const click = jest.fn();
+    let wrapper = mount(
+      <Link href="https://google.com" onClick={click} />
+    );
+
+    wrapper.simulate('click');
+    expect(click).toHaveBeenCalled();
+
+    const shellSpy = jest.spyOn(utils, 'openExternalUrl').mockImplementationOnce(() => Promise.resolve());
+
+    wrapper = mount(
+      <Link href="https://google.com" type="external" />
+    );
+    wrapper.simulate('click');
+    expect(shellSpy).toHaveBeenCalledWith(wrapper.prop('href'));
   });
 });

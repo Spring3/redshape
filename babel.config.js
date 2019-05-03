@@ -10,7 +10,7 @@ module.exports = {
     ]
   ],
   plugins: [
-    'async-to-promises',
+    'module:fast-async',
     '@babel/plugin-proposal-class-properties',
     ['babel-plugin-styled-components',
       {
@@ -21,7 +21,9 @@ module.exports = {
   ],
   env: {
     test: {
-      plugins: ['@babel/plugin-transform-modules-commonjs']
+      plugins: [
+        '@babel/plugin-transform-modules-commonjs'
+      ]
     }
   }
 };

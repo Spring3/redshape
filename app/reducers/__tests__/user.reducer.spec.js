@@ -23,7 +23,6 @@ describe('User reducer', () => {
   });
 
   describe('USER_LOGIN action', () => {
-
     afterEach(storage.clear);
 
     it('should set isFetching to true during status START', () => {
@@ -47,12 +46,16 @@ describe('User reducer', () => {
       expect(reducer(initialState, notify.ok(USER_LOGIN, data))).toEqual({
         ...initialState,
         id: data.user.id,
-        firstname: data.user.firstname,
-        lastname: data.user.lastname,
+        name: `${data.user.firstname} ${data.user.lastname}`,
         redmineEndpoint: data.user.redmineEndpoint,
         api_key: data.user.api_key
       });
-      expect(storageSetSpy).toHaveBeenCalledWith('user', data.user);
+      expect(storageSetSpy).toHaveBeenCalledWith('user', {
+        id: data.user.id,
+        name: `${data.user.firstname} ${data.user.lastname}`,
+        redmineEndpoint: data.user.redmineEndpoint,
+        api_key: data.user.api_key
+      });
 
       storageSetSpy.mockRestore();
     });

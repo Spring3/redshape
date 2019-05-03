@@ -21,10 +21,13 @@ const initialize = () => {
   const windowConfig = {
     width: 1024,
     height: 768,
+    minWidth: 744,
+    // icon: `${__dirname}/assets/icon.ico`,
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      webSecurity: false // to disable cors
+      webSecurity: false, // to disable cors
+      nodeIntegration: true
     }
   };
 
@@ -37,7 +40,6 @@ const initialize = () => {
       slashes: true
     });
   } else {
-    windowConfig.webPreferences.nodeIntegration = false;
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.resolve(__dirname, 'dist', 'index.html'),

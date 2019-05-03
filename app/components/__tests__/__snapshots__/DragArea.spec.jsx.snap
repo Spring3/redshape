@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DragArea should match the snapshot 1`] = `
+.c0 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 23px;
+  z-index: 3;
+  -webkit-app-region: drag;
+}
+
+<div
+  className="c0"
+/>
+`;

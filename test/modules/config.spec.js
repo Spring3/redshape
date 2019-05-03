@@ -40,10 +40,11 @@ describe('Config', () => {
     expect(config).toEqual({
       PORT: '2222',
       ENCRYPTION_KEY: 'test-key',
-      NODE_ENV: 'test'
+      NODE_ENV: 'test',
+      platform: 'darwin'
     });
     expect(storageHasSpy).toHaveBeenCalledWith('settings');
-    expect(storageGetSpy).toHaveBeenCalledWith('settings');
+    expect(storageGetSpy).toHaveBeenCalledWith('settings', {});
 
     storageHasSpy.mockRestore();
     storageGetSpy.mockRestore();
