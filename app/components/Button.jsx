@@ -25,7 +25,7 @@ const StyledButton = styled.button`
         &:hover,
         &:focus {
           background: ${props.palette.light}; 
-          color: ${props.theme.hoverText};
+          color: ${props.theme.hoverText} !important;
 
           svg {
             fill: ${props.theme.hoverText};
@@ -82,47 +82,59 @@ const StyledLink = styled.a`
   }
 `;
 
-
-const getColorPalette = (palette, theme) => {
-  switch (palette) {
-    case 'success':
-      return {
-        light: theme.green,
-        dark: theme.darkGreen
-      };
-    case 'warning':
-      return {
-        light: theme.yellow,
-        dark: theme.darkYellow
-      };
-    case 'danger':
-      return {
-        light: theme.red,
-        dark: theme.darkRed
-      };
-    default:
-      return {
-        light: theme.main,
-        dark: theme.mainDark
-      };
+class Button extends Component {
+  getColorPalette = () => {
+    const { palette, theme } = this.props;
+    switch (palette) {
+      case 'success':
+        return {
+          light: theme.green,
+          dark: theme.darkGreen
+        };
+      case 'warning':
+        return {
+          light: theme.yellow,
+          dark: theme.darkYellow
+        };
+      case 'danger':
+        return {
+          light: theme.red,
+          dark: theme.darkRed
+        };
+      default:
+        return {
+          light: theme.main,
+          dark: theme.mainDark
+        };
+    }
   }
-}
-
-
-const Button = ({ theme, id, children, type, disabled, block, onClick, className, palette }) => {
-  return (
-    <StyledButton
-      id={id}
-      palette={getColorPalette(palette, theme)}
-      onClick={onClick}
-      type={type}
-      disabled={disabled} 
-      block={block}
-      className={className}
-    >
-      {children}
-    </StyledButton>
-  );
+ 
+  render() {
+    const {
+      id,
+      children,
+      type,
+      disabled,
+      block,
+      onClick,
+      theme,
+      className
+    } = this.props;
+    return (
+      <StyledButton
+        id={id}
+        palette={this.getColorPalette()}
+        onClick={onClick}
+        type={type}
+        theme={theme}
+        disabled={disabled} 
+        block={block}
+        className={className}
+      >
+        {children}
+      </StyledButton>
+    );
+  }
 };
 
 Button.propTypes = {

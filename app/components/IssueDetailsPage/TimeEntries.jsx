@@ -65,7 +65,7 @@ const TimeEntriesList = styled.ul`
     cursor: pointer;
     display: block;
     padding: 10px;
-    margin: 20px auto 0px auto;
+    margin: 10px auto 0px auto;
     border-radius: 3px;
     border: 2px solid transparent;
 

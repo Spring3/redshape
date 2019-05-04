@@ -20,7 +20,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 .c3:hover,
 .c3:focus {
   background: #FF7079;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
 .c3:hover svg,
@@ -140,7 +140,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 .c0 {
   background: white;
   padding-top: 35px;
-  max-height: 450px;
+  max-height: 550px;
   min-width: 340px;
 }
 
@@ -149,14 +149,14 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   padding: 0;
   margin: 0;
   overflow-y: scroll;
-  max-height: 400px;
+  max-height: 500px;
 }
 
 .c5 li {
   cursor: pointer;
   display: block;
   padding: 10px;
-  margin: 20px auto 0px auto;
+  margin: 10px auto 0px auto;
   border-radius: 3px;
   border: 2px solid transparent;
 }

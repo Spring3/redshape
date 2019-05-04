@@ -119,7 +119,7 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background: #FFFFFF;
+  background: #F9F9F9;
   font-weight: 900;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -136,6 +136,7 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
 
 .c12 tbody tr th.due-date {
   width: 90px;
+  z-index: 1;
 }
 
 .c12 tbody tr td {

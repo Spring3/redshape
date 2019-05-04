@@ -71,7 +71,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
 .c15:hover,
 .c15:focus {
   background: #6CCA51;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
 .c15:hover svg,
@@ -733,7 +733,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
 .c15:hover,
 .c15:focus {
   background: #6CCA51;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
 .c15:hover svg,
@@ -5839,6 +5839,22 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         "light": "#6CCA51",
                                       }
                                     }
+                                    theme={
+                                      Object {
+                                        "bg": "#FFFFFF",
+                                        "bgDark": "#F9F9F9",
+                                        "green": "#6CCA51",
+                                        "hoverText": "#FFFFFF",
+                                        "main": "#FF7079",
+                                        "mainDark": "#EF6069",
+                                        "mainLight": "#FF7F87",
+                                        "minorText": "#909090",
+                                        "normalText": "#3F3844",
+                                        "red": "#FF634D",
+                                        "transitionTime": ".2s",
+                                        "yellow": "#FFDA77",
+                                      }
+                                    }
                                     type="button"
                                   >
                                     <StyledComponent
@@ -5876,6 +5892,22 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         Object {
                                           "dark": undefined,
                                           "light": "#6CCA51",
+                                        }
+                                      }
+                                      theme={
+                                        Object {
+                                          "bg": "#FFFFFF",
+                                          "bgDark": "#F9F9F9",
+                                          "green": "#6CCA51",
+                                          "hoverText": "#FFFFFF",
+                                          "main": "#FF7079",
+                                          "mainDark": "#EF6069",
+                                          "mainLight": "#FF7F87",
+                                          "minorText": "#909090",
+                                          "normalText": "#3F3844",
+                                          "red": "#FF634D",
+                                          "transitionTime": ".2s",
+                                          "yellow": "#FFDA77",
                                         }
                                       }
                                       type="button"

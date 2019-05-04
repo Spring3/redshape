@@ -29,6 +29,7 @@ exports[`Table component should match the snapshot 1`] = `
 
 .c0 tbody tr th.due-date {
   width: 90px;
+  z-index: 1;
 }
 
 .c0 tbody tr td {

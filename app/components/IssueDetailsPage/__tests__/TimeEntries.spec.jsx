@@ -10,8 +10,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { TIME_ENTRY_GET_ALL, TIME_ENTRY_DELETE } from '../../../actions/timeEntry.actions';
 import { TRACKING_START } from '../../../actions/tracking.actions';
 import { getInstance, reset, initialize } from '../../../../modules/request';
-import TimeEntries from '../TimeEntries';
 import theme from '../../../theme';
+import TimeEntries from '../TimeEntries';
 
 const redmineEndpoint = 'redmine.test.test';
 const token = 'multipass';
@@ -309,7 +309,7 @@ describe('IssueDetails => TimeEntries componnet', () => {
         </ThemeProvider>
       </Provider>
     );
-    wrapper.find('GhostButton').simulate('click', {
+    wrapper.find('TimeEntries').instance().removeTimeEntry(1)({
       preventDefault: () => {},
       stopPropagation: () => {}
     });

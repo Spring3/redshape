@@ -30,6 +30,7 @@ const StyledTable = styled.table`
 
       th.due-date {
         width: 90px;
+        z-index: 1;
       }
 
       td {

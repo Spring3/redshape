@@ -1,8 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import PropTypes from 'prop-types';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Button from './Button';
+
+const PaddedButton = styled(Button)`
+  padding: 5px;
+  margin-right: 10px;
+  margin-top: 10px;
+`;
 
 class Dialog extends Component {
   constructor(props) {
@@ -25,13 +32,26 @@ class Dialog extends Component {
   }
 
   renderDialog = () => {
+    const { title, message, theme } = this.props;
     confirmAlert({
       customUI: ({ onClose }) => (
-        <div className='custom-ui'>
-          <h1>{this.props.title}</h1>
-          <p>{this.props.message}</p>
-          <button onClick={this.cancel(onClose)}>Cancel</button>
-          <button onClick={this.confirm(onClose)}>Confirm</button>
+        <div>
+          <h1>{title}</h1>
+          <p>{message}</p>
+          <PaddedButton
+            theme={theme}
+            palette="danger"
+            onClick={this.cancel(onClose)}
+          >
+          Cancel
+          </PaddedButton>
+          <PaddedButton
+            theme={theme}
+            palette="success"
+            onClick={this.confirm(onClose)}
+          >
+          Confirm
+          </PaddedButton>
         </div>
       )
     });
@@ -73,4 +93,4 @@ Dialog.defaultProps = {
   onClose: undefined
 };
 
-export default Dialog;
+export default withTheme(Dialog);
