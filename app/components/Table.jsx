@@ -15,7 +15,7 @@ const StyledTable = styled.table`
         padding: 15px;
         position: sticky;
         top: 0;
-        background: ${props => props.theme.bg};
+        background: ${props => props.theme.bgDark};
         font-weight: 900;
         transition: color ease ${props => props.theme.transitionTime};
         &:hover {

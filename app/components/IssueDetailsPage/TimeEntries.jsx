@@ -10,6 +10,7 @@ import TimerIcon from 'mdi-react/TimerIcon';
 
 import Button, { GhostButton } from '../../components/Button';
 import DateComponent from '../../components/Date';
+import Dialog from '../../components/Dialog';
 import actions from '../../actions';
 
 const HeaderContainer = styled.div`
@@ -49,7 +50,7 @@ const FlexButton = styled(Button) `
 const TimeEntriesContainer = styled.div`
   background: white;
   padding-top: 35px;
-  max-height: 450px;
+  max-height: 550px;
   min-width: 340px;
 `;
 
@@ -58,7 +59,7 @@ const TimeEntriesList = styled.ul`
   padding: 0;
   margin: 0;
   overflow-y: scroll;
-  max-height: 400px;
+  max-height: 500px;
 
   li {
     cursor: pointer;
@@ -175,11 +176,17 @@ class TimeEntries extends Component {
                 </div>
                 {
                   userId === timeEntry.user.id && (
-                    <GhostButton
-                      onClick={this.removeTimeEntry(timeEntry.id)}
-                    >
-                      <CloseIcon color={theme.normalText} />
-                    </GhostButton>
+                    <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
+                      {
+                        requestConfirmation => (
+                          <GhostButton
+                            onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
+                          >
+                            <CloseIcon color={theme.normalText} />
+                          </GhostButton>
+                        )
+                      }
+                    </Dialog>
                   )
                 }
               </div>
