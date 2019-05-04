@@ -3,7 +3,8 @@ import {
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE,
   TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
-  TIME_ENTRY_UPDATE_VALIDATION_FAILED
+  TIME_ENTRY_UPDATE_VALIDATION_FAILED,
+  TIME_ENTRY_RESET
 } from '../actions/timeEntry.actions';
 
 const initialState = {
@@ -30,6 +31,9 @@ export default (state = initialState, action) => {
     case TIME_ENTRY_PUBLISH_VALIDATION_FAILED:
     case TIME_ENTRY_UPDATE_VALIDATION_FAILED: {
       return { ...state, error: action.data };
+    }
+    case TIME_ENTRY_RESET: {
+      return initialState;
     }
     default:
       return state;

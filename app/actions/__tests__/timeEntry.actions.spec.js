@@ -33,6 +33,7 @@ describe('Time actions', () => {
     expect(timeEntryActions.TIME_ENTRY_UPDATE).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_DELETE).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_GET_ALL).toBeTruthy();
+    expect(timeEntryActions.TIME_ENTRY_RESET).toBeTruthy();
 
     expect(timeEntryActions.default.validateBeforePublish).toBeTruthy();
     expect(timeEntryActions.default.publish).toBeTruthy();
@@ -40,6 +41,7 @@ describe('Time actions', () => {
     expect(timeEntryActions.default.update).toBeTruthy();
     expect(timeEntryActions.default.remove).toBeTruthy();
     expect(timeEntryActions.default.getAll).toBeTruthy();
+    expect(timeEntryActions.default.reset).toBeTruthy();
   });
 
   describe('validateBeforePublish action', () => {
@@ -264,7 +266,6 @@ describe('Time actions', () => {
       })).toEqual({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
     });
 
-    
     it('should fail if activity.id is not a number', () => {
       const validation = timeEntryActions.default.validateBeforeUpdate({
         activity: {
@@ -516,6 +517,14 @@ describe('Time actions', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_GET_ALL));
       expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
+    });
+  });
+
+  describe('reset action', () => {
+    it('should reset state', () => {
+      expect(timeEntryActions.default.reset()).toEqual({
+        type: timeEntryActions.TIME_ENTRY_RESET
+      });
     });
   });
 });

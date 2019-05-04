@@ -569,6 +569,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
           isUserAuthor={true}
           onClose={[MockFunction]}
           publishTimeEntry={[Function]}
+          resetValidation={[Function]}
           theme={
             Object {
               "bg": "#FFFFFF",

@@ -618,4 +618,62 @@ describe('TimeEntryModal Component', () => {
       done();
     }, 50);
   });
+
+  it('should reset time entry on unmount', () => {
+    const props = {
+      activities: [{
+        id: 1,
+        name: 'Development'
+      }, {
+        id: 2,
+        name: 'Testing'
+      }],
+      isUserAuthor: true,
+      timeEntry: {
+        id: 1,
+        activity: {
+          id: 1,
+          name: 'Development'
+        },
+        comments: 'Hello world',
+        created_on: '2011-01-01',
+        hours: 10,
+        issue: {
+          id: 1,
+          name: 'Cover a modal with tests'
+        },
+        project: {
+          id: 1,
+          name: 'Testing Project'
+        },
+        spent_on: new Date(),
+        user: {
+          id: 1,
+          name: 'John Wayne'
+        }
+      },
+      onClose: jest.fn(),
+      isOpen: true,
+      isEditable: true
+    };
+    const state = {
+      timeEntry: {
+        isFetching: false,
+        error: undefined
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <TimeEntryModal {...props} />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    const actionSpy = jest.spyOn(actions.default, 'reset');
+    wrapper.unmount();
+    expect(actionSpy).toHaveBeenCalled();
+    expect(store.getActions().pop().type).toBe(actions.TIME_ENTRY_RESET);
+  });
 });

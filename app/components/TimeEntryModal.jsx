@@ -64,7 +64,13 @@ class TimeEntryModal extends Component {
           wasModified: false
         });
       }
+    } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
+      this.props.resetValidation();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetValidation();
   }
 
   runValidation = () => {
@@ -311,7 +317,8 @@ TimeEntryModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool,
   publishTimeEntry: PropTypes.func.isRequired,
-  updateTimeEntry: PropTypes.func.isRequired
+  updateTimeEntry: PropTypes.func.isRequired,
+  resetValidation: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -322,7 +329,8 @@ const mapDispatchToProps = dispatch => ({
   publishTimeEntry: timeEntry => dispatch(actions.timeEntry.publish(timeEntry)),
   updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
   validateBeforePublish: timeEntry => dispatch(actions.timeEntry.validateBeforePublish(timeEntry)),
-  validateBeforeUpdate: changes => dispatch(actions.timeEntry.validateBeforeUpdate(changes))
+  validateBeforeUpdate: changes => dispatch(actions.timeEntry.validateBeforeUpdate(changes)),
+  resetValidation: () => dispatch(actions.timeEntry.reset())
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));
