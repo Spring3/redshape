@@ -111,8 +111,6 @@ class IssueDetailsPage extends Component {
       selectedTimeEntry: undefined,
       showTimeEntryModal: false
     };
-
-    this.getComments = _.memoize(issueId => this.props.selectedIssue.journals.filter(entry => entry.notes));
   }
 
   componentWillMount() {
@@ -160,6 +158,8 @@ class IssueDetailsPage extends Component {
       showTimeEntryModal: false
     });
   }
+
+  getIssueComments = () => this.props.selectedIssue.journals.filter(entry => entry.notes)
 
   render() {
     const { selectedIssue, history, userId, theme, postComments } = this.props;
@@ -258,7 +258,7 @@ class IssueDetailsPage extends Component {
             />
           </Flex>
           <CommentsSection
-            journalEntries={this.getComments(selectedIssue.id)}
+            journalEntries={this.getIssueComments()}
             publishComments={postComments}
             issueId={selectedIssue.id}
           />

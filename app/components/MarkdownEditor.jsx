@@ -20,6 +20,7 @@ import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 
 import { openExternalUrl, xssFilter } from '../../modules/utils';
+import { platform } from '../../modules/config';
 
 import TextArea from './TextArea';
 import { GhostButton } from './Button';
@@ -211,13 +212,24 @@ class MarkdownEditor extends PureComponent {
   }
 
   onKeyDown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.keyCode === KEY_ENTER) {
-      const { onSubmit } = this.props;
-      if (onSubmit) {
-        onSubmit(xssFilter(this.state.value));
-        this.setState({
-          value: ''
-        });
+    const { onSubmit } = this.props;
+    if (platform === 'darwin') {
+      if (e.metaKey && e.keyCode === KEY_ENTER) {
+        if (onSubmit) {
+          onSubmit(xssFilter(this.state.value));
+          this.setState({
+            value: ''
+          });
+        }
+      }
+    } else {
+      if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+        if (onSubmit) {
+          onSubmit(xssFilter(this.state.value));
+          this.setState({
+            value: ''
+          });
+        }
       }
     }
   }
