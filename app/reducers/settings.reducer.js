@@ -3,7 +3,9 @@ import {
   SETTINGS_USE_CORS,
   SETTINGS_SHOW_CLOSED_ISSUES,
   SETTINGS_USE_COLORS,
-  SETTINGS_ISSUE_HEADERS
+  SETTINGS_ISSUE_HEADERS,
+  SETTINGS_BACKUP,
+  SETTINGS_RESTORE
 } from '../actions/settings.actions';
 
 export const initialState = {
@@ -38,36 +40,49 @@ const orderTableHeaders = (headers) => {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SETTINGS_USE_CORS: {
+      const { userId, redmineEndpoint, useCors } = action.data;
       const nextState = {
         ...state,
-        useCors: !!action.data
+        useCors: !!useCors
       };
-      storage.set('settings', nextState);
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_SHOW_CLOSED_ISSUES: {
+      const { userId, redmineEndpoint, showClosed } = action.data;
       const nextState = {
         ...state,
-        showClosedIssues: !!action.data
+        showClosedIssues: !!showClosed
       };
-      storage.set('settings', nextState);
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_USE_COLORS: {
+      const { userId, redmineEndpoint, useColors } = action.data;
       const nextState = {
         ...state,
-        useColors: !!action.data
+        useColors: !!useColors
       };
-      storage.set('settings', nextState);
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_ISSUE_HEADERS: {
+      const { userId, redmineEndpoint, issueHeaders } = action.data;
       const nextState = {
         ...state,
-        issueHeaders: orderTableHeaders(action.data)
+        issueHeaders: orderTableHeaders(issueHeaders)
       };
-      storage.set('settings', nextState);
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
+    }
+    case SETTINGS_BACKUP: {
+      const { userId, redmineEndpoint } = action.data;
+      storage.set(`settings.${redmineEndpoint}.${userId}`, state);
+      return state;
+    }
+    case SETTINGS_RESTORE: {
+      const { userId, redmineEndpoint } = action.data;
+      return storage.get(`settings.${redmineEndpoint}.${userId}`, initialState);
     }
     default:
       return state;

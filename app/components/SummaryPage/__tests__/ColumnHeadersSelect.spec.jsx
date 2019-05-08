@@ -52,6 +52,10 @@ describe('SummaryPage => ColumnHeadersSelect componnet', () => {
           { label: 'Estimation', value: 'estimated_hours' },
           { label: 'Due Date', value: 'due_date' }
         ]
+      },
+      user: {
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
       }
     };
     const store = mockStore(state);

@@ -262,7 +262,7 @@ describe('[integration] LoginView', () => {
       expect(axiosMock.history.get[0].url).toBe(`${returnedValues.redmineEndpoint}/users/current.json`);
       expect(axiosMock.history.get[0].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
-      expect(store.getActions().length).toBe(2);
+      expect(store.getActions().length).toBe(3);
       expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
       expect(store.getActions()[1]).toEqual(notify.ok(USER_LOGIN, {
         user: {
