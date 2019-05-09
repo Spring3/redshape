@@ -237,7 +237,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id } = this.props;
+    const { className, id, onBlur } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -326,6 +326,7 @@ class MarkdownEditor extends PureComponent {
               ref={this.textareaRef}
               onChange={this.onTextAreaTyped}
               onKeyDown={this.onKeyDown}
+              onBlur={onBlur}
               value={value}
             />
           )
@@ -344,14 +345,16 @@ MarkdownEditor.propTypes = {
   ]),
   initialValue: PropTypes.string,
   preview: PropTypes.bool,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  onBlur: PropTypes.func
 };
 
 MarkdownEditor.defaultProps = {
   className: undefined,
   id: undefined,
   initialValue: '',
-  preview: false
+  preview: false,
+  onBlur: undefined
 };
 
 const Iframe = styled.iframe`

@@ -126,6 +126,11 @@ export default (state = initialState, action) => {
         if (issueId === state.data.id) {
           return {
             ...state,
+            data: {
+              ...state.data,
+              spent_hours: state.data.spent_hours + timeEntry.hours,
+              total_spent_hours: state.data.total_spent_hours + timeEntry.hours
+            },
             spentTime: {
               ...state.spentTime,
               data: [
@@ -142,7 +147,7 @@ export default (state = initialState, action) => {
       if (action.status === 'OK') {
         const issueId = _.get(action.data, 'issue.id');
         if (issueId === state.data.id) {
-          return {
+          const nextState = {
             ...state,
             spentTime: {
               ...state.spentTime,
@@ -151,6 +156,13 @@ export default (state = initialState, action) => {
               )
             }
           };
+          const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);
+          nextState.data = {
+            ...nextState.data,
+            spent_hours: newTotalTimeSpent,
+            total_spent_hours: newTotalTimeSpent
+          };
+          return nextState;
         }
       }
       return state;
@@ -159,13 +171,20 @@ export default (state = initialState, action) => {
       if (action.status === 'OK') {
         const { issueId, timeEntryId } = action.data;
         if (issueId === state.data.id) {
-          return {
+          const nextState = {
             ...state,
             spentTime: {
               ...state.spentTime,
               data: [...state.spentTime.data.filter(({ id }) => id !== timeEntryId)]
             }
           };
+          const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);
+          nextState.data = {
+            ...nextState.data,
+            spent_hours: newTotalTimeSpent,
+            total_spent_hours: newTotalTimeSpent
+          };
+          return nextState;
         }
       }
       return state;

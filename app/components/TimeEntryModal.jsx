@@ -173,6 +173,7 @@ class TimeEntryModal extends Component {
     const selectedActivity = { id: activity.id, label: activity.name }; 
     const validationErrors = time.error && time.error.isJoi
       ? {
+        comments: time.error.details.find(error => error.path[0] === 'comments'),
         activity: time.error.details.find(error => error.path[0] === 'activity'),
         hours: time.error.details.find(error => error.path[0] === 'hours'),
         spentOn: time.error.details.find(error => error.path[0] === 'spent_on')
@@ -247,9 +248,13 @@ class TimeEntryModal extends Component {
           <Label label="Comments" htmlFor="comments">
             <MarkdownEditor
               onChange={this.onCommentsChange}
+              onBlur={this.runValidation}
               initialValue={comments}
             />
           </Label>
+          <ErrorMessage show={!!validationErrors.comments}>
+            {this.getErrorMessage(validationErrors.comments)}
+          </ErrorMessage>
           {timeEntry.id && isUserAuthor
             ? (
               <OptionButtons>

@@ -3699,6 +3699,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 </Input__H4Label>
                                 <MarkdownEditor
                                   initialValue="Hello world"
+                                  onBlur={[Function]}
                                   onChange={[Function]}
                                   preview={false}
                                 >
@@ -5624,6 +5625,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       </StyledComponent>
                                     </MarkdownEditor__MarkdownOptionsList>
                                     <MarkdownEditor__ModifiedTextArea
+                                      onBlur={[Function]}
                                       onChange={[Function]}
                                       onKeyDown={[Function]}
                                       value="Hello world"
@@ -5671,12 +5673,14 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             </textarea>,
                                           }
                                         }
+                                        onBlur={[Function]}
                                         onChange={[Function]}
                                         onKeyDown={[Function]}
                                         value="Hello world"
                                       >
                                         <ForwardRef
                                           className="c12"
+                                          onBlur={[Function]}
                                           onChange={[Function]}
                                           onKeyDown={[Function]}
                                           value="Hello world"
@@ -5695,6 +5699,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 </textarea>,
                                               }
                                             }
+                                            onBlur={[Function]}
                                             onChange={[Function]}
                                             onKeyDown={[Function]}
                                             rows={1}
@@ -5769,6 +5774,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                             </StyledComponent>
                           </Input__FormGroup>
                         </Label>
+                        <ErrorMessage
+                          show={false}
+                        />
                         <TimeEntryModal__OptionButtons>
                           <StyledComponent
                             forwardedComponent={
