@@ -78,6 +78,19 @@ describe('MarkdownEditor component', () => {
     expect(xssSpy).toHaveBeenCalled();
     expect(wrapper.find(MarkdownEditor).state('value')).toBe('');
   });
+
+  it('should add a newline on macos if ctrl+enter was pressed', () => {
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <MarkdownEditor initialValue="Lorem ipsum dolor" />
+      </ThemeProvider>
+    );
+
+    const KEY_ENTER = 13;
+    wrapper.find('textarea').simulate('keyDown', { keyCode: KEY_ENTER, ctrlKey: true });
+    wrapper.update();
+    expect(wrapper.find(MarkdownEditor).state('value')).toBe('\r\nLorem ipsum dolor');
+  });
 });
 
 describe('MarkdownText component', () => {

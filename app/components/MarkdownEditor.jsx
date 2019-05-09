@@ -119,7 +119,7 @@ class MarkdownEditor extends PureComponent {
     this.adjustTextAreaHeight();
   }
 
-  applyMarkdown = (symbolStart, symbolEnd) => {
+  applyMarkdown = (symbolStart, symbolEnd = '') => {
     const { onChange } = this.props;
     const textarea = this.textareaRef.current;
     const currentValue = this.state.value;
@@ -158,27 +158,27 @@ class MarkdownEditor extends PureComponent {
   }
 
   makeh1 = () => {
-    this.applyMarkdown('# ', '');
+    this.applyMarkdown('# ');
   }
 
   makeh2 = () => {
-    this.applyMarkdown('## ', '');
+    this.applyMarkdown('## ');
   }
 
   makeh3 = () => {
-    this.applyMarkdown('### ', '');
+    this.applyMarkdown('### ');
   }
 
   makeBulletedList = () => {
-    this.applyMarkdown('- ', '');
+    this.applyMarkdown('- ');
   }
 
   makeNumberedList = () => {
-    this.applyMarkdown('1. ', '');
+    this.applyMarkdown('1. ');
   }
 
   makeQuote = () => {
-    this.applyMarkdown('> ', '');
+    this.applyMarkdown('> ');
   }
 
   makeLink = () => {
@@ -221,6 +221,8 @@ class MarkdownEditor extends PureComponent {
             value: ''
           });
         }
+      } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+        this.applyMarkdown('\r\n');
       }
     } else {
       if (e.ctrlKey && e.keyCode === KEY_ENTER) {
