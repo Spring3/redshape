@@ -4,6 +4,7 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path').posix;
 const { app, BrowserWindow, ipcMain, session } = require('electron');
+// require('./modules/request'); // to initialize from storage
 
 dotenv.load({ silent: true });
 
@@ -26,7 +27,6 @@ const initialize = () => {
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      webSecurity: false, // to disable cors
       nodeIntegration: true
     }
   };

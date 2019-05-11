@@ -1,13 +1,12 @@
-import request, { login, notify } from './helper';
-import { reset } from '../../modules/request';
+import request, { login, notify, logout } from './helper';
 import settingsActions from './settings.actions';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const USER_GET_CURRENT = 'USER_GET_CURRENT';
 
-const logout = () => (dispatch) => {
-  reset();
+const signout = () => (dispatch) => {
+  logout();
   dispatch(settingsActions.backup());
   dispatch({ type: USER_LOGOUT });
 };
@@ -49,5 +48,5 @@ const getCurrent = () => (dispatch) => {
 export default {
   checkLogin,
   getCurrent,
-  logout
+  logout: signout
 };

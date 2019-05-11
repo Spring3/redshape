@@ -1,6 +1,5 @@
-import axios, { CancelToken } from 'axios';
-
-import storage from './storage';
+const axios = require('axios');
+const storage = require('./storage');
 
 let instance;
 
@@ -16,7 +15,7 @@ const makeCancellable = (headers, requestId) => {
   if (pendingRequests[requestId]) {
     pendingRequests[requestId].cancel();
   }
-  const source = CancelToken.source();
+  const source = axios.default.CancelToken.source();
   const newHeaders = {
     ...headers,
     cancelToken: source.token
@@ -25,22 +24,20 @@ const makeCancellable = (headers, requestId) => {
   return newHeaders;
 };
 
-const getDefaultConfig = () => ({
-  timeout: TWENTY_SECONDS,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-  }
-});
-
 const initialize = (redmineEndpoint, token) => {
   if (!redmineEndpoint || !token) {
     return;
   }
-  const defaultConfig = getDefaultConfig();
+  const defaultConfig = {
+    timeout: TWENTY_SECONDS,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    }
+  };
   const axiosConfig = {
     baseURL: redmineEndpoint,
     timeout: defaultConfig.timeout,
@@ -63,13 +60,50 @@ if (storage.has('user')) {
   }
 }
 
-export {
-  getDefaultConfig,
+const handleReject = (error) => {
+  // if this request was not cancelled
+  if (!axios.default.isCancel(error)) {
+    let errorMessage = 'Error';
+    if (error.status) {
+      errorMessage = `${errorMessage} ${error.status}`;
+    }
+    errorMessage = `${errorMessage} (${error.statusText || error.message})`;
+
+    return Promise.reject(new Error(errorMessage));
+  }
+  return undefined;
+};
+
+const authorizedRequest = (config) => {
+  if (config.id) {
+    Object.assign(
+      config,
+      { headers: makeCancellable(config.headers || {}, config.id) }
+    );
+  }
+  if (!instance) {
+    return Promise.reject(new Error('401 - Unauthorized'));
+  }
+  return getInstance().request(config)
+    .then((res) => {
+      delete pendingRequests[config.id];
+      return ({ data: res.data });
+    })
+    .catch((error) => {
+      delete pendingRequests[config.id];
+      return handleReject(error);
+    });
+};
+
+const request = config => axios.default.request(config).catch(handleReject);
+
+module.exports = {
+  default: axios,
   makeCancellable,
   initialize,
   getInstance,
   pendingRequests,
-  reset
+  reset,
+  authorizedRequest,
+  request
 };
-
-export default axios;
