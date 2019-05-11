@@ -15,7 +15,7 @@ const makeCancellable = (headers, requestId) => {
   if (pendingRequests[requestId]) {
     pendingRequests[requestId].cancel();
   }
-  const source = axios.default.CancelToken.source();
+  const source = axios.CancelToken.source();
   const newHeaders = {
     ...headers,
     cancelToken: source.token
@@ -28,21 +28,10 @@ const initialize = (redmineEndpoint, token) => {
   if (!redmineEndpoint || !token) {
     return;
   }
-  const defaultConfig = {
-    timeout: TWENTY_SECONDS,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-    }
-  };
   const axiosConfig = {
     baseURL: redmineEndpoint,
-    timeout: defaultConfig.timeout,
+    timeout: TWENTY_SECONDS,
     headers: {
-      ...defaultConfig.headers,
       'X-Redmine-API-Key': token
     }
   };
@@ -62,7 +51,7 @@ if (storage.has('user')) {
 
 const handleReject = (error) => {
   // if this request was not cancelled
-  if (!axios.default.isCancel(error)) {
+  if (!axios.isCancel(error)) {
     let errorMessage = 'Error';
     if (error.status) {
       errorMessage = `${errorMessage} ${error.status}`;
@@ -84,6 +73,22 @@ const authorizedRequest = (config) => {
   if (!instance) {
     return Promise.reject(new Error('401 - Unauthorized'));
   }
+
+  Object.assign(
+    config,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+        'X-Redmine-API-Key': instance.defaults.headers['X-Redmine-API-Key'],
+        ...config.headers
+      }
+    }
+  );
+
   return getInstance().request(config)
     .then((res) => {
       delete pendingRequests[config.id];
@@ -95,7 +100,20 @@ const authorizedRequest = (config) => {
     });
 };
 
-const request = config => axios.default.request(config).catch(handleReject);
+const request = (config) => {
+  Object.assign(config, {
+    timeout: TWENTY_SECONDS,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      ...config.headers
+    }
+  });
+  return axios.request(config).catch(handleReject);
+};
 
 module.exports = {
   default: axios,

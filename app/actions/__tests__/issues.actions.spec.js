@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { IssueFilter, notify } from '../helper';
 import * as issuesActions from '../issues.actions';
-import * as axios from '../../../modules/request';
+import axios from '../../../modules/request';
 
 let axiosMock;
 const redmineEndpoint = 'https://redmine.test.com';

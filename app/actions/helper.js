@@ -115,11 +115,7 @@ const login = ({
 }) => axios.request({
   baseURL: redmineEndpoint,
   timeout: 20000,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    ...(headers || {})
-  },
+  headers: headers || {},
   url,
   method: 'GET'
 }).then((res) => {

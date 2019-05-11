@@ -4,7 +4,6 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path').posix;
 const { app, BrowserWindow, ipcMain, session } = require('electron');
-// require('./modules/request'); // to initialize from storage
 
 dotenv.load({ silent: true });
 
@@ -14,6 +13,7 @@ if (!process.env.ENCRYPTION_KEY) {
   dotenv.load({ silent: true });
 }
 const { PORT, redmineDomain } = require('./modules/config');
+require('./modules/request'); // to initialize from storage
 
 let mainWindow;
 const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));

@@ -12,12 +12,10 @@ import MockAdapter from 'axios-mock-adapter';
 import actions from '../../actions';
 import { USER_LOGIN } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
-import axios, { reset } from '../../../modules/request';
-
-jest.mock('electron-store');
+import storage from '../../../modules/storage';
+import axios from '../../../modules/request';
 
 import theme from '../../theme';
-import storage from '../../../modules/storage';
 import LoginView from '../LoginView';
 
 let axiosMock;
@@ -26,7 +24,7 @@ const mockStore = configureStore([thunk]);
 
 describe('Login view', () => {
   beforeAll(() => {
-    axiosMock = new MockAdapter(axios);
+    axiosMock = new MockAdapter(axios.default);
   });
 
   afterEach(() => {
@@ -37,7 +35,7 @@ describe('Login view', () => {
 
   afterAll(() => {
     axiosMock.restore();
-    reset();
+    axios.reset();
   });
 
   it('should match the snapshot', () => {
@@ -165,7 +163,7 @@ describe('Login view', () => {
 
 describe('[integration] LoginView', () => {
   beforeAll(() => {
-    axiosMock = new MockAdapter(axios);
+    axiosMock = new MockAdapter(axios.default);
   });
 
   afterEach(() => {
@@ -176,7 +174,7 @@ describe('[integration] LoginView', () => {
 
   afterAll(() => {
     axiosMock.restore();
-    reset();
+    axios.reset();
   });
 
   it('should not make a redmine api request if the form has errors', (done) => {

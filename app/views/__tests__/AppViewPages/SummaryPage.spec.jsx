@@ -8,10 +8,10 @@ import configureStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import { ThemeProvider } from 'styled-components';
 
-import { initialize, getInstance, reset } from '../../../../modules/request';
 import theme from '../../../theme';
 import SummaryPage from '../../AppViewPages/SummaryPage';
 import { ISSUES_GET_ALL } from '../../../actions/issues.actions';
+import { initialize, getInstance, reset } from '../../../../modules/request';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';

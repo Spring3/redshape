@@ -1,8 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as axios from '../../../modules/request';
+
+
 import * as userActions from '../user.actions';
 import { notify } from '../helper';
 import settingsActions from '../settings.actions';
+import axios from '../../../modules/request';
 
 const redmineEndpoint = 'redmine.test.com';
 const token = 'multipass';
@@ -88,7 +90,7 @@ describe('User actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_LOGIN));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(userActions.USER_LOGIN, response));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(userActions.USER_LOGIN, new Error(`Error ${response.status} (${response.message})`)));
     });
   });
 

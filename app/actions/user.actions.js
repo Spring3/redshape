@@ -1,5 +1,5 @@
-import request, { login, notify, logout } from './helper';
 import settingsActions from './settings.actions';
+import request, { login, notify, logout } from './helper';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';

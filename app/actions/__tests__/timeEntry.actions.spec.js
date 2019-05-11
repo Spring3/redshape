@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import moment from 'moment';
 import { notify } from '../helper';
 import * as timeEntryActions from '../timeEntry.actions';
-import * as axios from '../../../modules/request';
+import axios from '../../../modules/request';
 
 const redmineEndpoint = 'redmine.test.com';
 const token = 'multipass';

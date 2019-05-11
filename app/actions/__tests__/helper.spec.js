@@ -1,9 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as axios from '../../../modules/request';
 
-import request, { IssueFilter, notify, login } from '../helper';
-
-jest.mock('electron-store');
+import request, { IssueFilter, notify, login, logout } from '../helper';
+import axios from '../../../modules/request';
 
 let axiosMock;
 
@@ -24,6 +22,7 @@ describe('Helper module', () => {
     expect(request).toBeTruthy();
     expect(notify).toBeTruthy();
     expect(login).toBeTruthy();
+    expect(logout).toBeTruthy();
     expect(IssueFilter).toBeTruthy();
   });
 
@@ -85,7 +84,6 @@ describe('Helper module', () => {
   describe('Notifier', () => {
     it('should populate the action with status', () => {
       expect(notify.start).toBeTruthy();
-      expect(notify.paginate).toBeTruthy();
       expect(notify.ok).toBeTruthy();
       expect(notify.nok).toBeTruthy();
       expect(notify.cancel).toBeTruthy();
@@ -95,11 +93,6 @@ describe('Helper module', () => {
       expect(notify.start(TEST_ACTION)).toEqual({
         type: TEST_ACTION,
         status: 'START',
-        id: undefined
-      });
-      expect(notify.paginate(TEST_ACTION)).toEqual({
-        type: TEST_ACTION,
-        status: 'PAGE_NEXT',
         id: undefined
       });
       expect(notify.ok(TEST_ACTION, { test: 'aloalo' })).toEqual({
@@ -186,7 +179,8 @@ describe('Helper module', () => {
           url: '/user'
         });
       } catch (e) {
-        expect(e).toEqual(error);
+        expect(e).toBeInstanceOf(Error);
+        expect(e.message).toBe('Error (Test response error)');
       }
 
       expect(axios.getInstance()).toBe(undefined);
