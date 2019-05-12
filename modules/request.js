@@ -63,7 +63,7 @@ const handleReject = (error) => {
   return undefined;
 };
 
-const authorizedRequest = (config) => {
+const authorizedRequest = (config = {}) => {
   if (config.id) {
     Object.assign(
       config,
@@ -84,7 +84,7 @@ const authorizedRequest = (config) => {
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
         'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
         'X-Redmine-API-Key': instance.defaults.headers['X-Redmine-API-Key'],
-        ...config.headers
+        ...(config.headers || {})
       }
     }
   );
@@ -100,7 +100,7 @@ const authorizedRequest = (config) => {
     });
 };
 
-const request = (config) => {
+const request = (config = {}) => {
   Object.assign(config, {
     timeout: TWENTY_SECONDS,
     headers: {
@@ -109,7 +109,7 @@ const request = (config) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-      ...config.headers
+      ...(config.headers || {})
     }
   });
   return axios.request(config).catch(handleReject);
