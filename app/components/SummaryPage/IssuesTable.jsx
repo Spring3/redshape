@@ -4,6 +4,7 @@ import _get from 'lodash/get';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled, { withTheme, css } from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroller';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
@@ -72,9 +73,16 @@ class IssuesTable extends Component {
     );
   }
 
+  loadIssuePage = () => {
+    const { issues, fetchIssuePage } = this.props;
+    const { page } = issues;
+    fetchIssuePage(page + 1);
+  }
+
   render() {
-    const { issueHeaders, userTasks } = this.props;
+    const { issueHeaders, issues } = this.props;
     const { sortBy, sortDirection } = this.state;
+    const userTasks = issues.data;
     return (
       <Table>
         <tr>
@@ -94,39 +102,47 @@ class IssuesTable extends Component {
             </th>
           ))}
         </tr>
-        {userTasks.map(task => (
-          <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
-            {
-              issueHeaders.map(header => (
-                <td key={header.value}>
-                  {header.value === 'due_date'
-                    ? <Date date={_get(task, header.value)} />
-                    : this.paint(task, header.value)
-                  }
-                </td>
-              ))
-            }
-          </tr>
-        ))}
+        <InfiniteScroll
+          loadMore={this.loadIssuePage}
+          hasMore={!issues.isFetching && !issues.error && issues.data.length !== issues.totalCount}
+        >
+          {userTasks.map(task => (
+            <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
+              {
+                issueHeaders.map(header => (
+                  <td key={header.value}>
+                    {header.value === 'due_date'
+                      ? <Date date={_get(task, header.value)} />
+                      : this.paint(task, header.value)
+                    }
+                  </td>
+                ))
+              }
+            </tr>
+          ))}
+        </InfiniteScroll>
       </Table>
     );
   }
 }
 
 IssuesTable.propTypes = {
-  userTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  issues: PropTypes.shape({
+    userTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
   useColors: PropTypes.bool.isRequired,
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
-  onSort: PropTypes.func.isRequired
+  onSort: PropTypes.func.isRequired,
+  fetchIssuePage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   useColors: state.settings.useColors,
-  userTasks: state.issues.all.data,
+  issues: state.issues.all,
   issueHeaders: state.settings.issueHeaders,
 });
 

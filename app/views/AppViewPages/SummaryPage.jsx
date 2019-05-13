@@ -73,7 +73,7 @@ class SummaryPage extends Component {
     }
   }
 
-  fetchIssues = () => {
+  fetchIssues = (page = 0) => {
     const { search, sortBy, sortDirection } = this.state;
     const { userId, showClosedIssues } = this.props;
     const queryFilter = new IssueFilter()
@@ -82,7 +82,7 @@ class SummaryPage extends Component {
       .title(search)
       .sort(sortBy, sortDirection)
       .build();
-    this.props.fetchIssues(queryFilter);
+    this.props.fetchIssues(queryFilter, page);
   }
 
   onSearchChange = (e) => {
@@ -117,6 +117,7 @@ class SummaryPage extends Component {
           </OptionsGrid>
           <IssuesTable
             onSort={this.onSort}
+            fetchIssuePage={this.fetchIssues}
           />
         </IssuesSection>
         <ActivitySection>
@@ -142,7 +143,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssues: filter => dispatch(actions.issues.getAll(filter))
+  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);

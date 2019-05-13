@@ -6,10 +6,18 @@ export const ISSUES_GET = 'ISSUES_GET';
 export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
 export const ISSUES_RESET_SELECTION = 'ISSUES_RESET_SELECTION';
 
-const getAll = (filter, offset, limit) => (dispatch) => {
+const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
+  const { issues } = getState();
+  const limit = batchSize || issues.all.limit;
+  const page = typeof pageNumber === 'number' && pageNumber >= 0 ? pageNumber : issues.all.page;
+  console.log('PAGE', page);
+  const offset = page * limit;
   let query = {
-    include: 'attachments,children,relations,journals'
+    include: 'attachments,children,relations,journals',
+    offset,
+    limit
   };
+
 
   if (filter) {
     query = {
@@ -18,15 +26,7 @@ const getAll = (filter, offset, limit) => (dispatch) => {
     };
   }
 
-  if (offset) {
-    query.offset = offset;
-  }
-
-  if (limit) {
-    query.limit = limit;
-  }
-
-  dispatch(notify.start(ISSUES_GET_ALL));
+  dispatch(notify.start(ISSUES_GET_ALL, { page }));
 
   return request({
     url: '/issues.json',
@@ -60,7 +60,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
   const actionId = 'comments';
 
-  dispatch(notify.start(ISSUES_COMMENTS_SEND, actionId));
+  dispatch(notify.start(ISSUES_COMMENTS_SEND, { id: actionId }));
 
   return request({
     url: `/issues/${issueId}.json`,
@@ -84,19 +84,19 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
           name: user.name
         }
       },
-      actionId
+      { id: actionId }
     )
   ))
     .catch((error) => {
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
-      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, actionId));
+      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { id: actionId }));
     });
 };
 
 const resetSelected = () => ({ type: ISSUES_RESET_SELECTION });
 
 export default {
-  getAll,
+  getPage,
   get,
   sendComments,
   resetSelected

@@ -1,11 +1,13 @@
-import _ from 'lodash';
+import _get from 'lodash/get';
 import {
   ISSUES_GET_ALL
 } from '../actions/issues.actions';
 
 export const initialState = {
   data: [],
-  fetchedOffset: 0,
+  page: 0,
+  limit: 20,
+  totalCount: 0,
   isFetching: false,
   error: undefined
 };
@@ -15,10 +17,23 @@ export default (state = initialState, action) => {
     case ISSUES_GET_ALL: {
       switch (action.status) {
         case 'START': {
-          return { ...state, isFetching: true };
+          return {
+            ...state,
+            isFetching: true,
+            page: {}.hasOwnProperty.call(action, 'page') ? action.page : state.page
+          };
         }
         case 'OK': {
-          return { ...state, isFetching: false, data: _.get(action.data, 'issues', []), error: undefined };
+          const nextState = {
+            ...state,
+            isFetching: false,
+            data: state.page === 0
+              ? _get(action.data, 'issues', [])
+              : [...state.data, ..._get(action.data, 'issues', [])],
+            totalCount: action.data.total_count,
+            error: undefined
+          };
+          return nextState;
         }
         case 'NOK': {
           return { ...state, isFetching: false, error: action.data };
