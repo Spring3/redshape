@@ -1,6 +1,5 @@
 import storage from '../../modules/storage';
 import {
-  SETTINGS_USE_CORS,
   SETTINGS_SHOW_CLOSED_ISSUES,
   SETTINGS_USE_COLORS,
   SETTINGS_ISSUE_HEADERS,
@@ -9,7 +8,6 @@ import {
 } from '../actions/settings.actions';
 
 export const initialState = {
-  useCors: false,
   showClosedIssues: false,
   useColors: false,
   issueHeaders: [
@@ -39,15 +37,6 @@ const orderTableHeaders = (headers) => {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SETTINGS_USE_CORS: {
-      const { userId, redmineEndpoint, useCors } = action.data;
-      const nextState = {
-        ...state,
-        useCors: !!useCors
-      };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
-      return nextState;
-    }
     case SETTINGS_SHOW_CLOSED_ISSUES: {
       const { userId, redmineEndpoint, showClosed } = action.data;
       const nextState = {

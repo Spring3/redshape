@@ -15,8 +15,6 @@ const Grid = styled.div`
   display: grid;
   padding: 20px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-auto-rows: 100px;
-  grid-auto-flow: dense;
   grid-gap: 20px;
   margin-bottom: 60px;
 `;
@@ -29,13 +27,13 @@ const Section = styled.section`
 
 const IssuesSection = styled(Section)`
   grid-column: span 8;
-  grid-row: span 6;
+  grid-row: auto;
 `;
 
-const ActivitySection = styled(Section)`
-  grid-column: span 3;
-  grid-row: span 4;
-`;
+// const ActivitySection = styled(Section)`
+//   grid-column: span 3;
+//   grid-row: span 4;
+// `;
 
 const OptionsGrid = styled.div`
   display: grid;
@@ -120,9 +118,6 @@ class SummaryPage extends Component {
             fetchIssuePage={this.fetchIssues}
           />
         </IssuesSection>
-        <ActivitySection>
-          <h2>Activity Stack</h2>
-        </ActivitySection>
       </Grid>
     );
   }

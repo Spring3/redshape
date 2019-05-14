@@ -6,7 +6,7 @@ import {
 export const initialState = {
   data: [],
   page: 0,
-  limit: 20,
+  limit: 5,
   totalCount: 0,
   isFetching: false,
   error: undefined
@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
           return {
             ...state,
             isFetching: true,
-            page: {}.hasOwnProperty.call(action, 'page') ? action.page : state.page
+            page: {}.hasOwnProperty.call(action.info, 'page') ? action.info.page : state.page
           };
         }
         case 'OK': {

@@ -129,10 +129,10 @@ const login = ({
 const logout = () => axios.reset();
 
 const notify = {
-  start: (type, options = {}) => ({ type, status: 'START', ...options }),
-  ok: (type, data, options = {}) => ({ type, data, status: 'OK', ...options }),
-  nok: (type, data, options = {}) => ({ type, data, status: 'NOK', ...options }),
-  cancel: (type, options = {}) => ({ type, status: 'CANCELLED', ...options })
+  start: (type, info = {}) => ({ type, status: 'START', info }),
+  ok: (type, data, info = {}) => ({ type, data, status: 'OK', info }),
+  nok: (type, data, info = {}) => ({ type, data, status: 'NOK', info }),
+  cancel: (type, info = {}) => ({ type, status: 'CANCELLED', info })
 };
 
 export {

@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
           ...state,
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: false,
               isUpdating: true,
               error: undefined
@@ -65,7 +65,7 @@ export default (state = initialState, action) => {
           },
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: true,
               isUpdating: false,
               error: undefined
@@ -78,7 +78,7 @@ export default (state = initialState, action) => {
           ...state,
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: false,
               isUpdating: false,
               error: action.data

@@ -4,10 +4,11 @@ import _get from 'lodash/get';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled, { withTheme, css } from 'styled-components';
-import InfiniteScroll from 'react-infinite-scroller';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
+import InfiniteScroll from '../InfiniteScroll';
+import ProcessIndicator from '../ProcessIndicator';
 import Table from '../Table';
 import Date from '../Date';
 
@@ -33,6 +34,21 @@ const colorMap = {
   'normal': 'yellow'
 };
 
+const TableProcessIndicator = styled.tr`
+  position: relative;
+  div {
+    position: absolute;
+    left: 46%;
+    bottom: -15px;
+
+    span {
+      position: relative;
+      top: 10px;
+      left: 70px;
+    }
+  }
+`;
+
 class IssuesTable extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +57,8 @@ class IssuesTable extends Component {
       sortBy: undefined,
       sortDirection: undefined
     };
+
+    this.tableRef = React.createRef();
   }
 
   sortTable = (by) => () => {
@@ -73,9 +91,11 @@ class IssuesTable extends Component {
     );
   }
 
-  loadIssuePage = () => {
+  loadIssuePage = (pg) => {
+    console.log('CALLED', pg);
     const { issues, fetchIssuePage } = this.props;
     const { page } = issues;
+    console.log('CALLING', page + 1);
     fetchIssuePage(page + 1);
   }
 
@@ -83,29 +103,33 @@ class IssuesTable extends Component {
     const { issueHeaders, issues } = this.props;
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
+    console.log('HASMORE', !issues.isFetching && !issues.error && issues.data.length < issues.totalCount);
     return (
-      <Table>
-        <tr>
-          {issueHeaders.map(header => (
-            <th
-              key={header.value}
-              className={header.value === 'due_date' ? 'due-date' : ''}
-              onClick={this.sortTable(header.value)}
-            >
-              {header.label}&nbsp;
-              {sortBy === header.value && sortDirection === 'asc' && (
-                <SortAscendingIcon size={14} />
-              )}
-              {sortBy === header.value && sortDirection === 'desc' && (
-                <SortDescendingIcon size={14} />
-              )}
-            </th>
-          ))}
-        </tr>
+      <Table ref={this.tableRef}>
         <InfiniteScroll
-          loadMore={this.loadIssuePage}
-          hasMore={!issues.isFetching && !issues.error && issues.data.length !== issues.totalCount}
+          load={this.loadIssuePage}
+          hasMore={!issues.isFetching && !issues.error && issues.data.length < issues.totalCount}
+          loadIndicator={<TableProcessIndicator><ProcessIndicator /></TableProcessIndicator>}
+          container={this.tableRef.current}
+          immediate={true}
         >
+          <tr>
+            {issueHeaders.map(header => (
+              <th
+                key={header.value}
+                className={header.value === 'due_date' ? 'due-date' : ''}
+                onClick={this.sortTable(header.value)}
+              >
+                {header.label}&nbsp;
+                {sortBy === header.value && sortDirection === 'asc' && (
+                  <SortAscendingIcon size={14} />
+                )}
+                {sortBy === header.value && sortDirection === 'desc' && (
+                  <SortDescendingIcon size={14} />
+                )}
+              </th>
+            ))}
+          </tr>
           {userTasks.map(task => (
             <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
               {

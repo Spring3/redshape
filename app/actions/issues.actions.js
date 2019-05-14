@@ -10,7 +10,6 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
   const { issues } = getState();
   const limit = batchSize || issues.all.limit;
   const page = typeof pageNumber === 'number' && pageNumber >= 0 ? pageNumber : issues.all.page;
-  console.log('PAGE', page);
   const offset = page * limit;
   let query = {
     include: 'attachments,children,relations,journals',
@@ -58,9 +57,8 @@ const get = id => (dispatch) => {
 
 const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
-  const actionId = 'comments';
 
-  dispatch(notify.start(ISSUES_COMMENTS_SEND, { id: actionId }));
+  dispatch(notify.start(ISSUES_COMMENTS_SEND, { subject: 'comments' }));
 
   return request({
     url: `/issues/${issueId}.json`,
@@ -84,12 +82,12 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
           name: user.name
         }
       },
-      { id: actionId }
+      { subject: comments }
     )
   ))
     .catch((error) => {
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
-      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { id: actionId }));
+      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
     });
 };
 
