@@ -10,7 +10,7 @@ export const TIME_ENTRY_UPDATE_VALIDATION_FAILED = 'TIME_ENTRY_UPDATE_VALIDATION
 export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION_PASSED';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
-export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
+export const TIME_ENTRY_GET = 'TIME_ENTRY_GET';
 export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
 const validateBeforePublish = (timeEntry) => {
@@ -153,24 +153,29 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     });
 };
 
-const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
+const getPage = (issueId, projectId, pageNumber, batchSize) => (dispatch, getState) => {
+  const { issues } = getState();
+  const { page, limit } = issues.selected.spentTime;
+  const batch = batchSize || limit;
+  const pageIndex = typeof pageNumber === 'number' ? pageNumber : page;
+  const offset = pageIndex * batch;
   const query = _({
     offset,
-    limit,
+    limit: batch,
     project_id: projectId,
     issue_id: issueId
   }).pickBy().value();
 
-  dispatch(notify.start(TIME_ENTRY_GET_ALL));
+  dispatch(notify.start(TIME_ENTRY_GET, { page: pageIndex }));
 
   return request({
     url: '/time_entries.json',
     query,
-    id: `getIssueTimeEntries:${issueId}:${offset}`
-  }).then(({ data }) => dispatch(notify.ok(TIME_ENTRY_GET_ALL, data)))
+    id: `getIssueTimeEntries:${issueId}:${pageIndex}`
+  }).then(({ data }) => dispatch(notify.ok(TIME_ENTRY_GET, data, { page: pageIndex })))
     .catch((error) => {
       console.error('Error when trying to get the list of time entries', error);
-      dispatch(notify.nok(TIME_ENTRY_GET_ALL, error));
+      dispatch(notify.nok(TIME_ENTRY_GET, error, { page: pageIndex }));
     });
 };
 
@@ -180,7 +185,7 @@ export default {
   publish,
   update,
   remove,
-  getAll,
+  getPage,
   validateBeforePublish,
   validateBeforeUpdate,
   reset

@@ -20,12 +20,13 @@ class InfiniteScroll extends Component {
   }
 
   componentDidUpdate(oldProps, oldState) {
+    if (oldProps.isEnd !== this.props.isEnd && this.props.isEnd) {
+      this.setState({
+        isLoading: false
+      });
+    }
+
     if (oldProps.hasMore !== this.props.hasMore && !this.props.hasMore) {
-      if (this.state.isLoading) {
-        this.setState({
-          isLoading: false
-        });
-      }
       if (this.props.container) {
         this.props.container.removeEventListener('scroll', this.throttledScrollHandler);
       }
@@ -68,7 +69,7 @@ class InfiniteScroll extends Component {
   };
 
   render() {
-    const { children, loadIndicator, hasMore } = this.props;
+    const { children, loadIndicator } = this.props;
     const { isLoading } = this.state;
     return (
       <Fragment>
@@ -82,6 +83,7 @@ class InfiniteScroll extends Component {
 InfiniteScroll.propTypes = {
   children: PropTypes.element.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  isEnd: PropTypes.bool.isRequired,
   load: PropTypes.func.isRequired,
   container: PropTypes.element,
   loadIndicator: PropTypes.node,

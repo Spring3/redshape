@@ -10,7 +10,7 @@ const StyledTable = styled.table`
     font-size: 14px;
     overflow-y: scroll;
     display: block;
-    max-height: 65vh;
+    max-height: 60vh;
 
     tr {
       th {

@@ -6,7 +6,7 @@ import {
 export const initialState = {
   data: [],
   page: 0,
-  limit: 5,
+  limit: 20,
   totalCount: 0,
   isFetching: false,
   error: undefined
@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
           const nextState = {
             ...state,
             isFetching: false,
-            data: state.page === 0
+            data: action.info.page === 0
               ? _get(action.data, 'issues', [])
               : [...state.data, ..._get(action.data, 'issues', [])],
             totalCount: action.data.total_count,

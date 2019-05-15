@@ -29,13 +29,13 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
 
   return request({
     url: '/issues.json',
-    id: 'getAllIssues',
+    id: `getIssues:${page}`,
     query
   })
-    .then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data)))
+    .then(({ data }) => dispatch(notify.ok(ISSUES_GET_ALL, data, { page })))
     .catch((error) => {
       console.error('Error when trying to get a list of issues:', error.message);
-      dispatch(notify.nok(ISSUES_GET_ALL, error));
+      dispatch(notify.nok(ISSUES_GET_ALL, error, { page }));
     });
 };
 

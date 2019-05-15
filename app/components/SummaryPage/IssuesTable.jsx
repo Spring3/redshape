@@ -92,10 +92,8 @@ class IssuesTable extends Component {
   }
 
   loadIssuePage = (pg) => {
-    console.log('CALLED', pg);
     const { issues, fetchIssuePage } = this.props;
     const { page } = issues;
-    console.log('CALLING', page + 1);
     fetchIssuePage(page + 1);
   }
 
@@ -103,11 +101,11 @@ class IssuesTable extends Component {
     const { issueHeaders, issues } = this.props;
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
-    console.log('HASMORE', !issues.isFetching && !issues.error && issues.data.length < issues.totalCount);
     return (
       <Table ref={this.tableRef}>
         <InfiniteScroll
           load={this.loadIssuePage}
+          isEnd={issues.data.length === issues.totalCount}
           hasMore={!issues.isFetching && !issues.error && issues.data.length < issues.totalCount}
           loadIndicator={<TableProcessIndicator><ProcessIndicator /></TableProcessIndicator>}
           container={this.tableRef.current}

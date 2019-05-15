@@ -8,6 +8,8 @@ import PlusIcon from 'mdi-react/PlusIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
+import InfiniteScroll from '../../components/InfiniteScroll';
+import ProcessIndicator from '../../components/ProcessIndicator';
 import Button, { GhostButton } from '../../components/Button';
 import DateComponent from '../../components/Date';
 import Dialog from '../../components/Dialog';
@@ -118,15 +120,34 @@ const TimeEntriesList = styled.ul`
   }
 `;
 
+const ProcessIndicatorWrapper = styled.li`
+  position: relative;
+  div {
+    position: absolute;
+    left: 24%;
+    bottom: 0;
+
+    span {
+      position: relative;
+      bottom: 5px;
+      left: 60px;
+    }
+  }
+`;
+
 class TimeEntries extends Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
   componentWillMount() {
     const { fetchIssueTimeEntries, selectedIssue } = this.props;
-    fetchIssueTimeEntries(selectedIssue.id);
+    fetchIssueTimeEntries(selectedIssue.id, 0);
   }
 
   componentDidUpdate(oldProps) {
     if (oldProps.selectedIssue.id !== this.props.selectedIssue.id) {
-      this.props.fetchIssueTimeEntries(this.props.selectedIssue.id);
+      this.props.fetchIssueTimeEntries(this.props.selectedIssue.id, 0);
     }
   }
 
@@ -144,6 +165,12 @@ class TimeEntries extends Component {
     e.stopPropagation();
     const { selectedIssue, removeTimeEntry } = this.props;
     removeTimeEntry(timeEntryId, selectedIssue.id);
+  }
+
+  loadSpentTime = () => {
+    const { spentTime, selectedIssue } = this.props;
+    const { page } = spentTime;
+    this.props.fetchIssueTimeEntries(selectedIssue.id, page + 1);
   }
 
   render() {
@@ -165,34 +192,43 @@ class TimeEntries extends Component {
             </FlexButton>
           </div>
         </HeaderContainer>
-        <TimeEntriesList>
-          {spentTime.map(timeEntry => (
-            <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
-              <div>
+        <TimeEntriesList ref={this.listRef}>
+          <InfiniteScroll
+            load={this.loadSpentTime}
+            isEnd={spentTime.data.length === spentTime.totalCount}
+            hasMore={!spentTime.isFetching && !spentTime.error && spentTime.data.length < spentTime.totalCount}
+            loadIndicator={<ProcessIndicatorWrapper><ProcessIndicator /></ProcessIndicatorWrapper>}
+            container={this.listRef.current}
+            immediate={true}
+          >
+            {spentTime.data.map(timeEntry => (
+              <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
                 <div>
-                  <span className="username">{timeEntry.user.name}</span>
-                  <span className="time">{timeEntry.hours} hours</span>
-                  <DateComponent className="date" date={timeEntry.spent_on} />
+                  <div>
+                    <span className="username">{timeEntry.user.name}</span>
+                    <span className="time">{timeEntry.hours} hours</span>
+                    <DateComponent className="date" date={timeEntry.spent_on} />
+                  </div>
+                  {
+                    userId === timeEntry.user.id && (
+                      <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
+                        {
+                          requestConfirmation => (
+                            <GhostButton
+                              onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
+                            >
+                              <CloseIcon color={theme.normalText} />
+                            </GhostButton>
+                          )
+                        }
+                      </Dialog>
+                    )
+                  }
                 </div>
-                {
-                  userId === timeEntry.user.id && (
-                    <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
-                      {
-                        requestConfirmation => (
-                          <GhostButton
-                            onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
-                          >
-                            <CloseIcon color={theme.normalText} />
-                          </GhostButton>
-                        )
-                      }
-                    </Dialog>
-                  )
-                }
-              </div>
-              <p>{timeEntry.comments}</p>
-            </li>
-          ))}
+                <p>{timeEntry.comments}</p>
+              </li>
+            ))}
+            </InfiniteScroll>
         </TimeEntriesList>
       </TimeEntriesContainer>
     );
@@ -247,14 +283,14 @@ TimeEntries.propTypes = {
 const mapStateToProps = state => ({
   userId: state.user.id,
   userName: state.user.name,
-  spentTime: state.issues.selected.spentTime.data,
+  spentTime: state.issues.selected.spentTime,
   selectedIssue: state.issues.selected.data,
   isTimerEnabled: state.tracking.isEnabled,
   trackedIssueId: state.tracking.issue.id
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssueTimeEntries: (issueId) => dispatch(actions.timeEntry.getAll(issueId)),
+  fetchIssueTimeEntries: (issueId, page) => dispatch(actions.timeEntry.getPage(issueId, undefined, page)),
   startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });

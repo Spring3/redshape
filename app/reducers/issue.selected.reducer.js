@@ -10,12 +10,15 @@ import {
   TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE,
-  TIME_ENTRY_GET_ALL
+  TIME_ENTRY_GET
 } from '../actions/timeEntry.actions';
 
 const initialState = {
   data: {},
   spentTime: {
+    page: 0,
+    limit: 20,
+    totalCount: 0,
     data: [],
     isFetching: false,
     error: undefined
@@ -88,13 +91,14 @@ export default (state = initialState, action) => {
       }
       return state;
     }
-    case TIME_ENTRY_GET_ALL: {
+    case TIME_ENTRY_GET: {
       if (action.status === 'START') {
         return {
           ...state,
           spentTime: {
             ...state.spentTime,
-            isFetching: true
+            isFetching: true,
+            page: {}.hasOwnProperty.call(action.info, 'page') ? action.info.page : state.spentTime.page
           }
         };
       }
@@ -102,8 +106,12 @@ export default (state = initialState, action) => {
         return {
           ...state,
           spentTime: {
+            ...state.spentTime,
             isFetching: false,
-            data: _.get(action.data, 'time_entries', []),
+            data: action.info.page === 0
+              ? _.get(action.data, 'time_entries', [])
+              : [...state.spentTime.data, ..._.get(action.data, 'time_entries', [])],
+            totalCount: action.data.total_count,
             error: undefined
           }
         };
@@ -112,6 +120,7 @@ export default (state = initialState, action) => {
         return {
           ...state,
           spentTime: {
+            ...state.spentTime,
             isFetching: false,
             error: action.data
           }
