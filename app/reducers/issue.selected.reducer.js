@@ -3,14 +3,14 @@ import _ from 'lodash';
 import {
   ISSUES_GET,
   ISSUES_COMMENTS_SEND,
-  ISSUES_RESET_SELECTION
+  ISSUES_RESET_SELECTION,
+  ISSUES_TIME_ENTRY_GET
 } from '../actions/issues.actions';
 
 import {
   TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE,
-  TIME_ENTRY_GET
 } from '../actions/timeEntry.actions';
 
 const initialState = {
@@ -91,7 +91,7 @@ export default (state = initialState, action) => {
       }
       return state;
     }
-    case TIME_ENTRY_GET: {
+    case ISSUES_TIME_ENTRY_GET: {
       if (action.status === 'START') {
         return {
           ...state,

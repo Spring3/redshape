@@ -1,69 +1,111 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import reducer, { initialState } from '../issues.reducer';
-import { ISSUES_GET_ALL } from '../../actions/issues.actions';
+import { ISSUES_GET_PAGE } from '../../actions/issues.actions';
 import { notify } from '../../actions/helper';
 
 describe('issues reducer', () => {
   it('should return state if a given action does not match the filters', () => {
     expect(reducer(undefined, { type: 'WEIRD' })).toEqual({
       data: [],
-      fetchedOffset: 0,
       isFetching: false,
+      limit: 20,
+      page: 0,
+      totalCount: 0,
       error: undefined
     });
   });
 
-  describe('ISSUES_GET_ALL action', () => {
-    it('should process ISSUES_GET_ALL with status START', () => {
+  describe('ISSUES_GET_PAGE action', () => {
+    it('should process ISSUES_GET_PAGE with status START', () => {
       expect(
         reducer(
           _cloneDeep(initialState),
-          notify.start(ISSUES_GET_ALL)
+          notify.start(ISSUES_GET_PAGE, { page: 0 })
         )
       ).toEqual({
         data: [],
-        fetchedOffset: 0,
         isFetching: true,
+        limit: 20,
+        page: 0,
+        totalCount: 0,
         error: undefined
       });
     });
 
-    it('should process ISSUES_GET_ALL with status OK', () => {
+    it('should process ISSUES_GET_PAGE with status OK', () => {
       const data = { issues: ['1', '2', '3'] };
       expect(
         reducer(
           _cloneDeep(initialState),
-          notify.ok(ISSUES_GET_ALL, data)
+          notify.ok(ISSUES_GET_PAGE, data)
         )
       ).toEqual({
         data: data.issues,
-        fetchedOffset: 0,
         isFetching: false,
+        limit: 20,
+        page: 0,
+        totalCount: 0,
         error: undefined
       });
     });
 
-    it('should process ISSUES_GET_ALL with status NOK', () => {
+    it('should append data when ISSUES_GET_PAGE action comes with a page > 0 and status OK', () => {
+      const data = { issues: ['1', '2', '3'] };
+      expect(
+        reducer(
+          Object.assign(_cloneDeep(initialState), { data: ['4', '5'], page: 1 }),
+          notify.ok(ISSUES_GET_PAGE, data, { page: 1 })
+        )
+      ).toEqual({
+        data: ['4', '5', ...data.issues],
+        isFetching: false,
+        limit: 20,
+        page: 1,
+        totalCount: 0,
+        error: undefined
+      });
+    });
+
+    it('should reset data when ISSUES_GET_PAGE action comes with a page = 0 and status OK', () => {
+      const data = { issues: ['1', '2', '3'] };
+      expect(
+        reducer(
+          Object.assign(_cloneDeep(initialState), { data: ['4', '5'] }),
+          notify.ok(ISSUES_GET_PAGE, data, { page: 0 })
+        )
+      ).toEqual({
+        data: data.issues,
+        isFetching: false,
+        limit: 20,
+        page: 0,
+        totalCount: 0,
+        error: undefined
+      });
+    });
+
+    it('should process ISSUES_GET_PAGE with status NOK', () => {
       const data = new Error('Whoops');
       expect(
         reducer(
           _cloneDeep(initialState),
-          notify.nok(ISSUES_GET_ALL, data)
+          notify.nok(ISSUES_GET_PAGE, data)
         )
       ).toEqual({
         data: [],
-        fetchedOffset: 0,
         isFetching: false,
+        limit: 20,
+        page: 0,
+        totalCount: 0,
         error: data
       });
     });
 
-    it('should return the same state if ISSUES_GET_ALL comes with an unknown status', () => {
+    it('should return the same state if ISSUES_GET_PAGE comes with an unknown status', () => {
       expect(
         reducer(
           _cloneDeep(initialState),
           {
-            type: ISSUES_GET_ALL,
+            type: ISSUES_GET_PAGE,
             status: 'UNKNOWN',
             data: {
               issues: ['1', '2']
@@ -77,14 +119,14 @@ describe('issues reducer', () => {
       const error = new Error('Oh my!');
       const nokState = reducer(
         _cloneDeep(initialState),
-        notify.nok(ISSUES_GET_ALL, error)
+        notify.nok(ISSUES_GET_PAGE, error)
       );
       expect(nokState.error).toEqual(error);
 
       const okData = {
         issues: ['12', '123']
       };
-      const okState = reducer(nokState, notify.ok(ISSUES_GET_ALL, okData));
+      const okState = reducer(nokState, notify.ok(ISSUES_GET_PAGE, okData));
       expect(okState.error).toBe(undefined);
       expect(okState.data).toEqual(okData.issues);
     });
@@ -97,7 +139,7 @@ describe('issues reducer', () => {
             error: new Error('WRONG!'),
             data: [1, 2, 3, 4, 5]
           },
-          notify.start(ISSUES_GET_ALL)
+          notify.start(ISSUES_GET_PAGE)
         )
       ).toEqual({
         ...initialState,

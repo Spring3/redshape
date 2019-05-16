@@ -59,7 +59,7 @@ const Table = ({ children, forwardedRef }) => (
     width="100%"
   >
     {
-      children.props.element === 'tbody'
+      children.props && children.props.element === 'tbody'
         ? children
         : (
           <tbody ref={forwardedRef}>

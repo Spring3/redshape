@@ -93,24 +93,25 @@ describe('Helper module', () => {
       expect(notify.start(TEST_ACTION)).toEqual({
         type: TEST_ACTION,
         status: 'START',
-        id: undefined
+        info: {}
       });
       expect(notify.ok(TEST_ACTION, { test: 'aloalo' })).toEqual({
         type: TEST_ACTION,
         data: { test: 'aloalo' },
         status: 'OK',
-        id: undefined
+        info: {}
       });
       const error = new Error('Test');
       expect(notify.nok(TEST_ACTION, error)).toEqual({
         type: TEST_ACTION,
         data: error,
         status: 'NOK',
-        id: undefined
+        info: {}
       });
       expect(notify.cancel(TEST_ACTION)).toEqual({
         type: TEST_ACTION,
-        status: 'CANCELLED'
+        status: 'CANCELLED',
+        info: {}
       });
     });
   });
@@ -185,6 +186,14 @@ describe('Helper module', () => {
 
       expect(axios.getInstance()).toBe(undefined);
       expect(axiosMock.history.get.length).toBe(1);
+    });
+  });
+
+  describe('Logout action', () => {
+    it('should reset the axios instnace', () => {
+      const spy = jest.spyOn(axios, 'reset');
+      logout();
+      expect(spy).toHaveBeenCalled();
     });
   });
 });

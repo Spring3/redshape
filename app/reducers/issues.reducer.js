@@ -1,6 +1,6 @@
 import _get from 'lodash/get';
 import {
-  ISSUES_GET_ALL
+  ISSUES_GET_PAGE
 } from '../actions/issues.actions';
 
 export const initialState = {
@@ -14,7 +14,7 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ISSUES_GET_ALL: {
+    case ISSUES_GET_PAGE: {
       switch (action.status) {
         case 'START': {
           return {
@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
             data: action.info.page === 0
               ? _get(action.data, 'issues', [])
               : [...state.data, ..._get(action.data, 'issues', [])],
-            totalCount: action.data.total_count,
+            totalCount: action.data.total_count || 0,
             error: undefined
           };
           return nextState;

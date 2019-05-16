@@ -290,7 +290,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssueTimeEntries: (issueId, page) => dispatch(actions.timeEntry.getPage(issueId, undefined, page)),
+  fetchIssueTimeEntries: (issueId, page) => dispatch(actions.issues.getTimeEntriesPage(issueId, undefined, page)),
   startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
