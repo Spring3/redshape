@@ -14,32 +14,42 @@ describe('Time tracking actions', () => {
     expect(trackingActions.default.trackingPause).toBeTruthy();
     expect(trackingActions.default.trackingContinue).toBeTruthy();
     expect(trackingActions.default.trackingReset).toBeTruthy();
+  });
 
+  it('TRACKING_START action', () => {
     expect(trackingActions.default.trackingStart({})).toEqual({
       type: trackingActions.TRACKING_START,
       data: {
         issue: {}
       }
     });
+  });
 
+  it('TRACKING_STOP action', () => {
     expect(trackingActions.default.trackingStop(100)).toEqual({
       type: trackingActions.TRACKING_STOP,
       data: {
         duration: 100
       }
     });
+  });
 
+  it('TRACKING_PAUSE action', () => {
     expect(trackingActions.default.trackingPause(100)).toEqual({
       type: trackingActions.TRACKING_PAUSE,
       data: {
         duration: 100
       }
     });
+  });
 
+  it('TRACKING_CONTINUE action', () => {
     expect(trackingActions.default.trackingContinue()).toEqual({
       type: trackingActions.TRACKING_CONTINUE
     });
+  });
 
+  it('TRACKING_RESET action', () => {
     expect(trackingActions.default.trackingReset()).toEqual({
       type: trackingActions.TRACKING_RESET
     });

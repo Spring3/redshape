@@ -8,62 +8,16 @@ import configureStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import { ThemeProvider } from 'styled-components';
 
-import { initialize, getInstance, reset } from '../../../../modules/request';
 import theme from '../../../theme';
 import SummaryPage from '../../AppViewPages/SummaryPage';
-import { ISSUES_GET_ALL } from '../../../actions/issues.actions';
+import issueActions, { ISSUES_GET_PAGE } from '../../../actions/issues.actions';
+import { initialize, getInstance, reset } from '../../../../modules/request';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
 const token = 'multipass';
 
 let axiosMock;
-
-const fixtures = {
-  issues: [
-    {
-      id: '1',
-      project: { name: 'Test Project 1' },
-      tracker: { name: 'Test Tracker 1' },
-      status: { name: 'Open' },
-      subject: 'Task #1',
-      priority: { name: 'High' },
-      estimated_hours: '10',
-      due_date: new Date().toISOString()
-    },
-    {
-      id: '2',
-      project: { name: 'Test Project 2' },
-      tracker: { name: 'Test Tracker 2' },
-      status: { name: 'Open' },
-      subject: 'Task #2',
-      priority: { name: 'Normal' },
-      estimated_hours: '5',
-      due_date: new Date().toISOString()
-    },
-    {
-      id: '3',
-      project: { name: 'Test Project 3' },
-      tracker: { name: 'Test Tracker 3' },
-      status: { name: 'Open' },
-      subject: 'Task #3',
-      priority: { name: 'Low' },
-      estimated_hours: '2',
-      due_date: new Date().toISOString()
-    }
-  ], // Id and Subject are fixed, so they go first
-  expectedHeaders: ['Id', 'Subject', 'Project', 'Tracker', 'Status', 'Priority', 'Estimation', 'Due Date'],
-  valueMapping: {
-    Id: 'id',
-    Project: 'project.name',
-    Tracker: 'tracker.name',
-    Status: 'status.name',
-    Subject: 'subject',
-    Priority: 'priority.name',
-    Estimation: 'estimated_hours',
-    'Due Date': 'due_date'
-  }
-};
 
 describe('AppView -> Summary Page', () => {
   beforeAll(() => {
@@ -116,6 +70,7 @@ describe('AppView -> Summary Page', () => {
 
   it('should fetch the issues on mount', () => {
     axiosMock.onGet('/issues.json').reply(() => Promise.resolve([200, {}]));
+    const spy = jest.spyOn(issueActions, 'getPage');
     const state = {
       user: {
         id: 1,
@@ -141,13 +96,16 @@ describe('AppView -> Summary Page', () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <HashRouter>
-            <SummaryPage />  
+            <SummaryPage />
           </HashRouter>
         </ThemeProvider>
       </Provider>
     );
 
-    expect(store.getActions()[0].type).toBe(ISSUES_GET_ALL);
+    expect(spy).toHaveBeenCalled();
+    expect(store.getActions()[0].type).toBe(ISSUES_GET_PAGE);
+    expect(store.getActions()[0].info.page).toBe(0);
+    spy.mockRestore();
   });
 
   it('should fetch issues on search', (done) => {
@@ -190,7 +148,7 @@ describe('AppView -> Summary Page', () => {
     expect(page.state.search).toBe('search');
     setTimeout(() => {
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_ALL).length).toBe(2);
+      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -236,7 +194,7 @@ describe('AppView -> Summary Page', () => {
       expect(page.state.sortBy).toBe('id');
       expect(page.state.sortDirection).toBe('desc');
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_ALL).length).toBe(2);
+      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -281,7 +239,7 @@ describe('AppView -> Summary Page', () => {
     setTimeout(() => {
       expect(page.state.showClosedIssues).toBe(true);
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_ALL).length).toBe(2);
+      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });

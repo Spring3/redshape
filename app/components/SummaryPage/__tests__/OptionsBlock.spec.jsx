@@ -62,7 +62,8 @@ describe('SummaryPage => OptionsBlock component', () => {
         showClosedIssues: true
       },
       user: {
-        id: 1
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
       }
     };
     const store = mockStore(state);
@@ -78,7 +79,11 @@ describe('SummaryPage => OptionsBlock component', () => {
     expect(store.getActions().length).toBe(1);
     expect(store.getActions()[0]).toEqual({
       type: SETTINGS_SHOW_CLOSED_ISSUES,
-      data: false
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        showClosed: false
+      }
     });
   });
 
@@ -89,7 +94,8 @@ describe('SummaryPage => OptionsBlock component', () => {
         showClosedIssues: true
       },
       user: {
-        id: 1
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
       }
     };
     const store = mockStore(state);
@@ -105,7 +111,11 @@ describe('SummaryPage => OptionsBlock component', () => {
     expect(store.getActions().length).toBe(1);
     expect(store.getActions()[0]).toEqual({
       type: SETTINGS_USE_COLORS,
-      data: false
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        useColors: false
+      }
     });
   });
 });

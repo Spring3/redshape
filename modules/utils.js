@@ -1,8 +1,7 @@
-const { remote } = require('electron');
 const xss = require('xss');
+const { shell } = require('electron').remote;
 const axios = require('./request');
 
-const { shell } = remote;
 
 const openExternalUrl = url => ((url && url.startsWith('http'))
   ? axios.default.head(url)

@@ -1,12 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
+.c0 {
+  position: relative;
+}
+
 .c0 tbody {
   text-align: center;
   font-size: 14px;
   overflow-y: scroll;
   display: block;
-  max-height: 450px;
+  max-height: 60vh;
 }
 
 .c0 tbody tr th {
@@ -14,7 +18,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background: #FFFFFF;
+  background: #F9F9F9;
   font-weight: 900;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -31,6 +35,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 
 .c0 tbody tr th.due-date {
   width: 90px;
+  z-index: 1;
 }
 
 .c0 tbody tr td {

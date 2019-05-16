@@ -1,13 +1,14 @@
-import request, { login, notify } from './helper';
-import { reset } from '../../modules/request';
+import settingsActions from './settings.actions';
+import request, { login, notify, logout } from './helper';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const USER_GET_CURRENT = 'USER_GET_CURRENT';
 
-const logout = () => {
-  reset();
-  return { type: USER_LOGOUT };
+const signout = () => (dispatch) => {
+  logout();
+  dispatch(settingsActions.backup());
+  dispatch({ type: USER_LOGOUT });
 };
 
 const checkLogin = ({ username, password, redmineEndpoint }) => (dispatch) => {
@@ -24,6 +25,7 @@ const checkLogin = ({ username, password, redmineEndpoint }) => (dispatch) => {
   }).then(({ data }) => {
     Object.assign(data.user, { redmineEndpoint });
     dispatch(notify.ok(USER_LOGIN, data));
+    dispatch(settingsActions.restore());
   }).catch((error) => {
     console.error('Error when trying to get the info about current user', error);
     dispatch(notify.nok(USER_LOGIN, error));
@@ -46,5 +48,5 @@ const getCurrent = () => (dispatch) => {
 export default {
   checkLogin,
   getCurrent,
-  logout
+  logout: signout
 };

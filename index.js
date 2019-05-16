@@ -13,6 +13,7 @@ if (!process.env.ENCRYPTION_KEY) {
   dotenv.load({ silent: true });
 }
 const { PORT, redmineDomain } = require('./modules/config');
+require('./modules/request'); // to initialize from storage
 
 let mainWindow;
 const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));
@@ -26,7 +27,6 @@ const initialize = () => {
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      webSecurity: false, // to disable cors
       nodeIntegration: true
     }
   };

@@ -64,7 +64,13 @@ class TimeEntryModal extends Component {
           wasModified: false
         });
       }
+    } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
+      this.props.resetValidation();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetValidation();
   }
 
   runValidation = () => {
@@ -167,6 +173,7 @@ class TimeEntryModal extends Component {
     const selectedActivity = { id: activity.id, label: activity.name }; 
     const validationErrors = time.error && time.error.isJoi
       ? {
+        comments: time.error.details.find(error => error.path[0] === 'comments'),
         activity: time.error.details.find(error => error.path[0] === 'activity'),
         hours: time.error.details.find(error => error.path[0] === 'hours'),
         spentOn: time.error.details.find(error => error.path[0] === 'spent_on')
@@ -241,9 +248,13 @@ class TimeEntryModal extends Component {
           <Label label="Comments" htmlFor="comments">
             <MarkdownEditor
               onChange={this.onCommentsChange}
+              onBlur={this.runValidation}
               initialValue={comments}
             />
           </Label>
+          <ErrorMessage show={!!validationErrors.comments}>
+            {this.getErrorMessage(validationErrors.comments)}
+          </ErrorMessage>
           {timeEntry.id && isUserAuthor
             ? (
               <OptionButtons>
@@ -311,7 +322,8 @@ TimeEntryModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool,
   publishTimeEntry: PropTypes.func.isRequired,
-  updateTimeEntry: PropTypes.func.isRequired
+  updateTimeEntry: PropTypes.func.isRequired,
+  resetValidation: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -322,7 +334,8 @@ const mapDispatchToProps = dispatch => ({
   publishTimeEntry: timeEntry => dispatch(actions.timeEntry.publish(timeEntry)),
   updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
   validateBeforePublish: timeEntry => dispatch(actions.timeEntry.validateBeforePublish(timeEntry)),
-  validateBeforeUpdate: changes => dispatch(actions.timeEntry.validateBeforeUpdate(changes))
+  validateBeforeUpdate: changes => dispatch(actions.timeEntry.validateBeforeUpdate(changes)),
+  resetValidation: () => dispatch(actions.timeEntry.reset())
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

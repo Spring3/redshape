@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import * as projectActions from '../project.actions';
 import { notify } from '../helper';
-import * as axios from '../../../modules/request';
+import axios from '../../../modules/request';
 
 const redmineEndpoint = 'redmine.test.com';
 const token = 'multipass';

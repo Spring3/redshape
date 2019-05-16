@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
+
 import { IssueFilter, notify } from '../helper';
 import * as issuesActions from '../issues.actions';
-import * as axios from '../../../modules/request';
+import axios from '../../../modules/request';
 
 let axiosMock;
 const redmineEndpoint = 'https://redmine.test.com';
@@ -24,51 +25,75 @@ describe('Issue actions', () => {
 
   it('should expose the necessary actions', () => {
     expect(issuesActions).toBeTruthy();
-    expect(issuesActions.ISSUES_GET_ALL).toBeTruthy();
+    expect(issuesActions.ISSUES_GET_PAGE).toBeTruthy();
     expect(issuesActions.ISSUES_GET).toBeTruthy();
     expect(issuesActions.ISSUES_COMMENTS_SEND).toBeTruthy();
+    expect(issuesActions.ISSUES_RESET_SELECTION).toBeTruthy();
+    expect(issuesActions.ISSUES_TIME_ENTRY_GET).toBeTruthy();
 
-    expect(issuesActions.default.getAll).toBeTruthy();
+    expect(issuesActions.default.getPage).toBeTruthy();
     expect(issuesActions.default.get).toBeTruthy();
+    expect(issuesActions.default.getTimeEntriesPage).toBeTruthy();
     expect(issuesActions.default.sendComments).toBeTruthy();
+    expect(issuesActions.default.resetSelected).toBeTruthy();
   });
 
-  describe('getAll action', () => {
+  describe('getPage action', () => {
     it('should make request and return the response with correct actions', async () => {
+      const state = {
+        issues: {
+          all: {
+            page: 0,
+            limit: 20
+          }
+        }
+      };
       const response = {
         issues: ['1', '2', '3']
       };
       const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue(state);
       axiosMock.onGet('/issues.json').replyOnce(() => Promise.resolve([200, response]));
       const filter = new IssueFilter().assignee(1).build();
-      const offset = 1;
+      const page = 1;
       const limit = 10;
-      await issuesActions.default.getAll(filter, offset, limit)(dispatch);
+      await issuesActions.default.getPage(filter, page, limit)(dispatch, getState);
+      expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
       expect(axiosMock.history.get[0].params).toEqual({
         ...filter,
         include: 'attachments,children,relations,journals',
-        offset,
+        offset: page * limit,
         limit
       });
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.ok(issuesActions.ISSUES_GET_ALL, response));
+      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_PAGE, { page }));
+      expect(dispatch).toBeCalledWith(notify.ok(issuesActions.ISSUES_GET_PAGE, response, { page }));
     });
 
     it('should pass the error further with dispatch', async () => {
+      const state = {
+        issues: {
+          all: {
+            page: 0,
+            limit: 20
+          }
+        }
+      };
       const response = new Error('Whoops');
       response.status = 500;
       const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue(state);
       axiosMock.onGet('/issues.json').replyOnce(() => Promise.reject(response));
-      await issuesActions.default.getAll()(dispatch);
+      await issuesActions.default.getPage()(dispatch, getState);
+      expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_PAGE, { page: state.issues.all.page }));
+      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_GET_PAGE, new Error(`Error ${response.status} (${response.message})`), { page: state.issues.all.page }));
     });
   });
 
@@ -109,6 +134,73 @@ describe('Issue actions', () => {
     });
   });
 
+  describe('getTimeEntries action', () => {
+    it('should make request and return the response with correct actions', async () => {
+      const response = {
+        time_entries: []
+      };
+      const state = {
+        issues: {
+          selected: {
+            spentTime: {
+              page: 0,
+              limit: 20
+            }
+          }
+        }
+      };
+
+      const issueId = 1;
+      const projectId = 1;
+      const page = 1;
+      const limit = 1;
+
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue(state);
+      axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200, response]));
+      await issuesActions.default.getTimeEntriesPage(issueId, projectId, page, limit)(dispatch, getState);
+      expect(getState).toHaveBeenCalled();
+      expect(axiosMock.history.get.length).toBe(1);
+      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(axiosMock.history.get[0].params).toEqual({
+        offset: page * limit,
+        limit,
+        project_id: projectId,
+        issue_id: issueId
+      });
+      expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(issuesActions.ISSUES_TIME_ENTRY_GET, { page }));
+      expect(dispatch).toHaveBeenCalledWith(notify.ok(issuesActions.ISSUES_TIME_ENTRY_GET, response, { page }));
+    });
+
+    it('should pass the error further with dispatch', async () => {
+      const state = {
+        issues: {
+          selected: {
+            spentTime: {
+              page: 0,
+              limit: 20
+            }
+          }
+        }
+      };
+      const page = 3;
+      const response = new Error('Whoops');
+      response.status = 500;
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue(state);
+      axiosMock.onGet('/time_entries.json').reply(() => Promise.reject(response));
+      await issuesActions.default.getTimeEntriesPage(1, 2, page, 4)(dispatch, getState);
+      expect(getState).toHaveBeenCalled();
+      expect(axiosMock.history.get.length).toBe(1);
+      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenCalledWith(notify.start(issuesActions.ISSUES_TIME_ENTRY_GET, { page }));
+      expect(dispatch).toHaveBeenCalledWith(notify.nok(issuesActions.ISSUES_TIME_ENTRY_GET, new Error(`Error ${response.status} (${response.message})`), { page }));
+    });
+  });
+
   describe('sendComments action', () => {
     it('should make request and return the response with correct actions', async () => {
       const issueId = 1;
@@ -144,7 +236,7 @@ describe('Issue actions', () => {
       expect(axiosMock.history.put[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
       expect(getState).toHaveBeenCalled();
-      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, 'comments'));
+      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
       expect(dispatch).toBeCalledWith(notify.ok(
         issuesActions.ISSUES_COMMENTS_SEND,
         {
@@ -155,7 +247,7 @@ describe('Issue actions', () => {
           private_notes: false,
           user: state.user
         },
-        'comments'
+        { subject: 'comments' }
       ));
     });
 
@@ -178,8 +270,14 @@ describe('Issue actions', () => {
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(getState).toHaveBeenCalled();
-      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, 'comments'));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), 'comments'));
+      expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
+      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), { subject: 'comments' }));
+    });
+  });
+
+  describe('resetSelected action', () => {
+    expect(issuesActions.default.resetSelected()).toEqual({
+      type: issuesActions.ISSUES_RESET_SELECTION
     });
   });
 });

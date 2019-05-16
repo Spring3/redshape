@@ -1,4 +1,4 @@
-import * as axios from '../../modules/request';
+const axios = require('electron').remote.require('./modules/request');
 
 function IssueFilter () {
   const filter = {};
@@ -82,20 +82,6 @@ function IssueFilter () {
   this.build = () => ({ ...filter });
 }
 
-const handleReject = (e) => {
-  // if this request was not cancelled
-  if (!axios.default.isCancel(e)) {
-    let errorMessage = 'Error';
-    if (e.status) {
-      errorMessage = `${errorMessage} ${e.status}`;
-    }
-    errorMessage = `${errorMessage} (${e.statusText || e.message})`;
-
-    return Promise.reject(new Error(errorMessage));
-  }
-  return undefined;
-};
-
 const request = ({
   url,
   method = 'GET',
@@ -107,7 +93,8 @@ const request = ({
   const requestConfig = {
     url,
     method,
-    headers: axios.makeCancellable(headers || {}, id)
+    headers,
+    id
   };
 
   if (!['GET', 'DELETE'].includes(method)) {
@@ -118,58 +105,41 @@ const request = ({
     requestConfig.params = query;
   }
 
-  if (!axios.getInstance()) {
-    return Promise.reject(new Error('401 - Unauthorized'));
-  }
-
-  return axios.getInstance().request(requestConfig)
-    .then((res) => {
-      delete axios.pendingRequests[id];
-      return ({ data: res.data });
-    })
-    .catch((error) => {
-      delete axios.pendingRequests[id];
-      return handleReject(error);
-    });
+  return axios.authorizedRequest(requestConfig);
 };
 
 const login = ({
   redmineEndpoint,
   url,
   headers
-}) => {
-  const defaultConfig = axios.getDefaultConfig();
-  return axios.default.request({
-    baseURL: redmineEndpoint,
-    timeout: defaultConfig.timeout,
-    headers: {
-      ...defaultConfig.headers,
-      ...(headers || {})
-    },
-    url,
-    method: 'GET'
-  }).then((res) => {
-    axios.reset();
-    const { api_key } = res.data.user || {};
-    if (api_key) {
-      axios.initialize(redmineEndpoint, api_key);
-    }
-    return { data: res.data };
-  });
-};
+}) => axios.request({
+  baseURL: redmineEndpoint,
+  timeout: 20000,
+  headers: headers || {},
+  url,
+  method: 'GET'
+}).then((res) => {
+  const { api_key } = res.data.user || {};
+  if (api_key) {
+    axios.initialize(redmineEndpoint, api_key);
+  }
+  return { data: res.data };
+});
+
+const logout = () => axios.reset();
 
 const notify = {
-  start: (type, id) => ({ type, status: 'START', id }),
-  paginate: (type, data, id) => ({ type, data, status: 'PAGE_NEXT', id }),
-  ok: (type, data, id) => ({ type, data, status: 'OK', id }),
-  nok: (type, data, id) => ({ type, data, status: 'NOK', id }),
-  cancel: type => ({ type, status: 'CANCELLED' })
+  start: (type, info = {}) => ({ type, status: 'START', info }),
+  ok: (type, data, info = {}) => ({ type, data, status: 'OK', info }),
+  nok: (type, data, info = {}) => ({ type, data, status: 'NOK', info }),
+  cancel: (type, info = {}) => ({ type, status: 'CANCELLED', info })
 };
 
 export {
   IssueFilter,
   notify,
-  login
+  login,
+  logout
 };
 
 export default request;

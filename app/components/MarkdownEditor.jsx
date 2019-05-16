@@ -20,6 +20,7 @@ import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 
 import { openExternalUrl, xssFilter } from '../../modules/utils';
+import { platform } from '../../modules/config';
 
 import TextArea from './TextArea';
 import { GhostButton } from './Button';
@@ -118,7 +119,7 @@ class MarkdownEditor extends PureComponent {
     this.adjustTextAreaHeight();
   }
 
-  applyMarkdown = (symbolStart, symbolEnd) => {
+  applyMarkdown = (symbolStart, symbolEnd = '') => {
     const { onChange } = this.props;
     const textarea = this.textareaRef.current;
     const currentValue = this.state.value;
@@ -157,27 +158,27 @@ class MarkdownEditor extends PureComponent {
   }
 
   makeh1 = () => {
-    this.applyMarkdown('# ', '');
+    this.applyMarkdown('# ');
   }
 
   makeh2 = () => {
-    this.applyMarkdown('## ', '');
+    this.applyMarkdown('## ');
   }
 
   makeh3 = () => {
-    this.applyMarkdown('### ', '');
+    this.applyMarkdown('### ');
   }
 
   makeBulletedList = () => {
-    this.applyMarkdown('- ', '');
+    this.applyMarkdown('- ');
   }
 
   makeNumberedList = () => {
-    this.applyMarkdown('1. ', '');
+    this.applyMarkdown('1. ');
   }
 
   makeQuote = () => {
-    this.applyMarkdown('> ', '');
+    this.applyMarkdown('> ');
   }
 
   makeLink = () => {
@@ -211,13 +212,26 @@ class MarkdownEditor extends PureComponent {
   }
 
   onKeyDown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.keyCode === KEY_ENTER) {
-      const { onSubmit } = this.props;
-      if (onSubmit) {
-        onSubmit(xssFilter(this.state.value));
-        this.setState({
-          value: ''
-        });
+    const { onSubmit } = this.props;
+    if (platform === 'darwin') {
+      if (e.metaKey && e.keyCode === KEY_ENTER) {
+        if (onSubmit) {
+          onSubmit(xssFilter(this.state.value));
+          this.setState({
+            value: ''
+          });
+        }
+      } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+        this.applyMarkdown('\r\n');
+      }
+    } else {
+      if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+        if (onSubmit) {
+          onSubmit(xssFilter(this.state.value));
+          this.setState({
+            value: ''
+          });
+        }
       }
     }
   }
@@ -225,7 +239,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id } = this.props;
+    const { className, id, onBlur } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -314,6 +328,7 @@ class MarkdownEditor extends PureComponent {
               ref={this.textareaRef}
               onChange={this.onTextAreaTyped}
               onKeyDown={this.onKeyDown}
+              onBlur={onBlur}
               value={value}
             />
           )
@@ -332,14 +347,16 @@ MarkdownEditor.propTypes = {
   ]),
   initialValue: PropTypes.string,
   preview: PropTypes.bool,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  onBlur: PropTypes.func
 };
 
 MarkdownEditor.defaultProps = {
   className: undefined,
   id: undefined,
   initialValue: '',
-  preview: false
+  preview: false,
+  onBlur: undefined
 };
 
 const Iframe = styled.iframe`

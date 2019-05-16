@@ -9,10 +9,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 
-import { getInstance, reset, initialize } from '../../../../modules/request';
 import theme from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
 import { ISSUES_GET, ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
+import { getInstance, reset, initialize } from '../../../../modules/request';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';

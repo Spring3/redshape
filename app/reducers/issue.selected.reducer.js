@@ -3,19 +3,22 @@ import _ from 'lodash';
 import {
   ISSUES_GET,
   ISSUES_COMMENTS_SEND,
-  ISSUES_RESET_SELECTION
+  ISSUES_RESET_SELECTION,
+  ISSUES_TIME_ENTRY_GET
 } from '../actions/issues.actions';
 
 import {
   TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
   TIME_ENTRY_DELETE,
-  TIME_ENTRY_GET_ALL
 } from '../actions/timeEntry.actions';
 
 const initialState = {
   data: {},
   spentTime: {
+    page: 0,
+    limit: 20,
+    totalCount: 0,
     data: [],
     isFetching: false,
     error: undefined
@@ -48,7 +51,7 @@ export default (state = initialState, action) => {
           ...state,
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: false,
               isUpdating: true,
               error: undefined
@@ -65,7 +68,7 @@ export default (state = initialState, action) => {
           },
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: true,
               isUpdating: false,
               error: undefined
@@ -78,7 +81,7 @@ export default (state = initialState, action) => {
           ...state,
           updates: {
             ...state.updateStatus,
-            [action.id]: {
+            [action.info.subject]: {
               ok: false,
               isUpdating: false,
               error: action.data
@@ -88,13 +91,14 @@ export default (state = initialState, action) => {
       }
       return state;
     }
-    case TIME_ENTRY_GET_ALL: {
+    case ISSUES_TIME_ENTRY_GET: {
       if (action.status === 'START') {
         return {
           ...state,
           spentTime: {
             ...state.spentTime,
-            isFetching: true
+            isFetching: true,
+            page: {}.hasOwnProperty.call(action.info, 'page') ? action.info.page : state.spentTime.page
           }
         };
       }
@@ -102,8 +106,12 @@ export default (state = initialState, action) => {
         return {
           ...state,
           spentTime: {
+            ...state.spentTime,
             isFetching: false,
-            data: _.get(action.data, 'time_entries', []),
+            data: action.info.page === 0
+              ? _.get(action.data, 'time_entries', [])
+              : [...state.spentTime.data, ..._.get(action.data, 'time_entries', [])],
+            totalCount: action.data.total_count,
             error: undefined
           }
         };
@@ -112,6 +120,7 @@ export default (state = initialState, action) => {
         return {
           ...state,
           spentTime: {
+            ...state.spentTime,
             isFetching: false,
             error: action.data
           }
@@ -126,6 +135,11 @@ export default (state = initialState, action) => {
         if (issueId === state.data.id) {
           return {
             ...state,
+            data: {
+              ...state.data,
+              spent_hours: state.data.spent_hours + timeEntry.hours,
+              total_spent_hours: state.data.total_spent_hours + timeEntry.hours
+            },
             spentTime: {
               ...state.spentTime,
               data: [
@@ -142,7 +156,7 @@ export default (state = initialState, action) => {
       if (action.status === 'OK') {
         const issueId = _.get(action.data, 'issue.id');
         if (issueId === state.data.id) {
-          return {
+          const nextState = {
             ...state,
             spentTime: {
               ...state.spentTime,
@@ -151,6 +165,13 @@ export default (state = initialState, action) => {
               )
             }
           };
+          const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);
+          nextState.data = {
+            ...nextState.data,
+            spent_hours: newTotalTimeSpent,
+            total_spent_hours: newTotalTimeSpent
+          };
+          return nextState;
         }
       }
       return state;
@@ -159,13 +180,20 @@ export default (state = initialState, action) => {
       if (action.status === 'OK') {
         const { issueId, timeEntryId } = action.data;
         if (issueId === state.data.id) {
-          return {
+          const nextState = {
             ...state,
             spentTime: {
               ...state.spentTime,
               data: [...state.spentTime.data.filter(({ id }) => id !== timeEntryId)]
             }
           };
+          const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);
+          nextState.data = {
+            ...nextState.data,
+            spent_hours: newTotalTimeSpent,
+            total_spent_hours: newTotalTimeSpent
+          };
+          return nextState;
         }
       }
       return state;

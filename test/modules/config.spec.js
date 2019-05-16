@@ -1,5 +1,3 @@
-jest.mock('electron-store');
-
 const Store = require('electron-store');
 
 const standardEnv = {

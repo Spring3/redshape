@@ -1,5 +1,5 @@
 import reducer from '../user.reducer';
-import { USER_LOGIN } from '../../actions/user.actions';
+import { USER_LOGIN, USER_LOGOUT } from '../../actions/user.actions';
 import actions from '../../actions';
 import { notify } from '../../actions/helper';
 
@@ -87,7 +87,14 @@ describe('User reducer', () => {
         redmineEndpoint: 'https://redmine.domain',
         api_key: '123abc'
       };
-      expect(reducer(defaultState, actions.user.logout()));
+      expect(
+        reducer(
+          defaultState,
+          {
+            type: USER_LOGOUT
+          }
+        )
+      );
 
       expect(storageGetSpy).toHaveBeenCalledWith('settings');
       expect(storageClearSpy).toHaveBeenCalled();

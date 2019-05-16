@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { HashRouter, Route } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import { mount } from 'enzyme';
-import userActions from '../../actions/user.actions';
+import userActions, { USER_LOGOUT } from '../../actions/user.actions';
 
 import Navbar from '../Navbar';
 
@@ -48,7 +48,9 @@ describe('Navbar component', () => {
 
     expect(wrapper.exists('#signout')).toBe(true);
     wrapper.find('#signout').hostNodes().simulate('click');
-    expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0]).toEqual(userActions.logout());
+    expect(store.getActions().length).toBe(2);
+    expect(store.getActions().pop()).toEqual({
+      type: USER_LOGOUT
+    });
   });
 });

@@ -1,5 +1,5 @@
 const { remote } = require('electron');
-const _ = require('lodash');
+const _pick = require('lodash/pick');
 
 let config;
 
@@ -7,7 +7,7 @@ let config;
 const mainProcess = (process || remote.process);
 
 if (!config) {
-  config = _.pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
+  config = _pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
   config.platform = mainProcess.platform;
 }
 

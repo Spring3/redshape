@@ -10,7 +10,7 @@ export const TIME_ENTRY_UPDATE_VALIDATION_FAILED = 'TIME_ENTRY_UPDATE_VALIDATION
 export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION_PASSED';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
-export const TIME_ENTRY_GET_ALL = 'TIME_ENTRY_GET_ALL';
+export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
 const validateBeforePublish = (timeEntry) => {
   const validationSchema = Joi.object().keys({
@@ -152,32 +152,13 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     });
 };
 
-const getAll = (issueId, projectId, offset, limit) => (dispatch) => {
-  const query = _({
-    offset,
-    limit,
-    project_id: projectId,
-    issue_id: issueId
-  }).pickBy().value();
-
-  dispatch(notify.start(TIME_ENTRY_GET_ALL));
-
-  return request({
-    url: '/time_entries.json',
-    query,
-    id: `getIssueTimeEntries:${issueId}:${offset}`
-  }).then(({ data }) => dispatch(notify.ok(TIME_ENTRY_GET_ALL, data)))
-    .catch((error) => {
-      console.error('Error when trying to get the list of time entries', error);
-      dispatch(notify.nok(TIME_ENTRY_GET_ALL, error));
-    });
-};
+const reset = () => ({ type: TIME_ENTRY_RESET });
 
 export default {
   publish,
   update,
   remove,
-  getAll,
   validateBeforePublish,
-  validateBeforeUpdate
+  validateBeforeUpdate,
+  reset
 };

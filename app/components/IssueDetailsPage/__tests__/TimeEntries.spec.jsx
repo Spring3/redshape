@@ -7,11 +7,12 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 
-import { TIME_ENTRY_GET_ALL, TIME_ENTRY_DELETE } from '../../../actions/timeEntry.actions';
+import { TIME_ENTRY_DELETE } from '../../../actions/timeEntry.actions';
+import { ISSUES_TIME_ENTRY_GET } from '../../../actions/issues.actions';
 import { TRACKING_START } from '../../../actions/tracking.actions';
 import { getInstance, reset, initialize } from '../../../../modules/request';
-import TimeEntries from '../TimeEntries';
 import theme from '../../../theme';
+import TimeEntries from '../TimeEntries';
 
 const redmineEndpoint = 'redmine.test.test';
 const token = 'multipass';
@@ -45,7 +46,8 @@ describe('IssueDetails => TimeEntries componnet', () => {
         selected: {
           data: {
             id: 1,
-            subject: 'Test'
+            subject: 'Test',
+            journals: []
           },
           spentTime: {
             data: [
@@ -148,7 +150,7 @@ describe('IssueDetails => TimeEntries componnet', () => {
       </Provider>
     );
     expect(store.getActions().length).toBe(1);
-    expect(store.getActions()[0].type).toBe(TIME_ENTRY_GET_ALL);
+    expect(store.getActions()[0].type).toBe(ISSUES_TIME_ENTRY_GET);
   });
 
   it('should be able to request the time entry modal', () => {
@@ -309,7 +311,7 @@ describe('IssueDetails => TimeEntries componnet', () => {
         </ThemeProvider>
       </Provider>
     );
-    wrapper.find('GhostButton').simulate('click', {
+    wrapper.find('TimeEntries').instance().removeTimeEntry(1)({
       preventDefault: () => {},
       stopPropagation: () => {}
     });
