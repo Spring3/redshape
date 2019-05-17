@@ -13,7 +13,7 @@ import {
   TIME_ENTRY_DELETE,
 } from '../actions/timeEntry.actions';
 
-const initialState = {
+export const initialState = {
   data: {},
   spentTime: {
     page: 0,
@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
             journals: [...state.data.journals, action.data]
           },
           updates: {
-            ...state.updateStatus,
+            ...state.updates,
             [action.info.subject]: {
               ok: true,
               isUpdating: false,
@@ -80,7 +80,7 @@ export default (state = initialState, action) => {
         return {
           ...state,
           updates: {
-            ...state.updateStatus,
+            ...state.updates,
             [action.info.subject]: {
               ok: false,
               isUpdating: false,
