@@ -3,7 +3,7 @@ import _ from 'lodash';
 import storage from '../../modules/storage';
 import { PROJECT_GET_ALL } from '../actions/project.actions';
 
-const initialState = {
+export const initialState = {
   data: {},
   fetchedOffset: 0,
   isFetching: false,
@@ -31,17 +31,6 @@ export default (state = initialState, action) => {
       switch (action.status) {
         case 'START': {
           return { ...state, isFetching: true };
-        }
-        case 'PAGE_NEXT': {
-          const projects = convertProjectsArray(action.data);
-          return {
-            ...state,
-            data: {
-              ...state.data,
-              ...projects
-            },
-            error: undefined
-          };
         }
         case 'OK': {
           const projects = convertProjectsArray(action.data);

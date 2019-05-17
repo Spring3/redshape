@@ -34,9 +34,13 @@ describe('issues reducer', () => {
 
     it('should process ISSUES_GET_PAGE with status OK', () => {
       const data = { issues: ['1', '2', '3'] };
+      const error = new Error('Whoops');
       expect(
         reducer(
-          _cloneDeep(initialState),
+          {
+            ..._cloneDeep(initialState),
+            error
+          },
           notify.ok(ISSUES_GET_PAGE, data)
         )
       ).toEqual({

@@ -7,7 +7,7 @@ import {
 } from '../actions/tracking.actions';
 import storage from '../../modules/storage';
 
-const initialState = {
+export const initialState = {
   issue: {},
   isEnabled: false,
   isPaused: false,

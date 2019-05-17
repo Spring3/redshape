@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
       const { userId, redmineEndpoint, issueHeaders } = action.data;
       const nextState = {
         ...state,
-        issueHeaders: orderTableHeaders(issueHeaders)
+        issueHeaders: issueHeaders ? orderTableHeaders(issueHeaders) : state.issueHeaders
       };
       storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;

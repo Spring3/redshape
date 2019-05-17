@@ -7,7 +7,7 @@ import {
   TIME_ENTRY_RESET
 } from '../actions/timeEntry.actions';
 
-const initialState = {
+export const initialState = {
   isFetching: false,
   error: undefined
 };
