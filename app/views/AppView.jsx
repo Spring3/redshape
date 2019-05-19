@@ -89,6 +89,7 @@ class AppView extends Component {
           <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
           <Timer
             onStop={this.onTrackingStop}
+            history={this.props.history}
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}

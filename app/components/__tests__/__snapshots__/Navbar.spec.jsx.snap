@@ -104,9 +104,6 @@ exports[`Navbar component should match the snapshot 1`] = `
         Summary
       </a>
     </li>
-    <li>
-      Issues
-    </li>
   </ul>
   <ul>
     <li>

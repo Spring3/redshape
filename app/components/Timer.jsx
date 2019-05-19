@@ -10,8 +10,11 @@ import StopIcon from 'mdi-react/StopIcon';
 import actions from '../actions';
 
 import { GhostButton } from './Button';
+import { animationSlideUp } from '../animations';
+import Link from './Link';
 
 const ActiveTimer = styled.div`
+  animation: ${animationSlideUp} .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
   padding: 20px;
@@ -21,13 +24,13 @@ const ActiveTimer = styled.div`
   background: ${props => props.theme.bg};
   display: ${props => props.isEnabled ? 'flex' : 'none'};
   align-items: center;
-  box-shadow: 0px 0px 15px ${props => props.theme.bgDark};
+  box-shadow: 0px -2px 20px ${props => props.theme.bgDark};
+  border-top: 2px solid ${props => props.theme.bgDark};
 
   div.buttons {
     margin: 0 20px;
   }
 
-  div.issueName,
   div.time {
     margin: 0 20px;
     font-size: 16px;
@@ -55,6 +58,15 @@ const ActiveTimer = styled.div`
 
 const StyledButton = styled(GhostButton)`
   padding: 0px;
+`;
+
+const MaskedLink = styled(Link)`
+  color: inherit;
+  padding: 0;
+  margin: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
 `;
 
 class Timer extends Component {
@@ -140,6 +152,11 @@ class Timer extends Component {
     this.setState({ value: 0 });
   }
 
+  redirectToTrackedLink = (event) => {
+    event.preventDefault();
+    this.props.history.push(`/app/issue/${this.props.trackedIssue.id}`);
+  }
+
   render() {
     const { value } = this.state;
     const { isEnabled, trackedIssue, isPaused } = this.props;
@@ -170,7 +187,12 @@ class Timer extends Component {
           }
         </div>
         <div className="issueName">
-          <span>{trackedIssue.subject}</span>
+          <MaskedLink
+            href='#'
+            onClick={this.redirectToTrackedLink}
+          >
+            {trackedIssue.subject}
+          </MaskedLink>
         </div>
         <div className="time">
           <span>{timeString}</span>
@@ -206,7 +228,8 @@ Timer.propTypes = {
   onContinue: PropTypes.func,
   pauseTimer: PropTypes.func.isRequired,
   continueTimer: PropTypes.func.isRequired,
-  stopTimer: PropTypes.func.isRequired
+  stopTimer: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 Timer.defaultProps = {

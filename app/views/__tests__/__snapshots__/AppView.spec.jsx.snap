@@ -91,7 +91,20 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 0px;
 }
 
+.c8 {
+  font-size: 14px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.c8:hover {
+  background: undefined;
+  color: undefined;
+}
+
 .c5 {
+  -webkit-animation: gOHwoP .7s ease-in;
+  animation: gOHwoP .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
   padding: 20px;
@@ -103,14 +116,14 @@ exports[`AppView should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  box-shadow: 0px 0px 15px;
+  box-shadow: 0px -2px 20px;
+  border-top: 2px solid;
 }
 
 .c5 div.buttons {
   margin: 0 20px;
 }
 
-.c5 div.issueName,
 .c5 div.time {
   margin: 0 20px;
   font-size: 16px;
@@ -127,6 +140,16 @@ exports[`AppView should match the snapshot 1`] = `
 
 .c6 {
   padding: 0px;
+}
+
+.c7 {
+  color: inherit;
+  padding: 0;
+  margin: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+  -webkit-text-decoration: none;
+  text-decoration: none;
 }
 
 .c1 {
@@ -169,9 +192,6 @@ exports[`AppView should match the snapshot 1`] = `
         >
           Summary
         </a>
-      </li>
-      <li>
-        Issues
       </li>
     </ul>
     <ul>
@@ -245,9 +265,14 @@ exports[`AppView should match the snapshot 1`] = `
       <div
         className="issueName"
       >
-        <span>
+        <a
+          className="c7 c8"
+          href="#"
+          onClick={[Function]}
+          rel="noopener noreferer"
+        >
           Test issue
-        </span>
+        </a>
       </div>
       <div
         className="time"

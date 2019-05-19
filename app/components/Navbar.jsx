@@ -97,7 +97,7 @@ class NavigationBar extends Component {
               Summary
             </NavLink>
           </li>
-          <li>Issues</li>
+          {/* <li>Issues</li> */}
         </ul>
         <ul>
           <li>

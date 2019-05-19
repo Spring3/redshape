@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
-import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
+import toJSON from 'enzyme-to-json';
 import thunk from 'redux-thunk';
 
 // using mount instead of shallow due to https://github.com/airbnb/enzyme/issues/1908
@@ -27,15 +27,15 @@ describe('Timer component', () => {
       }
     };
     const store = mockStore(state);
-    const tree = renderer.create(
+    const wrapper = mount(
       <Provider store={store}>
         <Timer
           trackedDuration={4000}
         />
       </Provider>,
       { context: { store } }
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
   it('should automatically resume timer if trackedTime prop was provided', async () => {
@@ -306,5 +306,43 @@ describe('Timer component', () => {
     expect(timer.interval).not.toBeDefined();
 
     expect(onStop).toHaveBeenCalledTimes(1);
+  });
+
+  it('should redirect when the name of the tracked issue is clicked', () => {
+    const onStop = jest.fn();
+    const onPause = jest.fn();
+    const onContinue = jest.fn();
+
+    const state = {
+      tracking: {
+        isEnabled: true,
+        isPaused: true,
+        duration: 0,
+        issue: {
+          id: '123abc',
+          subject: 'Test issue'
+        }
+      }
+    };
+
+    const store = mockStore(state);
+    const history = {
+      push: jest.fn()
+    };
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <Timer
+          history={history}
+          onStop={onStop}
+          onPause={onPause}
+          onContinue={onContinue}
+        />
+      </Provider>,
+      { context: { store } }
+    );
+
+    wrapper.find('.issueName').childAt(0).simulate('click');
+    expect(history.push).toHaveBeenCalledWith(`/app/issue/${state.tracking.issue.id}`);
   });
 });

@@ -14,7 +14,20 @@ exports[`Timer component should match the snapshot 1`] = `
   background: transparent;
 }
 
+.c4 {
+  font-size: 14px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.c4:hover {
+  background: undefined;
+  color: undefined;
+}
+
 .c0 {
+  -webkit-animation: gOHwoP .7s ease-in;
+  animation: gOHwoP .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
   padding: 20px;
@@ -29,14 +42,14 @@ exports[`Timer component should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  box-shadow: 0px 0px 15px;
+  box-shadow: 0px -2px 20px;
+  border-top: 2px solid;
 }
 
 .c0 div.buttons {
   margin: 0 20px;
 }
 
-.c0 div.issueName,
 .c0 div.time {
   margin: 0 20px;
   font-size: 16px;
@@ -55,62 +68,416 @@ exports[`Timer component should match the snapshot 1`] = `
   padding: 0px;
 }
 
-<div
-  className="c0"
+.c3 {
+  color: inherit;
+  padding: 0;
+  margin: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
 >
-  <div
-    className="buttons"
+  <Connect(Timer)
+    trackedDuration={4000}
   >
-    <a
-      className="c1 c2"
-      disabled={false}
-      href="#"
-      onClick={[Function]}
+    <Timer
+      continueTimer={[Function]}
+      initialValue={0}
+      isEnabled={true}
+      isPaused={true}
+      issueTitle=""
+      pauseTimer={[Function]}
+      stopTimer={[Function]}
+      trackedDuration={4000}
+      trackedIssue={
+        Object {
+          "id": "123abc",
+          "subject": "Test issue",
+        }
+      }
+      trackedTime={0}
     >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={35}
-        viewBox="0 0 24 24"
-        width={35}
+      <Timer__ActiveTimer
+        isEnabled={true}
       >
-        <path
-          d="M18,18H6V6H18V18Z"
-        />
-      </svg>
-    </a>
-    <a
-      className="c1 c2"
-      disabled={false}
-      href="#"
-      onClick={[Function]}
-    >
-      <svg
-        className="mdi-icon "
-        fill="currentColor"
-        height={35}
-        viewBox="0 0 24 24"
-        width={35}
-      >
-        <path
-          d="M8,5.14V19.14L19,12.14L8,5.14Z"
-        />
-      </svg>
-    </a>
-  </div>
-  <div
-    className="issueName"
-  >
-    <span>
-      Test issue
-    </span>
-  </div>
-  <div
-    className="time"
-  >
-    <span>
-      00:00:00
-    </span>
-  </div>
-</div>
+        <StyledComponent
+          forwardedComponent={
+            Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "attrs": Array [],
+              "componentStyle": ComponentStyle {
+                "componentId": "Timer__ActiveTimer-rhbzcf-0",
+                "isStatic": false,
+                "lastClassName": "c0",
+                "rules": Array [
+                  "animation:",
+                  Keyframes {
+                    "id": "sc-keyframes-gOHwoP",
+                    "inject": [Function],
+                    "name": "gOHwoP",
+                    "rules": Array [
+                      "@-webkit-keyframes gOHwoP{0%{opacity:0;-webkit-transform:translateY(100px);-ms-transform:translateY(100px);transform:translateY(100px);}100%{opacity:1;-webkit-transform:translateY(0px);-ms-transform:translateY(0px);transform:translateY(0px);}}",
+                      "@keyframes gOHwoP{0%{opacity:0;-webkit-transform:translateY(100px);-ms-transform:translateY(100px);transform:translateY(100px);}100%{opacity:1;-webkit-transform:translateY(0px);-ms-transform:translateY(0px);transform:translateY(0px);}}",
+                    ],
+                    "toString": [Function],
+                  },
+                  " .7s ease-in;max-width:100%;box-sizing:border-box;padding:20px;position:fixed;bottom:0;width:100%;background:",
+                  [Function],
+                  ";display:",
+                  [Function],
+                  ";align-items:center;box-shadow:0px -2px 20px ",
+                  [Function],
+                  ";border-top:2px solid ",
+                  [Function],
+                  ";div.buttons{margin:0 20px;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
+                  [Function],
+                  ";}}a:first-child{margin-right:20px;}}div.time{color:",
+                  [Function],
+                  ";}",
+                ],
+              },
+              "displayName": "Timer__ActiveTimer",
+              "foldedComponentIds": Array [],
+              "render": [Function],
+              "styledComponentId": "Timer__ActiveTimer-rhbzcf-0",
+              "target": "div",
+              "toString": [Function],
+              "warnTooManyClasses": [Function],
+              "withComponent": [Function],
+            }
+          }
+          forwardedRef={null}
+          isEnabled={true}
+        >
+          <div
+            className="c0"
+          >
+            <div
+              className="buttons"
+            >
+              <Timer__StyledButton
+                onClick={[Function]}
+              >
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "$asyncbind": [Function],
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "Timer__StyledButton-rhbzcf-1",
+                        "isStatic": true,
+                        "lastClassName": "c1",
+                        "rules": Array [
+                          "padding:0px;",
+                        ],
+                      },
+                      "displayName": "Timer__StyledButton",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "Timer__StyledButton-rhbzcf-1",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                  onClick={[Function]}
+                >
+                  <GhostButton
+                    className="c1"
+                    disabled={false}
+                    onClick={[Function]}
+                  >
+                    <Button__StyledLink
+                      className="c1"
+                      disabled={false}
+                      href="#"
+                      onClick={[Function]}
+                    >
+                      <StyledComponent
+                        className="c1"
+                        disabled={false}
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "Button__StyledLink-gyjjyq-1",
+                              "isStatic": false,
+                              "lastClassName": "c2",
+                              "rules": Array [
+                                "text-decoration:none;color:",
+                                [Function],
+                                ";transition:color ease ",
+                                [Function],
+                                ";",
+                                [Function],
+                                " &:active,&:focus,&:visited{background:transparent;}",
+                              ],
+                            },
+                            "displayName": "Button__StyledLink",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "Button__StyledLink-gyjjyq-1",
+                            "target": "a",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                        href="#"
+                        onClick={[Function]}
+                      >
+                        <a
+                          className="c1 c2"
+                          disabled={false}
+                          href="#"
+                          onClick={[Function]}
+                        >
+                          <StopIcon
+                            size={35}
+                          >
+                            <svg
+                              className="mdi-icon "
+                              fill="currentColor"
+                              height={35}
+                              viewBox="0 0 24 24"
+                              width={35}
+                            >
+                              <path
+                                d="M18,18H6V6H18V18Z"
+                              />
+                            </svg>
+                          </StopIcon>
+                        </a>
+                      </StyledComponent>
+                    </Button__StyledLink>
+                  </GhostButton>
+                </StyledComponent>
+              </Timer__StyledButton>
+              <Timer__StyledButton
+                onClick={[Function]}
+              >
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "$asyncbind": [Function],
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "Timer__StyledButton-rhbzcf-1",
+                        "isStatic": true,
+                        "lastClassName": "c1",
+                        "rules": Array [
+                          "padding:0px;",
+                        ],
+                      },
+                      "displayName": "Timer__StyledButton",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "Timer__StyledButton-rhbzcf-1",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                  onClick={[Function]}
+                >
+                  <GhostButton
+                    className="c1"
+                    disabled={false}
+                    onClick={[Function]}
+                  >
+                    <Button__StyledLink
+                      className="c1"
+                      disabled={false}
+                      href="#"
+                      onClick={[Function]}
+                    >
+                      <StyledComponent
+                        className="c1"
+                        disabled={false}
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "Button__StyledLink-gyjjyq-1",
+                              "isStatic": false,
+                              "lastClassName": "c2",
+                              "rules": Array [
+                                "text-decoration:none;color:",
+                                [Function],
+                                ";transition:color ease ",
+                                [Function],
+                                ";",
+                                [Function],
+                                " &:active,&:focus,&:visited{background:transparent;}",
+                              ],
+                            },
+                            "displayName": "Button__StyledLink",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "Button__StyledLink-gyjjyq-1",
+                            "target": "a",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                        href="#"
+                        onClick={[Function]}
+                      >
+                        <a
+                          className="c1 c2"
+                          disabled={false}
+                          href="#"
+                          onClick={[Function]}
+                        >
+                          <PlayIcon
+                            size={35}
+                          >
+                            <svg
+                              className="mdi-icon "
+                              fill="currentColor"
+                              height={35}
+                              viewBox="0 0 24 24"
+                              width={35}
+                            >
+                              <path
+                                d="M8,5.14V19.14L19,12.14L8,5.14Z"
+                              />
+                            </svg>
+                          </PlayIcon>
+                        </a>
+                      </StyledComponent>
+                    </Button__StyledLink>
+                  </GhostButton>
+                </StyledComponent>
+              </Timer__StyledButton>
+            </div>
+            <div
+              className="issueName"
+            >
+              <Timer__MaskedLink
+                href="#"
+                onClick={[Function]}
+              >
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "$asyncbind": [Function],
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "Timer__MaskedLink-rhbzcf-2",
+                        "isStatic": true,
+                        "lastClassName": "c3",
+                        "rules": Array [
+                          "color:inherit;padding:0;margin:0 20px;font-size:16px;font-weight:bold;text-decoration:none;",
+                        ],
+                      },
+                      "displayName": "Timer__MaskedLink",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "Timer__MaskedLink-rhbzcf-2",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                  href="#"
+                  onClick={[Function]}
+                >
+                  <Link
+                    className="c3"
+                    href="#"
+                    onClick={[Function]}
+                  >
+                    <Link__StyledLink
+                      className="c3"
+                      href="#"
+                      onClick={[Function]}
+                      rel="noopener noreferer"
+                    >
+                      <StyledComponent
+                        className="c3"
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "Link__StyledLink-i7b1cx-0",
+                              "isStatic": false,
+                              "lastClassName": "c4",
+                              "rules": Array [
+                                "color:",
+                                [Function],
+                                ";font-size:14px;padding:2px;cursor:pointer;",
+                                [Function],
+                              ],
+                            },
+                            "displayName": "Link__StyledLink",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "Link__StyledLink-i7b1cx-0",
+                            "target": "a",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                        href="#"
+                        onClick={[Function]}
+                        rel="noopener noreferer"
+                      >
+                        <a
+                          className="c3 c4"
+                          href="#"
+                          onClick={[Function]}
+                          rel="noopener noreferer"
+                        >
+                          Test issue
+                        </a>
+                      </StyledComponent>
+                    </Link__StyledLink>
+                  </Link>
+                </StyledComponent>
+              </Timer__MaskedLink>
+            </div>
+            <div
+              className="time"
+            >
+              <span>
+                00:00:00
+              </span>
+            </div>
+          </div>
+        </StyledComponent>
+      </Timer__ActiveTimer>
+    </Timer>
+  </Connect(Timer)>
+</Provider>
 `;
