@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Modal from 'react-responsive-modal';
 import Select from 'react-select';
 import styled, { withTheme } from 'styled-components';
 
@@ -12,6 +11,7 @@ import Button from '../components/Button';
 import MarkdownEditor from '../components/MarkdownEditor';
 import ErrorMessage from '../components/ErrorMessage';
 import DatePicker from '../components/DatePicker';
+import Modal from '../components/Modal';
 
 import actions from '../actions';
 
