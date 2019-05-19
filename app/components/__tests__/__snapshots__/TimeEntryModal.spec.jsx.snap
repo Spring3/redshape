@@ -692,7 +692,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                       "boxShadow": "none",
                     },
                     "overlay": Object {
-                      "background": "rgba(255, 255, 255, 0.9)",
+                      "background": "rgba(255,255,255, 0.93)",
                     },
                   }
                 }
@@ -1139,7 +1139,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                       >
                         <div
                           class="styles_overlay__CLSq- styles_overlayCenter__YHoO7 styles_transitionEnter__3j_-a styles_transitionEnterActive___eQs7"
-                          style="background: rgba(255, 255, 255, 0.9);"
+                          style="background: rgba(255, 255, 255, 0.93);"
                         >
                           <div
                             class="styles_modal__gNwvD"
@@ -1728,7 +1728,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                           onClick={[Function]}
                           style={
                             Object {
-                              "background": "rgba(255, 255, 255, 0.9)",
+                              "background": "rgba(255,255,255, 0.93)",
                             }
                           }
                         >
@@ -6034,7 +6034,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "boxShadow": "none",
                                   },
                                   "overlay": Object {
-                                    "background": "rgba(255, 255, 255, 0.9)",
+                                    "background": "rgba(255,255,255, 0.93)",
                                   },
                                 }
                               }

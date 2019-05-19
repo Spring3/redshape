@@ -6,6 +6,7 @@ import renderer from 'react-test-renderer';
 import CommentsSection from '../CommentsSection';
 import theme from '../../../theme';
 
+
 describe('IssueDetails => CommentsSEction componnet', () => {
   it('should match the snapshot', () => {
     const props = {

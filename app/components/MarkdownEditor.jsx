@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
 import throttle from 'lodash/throttle';
+import { remote } from 'electron';
 
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon';
@@ -20,7 +21,6 @@ import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 
 import { openExternalUrl, xssFilter } from '../../modules/utils';
-import { platform } from '../../modules/config';
 
 import TextArea from './TextArea';
 import { GhostButton } from './Button';
@@ -213,7 +213,7 @@ class MarkdownEditor extends PureComponent {
 
   onKeyDown = (e) => {
     const { onSubmit } = this.props;
-    if (platform === 'darwin') {
+    if (remote.process.platform === 'darwin') {
       if (e.metaKey && e.keyCode === KEY_ENTER) {
         if (onSubmit) {
           onSubmit(xssFilter(this.state.value));

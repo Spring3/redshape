@@ -39,7 +39,7 @@ describe('Config', () => {
       PORT: '2222',
       ENCRYPTION_KEY: 'test-key',
       NODE_ENV: 'test',
-      platform: 'darwin'
+      platform: process.platform
     });
     expect(storageHasSpy).toHaveBeenCalledWith('settings');
     expect(storageGetSpy).toHaveBeenCalledWith('settings', {});

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-
-import { platform } from '../../../modules/config';
+import { remote } from 'electron';
 
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import Link from '../Link';
@@ -107,7 +106,7 @@ class CommentsSection extends Component {
               <SmallNotice>
                 Press&nbsp;
                 {
-                  platform === 'darwin'
+                  remote.process.platform === 'darwin'
                     ? (<Link href="#">Cmd + Enter</Link>)
                     : (<Link href="#">Ctrl + Enter</Link>)
                 }

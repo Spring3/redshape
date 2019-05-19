@@ -4,7 +4,7 @@ const _pick = require('lodash/pick');
 let config;
 
 // main process
-const mainProcess = (process || remote.process);
+const mainProcess = process && process.type === 'renderer' ? remote.process : process;
 
 if (!config) {
   config = _pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');

@@ -81,18 +81,20 @@ describe('AppView', () => {
     });
     const tree = renderer.create(
       <Provider store={store}>
-        <HashRouter>
-          <AppView
-            match={
-              {
-                isExact: false,
-                params: {},
-                path: undefined,
-                url: '/app'
+        <ThemeProvider theme={theme}>
+          <HashRouter>
+            <AppView
+              match={
+                {
+                  isExact: false,
+                  params: {},
+                  path: undefined,
+                  url: '/app'
+                }
               }
-            }
-          />
-        </HashRouter>
+            />
+          </HashRouter>
+        </ThemeProvider>
       </Provider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -147,18 +149,20 @@ describe('AppView', () => {
 
       const wrapper = mount(
         <Provider store={store}>
-          <Router history={historyMock}>
-            <AppView
-              match={
-                {
-                  isExact: false,
-                  params: {},
-                  path: undefined,
-                  url: '/app'
+          <ThemeProvider theme={theme}>
+            <Router history={historyMock}>
+              <AppView
+                match={
+                  {
+                    isExact: false,
+                    params: {},
+                    path: undefined,
+                    url: '/app'
+                  }
                 }
-              }
-            />
-          </Router>
+              />
+            </Router>
+          </ThemeProvider>
         </Provider>
       );
 
@@ -214,18 +218,20 @@ describe('AppView', () => {
 
       const wrapper = mount(
         <Provider store={store}>
-          <Router history={historyMock}>
-            <AppView
-              match={
-                {
-                  isExact: false,
-                  params: {},
-                  path: undefined,
-                  url: '/app'
+          <ThemeProvider theme={theme}>
+            <Router history={historyMock}>
+              <AppView
+                match={
+                  {
+                    isExact: false,
+                    params: {},
+                    path: undefined,
+                    url: '/app'
+                  }
                 }
-              }
-            />
-          </Router>
+              />
+            </Router>
+          </ThemeProvider>
         </Provider>
       );
 
