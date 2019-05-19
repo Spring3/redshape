@@ -1,5 +1,5 @@
 {
-  "name": "redtime",
+  "name": "Redtime",
   "version": "0.0.1",
   "description": "Yet another redmine time tracker",
   "main": "index.js",
@@ -58,6 +58,7 @@
     "dotenv": "^6.2.0",
     "electron": "^5.0.0",
     "electron-store": "^2.0.0",
+    "electron-util": "^0.11.0",
     "formik": "^1.5.1",
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
