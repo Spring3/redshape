@@ -297,6 +297,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 .c19 {
+  position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
   border-radius: 3px;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import PropTypes from 'prop-types';
 
 const flipAnimation = keyframes`
   50% {
@@ -29,11 +30,33 @@ const Square = styled.div`
   animation: ${flipAnimation} 1s infinite;
 `;
 
-export default () => (
-  <ProcessIndicator>
+const ProcessIndicatorComponent = ({ className }) => (
+  <ProcessIndicator className={className}>
     <Square />
     <span>
       Please Wait...
     </span>
   </ProcessIndicator>
 );
+
+ProcessIndicatorComponent.propTypes = {
+  className: PropTypes.string
+};
+
+ProcessIndicatorComponent.defaultProps = {
+  className: null
+};
+
+export const OverlayProcessIndicator = styled(ProcessIndicatorComponent)`
+  justify-content: center;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  z-index: 5;
+  background: ${props => props.theme.bg};
+  box-shadow: 0px 0px 10px ${props => props.theme.shadow};
+  padding: 20px;
+  border-radius: 3px;
+`;
+
+export default ProcessIndicatorComponent;

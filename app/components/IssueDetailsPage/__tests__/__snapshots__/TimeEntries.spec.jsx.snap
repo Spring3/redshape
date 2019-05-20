@@ -44,6 +44,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   transition: background ease .2s;
   width: auto;
   border: 2px solid #909090;
+  background: #FFFFFF;
   color: #909090;
 }
 
@@ -143,6 +144,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 }
 
 .c5 {
+  position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
   border-radius: 3px;

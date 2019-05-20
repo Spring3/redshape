@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const StyledTable = styled.table`
   position: relative;
+  min-height: 200px;
 
   tbody {
     text-align: center;

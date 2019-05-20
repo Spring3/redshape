@@ -15,6 +15,7 @@ import TimeEntryModal from '../../components/TimeEntryModal';
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
+import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
 
 import actions from '../../actions';
@@ -123,7 +124,8 @@ class IssueDetailsPage extends Component {
   }
 
   showTimeEntryModal = (timeEntry) => {
-    const { selectedIssue, userId, userName, projects } = this.props;
+    const { selectedIssueState, userId, userName, projects } = this.props;
+    const selectedIssue = selectedIssueState.data;
     const selectedTimeEntry = timeEntry
       ? timeEntry
       : {
@@ -159,11 +161,12 @@ class IssueDetailsPage extends Component {
     });
   }
 
-  getIssueComments = () => this.props.selectedIssue.journals.filter(entry => entry.notes)
+  getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
 
   render() {
-    const { selectedIssue, history, userId, theme, postComments } = this.props;
+    const { selectedIssueState, history, userId, theme, postComments } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
+    const selectedIssue = selectedIssueState.data;
     return selectedIssue.id
       ? (
         <Section>
@@ -274,45 +277,49 @@ class IssueDetailsPage extends Component {
           )}
         </Section>
       )
-      : null;
+      : <OverlayProcessIndicator />;
   }
 }
 
 IssueDetailsPage.propTypes = {
-  selectedIssue: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    subject: PropTypes.string.isRequired,
-    journals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    description: PropTypes.string,
-    project: PropTypes.shape({
+  selectedIssueState: PropTypes.shape({
+    data: PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    priority: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    assigned_to: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).siRequired,
-    done_ratio: PropTypes.number.isRequired,
-    start_date: PropTypes.string.isRequired,
-    due_date: PropTypes.string.isRequired,
-    total_estimated_hours: PropTypes.number,
-    spent_hours: PropTypes.number,
-    tracker: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    status: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    author: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired
+      subject: PropTypes.string.isRequired,
+      journals: PropTypes.arrayOf(PropTypes.object).isRequired,
+      description: PropTypes.string,
+      project: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      priority: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      assigned_to: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).siRequired,
+      done_ratio: PropTypes.number.isRequired,
+      start_date: PropTypes.string.isRequired,
+      due_date: PropTypes.string.isRequired,
+      total_estimated_hours: PropTypes.number,
+      spent_hours: PropTypes.number,
+      tracker: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      status: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      author: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired
+    }),
+    isFetching: PropTypes.bool.isRequired,
+    error: PropTypes.instanceOf(Error)
   }).isRequired,
   userId: PropTypes.number.isRequired,
   userName: PropTypes.string.isRequired,
@@ -325,7 +332,7 @@ const mapStateToProps = state => ({
   projects: state.projects.data,
   userId: state.user.id,
   userName: state.user.name,
-  selectedIssue: state.issues.selected.data
+  selectedIssueState: state.issues.selected
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -37,7 +37,8 @@ const StyledButton = styled.button`
       `;
     }
     return css`
-      border: 2px solid ${props.theme.minorText};    
+      border: 2px solid ${props.theme.minorText};
+      background: ${props.theme.bg};
       color: ${props.theme.minorText};
 
       svg {

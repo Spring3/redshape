@@ -402,6 +402,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
 }
 
 .c14 {
+  position: relative;
   margin-top: 20px;
   padding-top: 20px;
   border-top: 2px solid #F9F9F9;
@@ -409,14 +410,14 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
 }
 
 .c14 button {
   padding: 8px 15px;
+}
+
+.c14 div {
+  margin-left: 20px;
 }
 
 <Provider
@@ -1123,6 +1124,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
 }
 
 .c14 {
+  position: relative;
   margin-top: 20px;
   padding-top: 20px;
   border-top: 2px solid #F9F9F9;
@@ -1130,14 +1132,14 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
 }
 
 .c14 button {
   padding: 8px 15px;
+}
+
+.c14 div {
+  margin-left: 20px;
 }
 
 <div
@@ -5638,7 +5640,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Button__StyledLink-gyjjyq-1",
+                                                                "componentId": "Button__StyledLink-sc-1yphocy-1",
                                                                 "isStatic": false,
                                                                 "lastClassName": "c11",
                                                                 "rules": Array [
@@ -5654,7 +5656,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Button__StyledLink",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Button__StyledLink-gyjjyq-1",
+                                                              "styledComponentId": "Button__StyledLink-sc-1yphocy-1",
                                                               "target": "a",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5863,9 +5865,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "isStatic": false,
                                       "lastClassName": "c14",
                                       "rules": Array [
-                                        "margin-top:20px;padding-top:20px;border-top:2px solid ",
+                                        "position:relative;margin-top:20px;padding-top:20px;border-top:2px solid ",
                                         [Function],
-                                        ";display:flex;justify-content:space-between;button{padding:8px 15px;}",
+                                        ";display:flex;button{padding:8px 15px;}div{margin-left:20px;}",
                                       ],
                                     },
                                     "displayName": "TimeEntryModal__OptionButtons",
@@ -5884,6 +5886,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                   className="c14"
                                 >
                                   <WithTheme(Button)
+                                    disabled={false}
                                     id="btn-update"
                                     onClick={[Function]}
                                     palette="success"
@@ -5951,7 +5954,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "$$typeof": Symbol(react.forward_ref),
                                               "attrs": Array [],
                                               "componentStyle": ComponentStyle {
-                                                "componentId": "Button__StyledButton-gyjjyq-0",
+                                                "componentId": "Button__StyledButton-sc-1yphocy-0",
                                                 "isStatic": false,
                                                 "lastClassName": "c15",
                                                 "rules": Array [
@@ -5964,7 +5967,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "displayName": "Button__StyledButton",
                                               "foldedComponentIds": Array [],
                                               "render": [Function],
-                                              "styledComponentId": "Button__StyledButton-gyjjyq-0",
+                                              "styledComponentId": "Button__StyledButton-sc-1yphocy-0",
                                               "target": "button",
                                               "toString": [Function],
                                               "warnTooManyClasses": [Function],

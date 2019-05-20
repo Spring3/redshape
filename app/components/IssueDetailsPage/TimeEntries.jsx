@@ -9,7 +9,7 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
 import InfiniteScroll from '../../components/InfiniteScroll';
-import ProcessIndicator from '../../components/ProcessIndicator';
+import ProcessIndicator, { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import Button, { GhostButton } from '../../components/Button';
 import DateComponent from '../../components/Date';
 import Dialog from '../../components/Dialog';
@@ -55,6 +55,7 @@ const TimeEntriesContainer = styled.div`
 `;
 
 const TimeEntriesList = styled.ul`
+  position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
   border-radius: 3px;

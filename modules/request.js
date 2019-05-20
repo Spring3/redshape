@@ -82,9 +82,6 @@ const authorizedRequest = (config = {}) => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
         'X-Redmine-API-Key': instance.defaults.headers['X-Redmine-API-Key'],
         ...(config.headers || {})
       }
@@ -108,9 +105,6 @@ const request = (config = {}) => {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
       ...(config.headers || {})
     }
   });

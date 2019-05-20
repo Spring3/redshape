@@ -3,6 +3,7 @@
 exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 .c0 {
   position: relative;
+  min-height: 200px;
 }
 
 .c0 tbody {

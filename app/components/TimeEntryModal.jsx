@@ -12,6 +12,7 @@ import MarkdownEditor from '../components/MarkdownEditor';
 import ErrorMessage from '../components/ErrorMessage';
 import DatePicker from '../components/DatePicker';
 import Modal from '../components/Modal';
+import ProcessIndicator from '../components/ProcessIndicator';
 
 import actions from '../actions';
 
@@ -21,14 +22,18 @@ const FlexRow = styled.div`
 `;
 
 const OptionButtons = styled.div`
+  position: relative;
   margin-top: 20px;
   padding-top: 20px;
   border-top: 2px solid ${props => props.theme.bgDark};
   display: flex;
-  justify-content: space-between;
   
   button {
     padding: 8px 15px;
+  }
+
+  div {
+    margin-left: 20px;
   }
 `;
 
@@ -263,22 +268,25 @@ class TimeEntryModal extends Component {
                 <Button
                   id="btn-update"
                   onClick={this.onUpdate}
+                  disabled={time.isFetching}
                   palette='success'
                 >
                 Submit
                 </Button>
+                { time.isFetching && (<ProcessIndicator />) }
               </OptionButtons>
             )
             : (
               <OptionButtons>
                 <Button
                   id="btn-add"
-                  disabled={!wasModified}
+                  disabled={!wasModified || time.isFetching}
                   onClick={this.onAdd}
                   palette='success'
                 >
                 Submit
                 </Button>
+                { time.isFetching && (<ProcessIndicator />) }
               </OptionButtons>
             )
           }

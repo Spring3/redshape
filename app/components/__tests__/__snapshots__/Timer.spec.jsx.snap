@@ -217,7 +217,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-gyjjyq-1",
+                              "componentId": "Button__StyledLink-sc-1yphocy-1",
                               "isStatic": false,
                               "lastClassName": "c2",
                               "rules": Array [
@@ -233,7 +233,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "displayName": "Button__StyledLink",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "Button__StyledLink-gyjjyq-1",
+                            "styledComponentId": "Button__StyledLink-sc-1yphocy-1",
                             "target": "a",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],
@@ -320,7 +320,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-gyjjyq-1",
+                              "componentId": "Button__StyledLink-sc-1yphocy-1",
                               "isStatic": false,
                               "lastClassName": "c2",
                               "rules": Array [
@@ -336,7 +336,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "displayName": "Button__StyledLink",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "Button__StyledLink-gyjjyq-1",
+                            "styledComponentId": "Button__StyledLink-sc-1yphocy-1",
                             "target": "a",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],

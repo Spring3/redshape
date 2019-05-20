@@ -8,7 +8,7 @@ import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
 import InfiniteScroll from '../InfiniteScroll';
-import ProcessIndicator from '../ProcessIndicator';
+import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
 import Table from '../Table';
 import Date from '../Date';
 
@@ -34,19 +34,10 @@ const colorMap = {
   'normal': 'yellow'
 };
 
-const TableProcessIndicator = styled.tr`
+const ProcessIndicatorContainer = styled(ProcessIndicator)`
+  justify-content: center;
   position: relative;
-  div {
-    position: absolute;
-    left: 46%;
-    bottom: -15px;
-
-    span {
-      position: relative;
-      top: 10px;
-      left: 70px;
-    }
-  }
+  top: 100px;
 `;
 
 class IssuesTable extends Component {
@@ -103,11 +94,11 @@ class IssuesTable extends Component {
     const userTasks = issues.data;
     return (
       <Table ref={this.tableRef}>
+        { (!userTasks.length || issues.isFetching) && (<OverlayProcessIndicator />) }
         <InfiniteScroll
           load={this.loadIssuePage}
           isEnd={issues.data.length === issues.totalCount}
           hasMore={!issues.isFetching && !issues.error && issues.data.length < issues.totalCount}
-          loadIndicator={<TableProcessIndicator><ProcessIndicator /></TableProcessIndicator>}
           container={this.tableRef.current}
           immediate={true}
         >

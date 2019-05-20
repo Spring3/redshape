@@ -106,8 +106,52 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
   color: #909090;
 }
 
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c14 span {
+  white-space: nowrap;
+  padding-left: 20px;
+  vertical-align: middle;
+}
+
+.c15 {
+  width: 2em;
+  height: 2em;
+  background-color: #FF7079;
+  -webkit-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+  -webkit-animation: bKxTBf 1s infinite;
+  animation: bKxTBf 1s infinite;
+}
+
+.c13 {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  z-index: 5;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px #E9E9E9;
+  padding: 20px;
+  border-radius: 3px;
+}
+
 .c12 {
   position: relative;
+  min-height: 200px;
 }
 
 .c12 tbody {
@@ -501,6 +545,16 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
       width="100%"
     >
       <tbody>
+        <div
+          className="c13 c14"
+        >
+          <div
+            className="c15"
+          />
+          <span>
+            Please Wait...
+          </span>
+        </div>
         <tr>
           <th
             className=""
