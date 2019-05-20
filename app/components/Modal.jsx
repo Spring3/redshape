@@ -13,11 +13,12 @@ class Modal extends Component {
     const rgb = intColors.join(',');
     this.modalStyles = {
       overlay: {
-        background: `rgba(${rgb}, 0.93)`,
+        background: `rgba(${rgb}, 0.9)`,
       },
       modal: {
-        boxShadow: 'none',
-        background: 'transparent'
+        boxShadow: `0px 0px 20px ${theme.shadow}`,
+        background: theme.bg,
+        borderRadius: 3
       }
     };
   }
@@ -26,6 +27,10 @@ class Modal extends Component {
     if (this.props.open) {
       document.body.children[0].classList.add('react-confirm-alert-blur');
     }
+  }
+
+  componentWillUnmount() {
+    document.body.children[0].classList.remove('react-confirm-alert-blur');
   }
 
   onCloseProxy = () => {

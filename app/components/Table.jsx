@@ -14,7 +14,7 @@ const StyledTable = styled.table`
 
     tr {
       th {
-        padding: 15px;
+        padding: 15px 5px;
         position: sticky;
         top: 0;
         background: ${props => props.theme.bgDark};
@@ -36,7 +36,7 @@ const StyledTable = styled.table`
       }
 
       td {
-        padding: 15px;
+        padding: 15px 5px;
         font-weight: 500;
         transition: background ease ${props => props.theme.transitionTime};
       }

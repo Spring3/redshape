@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _debounce from 'lodash/debounce';
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -52,6 +52,8 @@ class TimeEntryModal extends Component {
       },
       wasModified: false
     };
+
+    this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
   }
 
   componentDidUpdate(oldProps) {
@@ -247,7 +249,7 @@ class TimeEntryModal extends Component {
           </FlexRow>
           <Label label="Comments" htmlFor="comments">
             <MarkdownEditor
-              onChange={this.onCommentsChange}
+              onChange={this.debouncedCommentsChange}
               onBlur={this.runValidation}
               initialValue={comments}
             />

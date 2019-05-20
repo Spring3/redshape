@@ -4,7 +4,7 @@ const axios = require('./request');
 
 
 const openExternalUrl = url => ((url && url.startsWith('http'))
-  ? axios.default.head(url)
+  ? Promise.resolve()
   : Promise.reject(new Error('Intercepted suspicious url', url))
 ).then(() => shell.openExternal(url))
   .catch(error => console.error('Error when opening external url', url, error.message));

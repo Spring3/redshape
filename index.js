@@ -3,8 +3,17 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path').posix;
-const { app, BrowserWindow, ipcMain, session, Menu, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, session, Menu } = require('electron');
 const utils = require('electron-util');
+
+// finalHandler({
+//   showDialog: true,
+//   reportButton: error => utils.openNewGitHubIssue({
+//     user: 'Spring3',
+//     repo: 'redtime',
+//     body: `Please describe the issue as detailed as you can\n\n---\n### Error Stack:\n \`\`\`\n${error.stack}\n\`\`\``
+//   })
+// });
 
 dotenv.load({ silent: true });
 
@@ -120,8 +129,9 @@ const initializeMenu = () => {
         {
           label: 'Report An Issue',
           click: () => utils.openNewGitHubIssue({
-            repoUrl: 'https://github.com/Spring3/redtime',
-            body: `### Debug Info:\n \`\`\`\n${utils.debugInfo()}\n\`\`\``
+            user: 'Spring3',
+            repo: 'redtime',
+            body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${utils.debugInfo()}\n\`\`\``
           })
         },
         // {

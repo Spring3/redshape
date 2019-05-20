@@ -19,7 +19,6 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${props => props.theme.bgDark};
   border-radius: 3px;
 
   h2 {
@@ -30,12 +29,11 @@ const HeaderContainer = styled.div`
 
   & > div {
     margin-right: 15px;
-    background: ${props => props.theme.bgDark};
     padding: 0px 5px;
     border-radius: 3px;
 
     button {
-      background: ${props => props.theme.bgDark};
+      background: ${props => props.theme.bg};
       margin: 0px 5px;
     }
   }
@@ -53,15 +51,18 @@ const TimeEntriesContainer = styled.div`
   background: white;
   padding-top: 35px;
   max-height: 550px;
-  min-width: 340px;
+  min-width: 350px;
 `;
 
 const TimeEntriesList = styled.ul`
   list-style-type: none;
-  padding: 0;
+  padding: 0px 10px 10px 10px;
+  border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
+  background: ${props => props.theme.bgDark};
+  box-shadow: inset 0px 0px 10px 0px ${props => props.theme.bgDark};
 
   li {
     cursor: pointer;
@@ -70,6 +71,7 @@ const TimeEntriesList = styled.ul`
     margin: 10px auto 0px auto;
     border-radius: 3px;
     border: 2px solid transparent;
+    background: ${props => props.theme.bg};
 
     div:first-child {
       display: flex;
@@ -105,12 +107,9 @@ const TimeEntriesList = styled.ul`
       min-width: 100%;
       width: 0;
       line-height: 2;
-      min-width: 320px;
     }
 
     &:hover {
-      background: ${props => props.theme.bgDark};
-
       div:first-child {
         a {
           visibility: visible;

@@ -1,4 +1,5 @@
 const axios = require('axios');
+
 const storage = require('./storage');
 
 let instance;
@@ -58,7 +59,8 @@ const handleReject = (error) => {
     }
     errorMessage = `${errorMessage} (${error.statusText || error.message})`;
 
-    return Promise.reject(new Error(errorMessage));
+    const err = new Error(errorMessage);
+    return Promise.reject(err);
   }
   return undefined;
 };

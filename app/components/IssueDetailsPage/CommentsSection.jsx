@@ -10,7 +10,7 @@ import DateComponent from '../Date';
 const Section = styled.section`
   background: white;
   padding: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 `;
 
 const SmallNotice = styled.p`
@@ -26,19 +26,27 @@ const SmallNotice = styled.p`
 
 const Comments = styled.ul`
   list-style-type: none;
-  padding: 0;
+  padding: 20px 0px;
+  margin: 0px;
+  border-radius: 3px;
+  background: ${props => props.theme.bgDark};
   
+  li:first-child {
+    margin-top: 20px;
+  }
+
   li {
-    background: ${props => props.theme.bgDark};
+    background: ${props => props.theme.bg};
+    box-shadow: 0px 0px 5px 0px ${props => props.theme.shadow};
     display: block;
     border-radius: 3px;
-    margin-bottom: 20px;
+    margin: 20px;
 
     div.commentsHeader {
       display: flex;
       justify-content: space-between;
-      padding: 20px;
-      border-bottom: 2px solid ${props => props.theme.bg};
+      padding: 10px 20px;
+      border-bottom: 2px solid ${props => props.theme.bgDark};
 
       ${({theme}) => css`
         span:first-child {
@@ -67,10 +75,16 @@ const Comments = styled.ul`
 `;
 
 const CommentsForm = styled.div`
-  margin-top: 40px;
+  background: ${props => props.theme.bgDark};
   padding: 20px;
   border-radius: 3px;
   border: 2px solid ${props => props.theme.bgDark};
+  #commentsForm {
+    background: ${props => props.theme.bg};
+    padding: 20px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px ${props => props.theme.shadow};
+  }
 `;
 
 class CommentsSection extends Component {
@@ -100,6 +114,7 @@ class CommentsSection extends Component {
           </Comments>
           <CommentsForm>
             <MarkdownEditor
+              id="commentsForm"
               onSubmit={this.sendComments}
             />
             <p>

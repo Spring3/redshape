@@ -10,5 +10,6 @@ export default {
   red: '#FF634D',
   yellow: '#FFDA77',
   green: '#6CCA51',
+  shadow: '#E9E9E9',
   transitionTime: '.2s'
 };

@@ -15,7 +15,6 @@ const Grid = styled.div`
   display: grid;
   padding: 20px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-gap: 20px;
   margin-bottom: 60px;
 `;
 
