@@ -169,7 +169,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
 .c0 {
   background: white;
   padding: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 .c14 {
@@ -185,14 +185,22 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
 
 .c1 {
   list-style-type: none;
-  padding: 0;
+  padding: 20px 0px;
+  margin: 0px;
+  border-radius: 3px;
+  background: #F9F9F9;
+}
+
+.c1 li:first-child {
+  margin-top: 20px;
 }
 
 .c1 li {
-  background: #F9F9F9;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 5px 0px #E9E9E9;
   display: block;
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .c1 li div.commentsHeader {
@@ -204,8 +212,8 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 20px;
-  border-bottom: 2px solid #FFFFFF;
+  padding: 10px 20px;
+  border-bottom: 2px solid #F9F9F9;
 }
 
 .c1 li div.commentsHeader span:first-child {
@@ -230,10 +238,17 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
 }
 
 .c4 {
-  margin-top: 40px;
+  background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
+}
+
+.c4 #commentsForm {
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px #E9E9E9;
 }
 
 <section
@@ -314,7 +329,9 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
     <div
       className="c4"
     >
-      <div>
+      <div
+        id="commentsForm"
+      >
         <ul
           className="c5"
         >

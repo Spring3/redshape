@@ -14,7 +14,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 }
 
 .c0 tbody tr th {
-  padding: 15px;
+  padding: 15px 5px;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -39,7 +39,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 }
 
 .c0 tbody tr td {
-  padding: 15px;
+  padding: 15px 5px;
   font-weight: 500;
   -webkit-transition: background ease .2s;
   transition: background ease .2s;

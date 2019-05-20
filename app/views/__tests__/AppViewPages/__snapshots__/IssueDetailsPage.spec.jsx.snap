@@ -257,7 +257,6 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  background: #F9F9F9;
   border-radius: 3px;
 }
 
@@ -269,13 +268,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 
 .c16 > div {
   margin-right: 15px;
-  background: #F9F9F9;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
 .c16 > div button {
-  background: #F9F9F9;
+  background: #FFFFFF;
   margin: 0px 5px;
 }
 
@@ -295,15 +293,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: white;
   padding-top: 35px;
   max-height: 550px;
-  min-width: 340px;
+  min-width: 350px;
 }
 
 .c19 {
   list-style-type: none;
-  padding: 0;
+  padding: 0px 10px 10px 10px;
+  border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
+  background: #F9F9F9;
+  box-shadow: inset 0px 0px 10px 0px #F9F9F9;
 }
 
 .c19 li {
@@ -313,6 +314,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin: 10px auto 0px auto;
   border-radius: 3px;
   border: 2px solid transparent;
+  background: #FFFFFF;
 }
 
 .c19 li div:first-child {
@@ -368,11 +370,6 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-width: 100%;
   width: 0;
   line-height: 2;
-  min-width: 320px;
-}
-
-.c19 li:hover {
-  background: #F9F9F9;
 }
 
 .c19 li:hover div:first-child a {
@@ -382,7 +379,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 .c20 {
   background: white;
   padding: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 .c31 {
@@ -398,14 +395,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 
 .c21 {
   list-style-type: none;
-  padding: 0;
+  padding: 20px 0px;
+  margin: 0px;
+  border-radius: 3px;
+  background: #F9F9F9;
+}
+
+.c21 li:first-child {
+  margin-top: 20px;
 }
 
 .c21 li {
-  background: #F9F9F9;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 5px 0px #E9E9E9;
   display: block;
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .c21 li div.commentsHeader {
@@ -417,8 +422,8 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 20px;
-  border-bottom: 2px solid #FFFFFF;
+  padding: 10px 20px;
+  border-bottom: 2px solid #F9F9F9;
 }
 
 .c21 li div.commentsHeader span:first-child {
@@ -443,10 +448,17 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 .c22 {
-  margin-top: 40px;
+  background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
+}
+
+.c22 #commentsForm {
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px #E9E9E9;
 }
 
 .c1 {
@@ -825,7 +837,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       <div
         className="c22"
       >
-        <div>
+        <div
+          id="commentsForm"
+        >
           <ul
             className="c23"
           >

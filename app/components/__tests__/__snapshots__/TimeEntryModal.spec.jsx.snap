@@ -444,6 +444,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
         "minorText": "#909090",
         "normalText": "#3F3844",
         "red": "#FF634D",
+        "shadow": "#E9E9E9",
         "transitionTime": ".2s",
         "yellow": "#FFDA77",
       }
@@ -521,6 +522,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
             "minorText": "#909090",
             "normalText": "#3F3844",
             "red": "#FF634D",
+            "shadow": "#E9E9E9",
             "transitionTime": ".2s",
             "yellow": "#FFDA77",
           }
@@ -582,6 +584,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
               "minorText": "#909090",
               "normalText": "#3F3844",
               "red": "#FF634D",
+              "shadow": "#E9E9E9",
               "transitionTime": ".2s",
               "yellow": "#FFDA77",
             }
@@ -642,6 +645,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                   "minorText": "#909090",
                   "normalText": "#3F3844",
                   "red": "#FF634D",
+                  "shadow": "#E9E9E9",
                   "transitionTime": ".2s",
                   "yellow": "#FFDA77",
                 }
@@ -688,11 +692,12 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                 styles={
                   Object {
                     "modal": Object {
-                      "background": "transparent",
-                      "boxShadow": "none",
+                      "background": "#FFFFFF",
+                      "borderRadius": 3,
+                      "boxShadow": "0px 0px 20px #E9E9E9",
                     },
                     "overlay": Object {
-                      "background": "rgba(255,255,255, 0.93)",
+                      "background": "rgba(255,255,255, 0.9)",
                     },
                   }
                 }
@@ -708,6 +713,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                     "minorText": "#909090",
                     "normalText": "#3F3844",
                     "red": "#FF634D",
+                    "shadow": "#E9E9E9",
                     "transitionTime": ".2s",
                     "yellow": "#FFDA77",
                   }
@@ -1139,11 +1145,11 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                       >
                         <div
                           class="styles_overlay__CLSq- styles_overlayCenter__YHoO7 styles_transitionEnter__3j_-a styles_transitionEnterActive___eQs7"
-                          style="background: rgba(255, 255, 255, 0.93);"
+                          style="background: rgba(255, 255, 255, 0.9);"
                         >
                           <div
                             class="styles_modal__gNwvD"
-                            style="box-shadow: none; background: transparent;"
+                            style="box-shadow: 0px 0px 20px #E9E9E9; background: rgb(255, 255, 255); border-radius: 3px;"
                           >
                             <div
                               class="form-group undefined c0"
@@ -1728,7 +1734,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                           onClick={[Function]}
                           style={
                             Object {
-                              "background": "rgba(255,255,255, 0.93)",
+                              "background": "rgba(255,255,255, 0.9)",
                             }
                           }
                         >
@@ -1740,8 +1746,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                             onMouseUp={[Function]}
                             style={
                               Object {
-                                "background": "transparent",
-                                "boxShadow": "none",
+                                "background": "#FFFFFF",
+                                "borderRadius": 3,
+                                "boxShadow": "0px 0px 20px #E9E9E9",
                               }
                             }
                           >
@@ -3217,7 +3224,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "$$typeof": Symbol(react.forward_ref),
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
-                                      "componentId": "TimeEntryModal__FlexRow-neua1m-0",
+                                      "componentId": "TimeEntryModal__FlexRow-ovksla-0",
                                       "isStatic": true,
                                       "lastClassName": "c2",
                                       "rules": Array [
@@ -3227,7 +3234,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "displayName": "TimeEntryModal__FlexRow",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
-                                    "styledComponentId": "TimeEntryModal__FlexRow-neua1m-0",
+                                    "styledComponentId": "TimeEntryModal__FlexRow-ovksla-0",
                                     "target": "div",
                                     "toString": [Function],
                                     "warnTooManyClasses": [Function],
@@ -3493,6 +3500,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     "minorText": "#909090",
                                                     "normalText": "#3F3844",
                                                     "red": "#FF634D",
+                                                    "shadow": "#E9E9E9",
                                                     "transitionTime": ".2s",
                                                     "yellow": "#FFDA77",
                                                   }
@@ -3778,7 +3786,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "$$typeof": Symbol(react.forward_ref),
                                                 "attrs": Array [],
                                                 "componentStyle": ComponentStyle {
-                                                  "componentId": "MarkdownEditor__MarkdownOptionsList-sc-1gfee0s-1",
+                                                  "componentId": "MarkdownEditor__MarkdownOptionsList-d4lru7-1",
                                                   "isStatic": true,
                                                   "lastClassName": "c5",
                                                   "rules": Array [
@@ -3790,7 +3798,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "displayName": "MarkdownEditor__MarkdownOptionsList",
                                                 "foldedComponentIds": Array [],
                                                 "render": [Function],
-                                                "styledComponentId": "MarkdownEditor__MarkdownOptionsList-sc-1gfee0s-1",
+                                                "styledComponentId": "MarkdownEditor__MarkdownOptionsList-d4lru7-1",
                                                 "target": "ul",
                                                 "toString": [Function],
                                                 "warnTooManyClasses": [Function],
@@ -5703,7 +5711,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "$$typeof": Symbol(react.forward_ref),
                                                 "attrs": Array [],
                                                 "componentStyle": ComponentStyle {
-                                                  "componentId": "MarkdownEditor__ModifiedTextArea-sc-1gfee0s-2",
+                                                  "componentId": "MarkdownEditor__ModifiedTextArea-d4lru7-2",
                                                   "isStatic": false,
                                                   "lastClassName": "c12",
                                                   "rules": Array [
@@ -5719,7 +5727,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "displayName": "MarkdownEditor__ModifiedTextArea",
                                                 "foldedComponentIds": Array [],
                                                 "render": [Function],
-                                                "styledComponentId": "MarkdownEditor__ModifiedTextArea-sc-1gfee0s-2",
+                                                "styledComponentId": "MarkdownEditor__ModifiedTextArea-d4lru7-2",
                                                 "target": Object {
                                                   "$$typeof": Symbol(react.forward_ref),
                                                   "render": [Function],
@@ -5851,7 +5859,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "$$typeof": Symbol(react.forward_ref),
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
-                                      "componentId": "TimeEntryModal__OptionButtons-neua1m-1",
+                                      "componentId": "TimeEntryModal__OptionButtons-ovksla-1",
                                       "isStatic": false,
                                       "lastClassName": "c14",
                                       "rules": Array [
@@ -5863,7 +5871,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "displayName": "TimeEntryModal__OptionButtons",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
-                                    "styledComponentId": "TimeEntryModal__OptionButtons-neua1m-1",
+                                    "styledComponentId": "TimeEntryModal__OptionButtons-ovksla-1",
                                     "target": "div",
                                     "toString": [Function],
                                     "warnTooManyClasses": [Function],
@@ -5898,6 +5906,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                           "minorText": "#909090",
                                           "normalText": "#3F3844",
                                           "red": "#FF634D",
+                                          "shadow": "#E9E9E9",
                                           "transitionTime": ".2s",
                                           "yellow": "#FFDA77",
                                         }
@@ -5927,6 +5936,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "minorText": "#909090",
                                             "normalText": "#3F3844",
                                             "red": "#FF634D",
+                                            "shadow": "#E9E9E9",
                                             "transitionTime": ".2s",
                                             "yellow": "#FFDA77",
                                           }
@@ -5982,6 +5992,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "minorText": "#909090",
                                               "normalText": "#3F3844",
                                               "red": "#FF634D",
+                                              "shadow": "#E9E9E9",
                                               "transitionTime": ".2s",
                                               "yellow": "#FFDA77",
                                             }
@@ -6030,11 +6041,12 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                               styles={
                                 Object {
                                   "modal": Object {
-                                    "background": "transparent",
-                                    "boxShadow": "none",
+                                    "background": "#FFFFFF",
+                                    "borderRadius": 3,
+                                    "boxShadow": "0px 0px 20px #E9E9E9",
                                   },
                                   "overlay": Object {
-                                    "background": "rgba(255,255,255, 0.93)",
+                                    "background": "rgba(255,255,255, 0.9)",
                                   },
                                 }
                               }

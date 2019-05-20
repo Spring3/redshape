@@ -103,7 +103,6 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  background: #F9F9F9;
   border-radius: 3px;
 }
 
@@ -115,13 +114,12 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 
 .c1 > div {
   margin-right: 15px;
-  background: #F9F9F9;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
 .c1 > div button {
-  background: #F9F9F9;
+  background: #FFFFFF;
   margin: 0px 5px;
 }
 
@@ -141,15 +139,18 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   background: white;
   padding-top: 35px;
   max-height: 550px;
-  min-width: 340px;
+  min-width: 350px;
 }
 
 .c5 {
   list-style-type: none;
-  padding: 0;
+  padding: 0px 10px 10px 10px;
+  border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
+  background: #F9F9F9;
+  box-shadow: inset 0px 0px 10px 0px #F9F9F9;
 }
 
 .c5 li {
@@ -159,6 +160,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   margin: 10px auto 0px auto;
   border-radius: 3px;
   border: 2px solid transparent;
+  background: #FFFFFF;
 }
 
 .c5 li div:first-child {
@@ -214,11 +216,6 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   min-width: 100%;
   width: 0;
   line-height: 2;
-  min-width: 320px;
-}
-
-.c5 li:hover {
-  background: #F9F9F9;
 }
 
 .c5 li:hover div:first-child a {

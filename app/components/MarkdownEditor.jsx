@@ -19,7 +19,6 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
-
 import { openExternalUrl, xssFilter } from '../../modules/utils';
 
 import TextArea from './TextArea';
@@ -422,7 +421,7 @@ class MarkdownText extends PureComponent {
   interceptIframeRedirect = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    openExternalUrl(e.target.href);
+    openExternalUrl(e.target.getAttribute('href') || e.target.innerText);
   }
 
   adjustIframeSize = () => {
