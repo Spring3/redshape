@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import _ from 'lodash';
+import _get from 'lodash/get';
 import moment from 'moment';
 
 import actions from '../actions';
@@ -44,7 +44,7 @@ class AppView extends Component {
 
   onTrackingStop = (value, trackedIssue) => {
     const { userId, userName, projects } = this.props;
-    const activities = _.get(projects[trackedIssue.project.id], 'activities', []);
+    const activities = _get(projects[trackedIssue.project.id], 'activities', []);
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       showTimeEntryModal: true,
@@ -54,7 +54,7 @@ class AppView extends Component {
           id: trackedIssue.id,
           name: trackedIssue.subject
         },
-        hours: (value / 360000).toFixed(2),
+        hours: (value / 3600000).toFixed(2),
         comments: '',
         project: {
           id: trackedIssue.project.id,

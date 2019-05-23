@@ -1770,7 +1770,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "$$typeof": Symbol(react.forward_ref),
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
-                                        "componentId": "Input__FormGroup-v24ypt-4",
+                                        "componentId": "Input__FormGroup-qdoik-4",
                                         "isStatic": false,
                                         "lastClassName": "c0",
                                         "rules": Array [
@@ -1782,7 +1782,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "displayName": "Input__FormGroup",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
-                                      "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                      "styledComponentId": "Input__FormGroup-qdoik-4",
                                       "target": "div",
                                       "toString": [Function],
                                       "warnTooManyClasses": [Function],
@@ -1803,7 +1803,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "$$typeof": Symbol(react.forward_ref),
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
-                                              "componentId": "Input__H4Label-v24ypt-5",
+                                              "componentId": "Input__H4Label-qdoik-5",
                                               "isStatic": false,
                                               "lastClassName": "c1",
                                               "rules": Array [
@@ -1815,7 +1815,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "displayName": "Input__H4Label",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
-                                            "styledComponentId": "Input__H4Label-v24ypt-5",
+                                            "styledComponentId": "Input__H4Label-qdoik-5",
                                             "target": "h4",
                                             "toString": [Function],
                                             "warnTooManyClasses": [Function],
@@ -1858,7 +1858,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "$$typeof": Symbol(react.forward_ref),
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
-                                        "componentId": "Input__FormGroup-v24ypt-4",
+                                        "componentId": "Input__FormGroup-qdoik-4",
                                         "isStatic": false,
                                         "lastClassName": "c0",
                                         "rules": Array [
@@ -1870,7 +1870,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "displayName": "Input__FormGroup",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
-                                      "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                      "styledComponentId": "Input__FormGroup-qdoik-4",
                                       "target": "div",
                                       "toString": [Function],
                                       "warnTooManyClasses": [Function],
@@ -1891,7 +1891,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "$$typeof": Symbol(react.forward_ref),
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
-                                              "componentId": "Input__H4Label-v24ypt-5",
+                                              "componentId": "Input__H4Label-qdoik-5",
                                               "isStatic": false,
                                               "lastClassName": "c1",
                                               "rules": Array [
@@ -1903,7 +1903,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "displayName": "Input__H4Label",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
-                                            "styledComponentId": "Input__H4Label-v24ypt-5",
+                                            "styledComponentId": "Input__H4Label-qdoik-5",
                                             "target": "h4",
                                             "toString": [Function],
                                             "warnTooManyClasses": [Function],
@@ -1949,7 +1949,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "$$typeof": Symbol(react.forward_ref),
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
-                                        "componentId": "Input__FormGroup-v24ypt-4",
+                                        "componentId": "Input__FormGroup-qdoik-4",
                                         "isStatic": false,
                                         "lastClassName": "c0",
                                         "rules": Array [
@@ -1961,7 +1961,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "displayName": "Input__FormGroup",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
-                                      "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                      "styledComponentId": "Input__FormGroup-qdoik-4",
                                       "target": "div",
                                       "toString": [Function],
                                       "warnTooManyClasses": [Function],
@@ -1982,7 +1982,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "$$typeof": Symbol(react.forward_ref),
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
-                                              "componentId": "Input__H4Label-v24ypt-5",
+                                              "componentId": "Input__H4Label-qdoik-5",
                                               "isStatic": false,
                                               "lastClassName": "c1",
                                               "rules": Array [
@@ -1994,7 +1994,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "displayName": "Input__H4Label",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
-                                            "styledComponentId": "Input__H4Label-v24ypt-5",
+                                            "styledComponentId": "Input__H4Label-qdoik-5",
                                             "target": "h4",
                                             "toString": [Function],
                                             "warnTooManyClasses": [Function],
@@ -3265,7 +3265,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "$$typeof": Symbol(react.forward_ref),
                                               "attrs": Array [],
                                               "componentStyle": ComponentStyle {
-                                                "componentId": "Input__FormGroup-v24ypt-4",
+                                                "componentId": "Input__FormGroup-qdoik-4",
                                                 "isStatic": false,
                                                 "lastClassName": "c0",
                                                 "rules": Array [
@@ -3277,7 +3277,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "displayName": "Input__FormGroup",
                                               "foldedComponentIds": Array [],
                                               "render": [Function],
-                                              "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                              "styledComponentId": "Input__FormGroup-qdoik-4",
                                               "target": "div",
                                               "toString": [Function],
                                               "warnTooManyClasses": [Function],
@@ -3298,7 +3298,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     "$$typeof": Symbol(react.forward_ref),
                                                     "attrs": Array [],
                                                     "componentStyle": ComponentStyle {
-                                                      "componentId": "Input__H4Label-v24ypt-5",
+                                                      "componentId": "Input__H4Label-qdoik-5",
                                                       "isStatic": false,
                                                       "lastClassName": "c1",
                                                       "rules": Array [
@@ -3310,7 +3310,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     "displayName": "Input__H4Label",
                                                     "foldedComponentIds": Array [],
                                                     "render": [Function],
-                                                    "styledComponentId": "Input__H4Label-v24ypt-5",
+                                                    "styledComponentId": "Input__H4Label-qdoik-5",
                                                     "target": "h4",
                                                     "toString": [Function],
                                                     "warnTooManyClasses": [Function],
@@ -3352,7 +3352,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "Input__StyledInput-v24ypt-0",
+                                                        "componentId": "Input__StyledInput-qdoik-0",
                                                         "isStatic": false,
                                                         "lastClassName": "c3",
                                                         "rules": Array [
@@ -3364,7 +3364,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "Input__StyledInput",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "Input__StyledInput-v24ypt-0",
+                                                      "styledComponentId": "Input__StyledInput-qdoik-0",
                                                       "target": "input",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -3415,7 +3415,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "$$typeof": Symbol(react.forward_ref),
                                               "attrs": Array [],
                                               "componentStyle": ComponentStyle {
-                                                "componentId": "Input__FormGroup-v24ypt-4",
+                                                "componentId": "Input__FormGroup-qdoik-4",
                                                 "isStatic": false,
                                                 "lastClassName": "c0",
                                                 "rules": Array [
@@ -3427,7 +3427,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "displayName": "Input__FormGroup",
                                               "foldedComponentIds": Array [],
                                               "render": [Function],
-                                              "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                              "styledComponentId": "Input__FormGroup-qdoik-4",
                                               "target": "div",
                                               "toString": [Function],
                                               "warnTooManyClasses": [Function],
@@ -3448,7 +3448,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     "$$typeof": Symbol(react.forward_ref),
                                                     "attrs": Array [],
                                                     "componentStyle": ComponentStyle {
-                                                      "componentId": "Input__H4Label-v24ypt-5",
+                                                      "componentId": "Input__H4Label-qdoik-5",
                                                       "isStatic": false,
                                                       "lastClassName": "c1",
                                                       "rules": Array [
@@ -3460,7 +3460,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     "displayName": "Input__H4Label",
                                                     "foldedComponentIds": Array [],
                                                     "render": [Function],
-                                                    "styledComponentId": "Input__H4Label-v24ypt-5",
+                                                    "styledComponentId": "Input__H4Label-qdoik-5",
                                                     "target": "h4",
                                                     "toString": [Function],
                                                     "warnTooManyClasses": [Function],
@@ -3521,7 +3521,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "$$typeof": Symbol(react.forward_ref),
                                                         "attrs": Array [],
                                                         "componentStyle": ComponentStyle {
-                                                          "componentId": "DatePicker__StyledDatePicker-sc-1kolmcy-0",
+                                                          "componentId": "DatePicker__StyledDatePicker-sc-1xssxj3-0",
                                                           "isStatic": false,
                                                           "lastClassName": "c4",
                                                           "rules": Array [
@@ -3551,7 +3551,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "displayName": "DatePicker__StyledDatePicker",
                                                         "foldedComponentIds": Array [],
                                                         "render": [Function],
-                                                        "styledComponentId": "DatePicker__StyledDatePicker-sc-1kolmcy-0",
+                                                        "styledComponentId": "DatePicker__StyledDatePicker-sc-1xssxj3-0",
                                                         "target": "div",
                                                         "toString": [Function],
                                                         "warnTooManyClasses": [Function],
@@ -3632,7 +3632,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                       "$$typeof": Symbol(react.forward_ref),
                                                                       "attrs": Array [],
                                                                       "componentStyle": ComponentStyle {
-                                                                        "componentId": "Input__StyledInput-v24ypt-0",
+                                                                        "componentId": "Input__StyledInput-qdoik-0",
                                                                         "isStatic": false,
                                                                         "lastClassName": "c3",
                                                                         "rules": Array [
@@ -3644,7 +3644,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                       "displayName": "Input__StyledInput",
                                                                       "foldedComponentIds": Array [],
                                                                       "render": [Function],
-                                                                      "styledComponentId": "Input__StyledInput-v24ypt-0",
+                                                                      "styledComponentId": "Input__StyledInput-qdoik-0",
                                                                       "target": "input",
                                                                       "toString": [Function],
                                                                       "warnTooManyClasses": [Function],
@@ -3711,7 +3711,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "$$typeof": Symbol(react.forward_ref),
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
-                                        "componentId": "Input__FormGroup-v24ypt-4",
+                                        "componentId": "Input__FormGroup-qdoik-4",
                                         "isStatic": false,
                                         "lastClassName": "c0",
                                         "rules": Array [
@@ -3723,7 +3723,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                       "displayName": "Input__FormGroup",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
-                                      "styledComponentId": "Input__FormGroup-v24ypt-4",
+                                      "styledComponentId": "Input__FormGroup-qdoik-4",
                                       "target": "div",
                                       "toString": [Function],
                                       "warnTooManyClasses": [Function],
@@ -3744,7 +3744,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "$$typeof": Symbol(react.forward_ref),
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
-                                              "componentId": "Input__H4Label-v24ypt-5",
+                                              "componentId": "Input__H4Label-qdoik-5",
                                               "isStatic": false,
                                               "lastClassName": "c1",
                                               "rules": Array [
@@ -3756,7 +3756,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             "displayName": "Input__H4Label",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
-                                            "styledComponentId": "Input__H4Label-v24ypt-5",
+                                            "styledComponentId": "Input__H4Label-qdoik-5",
                                             "target": "h4",
                                             "toString": [Function],
                                             "warnTooManyClasses": [Function],
@@ -3861,7 +3861,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -3873,7 +3873,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -3998,7 +3998,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4010,7 +4010,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4135,7 +4135,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4147,7 +4147,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4272,7 +4272,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4284,7 +4284,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4409,7 +4409,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4421,7 +4421,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4546,7 +4546,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4558,7 +4558,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4683,7 +4683,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4695,7 +4695,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4820,7 +4820,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4832,7 +4832,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -4957,7 +4957,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -4969,7 +4969,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5094,7 +5094,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -5106,7 +5106,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5231,7 +5231,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -5243,7 +5243,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5368,7 +5368,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -5380,7 +5380,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5505,7 +5505,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "$$typeof": Symbol(react.forward_ref),
                                                               "attrs": Array [],
                                                               "componentStyle": ComponentStyle {
-                                                                "componentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                                "componentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                                 "isStatic": true,
                                                                 "lastClassName": "c8",
                                                                 "rules": Array [
@@ -5517,7 +5517,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "displayName": "Tooltip__TooltipContainer",
                                                               "foldedComponentIds": Array [],
                                                               "render": [Function],
-                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-1yytjl7-1",
+                                                              "styledComponentId": "Tooltip__TooltipContainer-sc-5qz4om-1",
                                                               "target": "div",
                                                               "toString": [Function],
                                                               "warnTooManyClasses": [Function],
@@ -5798,7 +5798,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "$$typeof": Symbol(react.forward_ref),
                                                         "attrs": Array [],
                                                         "componentStyle": ComponentStyle {
-                                                          "componentId": "TextArea__StyledTextArea-sc-1ncyxaw-0",
+                                                          "componentId": "TextArea__StyledTextArea-sc-1jxb073-0",
                                                           "isStatic": true,
                                                           "lastClassName": "c13",
                                                           "rules": Array [
@@ -5808,7 +5808,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "displayName": "TextArea__StyledTextArea",
                                                         "foldedComponentIds": Array [],
                                                         "render": [Function],
-                                                        "styledComponentId": "TextArea__StyledTextArea-sc-1ncyxaw-0",
+                                                        "styledComponentId": "TextArea__StyledTextArea-sc-1jxb073-0",
                                                         "target": "textarea",
                                                         "toString": [Function],
                                                         "warnTooManyClasses": [Function],

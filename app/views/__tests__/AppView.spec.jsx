@@ -334,7 +334,7 @@ describe('AppView', () => {
           id: state.tracking.issue.id,
           name: state.tracking.issue.subject
         },
-        hours: (state.tracking.duration / 360000).toFixed(2),
+        hours: (state.tracking.duration / 3600000).toFixed(2),
         comments: '',
         project: {
           id: state.tracking.issue.project.id,

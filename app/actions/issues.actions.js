@@ -20,7 +20,6 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
     limit
   };
 
-
   if (filter) {
     query = {
       ...query,

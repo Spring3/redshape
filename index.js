@@ -5,15 +5,9 @@ const url = require('url');
 const path = require('path').posix;
 const { app, BrowserWindow, ipcMain, session, Menu } = require('electron');
 const utils = require('electron-util');
+const isDev = require('electron-is-dev');
 
-// finalHandler({
-//   showDialog: true,
-//   reportButton: error => utils.openNewGitHubIssue({
-//     user: 'Spring3',
-//     repo: 'redtime',
-//     body: `Please describe the issue as detailed as you can\n\n---\n### Error Stack:\n \`\`\`\n${error.stack}\n\`\`\``
-//   })
-// });
+require('./modules/exceptionCatcher')();
 
 dotenv.load({ silent: true });
 
@@ -26,7 +20,7 @@ const { PORT, redmineDomain } = require('./modules/config');
 require('./modules/request'); // to initialize from storage
 
 let mainWindow;
-const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));
+// const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));
 
 const initializeMenu = () => {
   const isMac = process.platform === 'darwin';

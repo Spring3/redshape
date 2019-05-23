@@ -3,7 +3,8 @@ import thunk from 'redux-thunk';
 import _get from 'lodash/get';
 
 import storage from '../modules/storage';
-import reducers from './reducers/index.js';
+import reducers from './reducers/index';
+import notificationMiddleware from './middlewares/notification.middleware';
 
 const initialState = storage.store;
 
@@ -17,4 +18,4 @@ export default createStore(reducers, {
   projects: initialState.projects,
   tracking: initialState.time_tracking
 },
-applyMiddleware(thunk));
+applyMiddleware(thunk, notificationMiddleware));
