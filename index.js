@@ -32,7 +32,7 @@ const initializeMenu = () => {
         {
           label: 'About Redtime',
           click: () => utils.showAboutWindow({
-            // icon: path.join(__dirname, 'static/Icon.png'),
+            icon: path.join(__dirname, 'assets/icon.png'),
             copyright: 'Copyright © Daniyil Vasylenko',
             text: 'Some more info.'
           })
@@ -146,7 +146,7 @@ const initialize = () => {
     width: 1024,
     height: 768,
     minWidth: 744,
-    // icon: `${__dirname}/assets/icon.ico`,
+    icon: path.join(__dirname, '/assets/icon.png'),
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
