@@ -35,7 +35,7 @@ const handleError = (title, err) => {
         type: 'error',
         buttons,
         defaultId: 0,
-        noLink: true,
+        noLink: false,
         message: title,
         detail: cleanStack(error.stack, { pretty: true })
       });

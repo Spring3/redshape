@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'redtime',
+  name: 'redshape',
   verbose: true,
   clearMocks: true,
   collectCoverage: true,

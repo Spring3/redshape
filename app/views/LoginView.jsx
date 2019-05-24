@@ -97,7 +97,7 @@ class LoginView extends Component {
       <Container>
         <DragArea />
         <GHLinkContainer>
-          <Link type="external" href="https://github.com/Spring3/redtime">
+          <Link type="external" href="https://github.com/Spring3/redshape">
             <GithubCircleIcon color={theme.main} size="30"/>
           </Link>
         </GHLinkContainer>
@@ -116,7 +116,7 @@ class LoginView extends Component {
             isSubmitting
           }) => (
             <LoginForm onSubmit={handleSubmit}>
-              <Headline>Redtime</Headline>
+              <Headline>Redshape</Headline>
               <Label
                 label="Login"
                 htmlFor="username"

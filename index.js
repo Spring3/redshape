@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path').posix;
-const { app, BrowserWindow, ipcMain, session, Menu } = require('electron');
+const { app, BrowserWindow, session, Menu } = require('electron');
 const utils = require('electron-util');
 const isDev = require('electron-is-dev');
 
@@ -20,22 +20,28 @@ const { PORT, redmineDomain } = require('./modules/config');
 require('./modules/request'); // to initialize from storage
 
 let mainWindow;
-// const isDev = !!(process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath));
+let aboutWindow;
 
 const initializeMenu = () => {
   const isMac = process.platform === 'darwin';
   const menu = Menu.buildFromTemplate([
     // { role: 'appMenu' }
     ...(isMac ? [{
-      label: 'Redtime',
+      label: 'Redshape',
       submenu: [
         {
-          label: 'About Redtime',
-          click: () => utils.showAboutWindow({
-            icon: path.join(__dirname, 'assets/icon.png'),
-            copyright: 'Copyright © Daniyil Vasylenko',
-            text: 'Some more info.'
-          })
+          label: 'About Redshape',
+          click: () => {
+            if (!aboutWindow || (aboutWindow instanceof BrowserWindow) === false) {
+              createAboutWindow();
+            } else {
+              aboutWindow.focus();
+            }
+            aboutWindow.show();
+            if (isDev) {
+              aboutWindow.webContents.openDevTools();
+            }
+          }
         },
         { type: 'separator' },
         { role: 'services' },
@@ -124,7 +130,7 @@ const initializeMenu = () => {
           label: 'Report An Issue',
           click: () => utils.openNewGitHubIssue({
             user: 'Spring3',
-            repo: 'redtime',
+            repo: 'redshape',
             body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${utils.debugInfo()}\n\`\`\``
           })
         },
@@ -141,12 +147,41 @@ const initializeMenu = () => {
   Menu.setApplicationMenu(menu);
 };
 
+const createAboutWindow = () => {
+  aboutWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    useContentSize: true,
+    titleBarStyle: 'hidden-inset',
+    show: false,
+    icon: path.join(__dirname, 'assets/icon.png'),
+    webPreferences: {
+      nodeIntegration: true
+    },
+  });
+  aboutWindow.loadURL(
+    isDev
+      ? url.format({
+        protocol: 'http:',
+        host: `localhost:${PORT}`,
+        pathname: 'about.html',
+        slashes: true
+      })
+      : url.format({
+        protocol: 'file:',
+        pathname: path.resolve(__dirname, 'dist', 'about.html'),
+        slashes: true
+      })
+  );
+  aboutWindow.setMenu(null);
+};
+
 const initialize = () => {
   const windowConfig = {
     width: 1024,
     height: 768,
     minWidth: 744,
-    icon: path.join(__dirname, '/assets/icon.png'),
+    icon: path.join(__dirname, 'assets/icon.png'),
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
@@ -198,7 +233,6 @@ if (redmineDomain) {
 }
 
 app.once('ready', initialize);
-app.once('quit', () => ipcMain.removeAllListeners('action'));
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();

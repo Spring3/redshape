@@ -8,11 +8,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   target: 'electron-renderer',
-  entry: path.resolve(__dirname, 'app'),
+  entry: {
+    main: path.resolve(__dirname, 'app'),
+    about: path.resolve(__dirname, 'about')
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: path.resolve(__dirname, '/'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -25,6 +28,12 @@ const config = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader'
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
         ]
       }
     ]
@@ -44,10 +53,17 @@ const config = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
-      allChunks: true
+      chunkFilename: '[name].css'
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './app/index.html')
+      filename: 'index.html',
+      template: path.resolve(__dirname, './app/index.html'),
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'about.html',
+      template: path.resolve(__dirname, './about/about.html'),
+      chunks: ['about']
     })
   ]
 };

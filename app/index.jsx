@@ -4,8 +4,6 @@ import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 
-import './index.css';
-
 import store from './store';
 import theme from './theme';
 import App from './App';
