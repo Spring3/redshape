@@ -15,7 +15,7 @@
     "url": "git+https://github.com/Spring3/redshape.git"
   },
   "author": "Daniyil Vasylenko",
-  "license": "GNU GPL",
+  "license": "gpl-3.0",
   "bugs": {
     "url": "https://github.com/Spring3/redshape/issues"
   },
@@ -46,6 +46,7 @@
     "jest-dom": "^3.1.2",
     "jest-styled-components": "^6.3.1",
     "mini-css-extract-plugin": "^0.5.0",
+    "raw-loader": "^2.0.0",
     "react-test-renderer": "^16.8.4",
     "react-testing-library": "^6.0.0",
     "redux-mock-store": "^1.5.3",
@@ -77,6 +78,7 @@
     "react-responsive-modal": "^3.6.0",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.4.1",
+    "react-tabs": "^3.0.0",
     "react-toastify": "^5.1.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",

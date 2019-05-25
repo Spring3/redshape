@@ -35,6 +35,12 @@ const config = {
         use: [
           'file-loader'
         ]
+      },
+      {
+        test: /\.txt$/,
+        use: [
+          'raw-loader'
+        ]
       }
     ]
   },

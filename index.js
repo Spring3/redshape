@@ -149,7 +149,7 @@ const initializeMenu = () => {
 
 const createAboutWindow = () => {
   aboutWindow = new BrowserWindow({
-    width: 400,
+    width: 480,
     height: 400,
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
@@ -173,6 +173,9 @@ const createAboutWindow = () => {
         slashes: true
       })
   );
+  aboutWindow.once('closed', () => {
+    aboutWindow = null;
+  });
   aboutWindow.setMenu(null);
 };
 

@@ -1,6 +1,7 @@
 export default {
   bg: '#FFFFFF',
   bgDark: '#F9F9F9',
+  bgDarker: '#E9E9E9',
   mainLight: '#FF7F87',
   main: '#FF7079',
   mainDark: '#EF6069',
