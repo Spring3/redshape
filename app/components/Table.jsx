@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 const StyledTable = styled.table`
   position: relative;
   min-height: 200px;
+  border: 2px solid ${props => props.theme.bgDark};
 
   tbody {
     text-align: center;

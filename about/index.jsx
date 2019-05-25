@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider, css } from 'styled-components';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import CheckboxBlankCircleIcon from 'mdi-react/CheckboxBlankCircleIcon';
-import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
 
 import { version, name } from '../package.json';
 import LogoIcon from '../assets/icon.png';
@@ -96,21 +94,25 @@ const StyledTabs = styled(Tabs)`
       cursor: pointer;
       margin-right: 10px;
       border-radius: 50%;
-      background: ${props => props.theme.bg};
-      border: 1px solid ${props => props.theme.main};
 
-      transition: background ease-in ${props => props.theme.transitionTime};
-      transition: box-shadow ease-in ${props => props.theme.transitionTime};
+      ${({ theme }) => css`
+        background: ${theme.bg};
+        border: 1px solid ${theme.main};
+        transition: background ease-in ${theme.transitionTime};
+        transition: box-shadow ease-in ${theme.transitionTime};
 
-      &:hover {
-        border-color: ${props => props.theme.main};
-        box-shadow: 0px 0px 5px 0px ${props => props.theme.main};
-      }
+        &:hover {
+          border-color: ${theme.main};
+          box-shadow: 0px 0px 5px 0px ${theme.main};
+        }
+      `}
     }
 
     li.react-tabs__tab--selected {
-      border-color: ${props => props.theme.main};
-      background: ${props => props.theme.main};
+      ${({ theme }) => css`
+        border-color: ${theme.main};
+        background: ${theme.main};
+      `}
       box-shadow: none;
     }
   }

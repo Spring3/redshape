@@ -73,13 +73,15 @@ class SummaryPage extends Component {
   fetchIssues = (page = 0) => {
     const { search, sortBy, sortDirection } = this.state;
     const { userId, showClosedIssues } = this.props;
-    const queryFilter = new IssueFilter()
-      .assignee(userId)
-      .status({ open: true, closed: showClosedIssues })
-      .title(search)
-      .sort(sortBy, sortDirection)
-      .build();
-    this.props.fetchIssues(queryFilter, page);
+    if (userId) {
+      const queryFilter = new IssueFilter()
+        .assignee(userId)
+        .status({ open: true, closed: showClosedIssues })
+        .title(search)
+        .sort(sortBy, sortDirection)
+        .build();
+      this.props.fetchIssues(queryFilter, page);
+    }
   }
 
   onSearchChange = (e) => {
