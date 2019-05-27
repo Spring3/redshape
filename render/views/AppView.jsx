@@ -13,7 +13,7 @@ import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
-import storage from '../../modules/storage';
+import storage from '../../common/storage';
 
 const Grid = styled.div`
   height: 100%;

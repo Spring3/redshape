@@ -2,11 +2,14 @@
   "name": "Redshape",
   "version": "0.0.1",
   "description": "Redmine time tracker",
-  "main": "index.js",
+  "main": "main/index.js",
   "scripts": {
-    "start": "npm run build && electron --noDevServer ./index.js",
+    "start": "npm run prepack && electron --noDevServer ./main/index.js",
     "dev": "webpack-dev-server",
-    "build": "webpack --config webpack.config.js",
+    "pack": "electron-builder --dir dist",
+    "prepack": "NODE_ENV=production webpack --config webpack.config.js",
+    "build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps",
     "lint": "eslint .",
     "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"
   },
@@ -14,12 +17,32 @@
     "type": "git",
     "url": "git+https://github.com/Spring3/redshape.git"
   },
-  "author": "Daniyil Vasylenko",
+  "author": "Daniyil Vasylenko <https://github.com/Spring3>",
   "license": "gpl-3.0",
   "bugs": {
     "url": "https://github.com/Spring3/redshape/issues"
   },
-  "homepage": "https://github.com/Spring3/redshape#readme",
+  "homepage": "./",
+  "build": {
+    "appId": "app.spring3.redshape", 
+    "files": [
+      "common/**/*",
+      "main/**/*",
+      "dist/**/*",
+      "env.tpl",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "category": "Development"
+    },
+    "directories": {
+      "buildResources": "assets",
+      "output": "build/"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
@@ -30,6 +53,8 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-styled-components": "^1.10.0",
     "css-loader": "^2.1.0",
+    "electron": "^5.0.2",
+    "electron-builder": "^20.41.0",
     "electron-react-devtools": "^0.5.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
@@ -59,7 +84,6 @@
     "axios": "^0.18.0",
     "clean-stack": "^2.1.0",
     "dotenv": "^6.2.0",
-    "electron": "^5.0.2",
     "electron-is-dev": "^1.1.0",
     "electron-store": "^2.0.0",
     "electron-util": "^0.11.0",

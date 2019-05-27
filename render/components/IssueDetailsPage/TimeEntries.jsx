@@ -8,11 +8,11 @@ import PlusIcon from 'mdi-react/PlusIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
-import InfiniteScroll from '../../components/InfiniteScroll';
-import ProcessIndicator, { OverlayProcessIndicator } from '../../components/ProcessIndicator';
-import Button, { GhostButton } from '../../components/Button';
-import DateComponent from '../../components/Date';
-import Dialog from '../../components/Dialog';
+import InfiniteScroll from '../InfiniteScroll';
+import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
+import Button, { GhostButton } from '../Button';
+import DateComponent from '../Date';
+import Dialog from '../Dialog';
 import actions from '../../actions';
 
 const HeaderContainer = styled.div`

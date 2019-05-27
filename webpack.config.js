@@ -5,16 +5,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { spawn } = require('child_process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const config = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: isProduction ? 'production' : 'development',
   target: 'electron-renderer',
   entry: {
-    main: path.resolve(__dirname, 'app'),
-    about: path.resolve(__dirname, 'about')
+    app: path.resolve(__dirname, 'render/'),
+    about: path.resolve(__dirname, 'render/about')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: path.resolve(__dirname, '/'),
+    // to avoid extra slash at the beginning, that makes the file:// request result in a RESOURCE_NOT_FOUND error
+    publicPath: isProduction ? '' : path.resolve(__dirname, '/'),
     filename: '[name].js'
   },
   module: {
@@ -63,18 +66,18 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, './app/index.html'),
-      chunks: ['main']
+      template: path.resolve(__dirname, './render/index.html'),
+      chunks: ['app']
     }),
     new HtmlWebpackPlugin({
       filename: 'about.html',
-      template: path.resolve(__dirname, './about/about.html'),
+      template: path.resolve(__dirname, './render/about/about.html'),
       chunks: ['about']
     })
   ]
 };
 
-if (config.mode === 'development') {
+if (!isProduction) {
   config.devServer = {
     contentBase: path.resolve(__dirname, './dist'),
     publicPath: path.resolve(__dirname, '/'),

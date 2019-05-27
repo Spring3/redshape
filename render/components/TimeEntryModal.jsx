@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import styled, { withTheme } from 'styled-components';
 
-import { Input, Label } from '../components/Input';
-import Button from '../components/Button';
-import MarkdownEditor from '../components/MarkdownEditor';
-import ErrorMessage from '../components/ErrorMessage';
-import DatePicker from '../components/DatePicker';
-import Modal from '../components/Modal';
-import ProcessIndicator from '../components/ProcessIndicator';
+import { Input, Label } from './Input';
+import Button from './Button';
+import MarkdownEditor from './MarkdownEditor';
+import ErrorMessage from './ErrorMessage';
+import DatePicker from './DatePicker';
+import Modal from './Modal';
+import ProcessIndicator from './ProcessIndicator';
 
 import actions from '../actions';
 

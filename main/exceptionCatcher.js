@@ -3,7 +3,7 @@ const ensureError = require('ensure-error');
 const isDev = require('electron-is-dev');
 const { app, dialog, clipboard } = require('electron');
 
-const { report } = require('./reporter');
+const { report } = require('../common/reporter');
 
 const config = {
   showDialog: !isDev,

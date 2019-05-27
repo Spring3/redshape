@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import actions from '../../actions';
-import { Input, Label } from '../../components/Input';
+import { Input, Label } from '../Input';
 
 const MarginedDiv = styled.div`
   margin-top: 10px;

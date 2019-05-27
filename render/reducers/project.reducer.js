@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import storage from '../../modules/storage';
+import storage from '../../common/storage';
 import { PROJECT_GET_ALL } from '../actions/project.actions';
 
 export const initialState = {

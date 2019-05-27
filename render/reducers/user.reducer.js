@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { USER_LOGIN, USER_LOGOUT } from '../actions/user.actions';
-import storage from '../../modules/storage';
+import storage from '../../common/storage';
 
 export const initialState = {
   isFetching: false,

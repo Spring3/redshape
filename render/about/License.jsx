@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Link from '../app/components/Link';
+import Link from '../components/Link';
 
 const Container = styled.div`
   text-align: justify;

@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/lib/animated';
 import { withTheme } from 'styled-components';
 
 import actions from '../../actions';
-import { Label } from '../../components/Input';
+import { Label } from '../Input';
 
 const selectStyles = {
   container: (base, state) => {

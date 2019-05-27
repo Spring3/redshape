@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { report } from '../../modules/reporter';
+import { report } from '../../common/reporter';
 
 const NotifyButton = styled.button`
   position: absolute;

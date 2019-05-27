@@ -2,22 +2,27 @@ const dotenv = require('dotenv');
 const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
-const path = require('path').posix;
+const path = require('path');
 const { app, BrowserWindow, session, Menu } = require('electron');
 const utils = require('electron-util');
 const isDev = require('electron-is-dev');
 
-require('./modules/exceptionCatcher')();
+require('./exceptionCatcher')();
 
-dotenv.load({ silent: true });
+const configFilePath = isDev
+  ? path.join(__dirname, '../.env')
+  : path.join(app.getPath('userData'), '.env');
 
-if (!process.env.ENCRYPTION_KEY) {
+const env = dotenv.load({ silent: true, path: configFilePath });
+
+if (env.error || !process.env.ENCRYPTION_KEY) {
   const key = crypto.randomBytes(32).toString('hex');
-  fs.appendFileSync(path.resolve(__dirname, './.env'), `ENCRYPTION_KEY=${key}`);
-  dotenv.load({ silent: true });
+  fs.appendFileSync(configFilePath, `ENCRYPTION_KEY=${key}`);
+  dotenv.load({ silent: true, path: configFilePath });
 }
-const { PORT, redmineDomain } = require('./modules/config');
-require('./modules/request'); // to initialize from storage
+
+const { PORT, redmineDomain } = require('../common/config');
+require('../common/request'); // to initialize from storage
 
 let mainWindow;
 let aboutWindow;
@@ -154,7 +159,7 @@ const createAboutWindow = () => {
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
     show: false,
-    icon: path.join(__dirname, 'assets/icon.png'),
+    icon: path.join(__dirname, '../assets/icon.png'),
     webPreferences: {
       nodeIntegration: true
     },
@@ -169,7 +174,7 @@ const createAboutWindow = () => {
       })
       : url.format({
         protocol: 'file:',
-        pathname: path.resolve(__dirname, 'dist', 'about.html'),
+        pathname: path.join(__dirname, '../dist/about.html'),
         slashes: true
       })
   );
@@ -184,7 +189,7 @@ const initialize = () => {
     width: 1024,
     height: 768,
     minWidth: 744,
-    icon: path.join(__dirname, 'assets/icon.png'),
+    icon: path.join(__dirname, '../assets/icon.png'),
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
@@ -192,31 +197,28 @@ const initialize = () => {
     }
   };
 
-  let indexPath;
-  if (isDev && process.argv.indexOf('--noDevServer') === -1) {
-    indexPath = url.format({
+  const indexPath = isDev
+    ? url.format({
       protocol: 'http:',
       host: `localhost:${PORT}`,
       pathname: 'index.html',
       slashes: true
-    });
-  } else {
-    indexPath = url.format({
+    })
+    : url.format({
       protocol: 'file:',
-      pathname: path.resolve(__dirname, 'dist', 'index.html'),
+      pathname: path.join(__dirname, '../dist/index.html'),
       slashes: true
     });
-  }
   mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
-  utils.enforceMacOSAppLocation();
+  // utils.enforceMacOSAppLocation();
   initializeMenu();
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
-    if (isDev) {
-      mainWindow.webContents.openDevTools();
-    }
+    // if (isDev) {
+    mainWindow.webContents.openDevTools();
+    // }
   });
 
   mainWindow.once('closed', () => {

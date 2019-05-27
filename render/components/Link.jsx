@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { openExternalUrl } from '../../modules/utils';
+import { openExternalUrl } from '../../common/utils';
 
 const StyledLink = styled.a`
   color: ${props => props.theme.main};

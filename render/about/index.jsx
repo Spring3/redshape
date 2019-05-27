@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import styled, { ThemeProvider, css } from 'styled-components';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import { version, name } from '../package.json';
-import LogoIcon from '../assets/icon.png';
+import { version, name } from '../../package.json';
+import LogoIcon from '../../assets/icon.png';
 
-import Link from '../app/components/Link';
-import { report } from '../modules/reporter';
+import Link from '../components/Link';
+import { report } from '../../common/reporter';
 import License from './License';
 
-import theme from '../app/theme';
+import theme from '../theme';
 
 if (module.hot) {
   module.hot.accept();

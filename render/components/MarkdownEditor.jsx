@@ -19,7 +19,7 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
-import { openExternalUrl, xssFilter } from '../../modules/utils';
+import { openExternalUrl, xssFilter } from '../../common/utils';
 
 import TextArea from './TextArea';
 import { GhostButton } from './Button';

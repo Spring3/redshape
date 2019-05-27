@@ -5,7 +5,7 @@ import {
   TRACKING_CONTINUE,
   TRACKING_RESET
 } from '../actions/tracking.actions';
-import storage from '../../modules/storage';
+import storage from '../../common/storage';
 
 export const initialState = {
   issue: {},

@@ -1,4 +1,4 @@
-const axios = require('electron').remote.require('./modules/request');
+const axios = require('electron').remote.require('../common/request');
 
 function IssueFilter () {
   const filter = {};
