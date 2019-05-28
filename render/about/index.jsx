@@ -69,7 +69,7 @@ const StyledTabPanel = styled(TabPanel)`
   flex-grow: 1;
   padding: 20px;
   display: none;
-  background: ${props => props.theme.bgDark};
+  background: ${props => props.theme.bg};
 `;
 
 const StyledTabs = styled(Tabs)`
@@ -85,7 +85,7 @@ const StyledTabs = styled(Tabs)`
     width: 100%;
     display: inline-block;
     text-align: center;
-    border-bottom: 2px solid ${props => props.theme.bgDarker};
+    background: ${props => props.theme.bg};
     
     li.react-tabs__tab {
       display: inline-block;

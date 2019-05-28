@@ -29,25 +29,26 @@ let aboutWindow;
 
 const initializeMenu = () => {
   const isMac = process.platform === 'darwin';
+  const aboutSubmenu = {
+    label: 'About Redshape',
+    click: () => {
+      if (!aboutWindow || (aboutWindow instanceof BrowserWindow) === false) {
+        createAboutWindow();
+      } else {
+        aboutWindow.focus();
+      }
+      aboutWindow.show();
+      if (isDev) {
+        aboutWindow.webContents.openDevTools();
+      }
+    }
+  };
   const menu = Menu.buildFromTemplate([
     // { role: 'appMenu' }
     ...(isMac ? [{
       label: 'Redshape',
       submenu: [
-        {
-          label: 'About Redshape',
-          click: () => {
-            if (!aboutWindow || (aboutWindow instanceof BrowserWindow) === false) {
-              createAboutWindow();
-            } else {
-              aboutWindow.focus();
-            }
-            aboutWindow.show();
-            if (isDev) {
-              aboutWindow.webContents.openDevTools();
-            }
-          }
-        },
+        aboutSubmenu,
         { type: 'separator' },
         { role: 'services' },
         { type: 'separator' },
@@ -61,6 +62,7 @@ const initializeMenu = () => {
     {
       label: 'File',
       submenu: [
+        ...(!isMac ? [aboutSubmenu] : []),
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
     },
@@ -93,25 +95,18 @@ const initializeMenu = () => {
       ]
     },
     // { role: 'viewMenu' }
-    {
-      label: 'View',
-      submenu: [
-        ...(isDev
-          ? [
-            { role: 'reload' },
-            { role: 'forcereload' },
-            { role: 'toggledevtools' },
-            { type: 'separator' }
-          ]
-          : []
-        ),
-        { role: 'resetzoom' },
-        { role: 'zoomin' },
-        { role: 'zoomout' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
-    },
+    ...(isDev
+      ? [{
+        label: 'View',
+        submenu: [
+          { role: 'reload' },
+          { role: 'forcereload' },
+          { role: 'toggledevtools' },
+          { type: 'separator' }
+        ]
+      }]
+      : []
+    ),
     // { role: 'windowMenu' }
     {
       label: 'Window',
@@ -211,14 +206,13 @@ const initialize = () => {
     });
   mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
-  // utils.enforceMacOSAppLocation();
   initializeMenu();
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
-    // if (isDev) {
-    mainWindow.webContents.openDevTools();
-    // }
+    if (isDev) {
+      mainWindow.webContents.openDevTools();
+    }
   });
 
   mainWindow.once('closed', () => {
