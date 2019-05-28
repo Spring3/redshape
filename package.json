@@ -24,12 +24,11 @@
   },
   "homepage": "./",
   "build": {
-    "appId": "app.spring3.redshape", 
+    "appId": "app.spring3.redshape",
     "files": [
       "common/**/*",
       "main/**/*",
       "dist/**/*",
-      "env.tpl",
       "node_modules/**/*"
     ],
     "mac": {

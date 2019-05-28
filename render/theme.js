@@ -5,7 +5,7 @@ export default {
   mainLight: '#FF7F87',
   main: '#FF7079',
   mainDark: '#EF6069',
-  minorText: '#909090',
+  minorText: '#A0A0A0',
   normalText: '#3F3844',
   hoverText: '#FFFFFF',
   red: '#FF634D',

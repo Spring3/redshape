@@ -71,7 +71,7 @@ const TimeEntriesList = styled.ul`
     padding: 10px;
     margin: 10px auto 0px auto;
     border-radius: 3px;
-    border: 2px solid transparent;
+    border: 1px solid ${props => props.theme.bgDarker};
     background: ${props => props.theme.bg};
 
     div:first-child {

@@ -13,9 +13,24 @@ class InfiniteScroll extends Component {
     this.throttledScrollHandler = throttle(this.onScroll, 100);
   }
 
+  componentWillMount() {
+    if (this.props.container && this.props.immediate) {
+      this.throttledScrollHandler();
+    }
+  }
+
   componentWillUnmount() {
     if (this.props.container) {
       this.props.container.removeEventListener('scroll', this.throttledScrollHandler);
+    }
+  }
+
+  shouldLoad = () => {
+    const { container } = this.props;
+    if (container === window) {
+      return (container.innerHeight + container.scrollY) <= document.body.scrollHeight;
+    } else {
+      return container.scrollTop <= container.scrollHeight;
     }
   }
 
@@ -32,8 +47,8 @@ class InfiniteScroll extends Component {
       }
     }
 
-    if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {
-      if (this.props.container && this.props.container.scrollTop <= this.props.container.scrollHeight) {
+    if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {      
+      if (this.props.container && this.shouldLoad()) {
         this.throttledScrollHandler()
       }
     }
@@ -46,7 +61,7 @@ class InfiniteScroll extends Component {
       }
       if (this.props.container) {
         this.props.container.addEventListener('scroll', this.throttledScrollHandler);
-        if (this.props.immediate && this.props.container.scrollTop <= this.props.container.scrollHeight) {
+        if (this.props.immediate && this.shouldLoad()) {
           this.throttledScrollHandler();
         }
       }
@@ -57,10 +72,12 @@ class InfiniteScroll extends Component {
     const { load, threshold, hasMore, container } = this.props;
     const { isLoading } = this.state;
     const target = event.target || container;
-    const scrolledToBottom = Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight;
-
+    const scrolledToBottom = container === window
+     ? (window.innerHeight + window.scrollY) >= document.body.scrollHeight
+     : Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight;
+    // if does not have an overflow, or scrolled to bottom
     if (!isLoading && scrolledToBottom && hasMore) {
-      if (target.scrollTop <= target.scrollHeight || (target.scrollTop % target.scrollHeight) >= threshold) {
+      if (this.shouldLoad() || (target.scrollTop % target.scrollHeight) >= threshold) {
         this.setState({
           isLoading: true
         }, () => load());

@@ -9,8 +9,74 @@ import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
 import InfiniteScroll from '../InfiniteScroll';
 import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
-import Table from '../Table';
 import Date from '../Date';
+
+const Table = styled.table`
+  position: relative;
+  min-height: 200px;
+  width: 100%;
+  border: 2px solid ${props => props.theme.bgDark};
+  border-spacing: 0px;
+
+  tbody {
+    text-align: center;
+    font-size: 14px;
+    overflow-y: scroll;
+    max-height: 60vh;
+
+    tr {
+      td {
+        border-bottom: 2px solid ${props => props.theme.bgDark};
+        padding: 15px 5px;
+        transition: background ease ${props => props.theme.transitionTime};
+      }
+
+      &:hover {
+        cursor: pointer;
+        
+        td {
+          background: ${props => props.theme.bgDark};
+        }
+      }
+
+      td.due_date {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  thead {
+    z-index: 1;
+    tr {
+      th {
+        padding: 15px 5px;
+        background: ${props => props.theme.bg};
+        border-bottom: 2px solid ${props => props.theme.bgDarker};
+        transition: color ease ${props => props.theme.transitionTime};
+        &:hover {
+          cursor: pointer;
+          color: ${props => props.theme.main};
+        }
+  
+        svg {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+`;
+
+const ProcessIndicatorContainer = styled.tr`
+  position: absolute;
+  width: 100%;
+  text-align: center;
+
+  div.container {
+    position: absolute;
+    top: 15px;
+    left: 45%;
+  }
+`;
 
 const ColorfulSpan = styled.span`
   ${
@@ -34,12 +100,6 @@ const colorMap = {
   'normal': 'yellow'
 };
 
-const ProcessIndicatorContainer = styled(ProcessIndicator)`
-  justify-content: center;
-  position: relative;
-  top: 100px;
-`;
-
 class IssuesTable extends Component {
   constructor(props) {
     super(props);
@@ -48,8 +108,6 @@ class IssuesTable extends Component {
       sortBy: undefined,
       sortDirection: undefined
     };
-
-    this.tableRef = React.createRef();
   }
 
   sortTable = (by) => () => {
@@ -82,7 +140,7 @@ class IssuesTable extends Component {
     );
   }
 
-  loadIssuePage = (pg) => {
+  loadIssuePage = () => {
     const { issues, fetchIssuePage } = this.props;
     const { page } = issues;
     fetchIssuePage(page + 1);
@@ -93,20 +151,13 @@ class IssuesTable extends Component {
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
     return (
-      <Table ref={this.tableRef}>
-        { (!userTasks.length || issues.isFetching) && (<OverlayProcessIndicator />) }
-        <InfiniteScroll
-          load={this.loadIssuePage}
-          isEnd={issues.data.length === issues.totalCount}
-          hasMore={!issues.isFetching && !issues.error && issues.data.length < issues.totalCount}
-          container={this.tableRef.current}
-          immediate={true}
-        >
+      <Table>
+        { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
+        <thead>
           <tr>
             {issueHeaders.map(header => (
               <th
                 key={header.value}
-                className={header.value === 'due_date' ? 'due-date' : ''}
                 onClick={this.sortTable(header.value)}
               >
                 {header.label}&nbsp;
@@ -119,21 +170,35 @@ class IssuesTable extends Component {
               </th>
             ))}
           </tr>
-          {userTasks.map(task => (
-            <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
-              {
-                issueHeaders.map(header => (
-                  <td key={header.value}>
-                    {header.value === 'due_date'
-                      ? <Date date={_get(task, header.value)} />
-                      : this.paint(task, header.value)
-                    }
-                  </td>
-                ))
-              }
-            </tr>
-          ))}
-        </InfiniteScroll>
+        </thead>
+        <tbody>
+          <InfiniteScroll
+            load={this.loadIssuePage}
+            isEnd={userTasks.length === issues.totalCount}
+            hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
+            container={window}
+            loadIndicator={<ProcessIndicatorContainer><ProcessIndicator className="container" /></ProcessIndicatorContainer>}
+            immediate={true}
+          >
+            {userTasks.map(task => (
+              <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
+                {
+                  issueHeaders.map(header => (
+                    <td
+                      key={header.value}
+                      className={header.value === 'due_date' && header.value}
+                    >
+                      {header.value === 'due_date'
+                        ? <Date date={_get(task, header.value)} />
+                        : this.paint(task, header.value)
+                      }
+                    </td>
+                  ))
+                }
+              </tr>
+            ))}
+          </InfiniteScroll>
+        </tbody>
       </Table>
     );
   }

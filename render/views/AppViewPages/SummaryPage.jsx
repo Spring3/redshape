@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import { IssueFilter } from '../../actions/helper';
 import actions from '../../actions';
@@ -107,9 +108,10 @@ class SummaryPage extends Component {
             <ColumnHeadersSelect />
             <GridRow>
               <Input
+                icon={<MagnifyIcon xmlns="http://www.w3.org/2000/svg" />}
                 type="text"
                 name="search"
-                placeholder="Search"
+                placeholder="Search..."
                 onChange={this.onSearchChange}
               />
             </GridRow>

@@ -37,7 +37,7 @@ const Comments = styled.ul`
 
   li {
     background: ${props => props.theme.bg};
-    box-shadow: 0px 0px 5px 0px ${props => props.theme.shadow};
+    border: 1px solid ${props => props.theme.bgDarker};
     display: block;
     border-radius: 3px;
     margin: 20px;
@@ -83,7 +83,7 @@ const CommentsForm = styled.div`
     background: ${props => props.theme.bg};
     padding: 20px;
     border-radius: 3px;
-    box-shadow: 0px 0px 10px ${props => props.theme.shadow};
+    border: 1px solid ${props => props.theme.bgDarker};
   }
 `;
 

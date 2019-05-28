@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import CheckIcon from 'mdi-react/CheckIcon';
@@ -33,6 +34,12 @@ const StyledInput = styled.input`
       color: ${theme.minorText};
     }
   `}}
+
+  ${props => props.icon && css`
+    background-image: url(data:image/svg+xml;utf8,${props.icon});
+    background-repeat: no-repeat;
+    background-position: right center;
+  `}
 `;
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
@@ -173,7 +180,8 @@ class Input extends PureComponent {
       value,
       id,
       name,
-      disabled
+      disabled,
+      icon
     } = this.props;
     return type.toLowerCase() === 'checkbox'
       ? (
@@ -193,6 +201,7 @@ class Input extends PureComponent {
       )
       : (
         <StyledInput
+          icon={icon && encodeURIComponent(renderToStaticMarkup(icon))}
           type={type}
           placeholder={placeholder}
           onChange={onChange}
@@ -228,7 +237,8 @@ Input.propTypes = {
     if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
       return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);
     }
-  }
+  },
+  icon: PropTypes.element
 };
 
 Input.defaultProps = {

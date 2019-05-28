@@ -10,6 +10,7 @@ const StyledButton = styled.button`
   text-align: center;
   
   ${props => css`
+    background: ${props.theme.bg};
     transition: color ease ${props.theme.transitionTime};
     transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
