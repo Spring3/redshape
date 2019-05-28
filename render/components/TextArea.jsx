@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StyledTextArea = styled.textarea`
   font-size: 14px;
@@ -11,6 +11,17 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   line-height: 1.5rem;
   box-sizing: border-box;
+  background: ${props => props.theme.bg};
+
+  ${props => props.disabled && css`
+    background: ${props.theme.bgDisabled};
+    border-color: ${props.theme.bgDarker} !important;
+    color: ${props.theme.minorText};
+
+    &:hover {
+      border-color: ${props.theme.bgDarker} !important;
+    }
+  `}
 `;
 
 const TextArea = ({

@@ -194,6 +194,9 @@ class DatePicker extends Component {
           styles={this.styles}
           name={name}
           value={new Date(value)}
+          inputProps={{
+            disabled: isDisabled
+          }}
           disabled={isDisabled}
           onChange={onChange}
           component={props => (<Input {...props} />)}

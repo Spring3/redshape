@@ -40,6 +40,16 @@ const StyledInput = styled.input`
     background-repeat: no-repeat;
     background-position: right center;
   `}
+
+  ${props => props.disabled && css`
+    background: ${props.theme.bgDisabled};
+    border-color: ${props.theme.bgDarker};
+    color: ${props.theme.minorText};
+
+    &:hover {
+      border-color: ${props.theme.bgDarker};
+    }
+  `}
 `;
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`

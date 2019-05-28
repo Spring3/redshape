@@ -268,7 +268,7 @@ class IssueDetailsPage extends Component {
           { selectedTimeEntry && (
             <TimeEntryModal
               isOpen={showTimeEntryModal}
-              isEditable={true}
+              isEditable={selectedTimeEntry.user.id === userId}
               activities={activities}
               isUserAuthor={selectedTimeEntry.user.id === userId}
               timeEntry={selectedTimeEntry}

@@ -204,6 +204,7 @@ class TimeEntryModal extends Component {
               options={activities}
               styles={selectStyles}
               value={selectedActivity}
+              isDisabled={!isUserAuthor}
               onBlur={this.runValidation}
               onChange={this.onActivityChange}
               isClearable={false}
@@ -242,7 +243,7 @@ class TimeEntryModal extends Component {
                 <DatePicker
                   name="date"
                   value={new Date(spent_on)}
-                  isDisabled={!isEditable}
+                  isDisabled={!isEditable || !isUserAuthor}
                   onBlur={this.runValidation}
                   onChange={this.onDateChange}
                 />
@@ -254,6 +255,7 @@ class TimeEntryModal extends Component {
           </FlexRow>
           <Label label="Comments" htmlFor="comments">
             <MarkdownEditor
+              isDisabled={!isUserAuthor}
               onChange={this.debouncedCommentsChange}
               onBlur={this.runValidation}
               initialValue={comments}
@@ -262,7 +264,7 @@ class TimeEntryModal extends Component {
           <ErrorMessage show={!!validationErrors.comments}>
             {this.getErrorMessage(validationErrors.comments)}
           </ErrorMessage>
-          {timeEntry.id && isUserAuthor
+          {timeEntry.id
             ? (
               <OptionButtons>
                 <Button

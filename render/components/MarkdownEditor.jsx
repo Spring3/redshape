@@ -119,7 +119,8 @@ class MarkdownEditor extends PureComponent {
   }
 
   applyMarkdown = (symbolStart, symbolEnd = '') => {
-    const { onChange } = this.props;
+    const { onChange, isDisabled } = this.props;
+    if (isDisabled) { return; }
     const textarea = this.textareaRef.current;
     const currentValue = this.state.value;
     let newValue;
@@ -238,7 +239,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur } = this.props;
+    const { className, id, onBlur, isDisabled } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -324,6 +325,7 @@ class MarkdownEditor extends PureComponent {
           )
           : (
             <ModifiedTextArea
+              disabled={isDisabled}
               ref={this.textareaRef}
               onChange={this.onTextAreaTyped}
               onKeyDown={this.onKeyDown}
@@ -338,6 +340,7 @@ class MarkdownEditor extends PureComponent {
 }
 
 MarkdownEditor.propTypes = {
+  isDisabled: PropTypes.bool,
   onChange: PropTypes.func,
   className: PropTypes.string,
   id: PropTypes.oneOfType([
@@ -351,6 +354,7 @@ MarkdownEditor.propTypes = {
 };
 
 MarkdownEditor.defaultProps = {
+  isDisabled: false,
   className: undefined,
   id: undefined,
   initialValue: '',

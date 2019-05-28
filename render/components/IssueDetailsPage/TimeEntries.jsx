@@ -9,7 +9,7 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
 import InfiniteScroll from '../InfiniteScroll';
-import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
+import ProcessIndicator from '../ProcessIndicator';
 import Button, { GhostButton } from '../Button';
 import DateComponent from '../Date';
 import Dialog from '../Dialog';
