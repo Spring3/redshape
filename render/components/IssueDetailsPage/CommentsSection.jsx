@@ -15,8 +15,9 @@ const Section = styled.section`
 
 const SmallNotice = styled.p`
   font-size: 12px;
-  margin-top: 0px;
+  margin-top: 30px;
   color: ${props => props.theme.minorText};
+  font-weight: bold;
 
   a {
     font-size: inherit !important;
@@ -36,40 +37,45 @@ const Comments = styled.ul`
   }
 
   li {
-    background: ${props => props.theme.bg};
-    border: 1px solid ${props => props.theme.bgDarker};
-    display: block;
-    border-radius: 3px;
-    margin: 20px;
+    margin: 40px 20px 20px 20px;
+    display: flex;
+    justify-content: space-around;
 
     div.commentsHeader {
+      flex-grow: 1;
       display: flex;
-      justify-content: space-between;
-      padding: 10px 20px;
-      border-bottom: 2px solid ${props => props.theme.bgDark};
+      flex-direction: column;
+      min-width: 20%;
 
       ${({theme}) => css`
-        span:first-child {
-          font-weight: bold;
-          color: ${theme.normalText};
+        h3 {
+          margin-top: 20px;
+          margin-bottom: 20px;
+          color: ${theme.main};
         }
 
         span:last-child {
-          font-weight: bold;
           color: ${theme.minorText};
           transition: color ease ${theme.transitionTime};
-          text-align: center;
+          text-align: left;
 
           &:hover {
             color: ${theme.normalText};
           }
+          margin-bottom: 20px;
         }
       `}
 
     }
 
     iframe {
+      margin-left: 20px;
       padding: 5px 20px 0px 20px;
+      background: ${props => props.theme.bg};
+      border: 1px solid ${props => props.theme.bgDarker};
+      border-radius: 3px;
+      width: 74%;
+      min-height: 100px;
     }
   }
 `;
@@ -105,7 +111,7 @@ class CommentsSection extends Component {
             {journalEntries.map(entry => (
               <li key={entry.id}>
                 <div className="commentsHeader">
-                  <span className="username">{entry.user.name}</span>
+                  <h3 className="username">{entry.user.name}</h3>
                   <DateComponent className="date" date={entry.created_on} />
                 </div>
                 <MarkdownText markdownText={entry.notes} />

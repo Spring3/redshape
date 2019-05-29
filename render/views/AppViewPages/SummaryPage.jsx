@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import { IssueFilter } from '../../actions/helper';
@@ -99,6 +99,7 @@ class SummaryPage extends Component {
   }
 
   render() {
+    const { theme } = this.props;
     return (
       <Grid>
         <IssuesSection>
@@ -108,7 +109,12 @@ class SummaryPage extends Component {
             <ColumnHeadersSelect />
             <GridRow>
               <Input
-                icon={<MagnifyIcon xmlns="http://www.w3.org/2000/svg" />}
+                icon={
+                  <MagnifyIcon
+                    xmlns="http://www.w3.org/2000/svg"
+                    color={theme.main}
+                  />
+                }
                 type="text"
                 name="search"
                 placeholder="Search..."
@@ -132,7 +138,8 @@ SummaryPage.propTypes = {
     PropTypes.number
   ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
-  fetchIssues: PropTypes.func.isRequired
+  fetchIssues: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -144,4 +151,4 @@ const mapDispatchToProps = dispatch => ({
   fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);
+export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));

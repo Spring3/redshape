@@ -50,7 +50,7 @@ const Table = styled.table`
     tr {
       th {
         padding: 15px 5px;
-        background: ${props => props.theme.bg};
+        background: ${props => props.theme.bgDark};
         border-bottom: 2px solid ${props => props.theme.bgDarker};
         transition: color ease ${props => props.theme.transitionTime};
         &:hover {

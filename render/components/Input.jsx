@@ -32,13 +32,15 @@ const StyledInput = styled.input`
 
     &::placeholder {
       color: ${theme.minorText};
+      font-weight: 500;
     }
   `}}
 
   ${props => props.icon && css`
     background-image: url(data:image/svg+xml;utf8,${props.icon});
     background-repeat: no-repeat;
-    background-position: right center;
+    background-position: 5px center;
+    padding-left: 35px;
   `}
 
   ${props => props.disabled && css`
