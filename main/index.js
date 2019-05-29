@@ -157,7 +157,7 @@ const createAboutWindow = () => {
     maxWidth: 600,
     maxHeight: 520,
     useContentSize: true,
-    titleBarStyle: 'hidden-inset',
+    titleBarStyle: 'hidden',
     show: false,
     icon: path.join(__dirname, '../assets/icon.png'),
     webPreferences: {

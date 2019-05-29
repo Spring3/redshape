@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { ThemeProvider, css } from 'styled-components';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { version, name } from '../../package.json';
 import LogoIcon from '../../assets/icon.png';
 
+import DragArea from '../components/DragArea';
 import Link from '../components/Link';
 import { report } from '../../common/reporter';
 import License from './License';
@@ -55,7 +56,7 @@ const IconContainer = styled.div`
   }
   `;
   
-  const CenteredDiv = styled.div`
+const CenteredDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -77,6 +78,7 @@ const StyledTabs = styled(Tabs)`
   height: 100vh;
   flex-direction: column;
   display: flex;
+  padding-top: 15px;
 
   ul.react-tabs__tab-list {
     list-style-type: none;
@@ -132,65 +134,68 @@ class AboutPage extends Component {
 
   render() {
     return (
-    <StyledTabs>
-      <TabList>
-        <Tab></Tab>
-        <Tab></Tab>
-      </TabList>
+      <Fragment>
+        <DragArea />
+        <StyledTabs>
+          <TabList>
+            <Tab></Tab>
+            <Tab></Tab>
+          </TabList>
 
-      <StyledTabPanel>
-        <FlexBox>
-          <IconContainer>
-            <Link
-              href="https://spring3.github.io/website/redshape"
-              type="external"
-            >
-              <img alt="App icon" height="70" src={LogoIcon} />
-            </Link>
-            <h2>{name}</h2>
-            <h2>v{version}</h2>
-          </IconContainer>
-          <CenteredDiv>
-            <h3>Time tracker for Redmine</h3>
-            <div>
-              <Link
-                href="#"
-                onClick={this.onReportButtonClick}
-              >
-                Submit
-              </Link>
-              <span>&nbsp;issues/proposals on Github.</span>
-            </div>
-            <div>
-              <span>Visit the Redshape</span>
-              <Link
-                href="https://spring3.github.io/website/redshape"
-                type="external"
-              >
-                homepage
-              </Link>
-            </div>
-          </CenteredDiv>
-          <Paragraph>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</Paragraph>
-          <footer>
-            <div>
-              Copyright © 2019&nbsp;
-              <Link
-                href="https://spring3.github.io/website/"
-                type="external"
-              >
-                Daniyil Vasylenko
-              </Link>
-            </div>
-          </footer>
-        </FlexBox>
-      </StyledTabPanel>
-      <StyledTabPanel>
-        <FlexBox>
-          <License />
-        </FlexBox>
-      </StyledTabPanel>
-    </StyledTabs>
+          <StyledTabPanel>
+            <FlexBox>
+              <IconContainer>
+                <Link
+                  href="https://spring3.github.io/website/redshape"
+                  type="external"
+                >
+                  <img alt="App icon" height="70" src={LogoIcon} />
+                </Link>
+                <h2>{name}</h2>
+                <h2>v{version}</h2>
+              </IconContainer>
+              <CenteredDiv>
+                <h3>Time tracker for Redmine</h3>
+                <div>
+                  <Link
+                    href="#"
+                    onClick={this.onReportButtonClick}
+                  >
+                    Submit
+                  </Link>
+                  <span>&nbsp;issues/proposals on Github.</span>
+                </div>
+                <div>
+                  <span>Visit the Redshape</span>
+                  <Link
+                    href="https://spring3.github.io/website/redshape"
+                    type="external"
+                  >
+                    homepage
+                  </Link>
+                </div>
+              </CenteredDiv>
+              <Paragraph>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</Paragraph>
+              <footer>
+                <div>
+                  Copyright © 2019&nbsp;
+                  <Link
+                    href="https://spring3.github.io/website/"
+                    type="external"
+                  >
+                    Daniyil Vasylenko
+                  </Link>
+                </div>
+              </footer>
+            </FlexBox>
+          </StyledTabPanel>
+          <StyledTabPanel>
+            <FlexBox>
+              <License />
+            </FlexBox>
+          </StyledTabPanel>
+        </StyledTabs>
+      </Fragment>
     );
   }
 };
