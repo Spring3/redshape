@@ -1,3 +1,4 @@
+require('dotenv').config({ silent: true });
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
@@ -15,9 +16,9 @@ const config = {
     about: path.resolve(__dirname, 'render/about')
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, './dist'),
     // to avoid extra slash at the beginning, that makes the file:// request result in a RESOURCE_NOT_FOUND error
-    publicPath: isProduction ? '' : path.resolve(__dirname, '/'),
+    publicPath: isProduction ? '' : '/',
     filename: '[name].js'
   },
   module: {
@@ -80,13 +81,9 @@ const config = {
 if (!isProduction) {
   config.devServer = {
     contentBase: path.resolve(__dirname, './dist'),
-    publicPath: path.resolve(__dirname, '/'),
+    publicPath: '/',
     disableHostCheck: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-    },
+    port: process.env.PORT,
     stats: {
       colors: true,
       chunks: false,

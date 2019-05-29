@@ -7,6 +7,7 @@ const { app, BrowserWindow, session, Menu } = require('electron');
 const utils = require('electron-util');
 const isDev = require('electron-is-dev');
 
+
 require('./exceptionCatcher')();
 
 const configFilePath = isDev
@@ -21,7 +22,7 @@ if (env.error || !process.env.ENCRYPTION_KEY) {
   dotenv.load({ silent: true, path: configFilePath });
 }
 
-const { PORT, redmineDomain } = require('../common/config');
+const { PORT } = require('../common/config');
 require('../common/request'); // to initialize from storage
 
 let mainWindow;
@@ -219,17 +220,6 @@ const initialize = () => {
     mainWindow = null;
   });
 };
-
-if (redmineDomain) {
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [`script-src 'self' ${redmineDomain}`]
-      }
-    });
-  });
-}
 
 app.once('ready', initialize);
 app.on('window-all-closed', () => {
