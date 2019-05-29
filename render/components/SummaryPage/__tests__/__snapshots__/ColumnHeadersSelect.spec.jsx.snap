@@ -3,11 +3,11 @@
 exports[`SummaryPage => ColumnHeadersSelect componnet should match the snapshot 1`] = `
 .c0 h4 {
   margin-bottom: 10px;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c1 {
-  color: #909090;
+  color: #A0A0A0;
 }
 
 <div

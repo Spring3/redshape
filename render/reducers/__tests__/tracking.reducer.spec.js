@@ -1,6 +1,6 @@
 import _cloneDeep from 'lodash/cloneDeep';
 
-import storage from '../../../modules/storage';
+import storage from '../../../common/storage';
 import reducer, { initialState } from '../tracking.reducer';
 import actions from '../../actions/tracking.actions';
 

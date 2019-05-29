@@ -9,7 +9,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { SETTINGS_SHOW_CLOSED_ISSUES, SETTINGS_USE_COLORS } from '../../../actions/settings.actions';
 import OptionsBlock from '../OptionsBlock';
-import { getInstance, reset, initialize } from '../../../../modules/request';
+import { getInstance, reset, initialize } from '../../../../common/request';
 import theme from '../../../theme';
 
 const redmineEndpoint = 'redmint.test.test';

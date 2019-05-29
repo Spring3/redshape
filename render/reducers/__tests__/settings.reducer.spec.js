@@ -1,7 +1,7 @@
 import _cloneDeep from 'lodash/cloneDeep';
 
 import reducer, { initialState } from '../settings.reducer';
-import storage from '../../../modules/storage';
+import storage from '../../../common/storage';
 import * as actions from '../../actions/settings.actions';
 
 let storageSpy

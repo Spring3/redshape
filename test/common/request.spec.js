@@ -1,4 +1,4 @@
-const request = require('../../modules/request');
+const request = require('../../common/request');
 
 describe('Request', () => {
   it('should expose all the necessary functions', () => {

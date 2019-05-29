@@ -201,6 +201,7 @@ class TimeEntryModal extends Component {
           </Label>
           <Label htmlFor="activity" label="Activity">
             <Select
+              name="activity"
               options={activities}
               styles={selectStyles}
               value={selectedActivity}
@@ -230,7 +231,7 @@ class TimeEntryModal extends Component {
                   name="hours"
                   value={hours}
                   onBlur={this.runValidation}
-                  disabled={!isEditable}
+                  disabled={!isEditable || !isUserAuthor}
                   onChange={this.onHoursChange}
                 />
               </Label>

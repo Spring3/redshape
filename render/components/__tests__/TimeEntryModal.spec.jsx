@@ -9,7 +9,7 @@ import { mount } from 'enzyme';
 
 import * as actions from '../../actions/timeEntry.actions';
 import theme from '../../theme';
-import { initialize, getInstance, reset } from '../../../modules/request';
+import { initialize, getInstance, reset } from '../../../common/request';
 import TimeEntryModal from '../TimeEntryModal';
 
 let axiosMock;
@@ -432,7 +432,7 @@ describe('TimeEntryModal Component', () => {
     }, 50);
   });
 
-  it('should not display the update buttons if user is not the author', () => {
+  it('should disable the UI if user is not the author', () => {
     const props = {
       activities: [{
         id: 1,
@@ -484,8 +484,12 @@ describe('TimeEntryModal Component', () => {
       </Provider>
     );
 
-    expect(wrapper.exists('#btn-add')).toBe(true);
-    expect(wrapper.exists('#btn-update')).toBe(false);
+    expect(wrapper.find('Select').prop('isDisabled')).toBe(true);
+    expect(wrapper.find('input[name="hours"]').prop('disabled')).toBe(true);
+    expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
+    expect(wrapper.find('MarkdownEditor').prop('isDisabled')).toBe(true);
+    expect(wrapper.exists('#btn-add')).toBe(false);
+    expect(wrapper.exists('#btn-update')).toBe(true);
   });
 
   it('should not add if validation failed', (done) => {

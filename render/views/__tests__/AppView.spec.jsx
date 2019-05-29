@@ -12,14 +12,14 @@ import { ThemeProvider } from 'styled-components';
 import { USER_LOGOUT } from '../../actions/user.actions';
 import { PROJECT_GET_ALL } from '../../actions/project.actions';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
-import * as axios from '../../../modules/request';
+import * as axios from '../../../common/request';
 import theme from '../../theme';
 
 import AppView from '../AppView';
 
 jest.mock('electron-store');
 
-import storage from '../../../modules/storage';
+import storage from '../../../common/storage';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';

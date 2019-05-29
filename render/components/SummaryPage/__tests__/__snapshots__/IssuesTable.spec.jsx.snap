@@ -1,59 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
-.c0 {
-  position: relative;
-  min-height: 200px;
-}
-
-.c0 tbody {
-  text-align: center;
-  font-size: 14px;
-  overflow-y: scroll;
-  display: block;
-  max-height: 60vh;
-}
-
-.c0 tbody tr th {
-  padding: 15px 5px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  background: #F9F9F9;
-  font-weight: 900;
-  -webkit-transition: color ease .2s;
-  transition: color ease .2s;
-}
-
-.c0 tbody tr th:hover {
-  cursor: pointer;
-  color: #FF7079;
-}
-
-.c0 tbody tr th svg {
-  vertical-align: middle;
-}
-
-.c0 tbody tr th.due-date {
-  width: 90px;
-  z-index: 1;
-}
-
-.c0 tbody tr td {
-  padding: 15px 5px;
-  font-weight: 500;
-  -webkit-transition: background ease .2s;
-  transition: background ease .2s;
-}
-
-.c0 tbody tr:hover {
-  cursor: pointer;
-}
-
-.c0 tbody tr:hover td {
-  background: #F9F9F9;
-}
-
 .c3 {
   position: relative;
   display: inline-grid;
@@ -69,6 +16,61 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 .c3 span:last-child {
   opacity: 0;
   display: none;
+}
+
+.c0 {
+  position: relative;
+  min-height: 200px;
+  width: 100%;
+  border: 2px solid #F9F9F9;
+  border-spacing: 0px;
+}
+
+.c0 tbody {
+  text-align: center;
+  font-size: 14px;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
+.c0 tbody tr td {
+  border-bottom: 2px solid #F9F9F9;
+  padding: 15px 5px;
+  -webkit-transition: background ease .2s;
+  transition: background ease .2s;
+}
+
+.c0 tbody tr:hover {
+  cursor: pointer;
+}
+
+.c0 tbody tr:hover td {
+  background: #F9F9F9;
+}
+
+.c0 tbody tr td.due_date {
+  white-space: nowrap;
+}
+
+.c0 thead {
+  z-index: 1;
+}
+
+.c0 thead tr th {
+  padding: 15px 5px;
+  background: #F9F9F9;
+  border-bottom: 2px solid #E9E9E9;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+}
+
+.c0 thead tr th:hover {
+  cursor: pointer;
+  color: #FF7079;
+}
+
+.c0 thead tr th svg {
+  vertical-align: middle;
 }
 
 .c1 {
@@ -87,95 +89,94 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 }
 
 <table
-  cellPadding={0}
-  cellSpacing={0}
   className="c0"
-  width="100%"
 >
-  <tbody>
+  <thead>
     <tr>
       <th
-        className=""
         onClick={[Function]}
       >
         Id
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Project
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Tracker
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Status
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Subject
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Priority
          
       </th>
       <th
-        className=""
         onClick={[Function]}
       >
         Estimation
          
       </th>
       <th
-        className="due-date"
         onClick={[Function]}
       >
         Due Date
          
       </th>
     </tr>
+  </thead>
+  <tbody>
     <tr
       onClick={[Function]}
     >
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           1
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Project 1
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Tracker 1
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c1"
           color="#6CCA51"
@@ -183,14 +184,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           Open
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Task #1
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c2"
           color="#FF634D"
@@ -198,14 +203,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           High
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           10
         </span>
       </td>
-      <td>
+      <td
+        className="due_date"
+      >
         <span
           className="c3"
         >
@@ -221,28 +230,36 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
     <tr
       onClick={[Function]}
     >
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           2
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Project 2
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Tracker 2
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c1"
           color="#6CCA51"
@@ -250,14 +267,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           Open
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Task #2
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c4"
           color="#FFDA77"
@@ -265,14 +286,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           Normal
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           5
         </span>
       </td>
-      <td>
+      <td
+        className="due_date"
+      >
         <span
           className="c3"
         >
@@ -288,28 +313,36 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
     <tr
       onClick={[Function]}
     >
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           3
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Project 3
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Test Tracker 3
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c1"
           color="#6CCA51"
@@ -317,14 +350,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           Open
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           Task #3
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className="c1"
           color="#6CCA51"
@@ -332,14 +369,18 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
           Low
         </span>
       </td>
-      <td>
+      <td
+        className={false}
+      >
         <span
           className=""
         >
           2
         </span>
       </td>
-      <td>
+      <td
+        className="due_date"
+      >
         <span
           className="c3"
         >

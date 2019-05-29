@@ -12,8 +12,8 @@ import MockAdapter from 'axios-mock-adapter';
 import actions from '../../actions';
 import { USER_LOGIN } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
-import storage from '../../../modules/storage';
-import axios from '../../../modules/request';
+import storage from '../../../common/storage';
+import axios from '../../../common/request';
 
 import theme from '../../theme';
 import LoginView from '../LoginView';

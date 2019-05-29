@@ -19,6 +19,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   font-size: 14px;
   outline: none;
   text-align: center;
+  background: #FFFFFF;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
   -webkit-transition: background ease .2s;
@@ -118,9 +119,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   resize: none;
   overflow: hidden;
   height: auto;
+  font-family: inherit;
   width: 100%;
   line-height: 1.5rem;
   box-sizing: border-box;
+  background: #FFFFFF;
 }
 
 .c28 {
@@ -139,7 +142,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
-  box-shadow: 0px 2px 7px #909090;
+  box-shadow: 0px 2px 7px #A0A0A0;
 }
 
 .c28::after {
@@ -211,7 +214,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   padding: 10px;
   border-radius: 3px;
   outline: none;
-  border: 1px solid #909090;
+  border: 1px solid #A0A0A0;
 }
 
 .c29:hover {
@@ -314,7 +317,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   padding: 10px;
   margin: 10px auto 0px auto;
   border-radius: 3px;
-  border: 2px solid transparent;
+  border: 1px solid #E9E9E9;
   background: #FFFFFF;
 }
 
@@ -357,7 +360,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 .c19 li div:first-child div span.date {
   margin-right: 5px;
   font-size: 12px;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c19 li div:first-child div span.username {
@@ -385,8 +388,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 
 .c31 {
   font-size: 12px;
-  margin-top: 0px;
-  color: #909090;
+  margin-top: 30px;
+  color: #A0A0A0;
+  font-weight: bold;
 }
 
 .c31 a {
@@ -407,37 +411,44 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 .c21 li {
-  background: #FFFFFF;
-  box-shadow: 0px 0px 5px 0px #E9E9E9;
-  display: block;
-  border-radius: 3px;
-  margin: 20px;
-}
-
-.c21 li div.commentsHeader {
+  margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding: 10px 20px;
-  border-bottom: 2px solid #F9F9F9;
+  -webkit-box-pack: space-around;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: space-around;
+  justify-content: space-around;
 }
 
-.c21 li div.commentsHeader span:first-child {
-  font-weight: bold;
-  color: #3F3844;
+.c21 li div.commentsHeader {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 20%;
+}
+
+.c21 li div.commentsHeader h3 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #FF7079;
 }
 
 .c21 li div.commentsHeader span:last-child {
-  font-weight: bold;
-  color: #909090;
+  color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
-  text-align: center;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .c21 li div.commentsHeader span:last-child:hover {
@@ -445,7 +456,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 .c21 li iframe {
+  margin-left: 20px;
   padding: 5px 20px 0px 20px;
+  background: #FFFFFF;
+  border: 1px solid #E9E9E9;
+  border-radius: 3px;
+  width: 74%;
+  min-height: 100px;
 }
 
 .c22 {
@@ -459,7 +476,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
   padding: 20px;
   border-radius: 3px;
-  box-shadow: 0px 0px 10px #E9E9E9;
+  border: 1px solid #E9E9E9;
 }
 
 .c1 {
@@ -513,7 +530,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 .c5 {
   font-size: 12px;
   margin-top: 0px;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c5 a {

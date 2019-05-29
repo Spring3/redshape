@@ -5,7 +5,7 @@ import { notify } from '../../actions/helper';
 
 jest.mock('electron-store');
 
-import storage from '../../../modules/storage';
+import storage from '../../../common/storage';
 
 describe('User reducer', () => {
   const initialState = {

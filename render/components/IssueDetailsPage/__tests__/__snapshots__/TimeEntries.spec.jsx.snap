@@ -7,6 +7,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   font-size: 14px;
   outline: none;
   text-align: center;
+  background: #FFFFFF;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
   -webkit-transition: background ease .2s;
@@ -38,18 +39,19 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   font-size: 14px;
   outline: none;
   text-align: center;
+  background: #FFFFFF;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
   -webkit-transition: background ease .2s;
   transition: background ease .2s;
   width: auto;
-  border: 2px solid #909090;
+  border: 2px solid #A0A0A0;
   background: #FFFFFF;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c4 svg {
-  fill: #909090;
+  fill: #A0A0A0;
 }
 
 .c7 {
@@ -161,7 +163,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   padding: 10px;
   margin: 10px auto 0px auto;
   border-radius: 3px;
-  border: 2px solid transparent;
+  border: 1px solid #E9E9E9;
   background: #FFFFFF;
 }
 
@@ -204,7 +206,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 .c5 li div:first-child div span.date {
   margin-right: 5px;
   font-size: 12px;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c5 li div:first-child div span.username {

@@ -1,4 +1,4 @@
-const utils = require('../../modules/utils');
+const utils = require('../../common/utils');
 
 describe('utils', () => {
   it('should expose the utils functions', () => {

@@ -12,7 +12,7 @@ import renderer from 'react-test-renderer';
 import theme from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
 import { ISSUES_GET, ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
-import { getInstance, reset, initialize } from '../../../../modules/request';
+import { getInstance, reset, initialize } from '../../../../common/request';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';

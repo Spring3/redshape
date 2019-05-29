@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import request, { IssueFilter, notify, login, logout } from '../helper';
-import axios from '../../../modules/request';
+import axios from '../../../common/request';
 
 let axiosMock;
 

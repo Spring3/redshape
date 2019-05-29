@@ -119,7 +119,7 @@ exports[`Timer component should match the snapshot 1`] = `
               "$$typeof": Symbol(react.forward_ref),
               "attrs": Array [],
               "componentStyle": ComponentStyle {
-                "componentId": "Timer__ActiveTimer-sc-14pue7f-0",
+                "componentId": "Timer__ActiveTimer-d99dh7-0",
                 "isStatic": false,
                 "lastClassName": "c0",
                 "rules": Array [
@@ -152,7 +152,7 @@ exports[`Timer component should match the snapshot 1`] = `
               "displayName": "Timer__ActiveTimer",
               "foldedComponentIds": Array [],
               "render": [Function],
-              "styledComponentId": "Timer__ActiveTimer-sc-14pue7f-0",
+              "styledComponentId": "Timer__ActiveTimer-d99dh7-0",
               "target": "div",
               "toString": [Function],
               "warnTooManyClasses": [Function],
@@ -178,7 +178,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "$asyncbind": [Function],
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "Timer__StyledButton-sc-14pue7f-1",
+                        "componentId": "Timer__StyledButton-d99dh7-1",
                         "isStatic": true,
                         "lastClassName": "c1",
                         "rules": Array [
@@ -188,7 +188,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "displayName": "Timer__StyledButton",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "Timer__StyledButton-sc-14pue7f-1",
+                      "styledComponentId": "Timer__StyledButton-d99dh7-1",
                       "target": [Function],
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -217,7 +217,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-sc-1yphocy-1",
+                              "componentId": "Button__StyledLink-bgocaa-1",
                               "isStatic": false,
                               "lastClassName": "c2",
                               "rules": Array [
@@ -233,7 +233,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "displayName": "Button__StyledLink",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "Button__StyledLink-sc-1yphocy-1",
+                            "styledComponentId": "Button__StyledLink-bgocaa-1",
                             "target": "a",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],
@@ -281,7 +281,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "$asyncbind": [Function],
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "Timer__StyledButton-sc-14pue7f-1",
+                        "componentId": "Timer__StyledButton-d99dh7-1",
                         "isStatic": true,
                         "lastClassName": "c1",
                         "rules": Array [
@@ -291,7 +291,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "displayName": "Timer__StyledButton",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "Timer__StyledButton-sc-14pue7f-1",
+                      "styledComponentId": "Timer__StyledButton-d99dh7-1",
                       "target": [Function],
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -320,7 +320,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-sc-1yphocy-1",
+                              "componentId": "Button__StyledLink-bgocaa-1",
                               "isStatic": false,
                               "lastClassName": "c2",
                               "rules": Array [
@@ -336,7 +336,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "displayName": "Button__StyledLink",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "Button__StyledLink-sc-1yphocy-1",
+                            "styledComponentId": "Button__StyledLink-bgocaa-1",
                             "target": "a",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],
@@ -389,7 +389,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "$asyncbind": [Function],
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "Timer__MaskedLink-sc-14pue7f-2",
+                        "componentId": "Timer__MaskedLink-d99dh7-2",
                         "isStatic": true,
                         "lastClassName": "c3",
                         "rules": Array [
@@ -399,7 +399,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       "displayName": "Timer__MaskedLink",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "Timer__MaskedLink-sc-14pue7f-2",
+                      "styledComponentId": "Timer__MaskedLink-d99dh7-2",
                       "target": [Function],
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -428,7 +428,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "Link__StyledLink-sc-4bd6cn-0",
+                              "componentId": "Link__StyledLink-qed6kb-0",
                               "isStatic": false,
                               "lastClassName": "c4",
                               "rules": Array [
@@ -441,7 +441,7 @@ exports[`Timer component should match the snapshot 1`] = `
                             "displayName": "Link__StyledLink",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "Link__StyledLink-sc-4bd6cn-0",
+                            "styledComponentId": "Link__StyledLink-qed6kb-0",
                             "target": "a",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],

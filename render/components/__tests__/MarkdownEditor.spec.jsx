@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import { ThemeProvider } from 'styled-components';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
-import utils from '../../../modules/utils';
+import utils from '../../../common/utils';
 import theme from '../../theme';
 
 describe('MarkdownEditor component', () => {

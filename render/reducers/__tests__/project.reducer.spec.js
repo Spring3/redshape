@@ -3,7 +3,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import reducer, { initialState } from '../project.reducer';
 import { notify } from '../../actions/helper';
 import * as actions from '../../actions/project.actions';
-import storage from '../../../modules/storage';
+import storage from '../../../common/storage';
 
 describe('Project reducer', () => {
   it('should return the initial state if an unknown action comes in', () => {

@@ -13,9 +13,13 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
   font-weight: bold;
   -webkit-transition: background .2s;
   transition: background .2s;
-  border: 1px solid #909090;
+  border: 1px solid #A0A0A0;
   color: #FF7079;
   background: white;
+  background-image: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22mdi-icon%20%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23FF7079%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M9.5%2C3C13.09%2C3%2016%2C5.91%2016%2C9.5C16%2C11.11%2015.41%2C12.59%2014.44%2C13.73L14.71%2C14H15.5L20.5%2C19L19%2C20.5L14%2C15.5V14.71L13.73%2C14.44C12.59%2C15.41%2011.11%2C16%209.5%2C16C5.91%2C16%203%2C13.09%203%2C9.5C3%2C5.91%205.91%2C3%209.5%2C3M9.5%2C5C7%2C5%205%2C7%205%2C9.5C5%2C12%207%2C14%209.5%2C14C12%2C14%2014%2C12%2014%2C9.5C14%2C7%2012%2C5%209.5%2C5Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E);
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  padding-left: 35px;
 }
 
 .c11:hover {
@@ -28,19 +32,23 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
 }
 
 .c11::-webkit-input-placeholder {
-  color: #909090;
+  color: #A0A0A0;
+  font-weight: 500;
 }
 
 .c11::-moz-placeholder {
-  color: #909090;
+  color: #A0A0A0;
+  font-weight: 500;
 }
 
 .c11:-ms-input-placeholder {
-  color: #909090;
+  color: #A0A0A0;
+  font-weight: 500;
 }
 
 .c11::placeholder {
-  color: #909090;
+  color: #A0A0A0;
+  font-weight: 500;
 }
 
 .c7 {
@@ -99,97 +107,31 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
 
 .c3 h4 {
   margin-bottom: 10px;
-  color: #909090;
+  color: #A0A0A0;
 }
 
 .c4 {
-  color: #909090;
-}
-
-.c14 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c14 span {
-  white-space: nowrap;
-  padding-left: 20px;
-  vertical-align: middle;
-}
-
-.c15 {
-  width: 2em;
-  height: 2em;
-  background-color: #FF7079;
-  -webkit-transform: rotate(0);
-  -ms-transform: rotate(0);
-  transform: rotate(0);
-  -webkit-animation: bKxTBf 1s infinite;
-  animation: bKxTBf 1s infinite;
-}
-
-.c13 {
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  position: absolute;
-  top: 45%;
-  left: 45%;
-  z-index: 5;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 10px #E9E9E9;
-  padding: 20px;
-  border-radius: 3px;
+  color: #A0A0A0;
 }
 
 .c12 {
   position: relative;
   min-height: 200px;
+  width: 100%;
+  border: 2px solid #F9F9F9;
+  border-spacing: 0px;
 }
 
 .c12 tbody {
   text-align: center;
   font-size: 14px;
   overflow-y: scroll;
-  display: block;
   max-height: 60vh;
 }
 
-.c12 tbody tr th {
-  padding: 15px 5px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  background: #F9F9F9;
-  font-weight: 900;
-  -webkit-transition: color ease .2s;
-  transition: color ease .2s;
-}
-
-.c12 tbody tr th:hover {
-  cursor: pointer;
-  color: #FF7079;
-}
-
-.c12 tbody tr th svg {
-  vertical-align: middle;
-}
-
-.c12 tbody tr th.due-date {
-  width: 90px;
-  z-index: 1;
-}
-
 .c12 tbody tr td {
+  border-bottom: 2px solid #F9F9F9;
   padding: 15px 5px;
-  font-weight: 500;
   -webkit-transition: background ease .2s;
   transition: background ease .2s;
 }
@@ -200,6 +142,31 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
 
 .c12 tbody tr:hover td {
   background: #F9F9F9;
+}
+
+.c12 tbody tr td.due_date {
+  white-space: nowrap;
+}
+
+.c12 thead {
+  z-index: 1;
+}
+
+.c12 thead tr th {
+  padding: 15px 5px;
+  background: #F9F9F9;
+  border-bottom: 2px solid #E9E9E9;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+}
+
+.c12 thead tr th:hover {
+  cursor: pointer;
+  color: #FF7079;
+}
+
+.c12 thead tr th svg {
+  vertical-align: middle;
 }
 
 .c9 {
@@ -533,45 +500,31 @@ exports[`AppView -> Summary Page should match the snapshot 1`] = `
           disabled={false}
           name="search"
           onChange={[Function]}
-          placeholder="Search"
+          placeholder="Search..."
           type="text"
         />
       </div>
     </div>
     <table
-      cellPadding={0}
-      cellSpacing={0}
       className="c12"
-      width="100%"
     >
-      <tbody>
-        <div
-          className="c13 c14"
-        >
-          <div
-            className="c15"
-          />
-          <span>
-            Please Wait...
-          </span>
-        </div>
+      <thead>
         <tr>
           <th
-            className=""
             onClick={[Function]}
           >
             Id
              
           </th>
           <th
-            className=""
             onClick={[Function]}
           >
             Subject
              
           </th>
         </tr>
-      </tbody>
+      </thead>
+      <tbody />
     </table>
   </section>
 </div>

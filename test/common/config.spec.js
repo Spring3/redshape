@@ -29,11 +29,11 @@ describe('Config', () => {
   });
 
   it('overwrite default env data with user settings', () => {
-    const storage = require('../../modules/storage.js'); // eslint-disable-line
+    const storage = require('../../common/storage.js'); // eslint-disable-line
     const storageHasSpy = jest.spyOn(storage, 'has');
     const storageGetSpy = jest.spyOn(storage, 'get');
 
-    const config = require('../../modules/config.js'); // eslint-disable-line
+    const config = require('../../common/config.js'); // eslint-disable-line
 
     expect(config).toEqual({
       PORT: '2222',

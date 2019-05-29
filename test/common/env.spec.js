@@ -16,7 +16,7 @@ describe('ENV', () => {
   afterAll(() => Object.assign(process.env, standardEnv));
 
   it('should get the default env data', () => {
-    const env = require('../../modules/env.js'); // eslint-disable-line
+    const env = require('../../common/env.js'); // eslint-disable-line
     expect(env).toEqual({
       PORT: '1234',
       ENCRYPTION_KEY: 'test-key',
