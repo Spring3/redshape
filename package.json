@@ -7,8 +7,8 @@
     "start": "npm run prepack && electron --noDevServer ./main/index.js",
     "dev": "webpack-dev-server",
     "pack": "electron-builder --dir dist",
-    "prepack": "NODE_ENV=production webpack --config webpack.config.js",
-    "build": "electron-builder",
+    "prepack": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build": "npm run pack && electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint .",
     "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"
@@ -51,6 +51,7 @@
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-styled-components": "^1.10.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "electron": "^5.0.2",
     "electron-builder": "^20.41.0",

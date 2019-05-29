@@ -152,6 +152,10 @@ const createAboutWindow = () => {
   aboutWindow = new BrowserWindow({
     width: 480,
     height: 400,
+    minWidth: 480,
+    minHeight: 400,
+    maxWidth: 600,
+    maxHeight: 520,
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
     show: false,
