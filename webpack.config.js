@@ -1,3 +1,4 @@
+require('dotenv').config({ silent: true });
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
@@ -5,14 +6,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { spawn } = require('child_process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const config = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: isProduction ? 'production' : 'development',
   target: 'electron-renderer',
-  entry: path.resolve(__dirname, 'app'),
+  entry: {
+    app: path.resolve(__dirname, 'render/'),
+    about: path.resolve(__dirname, 'render/about')
+  },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: path.resolve(__dirname, '/'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, './dist'),
+    // to avoid extra slash at the beginning, that makes the file:// request result in a RESOURCE_NOT_FOUND error
+    publicPath: isProduction ? '' : '/',
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -25,6 +32,18 @@ const config = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader'
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
+      },
+      {
+        test: /\.txt$/,
+        use: [
+          'raw-loader'
         ]
       }
     ]
@@ -44,24 +63,27 @@ const config = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
-      allChunks: true
+      chunkFilename: '[name].css'
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './app/index.html')
+      filename: 'index.html',
+      template: path.resolve(__dirname, './render/index.html'),
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'about.html',
+      template: path.resolve(__dirname, './render/about/about.html'),
+      chunks: ['about']
     })
   ]
 };
 
-if (config.mode === 'development') {
+if (!isProduction) {
   config.devServer = {
     contentBase: path.resolve(__dirname, './dist'),
-    publicPath: path.resolve(__dirname, '/'),
+    publicPath: '/',
     disableHostCheck: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-    },
+    port: process.env.PORT,
     stats: {
       colors: true,
       chunks: false,

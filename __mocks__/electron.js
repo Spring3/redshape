@@ -1,3 +1,5 @@
+import { name } from '../package.json';
+
 const shell = {
   openExternal: () => {}
 };
@@ -7,9 +9,13 @@ const remote = {
   process: {
     platform: 'darwin'
   },
+  app: {
+    getName: () => name,
+    isPackaged: false
+  },
   require: (path) => {
-    if (path === './modules/request') {
-      return require('../modules/request'); // eslint-disable-line
+    if (path.includes('/common/request')) {
+      return require('../common/request'); // eslint-disable-line
     }
     return undefined;
   }

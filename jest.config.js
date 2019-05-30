@@ -1,10 +1,11 @@
 module.exports = {
-  name: 'redtime',
+  name: 'redshape',
   verbose: true,
   clearMocks: true,
   collectCoverage: true,
   setupFilesAfterEnv: ['./setupJest.js'],
   moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/__mocks__/style-mock.js'
+    '\\.(css|less)$': '<rootDir>/__mocks__/style-mock.js',
+    '\\.(png)$': '<rootDir>/__mocks__/image-mock.js'
   }
 };

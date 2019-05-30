@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/redtime
+    working_directory: ~/redshape
     docker:
       - image: circleci/node:10.15.3
     steps:
