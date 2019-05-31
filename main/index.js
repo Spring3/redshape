@@ -5,9 +5,10 @@ const url = require('url');
 const path = require('path');
 const { app, BrowserWindow, Menu } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const utils = require('electron-util');
+const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 
+const utils = require('./utils');
 require('./exceptionCatcher')();
 
 const configFilePath = isDev
@@ -134,10 +135,10 @@ const initializeMenu = () => {
       submenu: [
         {
           label: 'Report An Issue',
-          click: () => utils.openNewGitHubIssue({
+          click: () => electronUtils.openNewGitHubIssue({
             user: 'Spring3',
             repo: 'redshape',
-            body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${utils.debugInfo()}\n\`\`\``
+            body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${electronUtils.debugInfo()}\n\`\`\``
           })
         },
         // {
@@ -154,7 +155,7 @@ const initializeMenu = () => {
 };
 
 const createAboutWindow = () => {
-  aboutWindow = new BrowserWindow({
+  const windowConfig = {
     width: 480,
     height: 400,
     minWidth: 480,
@@ -164,11 +165,13 @@ const createAboutWindow = () => {
     useContentSize: true,
     titleBarStyle: 'hidden',
     show: false,
-    icon: path.join(__dirname, '../assets/icon.png'),
     webPreferences: {
       nodeIntegration: true
     },
-  });
+  };
+
+  aboutWindow = new BrowserWindow(utils.fixIcon(windowConfig));
+
   aboutWindow.loadURL(
     isDev
       ? url.format({
@@ -183,9 +186,11 @@ const createAboutWindow = () => {
         slashes: true
       })
   );
+
   aboutWindow.once('closed', () => {
     aboutWindow = null;
   });
+
   aboutWindow.setMenu(null);
 };
 
@@ -194,7 +199,6 @@ const initialize = () => {
     width: 1024,
     height: 768,
     minWidth: 744,
-    icon: path.join(__dirname, '../assets/icon.png'),
     show: false,
     titleBarStyle: 'hidden',
     webPreferences: {
@@ -214,7 +218,8 @@ const initialize = () => {
       pathname: path.join(__dirname, '../dist/index.html'),
       slashes: true
     });
-  mainWindow = new BrowserWindow(windowConfig);
+
+  mainWindow = new BrowserWindow(utils.fixIcon(windowConfig));
   mainWindow.loadURL(indexPath);
 
   mainWindow.once('ready-to-show', () => {

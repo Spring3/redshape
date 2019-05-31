@@ -45,8 +45,7 @@
       "target": [
         "nsis",
         "nsis-web"
-      ],
-      "icon": "assets/icon.ico"
+      ]
     },
     "mac": {
       "category": "public.app-category.developer-tools"
