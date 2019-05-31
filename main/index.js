@@ -3,10 +3,10 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const { app, BrowserWindow, session, Menu } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const utils = require('electron-util');
 const isDev = require('electron-is-dev');
-
 
 require('./exceptionCatcher')();
 
@@ -64,6 +64,11 @@ const initializeMenu = () => {
       label: 'File',
       submenu: [
         ...(!isMac ? [aboutSubmenu] : []),
+        ...(isDev ? [] : [{
+          label: 'Check for Updates',
+          click: () => autoUpdater.checkForUpdatesAndNotify()
+        }]
+        ),
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
     },
@@ -211,7 +216,6 @@ const initialize = () => {
     });
   mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
-  initializeMenu();
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
@@ -225,7 +229,18 @@ const initialize = () => {
   });
 };
 
-app.once('ready', initialize);
+if (!process.env.REDSHAPE_DEBUG) {
+  autoUpdater.on('error', console.error);
+}
+
+app.once('ready', () => {
+  initialize();
+  initializeMenu();
+  if (!isDev) {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();

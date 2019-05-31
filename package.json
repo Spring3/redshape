@@ -9,6 +9,7 @@
     "pack": "electron-builder --dir dist",
     "prepack": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build": "npm run pack && electron-builder",
+    "release": "npm run pack && electron-builder -p always",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint .",
     "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"
@@ -17,7 +18,10 @@
     "type": "git",
     "url": "git+https://github.com/Spring3/redshape.git"
   },
-  "author": "Daniyil Vasylenko <https://github.com/Spring3>",
+  "author": {
+    "name": "Daniyil Vasylenko <https://github.com/Spring3>",
+    "email": "redshape.app@gmail.com"
+  },
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Spring3/redshape/issues"
@@ -25,17 +29,34 @@
   "homepage": "./",
   "build": {
     "appId": "app.spring3.redshape",
+    "electronUpdaterCompatibility": ">= 2.16",
     "files": [
       "common/**/*",
       "main/**/*",
       "dist/**/*",
       "node_modules/**/*"
     ],
+    "publish": [{
+      "provider": "github",
+      "owner": "Spring3",
+      "repo": "redshape"
+    }],
+    "win": {
+      "target": [
+        "nsis",
+        "nsis-web"
+      ],
+      "icon": "assets/icon.ico"
+    },
     "mac": {
       "category": "public.app-category.developer-tools"
     },
     "linux": {
-      "category": "Development"
+      "category": "Development",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
     },
     "directories": {
       "buildResources": "assets",
@@ -87,6 +108,7 @@
     "electron-is-dev": "^1.1.0",
     "electron-store": "^2.0.0",
     "electron-util": "^0.11.0",
+    "electron-updater": "^4.0.6",
     "ensure-error": "^2.0.0",
     "formik": "^1.5.1",
     "joi": "^14.3.1",

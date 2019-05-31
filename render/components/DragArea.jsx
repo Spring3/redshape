@@ -11,6 +11,4 @@ const DragArea = styled.div`
   -webkit-app-region: drag
 `;
 
-export default () => (
-  <DragArea />
-);
+export default () => (<DragArea />);
