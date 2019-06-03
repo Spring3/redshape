@@ -255,8 +255,17 @@ Array [
               Submit
             </a>
             <span>
-               issues/proposals on Github.
+               issues/proposals on Github or 
             </span>
+            <a
+              className="c7"
+              href="mailto:redshape.app@gmail.com"
+              onClick={[Function]}
+              rel="noopener noreferer"
+              type="external"
+            >
+              by e-mail
+            </a>
           </div>
           <div>
             <span>
