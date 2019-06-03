@@ -38,13 +38,6 @@ const Headline = styled.h1`
   color: ${props => props.theme.main};
 `;
 
-const GHLinkContainer = styled.div`
-  grid-column: 6;
-  justify-self: end;
-  align-self: start;
-  margin: 20px 20px 0px 0px;
-`;
-
 const CopyrightsContainer = styled.div`
   grid-row: 4;
   grid-column: 2 / 6;
@@ -92,15 +85,10 @@ class LoginView extends Component {
   }
 
   render() {
-    const { loginError, theme } = this.props; 
+    const { loginError } = this.props; 
     return (
       <Container>
         <DragArea />
-        <GHLinkContainer>
-          <Link type="external" href="https://github.com/Spring3/redshape">
-            <GithubCircleIcon color={theme.main} size="30"/>
-          </Link>
-        </GHLinkContainer>
         <Formik
           initialValues={{ username: '', password: '', redmineEndpoint: '' }}
           validate={this.validate}
