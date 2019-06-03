@@ -65,11 +65,6 @@ const initializeMenu = () => {
       label: 'File',
       submenu: [
         ...(!isMac ? [aboutSubmenu] : []),
-        ...(isDev ? [] : [{
-          label: 'Check for Updates',
-          click: () => autoUpdater.checkForUpdatesAndNotify()
-        }]
-        ),
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
     },
@@ -140,13 +135,7 @@ const initializeMenu = () => {
             repo: 'redshape',
             body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${electronUtils.debugInfo()}\n\`\`\``
           })
-        },
-        // {
-        //   label: 'Learn More',
-        //   click: async () => {
-        //     await shell.openExternal('https://electronjs.org')
-        //   }
-        // }
+        }
       ]
     }
   ]);
