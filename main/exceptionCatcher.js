@@ -63,7 +63,7 @@ module.exports = (options = {}) => {
   }
 
   process.on('uncaughtException', error => handleError('Unhandled Error', error));
-  process.on('unhandledRejection', error => () => {
+  process.on('unhandledRejection', (error) => {
     if (error.message !== 'net::ERR_INTERNET_DISCONNECTED') {
       handleError('Unhandled Promise Rejection', error);
     }

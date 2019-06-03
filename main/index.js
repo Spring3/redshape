@@ -11,6 +11,8 @@ const isDev = require('electron-is-dev');
 const utils = require('./utils');
 require('./exceptionCatcher')();
 
+app.setAppUserModelId('app.spring3.redshape');
+
 const configFilePath = isDev
   ? path.join(__dirname, '../.env')
   : path.join(app.getPath('userData'), '.env');
@@ -222,10 +224,6 @@ const initialize = () => {
     mainWindow = null;
   });
 };
-
-if (!process.env.REDSHAPE_DEBUG) {
-  autoUpdater.on('error', console.error);
-}
 
 app.once('ready', () => {
   initialize();
