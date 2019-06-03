@@ -155,7 +155,13 @@ class AboutPage extends Component {
                   >
                     Submit
                   </Link>
-                  <span>&nbsp;issues/proposals on Github.</span>
+                  <span>&nbsp;issues/proposals on Github or </span>
+                  <Link
+                    href="mailto:redshape.app@gmail.com"
+                    type="external"
+                  >
+                    by e-mail
+                  </Link>
                 </div>
                 <div>
                   <span>Visit the Redshape</span>

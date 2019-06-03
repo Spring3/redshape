@@ -7,14 +7,17 @@ describe('utils', () => {
   });
 
   describe('openExternalUrl', () => {
-    it('should print an error if the link uses any protocol but http(s)', async () => {
+    it('should print an error if the link uses any protocol but http(s) and mailto:', async () => {
       const http = 'http://test.test';
       const https = 'https://test.test';
+      const mailto = 'mailto:140*12';
       const ftp = 'ftp://test.test';
       const spy = jest.spyOn(console, 'error');
       await utils.openExternalUrl(http);
       expect(spy).not.toHaveBeenCalled();
       await utils.openExternalUrl(https);
+      expect(spy).not.toHaveBeenCalled();
+      await utils.openExternalUrl(mailto);
       expect(spy).not.toHaveBeenCalled();
       await utils.openExternalUrl(ftp);
       expect(spy).toHaveBeenCalledWith('Error when opening external url', ftp, 'Intercepted suspicious url');

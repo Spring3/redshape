@@ -2,7 +2,7 @@ const xss = require('xss');
 const { shell } = require('electron').remote;
 
 const openExternalUrl = url => new Promise((resolve, reject) => { // eslint-disable-line
-  return (url && url.startsWith('http'))
+  return (url && (url.startsWith('http') || url.startsWith('mailto:')))
     ? resolve(url)
     : reject(new Error('Intercepted suspicious url', url));
 })
