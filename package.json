@@ -10,6 +10,7 @@
     "prepack": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build": "npm run pack && electron-builder",
     "release": "npm run pack && electron-builder -p always",
+    "release:ci": "npm run pack && electron-builder -p onTagOrDraft",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint .",
     "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"

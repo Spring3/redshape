@@ -32,11 +32,11 @@ script:
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine
       docker exec -u root electron-builder bash -c "apt-get install --no-install-recommends -y gcc-multilib g++-multilib"
-      docker exec electron-builder bash -c "npm i && npm run release -- -wl"
+      docker exec electron-builder bash -c "npm i && npm run release:ci -- -wl"
       docker stop electron-builder
     else
       npm i
-      npm run release
+      npm run release:ci
     fi
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
