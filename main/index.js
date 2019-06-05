@@ -7,20 +7,25 @@ const { app, BrowserWindow, Menu } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
+const logger = require('electron-log');
 
 const utils = require('./utils');
 require('./exceptionCatcher')();
+
+app.setAppUserModelId('app.spring3.redshape');
+autoUpdater.logger = logger;
+autoUpdater.logger.transports.file.level = 'info';
 
 const configFilePath = isDev
   ? path.join(__dirname, '../.env')
   : path.join(app.getPath('userData'), '.env');
 
-const env = dotenv.load({ silent: true, path: configFilePath });
+const env = dotenv.config({ silent: true, path: configFilePath });
 
 if (env.error || !process.env.ENCRYPTION_KEY) {
   const key = crypto.randomBytes(32).toString('hex');
   fs.appendFileSync(configFilePath, `ENCRYPTION_KEY=${key}`);
-  dotenv.load({ silent: true, path: configFilePath });
+  dotenv.config({ silent: true, path: configFilePath });
 }
 
 const { PORT } = require('../common/config');
@@ -222,10 +227,6 @@ const initialize = () => {
     mainWindow = null;
   });
 };
-
-if (!process.env.REDSHAPE_DEBUG) {
-  autoUpdater.on('error', console.error);
-}
 
 app.once('ready', () => {
   initialize();

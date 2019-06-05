@@ -32,6 +32,7 @@ const TextArea = ({
   id,
   value,
   className,
+  maxLength,
   forwardedRef,
   onKeyDown
 }) => (
@@ -40,6 +41,7 @@ const TextArea = ({
     name={name}
     onChange={onChange}
     rows={rows}
+    maxLength={maxLength}
     disabled={disabled}
     id={id}
     className={className}
@@ -65,6 +67,10 @@ TextArea.propTypes = {
   ]),
   className: PropTypes.string,
   value: PropTypes.string,
+  maxLength: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   forwardedRef: PropTypes.object,
   onKeyDown: PropTypes.func
 };
@@ -73,6 +79,7 @@ TextArea.defaultProps = {
   name: undefined,
   rows: 1,
   disabled: false,
+  maxLength: undefined,
   id: undefined,
   className: undefined,
   value: undefined,

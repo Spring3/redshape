@@ -2,6 +2,7 @@ const cleanStack = require('clean-stack');
 const ensureError = require('ensure-error');
 const isDev = require('electron-is-dev');
 const { app, dialog, clipboard } = require('electron');
+const logger = require('electron-log');
 
 const { report } = require('../common/reporter');
 
@@ -15,7 +16,7 @@ let installed = false;
 const handleError = (title, err) => {
   const error = ensureError(err);
 
-  console.error(error);
+  logger.error(error);
 
   if (config.showDialog) {
     const stack = cleanStack(error.stack);
@@ -63,7 +64,7 @@ module.exports = (options = {}) => {
   }
 
   process.on('uncaughtException', error => handleError('Unhandled Error', error));
-  process.on('unhandledRejection', error => () => {
+  process.on('unhandledRejection', (error) => {
     if (error.message !== 'net::ERR_INTERNET_DISCONNECTED') {
       handleError('Unhandled Promise Rejection', error);
     }
