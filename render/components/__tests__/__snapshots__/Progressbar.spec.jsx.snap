@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Progressbar component should match the snapshot 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  position: relative;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.c2 {
+  border-radius: 5px;
+  max-width: 100%;
+  width: 0;
+  -webkit-transition: width ease;
+  transition: width ease;
+  width: 25% !important;
+  height: 10px;
+  background: yellow;
+}
+
+<div
+  className="c0"
+>
+  <div
+    className="c1"
+    height={10}
+  >
+    <div
+      className="c2"
+      height={10}
+    />
+  </div>
+</div>
+`;

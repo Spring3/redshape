@@ -1,0 +1,531 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppView -> Summary Page should match the snapshot 1`] = `
+.c11 {
+  display: block;
+  width: 100%;
+  border-radius: 3px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  min-height: 35px;
+  outline: none;
+  font-weight: bold;
+  -webkit-transition: background .2s;
+  transition: background .2s;
+  border: 1px solid #A0A0A0;
+  color: #FF7079;
+  background: white;
+  background-image: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22mdi-icon%20%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23FF7079%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M9.5%2C3C13.09%2C3%2016%2C5.91%2016%2C9.5C16%2C11.11%2015.41%2C12.59%2014.44%2C13.73L14.71%2C14H15.5L20.5%2C19L19%2C20.5L14%2C15.5V14.71L13.73%2C14.44C12.59%2C15.41%2011.11%2C16%209.5%2C16C5.91%2C16%203%2C13.09%203%2C9.5C3%2C5.91%205.91%2C3%209.5%2C3M9.5%2C5C7%2C5%205%2C7%205%2C9.5C5%2C12%207%2C14%209.5%2C14C12%2C14%2014%2C12%2014%2C9.5C14%2C7%2012%2C5%209.5%2C5Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E);
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  padding-left: 35px;
+}
+
+.c11:hover {
+  border: 1px solid #FF7079;
+}
+
+.c11:focus {
+  border-color: #FF7079;
+  box-shadow: 0px 0px 0px 1px #FF7079;
+}
+
+.c11::-webkit-input-placeholder {
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+.c11::-moz-placeholder {
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+.c11:-ms-input-placeholder {
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+.c11::placeholder {
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+.c7 {
+  border: 0;
+  -webkit-clip: rect(0 0 0 0);
+  clip: rect(0 0 0 0);
+  -webkit-clippath: inset(50%);
+  clippath: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.c8 {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #F9F9F9 transition:background .2s;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  background: white;
+  border-color: #FF7079;
+}
+
+.c8 svg {
+  visibility: hidden;
+  position: relative;
+  vertical-align: middle;
+  bottom: 3px;
+}
+
+.c6:not(:disabled):hover + .c8,
+.c6:focus + .c8 {
+  box-shadow: 0px 0px 5px 1px #FF7F87;
+}
+
+.c6:disabled + .c8 {
+  background: #F9F9F9;
+  border-color: lightgrey;
+}
+
+.c5 {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c5 + span {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.c3 h4 {
+  margin-bottom: 10px;
+  color: #A0A0A0;
+}
+
+.c4 {
+  color: #A0A0A0;
+}
+
+.c12 {
+  position: relative;
+  min-height: 200px;
+  width: 100%;
+  border: 2px solid #F9F9F9;
+  border-spacing: 0px;
+}
+
+.c12 tbody {
+  text-align: center;
+  font-size: 14px;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
+.c12 tbody tr td {
+  border-bottom: 2px solid #F9F9F9;
+  padding: 15px 5px;
+  -webkit-transition: background ease .2s;
+  transition: background ease .2s;
+}
+
+.c12 tbody tr:hover {
+  cursor: pointer;
+}
+
+.c12 tbody tr:hover td {
+  background: #F9F9F9;
+}
+
+.c12 tbody tr td.due_date {
+  white-space: nowrap;
+}
+
+.c12 thead {
+  z-index: 1;
+}
+
+.c12 thead tr th {
+  padding: 15px 5px;
+  background: #F9F9F9;
+  border-bottom: 2px solid #E9E9E9;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+}
+
+.c12 thead tr th:hover {
+  cursor: pointer;
+  color: #FF7079;
+}
+
+.c12 thead tr th svg {
+  vertical-align: middle;
+}
+
+.c9 {
+  margin-top: 10px;
+}
+
+.c0 {
+  display: grid;
+  padding: 20px;
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  margin-bottom: 60px;
+}
+
+.c1 {
+  background: white;
+  padding: 0px 20px 20px 20px;
+  border-radius: 5px;
+  grid-column: span 8;
+  grid-row: auto;
+}
+
+.c2 {
+  display: grid;
+  grid-template-columns: minmax(200px,auto) 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+  margin-bottom: 20px;
+}
+
+.c10 {
+  grid-column: 1/-1;
+}
+
+<div
+  className="c0"
+>
+  <section
+    className="c1"
+  >
+    <h2>
+      Issues assigned to me
+    </h2>
+    <div
+      className="c2"
+    >
+      <div>
+        <div
+          className="form-group undefined c3"
+        >
+          <h4
+            className="c4"
+            htmlFor="queryOptions"
+          >
+            Options
+          </h4>
+          <div
+            id="queryOptions"
+          >
+            <label>
+              <div
+                className="c5"
+              >
+                <input
+                  checked={false}
+                  className="c6 c7"
+                  disabled={false}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <div
+                  checked={false}
+                  className="c8"
+                >
+                  <svg
+                    className="mdi-icon "
+                    fill="white"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <span>
+                Include Closed
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          className="c9"
+        >
+          <label>
+            <div
+              className="c5"
+            >
+              <input
+                checked={false}
+                className="c6 c7"
+                disabled={false}
+                onChange={[Function]}
+                type="checkbox"
+              />
+              <div
+                checked={false}
+                className="c8"
+              >
+                <svg
+                  className="mdi-icon "
+                  fill="white"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  width="18"
+                >
+                  <path
+                    d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <span>
+              Use Colors
+            </span>
+          </label>
+        </div>
+      </div>
+      <div
+        className="form-group undefined c3"
+      >
+        <h4
+          className="c4"
+          htmlFor="headers"
+        >
+          Table Columns
+        </h4>
+        <div
+          className="css-10nd86i"
+          onKeyDown={[Function]}
+        >
+          <div
+            className="css-1rcfx4g"
+            onMouseDown={[Function]}
+            onTouchEnd={[Function]}
+          >
+            <div
+              className="css-1hwfws3"
+            >
+              <div
+                style={
+                  Object {
+                    "overflow": "hidden",
+                    "whiteSpace": "nowrap",
+                    "width": "auto",
+                  }
+                }
+              >
+                <div
+                  className="css-iuzuh3"
+                >
+                  <div
+                    className="css-7ydjiw"
+                  >
+                    Id
+                  </div>
+                  <div
+                    className="css-azd3r6"
+                    onClick={[Function]}
+                    onMouseDown={[Function]}
+                    onTouchEnd={[Function]}
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="css-19bqh2r"
+                      focusable="false"
+                      height={14}
+                      viewBox="0 0 20 20"
+                      width={14}
+                    >
+                      <path
+                        d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={
+                  Object {
+                    "overflow": "hidden",
+                    "whiteSpace": "nowrap",
+                    "width": "auto",
+                  }
+                }
+              >
+                <div
+                  className="css-iuzuh3"
+                >
+                  <div
+                    className="css-7ydjiw"
+                  >
+                    Subject
+                  </div>
+                  <div
+                    className="css-azd3r6"
+                    onClick={[Function]}
+                    onMouseDown={[Function]}
+                    onTouchEnd={[Function]}
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="css-19bqh2r"
+                      focusable="false"
+                      height={14}
+                      viewBox="0 0 20 20"
+                      width={14}
+                    >
+                      <path
+                        d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="css-1g6gooi"
+              >
+                <div
+                  className=""
+                  style={
+                    Object {
+                      "display": "inline-block",
+                    }
+                  }
+                >
+                  <input
+                    aria-autocomplete="list"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    disabled={false}
+                    id="react-select-2-input"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    spellCheck="false"
+                    style={
+                      Object {
+                        "background": 0,
+                        "border": 0,
+                        "boxSizing": "content-box",
+                        "color": "inherit",
+                        "fontSize": "inherit",
+                        "opacity": 1,
+                        "outline": 0,
+                        "padding": 0,
+                        "width": "1px",
+                      }
+                    }
+                    tabIndex="0"
+                    type="text"
+                    value=""
+                  />
+                  <div
+                    style={
+                      Object {
+                        "height": 0,
+                        "left": 0,
+                        "overflow": "scroll",
+                        "position": "absolute",
+                        "top": 0,
+                        "visibility": "hidden",
+                        "whiteSpace": "pre",
+                      }
+                    }
+                  >
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="css-1wy0on6"
+            >
+              <span
+                className="css-d8oujb"
+              />
+              <div
+                aria-hidden="true"
+                className="css-1ep9fjw"
+                onMouseDown={[Function]}
+                onTouchEnd={[Function]}
+              >
+                <svg
+                  aria-hidden="true"
+                  className="css-19bqh2r"
+                  focusable="false"
+                  height={20}
+                  viewBox="0 0 20 20"
+                  width={20}
+                >
+                  <path
+                    d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input
+              name="headers"
+              type="hidden"
+              value="id"
+            />
+            <input
+              name="headers"
+              type="hidden"
+              value="subject"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="c10"
+      >
+        <input
+          className="c11"
+          disabled={false}
+          name="search"
+          onChange={[Function]}
+          placeholder="Search..."
+          type="text"
+        />
+      </div>
+    </div>
+    <table
+      className="c12"
+    >
+      <thead>
+        <tr>
+          <th
+            onClick={[Function]}
+          >
+            Id
+             
+          </th>
+          <th
+            onClick={[Function]}
+          >
+            Subject
+             
+          </th>
+        </tr>
+      </thead>
+      <tbody />
+    </table>
+  </section>
+</div>
+`;
