@@ -260,6 +260,7 @@ class TimeEntryModal extends Component {
               onChange={this.debouncedCommentsChange}
               onBlur={this.runValidation}
               initialValue={comments}
+              maxLength={255}
             />
           </Label>
           <ErrorMessage show={!!validationErrors.comments}>

@@ -239,7 +239,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, isDisabled } = this.props;
+    const { className, id, onBlur, isDisabled, maxLength } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -331,6 +331,7 @@ class MarkdownEditor extends PureComponent {
               onKeyDown={this.onKeyDown}
               onBlur={onBlur}
               value={value}
+              maxLength={maxLength}
             />
           )
         }
@@ -348,6 +349,10 @@ MarkdownEditor.propTypes = {
     PropTypes.number
   ]),
   initialValue: PropTypes.string,
+  maxLength: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   preview: PropTypes.bool,
   onSubmit: PropTypes.func,
   onBlur: PropTypes.func
@@ -356,6 +361,7 @@ MarkdownEditor.propTypes = {
 MarkdownEditor.defaultProps = {
   isDisabled: false,
   className: undefined,
+  maxLength: undefined,
   id: undefined,
   initialValue: '',
   preview: false,
