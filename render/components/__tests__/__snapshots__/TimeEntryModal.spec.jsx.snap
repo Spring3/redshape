@@ -1689,6 +1689,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 </ul>
                                 <textarea
                                   class="c12 c13"
+                                  maxlength="255"
                                   rows="1"
                                   style="height: 5px;"
                                 >
@@ -3834,6 +3835,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     <MarkdownEditor
                                       initialValue="Hello world"
                                       isDisabled={false}
+                                      maxLength={255}
                                       onBlur={[Function]}
                                       onChange={[Function]}
                                       preview={false}
@@ -5761,6 +5763,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         </MarkdownEditor__MarkdownOptionsList>
                                         <MarkdownEditor__ModifiedTextArea
                                           disabled={false}
+                                          maxLength={255}
                                           onBlur={[Function]}
                                           onChange={[Function]}
                                           onKeyDown={[Function]}
@@ -5803,6 +5806,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               Object {
                                                 "current": <textarea
                                                   class="c12 c13"
+                                                  maxlength="255"
                                                   rows="1"
                                                   style="height: 5px;"
                                                 >
@@ -5810,6 +5814,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 </textarea>,
                                               }
                                             }
+                                            maxLength={255}
                                             onBlur={[Function]}
                                             onChange={[Function]}
                                             onKeyDown={[Function]}
@@ -5818,6 +5823,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             <ForwardRef
                                               className="c12"
                                               disabled={false}
+                                              maxLength={255}
                                               onBlur={[Function]}
                                               onChange={[Function]}
                                               onKeyDown={[Function]}
@@ -5830,6 +5836,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   Object {
                                                     "current": <textarea
                                                       class="c12 c13"
+                                                      maxlength="255"
                                                       rows="1"
                                                       style="height: 5px;"
                                                     >
@@ -5837,6 +5844,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     </textarea>,
                                                   }
                                                 }
+                                                maxLength={255}
                                                 onBlur={[Function]}
                                                 onChange={[Function]}
                                                 onKeyDown={[Function]}
@@ -5846,6 +5854,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 <TextArea__StyledTextArea
                                                   className="c12"
                                                   disabled={false}
+                                                  maxLength={255}
                                                   onChange={[Function]}
                                                   onKeyDown={[Function]}
                                                   rows={1}
@@ -5883,6 +5892,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       Object {
                                                         "current": <textarea
                                                           class="c12 c13"
+                                                          maxlength="255"
                                                           rows="1"
                                                           style="height: 5px;"
                                                         >
@@ -5890,6 +5900,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         </textarea>,
                                                       }
                                                     }
+                                                    maxLength={255}
                                                     onChange={[Function]}
                                                     onKeyDown={[Function]}
                                                     rows={1}
@@ -5898,6 +5909,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     <textarea
                                                       className="c12 c13"
                                                       disabled={false}
+                                                      maxLength={255}
                                                       onChange={[Function]}
                                                       onKeyDown={[Function]}
                                                       rows={1}

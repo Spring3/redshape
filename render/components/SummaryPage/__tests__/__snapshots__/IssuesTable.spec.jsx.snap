@@ -80,11 +80,6 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
 
 .c2 {
   padding-bottom: 2px;
-  background: linear-gradient(to bottom,transparent 0,transparent 90%,#FF634D 90%,#FF634D 100%);
-}
-
-.c4 {
-  padding-bottom: 2px;
   background: linear-gradient(to bottom,transparent 0,transparent 90%,#FFDA77 90%,#FFDA77 100%);
 }
 
@@ -198,7 +193,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
       >
         <span
           className="c2"
-          color="#FF634D"
+          color="#FFDA77"
         >
           High
         </span>
@@ -280,7 +275,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className={false}
       >
         <span
-          className="c4"
+          className="c2"
           color="#FFDA77"
         >
           Normal

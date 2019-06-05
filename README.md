@@ -11,6 +11,8 @@ The project was originally developed for a MVP portfolio showcase, but there is 
 
 Thanks for using, or considering to use this project. I would love to hear some feedback as well as your suggestions and thoughts about what could be improved. If you have something to say, don't hesitate to [send me an email](mailto:redshape.app@gmail.com).
 
+![Redshape Screenshot](https://user-images.githubusercontent.com/4171202/58926139-bbd6df00-8752-11e9-92bb-ddfdb5bce33d.png)
+
 ## Installation
 
 ### macOS

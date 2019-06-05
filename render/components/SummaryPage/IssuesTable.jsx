@@ -91,7 +91,8 @@ const ColorfulSpan = styled.span`
 
 const colorMap = {
   'closed': 'red',
-  'high': 'red',
+  'high': 'yellow',
+  'urgent': 'red',
   'immediate': 'red',
   'critical': 'red',
   'open': 'green',
