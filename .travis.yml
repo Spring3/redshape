@@ -24,6 +24,8 @@ script:
         electronuserland/builder:wine
       docker exec -u root electron-builder bash -c "apt-get install --no-install-recommends -y gcc-multilib g++-multilib"
       if [ "$TRAVIS_BRANCH" == "master" ]; then
+        docker exec electron-builder bash -c "npm i && npm run release -- -wl --ia32 --x64"
+      elif [ "$TRAVIS_BRANCH" == "develop" ]; then
         docker exec electron-builder bash -c "npm i && npm run release:ci -- -wl --ia32 --x64"
       else
         docker exec electron-builder bash -c "npm i && npm run build -- -wl --ia32 --x64"
