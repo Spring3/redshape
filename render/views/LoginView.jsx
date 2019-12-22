@@ -30,6 +30,7 @@ const LoginForm = styled.form`
   grid-column: 2 / 6;
   grid-row: 2 / 4;
   min-width: 300px;
+  min-height: 500px;
 `;
 
 const Headline = styled.h1`
@@ -50,7 +51,14 @@ const SubmitButton = styled(Button)`
   margin: 25px auto 0px auto;
 `;
 
-class LoginView extends Component {  
+class LoginView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      useApiKey: false
+    };
+  }
+
   componentDidMount() {
     const { userId, api_key } = this.props;
     if (userId && api_key) {
@@ -58,12 +66,16 @@ class LoginView extends Component {
     }
   }
 
-  validate = ({ username, password, redmineEndpoint }) => {
+  validate = ({ apiKey, username, password, redmineEndpoint }) => {
     const errors = {
-      username: Joi.validate(username, Joi.string().required()),
-      password: Joi.validate(password, Joi.string().required()),
       redmineEndpoint: Joi.validate(redmineEndpoint, Joi.string().uri().required())
     };
+    if (this.state.useApiKey){
+      errors.apiKey = Joi.validate(apiKey, Joi.string().required());
+    } else {
+      errors.username = Joi.validate(username, Joi.string().required());
+      errors.password = Joi.validate(password, Joi.string().required());
+    }
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
       if (validation.error) {
@@ -75,7 +87,7 @@ class LoginView extends Component {
 
   onSubmit = (values, { setSubmitting }) => {
     const { checkLogin } = this.props;
-    checkLogin(values).then(() => {
+    checkLogin({...values, useApiKey: this.state.useApiKey}).then(() => {
       const { loginError, userId } = this.props;
       if (!loginError && userId) {
         this.props.history.push('/app/summary');
@@ -84,57 +96,32 @@ class LoginView extends Component {
     });
   }
 
+  onToggleLoginMode = () => {
+    this.setState({useApiKey: !this.state.useApiKey})
+  }
+
   render() {
-    const { loginError } = this.props; 
+    const { loginError } = this.props;
     return (
       <Container>
         <DragArea />
         <Formik
-          initialValues={{ username: '', password: '', redmineEndpoint: '' }}
+          initialValues={{username: '', password: '', apiKey: '', redmineEndpoint: ''}}
           validate={this.validate}
           onSubmit={this.onSubmit}
         >
           {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting
-          }) => (
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting
+            }) => (
             <LoginForm onSubmit={handleSubmit}>
               <Headline>Redshape</Headline>
-              <Label
-                label="Login"
-                htmlFor="username"
-              >
-                <Input
-                  type="text"
-                  name="username"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                />
-              </Label>
-              <ErrorMessage show={errors.username && touched.username}>
-                {errors.username}
-              </ErrorMessage>
-              <Label
-                label="Password"
-                htmlFor="password"
-              >
-                <Input
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                />
-              </Label>
-              <ErrorMessage show={errors.password && touched.password}>
-                {errors.password}
-              </ErrorMessage>
+
               <Label
                 label="Redmine Endpoint"
                 htmlFor="redmineEndpoint"
@@ -150,6 +137,70 @@ class LoginView extends Component {
               <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
                 {errors.redmineEndpoint}
               </ErrorMessage>
+
+              <Label
+                label="Login mode"
+                htmlFor="loginMode"
+              >
+                <label>
+                  <Input type="checkbox" name="loginMode" checked={this.state.useApiKey}
+                         onChange={this.onToggleLoginMode}/>
+                  <span>Use API Key</span>
+                </label>
+              </Label>
+              {this.state.useApiKey ? (
+                <>
+                  <Label
+                    label="API Key"
+                    htmlFor="apiKey"
+                  >
+                    <Input
+                      type="text"
+                      name="apiKey"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.apiKey}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.apiKey && touched.apiKey}>
+                    {errors.apiKey}
+                  </ErrorMessage>
+                </>
+              ) : (
+                <>
+                  <Label
+                    label="Login"
+                    htmlFor="username"
+                  >
+                    <Input
+                      type="text"
+                      name="username"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.username && touched.username}>
+                    {errors.username}
+                  </ErrorMessage>
+                  <Label
+                    label="Password"
+                    htmlFor="password"
+                  >
+                    <Input
+                      type="password"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.password && touched.password}>
+                    {errors.password}
+                  </ErrorMessage>
+                </>
+              )}
+
               <SubmitButton
                 type="submit"
                 disabled={isSubmitting}
