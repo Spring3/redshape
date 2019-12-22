@@ -54,8 +54,8 @@ export default class Routes extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={LoginView} />
-        <Route path="/app" component={AppView} />
+        <Route path="/" exact component={props => <LoginView {...props}/>} />
+        <Route path="/app" component={props => <AppView {...props}/>} />
       </Switch>
     );
   }
