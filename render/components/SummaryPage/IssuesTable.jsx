@@ -184,17 +184,16 @@ class IssuesTable extends Component {
             {userTasks.map(task => (
               <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
                 {
-                  issueHeaders.map(header => (
-                    <td
-                      key={header.value}
-                      className={header.value === 'due_date' ? header.value : ""}
-                    >
-                      {header.value === 'due_date'
-                        ? <Date date={_get(task, header.value)} />
-                        : this.paint(task, header.value)
-                      }
-                    </td>
-                  ))
+                  issueHeaders.map(header => {
+                    const date = header.value === 'due_date' && _get(task, header.value);
+                    return (
+                      <td
+                        key={header.value}
+                        className={header.value === 'due_date' ? header.value : ""}
+                      >
+                        {date ? <Date date={date}/> : this.paint(task, header.value)}
+                      </td>
+                    )})
                 }
               </tr>
             ))}
