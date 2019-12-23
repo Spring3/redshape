@@ -132,7 +132,7 @@ class IssuesTable extends Component {
   paint = (item, mapping) => {
     const { theme, useColors } = this.props;
     const textValue = _get(item, mapping);
-    
+
     const color = (useColors && typeof textValue === 'string'
       ? colorMap[textValue.toLowerCase()]
       : undefined);
@@ -187,7 +187,7 @@ class IssuesTable extends Component {
                   issueHeaders.map(header => (
                     <td
                       key={header.value}
-                      className={header.value === 'due_date' && header.value}
+                      className={header.value === 'due_date' ? header.value : ""}
                     >
                       {header.value === 'due_date'
                         ? <Date date={_get(task, header.value)} />
