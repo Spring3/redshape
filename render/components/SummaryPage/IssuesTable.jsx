@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { connect } from 'react-redux';
@@ -152,9 +152,10 @@ class IssuesTable extends Component {
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
     return (
-      <Table>
+      <Fragment>
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
-        <thead>
+        <Table>
+          <thead>
           <tr>
             {issueHeaders.map(header => (
               <th
@@ -171,14 +172,14 @@ class IssuesTable extends Component {
               </th>
             ))}
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <InfiniteScroll
             load={this.loadIssuePage}
             isEnd={userTasks.length === issues.totalCount}
             hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
             container={window}
-            loadIndicator={<ProcessIndicatorContainer><ProcessIndicator className="container" /></ProcessIndicatorContainer>}
+            loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
             immediate={true}
           >
             {userTasks.map(task => (
@@ -198,8 +199,9 @@ class IssuesTable extends Component {
               </tr>
             ))}
           </InfiniteScroll>
-        </tbody>
-      </Table>
+          </tbody>
+        </Table>
+      </Fragment>
     );
   }
 }
