@@ -123,7 +123,7 @@ class CommentsSection extends Component {
               id="commentsForm"
               onSubmit={this.sendComments}
             />
-            <p>
+            <div>
               <SmallNotice>
                 Press&nbsp;
                 {
@@ -133,7 +133,7 @@ class CommentsSection extends Component {
                 }
                 to send
               </SmallNotice>
-            </p>
+            </div>
           </CommentsForm>
         </div>
       </Section>
