@@ -81,7 +81,7 @@
     "electron-react-devtools": "^0.5.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
-    "enzyme-to-json": "^3.3.5",
+    "enzyme-to-json": "^3.4.3",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
