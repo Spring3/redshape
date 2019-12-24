@@ -108,18 +108,6 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 0px;
 }
 
-.c8 {
-  color: #FF7079;
-  font-size: 14px;
-  padding: 2px;
-  cursor: pointer;
-}
-
-.c8:hover {
-  background: #FF7079;
-  color: #FFFFFF;
-}
-
 .c5 {
   -webkit-animation: gOHwoP .7s ease-in;
   animation: gOHwoP .7s ease-in;
@@ -167,16 +155,6 @@ exports[`AppView should match the snapshot 1`] = `
 
 .c6 {
   padding: 0px;
-}
-
-.c7 {
-  color: inherit;
-  padding: 0;
-  margin: 0 20px;
-  font-size: 16px;
-  font-weight: bold;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 .c1 {
@@ -291,16 +269,7 @@ exports[`AppView should match the snapshot 1`] = `
       </div>
       <div
         className="issueName"
-      >
-        <a
-          className="c7 c8"
-          href="#"
-          onClick={[Function]}
-          rel="noopener noreferer"
-        >
-          Test issue
-        </a>
-      </div>
+      />
       <div
         className="time"
       >

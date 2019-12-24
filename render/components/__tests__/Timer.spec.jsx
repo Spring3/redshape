@@ -154,14 +154,62 @@ describe('Timer component', () => {
     const timer = wrapper.find('Timer').instance();
     expect(timer).toBeTruthy();
 
-    const cleanupSpy = jest.spyOn(timer, 'cleanup');
+    // const cleanupSpy = jest.spyOn(timer, 'cleanup');
+    const saveStateSpy = jest.spyOn(timer, 'saveState');
 
     expect(timer.interval).toBeDefined();
     await waitSeconds(1);
     expect(timer.state.value).toBe(5000);
     wrapper.unmount();
 
-    expect(cleanupSpy).toHaveBeenCalled();
+    expect(saveStateSpy).toHaveBeenCalled();
+    // we do not call onPause if we unmount
+    // expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
+    expect(store.getActions()).toEqual([{ type: 'TRACKING_CONTINUE', data: { duration: 5000 } }]);
+  });
+
+  it('should automatically save the progress and stop before unload', async () => {
+    const onStop = jest.fn();
+    const onPause = jest.fn();
+    const onContinue = jest.fn();
+
+    const state = {
+      tracking: {
+        isEnabled: true,
+        isPaused: false,
+        duration: 4000,
+        issue: {
+          id: '123abc',
+          subject: 'Test issue'
+        }
+      }
+    };
+
+    const store = mockStore(state);
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <Timer
+          onStop={onStop}
+          onPause={onPause}
+          onContinue={onContinue}
+        />
+      </Provider>,
+      { context: { store } }
+    );
+
+    const timer = wrapper.find('Timer').instance();
+    expect(timer).toBeTruthy();
+
+    expect(timer.interval).toBeDefined();
+    await waitSeconds(1);
+    timer.cleanup();
+    expect(timer.state.value).toBe(5000);
+    // TODO: fire a window 'unload' event. Now we just call cleanup here
+    // const unloadEv = new Event('unload');
+    // wrapper.first().getDOMNode().dispatchEvent(unloadEv);
+    // expect(cleanupSpy).toHaveBeenCalled();
+
     expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
   });
 

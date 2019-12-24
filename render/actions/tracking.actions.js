@@ -7,7 +7,7 @@ export const TRACKING_RESET = 'TRACKING_RESET';
 const trackingStart = issue => ({ type: TRACKING_START, data: { issue } });
 const trackingStop = duration => ({ type: TRACKING_STOP, data: { duration } });
 const trackingPause = duration => ({ type: TRACKING_PAUSE, data: { duration } });
-const trackingContinue = () => ({ type: TRACKING_CONTINUE });
+const trackingContinue = duration => ({ type: TRACKING_CONTINUE, data: { duration } });
 const trackingReset = () => ({ type: TRACKING_RESET });
 
 export default {

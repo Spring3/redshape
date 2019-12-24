@@ -52,7 +52,8 @@ export default (state = initialState, action) => {
     case TRACKING_CONTINUE: {
       const nextState = {
         ...state,
-        isPaused: false
+        isPaused: false,
+        duration: action.data.duration || state.duration
       };
       storage.set('time_tracking', nextState);
       return nextState;

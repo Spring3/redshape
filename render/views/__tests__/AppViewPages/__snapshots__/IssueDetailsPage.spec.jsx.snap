@@ -1221,7 +1221,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             value=""
           />
         </div>
-        <p>
+        <div>
           <p
             className="c31"
           >
@@ -1236,7 +1236,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </a>
             to send
           </p>
-        </p>
+        </div>
       </div>
     </div>
   </section>

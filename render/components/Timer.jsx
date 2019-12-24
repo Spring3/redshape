@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -88,8 +88,10 @@ class Timer extends Component {
   }
 
   stopInterval = () => {
-    clearInterval(this.interval);
-    this.interval = undefined;
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = undefined;
+    }
   }
 
   cleanup = () => {
@@ -101,12 +103,21 @@ class Timer extends Component {
     window.removeEventListener('beforeunload', this.cleanup);
   }
 
+  saveState = () => {
+    const { isEnabled, isPaused } = this.props;
+    if (isEnabled && !isPaused) {
+      const { continueTimer } = this.props;
+      continueTimer(this.state.value);
+    }
+    this.stopInterval();
+  }
+
   componentWillMount() {
     window.addEventListener('beforeunload', this.cleanup);
   }
 
   componentWillUnmount() {
-    this.cleanup();
+    this.saveState();
   }
 
   componentDidUpdate(oldProps) {
@@ -132,12 +143,13 @@ class Timer extends Component {
     }
   }
 
-  onContinue = () => { 
+  onContinue = () => {
     this.interval = setInterval(this.tick, 1000);
     const { onContinue, trackedIssue, continueTimer } = this.props;
-    continueTimer();
+    const { value } = this.state;
+    continueTimer(value);
     if (onContinue) {
-      onContinue(trackedIssue);
+      onContinue(trackedIssue, value);
     }
   }
 
@@ -157,11 +169,17 @@ class Timer extends Component {
     this.props.history.push(`/app/issue/${this.props.trackedIssue.id}`);
   }
 
+  componentWillReceiveProps(newProps) {
+    const { trackedTime } = newProps;
+    this.setState({ value: trackedTime })
+  }
+
   render() {
     const { value } = this.state;
     const { isEnabled, trackedIssue, isPaused } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
+      <Fragment>
       <ActiveTimer isEnabled={isEnabled}>
         <div className="buttons">
           <StyledButton
@@ -187,17 +205,20 @@ class Timer extends Component {
           }
         </div>
         <div className="issueName">
+          { (isEnabled ?
           <MaskedLink
             href='#'
             onClick={this.redirectToTrackedLink}
           >
             {trackedIssue.subject}
           </MaskedLink>
+            : null)}
         </div>
         <div className="time">
           <span>{timeString}</span>
         </div>
       </ActiveTimer>
+      </Fragment>
     );
   }
 }
@@ -248,7 +269,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   pauseTimer: value => dispatch(actions.tracking.trackingPause(value)),
-  continueTimer: () => dispatch(actions.tracking.trackingContinue()),
+  continueTimer: value => dispatch(actions.tracking.trackingContinue(value)),
   stopTimer: value => dispatch(actions.tracking.trackingStop(value))
 });
 
