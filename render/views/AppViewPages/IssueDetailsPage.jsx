@@ -104,7 +104,7 @@ const IssueDetails = styled.div`
   flex-grow: 1;
 `;
 
-class IssueDetailsPage extends Component { 
+class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -141,7 +141,8 @@ class IssueDetailsPage extends Component {
           id: selectedIssue.project.id,
           name: selectedIssue.project.name
         },
-        hours: 0,
+        hours: undefined,
+        duration: "",
         spent_on: moment().format('YYYY-MM-DD')
       };
     selectedTimeEntry.issue.name = selectedIssue.subject;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import { withRouter } from 'react-router-dom';
 import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
@@ -68,13 +68,13 @@ class LoginView extends Component {
 
   validate = ({ apiKey, username, password, redmineEndpoint }) => {
     const errors = {
-      redmineEndpoint: Joi.validate(redmineEndpoint, Joi.string().uri().required())
+      redmineEndpoint: Joi.string().uri().required().validate(redmineEndpoint)
     };
     if (this.state.useApiKey){
-      errors.apiKey = Joi.validate(apiKey, Joi.string().required());
+      errors.apiKey = Joi.string().required().validate(apiKey);
     } else {
-      errors.username = Joi.validate(username, Joi.string().required());
-      errors.password = Joi.validate(password, Joi.string().required());
+      errors.username = Joi.string().required().validate(username);
+      errors.password = Joi.string().required().validate(password);
     }
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {

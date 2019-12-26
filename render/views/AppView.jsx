@@ -15,6 +15,8 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
+import { hoursToDuration } from "../actions/timeEntry.actions";
+
 const Grid = styled.div`
   height: 100%;
   display: grid;
@@ -45,6 +47,7 @@ class AppView extends Component {
   onTrackingStop = (value, trackedIssue) => {
     const { userId, userName, projects } = this.props;
     const activities = _get(projects[trackedIssue.project.id], 'activities', []);
+    const hours = parseFloat((value / 3600000).toFixed(3));
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       showTimeEntryModal: true,
@@ -54,7 +57,8 @@ class AppView extends Component {
           id: trackedIssue.id,
           name: trackedIssue.subject
         },
-        hours: (value / 3600000).toFixed(2),
+        hours,
+        duration: hoursToDuration(hours),
         comments: '',
         project: {
           id: trackedIssue.project.id,

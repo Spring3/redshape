@@ -283,7 +283,8 @@ describe('IssueDetails page', () => {
         id: state.issues.selected.data.project.id,
         name: state.issues.selected.data.project.name
       },
-      hours: 0,
+      duration: '',
+      hours: undefined,
       spent_on: moment().format('YYYY-MM-DD')
     };
 

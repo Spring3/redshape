@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TimeEntryModal Component it should match the snapshot 1`] = `
-.c3 {
+.c9 {
   display: block;
   width: 100%;
   border-radius: 3px;
@@ -18,31 +18,31 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background: white;
 }
 
-.c3:hover {
+.c9:hover {
   border: 1px solid #FF7079;
 }
 
-.c3:focus {
+.c9:focus {
   border-color: #FF7079;
   box-shadow: 0px 0px 0px 1px #FF7079;
 }
 
-.c3::-webkit-input-placeholder {
+.c9::-webkit-input-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3::-moz-placeholder {
+.c9::-moz-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3:-ms-input-placeholder {
+.c9:-ms-input-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3::placeholder {
+.c9::placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
@@ -56,7 +56,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   color: #A0A0A0;
 }
 
-.c15 {
+.c19 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -73,18 +73,18 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c15:hover,
-.c15:focus {
+.c19:hover,
+.c19:focus {
   background: #6CCA51;
   color: #FFFFFF !important;
 }
 
-.c15:hover svg,
-.c15:focus svg {
+.c19:hover svg,
+.c19:focus svg {
   fill: #FFFFFF;
 }
 
-.c11 {
+.c15 {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #FF7079;
@@ -92,21 +92,21 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   transition: color ease .2s;
 }
 
-.c11:hover {
+.c15:hover {
   color: #EF6069;
 }
 
-.c11:hover svg {
+.c15:hover svg {
   fill: #EF6069;
 }
 
-.c11:active,
-.c11:focus,
-.c11:visited {
+.c15:active,
+.c15:focus,
+.c15:visited {
   background: transparent;
 }
 
-.c13 {
+.c17 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -118,7 +118,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c10 {
+.c8 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -137,7 +137,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   box-shadow: 0px 2px 7px #A0A0A0;
 }
 
-.c10::after {
+.c8::after {
   content: ' ';
   position: absolute;
   top: 100%;
@@ -151,47 +151,47 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c8 {
+.c5 {
   display: inline-block;
   position: relative;
 }
 
-.c8:hover .c9 {
+.c5:hover .c7 {
   display: block;
 }
 
-.c7 {
+.c14 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c7:hover svg {
+.c14:hover svg {
   color: #FF7079 !important;
 }
 
-.c5 {
+.c12 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c5 li:first-child {
+.c12 li:first-child {
   margin-left: 0;
 }
 
-.c5 li:last-child {
+.c12 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c5 .c6:last-child {
+.c12 .c13:last-child {
   bottom: 1px;
 }
 
-.c5 .c6:last-child a {
+.c12 .c13:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -202,27 +202,27 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c12 {
+.c16 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #A0A0A0;
 }
 
-.c12:hover {
+.c16:hover {
   border-color: #FF7079;
 }
 
-.c12:focus {
+.c16:focus {
   border: 2px solid #FF7079;
 }
 
-.c4 .DayPicker {
+.c11 .DayPicker {
   display: inline-block;
   font-size: 1rem;
 }
 
-.c4 .DayPicker-wrapper {
+.c11 .DayPicker-wrapper {
   position: relative;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
@@ -234,7 +234,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   user-select: none;
 }
 
-.c4 .DayPicker-Months {
+.c11 .DayPicker-Months {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -248,7 +248,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   justify-content: center;
 }
 
-.c4 .DayPicker-Month {
+.c11 .DayPicker-Month {
   display: table;
   margin: 0 1em;
   margin-top: 1em;
@@ -260,7 +260,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   user-select: none;
 }
 
-.c4 .DayPicker-NavButton {
+.c11 .DayPicker-NavButton {
   position: absolute;
   top: 1em;
   right: 1.5em;
@@ -275,11 +275,11 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c4 .DayPicker-NavButton:hover {
+.c11 .DayPicker-NavButton:hover {
   opacity: 0.8;
 }
 
-.c4 .DayPicker-NavButton--prev {
+.c11 .DayPicker-NavButton--prev {
   margin-right: 1.5em;
   left: 1.5em;
   right: unset;
@@ -287,37 +287,37 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background-size: 1.5rem;
 }
 
-.c4 .DayPicker-NavButton--next {
+.c11 .DayPicker-NavButton--next {
   background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22mdi-icon%20%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%233F3844%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M10%2C17L15%2C12L10%2C7V17Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
   background-size: 1.5rem;
 }
 
-.c4 .DayPicker-NavButton--interactionDisabled {
+.c11 .DayPicker-NavButton--interactionDisabled {
   display: none;
 }
 
-.c4 .DayPicker-Caption {
+.c11 .DayPicker-Caption {
   display: table-caption;
   margin-bottom: 0.5em;
   padding: 0 0.5em;
   text-align: center;
 }
 
-.c4 .DayPicker-Caption > div {
+.c11 .DayPicker-Caption > div {
   font-weight: 500;
   font-size: 1.15em;
 }
 
-.c4 .DayPicker-Weekdays {
+.c11 .DayPicker-Weekdays {
   display: table-header-group;
   margin-top: 1em;
 }
 
-.c4 .DayPicker-WeekdaysRow {
+.c11 .DayPicker-WeekdaysRow {
   display: table-row;
 }
 
-.c4 .DayPicker-Weekday {
+.c11 .DayPicker-Weekday {
   display: table-cell;
   padding: 0.5em;
   color: #3F3844;
@@ -326,21 +326,21 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   font-size: 0.875em;
 }
 
-.c4 .DayPicker-Weekday abbr[title] {
+.c11 .DayPicker-Weekday abbr[title] {
   border-bottom: none;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c4 .DayPicker-Body {
+.c11 .DayPicker-Body {
   display: table-row-group;
 }
 
-.c4 .DayPicker-Week {
+.c11 .DayPicker-Week {
   display: table-row;
 }
 
-.c4 .DayPicker-Day {
+.c11 .DayPicker-Day {
   display: table-cell;
   padding: 0.5em;
   border-radius: 50%;
@@ -349,47 +349,47 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c4 .DayPicker--interactionDisabled .DayPicker-Day {
+.c11 .DayPicker--interactionDisabled .DayPicker-Day {
   cursor: default;
 }
 
-.c4 .DayPicker-Footer {
+.c11 .DayPicker-Footer {
   padding-top: 0.5em;
 }
 
-.c4 .DayPicker-Day--today {
+.c11 .DayPicker-Day--today {
   color: #FF7079;
   font-weight: 700;
 }
 
-.c4 .DayPicker-Day--disabled {
+.c11 .DayPicker-Day--disabled {
   color: #A0A0A0;
   cursor: default;
 }
 
-.c4 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+.c11 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   position: relative;
   background-color: #3F3844;
   color: #FFFFFF;
   font-weight: bold;
 }
 
-.c4 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+.c11 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
   background-color: #F9F9F9;
   color: #3F3844;
 }
 
-.c4 .DayPickerInput {
+.c11 .DayPickerInput {
   display: inline-block;
 }
 
-.c4 .DayPickerInput-OverlayWrapper {
+.c11 .DayPickerInput-OverlayWrapper {
   position: relative;
   left: -30%;
   bottom: -5px;
 }
 
-.c4 .DayPickerInput-Overlay {
+.c11 .DayPickerInput-Overlay {
   position: absolute;
   left: 0;
   z-index: 1;
@@ -408,7 +408,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c14 {
+.c18 {
   position: relative;
   margin-top: 20px;
   padding-top: 20px;
@@ -419,12 +419,33 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   display: flex;
 }
 
-.c14 button {
+.c18 button {
   padding: 8px 15px;
 }
 
-.c14 div {
+.c18 div {
   margin-left: 20px;
+}
+
+.c3 {
+  max-width: 350px;
+}
+
+.c10 {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  color: gray;
+  margin-left: 0.5rem;
+  min-width: 10rem;
+}
+
+.c6 {
+  padding-bottom: 1px;
+}
+
+.c4 {
+  margin-left: 0.2rem;
 }
 
 <Provider
@@ -485,6 +506,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
           },
           "comments": "Hello world",
           "created_on": "2011-01-01",
+          "duration": "10",
           "hours": 10,
           "id": 1,
           "issue": Object {
@@ -547,6 +569,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
             },
             "comments": "Hello world",
             "created_on": "2011-01-01",
+            "duration": "10",
             "hours": 10,
             "id": 1,
             "issue": Object {
@@ -617,6 +640,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
               },
               "comments": "Hello world",
               "created_on": "2011-01-01",
+              "duration": "10",
               "hours": 10,
               "id": 1,
               "issue": Object {
@@ -707,6 +731,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                 showCloseIcon={true}
                 styles={
                   Object {
+                    "closeButton": Object {
+                      "cursor": "pointer",
+                    },
                     "modal": Object {
                       "background": "#FFFFFF",
                       "borderRadius": 3,
@@ -740,7 +767,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                 <Portal>
                   <Portal
                     containerInfo={
-                      .c3 {
+                      .c9 {
   display: block;
   width: 100%;
   border-radius: 3px;
@@ -757,31 +784,31 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background: white;
 }
 
-.c3:hover {
+.c9:hover {
   border: 1px solid #FF7079;
 }
 
-.c3:focus {
+.c9:focus {
   border-color: #FF7079;
   box-shadow: 0px 0px 0px 1px #FF7079;
 }
 
-.c3::-webkit-input-placeholder {
+.c9::-webkit-input-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3::-moz-placeholder {
+.c9::-moz-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3:-ms-input-placeholder {
+.c9:-ms-input-placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
 
-.c3::placeholder {
+.c9::placeholder {
   color: #A0A0A0;
   font-weight: 500;
 }
@@ -795,7 +822,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   color: #A0A0A0;
 }
 
-.c15 {
+.c19 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -812,18 +839,18 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c15:hover,
-.c15:focus {
+.c19:hover,
+.c19:focus {
   background: #6CCA51;
   color: #FFFFFF !important;
 }
 
-.c15:hover svg,
-.c15:focus svg {
+.c19:hover svg,
+.c19:focus svg {
   fill: #FFFFFF;
 }
 
-.c11 {
+.c15 {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #FF7079;
@@ -831,21 +858,21 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   transition: color ease .2s;
 }
 
-.c11:hover {
+.c15:hover {
   color: #EF6069;
 }
 
-.c11:hover svg {
+.c15:hover svg {
   fill: #EF6069;
 }
 
-.c11:active,
-.c11:focus,
-.c11:visited {
+.c15:active,
+.c15:focus,
+.c15:visited {
   background: transparent;
 }
 
-.c13 {
+.c17 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -857,7 +884,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c10 {
+.c8 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -876,7 +903,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   box-shadow: 0px 2px 7px #A0A0A0;
 }
 
-.c10::after {
+.c8::after {
   content: ' ';
   position: absolute;
   top: 100%;
@@ -890,47 +917,47 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c8 {
+.c5 {
   display: inline-block;
   position: relative;
 }
 
-.c8:hover .c9 {
+.c5:hover .c7 {
   display: block;
 }
 
-.c7 {
+.c14 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c7:hover svg {
+.c14:hover svg {
   color: #FF7079 !important;
 }
 
-.c5 {
+.c12 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c5 li:first-child {
+.c12 li:first-child {
   margin-left: 0;
 }
 
-.c5 li:last-child {
+.c12 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c5 .c6:last-child {
+.c12 .c13:last-child {
   bottom: 1px;
 }
 
-.c5 .c6:last-child a {
+.c12 .c13:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -941,27 +968,27 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c12 {
+.c16 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #A0A0A0;
 }
 
-.c12:hover {
+.c16:hover {
   border-color: #FF7079;
 }
 
-.c12:focus {
+.c16:focus {
   border: 2px solid #FF7079;
 }
 
-.c4 .DayPicker {
+.c11 .DayPicker {
   display: inline-block;
   font-size: 1rem;
 }
 
-.c4 .DayPicker-wrapper {
+.c11 .DayPicker-wrapper {
   position: relative;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
@@ -973,7 +1000,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   user-select: none;
 }
 
-.c4 .DayPicker-Months {
+.c11 .DayPicker-Months {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -987,7 +1014,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   justify-content: center;
 }
 
-.c4 .DayPicker-Month {
+.c11 .DayPicker-Month {
   display: table;
   margin: 0 1em;
   margin-top: 1em;
@@ -999,7 +1026,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   user-select: none;
 }
 
-.c4 .DayPicker-NavButton {
+.c11 .DayPicker-NavButton {
   position: absolute;
   top: 1em;
   right: 1.5em;
@@ -1014,11 +1041,11 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c4 .DayPicker-NavButton:hover {
+.c11 .DayPicker-NavButton:hover {
   opacity: 0.8;
 }
 
-.c4 .DayPicker-NavButton--prev {
+.c11 .DayPicker-NavButton--prev {
   margin-right: 1.5em;
   left: 1.5em;
   right: unset;
@@ -1026,37 +1053,37 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   background-size: 1.5rem;
 }
 
-.c4 .DayPicker-NavButton--next {
+.c11 .DayPicker-NavButton--next {
   background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22mdi-icon%20%22%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%233F3844%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M10%2C17L15%2C12L10%2C7V17Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
   background-size: 1.5rem;
 }
 
-.c4 .DayPicker-NavButton--interactionDisabled {
+.c11 .DayPicker-NavButton--interactionDisabled {
   display: none;
 }
 
-.c4 .DayPicker-Caption {
+.c11 .DayPicker-Caption {
   display: table-caption;
   margin-bottom: 0.5em;
   padding: 0 0.5em;
   text-align: center;
 }
 
-.c4 .DayPicker-Caption > div {
+.c11 .DayPicker-Caption > div {
   font-weight: 500;
   font-size: 1.15em;
 }
 
-.c4 .DayPicker-Weekdays {
+.c11 .DayPicker-Weekdays {
   display: table-header-group;
   margin-top: 1em;
 }
 
-.c4 .DayPicker-WeekdaysRow {
+.c11 .DayPicker-WeekdaysRow {
   display: table-row;
 }
 
-.c4 .DayPicker-Weekday {
+.c11 .DayPicker-Weekday {
   display: table-cell;
   padding: 0.5em;
   color: #3F3844;
@@ -1065,21 +1092,21 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   font-size: 0.875em;
 }
 
-.c4 .DayPicker-Weekday abbr[title] {
+.c11 .DayPicker-Weekday abbr[title] {
   border-bottom: none;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c4 .DayPicker-Body {
+.c11 .DayPicker-Body {
   display: table-row-group;
 }
 
-.c4 .DayPicker-Week {
+.c11 .DayPicker-Week {
   display: table-row;
 }
 
-.c4 .DayPicker-Day {
+.c11 .DayPicker-Day {
   display: table-cell;
   padding: 0.5em;
   border-radius: 50%;
@@ -1088,47 +1115,47 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c4 .DayPicker--interactionDisabled .DayPicker-Day {
+.c11 .DayPicker--interactionDisabled .DayPicker-Day {
   cursor: default;
 }
 
-.c4 .DayPicker-Footer {
+.c11 .DayPicker-Footer {
   padding-top: 0.5em;
 }
 
-.c4 .DayPicker-Day--today {
+.c11 .DayPicker-Day--today {
   color: #FF7079;
   font-weight: 700;
 }
 
-.c4 .DayPicker-Day--disabled {
+.c11 .DayPicker-Day--disabled {
   color: #A0A0A0;
   cursor: default;
 }
 
-.c4 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+.c11 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   position: relative;
   background-color: #3F3844;
   color: #FFFFFF;
   font-weight: bold;
 }
 
-.c4 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+.c11 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
   background-color: #F9F9F9;
   color: #3F3844;
 }
 
-.c4 .DayPickerInput {
+.c11 .DayPickerInput {
   display: inline-block;
 }
 
-.c4 .DayPickerInput-OverlayWrapper {
+.c11 .DayPickerInput-OverlayWrapper {
   position: relative;
   left: -30%;
   bottom: -5px;
 }
 
-.c4 .DayPickerInput-Overlay {
+.c11 .DayPickerInput-Overlay {
   position: absolute;
   left: 0;
   z-index: 1;
@@ -1147,7 +1174,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c14 {
+.c18 {
   position: relative;
   margin-top: 20px;
   padding-top: 20px;
@@ -1158,12 +1185,33 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
   display: flex;
 }
 
-.c14 button {
+.c18 button {
   padding: 8px 15px;
 }
 
-.c14 div {
+.c18 div {
   margin-left: 20px;
+}
+
+.c3 {
+  max-width: 350px;
+}
+
+.c10 {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  color: gray;
+  margin-left: 0.5rem;
+  min-width: 10rem;
+}
+
+.c6 {
+  padding-bottom: 1px;
+}
+
+.c4 {
+  margin-left: 0.2rem;
 }
 
 <div
@@ -1293,22 +1341,57 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                             <div
                               class="c2"
                             >
-                              <div>
+                              <div
+                                class="c3"
+                              >
                                 <div
                                   class="form-group undefined c0"
                                 >
                                   <h4
                                     class="c1"
-                                    for="hours"
+                                    for="duration"
                                   >
-                                    Hours
+                                    Duration
+                                    <span
+                                      class="c4"
+                                    >
+                                      <div
+                                        class="c5"
+                                      >
+                                        <svg
+                                          class="mdi-icon c6"
+                                          fill="currentColor"
+                                          height="14"
+                                          viewBox="0 0 24 24"
+                                          width="14"
+                                        >
+                                          <path
+                                            d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z"
+                                          />
+                                        </svg>
+                                        <p
+                                          class="tooltip c7 c8"
+                                        >
+                                          hours (3.23) or durations (3h 14m, 194 mins)
+                                        </p>
+                                      </div>
+                                    </span>
                                   </h4>
-                                  <input
-                                    class="c3"
-                                    name="hours"
-                                    type="number"
-                                    value="10"
-                                  />
+                                  <div
+                                    class="c2"
+                                  >
+                                    <input
+                                      class="c9"
+                                      name="duration"
+                                      type="text"
+                                      value="10"
+                                    />
+                                    <div
+                                      class="c10"
+                                    >
+                                      10 hours
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                               <div>
@@ -1322,13 +1405,13 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     Date
                                   </h4>
                                   <div
-                                    class="c4"
+                                    class="c11"
                                   >
                                     <div
                                       class="DayPickerInput"
                                     >
                                       <input
-                                        class="c3"
+                                        class="c9"
                                         placeholder="YYYY-M-D"
                                         type="text"
                                         value="2011-1-1"
@@ -1349,13 +1432,13 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                               </h4>
                               <div>
                                 <ul
-                                  class="c5"
+                                  class="c12"
                                 >
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1369,17 +1452,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Bold text
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1393,17 +1476,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Italic text
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1417,17 +1500,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Underlined text
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1441,17 +1524,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Crossed out text
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1465,17 +1548,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Code block
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1489,17 +1572,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         XL Header
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1513,17 +1596,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         L Header
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1537,17 +1620,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         M Header
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1561,17 +1644,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Bulleted List
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1585,17 +1668,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Ordered List
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1609,17 +1692,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Quote block
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1633,17 +1716,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Hyperlink
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <div
-                                      class="c8"
+                                      class="c5"
                                     >
                                       <svg
                                         class="mdi-icon "
@@ -1657,17 +1740,17 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                         />
                                       </svg>
                                       <p
-                                        class="tooltip c9 c10"
+                                        class="tooltip c7 c8"
                                       >
                                         Embeded Image
                                       </p>
                                     </div>
                                   </li>
                                   <li
-                                    class="c6 c7"
+                                    class="c13 c14"
                                   >
                                     <a
-                                      class="c11"
+                                      class="c15"
                                       href="#"
                                     >
                                       <svg
@@ -1688,7 +1771,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                   </li>
                                 </ul>
                                 <textarea
-                                  class="c12 c13"
+                                  class="c16 c17"
                                   maxlength="255"
                                   rows="1"
                                   style="height: 5px;"
@@ -1698,10 +1781,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                               </div>
                             </div>
                             <div
-                              class="c14"
+                              class="c18"
                             >
                               <button
-                                class="c15"
+                                class="c19"
                                 id="btn-update"
                                 type="button"
                               >
@@ -1710,6 +1793,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                             </div>
                             <button
                               class="styles_closeButton__20ID4"
+                              style="cursor: pointer;"
                             >
                               <svg
                                 class="styles_closeIcon__1QwbI"
@@ -3293,159 +3377,432 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 <div
                                   className="c2"
                                 >
-                                  <div>
-                                    <Label
-                                      htmlFor="hours"
-                                      inline={false}
-                                      label="Hours"
-                                      rightToLeft={false}
+                                  <TimeEntryModal__DurationField>
+                                    <StyledComponent
+                                      forwardedComponent={
+                                        Object {
+                                          "$$typeof": Symbol(react.forward_ref),
+                                          "attrs": Array [],
+                                          "componentStyle": ComponentStyle {
+                                            "componentId": "TimeEntryModal__DurationField-sc-1l99qzp-2",
+                                            "isStatic": true,
+                                            "lastClassName": "c3",
+                                            "rules": Array [
+                                              "max-width:350px;",
+                                            ],
+                                          },
+                                          "displayName": "TimeEntryModal__DurationField",
+                                          "foldedComponentIds": Array [],
+                                          "render": [Function],
+                                          "styledComponentId": "TimeEntryModal__DurationField-sc-1l99qzp-2",
+                                          "target": "div",
+                                          "toString": [Function],
+                                          "warnTooManyClasses": [Function],
+                                          "withComponent": [Function],
+                                        }
+                                      }
+                                      forwardedRef={null}
                                     >
-                                      <Input__FormGroup
-                                        className="form-group undefined"
+                                      <div
+                                        className="c3"
                                       >
-                                        <StyledComponent
-                                          className="form-group undefined"
-                                          forwardedComponent={
-                                            Object {
-                                              "$$typeof": Symbol(react.forward_ref),
-                                              "attrs": Array [],
-                                              "componentStyle": ComponentStyle {
-                                                "componentId": "Input__FormGroup-hbl69l-4",
-                                                "isStatic": false,
-                                                "lastClassName": "c0",
-                                                "rules": Array [
-                                                  "   h4{margin-bottom:10px;color:",
-                                                  [Function],
-                                                  ";}",
-                                                ],
-                                              },
-                                              "displayName": "Input__FormGroup",
-                                              "foldedComponentIds": Array [],
-                                              "render": [Function],
-                                              "styledComponentId": "Input__FormGroup-hbl69l-4",
-                                              "target": "div",
-                                              "toString": [Function],
-                                              "warnTooManyClasses": [Function],
-                                              "withComponent": [Function],
-                                            }
+                                        <Label
+                                          htmlFor="duration"
+                                          inline={false}
+                                          label="Duration"
+                                          rightOfLabel={
+                                            <ForwardRef>
+                                              <Tooltip
+                                                className={null}
+                                                text="hours (3.23) or durations (3h 14m, 194 mins)"
+                                              >
+                                                <ForwardRef
+                                                  size={14}
+                                                />
+                                              </Tooltip>
+                                            </ForwardRef>
                                           }
-                                          forwardedRef={null}
+                                          rightToLeft={false}
                                         >
-                                          <div
-                                            className="form-group undefined c0"
+                                          <Input__FormGroup
+                                            className="form-group undefined"
                                           >
-                                            <Input__H4Label
-                                              htmlFor="hours"
-                                            >
-                                              <StyledComponent
-                                                forwardedComponent={
-                                                  Object {
-                                                    "$$typeof": Symbol(react.forward_ref),
-                                                    "attrs": Array [],
-                                                    "componentStyle": ComponentStyle {
-                                                      "componentId": "Input__H4Label-hbl69l-5",
-                                                      "isStatic": false,
-                                                      "lastClassName": "c1",
-                                                      "rules": Array [
-                                                        "color:",
-                                                        [Function],
-                                                        ";",
-                                                      ],
-                                                    },
-                                                    "displayName": "Input__H4Label",
-                                                    "foldedComponentIds": Array [],
-                                                    "render": [Function],
-                                                    "styledComponentId": "Input__H4Label-hbl69l-5",
-                                                    "target": "h4",
-                                                    "toString": [Function],
-                                                    "warnTooManyClasses": [Function],
-                                                    "withComponent": [Function],
-                                                  }
+                                            <StyledComponent
+                                              className="form-group undefined"
+                                              forwardedComponent={
+                                                Object {
+                                                  "$$typeof": Symbol(react.forward_ref),
+                                                  "attrs": Array [],
+                                                  "componentStyle": ComponentStyle {
+                                                    "componentId": "Input__FormGroup-hbl69l-4",
+                                                    "isStatic": false,
+                                                    "lastClassName": "c0",
+                                                    "rules": Array [
+                                                      "   h4{margin-bottom:10px;color:",
+                                                      [Function],
+                                                      ";}",
+                                                    ],
+                                                  },
+                                                  "displayName": "Input__FormGroup",
+                                                  "foldedComponentIds": Array [],
+                                                  "render": [Function],
+                                                  "styledComponentId": "Input__FormGroup-hbl69l-4",
+                                                  "target": "div",
+                                                  "toString": [Function],
+                                                  "warnTooManyClasses": [Function],
+                                                  "withComponent": [Function],
                                                 }
-                                                forwardedRef={null}
-                                                htmlFor="hours"
-                                              >
-                                                <h4
-                                                  className="c1"
-                                                  htmlFor="hours"
-                                                >
-                                                  Hours
-                                                </h4>
-                                              </StyledComponent>
-                                            </Input__H4Label>
-                                            <Input
-                                              checked={false}
-                                              disabled={false}
-                                              name="hours"
-                                              onBlur={[Function]}
-                                              onChange={[Function]}
-                                              type="number"
-                                              value={10}
+                                              }
+                                              forwardedRef={null}
                                             >
-                                              <Input__StyledInput
-                                                disabled={false}
-                                                name="hours"
-                                                onBlur={[Function]}
-                                                onChange={[Function]}
-                                                type="number"
-                                                value={10}
+                                              <div
+                                                className="form-group undefined c0"
                                               >
-                                                <StyledComponent
-                                                  disabled={false}
-                                                  forwardedComponent={
-                                                    Object {
-                                                      "$$typeof": Symbol(react.forward_ref),
-                                                      "attrs": Array [],
-                                                      "componentStyle": ComponentStyle {
-                                                        "componentId": "Input__StyledInput-hbl69l-0",
-                                                        "isStatic": false,
-                                                        "lastClassName": "c3",
-                                                        "rules": Array [
-                                                          "display:block;width:100%;border-radius:3px;padding:5px 10px;box-sizing:border-box;font-size:14px;min-height:35px;outline:none;font-weight:bold;",
-                                                          [Function],
-                                                          "}",
-                                                          [Function],
-                                                          " ",
-                                                          [Function],
-                                                        ],
-                                                      },
-                                                      "displayName": "Input__StyledInput",
-                                                      "foldedComponentIds": Array [],
-                                                      "render": [Function],
-                                                      "styledComponentId": "Input__StyledInput-hbl69l-0",
-                                                      "target": "input",
-                                                      "toString": [Function],
-                                                      "warnTooManyClasses": [Function],
-                                                      "withComponent": [Function],
-                                                    }
-                                                  }
-                                                  forwardedRef={null}
-                                                  name="hours"
-                                                  onBlur={[Function]}
-                                                  onChange={[Function]}
-                                                  type="number"
-                                                  value={10}
+                                                <Input__H4Label
+                                                  htmlFor="duration"
                                                 >
-                                                  <input
-                                                    className="c3"
-                                                    disabled={false}
-                                                    name="hours"
-                                                    onBlur={[Function]}
-                                                    onChange={[Function]}
-                                                    type="number"
-                                                    value={10}
-                                                  />
-                                                </StyledComponent>
-                                              </Input__StyledInput>
-                                            </Input>
-                                          </div>
-                                        </StyledComponent>
-                                      </Input__FormGroup>
-                                    </Label>
-                                    <ErrorMessage
-                                      show={false}
-                                    />
-                                  </div>
+                                                  <StyledComponent
+                                                    forwardedComponent={
+                                                      Object {
+                                                        "$$typeof": Symbol(react.forward_ref),
+                                                        "attrs": Array [],
+                                                        "componentStyle": ComponentStyle {
+                                                          "componentId": "Input__H4Label-hbl69l-5",
+                                                          "isStatic": false,
+                                                          "lastClassName": "c1",
+                                                          "rules": Array [
+                                                            "color:",
+                                                            [Function],
+                                                            ";",
+                                                          ],
+                                                        },
+                                                        "displayName": "Input__H4Label",
+                                                        "foldedComponentIds": Array [],
+                                                        "render": [Function],
+                                                        "styledComponentId": "Input__H4Label-hbl69l-5",
+                                                        "target": "h4",
+                                                        "toString": [Function],
+                                                        "warnTooManyClasses": [Function],
+                                                        "withComponent": [Function],
+                                                      }
+                                                    }
+                                                    forwardedRef={null}
+                                                    htmlFor="duration"
+                                                  >
+                                                    <h4
+                                                      className="c1"
+                                                      htmlFor="duration"
+                                                    >
+                                                      Duration
+                                                      <TimeEntryModal__LabelIcon>
+                                                        <StyledComponent
+                                                          forwardedComponent={
+                                                            Object {
+                                                              "$$typeof": Symbol(react.forward_ref),
+                                                              "attrs": Array [],
+                                                              "componentStyle": ComponentStyle {
+                                                                "componentId": "TimeEntryModal__LabelIcon-sc-1l99qzp-5",
+                                                                "isStatic": true,
+                                                                "lastClassName": "c4",
+                                                                "rules": Array [
+                                                                  "margin-left:0.2rem;",
+                                                                ],
+                                                              },
+                                                              "displayName": "TimeEntryModal__LabelIcon",
+                                                              "foldedComponentIds": Array [],
+                                                              "render": [Function],
+                                                              "styledComponentId": "TimeEntryModal__LabelIcon-sc-1l99qzp-5",
+                                                              "target": "span",
+                                                              "toString": [Function],
+                                                              "warnTooManyClasses": [Function],
+                                                              "withComponent": [Function],
+                                                            }
+                                                          }
+                                                          forwardedRef={null}
+                                                        >
+                                                          <span
+                                                            className="c4"
+                                                          >
+                                                            <Tooltip
+                                                              className={null}
+                                                              text="hours (3.23) or durations (3h 14m, 194 mins)"
+                                                            >
+                                                              <Tooltip__TooltipContainer
+                                                                className={null}
+                                                              >
+                                                                <StyledComponent
+                                                                  className={null}
+                                                                  forwardedComponent={
+                                                                    Object {
+                                                                      "$$typeof": Symbol(react.forward_ref),
+                                                                      "attrs": Array [],
+                                                                      "componentStyle": ComponentStyle {
+                                                                        "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
+                                                                        "isStatic": true,
+                                                                        "lastClassName": "c5",
+                                                                        "rules": Array [
+                                                                          "display:inline-block;position:relative;&:hover{",
+                                                                          ".c7",
+                                                                          "{display:block;}}",
+                                                                        ],
+                                                                      },
+                                                                      "displayName": "Tooltip__TooltipContainer",
+                                                                      "foldedComponentIds": Array [],
+                                                                      "render": [Function],
+                                                                      "styledComponentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
+                                                                      "target": "div",
+                                                                      "toString": [Function],
+                                                                      "warnTooManyClasses": [Function],
+                                                                      "withComponent": [Function],
+                                                                    }
+                                                                  }
+                                                                  forwardedRef={null}
+                                                                >
+                                                                  <div
+                                                                    className="c5"
+                                                                  >
+                                                                    <TimeEntryModal__ClockIconStyled
+                                                                      size={14}
+                                                                    >
+                                                                      <StyledComponent
+                                                                        forwardedComponent={
+                                                                          Object {
+                                                                            "$$typeof": Symbol(react.forward_ref),
+                                                                            "$asyncbind": [Function],
+                                                                            "attrs": Array [],
+                                                                            "componentStyle": ComponentStyle {
+                                                                              "componentId": "TimeEntryModal__ClockIconStyled-sc-1l99qzp-4",
+                                                                              "isStatic": true,
+                                                                              "lastClassName": "c6",
+                                                                              "rules": Array [
+                                                                                "padding-bottom:1px;",
+                                                                              ],
+                                                                            },
+                                                                            "displayName": "TimeEntryModal__ClockIconStyled",
+                                                                            "foldedComponentIds": Array [],
+                                                                            "render": [Function],
+                                                                            "styledComponentId": "TimeEntryModal__ClockIconStyled-sc-1l99qzp-4",
+                                                                            "target": [Function],
+                                                                            "toString": [Function],
+                                                                            "warnTooManyClasses": [Function],
+                                                                            "withComponent": [Function],
+                                                                          }
+                                                                        }
+                                                                        forwardedRef={null}
+                                                                        size={14}
+                                                                      >
+                                                                        <ClockIcon
+                                                                          className="c6"
+                                                                          size={14}
+                                                                        >
+                                                                          <svg
+                                                                            className="mdi-icon c6"
+                                                                            fill="currentColor"
+                                                                            height={14}
+                                                                            viewBox="0 0 24 24"
+                                                                            width={14}
+                                                                          >
+                                                                            <path
+                                                                              d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z"
+                                                                            />
+                                                                          </svg>
+                                                                        </ClockIcon>
+                                                                      </StyledComponent>
+                                                                    </TimeEntryModal__ClockIconStyled>
+                                                                    <Tooltip__TooltipText
+                                                                      className="tooltip"
+                                                                    >
+                                                                      <StyledComponent
+                                                                        className="tooltip"
+                                                                        forwardedComponent={
+                                                                          Object {
+                                                                            "$$typeof": Symbol(react.forward_ref),
+                                                                            "attrs": Array [],
+                                                                            "componentStyle": ComponentStyle {
+                                                                              "componentId": "c7",
+                                                                              "isStatic": false,
+                                                                              "lastClassName": "c8",
+                                                                              "rules": Array [
+                                                                                "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
+                                                                                [Function],
+                                                                                ";color:",
+                                                                                [Function],
+                                                                                ";text-align:center;font-size:12px;white-space:nowrap;box-shadow:0px 2px 7px ",
+                                                                                [Function],
+                                                                                ";&::after{content:' ';position:absolute;top:100%;left:50%;width:auto;transform:translateX(-50%);border:2px solid black;border-width:5px;border-color:",
+                                                                                [Function],
+                                                                                " transparent transparent transparent;}",
+                                                                              ],
+                                                                            },
+                                                                            "displayName": "Tooltip__TooltipText",
+                                                                            "foldedComponentIds": Array [],
+                                                                            "render": [Function],
+                                                                            "styledComponentId": "c7",
+                                                                            "target": "p",
+                                                                            "toString": [Function],
+                                                                            "warnTooManyClasses": [Function],
+                                                                            "withComponent": [Function],
+                                                                          }
+                                                                        }
+                                                                        forwardedRef={null}
+                                                                      >
+                                                                        <p
+                                                                          className="tooltip c7 c8"
+                                                                        >
+                                                                          hours (3.23) or durations (3h 14m, 194 mins)
+                                                                        </p>
+                                                                      </StyledComponent>
+                                                                    </Tooltip__TooltipText>
+                                                                  </div>
+                                                                </StyledComponent>
+                                                              </Tooltip__TooltipContainer>
+                                                            </Tooltip>
+                                                          </span>
+                                                        </StyledComponent>
+                                                      </TimeEntryModal__LabelIcon>
+                                                    </h4>
+                                                  </StyledComponent>
+                                                </Input__H4Label>
+                                                <TimeEntryModal__FlexRow>
+                                                  <StyledComponent
+                                                    forwardedComponent={
+                                                      Object {
+                                                        "$$typeof": Symbol(react.forward_ref),
+                                                        "attrs": Array [],
+                                                        "componentStyle": ComponentStyle {
+                                                          "componentId": "TimeEntryModal__FlexRow-sc-1l99qzp-0",
+                                                          "isStatic": true,
+                                                          "lastClassName": "c2",
+                                                          "rules": Array [
+                                                            "display:flex;justify-content:space-between;",
+                                                          ],
+                                                        },
+                                                        "displayName": "TimeEntryModal__FlexRow",
+                                                        "foldedComponentIds": Array [],
+                                                        "render": [Function],
+                                                        "styledComponentId": "TimeEntryModal__FlexRow-sc-1l99qzp-0",
+                                                        "target": "div",
+                                                        "toString": [Function],
+                                                        "warnTooManyClasses": [Function],
+                                                        "withComponent": [Function],
+                                                      }
+                                                    }
+                                                    forwardedRef={null}
+                                                  >
+                                                    <div
+                                                      className="c2"
+                                                    >
+                                                      <Input
+                                                        checked={false}
+                                                        disabled={false}
+                                                        name="duration"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        type="text"
+                                                        value="10"
+                                                      >
+                                                        <Input__StyledInput
+                                                          disabled={false}
+                                                          name="duration"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          type="text"
+                                                          value="10"
+                                                        >
+                                                          <StyledComponent
+                                                            disabled={false}
+                                                            forwardedComponent={
+                                                              Object {
+                                                                "$$typeof": Symbol(react.forward_ref),
+                                                                "attrs": Array [],
+                                                                "componentStyle": ComponentStyle {
+                                                                  "componentId": "Input__StyledInput-hbl69l-0",
+                                                                  "isStatic": false,
+                                                                  "lastClassName": "c9",
+                                                                  "rules": Array [
+                                                                    "display:block;width:100%;border-radius:3px;padding:5px 10px;box-sizing:border-box;font-size:14px;min-height:35px;outline:none;font-weight:bold;",
+                                                                    [Function],
+                                                                    "}",
+                                                                    [Function],
+                                                                    " ",
+                                                                    [Function],
+                                                                  ],
+                                                                },
+                                                                "displayName": "Input__StyledInput",
+                                                                "foldedComponentIds": Array [],
+                                                                "render": [Function],
+                                                                "styledComponentId": "Input__StyledInput-hbl69l-0",
+                                                                "target": "input",
+                                                                "toString": [Function],
+                                                                "warnTooManyClasses": [Function],
+                                                                "withComponent": [Function],
+                                                              }
+                                                            }
+                                                            forwardedRef={null}
+                                                            name="duration"
+                                                            onBlur={[Function]}
+                                                            onChange={[Function]}
+                                                            type="text"
+                                                            value="10"
+                                                          >
+                                                            <input
+                                                              className="c9"
+                                                              disabled={false}
+                                                              name="duration"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              type="text"
+                                                              value="10"
+                                                            />
+                                                          </StyledComponent>
+                                                        </Input__StyledInput>
+                                                      </Input>
+                                                      <TimeEntryModal__DurationInfo>
+                                                        <StyledComponent
+                                                          forwardedComponent={
+                                                            Object {
+                                                              "$$typeof": Symbol(react.forward_ref),
+                                                              "attrs": Array [],
+                                                              "componentStyle": ComponentStyle {
+                                                                "componentId": "TimeEntryModal__DurationInfo-sc-1l99qzp-3",
+                                                                "isStatic": true,
+                                                                "lastClassName": "c10",
+                                                                "rules": Array [
+                                                                  "align-self:center;color:gray;margin-left:0.5rem;min-width:10rem;",
+                                                                ],
+                                                              },
+                                                              "displayName": "TimeEntryModal__DurationInfo",
+                                                              "foldedComponentIds": Array [],
+                                                              "render": [Function],
+                                                              "styledComponentId": "TimeEntryModal__DurationInfo-sc-1l99qzp-3",
+                                                              "target": "div",
+                                                              "toString": [Function],
+                                                              "warnTooManyClasses": [Function],
+                                                              "withComponent": [Function],
+                                                            }
+                                                          }
+                                                          forwardedRef={null}
+                                                        >
+                                                          <div
+                                                            className="c10"
+                                                          >
+                                                            10 hours
+                                                          </div>
+                                                        </StyledComponent>
+                                                      </TimeEntryModal__DurationInfo>
+                                                    </div>
+                                                  </StyledComponent>
+                                                </TimeEntryModal__FlexRow>
+                                              </div>
+                                            </StyledComponent>
+                                          </Input__FormGroup>
+                                        </Label>
+                                        <ErrorMessage
+                                          show={false}
+                                        />
+                                      </div>
+                                    </StyledComponent>
+                                  </TimeEntryModal__DurationField>
                                   <div>
                                     <Label
                                       htmlFor="spent_on"
@@ -3573,7 +3930,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "componentStyle": ComponentStyle {
                                                           "componentId": "DatePicker__StyledDatePicker-sc-1hi18wg-0",
                                                           "isStatic": false,
-                                                          "lastClassName": "c4",
+                                                          "lastClassName": "c11",
                                                           "rules": Array [
                                                             ".DayPicker{display:inline-block;font-size:1rem;}.DayPicker-wrapper{position:relative;flex-direction:row;padding-bottom:1em;user-select:none;}.DayPicker-Months{display:flex;flex-wrap:wrap;justify-content:center;}.DayPicker-Month{display:table;margin:0 1em;margin-top:1em;border-spacing:0;border-collapse:collapse;user-select:none;}.DayPicker-NavButton{position:absolute;top:1em;right:1.5em;left:auto;display:inline-block;margin-top:2px;width:1.25em;height:1.25em;background-position:center;background-size:50%;background-repeat:no-repeat;cursor:pointer;}.DayPicker-NavButton:hover{opacity:0.8;}.DayPicker-NavButton--prev{margin-right:1.5em;left:1.5em;right:unset;background-image:url('data:image/svg+xml;utf8,",
                                                             [Function],
@@ -3611,7 +3968,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     forwardedRef={null}
                                                   >
                                                     <div
-                                                      className="c4"
+                                                      className="c11"
                                                     >
                                                       <DayPickerInput
                                                         classNames={
@@ -3689,7 +4046,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                       "componentStyle": ComponentStyle {
                                                                         "componentId": "Input__StyledInput-hbl69l-0",
                                                                         "isStatic": false,
-                                                                        "lastClassName": "c3",
+                                                                        "lastClassName": "c9",
                                                                         "rules": Array [
                                                                           "display:block;width:100%;border-radius:3px;padding:5px 10px;box-sizing:border-box;font-size:14px;min-height:35px;outline:none;font-weight:bold;",
                                                                           [Function],
@@ -3720,7 +4077,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                   value="2011-1-1"
                                                                 >
                                                                   <input
-                                                                    className="c3"
+                                                                    className="c9"
                                                                     disabled={false}
                                                                     onBlur={[Function]}
                                                                     onChange={[Function]}
@@ -3850,10 +4207,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "componentStyle": ComponentStyle {
                                                   "componentId": "MarkdownEditor__MarkdownOptionsList-h0sw8q-1",
                                                   "isStatic": true,
-                                                  "lastClassName": "c5",
+                                                  "lastClassName": "c12",
                                                   "rules": Array [
                                                     "list-style-type:none;margin:0px 0px 10px 0px;padding:5px 0px;width:100%;li:first-child{margin-left:0;}li:last-child{float:right;margin-right:0;}",
-                                                    ".c6",
+                                                    ".c13",
                                                     ":last-child{bottom:1px;a{display:flex;align-items:center;}}",
                                                   ],
                                                 },
@@ -3870,7 +4227,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             forwardedRef={null}
                                           >
                                             <ul
-                                              className="c5"
+                                              className="c12"
                                             >
                                               <MarkdownEditor__MarkdownOption
                                                 onClick={[Function]}
@@ -3881,9 +4238,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -3893,7 +4250,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -3904,7 +4261,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -3923,10 +4280,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -3943,7 +4300,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatBoldIcon>
                                                               <svg
@@ -3968,9 +4325,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -3986,7 +4343,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -3996,7 +4353,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Bold text
                                                                 </p>
@@ -4018,9 +4375,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4030,7 +4387,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4041,7 +4398,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4060,10 +4417,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4080,7 +4437,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatItalicIcon>
                                                               <svg
@@ -4105,9 +4462,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4123,7 +4480,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4133,7 +4490,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Italic text
                                                                 </p>
@@ -4155,9 +4512,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4167,7 +4524,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4178,7 +4535,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4197,10 +4554,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4217,7 +4574,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatUnderlineIcon>
                                                               <svg
@@ -4242,9 +4599,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4260,7 +4617,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4270,7 +4627,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Underlined text
                                                                 </p>
@@ -4292,9 +4649,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4304,7 +4661,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4315,7 +4672,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4334,10 +4691,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4354,7 +4711,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatStrikethroughIcon>
                                                               <svg
@@ -4379,9 +4736,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4397,7 +4754,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4407,7 +4764,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Crossed out text
                                                                 </p>
@@ -4429,9 +4786,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4441,7 +4798,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4452,7 +4809,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4471,10 +4828,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4491,7 +4848,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <CodeTagsIcon>
                                                               <svg
@@ -4516,9 +4873,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4534,7 +4891,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4544,7 +4901,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Code block
                                                                 </p>
@@ -4566,9 +4923,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4578,7 +4935,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4589,7 +4946,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4608,10 +4965,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4628,7 +4985,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatHeader1Icon>
                                                               <svg
@@ -4653,9 +5010,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4671,7 +5028,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4681,7 +5038,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   XL Header
                                                                 </p>
@@ -4703,9 +5060,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4715,7 +5072,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4726,7 +5083,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4745,10 +5102,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4765,7 +5122,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatHeader2Icon>
                                                               <svg
@@ -4790,9 +5147,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4808,7 +5165,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4818,7 +5175,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   L Header
                                                                 </p>
@@ -4840,9 +5197,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4852,7 +5209,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -4863,7 +5220,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -4882,10 +5239,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -4902,7 +5259,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatHeader3Icon>
                                                               <svg
@@ -4927,9 +5284,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -4945,7 +5302,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -4955,7 +5312,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   M Header
                                                                 </p>
@@ -4977,9 +5334,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -4989,7 +5346,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5000,7 +5357,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -5019,10 +5376,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -5039,7 +5396,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatListBulletedIcon>
                                                               <svg
@@ -5064,9 +5421,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -5082,7 +5439,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -5092,7 +5449,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Bulleted List
                                                                 </p>
@@ -5114,9 +5471,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -5126,7 +5483,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5137,7 +5494,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -5156,10 +5513,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -5176,7 +5533,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatListNumberedIcon>
                                                               <svg
@@ -5201,9 +5558,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -5219,7 +5576,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -5229,7 +5586,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Ordered List
                                                                 </p>
@@ -5251,9 +5608,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -5263,7 +5620,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5274,7 +5631,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -5293,10 +5650,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -5313,7 +5670,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <FormatQuoteCloseIcon>
                                                               <svg
@@ -5338,9 +5695,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -5356,7 +5713,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -5366,7 +5723,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Quote block
                                                                 </p>
@@ -5388,9 +5745,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -5400,7 +5757,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5411,7 +5768,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -5430,10 +5787,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -5450,7 +5807,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <LinkVariantIcon>
                                                               <svg
@@ -5475,9 +5832,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -5493,7 +5850,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -5503,7 +5860,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Hyperlink
                                                                 </p>
@@ -5525,9 +5882,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -5537,7 +5894,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5548,7 +5905,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   onClick={[Function]}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                     onClick={[Function]}
                                                   >
                                                     <Tooltip
@@ -5567,10 +5924,10 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Tooltip__TooltipContainer-sc-83zwzx-1",
                                                                 "isStatic": true,
-                                                                "lastClassName": "c8",
+                                                                "lastClassName": "c5",
                                                                 "rules": Array [
                                                                   "display:inline-block;position:relative;&:hover{",
-                                                                  ".c9",
+                                                                  ".c7",
                                                                   "{display:block;}}",
                                                                 ],
                                                               },
@@ -5587,7 +5944,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           forwardedRef={null}
                                                         >
                                                           <div
-                                                            className="c8"
+                                                            className="c5"
                                                           >
                                                             <ImageOutlineIcon>
                                                               <svg
@@ -5612,9 +5969,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "$$typeof": Symbol(react.forward_ref),
                                                                     "attrs": Array [],
                                                                     "componentStyle": ComponentStyle {
-                                                                      "componentId": "c9",
+                                                                      "componentId": "c7",
                                                                       "isStatic": false,
-                                                                      "lastClassName": "c10",
+                                                                      "lastClassName": "c8",
                                                                       "rules": Array [
                                                                         "position:absolute;display:none;border-radius:3px;top:-50px;left:50%;width:auto;transform:translateX(-50%);padding:5px;background:",
                                                                         [Function],
@@ -5630,7 +5987,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                     "displayName": "Tooltip__TooltipText",
                                                                     "foldedComponentIds": Array [],
                                                                     "render": [Function],
-                                                                    "styledComponentId": "c9",
+                                                                    "styledComponentId": "c7",
                                                                     "target": "p",
                                                                     "toString": [Function],
                                                                     "warnTooManyClasses": [Function],
@@ -5640,7 +5997,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                                 forwardedRef={null}
                                                               >
                                                                 <p
-                                                                  className="tooltip c9 c10"
+                                                                  className="tooltip c7 c8"
                                                                 >
                                                                   Embeded Image
                                                                 </p>
@@ -5660,9 +6017,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "$$typeof": Symbol(react.forward_ref),
                                                       "attrs": Array [],
                                                       "componentStyle": ComponentStyle {
-                                                        "componentId": "c6",
+                                                        "componentId": "c13",
                                                         "isStatic": false,
-                                                        "lastClassName": "c7",
+                                                        "lastClassName": "c14",
                                                         "rules": Array [
                                                           "display:inline;margin-right:10px;position:relative;cursor:pointer;&:hover{svg{color:",
                                                           [Function],
@@ -5672,7 +6029,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                       "displayName": "MarkdownEditor__MarkdownOption",
                                                       "foldedComponentIds": Array [],
                                                       "render": [Function],
-                                                      "styledComponentId": "c6",
+                                                      "styledComponentId": "c13",
                                                       "target": "li",
                                                       "toString": [Function],
                                                       "warnTooManyClasses": [Function],
@@ -5682,7 +6039,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   forwardedRef={null}
                                                 >
                                                   <li
-                                                    className="c6 c7"
+                                                    className="c13 c14"
                                                   >
                                                     <GhostButton
                                                       disabled={false}
@@ -5702,7 +6059,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                               "componentStyle": ComponentStyle {
                                                                 "componentId": "Button__StyledLink-bgocaa-1",
                                                                 "isStatic": false,
-                                                                "lastClassName": "c11",
+                                                                "lastClassName": "c15",
                                                                 "rules": Array [
                                                                   "text-decoration:none;color:",
                                                                   [Function],
@@ -5728,7 +6085,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                           onClick={[Function]}
                                                         >
                                                           <a
-                                                            className="c11"
+                                                            className="c15"
                                                             disabled={false}
                                                             href="#"
                                                             onClick={[Function]}
@@ -5778,7 +6135,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 "componentStyle": ComponentStyle {
                                                   "componentId": "MarkdownEditor__ModifiedTextArea-h0sw8q-2",
                                                   "isStatic": false,
-                                                  "lastClassName": "c12",
+                                                  "lastClassName": "c16",
                                                   "rules": Array [
                                                     "padding:10px;border-radius:3px;outline:none;border:1px solid ",
                                                     [Function],
@@ -5805,7 +6162,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             forwardedRef={
                                               Object {
                                                 "current": <textarea
-                                                  class="c12 c13"
+                                                  class="c16 c17"
                                                   maxlength="255"
                                                   rows="1"
                                                   style="height: 5px;"
@@ -5821,7 +6178,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                             value="Hello world"
                                           >
                                             <ForwardRef
-                                              className="c12"
+                                              className="c16"
                                               disabled={false}
                                               maxLength={255}
                                               onBlur={[Function]}
@@ -5830,12 +6187,12 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               value="Hello world"
                                             >
                                               <TextArea
-                                                className="c12"
+                                                className="c16"
                                                 disabled={false}
                                                 forwardedRef={
                                                   Object {
                                                     "current": <textarea
-                                                      class="c12 c13"
+                                                      class="c16 c17"
                                                       maxlength="255"
                                                       rows="1"
                                                       style="height: 5px;"
@@ -5852,7 +6209,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                 value="Hello world"
                                               >
                                                 <TextArea__StyledTextArea
-                                                  className="c12"
+                                                  className="c16"
                                                   disabled={false}
                                                   maxLength={255}
                                                   onChange={[Function]}
@@ -5861,7 +6218,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                   value="Hello world"
                                                 >
                                                   <StyledComponent
-                                                    className="c12"
+                                                    className="c16"
                                                     disabled={false}
                                                     forwardedComponent={
                                                       Object {
@@ -5870,7 +6227,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                         "componentStyle": ComponentStyle {
                                                           "componentId": "TextArea__StyledTextArea-sc-1pzmadu-0",
                                                           "isStatic": false,
-                                                          "lastClassName": "c13",
+                                                          "lastClassName": "c17",
                                                           "rules": Array [
                                                             "font-size:14px;resize:none;overflow:hidden;height:auto;font-family:inherit;width:100%;line-height:1.5rem;box-sizing:border-box;background:",
                                                             [Function],
@@ -5891,7 +6248,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     forwardedRef={
                                                       Object {
                                                         "current": <textarea
-                                                          class="c12 c13"
+                                                          class="c16 c17"
                                                           maxlength="255"
                                                           rows="1"
                                                           style="height: 5px;"
@@ -5907,7 +6264,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                                     value="Hello world"
                                                   >
                                                     <textarea
-                                                      className="c12 c13"
+                                                      className="c16 c17"
                                                       disabled={false}
                                                       maxLength={255}
                                                       onChange={[Function]}
@@ -5939,7 +6296,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                     "componentStyle": ComponentStyle {
                                       "componentId": "TimeEntryModal__OptionButtons-sc-1l99qzp-1",
                                       "isStatic": false,
-                                      "lastClassName": "c14",
+                                      "lastClassName": "c18",
                                       "rules": Array [
                                         "position:relative;margin-top:20px;padding-top:20px;border-top:2px solid ",
                                         [Function],
@@ -5959,7 +6316,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 forwardedRef={null}
                               >
                                 <div
-                                  className="c14"
+                                  className="c18"
                                 >
                                   <WithTheme(Button)
                                     disabled={false}
@@ -6036,7 +6393,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                               "componentStyle": ComponentStyle {
                                                 "componentId": "Button__StyledButton-bgocaa-0",
                                                 "isStatic": false,
-                                                "lastClassName": "c15",
+                                                "lastClassName": "c19",
                                                 "rules": Array [
                                                   "border-radius:3px;font-weight:bold;font-size:14px;outline:none;text-align:center;",
                                                   [Function],
@@ -6085,7 +6442,7 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                           type="button"
                                         >
                                           <button
-                                            className="c15"
+                                            className="c19"
                                             disabled={false}
                                             id="btn-update"
                                             onClick={[Function]}
@@ -6125,6 +6482,9 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                               onClickCloseIcon={[Function]}
                               styles={
                                 Object {
+                                  "closeButton": Object {
+                                    "cursor": "pointer",
+                                  },
                                   "modal": Object {
                                     "background": "#FFFFFF",
                                     "borderRadius": 3,
@@ -6140,6 +6500,11 @@ exports[`TimeEntryModal Component it should match the snapshot 1`] = `
                                 className="styles_closeButton__20ID4"
                                 id={null}
                                 onClick={[Function]}
+                                style={
+                                  Object {
+                                    "cursor": "pointer",
+                                  }
+                                }
                               >
                                 <svg
                                   className="styles_closeIcon__1QwbI"

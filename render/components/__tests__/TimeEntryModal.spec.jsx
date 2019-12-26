@@ -49,6 +49,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         id: 1,
         issue: {
@@ -103,6 +104,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         id: 1,
         issue: {
@@ -146,7 +148,7 @@ describe('TimeEntryModal Component', () => {
     expect(modal.state.wasModified).toBe(true);
     modal.setState({ wasModified: false });
     expect(modal.state.wasModified).toBe(false);
-    modal.onHoursChange({ target: { value: '15.2' } });
+    modal.onDurationChange({ target: { value: '15.2' } });
     expect(modal.state.wasModified).toBe(true);
     modal.setState({ wasModified: false });
     expect(modal.state.wasModified).toBe(false);
@@ -175,6 +177,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         id: 1,
         issue: {
@@ -210,7 +213,7 @@ describe('TimeEntryModal Component', () => {
       </Provider>
     );
 
-    expect(wrapper.find('Input[name="hours"]').prop('disabled')).toBe(true);
+    expect(wrapper.find('Input[name="duration"]').prop('disabled')).toBe(true);
     expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
   });
 
@@ -232,6 +235,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -307,6 +311,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -382,6 +387,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -450,6 +456,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -485,7 +492,7 @@ describe('TimeEntryModal Component', () => {
     );
 
     expect(wrapper.find('Select').prop('isDisabled')).toBe(true);
-    expect(wrapper.find('input[name="hours"]').prop('disabled')).toBe(true);
+    expect(wrapper.find('input[name="duration"]').prop('disabled')).toBe(true);
     expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
     expect(wrapper.find('MarkdownEditor').prop('isDisabled')).toBe(true);
     expect(wrapper.exists('#btn-add')).toBe(false);
@@ -509,6 +516,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -575,6 +583,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -641,6 +650,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,

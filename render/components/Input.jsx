@@ -133,15 +133,15 @@ const StyledLabel = styled.label`
   color: ${props => props.theme.minorText};
 `;
 
-const Label = ({ label, htmlFor, children, className, inline, rightToLeft }) => ( 
+const Label = ({ label, htmlFor, children, className, inline, rightToLeft, rightOfLabel }) => ( 
   <FormGroup className={`form-group ${className}`}>
     { rightToLeft === true && (children) }
     { inline === false
       ? (
-        <H4Label htmlFor={htmlFor}>{label}</H4Label>
+        <H4Label htmlFor={htmlFor}>{label}{rightOfLabel}</H4Label>
       )
       : (
-        <StyledLabel htmlFor={htmlFor}>{label}</StyledLabel>
+        <StyledLabel htmlFor={htmlFor}>{label}{rightOfLabel}</StyledLabel>
       )
     }
     { rightToLeft === false && (children) }
