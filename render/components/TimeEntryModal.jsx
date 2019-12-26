@@ -86,6 +86,9 @@ class TimeEntryModal extends Component {
       },
       wasModified: false
     };
+    if (props.initialVolatileContent){ // TimeEntry filled with duration (from Timer)
+      this.state.wasModified = true;
+    }
 
     this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
     this.debouncedDurationConversionChange = _debounce(this.onDurationConversionChange, 300);
@@ -93,12 +96,12 @@ class TimeEntryModal extends Component {
 
   componentDidUpdate(oldProps) {
     if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
-      const { timeEntry } = this.props;
+      const { timeEntry, initialVolatileContent } = this.props;
 
       if (timeEntry) {
         this.setState({
           timeEntry,
-          wasModified: false
+          wasModified: !!initialVolatileContent
         });
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
@@ -243,6 +246,7 @@ class TimeEntryModal extends Component {
       <Modal
         open={!!isOpen}
         onClose={onClose}
+        needConfirm={wasModified}
         center={true}
       >
         <Fragment>
@@ -394,7 +398,8 @@ TimeEntryModal.propTypes = {
   isEditable: PropTypes.bool,
   publishTimeEntry: PropTypes.func.isRequired,
   updateTimeEntry: PropTypes.func.isRequired,
-  resetValidation: PropTypes.func.isRequired
+  resetValidation: PropTypes.func.isRequired,
+  initialVolatileContent: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

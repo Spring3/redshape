@@ -98,10 +98,10 @@ class AppView extends Component {
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             isEditable={true}
-            onClose={this.closeTimeEntryModal}
             activities={activities}
             isUserAuthor={true}
             timeEntry={timeEntry}
+            initialVolatileContent={true}
             onClose={this.closeTimeEntryModal}
           />
         </Content>
