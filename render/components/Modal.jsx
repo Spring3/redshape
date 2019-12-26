@@ -19,6 +19,9 @@ class Modal extends Component {
         boxShadow: `0px 0px 20px ${theme.shadow}`,
         background: theme.bg,
         borderRadius: 3
+      },
+      closeButton: {
+        cursor: 'pointer'
       }
     };
   }
