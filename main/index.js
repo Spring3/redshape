@@ -3,11 +3,15 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const { app, BrowserWindow, Menu, Tray } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
+
+const { setupTray } = require('./tray');
+
+const NAME = 'Redshape';
 
 const utils = require('./utils');
 require('./exceptionCatcher')();
@@ -33,8 +37,6 @@ require('../common/request'); // to initialize from storage
 
 let mainWindow;
 let aboutWindow;
-let tray;
-let hideWhenClose = true;
 
 const initializeMenu = () => {
   const isMac = process.platform === 'darwin';
@@ -55,7 +57,7 @@ const initializeMenu = () => {
   const menu = Menu.buildFromTemplate([
     // { role: 'appMenu' }
     ...(isMac ? [{
-      label: 'Redshape',
+      label: NAME,
       submenu: [
         aboutSubmenu,
         { type: 'separator' },
@@ -229,34 +231,7 @@ const initialize = () => {
     mainWindow = null;
   });
 
-  tray = new Tray(utils.fixIcon(windowConfig).icon);
-  tray.setToolTip('Redshape');
-
-  let contextMenu;
-  const showMenuItem = { label: 'Show window', click: () => mainWindow.show() };
-  const hideMenuItem = { label: 'Hide in tray', role: 'close' };
-  const quitMenuItem = { role: 'quit' };
-
-  contextMenu = Menu.buildFromTemplate([ hideMenuItem, quitMenuItem ]);
-  tray.setContextMenu(contextMenu);
-
-  mainWindow.on('close', (ev) => {
-    if (hideWhenClose) {
-      ev.preventDefault();
-      mainWindow.hide();
-      ev.returnValue = false;
-    }
-  });
-
-  mainWindow.on('show', (ev) => {
-    contextMenu = Menu.buildFromTemplate([ hideMenuItem, quitMenuItem ]);
-    tray.setContextMenu(contextMenu);
-  });
-
-  mainWindow.on('hide', (ev) => {
-    contextMenu = Menu.buildFromTemplate([ showMenuItem, quitMenuItem ]);
-    tray.setContextMenu(contextMenu);
-  });
+  setupTray({ app, mainWindow, NAME, windowConfig });
 };
 
 app.once('ready', () => {
@@ -265,10 +240,6 @@ app.once('ready', () => {
   if (!isDev) {
     autoUpdater.checkForUpdatesAndNotify();
   }
-});
-
-app.on('before-quit', () => {
-  hideWhenClose = false; // other apps/OS can quit it
 });
 
 app.on('window-all-closed', () => {

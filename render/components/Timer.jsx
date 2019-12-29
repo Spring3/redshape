@@ -13,6 +13,8 @@ import { GhostButton } from './Button';
 import { animationSlideUp } from '../animations';
 import Link from './Link';
 
+import { setupTimerIPC, sendTimerIPC } from '../ipc';
+
 const ActiveTimer = styled.div`
   animation: ${animationSlideUp} .7s ease-in;
   max-width: 100%;
@@ -74,12 +76,48 @@ class Timer extends Component {
     super(props);
 
     this.state = {
-      value: props.trackedTime || props.initialValue || 0
+      value: props.trackedTime || props.initialValue || 0,
+      timestamp: null, // used only when store/restore to/from timestamp (window hidden)
     };
+
+    setupTimerIPC(this);
+
+    const { isEnabled, isPaused, trackedIssue } = this.props;
+    if (isEnabled){
+      sendTimerIPC('timer-info', {isEnabled, isPaused, issue: trackedIssue})
+    }
 
     this.interval = props.isEnabled && !props.isPaused
      ? setInterval(this.tick, 1000)
      : undefined;
+  }
+  /* stop time interval and store tracked time + current datetime */
+  storeToTimestamp(){
+    const { timestamp } = this.state;
+    const { isEnabled, isPaused, trackedIssue } = this.props;
+    if (isEnabled && !isPaused){
+      this.setState({
+        timestamp: {
+          value: this.state.value,
+          datetime: moment()
+        }
+      });
+      this.stopInterval()
+    }
+    sendTimerIPC('timer-info', {isEnabled, isPaused, issue: trackedIssue})
+  }
+  /* restore time interval based on stored tracked time + diff datetimes */
+  restoreFromTimestamp(enableInterval = true){
+    const { timestamp } = this.state;
+    const { isEnabled, isPaused } = this.props;
+    if (timestamp && isEnabled && !isPaused){
+      const { value, datetime } = timestamp;
+      const newValue = moment().diff(datetime, 'ms') + value;
+      this.setState({ timestamp: null, value: newValue });
+      if (enableInterval) {
+        this.interval = setInterval(this.tick, 1000);
+      }
+    }
   }
 
   tick = () => {
@@ -121,12 +159,13 @@ class Timer extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    const { isEnabled } = this.props;
+    const { isEnabled, isPaused, trackedIssue } = this.props;
     if (isEnabled !== oldProps.isEnabled) {
       this.stopInterval();
       // if was disabled, but now is enabled
       if (isEnabled) {
         this.interval = setInterval(this.tick, 1000);
+        sendTimerIPC('timer-info', {isEnabled, isPaused, issue: trackedIssue });
       }
       // otherwise, if was enabled, but now it's disabled, we don't do anything
       // because the interval was already cleared above
@@ -141,6 +180,7 @@ class Timer extends Component {
     if (onPause) {
       onPause(value, trackedIssue)
     }
+    sendTimerIPC('timer-info', {isEnabled: true, isPaused: true, issue: trackedIssue})
   }
 
   onContinue = () => {
@@ -151,6 +191,7 @@ class Timer extends Component {
     if (onContinue) {
       onContinue(trackedIssue, value);
     }
+    sendTimerIPC('timer-info', {isEnabled: true, isPaused: false, issue: trackedIssue})
   }
 
   onStop = () => {
@@ -162,6 +203,7 @@ class Timer extends Component {
       onStop(value, trackedIssue);
     }
     this.setState({ value: 0 });
+    sendTimerIPC('timer-info', {isEnabled: false, issue: trackedIssue})
   }
 
   redirectToTrackedLink = (event) => {
