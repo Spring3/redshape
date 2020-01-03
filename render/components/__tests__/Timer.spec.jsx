@@ -24,6 +24,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
     const store = mockStore(state);
@@ -48,10 +53,16 @@ describe('Timer component', () => {
         isEnabled: true,
         isPaused: false,
         duration: 4000,
+        comments: '',
         issue: {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -94,6 +105,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -135,6 +151,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -165,7 +186,7 @@ describe('Timer component', () => {
     expect(saveStateSpy).toHaveBeenCalled();
     // we do not call onPause if we unmount
     // expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
-    expect(store.getActions()).toEqual([{ type: 'TRACKING_CONTINUE', data: { duration: 5000 } }]);
+    expect(store.getActions()).toEqual([{ type: 'TRACKING_SAVE', data: { duration: 5000, comments: "" } }]);
   });
 
   it('should automatically save the progress and stop before unload', async () => {
@@ -182,6 +203,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -210,7 +236,7 @@ describe('Timer component', () => {
     // wrapper.first().getDOMNode().dispatchEvent(unloadEv);
     // expect(cleanupSpy).toHaveBeenCalled();
 
-    expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
+    expect(onPause).toHaveBeenCalledWith(state.tracking.issue, 5000, "");
   });
 
   it('should allow to pause the timer', async () => {
@@ -227,6 +253,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -255,7 +286,7 @@ describe('Timer component', () => {
     wrapper.find('.buttons').childAt(1).find('GhostButton').simulate('click');
     wrapper.update();
 
-    expect(onPause).toHaveBeenCalledWith(1000, state.tracking.issue);
+    expect(onPause).toHaveBeenCalledWith(state.tracking.issue, 1000, "");
   });
 
   it('should allow to resume the paused timer', async () => {
@@ -272,6 +303,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -322,6 +358,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 
@@ -350,7 +391,7 @@ describe('Timer component', () => {
     wrapper.find('.buttons').childAt(0).find('GhostButton').simulate('click');
     wrapper.update();
 
-    expect(onStop).toHaveBeenCalledWith(1000, state.tracking.issue);
+    expect(onStop).toHaveBeenCalledWith(state.tracking.issue, 1000, "");
     expect(timer.interval).not.toBeDefined();
 
     expect(onStop).toHaveBeenCalledTimes(1);
@@ -370,6 +411,11 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     };
 

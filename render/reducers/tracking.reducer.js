@@ -3,6 +3,7 @@ import {
   TRACKING_STOP,
   TRACKING_PAUSE,
   TRACKING_CONTINUE,
+  TRACKING_SAVE,
   TRACKING_RESET
 } from '../actions/tracking.actions';
 import storage from '../../common/storage';
@@ -11,7 +12,8 @@ export const initialState = {
   issue: {},
   isEnabled: false,
   isPaused: false,
-  duration: 0
+  duration: 0,
+  comments: ''
 };
 
 export default (state = initialState, action) => {
@@ -25,35 +27,52 @@ export default (state = initialState, action) => {
         issue,
         isEnabled: true,
         isPaused: false,
-        duration: 0
+        duration: 0,
+        comments: '',
       };
       storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_STOP: {
+      const { duration, comments } = action.data;
       const nextState = {
         ...state,
         isEnabled: false,
         isPaused: false,
-        duration: action.data.duration
+        duration,
+        comments,
       };
       storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_PAUSE: {
+      const { duration, comments } = action.data;
       const nextState = {
         ...state,
         isPaused: true,
-        duration: action.data.duration
+        duration,
+        comments,
       };
       storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_CONTINUE: {
+      const { duration, comments } = action.data;
       const nextState = {
         ...state,
         isPaused: false,
-        duration: action.data.duration || state.duration
+        duration: duration || state.duration,
+        comments: comments || state.comments,
+      };
+      storage.set('time_tracking', nextState);
+      return nextState;
+    }
+    case TRACKING_SAVE: {
+      const { duration, comments } = action.data;
+      const nextState = {
+        ...state,
+        duration,
+        comments,
       };
       storage.set('time_tracking', nextState);
       return nextState;

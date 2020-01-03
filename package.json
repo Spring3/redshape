@@ -56,6 +56,10 @@
     },
     "linux": {
       "category": "Development",
+      "depends": [
+        "libxss-dev",
+        "pkg-config"
+      ],
       "target": [
         "AppImage",
         "deb"
@@ -108,6 +112,7 @@
     "@hapi/joi": "^16.1.8",
     "axios": "^0.19.0",
     "clean-stack": "^2.1.0",
+    "desktop-idle": "^1.3.0",
     "dotenv": "^8.0.0",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^3.0.6",
@@ -117,7 +122,7 @@
     "ensure-error": "^2.0.0",
     "formik": "^1.5.7",
     "lodash": "^4.17.11",
-    "mdi-react": "^5.2.0",
+    "mdi-react": "^6.5.0",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",
     "prop-types": "^15.7.2",

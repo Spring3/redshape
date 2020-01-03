@@ -79,6 +79,11 @@ describe('AppView', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
       }
     });
     const tree = renderer.create(
@@ -134,6 +139,11 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
         }
       });
 
@@ -203,6 +213,11 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
         }
       });
 
@@ -288,6 +303,11 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
         }
       };
       const store = mockStore(state);
@@ -331,7 +351,7 @@ describe('AppView', () => {
       const hours = Number((state.tracking.ms / 3600000).toFixed(3));
       const duration = hoursToDuration(hours);
 
-      view.onTrackingStop(state.tracking.ms, state.tracking.issue);
+      view.onTrackingStop(state.tracking.issue, state.tracking.ms);
       expect(view.state.showTimeEntryModal).toBe(true);
       expect(view.state.timeEntry).toEqual({
         activity: {},

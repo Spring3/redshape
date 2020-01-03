@@ -17,6 +17,8 @@ import storage from '../../common/storage';
 
 import { hoursToDuration } from "../actions/timeEntry.actions";
 
+import IPC from '../ipc';
+
 const Grid = styled.div`
   height: 100%;
   display: grid;
@@ -38,13 +40,20 @@ class AppView extends Component {
       showTimeEntryModal: false,
       timeEntry: null
     };
+
+    this.modifyUserMenu();
+  }
+
+  modifyUserMenu(){
+    const { idleBehavior, discardIdleTime, advancedTimerControls } = this.props;
+    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls } })
   }
 
   componentWillMount() {
     this.props.getProjectData();
   }
 
-  onTrackingStop = (value, trackedIssue) => {
+  onTrackingStop = (trackedIssue, value, comments) => {
     const { userId, userName, projects } = this.props;
     const activities = _get(projects[trackedIssue.project.id], 'activities', []);
     const hours = parseFloat((value / 3600000).toFixed(3));
@@ -59,7 +68,7 @@ class AppView extends Component {
         },
         hours,
         duration: hoursToDuration(hours),
-        comments: '',
+        comments: comments || '',
         project: {
           id: trackedIssue.project.id,
           name: trackedIssue.project.name
@@ -125,14 +134,20 @@ AppView.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired).isRequired
-  }).isRequired
+  }).isRequired,
+  idleBehavior: PropTypes.number.isRequired,
+  discardIdleTime: PropTypes.bool.isRequired,
+  advancedTimerControls: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.user.id,
   userName: state.user.name,
   api_key: state.user.api_key,
-  projects: state.projects.data
+  projects: state.projects.data,
+  idleBehavior: state.settings.idleBehavior,
+  discardIdleTime: state.settings.discardIdleTime,
+  advancedTimerControls: state.settings.advancedTimerControls,
 });
 
 const mapDispatchToProps = dispatch => ({

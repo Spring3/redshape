@@ -127,6 +127,18 @@ exports[`AppView should match the snapshot 1`] = `
   border-top: 2px solid #F9F9F9;
 }
 
+.c5 div.panel {
+  min-width: 520px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c5 div.buttons {
   margin: 0 20px;
 }
@@ -151,6 +163,20 @@ exports[`AppView should match the snapshot 1`] = `
 
 .c5 div.time {
   color: #FF7079;
+}
+
+.c5 input[name="comment"] {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px #F9F9F9 solid;
+  color: #A4A4A4;
+}
+
+.c5 input[name="comment"]:focus {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px #FF7079 solid;
+  box-shadow: none;
 }
 
 .c6 {
@@ -228,54 +254,58 @@ exports[`AppView should match the snapshot 1`] = `
       className="c5"
     >
       <div
-        className="buttons"
+        className="panel"
       >
-        <a
-          className="c6 c3"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
+        <div
+          className="buttons"
         >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={35}
-            viewBox="0 0 24 24"
-            width={35}
+          <a
+            className="c6 c3"
+            disabled={false}
+            href="#"
+            onClick={[Function]}
           >
-            <path
-              d="M18,18H6V6H18V18Z"
-            />
-          </svg>
-        </a>
-        <a
-          className="c6 c3"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={35}
+              viewBox="0 0 24 24"
+              width={35}
+            >
+              <path
+                d="M18,18H6V6H18V18Z"
+              />
+            </svg>
+          </a>
+          <a
+            className="c6 c3"
+            disabled={false}
+            href="#"
+            onClick={[Function]}
+          >
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={35}
+              viewBox="0 0 24 24"
+              width={35}
+            >
+              <path
+                d="M14,19H18V5H14M6,19H10V5H6V19Z"
+              />
+            </svg>
+          </a>
+        </div>
+        <div
+          className="issueName"
+        />
+        <div
+          className="time"
         >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={35}
-            viewBox="0 0 24 24"
-            width={35}
-          >
-            <path
-              d="M14,19H18V5H14M6,19H10V5H6V19Z"
-            />
-          </svg>
-        </a>
-      </div>
-      <div
-        className="issueName"
-      />
-      <div
-        className="time"
-      >
-        <span>
-          00:00:00
-        </span>
+          <span>
+            00:00:00
+          </span>
+        </div>
       </div>
     </div>
   </div>

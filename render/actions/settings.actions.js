@@ -1,9 +1,45 @@
+export const SETTINGS_ADVANCED_TIMER_CONTROLS = 'SETTINGS_ADVANCED_TIMER_CONTROLS';
+export const SETTINGS_DISCARD_IDLE_TIME = 'SETTINGS_DISCARD_IDLE_TIME';
+export const SETTINGS_IDLE_BEHAVIOR = 'SETTINGS_IDLE_BEHAVIOR';
 export const SETTINGS_SHOW_CLOSED_ISSUES = 'SETTINGS_SHOW_CLOSED_ISSUES';
 export const SETTINGS_USE_COLORS = 'SETTINGS_USE_COLORS';
 export const SETTINGS_ISSUE_HEADERS = 'SETTINGS_ISSUE_HEADERS';
 export const SETTINGS_BACKUP = 'SETTINGS_BACKUP';
 export const SETTINGS_RESTORE = 'SETTINGS_RESTORE';
 
+const setAdvancedTimerControls = advancedTimerControls => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_ADVANCED_TIMER_CONTROLS,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      advancedTimerControls
+    }
+  });
+};
+const setDiscardIdleTime = discardIdleTime => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_DISCARD_IDLE_TIME,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      discardIdleTime
+    }
+  });
+};
+const setIdleBehavior = idleBehavior => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_IDLE_BEHAVIOR,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      idleBehavior
+    }
+  });
+};
 const setShowClosedIssues = showClosed => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
@@ -59,6 +95,9 @@ const restore = () => (dispatch, getState) => {
 };
 
 export default {
+  setAdvancedTimerControls,
+  setDiscardIdleTime,
+  setIdleBehavior,
   setShowClosedIssues,
   setUseColors,
   setIssueHeaders,

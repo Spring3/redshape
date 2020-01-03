@@ -1,6 +1,25 @@
 import { ipcRenderer } from 'electron';
+import store from './store';
+import actions from './actions';
 
 let currentTimer;
+
+ipcRenderer.on('settings', (event, {key, value}) => {
+  switch(key){
+    case 'ADVANCED_TIMER_CONTROLS':
+      store.dispatch(actions.settings.setAdvancedTimerControls(value));
+      break;
+    case 'DISCARD_IDLE_TIME':
+      store.dispatch(actions.settings.setDiscardIdleTime(value));
+      break;
+    case 'IDLE_BEHAVIOR':
+      store.dispatch(actions.settings.setIdleBehavior(value));
+      if (currentTimer){
+        currentTimer.resetIntervalIdle();
+      }
+      break;
+  }
+});
 
 ipcRenderer.on('window', (event, {action}) => {
   if (!currentTimer){ return; }
@@ -32,10 +51,13 @@ ipcRenderer.on('timer', (ev, {action, mainWindowHidden}) => {
   }
 });
 
-export function setupTimerIPC(timer){
-  currentTimer = timer;
-}
+const IPC = {
+  setupTimer(timer) {
+    currentTimer = timer;
+  },
+  send(channel, ...args) {
+    ipcRenderer.send(channel, ...args);
+  }
+};
 
-export function sendTimerIPC(channel, ...args) {
-  ipcRenderer.send(channel, ...args);
-}
+export default IPC;

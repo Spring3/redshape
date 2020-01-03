@@ -1,5 +1,4 @@
-const { Tray, Menu, ipcMain } = require('electron');
-const utils = require('./utils');
+const { Tray, Menu, ipcMain, nativeImage } = require('electron');
 
 let NAME;
 
@@ -8,6 +7,8 @@ let windowConfig;
 
 let tray;
 let contextMenu;
+
+let icons;
 
 let hideWhenClose = true;
 
@@ -30,11 +31,15 @@ const updateTrayMenu = () => {
     if (timerPaused) {
       resumeTimerMenuItem.label = timerLabel;
       template.push(resumeTimerMenuItem);
+      tray.setImage(icons.pause);
     }else{
       pauseTimerMenuItem.label = timerLabel;
       template.push(pauseTimerMenuItem);
+      tray.setImage(icons.play);
     }
     template.push(sepMenuItem);
+  }else{
+    tray.setImage(icons.default);
   }
   if (mainWindowHidden) {
     template.push(showMenuItem);
@@ -77,7 +82,13 @@ module.exports = {
       hideWhenClose = false; // other apps/OS can quit it
     });
 
-    tray = new Tray(utils.fixIcon(windowConfig).icon);
+    icons = {
+      default: nativeImage.createFromPath(windowConfig.icon),
+      pause: nativeImage.createFromPath(windowConfig.iconPause),
+      play: nativeImage.createFromPath(windowConfig.iconPlay),
+    };
+
+    tray = new Tray(icons.default);
     contextMenu = Menu.buildFromTemplate([ hideMenuItem, quitMenuItem ]);
     tray.setContextMenu(contextMenu);
     tray.setToolTip(statusLabel);

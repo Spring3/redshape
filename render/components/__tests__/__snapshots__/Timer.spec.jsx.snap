@@ -46,6 +46,18 @@ exports[`Timer component should match the snapshot 1`] = `
   border-top: 2px solid;
 }
 
+.c0 div.panel {
+  min-width: 520px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c0 div.buttons {
   margin: 0 20px;
 }
@@ -62,6 +74,20 @@ exports[`Timer component should match the snapshot 1`] = `
 
 .c0 div.buttons a:first-child {
   margin-right: 20px;
+}
+
+.c0 input[name="comment"] {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid;
+  color: #A4A4A4;
+}
+
+.c0 input[name="comment"]:focus {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid;
+  box-shadow: none;
 }
 
 .c1 {
@@ -94,12 +120,16 @@ exports[`Timer component should match the snapshot 1`] = `
     trackedDuration={4000}
   >
     <Timer
+      advancedTimerControls={false}
       continueTimer={[Function]}
+      discardIdleTime={true}
+      idleBehavior={0}
       initialValue={0}
       isEnabled={true}
       isPaused={true}
       issueTitle=""
       pauseTimer={[Function]}
+      saveTimer={[Function]}
       stopTimer={[Function]}
       trackedDuration={4000}
       trackedIssue={
@@ -142,11 +172,15 @@ exports[`Timer component should match the snapshot 1`] = `
                   [Function],
                   ";border-top:2px solid ",
                   [Function],
-                  ";div.buttons{margin:0 20px;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
+                  ";div.panel{min-width:520px;display:flex;align-items:center;}div.buttons{margin:0 20px;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
                   [Function],
                   ";}}a:first-child{margin-right:20px;}}div.time{color:",
                   [Function],
-                  ";}",
+                  ";}input[name=\\"comment\\"]{border:none;border-radius:0;border-bottom:1px ",
+                  [Function],
+                  " solid;color:#A4A4A4;&:focus{border:none;border-radius:0;border-bottom:1px ",
+                  [Function],
+                  " solid;box-shadow:none;}}",
                 ],
               },
               "displayName": "Timer__ActiveTimer",
@@ -166,313 +200,301 @@ exports[`Timer component should match the snapshot 1`] = `
             className="c0"
           >
             <div
-              className="buttons"
+              className="panel"
             >
-              <Timer__StyledButton
-                onClick={[Function]}
+              <div
+                className="buttons"
               >
-                <StyledComponent
-                  forwardedComponent={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "$asyncbind": [Function],
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "Timer__StyledButton-d99dh7-1",
-                        "isStatic": true,
-                        "lastClassName": "c1",
-                        "rules": Array [
-                          "padding:0px;",
-                        ],
-                      },
-                      "displayName": "Timer__StyledButton",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "Timer__StyledButton-d99dh7-1",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                    }
-                  }
-                  forwardedRef={null}
+                <Timer__StyledButton
                   onClick={[Function]}
                 >
-                  <GhostButton
-                    className="c1"
-                    disabled={false}
+                  <StyledComponent
+                    forwardedComponent={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "$asyncbind": [Function],
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "Timer__StyledButton-d99dh7-1",
+                          "isStatic": true,
+                          "lastClassName": "c1",
+                          "rules": Array [
+                            "padding:0px;",
+                          ],
+                        },
+                        "displayName": "Timer__StyledButton",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "Timer__StyledButton-d99dh7-1",
+                        "target": [Function],
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                      }
+                    }
+                    forwardedRef={null}
                     onClick={[Function]}
                   >
-                    <Button__StyledLink
+                    <GhostButton
                       className="c1"
                       disabled={false}
-                      href="#"
                       onClick={[Function]}
                     >
-                      <StyledComponent
+                      <Button__StyledLink
                         className="c1"
                         disabled={false}
-                        forwardedComponent={
-                          Object {
-                            "$$typeof": Symbol(react.forward_ref),
-                            "attrs": Array [],
-                            "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-bgocaa-1",
-                              "isStatic": false,
-                              "lastClassName": "c2",
-                              "rules": Array [
-                                "text-decoration:none;color:",
-                                [Function],
-                                ";transition:color ease ",
-                                [Function],
-                                ";",
-                                [Function],
-                                " &:active,&:focus,&:visited{background:transparent;}",
-                              ],
-                            },
-                            "displayName": "Button__StyledLink",
-                            "foldedComponentIds": Array [],
-                            "render": [Function],
-                            "styledComponentId": "Button__StyledLink-bgocaa-1",
-                            "target": "a",
-                            "toString": [Function],
-                            "warnTooManyClasses": [Function],
-                            "withComponent": [Function],
-                          }
-                        }
-                        forwardedRef={null}
                         href="#"
                         onClick={[Function]}
                       >
-                        <a
-                          className="c1 c2"
+                        <StyledComponent
+                          className="c1"
                           disabled={false}
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "Button__StyledLink-bgocaa-1",
+                                "isStatic": false,
+                                "lastClassName": "c2",
+                                "rules": Array [
+                                  "text-decoration:none;color:",
+                                  [Function],
+                                  ";transition:color ease ",
+                                  [Function],
+                                  ";",
+                                  [Function],
+                                  " &:active,&:focus,&:visited{background:transparent;}",
+                                ],
+                              },
+                              "displayName": "Button__StyledLink",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "Button__StyledLink-bgocaa-1",
+                              "target": "a",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
                           href="#"
                           onClick={[Function]}
                         >
-                          <StopIcon
-                            size={35}
+                          <a
+                            className="c1 c2"
+                            disabled={false}
+                            href="#"
+                            onClick={[Function]}
                           >
-                            <svg
-                              className="mdi-icon "
-                              fill="currentColor"
-                              height={35}
-                              viewBox="0 0 24 24"
-                              width={35}
+                            <StopIcon
+                              size={35}
                             >
                               <path
                                 d="M18,18H6V6H18V18Z"
                               />
-                            </svg>
-                          </StopIcon>
-                        </a>
-                      </StyledComponent>
-                    </Button__StyledLink>
-                  </GhostButton>
-                </StyledComponent>
-              </Timer__StyledButton>
-              <Timer__StyledButton
-                onClick={[Function]}
-              >
-                <StyledComponent
-                  forwardedComponent={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "$asyncbind": [Function],
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "Timer__StyledButton-d99dh7-1",
-                        "isStatic": true,
-                        "lastClassName": "c1",
-                        "rules": Array [
-                          "padding:0px;",
-                        ],
-                      },
-                      "displayName": "Timer__StyledButton",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "Timer__StyledButton-d99dh7-1",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                    }
-                  }
-                  forwardedRef={null}
+                            </StopIcon>
+                          </a>
+                        </StyledComponent>
+                      </Button__StyledLink>
+                    </GhostButton>
+                  </StyledComponent>
+                </Timer__StyledButton>
+                <Timer__StyledButton
                   onClick={[Function]}
                 >
-                  <GhostButton
-                    className="c1"
-                    disabled={false}
+                  <StyledComponent
+                    forwardedComponent={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "$asyncbind": [Function],
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "Timer__StyledButton-d99dh7-1",
+                          "isStatic": true,
+                          "lastClassName": "c1",
+                          "rules": Array [
+                            "padding:0px;",
+                          ],
+                        },
+                        "displayName": "Timer__StyledButton",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "Timer__StyledButton-d99dh7-1",
+                        "target": [Function],
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                      }
+                    }
+                    forwardedRef={null}
                     onClick={[Function]}
                   >
-                    <Button__StyledLink
+                    <GhostButton
                       className="c1"
                       disabled={false}
-                      href="#"
                       onClick={[Function]}
                     >
-                      <StyledComponent
+                      <Button__StyledLink
                         className="c1"
                         disabled={false}
-                        forwardedComponent={
-                          Object {
-                            "$$typeof": Symbol(react.forward_ref),
-                            "attrs": Array [],
-                            "componentStyle": ComponentStyle {
-                              "componentId": "Button__StyledLink-bgocaa-1",
-                              "isStatic": false,
-                              "lastClassName": "c2",
-                              "rules": Array [
-                                "text-decoration:none;color:",
-                                [Function],
-                                ";transition:color ease ",
-                                [Function],
-                                ";",
-                                [Function],
-                                " &:active,&:focus,&:visited{background:transparent;}",
-                              ],
-                            },
-                            "displayName": "Button__StyledLink",
-                            "foldedComponentIds": Array [],
-                            "render": [Function],
-                            "styledComponentId": "Button__StyledLink-bgocaa-1",
-                            "target": "a",
-                            "toString": [Function],
-                            "warnTooManyClasses": [Function],
-                            "withComponent": [Function],
-                          }
-                        }
-                        forwardedRef={null}
                         href="#"
                         onClick={[Function]}
                       >
-                        <a
-                          className="c1 c2"
+                        <StyledComponent
+                          className="c1"
                           disabled={false}
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "Button__StyledLink-bgocaa-1",
+                                "isStatic": false,
+                                "lastClassName": "c2",
+                                "rules": Array [
+                                  "text-decoration:none;color:",
+                                  [Function],
+                                  ";transition:color ease ",
+                                  [Function],
+                                  ";",
+                                  [Function],
+                                  " &:active,&:focus,&:visited{background:transparent;}",
+                                ],
+                              },
+                              "displayName": "Button__StyledLink",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "Button__StyledLink-bgocaa-1",
+                              "target": "a",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
                           href="#"
                           onClick={[Function]}
                         >
-                          <PlayIcon
-                            size={35}
+                          <a
+                            className="c1 c2"
+                            disabled={false}
+                            href="#"
+                            onClick={[Function]}
                           >
-                            <svg
-                              className="mdi-icon "
-                              fill="currentColor"
-                              height={35}
-                              viewBox="0 0 24 24"
-                              width={35}
+                            <PlayIcon
+                              size={35}
                             >
                               <path
                                 d="M8,5.14V19.14L19,12.14L8,5.14Z"
                               />
-                            </svg>
-                          </PlayIcon>
-                        </a>
-                      </StyledComponent>
-                    </Button__StyledLink>
-                  </GhostButton>
-                </StyledComponent>
-              </Timer__StyledButton>
-            </div>
-            <div
-              className="issueName"
-            >
-              <Timer__MaskedLink
-                href="#"
-                onClick={[Function]}
+                            </PlayIcon>
+                          </a>
+                        </StyledComponent>
+                      </Button__StyledLink>
+                    </GhostButton>
+                  </StyledComponent>
+                </Timer__StyledButton>
+              </div>
+              <div
+                className="issueName"
               >
-                <StyledComponent
-                  forwardedComponent={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "$asyncbind": [Function],
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "Timer__MaskedLink-d99dh7-2",
-                        "isStatic": true,
-                        "lastClassName": "c3",
-                        "rules": Array [
-                          "color:inherit;padding:0;margin:0 20px;font-size:16px;font-weight:bold;text-decoration:none;",
-                        ],
-                      },
-                      "displayName": "Timer__MaskedLink",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "Timer__MaskedLink-d99dh7-2",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                    }
-                  }
-                  forwardedRef={null}
+                <Timer__MaskedLink
                   href="#"
                   onClick={[Function]}
                 >
-                  <Link
-                    className="c3"
+                  <StyledComponent
+                    forwardedComponent={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "$asyncbind": [Function],
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "Timer__MaskedLink-d99dh7-2",
+                          "isStatic": true,
+                          "lastClassName": "c3",
+                          "rules": Array [
+                            "color:inherit;padding:0;margin:0 20px;font-size:16px;font-weight:bold;text-decoration:none;",
+                          ],
+                        },
+                        "displayName": "Timer__MaskedLink",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "Timer__MaskedLink-d99dh7-2",
+                        "target": [Function],
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                      }
+                    }
+                    forwardedRef={null}
                     href="#"
                     onClick={[Function]}
                   >
-                    <Link__StyledLink
+                    <Link
                       className="c3"
                       href="#"
                       onClick={[Function]}
-                      rel="noopener noreferer"
                     >
-                      <StyledComponent
+                      <Link__StyledLink
                         className="c3"
-                        forwardedComponent={
-                          Object {
-                            "$$typeof": Symbol(react.forward_ref),
-                            "attrs": Array [],
-                            "componentStyle": ComponentStyle {
-                              "componentId": "Link__StyledLink-qed6kb-0",
-                              "isStatic": false,
-                              "lastClassName": "c4",
-                              "rules": Array [
-                                "color:",
-                                [Function],
-                                ";font-size:14px;padding:2px;cursor:pointer;",
-                                [Function],
-                              ],
-                            },
-                            "displayName": "Link__StyledLink",
-                            "foldedComponentIds": Array [],
-                            "render": [Function],
-                            "styledComponentId": "Link__StyledLink-qed6kb-0",
-                            "target": "a",
-                            "toString": [Function],
-                            "warnTooManyClasses": [Function],
-                            "withComponent": [Function],
-                          }
-                        }
-                        forwardedRef={null}
                         href="#"
                         onClick={[Function]}
                         rel="noopener noreferer"
                       >
-                        <a
-                          className="c3 c4"
+                        <StyledComponent
+                          className="c3"
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "Link__StyledLink-qed6kb-0",
+                                "isStatic": false,
+                                "lastClassName": "c4",
+                                "rules": Array [
+                                  "color:",
+                                  [Function],
+                                  ";font-size:14px;padding:2px;cursor:pointer;",
+                                  [Function],
+                                ],
+                              },
+                              "displayName": "Link__StyledLink",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "Link__StyledLink-qed6kb-0",
+                              "target": "a",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
                           href="#"
                           onClick={[Function]}
                           rel="noopener noreferer"
                         >
-                          Test issue
-                        </a>
-                      </StyledComponent>
-                    </Link__StyledLink>
-                  </Link>
-                </StyledComponent>
-              </Timer__MaskedLink>
-            </div>
-            <div
-              className="time"
-            >
-              <span>
-                00:00:00
-              </span>
+                          <a
+                            className="c3 c4"
+                            href="#"
+                            onClick={[Function]}
+                            rel="noopener noreferer"
+                          >
+                            Test issue
+                          </a>
+                        </StyledComponent>
+                      </Link__StyledLink>
+                    </Link>
+                  </StyledComponent>
+                </Timer__MaskedLink>
+              </div>
+              <div
+                className="time"
+              >
+                <span>
+                  00:00:00
+                </span>
+              </div>
             </div>
           </div>
         </StyledComponent>

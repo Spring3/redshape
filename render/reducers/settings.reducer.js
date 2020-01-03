@@ -1,5 +1,8 @@
 import storage from '../../common/storage';
 import {
+  SETTINGS_ADVANCED_TIMER_CONTROLS,
+  SETTINGS_DISCARD_IDLE_TIME,
+  SETTINGS_IDLE_BEHAVIOR,
   SETTINGS_SHOW_CLOSED_ISSUES,
   SETTINGS_USE_COLORS,
   SETTINGS_ISSUE_HEADERS,
@@ -8,6 +11,9 @@ import {
 } from '../actions/settings.actions';
 
 export const initialState = {
+  advancedTimerControls: false,
+  idleBehavior: 0,
+  discardIdleTime: false,
   showClosedIssues: false,
   useColors: false,
   issueHeaders: [
@@ -37,6 +43,33 @@ const orderTableHeaders = (headers) => {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SETTINGS_ADVANCED_TIMER_CONTROLS: {
+      const { userId, redmineEndpoint, advancedTimerControls } = action.data;
+      const nextState = {
+        ...state,
+        advancedTimerControls,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_DISCARD_IDLE_TIME: {
+      const { userId, redmineEndpoint, discardIdleTime } = action.data;
+      const nextState = {
+        ...state,
+        discardIdleTime,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_IDLE_BEHAVIOR: {
+      const { userId, redmineEndpoint, idleBehavior } = action.data;
+      const nextState = {
+        ...state,
+        idleBehavior,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
     case SETTINGS_SHOW_CLOSED_ISSUES: {
       const { userId, redmineEndpoint, showClosed } = action.data;
       const nextState = {
