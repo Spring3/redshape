@@ -13,7 +13,7 @@
     "release:ci": "npm run prepack && electron-builder -p onTagOrDraft",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint .",
-    "test": "jest --forceExit --detectOpenHandles --maxWorkers=2"
+    "test": "ELECTRON_RUN_AS_NODE=true electron node_modules/.bin/jest --forceExit --detectOpenHandles --maxWorkers=2"
   },
   "repository": {
     "type": "git",

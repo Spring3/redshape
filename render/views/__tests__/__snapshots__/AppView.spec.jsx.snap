@@ -128,6 +128,10 @@ exports[`AppView should match the snapshot 1`] = `
 }
 
 .c5 div.panel {
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
   min-width: 520px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -137,10 +141,15 @@ exports[`AppView should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  max-width: 1800px;
 }
 
 .c5 div.buttons {
   margin: 0 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c5 div.time {
@@ -161,11 +170,22 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 20px;
 }
 
+.c5 div.issueName {
+  padding: 0 20px;
+  max-width: 500px;
+}
+
 .c5 div.time {
   color: #FF7079;
 }
 
 .c5 input[name="comment"] {
+  -webkit-box-flex: 2;
+  -webkit-flex-grow: 2;
+  -ms-flex-positive: 2;
+  flex-grow: 2;
+  margin-left: 20px;
+  width: initial;
   border: none;
   border-radius: 0;
   border-bottom: 1px #F9F9F9 solid;

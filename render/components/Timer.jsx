@@ -35,13 +35,16 @@ const ActiveTimer = styled.div`
   border-top: 2px solid ${props => props.theme.bgDark};
   
   div.panel {
+    flex-grow: 0;
     min-width: 520px;
     display: flex;
     align-items: center;
+    max-width: ${props => props.advancedTimerControls ? '900px' : '1800px'};
   }
   
   div.buttons {
     margin: 0 20px;
+    display: flex;
   }
   
   div.time {
@@ -63,12 +66,20 @@ const ActiveTimer = styled.div`
       margin-right: 20px;
     }
   }
+  
+  div.issueName {
+    padding: 0 20px;
+    max-width: 500px;
+  }
 
   div.time {
     color: ${props => props.theme.main};
   }
   
   input[name="comment"] {
+    flex-grow: 2;
+    margin-left: 20px;
+    width: initial;
     border: none;
     border-radius: 0;
     border-bottom: 1px ${props => props.theme.bgDark} solid;
@@ -80,6 +91,7 @@ const ActiveTimer = styled.div`
       box-shadow: none;
     }
   }
+  
 `;
 
 const StyledButton = styled(GhostButton)`
@@ -89,7 +101,6 @@ const StyledButton = styled(GhostButton)`
 const MaskedLink = styled(Link)`
   color: inherit;
   padding: 0;
-  margin: 0 20px;
   font-size: 16px;
   font-weight: bold;
   text-decoration: none;

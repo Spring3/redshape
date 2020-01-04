@@ -47,6 +47,10 @@ exports[`Timer component should match the snapshot 1`] = `
 }
 
 .c0 div.panel {
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
   min-width: 520px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -56,10 +60,15 @@ exports[`Timer component should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  max-width: 1800px;
 }
 
 .c0 div.buttons {
   margin: 0 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c0 div.time {
@@ -76,7 +85,18 @@ exports[`Timer component should match the snapshot 1`] = `
   margin-right: 20px;
 }
 
+.c0 div.issueName {
+  padding: 0 20px;
+  max-width: 500px;
+}
+
 .c0 input[name="comment"] {
+  -webkit-box-flex: 2;
+  -webkit-flex-grow: 2;
+  -ms-flex-positive: 2;
+  flex-grow: 2;
+  margin-left: 20px;
+  width: initial;
   border: none;
   border-radius: 0;
   border-bottom: 1px solid;
@@ -97,7 +117,6 @@ exports[`Timer component should match the snapshot 1`] = `
 .c3 {
   color: inherit;
   padding: 0;
-  margin: 0 20px;
   font-size: 16px;
   font-weight: bold;
   -webkit-text-decoration: none;
@@ -172,11 +191,13 @@ exports[`Timer component should match the snapshot 1`] = `
                   [Function],
                   ";border-top:2px solid ",
                   [Function],
-                  ";div.panel{min-width:520px;display:flex;align-items:center;}div.buttons{margin:0 20px;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
+                  ";div.panel{flex-grow:0;min-width:520px;display:flex;align-items:center;max-width:",
                   [Function],
-                  ";}}a:first-child{margin-right:20px;}}div.time{color:",
+                  ";}div.buttons{margin:0 20px;display:flex;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
                   [Function],
-                  ";}input[name=\\"comment\\"]{border:none;border-radius:0;border-bottom:1px ",
+                  ";}}a:first-child{margin-right:20px;}}div.issueName{padding:0 20px;max-width:500px;}div.time{color:",
+                  [Function],
+                  ";}input[name=\\"comment\\"]{flex-grow:2;margin-left:20px;width:initial;border:none;border-radius:0;border-bottom:1px ",
                   [Function],
                   " solid;color:#A4A4A4;&:focus{border:none;border-radius:0;border-bottom:1px ",
                   [Function],
@@ -414,7 +435,7 @@ exports[`Timer component should match the snapshot 1`] = `
                           "isStatic": true,
                           "lastClassName": "c3",
                           "rules": Array [
-                            "color:inherit;padding:0;margin:0 20px;font-size:16px;font-weight:bold;text-decoration:none;",
+                            "color:inherit;padding:0;font-size:16px;font-weight:bold;text-decoration:none;",
                           ],
                         },
                         "displayName": "Timer__MaskedLink",
