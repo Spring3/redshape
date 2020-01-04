@@ -170,6 +170,14 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 20px;
 }
 
+.c5 div.buttons.buttons-advanced a {
+  margin-right: 5px;
+}
+
+.c5 div.buttons.buttons-advanced a:last-child {
+  margin-right: initial;
+}
+
 .c5 div.issueName {
   padding: 0 20px;
   max-width: 500px;
