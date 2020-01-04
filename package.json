@@ -1,6 +1,6 @@
 {
   "name": "Redshape",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Redmine time tracker",
   "main": "main/index.js",
   "scripts": {
@@ -23,6 +23,13 @@
     "name": "Daniyil Vasylenko <https://github.com/Spring3>",
     "email": "redshape.app@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "rNoz (Group4Layers member)",
+      "email": "rnoz.commits@gmail.com",
+      "url": "https://www.group4layers.com"
+    }
+  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Spring3/redshape/issues"
@@ -55,15 +62,17 @@
       "category": "public.app-category.developer-tools"
     },
     "linux": {
+      "target": ["deb", "AppImage"]
+    },
+    "deb": {
       "category": "Development",
       "depends": [
         "libxss-dev",
         "pkg-config"
-      ],
-      "target": [
-        "AppImage",
-        "deb"
       ]
+    },
+    "appImage": {
+      "category": "Development"
     },
     "directories": {
       "buildResources": "assets",

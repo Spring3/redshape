@@ -177,6 +177,22 @@ Array [
   text-align: justify;
 }
 
+.c9 {
+  margin-top: 30px;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c9 a {
+  margin-top: 5px;
+}
+
 <div
     className="c0"
     data-tabs={true}
@@ -236,7 +252,7 @@ Array [
           </h2>
           <h2>
             v
-            1.0.0
+            1.1.0
           </h2>
         </div>
         <div
@@ -298,6 +314,22 @@ Array [
               type="external"
             >
               Daniyil Vasylenko
+            </a>
+          </div>
+          <div
+            className="c9"
+          >
+            <span>
+              Contributors
+            </span>
+            <a
+              className="c7"
+              href="https://www.group4layers.com"
+              onClick={[Function]}
+              rel="noopener noreferer"
+              type="external"
+            >
+              rNoz (Group4Layers)
             </a>
           </div>
         </footer>

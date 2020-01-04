@@ -48,7 +48,7 @@ const IconContainer = styled.div`
     bottom: -2px;
   }
   `;
-  
+
 const CenteredDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@ const CenteredDiv = styled.div`
     margin-top: 15px;
   }
 `;
-  
+
 const StyledTabPanel = styled(TabPanel)`
   flex-grow: 1;
   padding: 20px;
@@ -119,6 +119,17 @@ const StyledTabs = styled(Tabs)`
 
 const Paragraph = styled.p`
   text-align: justify;
+`;
+
+const Contributors = styled.div`
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  
+  a {
+    margin-top: 5px;
+  }
 `;
 
 class AboutPage extends Component {
@@ -184,6 +195,15 @@ class AboutPage extends Component {
                     Daniyil Vasylenko
                   </Link>
                 </div>
+                <Contributors>
+                  <span>Contributors</span>
+                  <Link
+                    href="https://www.group4layers.com"
+                    type="external"
+                  >
+                    rNoz (Group4Layers)
+                  </Link>
+                </Contributors>
               </footer>
             </FlexBox>
           </StyledTabPanel>
