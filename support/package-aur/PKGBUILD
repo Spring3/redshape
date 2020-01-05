@@ -10,7 +10,7 @@ groups=()
 depends=('electron' 'libxss' 'pkgconf')
 makedepends=('npm')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rNoz/redshape/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('343243dc5ff6439bbe3c13609e4e6f19')
+md5sums=("24b1b512baf8ec73929f2f541095f33e")
 noextract=()
 name=Redshape
 
@@ -19,7 +19,7 @@ build() {
 
   export SHELL=sh
   npm i
-  npm run prepack && ./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/electron-builder --linux deb --config.deb.compression='gz' -c.electronDist /usr/lib/electron -c.electronVersion $(sed s/^v// /usr/lib/electron/version)
+  npm run prepack && ./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/electron-builder --dir dist --linux deb --config.deb.compression='gz' -c.electronDist /usr/lib/electron -c.electronVersion $(sed s/^v// /usr/lib/electron/version)
 }
 
 package() {

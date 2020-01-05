@@ -243,9 +243,13 @@ class Timer extends Component {
   }
 
   cleanup = () => {
-    const { isEnabled, isPaused } = this.props;
-    if (isEnabled && !isPaused) {
-      this.onPause();
+    const { isEnabled, isPaused, saveTimer } = this.props;
+    if (isEnabled){
+      if (!isPaused){
+        this.onPause();
+      }else{
+        saveTimer(this.state.value, this.state.comments)
+      }
     }
     this.stopInterval();
     this.stopIntervalIdle();
@@ -438,6 +442,7 @@ class Timer extends Component {
               name="comment"
               value={comments}
               onChange={this.onCommentsChange}
+              onBlur={this.saveState}
               maxLength={255}
             />
           )}

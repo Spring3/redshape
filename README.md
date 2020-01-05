@@ -170,10 +170,21 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
 
 ```sh
-bash support/package-aur/pack.sh # can be omitted if using the archive from the repo
-cd support/package-aur
-makepkg
+bash support/package-aur/manager.sh pack # can be omitted if using the archive from the repo
+bash support/package-aur/manager.sh makepkg
 ```
+
+Before publishing a release, you have to update the PKGBUILD:
+
+```sh
+# using npm script:
+npm run release:aur
+
+# alternatively, with the shell:
+bash support/package-aur/manager.sh pack pkgbuild
+```
+
+The second target (`pkgbuild`) will update the version and md5sums of the PKGBUILD.
 
 ### Known issues
 

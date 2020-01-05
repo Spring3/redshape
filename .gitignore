@@ -5,5 +5,5 @@ build/
 .env
 .idea
 support/package-aur/*
-!support/package-aur/pack.sh
+!support/package-aur/manager.sh
 !support/package-aur/PKGBUILD

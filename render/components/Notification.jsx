@@ -17,7 +17,6 @@ const NotifyButton = styled.button`
 
 class Notification extends Component {
   reportError = () => {
-    console.log('Clicked');
     report(this.props.error);
   }
 
