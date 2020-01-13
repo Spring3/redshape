@@ -13,7 +13,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   color: #FFFFFF;
 }
 
-.c18 {
+.c21 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -30,18 +30,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c18:hover,
-.c18:focus {
+.c21:hover,
+.c21:focus {
   background: #FF7079;
   color: #FFFFFF !important;
 }
 
-.c18:hover svg,
-.c18:focus svg {
+.c21:hover svg,
+.c21:focus svg {
   fill: #FFFFFF;
 }
 
-.c18:active {
+.c21:active {
   background: #EF6069;
 }
 
@@ -67,66 +67,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: transparent;
 }
 
-.c9 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c10 {
-  background: #F9F9F9;
-  position: relative;
-  border-radius: 5px;
-  height: 5px;
-}
-
-.c11 {
-  border-radius: 5px;
-  max-width: 100%;
-  width: 0;
-  -webkit-transition: width ease;
-  transition: width ease;
-  width: 0.5% !important;
-  height: 5px;
-  background: #FF7079;
-}
-
-.c13 {
-  border-radius: 5px;
-  max-width: 100%;
-  width: 0;
-  -webkit-transition: width ease;
-  transition: width ease;
-  width: 0% !important;
-  height: 5px;
-  background: #FF7079;
-}
-
-.c30 {
-  font-size: 14px;
-  resize: none;
-  overflow: hidden;
-  height: auto;
-  font-family: inherit;
-  width: 100%;
-  line-height: 1.5rem;
-  box-sizing: border-box;
-  background: #FFFFFF;
-}
-
-.c28 {
+.c14 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -145,7 +86,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   box-shadow: 0px 2px 7px #A0A0A0;
 }
 
-.c28::after {
+.c14::after {
   content: ' ';
   position: absolute;
   top: 100%;
@@ -159,47 +100,108 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c26 {
+.c10 {
   display: inline-block;
   position: relative;
 }
 
-.c26:hover .c27 {
+.c10:hover .c13 {
   display: block;
 }
 
-.c25 {
+.c9 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c11 {
+  background: #F9F9F9;
+  position: relative;
+  border-radius: 5px;
+  height: 5px;
+}
+
+.c12 {
+  border-radius: 5px;
+  max-width: 100%;
+  width: 0;
+  float: left;
+  -webkit-transition: width ease;
+  transition: width ease;
+  width: 0.5% !important;
+  height: 5px;
+  background: #FF634D;
+}
+
+.c16 {
+  border-radius: 5px;
+  max-width: 100%;
+  width: 0;
+  float: left;
+  -webkit-transition: width ease;
+  transition: width ease;
+  width: 0% !important;
+  height: 5px;
+  background: #6CCA51;
+}
+
+.c30 {
+  font-size: 14px;
+  resize: none;
+  overflow: hidden;
+  height: auto;
+  font-family: inherit;
+  width: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+  background: #FFFFFF;
+}
+
+.c28 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c25:hover svg {
+.c28:hover svg {
   color: #FF7079 !important;
 }
 
-.c23 {
+.c26 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c23 li:first-child {
+.c26 li:first-child {
   margin-left: 0;
 }
 
-.c23 li:last-child {
+.c26 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c23 .c24:last-child {
+.c26 .c27:last-child {
   bottom: 1px;
 }
 
-.c23 .c24:last-child a {
+.c26 .c27:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -225,29 +227,29 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border: 2px solid #FF7079;
 }
 
-.c14 {
+.c17 {
   box-sizing: border-box;
   overflow: hidden;
 }
 
-.c12 {
+.c15 {
   position: relative;
   display: inline-grid;
   grid-template-rows: 1fr;
 }
 
-.c12 span {
+.c15 span {
   float: left;
   grid-row: 1;
   grid-column: 1;
 }
 
-.c12 span:last-child {
+.c15 span:last-child {
   opacity: 0;
   display: none;
 }
 
-.c16 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -263,24 +265,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c16 h2 {
+.c19 h2 {
   display: inline-block;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.c16 > div {
+.c19 > div {
   margin-right: 15px;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
-.c16 > div button {
+.c19 > div button {
   background: #FFFFFF;
   margin: 0px 5px;
 }
 
-.c17 {
+.c20 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -292,14 +294,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF7F87;
 }
 
-.c15 {
+.c18 {
   background: white;
   padding-top: 35px;
   max-height: 550px;
   min-width: 350px;
 }
 
-.c19 {
+.c22 {
   position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
@@ -311,7 +313,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   box-shadow: inset 0px 0px 10px 0px #F9F9F9;
 }
 
-.c19 li {
+.c22 li {
   cursor: pointer;
   display: block;
   padding: 10px;
@@ -321,7 +323,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c19 li div:first-child {
+.c22 li div:first-child {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -336,12 +338,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c19 li div:first-child a {
+.c22 li div:first-child a {
   margin-left: 10px;
   visibility: hidden;
 }
 
-.c19 li div:first-child div {
+.c22 li div:first-child div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -356,31 +358,31 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c19 li div:first-child div span.time,
-.c19 li div:first-child div span.date {
+.c22 li div:first-child div span.time,
+.c22 li div:first-child div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c19 li div:first-child div span.username {
+.c22 li div:first-child div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
 }
 
-.c19 li p {
+.c22 li p {
   margin-bottom: 0px;
   min-width: 100%;
   width: 0;
   line-height: 2;
 }
 
-.c19 li:hover div:first-child a {
+.c22 li:hover div:first-child a {
   visibility: visible;
 }
 
-.c20 {
+.c23 {
   background: white;
   padding: 20px;
   margin-bottom: 20px;
@@ -398,7 +400,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-right: 5px;
 }
 
-.c21 {
+.c24 {
   list-style-type: none;
   padding: 20px 0px;
   margin: 0px;
@@ -406,11 +408,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #F9F9F9;
 }
 
-.c21 li:first-child {
+.c24 li:first-child {
   margin-top: 20px;
 }
 
-.c21 li {
+.c24 li {
   margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -422,7 +424,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-around;
 }
 
-.c21 li div.commentsHeader {
+.c24 li div.commentsHeader {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -437,13 +439,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-width: 20%;
 }
 
-.c21 li div.commentsHeader h3 {
+.c24 li div.commentsHeader h3 {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #FF7079;
 }
 
-.c21 li div.commentsHeader span:last-child {
+.c24 li div.commentsHeader span:last-child {
   color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -451,11 +453,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-bottom: 20px;
 }
 
-.c21 li div.commentsHeader span:last-child:hover {
+.c24 li div.commentsHeader span:last-child:hover {
   color: #3F3844;
 }
 
-.c21 li iframe {
+.c24 li iframe {
   margin-left: 20px;
   padding: 5px 20px 0px 20px;
   background: #FFFFFF;
@@ -465,14 +467,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-height: 100px;
 }
 
-.c22 {
+.c25 {
   background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
 }
 
-.c22 #commentsForm {
+.c25 #commentsForm {
   background: #FFFFFF;
   padding: 20px;
   border-radius: 3px;
@@ -679,12 +681,21 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               >
                 <div
                   className="c10"
-                  height={5}
                 >
                   <div
                     className="c11"
                     height={5}
-                  />
+                  >
+                    <div
+                      className="c12"
+                      height={5}
+                    />
+                  </div>
+                  <p
+                    className="tooltip c13 c14"
+                  >
+                    1%
+                  </p>
                 </div>
               </div>
             </div>
@@ -704,7 +715,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Start date: 
             </div>
             <span
-              className="c12"
+              className="c15"
             >
               <span>
                 Jan 01 2011
@@ -719,7 +730,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Due date: 
             </div>
             <span
-              className="c12"
+              className="c15"
             >
               <span>
                 Jan 01 2011
@@ -756,12 +767,21 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               >
                 <div
                   className="c10"
-                  height={5}
                 >
                   <div
-                    className="c13"
+                    className="c11"
                     height={5}
-                  />
+                  >
+                    <div
+                      className="c16"
+                      height={5}
+                    />
+                  </div>
+                  <p
+                    className="tooltip c13 c14"
+                  >
+                    0%
+                  </p>
                 </div>
               </div>
             </div>
@@ -773,7 +793,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Description
         </h3>
         <iframe
-          className="c14"
+          className="c17"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Fixture test issue</p>"
@@ -782,10 +802,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="c15"
+      className="c18"
     >
       <div
-        className="c16"
+        className="c19"
       >
         <h2
           className="padded"
@@ -794,7 +814,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </h2>
         <div>
           <button
-            className="c17 c18"
+            className="c20 c21"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -815,7 +835,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </span>
           </button>
           <button
-            className="c17 c18"
+            className="c20 c21"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -838,35 +858,35 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
       </div>
       <ul
-        className="c19"
+        className="c22"
       />
     </div>
   </div>
   <section
-    className="c20"
+    className="c23"
   >
     <div>
       <h2>
         Comments
       </h2>
       <ul
-        className="c21"
+        className="c24"
       />
       <div
-        className="c22"
+        className="c25"
       >
         <div
           id="commentsForm"
         >
           <ul
-            className="c23"
+            className="c26"
           >
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -880,18 +900,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Bold text
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -905,18 +925,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Italic text
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -930,18 +950,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Underlined text
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -955,18 +975,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Crossed out text
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -980,18 +1000,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Code block
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1005,18 +1025,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   XL Header
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1030,18 +1050,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   L Header
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1055,18 +1075,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   M Header
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1080,18 +1100,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Bulleted List
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1105,18 +1125,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Ordered List
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1130,18 +1150,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Quote block
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1155,18 +1175,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Hyperlink
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
               onClick={[Function]}
             >
               <div
-                className="c26"
+                className="c10"
               >
                 <svg
                   className="mdi-icon "
@@ -1180,14 +1200,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c27 c28"
+                  className="tooltip c13 c14"
                 >
                   Embeded Image
                 </p>
               </div>
             </li>
             <li
-              className="c24 c25"
+              className="c27 c28"
             >
               <a
                 className="c4"

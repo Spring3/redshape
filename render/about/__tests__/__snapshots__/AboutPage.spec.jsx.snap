@@ -481,6 +481,8 @@ exports[`About page should match the snapshot [tab2] 1`] = `
       "shadow": "#D0D0D0",
       "transitionTime": ".2s",
       "yellow": "#FFDA77",
+      "yellow-green": "#C6D369",
+      "yellow-red": "#FF875A",
     }
   }
 >

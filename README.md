@@ -165,6 +165,16 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
 - There are other minor bugfixes and features not listed but can be read in the git log. Those are usually related with UX, propagating correctly the state, etc.
 
+### Issue progress bars
+
+- Progress (done ratio) shows a gradient of 5 colors between red-yellow-green (0, 20, 40, 60, 80, 100%).
+
+  Time cap shows a green bar between 0-80% and yellow-green in the last 20%. When it is overtime (eg. 150%), a red bar is shown with the overtime proportion (eg. 50/150).
+
+  Tooltips added showing the specific percentage value.
+
+  ![](docs/changes/progressbars.png)
+
 ### AUR package
 
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).

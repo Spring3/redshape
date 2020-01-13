@@ -215,6 +215,7 @@ class IssueDetailsPage extends Component {
                     <div>
                       <Progressbar
                         percent={selectedIssue.done_ratio}
+                        mode="progress-gradient"
                         background={theme.main}
                       />
                     </div>
@@ -246,6 +247,7 @@ class IssueDetailsPage extends Component {
                     <div>
                       <Progressbar
                         percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
+                        mode="time-tracking"
                         background={theme.main}
                       />
                     </div>
