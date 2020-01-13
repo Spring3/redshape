@@ -115,7 +115,9 @@ class TimeEntryModal extends Component {
 
   runValidation = (checkFields) => {
     const { validateBeforePublish, validateBeforeUpdate } = this.props;
+
     const { timeEntry } = this.state;
+
     if (timeEntry.id) {
       validateBeforeUpdate({
         comments: timeEntry.comments,
@@ -139,7 +141,7 @@ class TimeEntryModal extends Component {
   onDateChange = date => this.setState({
     timeEntry: {
       ...this.state.timeEntry,
-      spent_on: date,
+      spent_on: date.toISOString().split('T')[0],
     },
     wasModified: true
   });
