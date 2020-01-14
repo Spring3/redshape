@@ -11,6 +11,7 @@ import renderer from 'react-test-renderer';
 
 import theme from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
+import { ISSUE_RESET } from '../../../actions/issue.actions';
 import { ISSUES_GET, ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';
 
@@ -34,6 +35,10 @@ const state = {
   user: {
     id: 1,
     name: 'John Wayne'
+  },
+  issue: {
+    isFetching: false,
+    error: undefined
   },
   issues: {
     selected: {
@@ -176,7 +181,9 @@ describe('IssueDetails page', () => {
 
     wrapper.unmount();
 
-    expect(store.getActions().pop().type).toBe(ISSUES_RESET_SELECTION);
+    const actions = store.getActions();
+    actions.pop()
+    expect(actions.pop().type).toBe(ISSUES_RESET_SELECTION);
   });
 
   it('should show the selected time entry in a modal', () => {

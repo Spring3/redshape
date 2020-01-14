@@ -29,23 +29,32 @@ class Modal extends Component {
       modal: {
         boxShadow: `0px 0px 20px ${theme.shadow}`,
         background: theme.bg,
-        borderRadius: 3
+        borderRadius: 3,
       }
     };
   }
 
   componentDidMount() {
     if (this.props.open) {
-      document.body.children[0].classList.add('react-confirm-alert-blur');
+      const root = document.getElementById('root');
+      if (root){
+        root.classList.add('react-confirm-alert-blur');
+      }
     }
   }
 
   componentWillUnmount() {
-    document.body.children[0].classList.remove('react-confirm-alert-blur');
+    const root = document.getElementById('root');
+    if (root){
+      root.classList.remove('react-confirm-alert-blur');
+    }
   }
 
   onCloseProxy = () => {
-    document.body.children[0].classList.remove('react-confirm-alert-blur');
+    const root = document.getElementById('root');
+    if (root){
+      root.classList.remove('react-confirm-alert-blur');
+    }
     this.props.onClose();
   }
 

@@ -8,15 +8,18 @@ import styled, { css, withTheme } from 'styled-components';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import Link from '../../components/Link';
-import { GhostButton } from '../../components/Button';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
+import IssueModal from "../../components/IssueModal";
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
+
+import EditIcon from 'mdi-react/EditIcon';
+import Button, { GhostButton } from "../../components/Button";
 
 import actions from '../../actions';
 
@@ -58,6 +61,11 @@ const ColumnList = styled.ul`
   }
 `;
 
+const FlexButton = styled(Button) `
+  display: inline-flex;
+  align-items: center;
+`;
+
 const SmallNotice = styled.p`
   font-size: 12px;
   margin-top: 0px;
@@ -91,6 +99,14 @@ const IconButton = styled(GhostButton)`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  a:first-child {
+    margin-right: 2rem;
+  }
+`;
+
 const BackButton = styled(IconButton)`
   svg {
     animation: ${animationSlideRight} 2s ease-in infinite;
@@ -110,7 +126,8 @@ class IssueDetailsPage extends Component {
     this.state = {
       activities: [],
       selectedTimeEntry: undefined,
-      showTimeEntryModal: false
+      showTimeEntryModal: false,
+      showIssueModal: false
     };
   }
 
@@ -150,7 +167,8 @@ class IssueDetailsPage extends Component {
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       selectedTimeEntry,
-      showTimeEntryModal: true
+      showTimeEntryModal: true,
+      showIssueModal: false
     });
   }
 
@@ -158,15 +176,26 @@ class IssueDetailsPage extends Component {
     this.setState({
       activities: [],
       selectedTimeEntry: undefined,
-      showTimeEntryModal: false
+      showTimeEntryModal: false,
+      showIssueModal: false
     });
+  }
+
+  closeIssueModal = (changes) => {
+    this.setState({
+      showIssueModal: false
+    })
+  }
+
+  openIssueModal = () => () => {
+    this.setState({ showIssueModal: true })
   }
 
   getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
 
   render() {
     const { selectedIssueState, history, userId, theme, postComments } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
+    const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
 
     const cfields = selectedIssue.custom_fields;
@@ -175,9 +204,15 @@ class IssueDetailsPage extends Component {
         <Section>
           <Flex>
             <IssueDetails>
-              <BackButton onClick={history.goBack.bind(this)}>
-                <ArrowLeftIcon size={30} />
-              </BackButton>
+              <Buttons className="buttons">
+                <BackButton onClick={history.goBack.bind(this)}>
+                  <ArrowLeftIcon size={30} />
+                </BackButton>
+                <FlexButton onClick={this.openIssueModal()}>
+                  <EditIcon size={22} />
+                  <span>&nbsp;Edit</span>
+                </FlexButton>
+              </Buttons>
               <h2>
                 <span>#{selectedIssue.id}&nbsp;</span>
                 <span>{selectedIssue.subject}</span>
@@ -223,7 +258,7 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}</div><div>{el.value}</div></li>) : undefined)
                   }
                 </ColumnList>
                 <ColumnList>
@@ -258,7 +293,7 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}</div><div>{el.value}</div></li>) : undefined)
                   }
                 </ColumnList>
               </Wrapper>
@@ -285,6 +320,15 @@ class IssueDetailsPage extends Component {
               timeEntry={selectedTimeEntry}
               onClose={this.closeTimeEntryModal}
             />
+          )}
+          {selectedIssue && (
+          <IssueModal
+            isOpen={showIssueModal}
+            isEditable={selectedIssue.assigned_to.id === userId}
+            isUserAuthor={selectedIssue.author.id === userId}
+            issueEntry={selectedIssue}
+            onClose={this.closeIssueModal}
+          />
           )}
         </Section>
       )
