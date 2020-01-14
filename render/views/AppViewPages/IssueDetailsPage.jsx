@@ -168,6 +168,8 @@ class IssueDetailsPage extends Component {
     const { selectedIssueState, history, userId, theme, postComments } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
+
+    const cfields = selectedIssue.custom_fields;
     return selectedIssue.id
       ? (
         <Section>
@@ -220,6 +222,9 @@ class IssueDetailsPage extends Component {
                       />
                     </div>
                   </li>
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                  }
                 </ColumnList>
                 <ColumnList>
                   <li>
@@ -252,6 +257,9 @@ class IssueDetailsPage extends Component {
                       />
                     </div>
                   </li>
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                  }
                 </ColumnList>
               </Wrapper>
               <div>
@@ -302,7 +310,7 @@ IssueDetailsPage.propTypes = {
       assigned_to: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
-      }).siRequired,
+      }).isRequired,
       done_ratio: PropTypes.number.isRequired,
       start_date: PropTypes.string.isRequired,
       due_date: PropTypes.string.isRequired,
@@ -319,7 +327,12 @@ IssueDetailsPage.propTypes = {
       author: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
-      }).isRequired
+      }).isRequired,
+      custom_fields: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired
+      }))
     }),
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)
