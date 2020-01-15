@@ -34,20 +34,12 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     return Promise.resolve();
   }
 
-  const updates = {
-  };
+  const updates = {};
 
-  if (changes.progress) {
-    updates.done_ratio = changes.progress;
-  }
-
-  const updatedIssueEntry = {
-    ...originalIssueEntry,
-  };
   let progress = changes.progress;
   if (progress != null){
     progress = progress >= 0 ? Number(progress) : '';
-    updatedIssueEntry.done_ratio = progress;
+    updates.done_ratio = changes.progress;
   }
 
   return request({
@@ -60,7 +52,7 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     const updatedIssueEntry = {
       ...originalIssueEntry,
     };
-    if (changes.progress) {
+    if (progress != null) {
       updatedIssueEntry.done_ratio = progress;
     }
     return dispatch(notify.ok(ISSUE_UPDATE, updatedIssueEntry));

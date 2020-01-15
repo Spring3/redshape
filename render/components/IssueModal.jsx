@@ -1,20 +1,29 @@
+import _debounce from 'lodash/debounce';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 
-import { Input, Label } from './Input';
+import { Label } from './Input';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
 
+import RawSlider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import './styles/rc-slider.css';
+
+import 'rc-slider/assets/index.css'
 import actions from '../actions';
 
 const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const Slider = RawSlider.createSliderWithTooltip(RawSlider)
+
 
 const OptionButtons = styled.div`
   position: relative;
@@ -69,6 +78,10 @@ class IssueModal extends Component {
     });
   }
 
+  close(){
+    this.props.onClose();
+  }
+
   onUpdate = () => {
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
@@ -77,15 +90,15 @@ class IssueModal extends Component {
       }).then(() => {
         if (!this.props.issue.error) {
           this.props.issueGet(issueEntry.id);
-          this.props.onClose()
+          this.close()
         }
       });
     } else {
-      this.props.onClose();
+      this.close()
     }
   }
 
-  onProgressChange = ({ target: { value: progress }}) => {
+  onProgressChange = (progress) => {
     this.setState({
       issueEntry: {
         ...this.state.issueEntry,
@@ -101,7 +114,7 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, issue } = this.props;
+    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue } = this.props;
     const { issueEntry, wasModified } = this.state;
     const { done_ratio } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
@@ -126,14 +139,20 @@ class IssueModal extends Component {
           <FlexRow>
             <div>
               <Label htmlFor="progress" label="Progress">
-                <FlexRow>
-                <Input
-                  type="number"
-                  name="progress"
-                  value={done_ratio}
-                  onBlur={() => this.runValidation()}
-                  disabled={!isEditable || !isUserAuthor}
-                  onChange={this.onProgressChange}
+                <FlexRow style={{width:200}}>
+                 <Slider
+                   // bugfix: avoid sloppy dragging (value/onChange) using this key
+                   key={new Date().getTime()}
+                   name="progress"
+                   tipProps={{placement:'right'}}
+                   handleStyle={{borderColor:theme.green}}
+                   trackStyle={{backgroundColor:theme.green}}
+                   tipFormatter={(value) => `${value}%`}
+                   min={0}
+                   max={100}
+                   defaultValue={done_ratio}
+                   disabled={!isEditable || !isUserAuthor}
+                   onAfterChange={(value) => this.onProgressChange(value) && this.runValidation()}
                 />
                 </FlexRow>
               </Label>

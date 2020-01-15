@@ -63,7 +63,10 @@
       "category": "public.app-category.developer-tools"
     },
     "linux": {
-      "target": ["deb", "AppImage"]
+      "target": [
+        "deb",
+        "AppImage"
+      ]
     },
     "deb": {
       "category": "Development",
@@ -136,6 +139,7 @@
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",
     "prop-types": "^15.7.2",
+    "rc-slider": "^8.7.1",
     "react": "^16.8.6",
     "react-confirm-alert": "^2.4.1",
     "react-day-picker": "^7.4.0",

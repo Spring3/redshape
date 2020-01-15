@@ -1,0 +1,5 @@
+/* https://github.com/react-component/slider/issues/413 */
+/* bugfix: */
+.rc-slider-tooltip {
+  z-index: 99;
+}

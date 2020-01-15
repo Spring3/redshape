@@ -181,6 +181,13 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
   ![](docs/changes/custom_fields.png)
 
+### Edit issue
+
+- Progress (done ratio) can be edited in a new modal. It supports an input range to slide the percetage of progress (0 to 100). 
+
+  ![](docs/changes/edit_issue_progress.png)
+
+
 ### AUR package
 
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
