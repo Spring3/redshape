@@ -129,9 +129,12 @@ class IssuesTable extends Component {
     this.props.history.push(`/app/issue/${id}/`);
   }
 
-  paint = (item, mapping) => {
+  /**
+   * @param value to be used (@param mapping is discarded)
+   */
+  paint = (item, mapping, value) => {
     const { theme, useColors } = this.props;
-    const textValue = _get(item, mapping);
+    const textValue = value != null ? value : _get(item, mapping);
 
     const color = (useColors && typeof textValue === 'string'
       ? colorMap[textValue.toLowerCase()]
@@ -187,12 +190,17 @@ class IssuesTable extends Component {
                 {
                   issueHeaders.map(header => {
                     const date = header.value === 'due_date' && _get(task, header.value);
+                    let forcedValue;
+                    let estimated_hours = header.value === 'estimated_hours' && _get(task, header.value);
+                    if (estimated_hours){
+                      forcedValue = Number(estimated_hours.toFixed(2))
+                    }
                     return (
                       <td
                         key={header.value}
                         className={header.value === 'due_date' ? header.value : ""}
                       >
-                        {date ? <Date date={date}/> : this.paint(task, header.value)}
+                        { date ? (<Date date={date}/>) : this.paint(task, header.value, forcedValue) }
                       </td>
                     )})
                 }
