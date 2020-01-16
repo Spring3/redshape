@@ -53,11 +53,12 @@ const ColumnList = styled.ul`
   }
 
   li div {
-    width: 150px;
+    width: 220px;
   }
 
   li div:first-child {
     font-weight: bold;
+    width: 150px;
   }
 `;
 
@@ -197,8 +198,8 @@ class IssueDetailsPage extends Component {
     const { selectedIssueState, history, userId, theme, postComments } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
-
     const cfields = selectedIssue.custom_fields;
+    const children = selectedIssue.children;
     return selectedIssue.id
       ? (
         <Section>
@@ -258,7 +259,12 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}</div><div>{el.value}</div></li>) : undefined)
+                    children && (
+                      <li><div>Children issues:</div><div>{children.map((el) => (<Link onClick={() => this.props.history.push(`/app/issue/${el.id}/`)}>{`#${el.id}`}</Link>))}</div></li>
+                    )
+                  }
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
                   }
                 </ColumnList>
                 <ColumnList>
@@ -276,11 +282,23 @@ class IssueDetailsPage extends Component {
                   </li>
                   <li>
                     <div>Estimation: </div>
-                    <div>{selectedIssue.total_estimated_hours ? `${selectedIssue.total_estimated_hours} hours` : undefined}</div>
+                    <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
+                    {
+                      (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
+                        <span> (Total: {selectedIssue.total_estimated_hours.toFixed(2)} h)</span>
+                      )
+                    }
+                    </div>
                   </li>
                   <li>
                     <div>Time spent: </div>
-                    <div>{selectedIssue.spent_hours.toFixed(2)} hours</div>
+                    <div>{selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                      {
+                        (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
+                          <span> (Total: {selectedIssue.total_spent_hours.toFixed(2)} h)</span>
+                        )
+                      }
+                    </div>
                   </li>
                   <li>
                     <div>Time cap: </div>
@@ -293,7 +311,10 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}</div><div>{el.value}</div></li>) : undefined)
+                    children && (<li></li>)
+                  }
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
                   }
                 </ColumnList>
               </Wrapper>
@@ -359,6 +380,7 @@ IssueDetailsPage.propTypes = {
       start_date: PropTypes.string.isRequired,
       due_date: PropTypes.string.isRequired,
       total_estimated_hours: PropTypes.number,
+      total_spent_hours: PropTypes.number,
       spent_hours: PropTypes.number,
       tracker: PropTypes.shape({
         id: PropTypes.number.isRequired,

@@ -226,7 +226,7 @@ exports[`Date Picker should match the snapshot 1`] = `
       onKeyUp={[Function]}
       placeholder="YYYY-M-D"
       type="text"
-      value="1970-1-2"
+      value={123456789}
     />
   </div>
 </div>

@@ -3,8 +3,7 @@ import moment from 'moment';
 import Joi from '@hapi/joi';
 import request, { notify } from './helper';
 
-var momentDurationFormatSetup = require("moment-duration-format");
-momentDurationFormatSetup(moment);
+import { durationToHours, hoursToDuration } from "../datetime";
 
 export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
 export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
@@ -14,44 +13,6 @@ export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
-
-const reDuration = /^(?!$) *(?:(\d+) *(?:d|days?))? *(?:(\d+) *(?:h|hours?))? *(?:(\d+) *(?:m|mins?|minutes?))? *(?:(\d+) *(?:s|secs?|seconds?))? *$/;
-const reDurationHours = /^ *\d+(?:\.\d+)? *$/;
-
-/**
- * @param str humanized duration string (1d 1h 2 m 1 s) or a string representing the number of hours
- * @returns {null|number} number of hours extracted from humanized duration string or parseFloat
- */
-export const durationToHours = (value) => {
-  let m = value.match(reDurationHours);
-  let hours;
-  if (m) {
-    hours = parseFloat(value);
-  }else{
-    m = value.match(reDuration);
-    if (m) {
-      let d = {day: m[1], hour: m[2], minute: m[3], second: m[4]};
-      for (const [k, v] of Object.entries(d)) {
-        if (v) {
-          d[k] = parseInt(v);
-        }
-      }
-      hours = moment.duration(d).asHours();
-    } else {
-      return null;
-    }
-  }
-  if (hours){
-    hours = Number(hours.toFixed(2));
-  }
-  return hours;
-}
-
-export const hoursToDuration = (hours) => {
-  return hours == null ? '' : moment.duration(parseFloat(hours), "hours").format("d[d] h[h] m[m] s[s]", {
-    trim: "both mid"
-  });
-}
 
 const validateDuration = (value, helpers) => {
   const hours = durationToHours(value);

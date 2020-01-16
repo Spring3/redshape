@@ -522,11 +522,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 .c11 li div {
-  width: 150px;
+  width: 220px;
 }
 
 .c11 li div:first-child {
   font-weight: bold;
+  width: 150px;
 }
 
 .c6 {
@@ -796,7 +797,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Estimation: 
             </div>
             <div>
-              15 hours
+              <span>
+                 (Total: 
+                15.00
+                 h)
+              </span>
             </div>
           </li>
           <li>
@@ -804,8 +809,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Time spent: 
             </div>
             <div>
-              2.00
-               hours
+              2.00 h
             </div>
           </li>
           <li>

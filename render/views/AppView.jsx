@@ -15,7 +15,7 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
-import { hoursToDuration } from "../actions/timeEntry.actions";
+import { hoursToDuration } from "../datetime";
 
 import IPC from '../ipc';
 

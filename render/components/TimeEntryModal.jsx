@@ -18,7 +18,7 @@ import ClockIcon from "mdi-react/ClockIcon";
 
 import actions from '../actions';
 
-import { durationToHours, hoursToDuration } from '../actions/timeEntry.actions'
+import { durationToHours, hoursToDuration } from '../datetime'
 
 const FlexRow = styled.div`
   display: flex;
@@ -141,7 +141,7 @@ class TimeEntryModal extends Component {
   onDateChange = date => this.setState({
     timeEntry: {
       ...this.state.timeEntry,
-      spent_on: date.toISOString().split('T')[0],
+      spent_on: date != null ? date.toISOString().split('T')[0] : null,
     },
     wasModified: true
   });

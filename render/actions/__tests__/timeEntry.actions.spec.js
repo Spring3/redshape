@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import moment from 'moment';
 import { notify } from '../helper';
 import * as timeEntryActions from '../timeEntry.actions';
+import { hoursToDuration, durationToHours } from "../../datetime";
 import axios from '../../../common/request';
 
 const redmineEndpoint = 'redmine.test.com';
@@ -53,8 +54,6 @@ describe('Time actions', () => {
     ];
 
     it('should cast properly hours to duration', () => {
-      const { hoursToDuration } = timeEntryActions;
-
       expect(hoursToDuration(null)).toBe('');
       for (const {hours, duration} of casts) {
         expect(hoursToDuration(hours)).toBe(duration);
@@ -62,8 +61,6 @@ describe('Time actions', () => {
     });
 
     it('should cast properly duration to hours', () => {
-      const { durationToHours } = timeEntryActions;
-
       expect(() => {
         durationToHours(null);
       }).toThrow('Cannot read property');

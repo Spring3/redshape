@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 
-import { Label } from './Input';
+import { Input, Label } from './Input';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
+import Tooltip from "./Tooltip";
+import ClockIcon from "mdi-react/ClockIcon";
+import DatePicker from './DatePicker';
 
 import RawSlider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -17,13 +20,15 @@ import './styles/rc-slider.css';
 import 'rc-slider/assets/index.css'
 import actions from '../actions';
 
+import { durationToHours, hoursToDuration } from '../datetime'
+
 const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-const Slider = RawSlider.createSliderWithTooltip(RawSlider)
-
+// const Slider = RawSlider.createSliderWithTooltip(RawSlider)
+const Slider = RawSlider;
 
 const OptionButtons = styled.div`
   position: relative;
@@ -41,11 +46,42 @@ const OptionButtons = styled.div`
   }
 `;
 
+const DurationField = styled.div`
+  max-width: 350px;
+`;
+const FieldAdjacentInfo = styled.div`
+  align-self: center;
+  color: gray;
+  margin-left: 0.5rem;
+  min-width: 10rem;
+`;
+
+const ClockIconStyled = styled(ClockIcon)`
+  padding-bottom: 1px;
+`;
+const LabelIcon = styled.span`
+  margin-left: 0.2rem;
+`
+const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14}/></Tooltip></LabelIcon>);
+
 class IssueModal extends Component {
   constructor(props) {
     super(props);
+    let propsIssueEntry = props.issueEntry;
+    let issueEntry = {};
+    if (propsIssueEntry){
+      const { estimated_hours, done_ratio, due_date, children } = propsIssueEntry;
+      issueEntry = {
+        estimated_duration: hoursToDuration(estimated_hours),
+        progress: done_ratio,
+        due_date: due_date || '',
+        children: children ? children.length : 0
+      };
+    }
     this.state = {
-      issueEntry: props.issueEntry || {},
+      issueEntry,
+      instance: new Date().getTime(),
+      progress_info: issueEntry.progress || 0,
       wasModified: false
     };
   }
@@ -55,8 +91,17 @@ class IssueModal extends Component {
       const { issueEntry } = this.props;
 
       if (issueEntry) {
+        const { estimated_hours, done_ratio, due_date, children } = issueEntry;
         this.setState({
-          issueEntry,
+          // issueEntry,
+          issueEntry: {
+            estimated_duration: hoursToDuration(estimated_hours),
+            progress: done_ratio,
+            due_date: due_date || '',
+            children: children ? children.length : 0
+          },
+          instance: new Date().getTime(),
+          progress_info: done_ratio,
           wasModified: false
         });
       }
@@ -69,40 +114,59 @@ class IssueModal extends Component {
     this.props.resetValidation();
   }
 
-  runValidation() {
+  runValidation = (checkFields) => {
     const { validateBeforeUpdate } = this.props;
     const { issueEntry } = this.state;
 
     validateBeforeUpdate({
-      progress: issueEntry.done_ratio,
-    });
-  }
-
-  close(){
-    this.props.onClose();
+      progress: issueEntry.progress,
+      estimated_duration: issueEntry.estimated_duration,
+      due_date: issueEntry.due_date,
+    }, checkFields);
   }
 
   onUpdate = () => {
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
-      this.props.updateIssueEntry(issueEntry, {
-        progress: issueEntry.done_ratio
-      }).then(() => {
-        if (!this.props.issue.error) {
-          this.props.issueGet(issueEntry.id);
-          this.close()
-        }
-      });
+      this.props.updateIssueEntry(this.props.issueEntry, issueEntry)
+        .then((ret) => {
+          if (!this.props.issue.error) {
+            const unchanged = ret && ret.unchanged;
+            if (!unchanged){
+              this.props.issueGet(this.props.issueEntry.id);
+            }
+            this.props.onClose();
+          }
+        });
     } else {
-      this.close()
+      this.props.onClose();
     }
   }
+
+  onDueDateChange = date => this.setState({
+    issueEntry: {
+      ...this.state.issueEntry,
+      due_date: date != null ? date.toISOString().split('T')[0] : null,
+    },
+    wasModified: true
+  });
 
   onProgressChange = (progress) => {
     this.setState({
       issueEntry: {
         ...this.state.issueEntry,
-        done_ratio: progress
+        progress,
+      },
+      wasModified: true
+    });
+  }
+
+  onEstimatedDurationChange = ({ target: { value } }) => {
+    value = '' + value
+    this.setState({
+      issueEntry: {
+        ...this.state.issueEntry,
+        estimated_duration: value.replace(',', '.'),
       },
       wasModified: true
     });
@@ -114,14 +178,25 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue } = this.props;
-    const { issueEntry, wasModified } = this.state;
-    const { done_ratio } = issueEntry;
+    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry } = this.props;
+    const { issueEntry, wasModified, progress_info, instance } = this.state;
+    const { progress, estimated_duration, due_date, children } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
         progress: issue.error.details.find(error => error.path[0] === 'progress'),
+        estimated_duration: issue.error.details.find(error => error.path[0] === 'estimated_duration'),
+        // estimated_hours: issue.error.details.find(error => error.path[0] === 'estimated_hours'),
+        due_date: issue.error.details.find(error => error.path[0] === 'due_date'),
       }
       : {};
+    let estimatedDurationInfo = '';
+    if (estimated_duration){
+      let hours = durationToHours(estimated_duration);
+      if (hours > 0){
+        estimatedDurationInfo = `${Number(hours.toFixed(2))} hours`;
+      }
+    }
+    const progressInfo = `${progress_info.toFixed(0)}%`;
     return (
       <Modal
         open={!!isOpen}
@@ -131,36 +206,81 @@ class IssueModal extends Component {
       >
         <Fragment>
           <Label htmlFor="assignee" label="Assignee">
-            <div name="assignee">{issueEntry.assigned_to.name}</div>
+            <div name="assignee">{propsIssueEntry.assigned_to.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">#{issueEntry.id}&nbsp;{issueEntry.subject}</div>
+            <div name="issue">#{propsIssueEntry.id}&nbsp;{propsIssueEntry.subject}</div>
           </Label>
           <FlexRow>
-            <div>
-              <Label htmlFor="progress" label="Progress">
-                <FlexRow style={{width:200}}>
-                 <Slider
-                   // bugfix: avoid sloppy dragging (value/onChange) using this key
-                   key={new Date().getTime()}
-                   name="progress"
-                   tipProps={{placement:'right'}}
-                   handleStyle={{borderColor:theme.green}}
-                   trackStyle={{backgroundColor:theme.green}}
-                   tipFormatter={(value) => `${value}%`}
-                   min={0}
-                   max={100}
-                   defaultValue={done_ratio}
-                   disabled={!isEditable || !isUserAuthor}
-                   onAfterChange={(value) => this.onProgressChange(value) && this.runValidation()}
-                />
+            <DurationField>
+              <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
+                <FlexRow>
+                  <Input
+                    type="text"
+                    name="estimated_duration"
+                    value={estimated_duration}
+                    onBlur={() => this.runValidation(['estimated_duration'])}
+                    disabled={!isEditable || !isUserAuthor}
+                    onChange={this.onEstimatedDurationChange}
+                  />
+                  <FieldAdjacentInfo>{estimatedDurationInfo}</FieldAdjacentInfo>
                 </FlexRow>
               </Label>
-              <ErrorMessage show={!!validationErrors.progress}>
-                {this.getErrorMessage(validationErrors.progress)}
+              <ErrorMessage show={!!validationErrors.estimated_duration}>
+                {this.getErrorMessage(validationErrors.estimated_duration)}
               </ErrorMessage>
-            </div>
+            </DurationField>
+            {
+              !children && (
+              <div>
+                <Label htmlFor="due_date" label="Due date">
+                  <DatePicker
+                    key={instance}
+                    name="due_date"
+                    value={due_date}
+                    isDisabled={!isEditable || !isUserAuthor}
+                    // onBlur={() => this.runValidation('due_date')}
+                    onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
+                  />
+                </Label>
+                <ErrorMessage show={!!validationErrors.due_date}>
+                  {this.getErrorMessage(validationErrors.due_date)}
+                </ErrorMessage>
+              </div>
+              )}
           </FlexRow>
+          {
+            !children && (
+              <FlexRow>
+                <div>
+                  <Label htmlFor="progress" label="Progress">
+                    <FlexRow>
+                      <Slider
+                        style={{width:180}}
+                        // bugfix: avoid sloppy dragging (value/onChange) using this key
+                        // key={new Date().getTime()}
+                        key={instance}
+                        name="progress"
+                        tipProps={{placement:'right'}}
+                        handleStyle={{borderColor:theme.green}}
+                        onChange={(value) => this.setState({ progress_info: value, wasModified: true })}
+                        trackStyle={{backgroundColor:theme.green}}
+                        tipFormatter={(value) => `${value}%`}
+                        min={0}
+                        max={100}
+                        defaultValue={progress}
+                        disabled={!isEditable || !isUserAuthor}
+                        onAfterChange={(value) => this.onProgressChange(value) && this.runValidation('progress')}
+                      />
+                      <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
+                    </FlexRow>
+                  </Label>
+                  <ErrorMessage show={!!validationErrors.progress}>
+                    {this.getErrorMessage(validationErrors.progress)}
+                  </ErrorMessage>
+                </div>
+              </FlexRow>
+            )}
           <OptionButtons>
             <Button
               id="btn-update"
@@ -204,7 +324,8 @@ IssueModal.propTypes = {
     done_ratio: PropTypes.number.isRequired,
     start_date: PropTypes.string.isRequired,
     due_date: PropTypes.string.isRequired,
-    total_estimated_hours: PropTypes.number,
+    estimated_hours: PropTypes.number,
+    estimated_duration: PropTypes.string,
     spent_hours: PropTypes.number,
     tracker: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -240,7 +361,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   issueGet: (id) => dispatch(actions.issues.get(id)),
   updateIssueEntry: (issueEntry, changes) => dispatch(actions.issue.update(issueEntry, changes)),
-  validateBeforeUpdate: (changes) => dispatch(actions.issue.validateBeforeUpdate(changes)),
+  validateBeforeUpdate: (changes, checkFields) => dispatch(actions.issue.validateBeforeUpdate(changes, checkFields)),
   resetValidation: () => dispatch(actions.issue.reset())
 });
 

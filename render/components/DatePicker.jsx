@@ -193,7 +193,7 @@ class DatePicker extends Component {
         <DayPickerInput
           styles={this.styles}
           name={name}
-          value={new Date(value)}
+          value={value}
           inputProps={{
             disabled: isDisabled
           }}

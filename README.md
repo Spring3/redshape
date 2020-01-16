@@ -187,6 +187,21 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
   ![](docs/changes/edit_issue_progress.png)
 
+- Estimation (hours) and Due date can also be edited. 
+
+  ![](docs/changes/edit_issue_estimation_due_date.png) 
+
+- If editing a parent task, some non-editable fields are omitted.
+
+  ![](docs/changes/edit_issue_parent.png)
+
+### Issue fields
+
+- If is a parent task, it shows links to each of its subtasks.
+
+  If is a parent task, it shows the totals (estimated and spent time).
+
+  ![](docs/changes/issue_subtasks.png)
 
 ### AUR package
 

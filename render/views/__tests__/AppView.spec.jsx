@@ -21,7 +21,7 @@ jest.mock('electron-store');
 
 import storage from '../../../common/storage';
 
-import { hoursToDuration } from '../../actions/timeEntry.actions'
+import { hoursToDuration } from '../../datetime';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
