@@ -9,6 +9,9 @@ ipcRenderer.on('settings', (event, {key, value}) => {
     case 'ADVANCED_TIMER_CONTROLS':
       store.dispatch(actions.settings.setAdvancedTimerControls(value));
       break;
+    case 'PROGRESS_SLIDER_STEP_1':
+      store.dispatch(actions.settings.setProgressWithStep1(value));
+      break;
     case 'DISCARD_IDLE_TIME':
       store.dispatch(actions.settings.setDiscardIdleTime(value));
       break;

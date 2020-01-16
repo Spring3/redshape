@@ -27,7 +27,6 @@ const FlexRow = styled.div`
   justify-content: space-between;
 `;
 
-// const Slider = RawSlider.createSliderWithTooltip(RawSlider)
 const Slider = RawSlider;
 
 const OptionButtons = styled.div`
@@ -178,14 +177,13 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry } = this.props;
+    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressWithStep1 } = this.props;
     const { issueEntry, wasModified, progress_info, instance } = this.state;
     const { progress, estimated_duration, due_date, children } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
         progress: issue.error.details.find(error => error.path[0] === 'progress'),
         estimated_duration: issue.error.details.find(error => error.path[0] === 'estimated_duration'),
-        // estimated_hours: issue.error.details.find(error => error.path[0] === 'estimated_hours'),
         due_date: issue.error.details.find(error => error.path[0] === 'due_date'),
       }
       : {};
@@ -239,7 +237,6 @@ class IssueModal extends Component {
                     name="due_date"
                     value={due_date}
                     isDisabled={!isEditable || !isUserAuthor}
-                    // onBlur={() => this.runValidation('due_date')}
                     onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
                   />
                 </Label>
@@ -258,7 +255,6 @@ class IssueModal extends Component {
                       <Slider
                         style={{width:180}}
                         // bugfix: avoid sloppy dragging (value/onChange) using this key
-                        // key={new Date().getTime()}
                         key={instance}
                         name="progress"
                         tipProps={{placement:'right'}}
@@ -268,6 +264,7 @@ class IssueModal extends Component {
                         tipFormatter={(value) => `${value}%`}
                         min={0}
                         max={100}
+                        step={progressWithStep1 ? 1 : 10}
                         defaultValue={progress}
                         disabled={!isEditable || !isUserAuthor}
                         onAfterChange={(value) => this.onProgressChange(value) && this.runValidation('progress')}
@@ -352,10 +349,12 @@ IssueModal.propTypes = {
   updateIssueEntry: PropTypes.func.isRequired,
   validateBeforeUpdate: PropTypes.func.isRequired,
   resetValidation: PropTypes.func.isRequired,
+  progressWithStep1: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  issue: state.issue
+  issue: state.issue,
+  progressWithStep1: state.settings.progressWithStep1,
 });
 
 const mapDispatchToProps = dispatch => ({

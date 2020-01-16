@@ -7,11 +7,13 @@ import {
   SETTINGS_USE_COLORS,
   SETTINGS_ISSUE_HEADERS,
   SETTINGS_BACKUP,
-  SETTINGS_RESTORE
+  SETTINGS_RESTORE,
+  SETTINGS_PROGRESS_SLIDER_STEP_1
 } from '../actions/settings.actions';
 
 export const initialState = {
   advancedTimerControls: false,
+  progressWithStep1: false,
   idleBehavior: 0,
   discardIdleTime: false,
   showClosedIssues: false,
@@ -48,6 +50,15 @@ export default (state = initialState, action) => {
       const nextState = {
         ...state,
         advancedTimerControls,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_PROGRESS_SLIDER_STEP_1: {
+      const { userId, redmineEndpoint, progressWithStep1 } = action.data;
+      const nextState = {
+        ...state,
+        progressWithStep1,
       };
       storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;

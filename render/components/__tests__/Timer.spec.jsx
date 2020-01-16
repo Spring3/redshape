@@ -11,6 +11,13 @@ import Timer from '../Timer';
 
 const mockStore = configureStore([thunk]);
 
+const stateSettings = {
+  idleBehavior: 0,
+  discardIdleTime: true,
+  advancedTimerControls: false,
+  progressWithStep1: false,
+};
+
 const waitSeconds = (n = 1) => new Promise(resolve => setTimeout(() => resolve(), n * 1000));
 
 describe('Timer component', () => {
@@ -25,11 +32,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
     const store = mockStore(state);
     const wrapper = mount(
@@ -59,11 +62,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -106,11 +105,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -152,11 +147,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -204,11 +195,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -254,11 +241,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -304,11 +287,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -359,11 +338,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -412,11 +387,7 @@ describe('Timer component', () => {
           subject: 'Test issue'
         }
       },
-      settings: {
-        idleBehavior: 0,
-        discardIdleTime: true,
-        advancedTimerControls: false,
-      }
+      settings: stateSettings,
     };
 
     const store = mockStore(state);

@@ -203,6 +203,14 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
   ![](docs/changes/issue_subtasks.png)
 
+### More settings
+
+- Issue progress slider can be changed with 1% step if configured (by default is 10%). 
+  Enable this if you have support in the server side (ruby, redmine) to use every percentage (33%, 81%, etc).
+
+  ![](docs/changes/settings_progress.png)
+
+
 ### AUR package
 
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).

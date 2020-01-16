@@ -39,7 +39,7 @@ require('../common/request'); // to initialize from storage
 let mainWindow;
 let aboutWindow;
 
-const updateSettings = ({ idleBehavior, discardIdleTime, advancedTimerControls }, settings) => {
+const updateSettings = ({ idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 }, settings) => {
   if (idleBehavior >= 0){
     settings.idleBehavior = idleBehavior;
     mainWindow.webContents.send('settings', { key: 'IDLE_BEHAVIOR', value: idleBehavior })
@@ -51,6 +51,10 @@ const updateSettings = ({ idleBehavior, discardIdleTime, advancedTimerControls }
   if (advancedTimerControls != null){
     settings.advancedTimerControls = advancedTimerControls;
     mainWindow.webContents.send('settings', { key: 'ADVANCED_TIMER_CONTROLS', value: advancedTimerControls })
+  }
+  if (progressWithStep1 != null){
+    settings.progressWithStep1 = progressWithStep1;
+    mainWindow.webContents.send('settings', { key: 'PROGRESS_SLIDER_STEP_1', value: progressWithStep1 })
   }
   generateMenu({ settings });
 }
@@ -170,7 +174,12 @@ const generateMenu = ({ settings }) => {
             label: 'Use advanced timer controls',
             type: 'checkbox',
             checked: settings.advancedTimerControls, click: (el) => updateSettings({ advancedTimerControls: el.checked }, settings),
-          }
+          },
+          {
+            label: 'Use progress slider with 1% steps',
+            type: 'checkbox',
+            checked: settings.progressWithStep1, click: (el) => updateSettings({ progressWithStep1: el.checked }, settings),
+          },
         ]
       },
     ] : []),

@@ -84,6 +84,7 @@ describe('AppView', () => {
         idleBehavior: 0,
         discardIdleTime: true,
         advancedTimerControls: false,
+        progressWithStep1: false,
       }
     });
     const tree = renderer.create(
@@ -144,6 +145,7 @@ describe('AppView', () => {
           idleBehavior: 0,
           discardIdleTime: true,
           advancedTimerControls: false,
+          progressWithStep1: false,
         }
       });
 
@@ -218,6 +220,7 @@ describe('AppView', () => {
           idleBehavior: 0,
           discardIdleTime: true,
           advancedTimerControls: false,
+          progressWithStep1: false,
         }
       });
 
@@ -308,6 +311,7 @@ describe('AppView', () => {
           idleBehavior: 0,
           discardIdleTime: true,
           advancedTimerControls: false,
+          progressWithStep1: false,
         }
       };
       const store = mockStore(state);

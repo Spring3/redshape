@@ -45,8 +45,8 @@ class AppView extends Component {
   }
 
   modifyUserMenu(){
-    const { idleBehavior, discardIdleTime, advancedTimerControls } = this.props;
-    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls } })
+    const { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } = this.props;
+    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
   }
 
   componentWillMount() {
@@ -138,6 +138,7 @@ AppView.propTypes = {
   idleBehavior: PropTypes.number.isRequired,
   discardIdleTime: PropTypes.bool.isRequired,
   advancedTimerControls: PropTypes.bool.isRequired,
+  progressWithStep1: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -148,6 +149,7 @@ const mapStateToProps = state => ({
   idleBehavior: state.settings.idleBehavior,
   discardIdleTime: state.settings.discardIdleTime,
   advancedTimerControls: state.settings.advancedTimerControls,
+  progressWithStep1: state.settings.progressWithStep1,
 });
 
 const mapDispatchToProps = dispatch => ({

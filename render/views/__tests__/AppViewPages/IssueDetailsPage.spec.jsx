@@ -90,6 +90,12 @@ const state = {
     },
     isEnabled: false,
     duration: 0
+  },
+  settings: {
+    idleBehavior: 0,
+    discardIdleTime: true,
+    advancedTimerControls: false,
+    progressWithStep1: false,
   }
 };
 

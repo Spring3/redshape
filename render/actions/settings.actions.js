@@ -2,6 +2,7 @@ export const SETTINGS_ADVANCED_TIMER_CONTROLS = 'SETTINGS_ADVANCED_TIMER_CONTROL
 export const SETTINGS_DISCARD_IDLE_TIME = 'SETTINGS_DISCARD_IDLE_TIME';
 export const SETTINGS_IDLE_BEHAVIOR = 'SETTINGS_IDLE_BEHAVIOR';
 export const SETTINGS_SHOW_CLOSED_ISSUES = 'SETTINGS_SHOW_CLOSED_ISSUES';
+export const SETTINGS_PROGRESS_SLIDER_STEP_1 = 'SETTINGS_PROGRESS_SLIDER_STEP_1';
 export const SETTINGS_USE_COLORS = 'SETTINGS_USE_COLORS';
 export const SETTINGS_ISSUE_HEADERS = 'SETTINGS_ISSUE_HEADERS';
 export const SETTINGS_BACKUP = 'SETTINGS_BACKUP';
@@ -15,6 +16,17 @@ const setAdvancedTimerControls = advancedTimerControls => (dispatch, getState) =
       userId: user.id,
       redmineEndpoint: user.redmineEndpoint,
       advancedTimerControls
+    }
+  });
+};
+const setProgressWithStep1 = progressWithStep1 => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_PROGRESS_SLIDER_STEP_1,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      progressWithStep1
     }
   });
 };
@@ -96,6 +108,7 @@ const restore = () => (dispatch, getState) => {
 
 export default {
   setAdvancedTimerControls,
+  setProgressWithStep1,
   setDiscardIdleTime,
   setIdleBehavior,
   setShowClosedIssues,
