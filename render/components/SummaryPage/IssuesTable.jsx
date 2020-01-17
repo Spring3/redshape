@@ -189,18 +189,21 @@ class IssuesTable extends Component {
               <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
                 {
                   issueHeaders.map(header => {
-                    const date = header.value === 'due_date' && _get(task, header.value);
-                    let forcedValue;
-                    let estimated_hours = header.value === 'estimated_hours' && _get(task, header.value);
-                    if (estimated_hours){
-                      forcedValue = Number(estimated_hours.toFixed(2))
+                    const format = header.format;
+                    let value = _get(task, header.value);
+                    if (format === 'hours'){
+                      if (value != null){
+                        value = Number(value.toFixed(2));
+                      }
+                    }else if (format === 'progress'){
+                      value = `${value}%`
                     }
                     return (
                       <td
                         key={header.value}
                         className={header.value === 'due_date' ? header.value : ""}
                       >
-                        { date ? (<Date date={date}/>) : this.paint(task, header.value, forcedValue) }
+                        { format === 'date' ? (<Date date={value}/>) : this.paint(task, header.value, value) }
                       </td>
                     )})
                 }

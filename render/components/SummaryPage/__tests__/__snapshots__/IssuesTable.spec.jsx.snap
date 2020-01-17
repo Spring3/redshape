@@ -1,23 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
-.c3 {
-  position: relative;
-  display: inline-grid;
-  grid-template-rows: 1fr;
-}
-
-.c3 span {
-  float: left;
-  grid-row: 1;
-  grid-column: 1;
-}
-
-.c3 span:last-child {
-  opacity: 0;
-  display: none;
-}
-
 .c0 {
   position: relative;
   min-height: 200px;
@@ -133,6 +116,30 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
       <th
         onClick={[Function]}
       >
+        Total Estimation
+         
+      </th>
+      <th
+        onClick={[Function]}
+      >
+        Spent
+         
+      </th>
+      <th
+        onClick={[Function]}
+      >
+        Total Spent
+         
+      </th>
+      <th
+        onClick={[Function]}
+      >
+        Progress
+         
+      </th>
+      <th
+        onClick={[Function]}
+      >
         Due Date
          
       </th>
@@ -208,17 +215,40 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
-          className="c3"
+          className=""
         >
-          <span>
-            Jan 01 2011
-          </span>
-          <span>
-            Jan 01 2011
-          </span>
+          2011-01-01
         </span>
       </td>
     </tr>
@@ -291,17 +321,40 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
-          className="c3"
+          className=""
         >
-          <span>
-            Jan 01 2011
-          </span>
-          <span>
-            Jan 01 2011
-          </span>
+          2011-01-01
         </span>
       </td>
     </tr>
@@ -374,17 +427,40 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
-          className="c3"
+          className=""
         >
-          <span>
-            Jan 01 2011
-          </span>
-          <span>
-            Jan 01 2011
-          </span>
+          2011-01-01
         </span>
       </td>
     </tr>

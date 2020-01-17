@@ -26,6 +26,10 @@ const state = {
       { label: 'Subject', isFixed: true, value: 'subject' },
       { label: 'Priority', value: 'priority.name' },
       { label: 'Estimation', value: 'estimated_hours' },
+      { label: 'Total Estimation', value: 'total_estimated_hours' },
+      { label: 'Spent', value: 'spent_hours' },
+      { label: 'Total Spent', value: 'total_spent_hours' },
+      { label: 'Progress', value: 'done_ratio' },
       { label: 'Due Date', value: 'due_date' }
     ]
   },

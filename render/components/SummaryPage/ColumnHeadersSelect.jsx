@@ -35,12 +35,16 @@ class ColumnHeadersSelect extends Component {
     this.issueHeaders = [
       { label: 'Id', isFixed: true, value: 'id' },
       { label: 'Project', value: 'project.name' },
-      { label: 'Tracker', value: 'tracker.name' },
-      { label: 'Status', value: 'status.name' },
+      { label: 'Tracker', value: 'tracker.name', format: 'tracker' },
+      { label: 'Status', value: 'status.name', format: 'status' },
       { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Priority', value: 'priority.name' },
-      { label: 'Estimation', value: 'estimated_hours' },
-      { label: 'Due Date', value: 'due_date' }
+      { label: 'Priority', value: 'priority.name', format: 'priority' },
+      { label: 'Estimation', value: 'estimated_hours', format: 'hours' },
+      { label: 'Total Estimation', value: 'total_estimated_hours', format: 'hours' },
+      { label: 'Spent', value: 'spent_hours', format: 'hours' },
+      { label: 'Total Spent', value: 'total_spent_hours', format: 'hours' },
+      { label: 'Progress', value: 'done_ratio', format: 'progress' },
+      { label: 'Due Date', value: 'due_date', format: 'date' }
     ];
   }
 
@@ -90,6 +94,7 @@ ColumnHeadersSelect.propTypes = {
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
+    format: PropTypes.string,
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
   settingsChangeIssueHeaders: PropTypes.func.isRequired
