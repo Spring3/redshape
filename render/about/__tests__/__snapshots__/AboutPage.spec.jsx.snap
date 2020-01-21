@@ -542,7 +542,9 @@ exports[`About page should match the snapshot [tab2] 1`] = `
               "isStatic": false,
               "lastClassName": "c1",
               "rules": Array [
-                "box-sizing:border-box;height:100vh;flex-direction:column;display:flex;padding-top:15px;ul.react-tabs__tab-list{list-style-type:none;padding:10px 0px 10px 0px;margin:0px;width:100%;display:inline-block;text-align:center;background:",
+                "box-sizing:border-box;height:",
+                [Function],
+                ";flex-direction:column;display:flex;padding-top:15px;ul.react-tabs__tab-list{list-style-type:none;padding:10px 0px 10px 0px;margin:0px;width:100%;display:inline-block;text-align:center;background:",
                 [Function],
                 ";li.react-tabs__tab{display:inline-block;position:relative;padding:5px;cursor:pointer;margin-right:10px;border-radius:50%;",
                 [Function],

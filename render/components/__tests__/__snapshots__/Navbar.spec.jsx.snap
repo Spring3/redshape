@@ -4,8 +4,17 @@ exports[`Navbar component should match the snapshot 1`] = `
 .c2 {
   -webkit-text-decoration: none;
   text-decoration: none;
-  -webkit-transition: color ease;
-  transition: color ease;
+  color: #FF7079;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+}
+
+.c2:hover {
+  color: #EF6069;
+}
+
+.c2:hover svg {
+  fill: #EF6069;
 }
 
 .c2:active,
@@ -15,7 +24,7 @@ exports[`Navbar component should match the snapshot 1`] = `
 }
 
 .c3 {
-  color: gray;
+  color: #FF7079;
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
   align-self: flex-end;
@@ -41,7 +50,7 @@ exports[`Navbar component should match the snapshot 1`] = `
   -ms-flex-pack: justify;
   justify-content: space-between;
   padding: 20px 40px 0px 40px;
-  background: linear-gradient(to bottom,85%,transparent);
+  background: linear-gradient(to bottom,#FFFFFF 85%,transparent);
 }
 
 .c0 ul {
@@ -62,24 +71,28 @@ exports[`Navbar component should match the snapshot 1`] = `
   display: inline;
   font-size: 15px;
   font-weight: bold;
-  -webkit-transition: color ease;
-  transition: color ease;
+  color: #3F3844;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
 }
 
 .c0 ul li a {
   -webkit-text-decoration: none;
   text-decoration: none;
-  -webkit-transition: color ease;
-  transition: color ease;
+  color: #3F3844;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
   padding-bottom: 5px;
 }
 
 .c0 ul li a.active {
-  border-bottom: 2px solid;
+  color: #FF7079;
+  border-bottom: 2px solid #FF7079;
 }
 
 .c0 ul li:hover a {
   cursor: pointer;
+  color: #FF7079;
 }
 
 .c0 ul:first-child li {
@@ -100,13 +113,15 @@ exports[`Navbar component should match the snapshot 1`] = `
 
 .c1 svg {
   border-radius: 3px;
+  color: #FF7079;
   border: 2px solid transparent;
-  -webkit-transition: all ease;
-  transition: all ease;
+  -webkit-transition: all ease .2s;
+  transition: all ease .2s;
 }
 
 .c1 svg:hover {
-  border: 2px solid;
+  color: #FF7079;
+  border: 2px solid #FF7079;
 }
 
 .c1 svg {

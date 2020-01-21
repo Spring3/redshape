@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 import { connect } from 'react-redux';
 import {Link, NavLink, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -339,4 +339,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout())
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavigationBar));
+export default withRouter(withTheme(connect(mapStateToProps, mapDispatchToProps)(NavigationBar)));

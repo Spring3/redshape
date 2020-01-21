@@ -2,10 +2,12 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 import { HashRouter, Route } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import { mount } from 'enzyme';
 import userActions, { USER_LOGOUT } from '../../actions/user.actions';
+import theme from "../../theme";
 
 import Navbar from '../Navbar';
 
@@ -25,9 +27,11 @@ describe('Navbar component', () => {
     });
     const tree = renderer.create(
       <Provider store={store}>
-        <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
-        </HashRouter>
+        <ThemeProvider theme={theme}>
+          <HashRouter>
+            <Route path="/" component={props => <Navbar {...props}/>} />
+          </HashRouter>
+        </ThemeProvider>
       </Provider>
     );
     expect(tree).toMatchSnapshot();
@@ -46,9 +50,11 @@ describe('Navbar component', () => {
     });
     const wrapper = mount(
       <Provider store={store}>
-        <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
-        </HashRouter>
+        <ThemeProvider theme={theme}>
+          <HashRouter>
+            <Route path="/" component={props => <Navbar {...props}/>} />
+          </HashRouter>
+        </ThemeProvider>
       </Provider>
     );
 

@@ -39,12 +39,7 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   background: #FFFFFF;
   color: #EF6069;
@@ -52,20 +47,29 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
 }
 
 .c5::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: #FFFFFF transparent transparent transparent;
+}
+
+.c5::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .c3 {

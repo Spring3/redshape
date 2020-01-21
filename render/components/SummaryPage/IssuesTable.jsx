@@ -150,7 +150,7 @@ class IssuesTable extends Component {
       }else if (format === 'status' && isEnhanced) {
         return (<Status simple={true} value={value}/>);
       }else if (format === 'progress' && isEnhanced) {
-        return (<Progressbar percent={value} width={80} mode="progress-gradient" height={10}/>);
+        return (<Progressbar percent={value} width={80} mode="progress-gradient" height={7}/>);
       }else if (format === 'priority' && isEnhanced) {
         return (<Priority centered value={value}/>);
       }

@@ -25,7 +25,7 @@ exports[`Timer component should match the snapshot 1`] = `
   animation: gOHwoP .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 15px 20px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -73,7 +73,7 @@ exports[`Timer component should match the snapshot 1`] = `
 }
 
 .c0 div.buttons a {
-  padding: 10px 0px;
+  padding: 5px 0px;
 }
 
 .c0 div.buttons a:first-child {
@@ -143,7 +143,6 @@ exports[`Timer component should match the snapshot 1`] = `
   >
     <Timer
       continueTimer={[Function]}
-      discardIdleTime={true}
       idleBehavior={0}
       initialValue={0}
       isEnabled={true}
@@ -163,6 +162,7 @@ exports[`Timer component should match the snapshot 1`] = `
     >
       <Timer__ActiveTimer
         isEnabled={true}
+        isEnhanced={false}
       >
         <StyledComponent
           forwardedComponent={
@@ -185,7 +185,7 @@ exports[`Timer component should match the snapshot 1`] = `
                     ],
                     "toString": [Function],
                   },
-                  " .7s ease-in;max-width:100%;box-sizing:border-box;padding:20px;position:fixed;bottom:0;width:100%;background:",
+                  " .7s ease-in;max-width:100%;box-sizing:border-box;padding:15px 20px;position:fixed;bottom:0;width:100%;background:",
                   [Function],
                   ";display:",
                   [Function],
@@ -195,7 +195,7 @@ exports[`Timer component should match the snapshot 1`] = `
                   [Function],
                   ";div.panel{flex-grow:0;min-width:520px;display:flex;align-items:center;max-width:",
                   [Function],
-                  ";}div.buttons{margin:0 20px;display:flex;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:10px 0px;&:hover{background:",
+                  ";}div.buttons{margin:0 20px;display:flex;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:5px 0px;&:hover{background:",
                   [Function],
                   ";}}a:first-child{margin-right:20px;}}div.buttons.buttons-advanced{a{margin-right:5px;}a:last-child{margin-right:initial;}}div.issueName{padding:0 20px;max-width:500px;}div.time{color:",
                   [Function],
@@ -218,6 +218,7 @@ exports[`Timer component should match the snapshot 1`] = `
           }
           forwardedRef={null}
           isEnabled={true}
+          isEnhanced={false}
         >
           <div
             className="c0"

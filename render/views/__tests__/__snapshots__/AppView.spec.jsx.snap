@@ -23,8 +23,18 @@ exports[`AppView should match the snapshot 1`] = `
   background: transparent;
 }
 
+.c1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 23px;
+  z-index: 3;
+  -webkit-app-region: drag;
+}
+
 .c5 {
-  color: gray;
+  color: #FF7079;
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
   align-self: flex-end;
@@ -139,7 +149,7 @@ exports[`AppView should match the snapshot 1`] = `
   animation: gOHwoP .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 15px 20px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -185,7 +195,7 @@ exports[`AppView should match the snapshot 1`] = `
 }
 
 .c7 div.buttons a {
-  padding: 10px 0px;
+  padding: 5px 0px;
 }
 
 .c7 div.buttons a:hover {
@@ -235,16 +245,6 @@ exports[`AppView should match the snapshot 1`] = `
 
 .c8 {
   padding: 0px;
-}
-
-.c1 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 23px;
-  z-index: 3;
-  -webkit-app-region: drag;
 }
 
 .c0 {

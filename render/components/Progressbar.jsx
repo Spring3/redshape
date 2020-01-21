@@ -7,8 +7,6 @@ import Tooltip from "./Tooltip";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Background = styled.div`
@@ -20,7 +18,7 @@ const Background = styled.div`
 `;
 
 export const Progress = styled.div`
-  border-radius: 5px;
+  border-radius: ${props => props.float === 'right' ? '0 5px 5px 0' : (props.float === 'left' ? '5px 0 0 5px' : '5px')};
   max-width: 100%;
   width: 0;
   ${props => css`
@@ -68,6 +66,7 @@ const Progressbar = ({ percent, background, id, className, height, width, mode, 
           percent={percentage}
           background={background}
           height={height}
+          float={percentageOver > 0 ? 'left' : 'none'}
         />
         {
           percentageOver > 0 && (

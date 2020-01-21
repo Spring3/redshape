@@ -5,31 +5,35 @@ exports[`Progressbar component should match the snapshot 1`] = `
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
 }
 
 .c5::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: transparent transparent transparent;
+}
+
+.c5::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .c1 {
@@ -49,14 +53,6 @@ exports[`Progressbar component should match the snapshot 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c2 {
@@ -70,7 +66,7 @@ exports[`Progressbar component should match the snapshot 1`] = `
   border-radius: 5px;
   max-width: 100%;
   width: 0;
-  float: left;
+  float: none;
   -webkit-transition: width ease;
   transition: width ease;
   width: 25% !important;
@@ -107,31 +103,35 @@ exports[`Progressbar component should match the snapshot when using progress-gra
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
 }
 
 .c5::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: transparent transparent transparent;
+}
+
+.c5::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .c1 {
@@ -151,14 +151,6 @@ exports[`Progressbar component should match the snapshot when using progress-gra
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c2 {
@@ -172,7 +164,7 @@ exports[`Progressbar component should match the snapshot when using progress-gra
   border-radius: 5px;
   max-width: 100%;
   width: 0;
-  float: left;
+  float: none;
   -webkit-transition: width ease;
   transition: width ease;
   width: 70% !important;
@@ -209,31 +201,35 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
 }
 
 .c6::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: transparent transparent transparent;
+}
+
+.c6::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .c1 {
@@ -253,14 +249,6 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c2 {
@@ -271,7 +259,7 @@ exports[`Progressbar component should match the snapshot when using time-trackin
 }
 
 .c3 {
-  border-radius: 5px;
+  border-radius: 5px 0 0 5px;
   max-width: 100%;
   width: 0;
   float: left;
@@ -283,7 +271,7 @@ exports[`Progressbar component should match the snapshot when using time-trackin
 }
 
 .c4 {
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0;
   max-width: 100%;
   width: 0;
   float: right;
@@ -327,31 +315,35 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
 }
 
 .c5::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: transparent transparent transparent;
+}
+
+.c5::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .c1 {
@@ -371,14 +363,6 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c2 {
@@ -392,7 +376,7 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   border-radius: 5px;
   max-width: 100%;
   width: 0;
-  float: left;
+  float: none;
   -webkit-transition: width ease;
   transition: width ease;
   width: 70% !important;

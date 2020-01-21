@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
-.c4 {
+.c10 {
   border: 0;
   -webkit-clip: rect(0 0 0 0);
   clip: rect(0 0 0 0);
@@ -16,7 +16,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   width: 1px;
 }
 
-.c5 {
+.c11 {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -28,52 +28,47 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   border-color: #FF7079;
 }
 
-.c5 svg {
+.c11 svg {
   visibility: hidden;
   position: relative;
   vertical-align: middle;
   bottom: 3px;
 }
 
-.c3:not(:disabled):hover + .c5,
-.c3:focus + .c5 {
+.c9:not(:disabled):hover + .c11,
+.c9:focus + .c11 {
   box-shadow: 0px 0px 5px 1px #FF7F87;
 }
 
-.c3:disabled + .c5 {
+.c9:disabled + .c11 {
   background: #F9F9F9;
   border-color: lightgrey;
 }
 
-.c2 {
+.c8 {
   display: inline-block;
   vertical-align: middle;
 }
 
-.c2 + span {
+.c8 + span {
   margin-left: 10px;
   vertical-align: middle;
 }
 
-.c0 h4 {
+.c1 h4 {
   margin-bottom: 10px;
   color: #A0A0A0;
 }
 
-.c1 {
+.c2 {
   color: #A0A0A0;
 }
 
-.c12 {
+.c7 {
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   padding: 5px;
   background: #FFFFFF;
   color: #EF6069;
@@ -81,39 +76,82 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
+  z-index: 99;
+  top: -100%;
+  left: 30px;
 }
 
-.c12::after {
+.c7::after {
   content: ' ';
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: auto;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
   border: 2px solid black;
   border-width: 5px;
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c9 {
+.c7::after {
+  top: calc(50% - 5px);
+  left: -10px;
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.c12 {
+  position: absolute;
+  display: none;
+  border-radius: 3px;
+  width: auto;
+  padding: 5px;
+  background: #FFFFFF;
+  color: #EF6069;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0px 2px 7px #A0A0A0;
+  z-index: 99;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: -50px;
+  left: 50%;
+}
+
+.c12::after {
+  content: ' ';
+  position: absolute;
+  width: auto;
+  border: 2px solid black;
+  border-width: 5px;
+  border-color: #FFFFFF transparent transparent transparent;
+}
+
+.c12::after {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.c4 {
   display: inline-block;
   position: relative;
 }
 
-.c9:hover .c11 {
+.c4:hover .c6 {
   display: block;
 }
 
-.c6 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c7 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -124,42 +162,85 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c10 {
+.c5 {
   padding-bottom: 1px;
 }
 
-.c8 {
+.c3 {
   margin-left: 0.2rem;
   color: #A0A0A0;
 }
 
-<div>
+.c0 {
+  display: grid;
+  grid-template-columns: minmax(auto,400px) minmax(auto,500px);
+}
+
+@media (max-width:1200px) {
+  .c0 {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+@media (max-width:950px) {
+  .c0 {
+    grid-template-columns: 1fr;
+  }
+}
+
+<div
+  className="c0"
+>
   <div
-    className="form-group undefined c0"
+    className="form-group undefined c1"
   >
     <h4
-      className="c1"
+      className="c2"
       htmlFor="queryOptions"
     >
       Options
+      <span
+        className="c3"
+      >
+        <div
+          className="c4"
+        >
+          <svg
+            className="mdi-icon c5"
+            fill="currentColor"
+            height={14}
+            viewBox="0 0 24 24"
+            width={14}
+          >
+            <path
+              d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
+            />
+          </svg>
+          <p
+            className="tooltip c6 c7"
+          >
+            - Advanced timer controls: timer and comment are modifiable at runtime.
+          </p>
+        </div>
+      </span>
     </h4>
     <div
       id="queryOptions"
     >
       <label>
         <div
-          className="c2"
+          className="c8"
         >
           <input
             checked={false}
-            className="c3 c4"
+            className="c9 c10"
             disabled={false}
             onChange={[Function]}
             type="checkbox"
           />
           <div
             checked={false}
-            className="c5"
+            className="c11"
           >
             <svg
               className="mdi-icon "
@@ -181,16 +262,40 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="form-group undefined c0"
+    className="form-group undefined c1"
   >
     <h4
-      className="c1"
-      htmlFor="style"
+      className="c2"
+      htmlFor="idleBehavior"
     >
-      Timer Idle Behavior
+      Timer behavior
+      <span
+        className="c3"
+      >
+        <div
+          className="c4"
+        >
+          <svg
+            className="mdi-icon c5"
+            fill="currentColor"
+            height={14}
+            viewBox="0 0 24 24"
+            width={14}
+          >
+            <path
+              d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
+            />
+          </svg>
+          <p
+            className="tooltip c6 c12"
+          >
+            Detect if the system is idle to pause the timer.
+          </p>
+        </div>
+      </span>
     </h4>
     <div
-      className="c6"
+      className="c13"
     >
       <div
         className="css-3q53pl"
@@ -300,21 +405,21 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         />
       </div>
       <label
-        className="c7"
+        className="c14"
       >
         <div
-          className="c2"
+          className="c8"
         >
           <input
             checked={false}
-            className="c3 c4"
+            className="c9 c10"
             disabled={false}
             onChange={[Function]}
             type="checkbox"
           />
           <div
             checked={false}
-            className="c5"
+            className="c11"
           >
             <svg
               className="mdi-icon "
@@ -336,24 +441,24 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="c6"
+    className="c13"
   >
     <div
-      className="form-group undefined c0"
+      className="form-group undefined c1"
     >
       <h4
-        className="c1"
+        className="c2"
         htmlFor="progress"
       >
         Progress values
         <span
-          className="c8"
+          className="c3"
         >
           <div
-            className="c9"
+            className="c4"
           >
             <svg
-              className="mdi-icon c10"
+              className="mdi-icon c5"
               fill="currentColor"
               height={14}
               viewBox="0 0 24 24"
@@ -364,7 +469,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               />
             </svg>
             <p
-              className="tooltip c11 c12"
+              className="tooltip c6 c12"
             >
               Use 10% unless you have server-side support.
             </p>
@@ -481,13 +586,13 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="c6"
+    className="c13"
   >
     <div
-      className="form-group undefined c0"
+      className="form-group undefined c1"
     >
       <h4
-        className="c1"
+        className="c2"
         htmlFor="uiStyle"
       >
         UI Style
@@ -505,9 +610,9 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
             className="css-1hwfws3"
           >
             <div
-              className="css-1492t68"
+              className="css-xp4uvy"
             >
-              Select...
+              Default with colors
             </div>
             <div
               className="css-1g6gooi"
@@ -596,7 +701,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         <input
           name="uiStyle"
           type="hidden"
-          value=""
+          value="colors"
         />
       </div>
     </div>
