@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 const TooltipText = styled.p`
   position: absolute;
   display: none;
   border-radius: 3px;
-  top: -50px;
-  left: 50%;
   width: auto;
-  transform: translateX(-50%);
   padding: 5px;
   background: ${props => props.theme.bg};
   color: ${props => props.theme.mainDark};
@@ -17,18 +14,37 @@ const TooltipText = styled.p`
   font-size: 12px;
   white-space: nowrap;
   box-shadow: 0px 2px 7px ${props => props.theme.minorText};
+  z-index: 99;
 
   &::after {
     content: ' ';
     position: absolute;
-    top: 100%;
-    left: 50%; 
     width: auto;    
-    transform: translateX(-50%);
     border: 2px solid black;
     border-width: 5px;
     border-color: ${props => props.theme.bg} transparent transparent transparent;
   }
+  
+  ${props => props.position === 'top' ? css`
+    transform: translateX(-50%);
+    top: -50px;
+    left: 50%;
+    
+    &::after {
+      top: 100%;
+      left: 50%; 
+      transform: translateX(-50%);
+    }
+  ` : css`
+    top: -100%;
+    left: 30px;
+    
+    &::after {
+      top: calc(50% - 5px);
+      left: -10px; 
+      transform: rotate(90deg);
+    }
+  `}
 `;
 
 const TooltipContainer = styled.div`
@@ -42,16 +58,21 @@ const TooltipContainer = styled.div`
   }
 `;
 
+const TooltipMultiline = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 class Tooltip extends Component {
   render() {
-    const { className, children, text } = this.props;
+    const { className, children, text, position } = this.props;
+    const lines = text.split('\\n');
     return (
       <TooltipContainer
         className={className}
       >
         {children}
-        <TooltipText className="tooltip">{text}</TooltipText>
+        <TooltipText position={position || 'top'} className="tooltip">{ lines.length > 1 ? (<TooltipMultiline>{ lines.map(el => (<span>{el}</span>))}</TooltipMultiline>) : text }</TooltipText>
       </TooltipContainer>
     );
   }
@@ -60,7 +81,8 @@ class Tooltip extends Component {
 Tooltip.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
+  position: PropTypes.string,
 };
 
 Tooltip.defaultProps = {

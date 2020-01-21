@@ -1,17 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Navbar component should match the snapshot 1`] = `
-.c1 {
+.c2 {
   -webkit-text-decoration: none;
   text-decoration: none;
   -webkit-transition: color ease;
   transition: color ease;
 }
 
-.c1:active,
-.c1:focus,
-.c1:visited {
+.c2:active,
+.c2:focus,
+.c2:visited {
   background: transparent;
+}
+
+.c3 {
+  color: gray;
+  -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
 }
 
 .c0 {
@@ -21,7 +28,6 @@ exports[`Navbar component should match the snapshot 1`] = `
   right: 0px;
   z-index: 2;
   height: 50px;
-  background: linear-gradient(to bottom,85%,transparent);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -35,6 +41,7 @@ exports[`Navbar component should match the snapshot 1`] = `
   -ms-flex-pack: justify;
   justify-content: space-between;
   padding: 20px 40px 0px 40px;
+  background: linear-gradient(to bottom,85%,transparent);
 }
 
 .c0 ul {
@@ -71,7 +78,7 @@ exports[`Navbar component should match the snapshot 1`] = `
   border-bottom: 2px solid;
 }
 
-.c0 ul li:hover {
+.c0 ul li:hover a {
   cursor: pointer;
 }
 
@@ -91,10 +98,51 @@ exports[`Navbar component should match the snapshot 1`] = `
   margin-right: 0px;
 }
 
+.c1 svg {
+  border-radius: 3px;
+  border: 2px solid transparent;
+  -webkit-transition: all ease;
+  transition: all ease;
+}
+
+.c1 svg:hover {
+  border: 2px solid;
+}
+
+.c1 svg {
+  -webkit-animation: ikNrtx 2s ease-in infinite;
+  animation: ikNrtx 2s ease-in infinite;
+}
+
+.c1 svg:hover {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
 <nav
   className="c0"
 >
   <ul>
+    <li>
+      <a
+        className="c1 c2"
+        disabled={false}
+        href="#"
+        onClick={[Function]}
+      >
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={30}
+          viewBox="0 0 24 24"
+          width={30}
+        >
+          <path
+            d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+          />
+        </svg>
+      </a>
+    </li>
     <li>
       <a
         aria-current={null}
@@ -108,15 +156,23 @@ exports[`Navbar component should match the snapshot 1`] = `
   <ul>
     <li>
       <a
-        href="#/app/summary"
+        aria-current={null}
+        href="#/app/settings"
         onClick={[Function]}
       >
-        Anonymous
+        Settings
       </a>
     </li>
     <li>
+      <span
+        className="c3"
+      >
+        Anonymous
+      </span>
+    </li>
+    <li>
       <a
-        className="c1"
+        className="c2"
         disabled={false}
         href="#"
         id="signout"

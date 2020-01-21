@@ -12,6 +12,7 @@ import theme from '../../../theme';
 import SummaryPage from '../../AppViewPages/SummaryPage';
 import issueActions, { ISSUES_GET_PAGE } from '../../../actions/issues.actions';
 import { initialize, getInstance, reset } from '../../../../common/request';
+import {SETTINGS_SHOW_CLOSED_ISSUES} from "../../../actions/settings.actions";
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
@@ -66,6 +67,52 @@ describe('AppView -> Summary Page', () => {
       </Provider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('should toggle closed issues display when checkbox is clicked', () => {
+    const state = {
+      user: {
+        id: 1,
+        firstname: 'firstname',
+        lastname: 'lastname',
+        redmineEndpoint: 'https://redmine.domain',
+        api_key: '123abc'
+      },
+      issues: {
+        all: {
+          data: []
+        }
+      },
+      settings: {
+        uiStyle: 'colors',
+        showClosedIssues: true,
+        issueHeaders: [
+          { label: 'Id', isFixed: true, value: 'id' },
+          { label: 'Subject', isFixed: true, value: 'subject' }
+        ]
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <HashRouter>
+          <ThemeProvider theme={theme}>
+            <SummaryPage />
+          </ThemeProvider>
+        </HashRouter>
+      </Provider>
+    );
+
+    wrapper.find('input[type="checkbox"]').at(0).simulate('change', { target: { checked: false } });
+    expect(store.getActions().length).toBe(2);
+    expect(store.getActions()[1]).toEqual({
+      type: SETTINGS_SHOW_CLOSED_ISSUES,
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        showClosedIssues: false
+      }
+    });
   });
 
   it('should fetch the issues on mount', () => {

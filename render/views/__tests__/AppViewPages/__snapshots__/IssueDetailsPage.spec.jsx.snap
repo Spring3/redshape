@@ -1,14 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`IssueDetails page should match the snapshot 1`] = `
-.c9 {
+.c6 {
+  color: #FF7079;
+  font-size: 14px;
+  padding: 2px;
+  cursor: inherit;
+}
+
+.c18 {
   color: #FF7079;
   font-size: 14px;
   padding: 2px;
   cursor: pointer;
 }
 
-.c9:hover {
+.c18:hover {
   background: #FF7079;
   color: #FFFFFF;
 }
@@ -78,6 +85,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   position: relative;
   border-radius: 5px;
   height: 5px;
+  width: px;
 }
 
 .c15 {
@@ -92,7 +100,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF634D;
 }
 
-.c19 {
+.c20 {
   border-radius: 5px;
   max-width: 100%;
   width: 0;
@@ -104,7 +112,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #6CCA51;
 }
 
-.c32 {
+.c34 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -116,7 +124,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c7 {
+.c9 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -133,22 +141,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c7:hover,
-.c7:focus {
+.c9:hover,
+.c9:focus {
   background: #FF7079;
   color: #FFFFFF !important;
 }
 
-.c7:hover svg,
-.c7:focus svg {
+.c9:hover svg,
+.c9:focus svg {
   fill: #FFFFFF;
 }
 
-.c7:active {
+.c9:active {
   background: #EF6069;
 }
 
-.c5 {
+.c32 {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #FF7079;
@@ -156,52 +164,52 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   transition: color ease .2s;
 }
 
-.c5:hover {
+.c32:hover {
   color: #EF6069;
 }
 
-.c5:hover svg {
+.c32:hover svg {
   fill: #EF6069;
 }
 
-.c5:active,
-.c5:focus,
-.c5:visited {
+.c32:active,
+.c32:focus,
+.c32:visited {
   background: transparent;
 }
 
-.c30 {
+.c31 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c30:hover svg {
+.c31:hover svg {
   color: #FF7079 !important;
 }
 
-.c28 {
+.c29 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c28 li:first-child {
+.c29 li:first-child {
   margin-left: 0;
 }
 
-.c28 li:last-child {
+.c29 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c28 .c29:last-child {
+.c29 .c30:last-child {
   bottom: 1px;
 }
 
-.c28 .c29:last-child a {
+.c29 .c30:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -212,44 +220,44 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c31 {
+.c33 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #A0A0A0;
 }
 
-.c31:hover {
+.c33:hover {
   border-color: #FF7079;
 }
 
-.c31:focus {
+.c33:focus {
   border: 2px solid #FF7079;
 }
 
-.c20 {
+.c21 {
   box-sizing: border-box;
   overflow: hidden;
 }
 
-.c18 {
+.c19 {
   position: relative;
   display: inline-grid;
   grid-template-rows: 1fr;
 }
 
-.c18 span {
+.c19 span {
   float: left;
   grid-row: 1;
   grid-column: 1;
 }
 
-.c18 span:last-child {
+.c19 span:last-child {
   opacity: 0;
   display: none;
 }
 
-.c22 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -265,24 +273,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c22 h2 {
+.c23 h2 {
   display: inline-block;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.c22 > div {
+.c23 > div {
   margin-right: 15px;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
-.c22 > div button {
+.c23 > div button {
   background: #FFFFFF;
   margin: 0px 5px;
 }
 
-.c23 {
+.c24 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -294,14 +302,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF7F87;
 }
 
-.c21 {
+.c22 {
   background: white;
-  padding-top: 35px;
   max-height: 550px;
   min-width: 350px;
 }
 
-.c24 {
+.c25 {
   position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
@@ -313,7 +320,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   box-shadow: inset 0px 0px 10px 0px #F9F9F9;
 }
 
-.c24 li {
+.c25 li {
   cursor: pointer;
   display: block;
   padding: 10px;
@@ -323,7 +330,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c24 li div:first-child {
+.c25 li div:first-child {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -338,12 +345,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child a {
+.c25 li div:first-child a {
   margin-left: 10px;
   visibility: hidden;
 }
 
-.c24 li div:first-child div {
+.c25 li div:first-child div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -358,49 +365,49 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child div span.time,
-.c24 li div:first-child div span.date {
+.c25 li div:first-child div span.time,
+.c25 li div:first-child div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c24 li div:first-child div span.username {
+.c25 li div:first-child div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
 }
 
-.c24 li p {
+.c25 li p {
   margin-bottom: 0px;
   min-width: 100%;
   width: 0;
   line-height: 2;
 }
 
-.c24 li:hover div:first-child a {
+.c25 li:hover div:first-child a {
   visibility: visible;
 }
 
-.c25 {
+.c26 {
   background: white;
   padding: 20px;
   margin-bottom: 20px;
 }
 
-.c33 {
+.c35 {
   font-size: 12px;
   margin-top: 30px;
   color: #A0A0A0;
   font-weight: bold;
 }
 
-.c33 a {
+.c35 a {
   font-size: inherit !important;
   margin-right: 5px;
 }
 
-.c26 {
+.c27 {
   list-style-type: none;
   padding: 20px 0px;
   margin: 0px;
@@ -408,11 +415,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #F9F9F9;
 }
 
-.c26 li:first-child {
+.c27 li:first-child {
   margin-top: 20px;
 }
 
-.c26 li {
+.c27 li {
   margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -424,7 +431,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-around;
 }
 
-.c26 li div.commentsHeader {
+.c27 li div.commentsHeader {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -439,13 +446,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-width: 20%;
 }
 
-.c26 li div.commentsHeader h3 {
+.c27 li div.commentsHeader h3 {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #FF7079;
 }
 
-.c26 li div.commentsHeader span:last-child {
+.c27 li div.commentsHeader span:last-child {
   color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -453,32 +460,43 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-bottom: 20px;
 }
 
-.c26 li div.commentsHeader span:last-child:hover {
+.c27 li div.commentsHeader span:last-child:hover {
   color: #3F3844;
 }
 
-.c26 li iframe {
+.c27 li iframe {
   margin-left: 20px;
   padding: 5px 20px 0px 20px;
   background: #FFFFFF;
   border: 1px solid #E9E9E9;
   border-radius: 3px;
-  width: 74%;
   min-height: 100px;
+  width: 74%;
 }
 
-.c27 {
+.c28 {
   background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
 }
 
-.c27 #commentsForm {
+.c28 #commentsForm {
   background: #FFFFFF;
   padding: 20px;
   border-radius: 3px;
   border: 1px solid #E9E9E9;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c4 {
+  width: 100%;
 }
 
 .c1 {
@@ -502,8 +520,8 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   padding: 0;
   width: auto;
   float: left;
-  padding-right: 20px;
   border-radius: 3px;
+  padding-right: 20px;
 }
 
 .c11 li {
@@ -519,18 +537,27 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  min-height: 20px;
 }
 
 .c11 li div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 250px;
+}
+
+.c11 li div.fixed {
   width: 220px;
 }
 
 .c11 li div:first-child {
   font-weight: bold;
-  width: 150px;
+  width: 180px;
 }
 
-.c6 {
+.c8 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -541,13 +568,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c8 {
+.c5 {
   font-size: 12px;
   margin-top: 0px;
   color: #A0A0A0;
 }
 
-.c8 a {
+.c5 a {
   font-size: inherit !important;
   margin-right: 5px;
 }
@@ -558,42 +585,17 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-top: 10px;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+.c7 {
+  display: block;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin: 0.95rem 1rem 0 1rem;
 }
 
-.c3 a:first-child {
+.c7 a:first-child {
   margin-right: 2rem;
-}
-
-.c4 svg {
-  border-radius: 3px;
-  color: #FF7079;
-  border: 2px solid transparent;
-  -webkit-transition: all ease .2s;
-  transition: all ease .2s;
-}
-
-.c4 svg:hover {
-  color: #FF7079;
-  border: 2px solid #FF7079;
-}
-
-.c4 svg {
-  -webkit-animation: ikNrtx 2s ease-in infinite;
-  animation: ikNrtx 2s ease-in infinite;
-}
-
-.c4 svg:hover {
-  -webkit-animation-play-state: paused;
-  animation-play-state: paused;
 }
 
 .c2 {
@@ -613,70 +615,61 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       className="c2"
     >
       <div
-        className="buttons c3"
+        className="c3"
       >
-        <a
-          className="c4 c5"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
+        <div
+          className="c4"
         >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={30}
-            viewBox="0 0 24 24"
-            width={30}
+          <h2>
+            <span>
+              #
+              1
+               
+            </span>
+            <span>
+              Test
+            </span>
+          </h2>
+          <p
+            className="c5"
           >
-            <path
-              d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-            />
-          </svg>
-        </a>
-        <button
-          className="c6 c7"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
+            Created 
+            by 
+            <a
+              className="c6"
+              onClick={[Function]}
+              rel="noopener noreferer"
+            >
+              Author 1
+            </a>
+          </p>
+        </div>
+        <div
+          className="buttons c7"
         >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={22}
-            viewBox="0 0 24 24"
-            width={22}
+          <button
+            className="c8 c9"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
           >
-            <path
-              d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
-            />
-          </svg>
-          <span>
-             Edit
-          </span>
-        </button>
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={22}
+              viewBox="0 0 24 24"
+              width={22}
+            >
+              <path
+                d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+              />
+            </svg>
+            <span>
+               Edit
+            </span>
+          </button>
+        </div>
       </div>
-      <h2>
-        <span>
-          #
-          1
-           
-        </span>
-        <span>
-          Test
-        </span>
-      </h2>
-      <p
-        className="c8"
-      >
-        Created by 
-        <a
-          className="c9"
-          onClick={[Function]}
-          rel="noopener noreferer"
-        >
-          Author 1
-        </a>
-      </p>
       <div
         className="c10"
       >
@@ -752,6 +745,36 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </div>
           </li>
+          <li>
+            <div>
+              Initial estimated time
+              :
+            </div>
+            <div>
+              10.24
+            </div>
+          </li>
+          <li>
+            <div>
+              Children issues:
+            </div>
+            <div>
+              <a
+                className="c18"
+                onClick={[Function]}
+                rel="noopener noreferer"
+              >
+                #23
+              </a>
+              <a
+                className="c18"
+                onClick={[Function]}
+                rel="noopener noreferer"
+              >
+                #25
+              </a>
+            </div>
+          </li>
         </ul>
         <ul
           className="c11"
@@ -767,7 +790,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Start date: 
             </div>
             <span
-              className="c18"
+              className="c19"
             >
               <span>
                 Jan 01 2011
@@ -782,7 +805,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Due date: 
             </div>
             <span
-              className="c18"
+              className="c19"
             >
               <span>
                 Jan 01 2011
@@ -816,7 +839,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             <div>
               Time cap: 
             </div>
-            <div>
+            <div
+              class="fixed"
+            >
               <div
                 className="c12"
               >
@@ -828,7 +853,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                     height={5}
                   >
                     <div
-                      className="c19"
+                      className="c20"
                       height={5}
                     />
                   </div>
@@ -848,7 +873,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Description
         </h3>
         <iframe
-          className="c20"
+          className="c21"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Fixture test issue</p>"
@@ -857,10 +882,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="c21"
+      className="c22"
     >
       <div
-        className="c22"
+        className="c23"
       >
         <h2
           className="padded"
@@ -869,7 +894,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </h2>
         <div>
           <button
-            className="c23 c7"
+            className="c24 c9"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -890,7 +915,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </span>
           </button>
           <button
-            className="c23 c7"
+            className="c24 c9"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -913,31 +938,31 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
       </div>
       <ul
-        className="c24"
+        className="c25"
       />
     </div>
   </div>
   <section
-    className="c25"
+    className="c26"
   >
     <div>
       <h2>
         Comments
       </h2>
       <ul
-        className="c26"
+        className="c27"
       />
       <div
-        className="c27"
+        className="c28"
       >
         <div
           id="commentsForm"
         >
           <ul
-            className="c28"
+            className="c29"
           >
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -962,7 +987,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -987,7 +1012,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1012,7 +1037,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1037,7 +1062,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1062,7 +1087,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1087,7 +1112,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1112,7 +1137,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1137,7 +1162,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1162,7 +1187,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1187,7 +1212,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1212,7 +1237,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1237,7 +1262,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1262,10 +1287,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
             >
               <a
-                className="c5"
+                className="c32"
                 disabled={false}
                 href="#"
                 onClick={[Function]}
@@ -1288,7 +1313,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </li>
           </ul>
           <textarea
-            className="c31 c32"
+            className="c33 c34"
             disabled={false}
             onChange={[Function]}
             onKeyDown={[Function]}
@@ -1298,11 +1323,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
         <div>
           <p
-            className="c33"
+            className="c35"
           >
             Press 
             <a
-              className="c9"
+              className="c18"
               href="#"
               onClick={[Function]}
               rel="noopener noreferer"

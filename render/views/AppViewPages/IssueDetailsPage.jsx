@@ -1,27 +1,36 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import moment from 'moment';
-import styled, { css, withTheme } from 'styled-components';
+import styled, {css, withTheme} from 'styled-components';
 
-import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
-import { MarkdownText } from '../../components/MarkdownEditor';
+import {MarkdownText} from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
 import IssueModal from "../../components/IssueModal";
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
-import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
-import { animationSlideRight } from '../../animations';
+import {OverlayProcessIndicator} from '../../components/ProcessIndicator';
+
+import {IssueId, Priority, Status, Tag, TagContainer} from "../../components/Issue";
 
 import EditIcon from 'mdi-react/EditIcon';
-import Button, { GhostButton } from "../../components/Button";
+
+import Button, {StyledLink} from "../../components/Button";
 
 import actions from '../../actions';
+
+const IssueHeader = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+`;
+const FlexRow = styled.div`
+  width: 100%;
+`;
 
 const Flex = styled.div`
   display: flex;
@@ -41,7 +50,6 @@ const ColumnList = styled.ul`
   padding: 0;
   width: auto;
   float: left;
-  padding-right: 20px;
   border-radius: 3px;
 
   li {
@@ -50,16 +58,68 @@ const ColumnList = styled.ul`
     padding: 5px 0px 5px 0px;
     display: flex;
     align-items: center;
+    min-height: 20px;
   }
-
+  
+  ${props => props.isEnhanced ? css`
+  padding-right: 80px;
+  
   li div {
+    display: flex;
+    max-width: 350px;
+  }
+  
+  li div.fixed {
     width: 220px;
   }
 
   li div:first-child {
     font-weight: bold;
-    width: 150px;
+    width: 180px;
   }
+  
+  @media (max-width: 1600px) {
+    padding-right: 30px;
+    
+    li div {
+      max-width: 280px;
+    }
+    
+    li div:first-child {
+      width: 150px;
+    }
+  }
+  
+  @media (max-width: 1240px) {
+    padding-right: 20px;
+    
+    li div {
+      max-width: 100%;
+    }
+    
+    
+    li div:first-child {
+      width: 120px;
+    }
+  }
+  ` : css`
+  padding-right: 20px;
+  
+  li div {
+    display: flex;
+    width: 250px;
+  }
+  
+  li div.fixed {
+    width: 220px;
+  }
+
+  li div:first-child {
+    font-weight: bold;
+    width: 180px;
+  }
+  `}
+  
 `;
 
 const FlexButton = styled(Button) `
@@ -81,39 +141,14 @@ const SmallNotice = styled.p`
 const Wrapper = styled.div`
   display: inline-block;
   width: 100%;
-  margin-top: 10px;
-`;
-
-const IconButton = styled(GhostButton)`
-  svg {
-    border-radius: 3px;
-    ${({theme}) => css`
-      color: ${theme.main};
-      border: 2px solid transparent;
-      transition: all ease ${theme.transitionTime};
-
-      &:hover {
-        color: ${theme.main};
-        border: 2px solid ${theme.main};
-      }
-    `}
-  }
 `;
 
 const Buttons = styled.div`
-  display: flex;
+  display: block;
   align-items: center;
+  margin: 0.95rem 1rem 0 1rem;
   a:first-child {
     margin-right: 2rem;
-  }
-`;
-
-const BackButton = styled(IconButton)`
-  svg {
-    animation: ${animationSlideRight} 2s ease-in infinite;
-    &:hover {
-      animation-play-state: paused;
-    }
   }
 `;
 
@@ -195,50 +230,62 @@ class IssueDetailsPage extends Component {
   getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
 
   render() {
-    const { selectedIssueState, history, userId, theme, postComments } = this.props;
+    const { selectedIssueState, history, userId, theme, postComments, uiStyle, redmineEndpoint } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
-    const cfields = selectedIssue.custom_fields;
-    const children = selectedIssue.children;
+    let morefields = selectedIssue.custom_fields;
+    morefields = [{name: 'Initial estimated time', value: '10.24'}]
+    if (!morefields){
+      morefields = [];
+    }
+    const attachments = selectedIssue.attachments;
+    if (attachments && attachments.length){
+      morefields.push({ name: 'Attachments', value: attachments.length })
+    }
+    const tags = selectedIssue.tags;
+    // const children = selectedIssue.children;
+    const children = [{id: 23, tracker: {id: 2}}, {id: 25, tracker: {id: 3}}]
+    const isEnhanced = uiStyle === 'enhanced';
     return selectedIssue.id
       ? (
         <Section>
           <Flex>
             <IssueDetails>
+              <IssueHeader>
+                <FlexRow>
+                  <h2>
+                    {isEnhanced ? (<IssueId value={selectedIssue.id} tracker={selectedIssue.tracker.id}/>) : (<span>#{selectedIssue.id}&nbsp;</span>)}
+                    <span>{selectedIssue.subject}</span>
+                  </h2>
+                  <SmallNotice>
+                    Created {isEnhanced && (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>)}by&nbsp;
+                    <Link>{selectedIssue.author.name}</Link>
+                    <DateComponent date={selectedIssue.created_on} />
+                  </SmallNotice>
+                  {selectedIssue.closed_on && (
+                    <SmallNotice>Closed <DateComponent date={selectedIssue.closed_on} /></SmallNotice>
+                  )}
+                </FlexRow>
               <Buttons className="buttons">
-                <BackButton onClick={history.goBack.bind(this)}>
-                  <ArrowLeftIcon size={30} />
-                </BackButton>
                 <FlexButton onClick={this.openIssueModal()}>
                   <EditIcon size={22} />
                   <span>&nbsp;Edit</span>
                 </FlexButton>
               </Buttons>
-              <h2>
-                <span>#{selectedIssue.id}&nbsp;</span>
-                <span>{selectedIssue.subject}</span>
-              </h2>
-              <SmallNotice>
-                Created by&nbsp;
-                  <Link>{selectedIssue.author.name}</Link>
-                <DateComponent date={selectedIssue.created_on} />
-              </SmallNotice>
-              {selectedIssue.closed_on && (
-                <SmallNotice>Closed <DateComponent date={selectedIssue.closed_on} /></SmallNotice>
-              )}
+              </IssueHeader>
               <Wrapper>
-                <ColumnList>
+                <ColumnList isEnhanced={isEnhanced}>
                   <li>
                     <div>Tracker: </div>
                     <div>{selectedIssue.tracker.name}</div>
                   </li>
                   <li>
                     <div>Status:</div>
-                    <div>{selectedIssue.status.name}</div>
+                    <div>{ isEnhanced ? (<Status value={selectedIssue.status.name}/>) : (selectedIssue.status.name) }</div>
                   </li>
                   <li>
                     <div>Priority: </div>
-                    <div>{selectedIssue.priority.name}</div>
+                    <div>{ isEnhanced ? (<Priority value={selectedIssue.priority.name}/>) : (selectedIssue.priority.name) }</div>
                   </li>
                   <li>
                     <div>Assignee: </div>
@@ -259,15 +306,17 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    children && (
-                      <li><div>Children issues:</div><div>{children.map((el) => (<Link onClick={() => this.props.history.push(`/app/issue/${el.id}/`)}>{`#${el.id}`}</Link>))}</div></li>
-                    )
+                    morefields && morefields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
                   }
                   {
-                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                    tags ? (
+                      <li><div>Tags:</div><TagContainer>{tags.map(el => (<Tag mode={isEnhanced ? 'enhanced' : 'plain'} value={el}/>))}</TagContainer></li>
+                    ) : children ? (
+                      <li><div>Children issues:</div><div>{children.map((el) => (<IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id}/>))}</div></li>
+                    ) : undefined
                   }
                 </ColumnList>
-                <ColumnList>
+                <ColumnList isEnhanced={isEnhanced}>
                   <li>
                     <div>Target version: </div>
                     <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
@@ -302,7 +351,7 @@ class IssueDetailsPage extends Component {
                   </li>
                   <li>
                     <div>Time cap: </div>
-                    <div>
+                    <div class="fixed">
                       <Progressbar
                         percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
                         mode="time-tracking"
@@ -311,10 +360,15 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    children && (<li></li>)
+                    morefields && morefields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
                   }
                   {
-                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                    morefields && morefields.length % 2 === 1 && (<li></li>)
+                  }
+                  {
+                    tags && children && (
+                      <li><div>Children issues:</div><div>{children.map((el) => (<IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id}/>))}</div></li>
+                    )
                   }
                 </ColumnList>
               </Wrapper>
@@ -398,7 +452,20 @@ IssueDetailsPage.propTypes = {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         value: PropTypes.string.isRequired
-      }))
+      })),
+      tags: PropTypes.arrayOf(PropTypes.string.isRequired),
+      transitions: PropTypes.shape({
+        status: PropTypes.arrayOf(PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+          position: PropTypes.number.isRequired,
+        })),
+      }),
+      attachments: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      })),
+      created_on: PropTypes.string.isRequired,
+      updated_on: PropTypes.string.isRequired,
     }),
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)
@@ -407,14 +474,17 @@ IssueDetailsPage.propTypes = {
   userName: PropTypes.string.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
-  resetSelectedIssue: PropTypes.func.isRequired
+  resetSelectedIssue: PropTypes.func.isRequired,
+  uiStyle: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   projects: state.projects.data,
   userId: state.user.id,
   userName: state.user.name,
-  selectedIssueState: state.issues.selected
+  selectedIssueState: state.issues.selected,
+  uiStyle: state.settings.uiStyle,
+  redmineEndpoint: state.user.redmineEndpoint,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -63,7 +63,7 @@ describe('Issue actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
       expect(axiosMock.history.get[0].params).toEqual({
         ...filter,
-        include: 'attachments,children,relations,journals',
+        include: 'attachments,children,relations,journals,tags',
         offset: page * limit,
         limit
       });
@@ -111,7 +111,7 @@ describe('Issue actions', () => {
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues/${id}.json`);
       expect(axiosMock.history.get[0].params).toEqual({
-        include: 'attachments,children,relations,journals'
+        include: 'attachments,children,relations,journals,tags,transitions'
       });
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);

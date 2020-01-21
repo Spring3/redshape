@@ -59,6 +59,11 @@ const LabelIcon = styled.span`
 `
 const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14}/></Tooltip></LabelIcon>);
 
+const Title = styled.h4`
+  margin: 0;
+  font-size: 1rem;
+`;
+
 const selectStyles = {
   container: (base, state) => {
     return { ...base };
@@ -252,6 +257,7 @@ class TimeEntryModal extends Component {
         center={true}
       >
         <Fragment>
+          <Title>{ timeEntry.id ? 'Edit' : 'New' } time entry</Title>
           <Label htmlFor="author" label="Author">
             <div name="author">{timeEntry.user.name}</div>
           </Label>

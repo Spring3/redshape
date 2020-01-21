@@ -15,7 +15,7 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
   const page = typeof pageNumber === 'number' && pageNumber >= 0 ? pageNumber : issues.all.page;
   const offset = page * limit;
   let query = {
-    include: 'attachments,children,relations,journals',
+    include: 'attachments,children,relations,journals,tags',
     offset,
     limit
   };
@@ -47,7 +47,7 @@ const get = id => (dispatch) => {
   return request({
     url: `/issues/${id}.json`,
     query: {
-      include: 'attachments,children,relations,journals'
+      include: 'attachments,children,relations,journals,tags,transitions'
     },
     id: `getIssueDetails:${id}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))

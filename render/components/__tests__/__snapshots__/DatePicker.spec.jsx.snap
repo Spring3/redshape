@@ -224,7 +224,7 @@ exports[`Date Picker should match the snapshot 1`] = `
       onClick={[Function]}
       onFocus={[Function]}
       onKeyUp={[Function]}
-      placeholder="YYYY-M-D"
+      placeholder={false}
       type="text"
       value={123456789}
     />

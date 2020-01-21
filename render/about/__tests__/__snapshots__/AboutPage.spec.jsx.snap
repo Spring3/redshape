@@ -252,7 +252,7 @@ Array [
           </h2>
           <h2>
             v
-            1.2.0
+            1.3.0
           </h2>
         </div>
         <div
@@ -470,8 +470,19 @@ exports[`About page should match the snapshot [tab2] 1`] = `
       "bgDark": "#F9F9F9",
       "bgDarker": "#E9E9E9",
       "bgDisabled": "hsl(0,0%,95%)",
+      "cyan": "#57C5F7",
+      "darkBlue": "#1974FF",
+      "darkGreen": "#009030",
+      "darkOrange": "#E25A03",
+      "darkRed": "#D20F37",
+      "darkViolet": "#4C3B83",
       "green": "#6CCA51",
       "hoverText": "#FFFFFF",
+      "lightBlue": "#80B2FF",
+      "lightGreen": "#81CC9A",
+      "lightOrange": "#FEC689",
+      "lightRed": "#F2899E",
+      "lightViolet": "#B0A5D3",
       "main": "#FF7079",
       "mainDark": "#EF6069",
       "mainLight": "#FF7F87",
@@ -810,12 +821,14 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                                         type="external"
                                       >
                                         <Link__StyledLink
+                                          clickable="http://fsf.org/"
                                           href="http://fsf.org/"
                                           onClick={[Function]}
                                           rel="noopener noreferer"
                                           type="external"
                                         >
                                           <StyledComponent
+                                            clickable="http://fsf.org/"
                                             forwardedComponent={
                                               Object {
                                                 "$$typeof": Symbol(react.forward_ref),
@@ -827,7 +840,11 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                                                   "rules": Array [
                                                     "color:",
                                                     [Function],
-                                                    ";font-size:14px;padding:2px;cursor:pointer;",
+                                                    ";font-size:",
+                                                    [Function],
+                                                    ";padding:2px;cursor:",
+                                                    [Function],
+                                                    ";",
                                                     [Function],
                                                   ],
                                                 },

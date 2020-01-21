@@ -7,11 +7,6 @@ exports[`Copyrights Component should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c1:hover {
-  background: undefined;
-  color: undefined;
-}
-
 .c0 {
   color: #FF7079;
 }

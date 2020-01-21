@@ -14,6 +14,17 @@ export default {
   yellow: '#FFDA77',
   'yellow-green': '#C6D369',
   green: '#6CCA51',
+  darkBlue: '#1974FF',
+  lightBlue: '#80B2FF',
+  darkGreen: '#009030',
+  lightGreen: '#81CC9A',
+  darkRed: '#D20F37',
+  lightRed: '#F2899E',
+  darkViolet: '#4C3B83',
+  lightViolet: '#B0A5D3',
+  darkOrange: '#E25A03',
+  lightOrange: '#FEC689',
+  cyan: '#57C5F7',
   shadow: '#D0D0D0',
   transitionTime: '.2s'
 };

@@ -49,7 +49,6 @@ const FlexButton = styled(Button) `
 
 const TimeEntriesContainer = styled.div`
   background: white;
-  padding-top: 35px;
   max-height: 550px;
   min-width: 350px;
 `;

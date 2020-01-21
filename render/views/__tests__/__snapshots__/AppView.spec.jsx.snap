@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AppView should match the snapshot 1`] = `
-.c3 {
+.c4 {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #FF7079;
@@ -9,18 +9,25 @@ exports[`AppView should match the snapshot 1`] = `
   transition: color ease .2s;
 }
 
-.c3:hover {
+.c4:hover {
   color: #EF6069;
 }
 
-.c3:hover svg {
+.c4:hover svg {
   fill: #EF6069;
 }
 
-.c3:active,
-.c3:focus,
-.c3:visited {
+.c4:active,
+.c4:focus,
+.c4:visited {
   background: transparent;
+}
+
+.c5 {
+  color: gray;
+  -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
 }
 
 .c2 {
@@ -30,7 +37,6 @@ exports[`AppView should match the snapshot 1`] = `
   right: 0px;
   z-index: 2;
   height: 50px;
-  background: linear-gradient(to bottom,#FFFFFF 85%,transparent);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -44,6 +50,7 @@ exports[`AppView should match the snapshot 1`] = `
   -ms-flex-pack: justify;
   justify-content: space-between;
   padding: 20px 40px 0px 40px;
+  background: linear-gradient(to bottom,#FFFFFF 85%,transparent);
 }
 
 .c2 ul {
@@ -83,12 +90,8 @@ exports[`AppView should match the snapshot 1`] = `
   border-bottom: 2px solid #FF7079;
 }
 
-.c2 ul li:hover {
-  cursor: pointer;
-  color: #FF7079;
-}
-
 .c2 ul li:hover a {
+  cursor: pointer;
   color: #FF7079;
 }
 
@@ -108,7 +111,30 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 0px;
 }
 
-.c5 {
+.c3 svg {
+  border-radius: 3px;
+  color: #FF7079;
+  border: 2px solid transparent;
+  -webkit-transition: all ease .2s;
+  transition: all ease .2s;
+}
+
+.c3 svg:hover {
+  color: #FF7079;
+  border: 2px solid #FF7079;
+}
+
+.c3 svg {
+  -webkit-animation: ikNrtx 2s ease-in infinite;
+  animation: ikNrtx 2s ease-in infinite;
+}
+
+.c3 svg:hover {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.c7 {
   -webkit-animation: gOHwoP .7s ease-in;
   animation: gOHwoP .7s ease-in;
   max-width: 100%;
@@ -127,7 +153,7 @@ exports[`AppView should match the snapshot 1`] = `
   border-top: 2px solid #F9F9F9;
 }
 
-.c5 div.panel {
+.c7 div.panel {
   -webkit-box-flex: 0;
   -webkit-flex-grow: 0;
   -ms-flex-positive: 0;
@@ -144,7 +170,7 @@ exports[`AppView should match the snapshot 1`] = `
   max-width: 1800px;
 }
 
-.c5 div.buttons {
+.c7 div.buttons {
   margin: 0 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -152,42 +178,42 @@ exports[`AppView should match the snapshot 1`] = `
   display: flex;
 }
 
-.c5 div.time {
+.c7 div.time {
   margin: 0 20px;
   font-size: 16px;
   font-weight: bold;
 }
 
-.c5 div.buttons a {
+.c7 div.buttons a {
   padding: 10px 0px;
 }
 
-.c5 div.buttons a:hover {
+.c7 div.buttons a:hover {
   background: #F9F9F9;
 }
 
-.c5 div.buttons a:first-child {
+.c7 div.buttons a:first-child {
   margin-right: 20px;
 }
 
-.c5 div.buttons.buttons-advanced a {
+.c7 div.buttons.buttons-advanced a {
   margin-right: 5px;
 }
 
-.c5 div.buttons.buttons-advanced a:last-child {
+.c7 div.buttons.buttons-advanced a:last-child {
   margin-right: initial;
 }
 
-.c5 div.issueName {
+.c7 div.issueName {
   padding: 0 20px;
   max-width: 500px;
 }
 
-.c5 div.time {
+.c7 div.time {
   color: #FF7079;
 }
 
-.c5 input[name="comment"] {
+.c7 input[name="comment"] {
   -webkit-box-flex: 2;
   -webkit-flex-grow: 2;
   -ms-flex-positive: 2;
@@ -200,14 +226,14 @@ exports[`AppView should match the snapshot 1`] = `
   color: #A4A4A4;
 }
 
-.c5 input[name="comment"]:focus {
+.c7 input[name="comment"]:focus {
   border: none;
   border-radius: 0;
   border-bottom: 1px #FF7079 solid;
   box-shadow: none;
 }
 
-.c6 {
+.c8 {
   padding: 0px;
 }
 
@@ -228,7 +254,7 @@ exports[`AppView should match the snapshot 1`] = `
   grid-template-columns: repeat(auto-fit,minmax(70px,1fr));
 }
 
-.c4 {
+.c6 {
   grid-column: span 12;
   grid-row: 2 / -1;
 }
@@ -245,6 +271,26 @@ exports[`AppView should match the snapshot 1`] = `
     <ul>
       <li>
         <a
+          className="c3 c4"
+          disabled={false}
+          href="#"
+          onClick={[Function]}
+        >
+          <svg
+            className="mdi-icon "
+            fill="currentColor"
+            height={30}
+            viewBox="0 0 24 24"
+            width={30}
+          >
+            <path
+              d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+            />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a
           aria-current={null}
           href="#/app/summary"
           onClick={[Function]}
@@ -256,15 +302,23 @@ exports[`AppView should match the snapshot 1`] = `
     <ul>
       <li>
         <a
-          href="#/app/summary"
+          aria-current={null}
+          href="#/app/settings"
           onClick={[Function]}
         >
-          John Wayne
+          Settings
         </a>
       </li>
       <li>
+        <span
+          className="c5"
+        >
+          John Wayne
+        </span>
+      </li>
+      <li>
         <a
-          className="c3"
+          className="c4"
           disabled={false}
           href="#"
           id="signout"
@@ -276,10 +330,10 @@ exports[`AppView should match the snapshot 1`] = `
     </ul>
   </nav>
   <div
-    className="c4"
+    className="c6"
   >
     <div
-      className="c5"
+      className="c7"
     >
       <div
         className="panel"
@@ -288,7 +342,7 @@ exports[`AppView should match the snapshot 1`] = `
           className="buttons"
         >
           <a
-            className="c6 c3"
+            className="c8 c4"
             disabled={false}
             href="#"
             onClick={[Function]}
@@ -306,7 +360,7 @@ exports[`AppView should match the snapshot 1`] = `
             </svg>
           </a>
           <a
-            className="c6 c3"
+            className="c8 c4"
             disabled={false}
             href="#"
             onClick={[Function]}

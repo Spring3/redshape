@@ -35,6 +35,10 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
   white-space: nowrap;
 }
 
+.c0 tbody tr td.subject {
+  text-align: left;
+}
+
 .c0 thead {
   z-index: 1;
 }
@@ -56,14 +60,8 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
   vertical-align: middle;
 }
 
-.c1 {
-  padding-bottom: 2px;
-  background: linear-gradient(to bottom,transparent 0,transparent 90%,#6CCA51 90%,#6CCA51 100%);
-}
-
-.c2 {
-  padding-bottom: 2px;
-  background: linear-gradient(to bottom,transparent 0,transparent 90%,#FFDA77 90%,#FFDA77 100%);
+.c0 thead tr th.subject {
+  text-align: left;
 }
 
 <table
@@ -72,75 +70,101 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
   <thead>
     <tr>
       <th
+        className=""
         onClick={[Function]}
       >
         Id
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Project
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Tracker
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Status
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Subject
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Priority
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Estimation
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Total Estimation
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Spent
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Total Spent
          
       </th>
       <th
+        className=""
         onClick={[Function]}
       >
         Progress
          
       </th>
       <th
+        className=""
+        onClick={[Function]}
+      >
+        Tags
+         
+      </th>
+      <th
+        className=""
         onClick={[Function]}
       >
         Due Date
+         
+      </th>
+      <th
+        className=""
+        onClick={[Function]}
+      >
+        Attachments
          
       </th>
     </tr>
@@ -180,8 +204,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c1"
-          color="#6CCA51"
+          className=""
         >
           Open
         </span>
@@ -199,8 +222,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c2"
-          color="#FFDA77"
+          className=""
         >
           High
         </span>
@@ -243,6 +265,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         />
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
@@ -250,6 +279,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         >
           2011-01-01
         </span>
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
       </td>
     </tr>
     <tr
@@ -286,8 +322,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c1"
-          color="#6CCA51"
+          className=""
         >
           Open
         </span>
@@ -305,8 +340,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c2"
-          color="#FFDA77"
+          className=""
         >
           Normal
         </span>
@@ -349,6 +383,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         />
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
@@ -356,6 +397,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         >
           2011-01-01
         </span>
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
       </td>
     </tr>
     <tr
@@ -392,8 +440,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c1"
-          color="#6CCA51"
+          className=""
         >
           Open
         </span>
@@ -411,8 +458,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         className=""
       >
         <span
-          className="c1"
-          color="#6CCA51"
+          className=""
         >
           Low
         </span>
@@ -455,6 +501,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         />
       </td>
       <td
+        className=""
+      >
+        <span
+          className=""
+        />
+      </td>
+      <td
         className="due_date"
       >
         <span
@@ -462,6 +515,13 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         >
           2011-01-01
         </span>
+      </td>
+      <td
+        className=""
+      >
+        <span
+          className=""
+        />
       </td>
     </tr>
   </tbody>

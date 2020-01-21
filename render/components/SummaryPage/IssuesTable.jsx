@@ -10,6 +10,9 @@ import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 import InfiniteScroll from '../InfiniteScroll';
 import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
 import Date from '../Date';
+import Progressbar from "../Progressbar";
+
+import { Tag, Status, IssueId, Priority } from "../Issue";
 
 const Table = styled.table`
   position: relative;
@@ -42,6 +45,10 @@ const Table = styled.table`
       td.due_date {
         white-space: nowrap;
       }
+      
+      td.subject {
+        text-align: left;
+      }
     }
   }
 
@@ -60,6 +67,10 @@ const Table = styled.table`
   
         svg {
           vertical-align: middle;
+        }
+        
+        &.subject {
+          text-align: left;
         }
       }
     }
@@ -129,19 +140,35 @@ class IssuesTable extends Component {
     this.props.history.push(`/app/issue/${id}/`);
   }
 
-  /**
-   * @param value to be used (@param mapping is discarded)
-   */
-  paint = (item, mapping, value) => {
-    const { theme, useColors } = this.props;
-    const textValue = value != null ? value : _get(item, mapping);
+  paint = (format, value, textValue, opts) => {
+    const { theme, uiStyle } = this.props;
+    const isEnhanced = opts.isEnhanced;
 
-    const color = (useColors && typeof textValue === 'string'
-      ? colorMap[textValue.toLowerCase()]
-      : undefined);
-    return (
-      <ColorfulSpan color={theme[color]}>{textValue}</ColorfulSpan>
-    );
+    if (isEnhanced){
+      if (format === 'id' && isEnhanced) {
+        return (<IssueId value={value} tracker={opts.tracker}/>);
+      }else if (format === 'status' && isEnhanced) {
+        return (<Status simple={true} value={value}/>);
+      }else if (format === 'progress' && isEnhanced) {
+        return (<Progressbar percent={value} width={80} mode="progress-gradient" height={10}/>);
+      }else if (format === 'priority' && isEnhanced) {
+        return (<Priority centered value={value}/>);
+      }
+    }
+
+    if (format === 'date'){
+      return (<Date date={value}/>);
+    }else if (format === 'tags' && value){
+      return (<Fragment>{ value ? value.map(el => <Tag key={el} mode={isEnhanced ? "simple" : "plain"} value={el}></Tag>) : undefined}</Fragment>);
+    }else{
+      const color = (uiStyle === 'colors' && typeof value === 'string'
+        ? colorMap[value.toLowerCase()]
+        : undefined);
+
+      return (
+        <ColorfulSpan color={theme[color]} className={opts && opts.className}>{textValue}</ColorfulSpan>
+      );
+    }
   }
 
   loadIssuePage = () => {
@@ -151,9 +178,13 @@ class IssuesTable extends Component {
   }
 
   render() {
-    const { issueHeaders, issues } = this.props;
+    const { issueHeaders, issues, limit, uiStyle } = this.props;
     const { sortBy, sortDirection } = this.state;
-    const userTasks = issues.data;
+    let userTasks = issues.data;
+    if (limit){
+      userTasks = userTasks.slice(0,  limit)
+    }
+    const isEnhanced = uiStyle === 'enhanced';
     return (
       <Fragment>
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
@@ -164,6 +195,7 @@ class IssuesTable extends Component {
               <th
                 key={header.value}
                 onClick={this.sortTable(header.value)}
+                className={isEnhanced ? header.value : ""}
               >
                 {header.label}&nbsp;
                 {sortBy === header.value && sortDirection === 'asc' && (
@@ -179,31 +211,39 @@ class IssuesTable extends Component {
           <tbody>
           <InfiniteScroll
             load={this.loadIssuePage}
-            isEnd={userTasks.length === issues.totalCount}
-            hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
+            isEnd={userTasks.length === issues.totalCount || limit === userTasks.length}
+            hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount && !limit}
             container={window}
             loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
             immediate={true}
           >
-            {userTasks.map(task => (
+            {userTasks.map((task)  => (
               <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
                 {
                   issueHeaders.map(header => {
+                    let opts = {};
+                    if (isEnhanced) {
+                      opts.isEnhanced = isEnhanced;
+                      opts.tracker = _get(task, 'tracker.id');
+                    }
                     const format = header.format;
                     let value = _get(task, header.value);
+                    let textValue = value;
                     if (format === 'hours'){
                       if (value != null){
-                        value = Number(value.toFixed(2));
+                        textValue = Number(value.toFixed(2));
                       }
                     }else if (format === 'progress'){
-                      value = `${value}%`
+                      textValue = `${value}%`
+                    }else if (format === 'count' && value && value.length){
+                      textValue = `${value.length}`
                     }
                     return (
                       <td
                         key={header.value}
-                        className={header.value === 'due_date' ? header.value : ""}
+                        className={isEnhanced ? header.value : (header.value === 'due_date' ? header.value : "")}
                       >
-                        { format === 'date' ? (<Date date={value}/>) : this.paint(task, header.value, value) }
+                        { this.paint(format, value, textValue, opts) }
                       </td>
                     )})
                 }
@@ -221,7 +261,7 @@ IssuesTable.propTypes = {
   issues: PropTypes.shape({
     userTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
-  useColors: PropTypes.bool.isRequired,
+  uiStyle: PropTypes.string.isRequired,
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
@@ -232,7 +272,7 @@ IssuesTable.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  useColors: state.settings.useColors,
+  uiStyle: state.settings.uiStyle,
   issues: state.issues.all,
   issueHeaders: state.settings.issueHeaders,
 });

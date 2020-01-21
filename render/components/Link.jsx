@@ -6,12 +6,12 @@ import { openExternalUrl } from '../../common/utils';
 
 const StyledLink = styled.a`
   color: ${props => props.theme.main};
-  font-size: 14px;
+  font-size: ${props => props.fontSize ? props.fontSize : '14px'};
   padding: 2px;
-  cursor: pointer;
+  cursor: ${props => props.clickable ? 'pointer' : 'inherit'};
 
-  ${props => css`
-    ${typeof props.children === 'string' ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }` : ''}
+  ${props => props.clickable && typeof props.children === 'string' && css`
+    &:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }
   `}
 `;
 
@@ -26,13 +26,15 @@ class Link extends PureComponent {
     }
   }
   render() {
-    const { children, type, href, className } = this.props;
+    const { children, type, href, className, onClick, fontSize } = this.props;
     return (
       <StyledLink
         className={className}
         type={type}
         href={href}
         rel="noopener noreferer"
+        clickable={href || onClick}
+        fontSize={fontSize}
         onClick={this.onClick}
       >
         {children}

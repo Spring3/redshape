@@ -10,6 +10,7 @@ import actions from '../actions';
 import Navbar from '../components/Navbar';
 import Timer from '../components/Timer';
 import SummaryPage from './AppViewPages/SummaryPage';
+import SettingsPage from './AppViewPages/SettingsPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
@@ -45,8 +46,8 @@ class AppView extends Component {
   }
 
   modifyUserMenu(){
-    const { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } = this.props;
-    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
+    const { idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider } = this.props;
+    IPC.send('menu', { settings: { idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider } });
   }
 
   componentWillMount() {
@@ -99,6 +100,7 @@ class AppView extends Component {
         <Navbar />
         <Content>
           <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props}/>} />
+          <Route exact path={`${match.path}/settings`} component={props => <SettingsPage {...props}/>} />
           <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props}/>} />
           <Timer
             onStop={this.onTrackingStop}
@@ -135,10 +137,10 @@ AppView.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired).isRequired
   }).isRequired,
-  idleBehavior: PropTypes.number.isRequired,
-  discardIdleTime: PropTypes.bool.isRequired,
-  advancedTimerControls: PropTypes.bool.isRequired,
-  progressWithStep1: PropTypes.bool.isRequired,
+  idleBehavior: PropTypes.string.isRequired,
+  idleTimeDiscard: PropTypes.bool.isRequired,
+  showAdvancedTimerControls: PropTypes.bool.isRequired,
+  progressSlider: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -147,9 +149,9 @@ const mapStateToProps = state => ({
   api_key: state.user.api_key,
   projects: state.projects.data,
   idleBehavior: state.settings.idleBehavior,
-  discardIdleTime: state.settings.discardIdleTime,
-  advancedTimerControls: state.settings.advancedTimerControls,
-  progressWithStep1: state.settings.progressWithStep1,
+  idleTimeDiscard: state.settings.idleTimeDiscard,
+  showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
+  progressSlider: state.settings.progressSlider,
 });
 
 const mapDispatchToProps = dispatch => ({

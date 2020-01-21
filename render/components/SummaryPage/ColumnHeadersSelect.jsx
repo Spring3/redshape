@@ -4,10 +4,13 @@ import _ from 'lodash';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
-import { withTheme } from 'styled-components';
+import styled, { withTheme } from 'styled-components';
+import { availableOptions } from "../../settings";
 
 import actions from '../../actions';
 import { Label } from '../Input';
+import Tooltip from "../Tooltip";
+import HelpCircleIcon from "mdi-react/HelpCircleIcon";
 
 const selectStyles = {
   container: (base, state) => {
@@ -28,24 +31,20 @@ const selectStyles = {
   }
 };
 
+const HelpIconStyled = styled(HelpCircleIcon)`
+  padding-bottom: 1px;
+`;
+const LabelIcon = styled.span`
+  margin-left: 0.2rem;
+  color: #A0A0A0;
+`
+const TableColumnsInfo = (<LabelIcon><Tooltip text="'Tags', 'Total Estimation', 'Total Spent'\nand 'Spent' need server-side support."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
+
 class ColumnHeadersSelect extends Component {
   constructor(props) {
     super(props);
 
-    this.issueHeaders = [
-      { label: 'Id', isFixed: true, value: 'id' },
-      { label: 'Project', value: 'project.name' },
-      { label: 'Tracker', value: 'tracker.name', format: 'tracker' },
-      { label: 'Status', value: 'status.name', format: 'status' },
-      { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Priority', value: 'priority.name', format: 'priority' },
-      { label: 'Estimation', value: 'estimated_hours', format: 'hours' },
-      { label: 'Total Estimation', value: 'total_estimated_hours', format: 'hours' },
-      { label: 'Spent', value: 'spent_hours', format: 'hours' },
-      { label: 'Total Spent', value: 'total_spent_hours', format: 'hours' },
-      { label: 'Progress', value: 'done_ratio', format: 'progress' },
-      { label: 'Due Date', value: 'due_date', format: 'date' }
-    ];
+    this.issueHeaders = availableOptions.issueHeaders;
   }
 
   onHeadersSelectChange = (value, { action, removedValue }) => {
@@ -64,7 +63,7 @@ class ColumnHeadersSelect extends Component {
   render() {
     const { theme, issueHeaders } = this.props;
     return (
-      <Label htmlFor="headers" label="Table Columns">
+      <Label htmlFor="headers" label="Table Columns" rightOfLabel={TableColumnsInfo}>
         <Select
           name="headers"
           styles={selectStyles}
@@ -97,7 +96,8 @@ ColumnHeadersSelect.propTypes = {
     format: PropTypes.string,
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
-  settingsChangeIssueHeaders: PropTypes.func.isRequired
+  settingsChangeIssueHeaders: PropTypes.func.isRequired,
+  rightOfLabel: PropTypes.element,
 };
 
 const mapStateToProps = state => ({

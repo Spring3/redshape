@@ -68,7 +68,7 @@ const StyledTabPanel = styled(TabPanel)`
 
 const StyledTabs = styled(Tabs)`
   box-sizing: border-box;
-  height: 100vh;
+  height: ${props => props.modal ? 'auto' : '100vh'};
   flex-direction: column;
   display: flex;
   padding-top: 15px;
@@ -136,10 +136,11 @@ class AboutPage extends Component {
   onReportButtonClick = () => report()
 
   render() {
+    const { modal } = this.props;
     return (
       <Fragment>
         <DragArea />
-        <StyledTabs>
+        <StyledTabs modal={modal}>
           <TabList>
             <Tab></Tab>
             <Tab></Tab>

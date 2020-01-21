@@ -34,7 +34,11 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
   const schemaFields = {
     progress: Joi.number().integer().min(0).max(100).allow(''), // done_ratio
     estimated_duration: Joi.string().custom(validateEstimatedDuration, 'estimated duration validator').allow(''),
-    due_date: Joi.string().custom(validateDate, 'due date validation').allow(null, '')
+    due_date: Joi.string().custom(validateDate, 'due date validation').allow(null, ''),
+    status: Joi.object().keys({
+      value: Joi.number().integer().required(),
+      label: Joi.string().required(),
+    })
   };
   if (checkFields){
     if (!(checkFields instanceof Array)){
@@ -54,7 +58,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
 
 const validateBeforeUpdate = (issueEntry, checkFields) => {
   if (!checkFields){
-    checkFields = ['progress', 'estimated_duration', 'due_date'];
+    checkFields = ['progress', 'estimated_duration', 'due_date', 'status'];
   }
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
   return validationResult.error
@@ -77,9 +81,6 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
 
   const estimated_hours = durationToHours(changes.estimated_duration);
   let hours = originalIssueEntry.estimated_hours;
-  // if (hours){
-  //   hours = Number(hours.toFixed(2));
-  // }
   if (hours != estimated_hours){
     updates.estimated_hours = estimated_hours;
   }
@@ -91,10 +92,9 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
   if (originalIssueEntry.done_ratio !== progress){
     updates.done_ratio = progress;
   }
-  const pre = {
-    done: originalIssueEntry.done_ratio,
-    due: originalIssueEntry.due_date,
-    est: originalIssueEntry.estimated_hours
+  const status = changes.status;
+  if (originalIssueEntry.status != null && originalIssueEntry.status.id !== status.value){
+    updates.status_id = status.value;
   }
   if (!Object.keys(updates).length){
     return Promise.resolve({unchanged: true});

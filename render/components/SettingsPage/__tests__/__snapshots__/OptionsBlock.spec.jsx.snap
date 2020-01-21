@@ -1,0 +1,605 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
+.c4 {
+  border: 0;
+  -webkit-clip: rect(0 0 0 0);
+  clip: rect(0 0 0 0);
+  -webkit-clippath: inset(50%);
+  clippath: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.c5 {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #F9F9F9 transition:background .2s;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  background: white;
+  border-color: #FF7079;
+}
+
+.c5 svg {
+  visibility: hidden;
+  position: relative;
+  vertical-align: middle;
+  bottom: 3px;
+}
+
+.c3:not(:disabled):hover + .c5,
+.c3:focus + .c5 {
+  box-shadow: 0px 0px 5px 1px #FF7F87;
+}
+
+.c3:disabled + .c5 {
+  background: #F9F9F9;
+  border-color: lightgrey;
+}
+
+.c2 {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c2 + span {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.c0 h4 {
+  margin-bottom: 10px;
+  color: #A0A0A0;
+}
+
+.c1 {
+  color: #A0A0A0;
+}
+
+.c12 {
+  position: absolute;
+  display: none;
+  border-radius: 3px;
+  top: -50px;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  padding: 5px;
+  background: #FFFFFF;
+  color: #EF6069;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0px 2px 7px #A0A0A0;
+}
+
+.c12::after {
+  content: ' ';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: auto;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  border: 2px solid black;
+  border-width: 5px;
+  border-color: #FFFFFF transparent transparent transparent;
+}
+
+.c9 {
+  display: inline-block;
+  position: relative;
+}
+
+.c9:hover .c11 {
+  display: block;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c10 {
+  padding-bottom: 1px;
+}
+
+.c8 {
+  margin-left: 0.2rem;
+  color: #A0A0A0;
+}
+
+<div>
+  <div
+    className="form-group undefined c0"
+  >
+    <h4
+      className="c1"
+      htmlFor="queryOptions"
+    >
+      Options
+    </h4>
+    <div
+      id="queryOptions"
+    >
+      <label>
+        <div
+          className="c2"
+        >
+          <input
+            checked={false}
+            className="c3 c4"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c5"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Use advanced timer controls
+        </span>
+      </label>
+    </div>
+  </div>
+  <div
+    className="form-group undefined c0"
+  >
+    <h4
+      className="c1"
+      htmlFor="style"
+    >
+      Timer Idle Behavior
+    </h4>
+    <div
+      className="c6"
+    >
+      <div
+        className="css-3q53pl"
+        onKeyDown={[Function]}
+      >
+        <div
+          className="css-1rcfx4g"
+          onMouseDown={[Function]}
+          onTouchEnd={[Function]}
+        >
+          <div
+            className="css-1hwfws3"
+          >
+            <div
+              className="css-1492t68"
+            >
+              Select...
+            </div>
+            <div
+              className="css-1g6gooi"
+            >
+              <div
+                className=""
+                style={
+                  Object {
+                    "display": "inline-block",
+                  }
+                }
+              >
+                <input
+                  aria-autocomplete="list"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  disabled={false}
+                  id="react-select-2-input"
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  onFocus={[Function]}
+                  spellCheck="false"
+                  style={
+                    Object {
+                      "background": 0,
+                      "border": 0,
+                      "boxSizing": "content-box",
+                      "color": "inherit",
+                      "fontSize": "inherit",
+                      "opacity": 1,
+                      "outline": 0,
+                      "padding": 0,
+                      "width": "1px",
+                    }
+                  }
+                  tabIndex="0"
+                  type="text"
+                  value=""
+                />
+                <div
+                  style={
+                    Object {
+                      "height": 0,
+                      "left": 0,
+                      "overflow": "scroll",
+                      "position": "absolute",
+                      "top": 0,
+                      "visibility": "hidden",
+                      "whiteSpace": "pre",
+                    }
+                  }
+                >
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="css-1wy0on6"
+          >
+            <span
+              className="css-d8oujb"
+            />
+            <div
+              aria-hidden="true"
+              className="css-1ep9fjw"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <svg
+                aria-hidden="true"
+                className="css-19bqh2r"
+                focusable="false"
+                height={20}
+                viewBox="0 0 20 20"
+                width={20}
+              >
+                <path
+                  d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <input
+          name="idleBehavior"
+          type="hidden"
+          value=""
+        />
+      </div>
+      <label
+        className="c7"
+      >
+        <div
+          className="c2"
+        >
+          <input
+            checked={false}
+            className="c3 c4"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c5"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Auto discard idle time from timer
+        </span>
+      </label>
+    </div>
+  </div>
+  <div
+    className="c6"
+  >
+    <div
+      className="form-group undefined c0"
+    >
+      <h4
+        className="c1"
+        htmlFor="progress"
+      >
+        Progress values
+        <span
+          className="c8"
+        >
+          <div
+            className="c9"
+          >
+            <svg
+              className="mdi-icon c10"
+              fill="currentColor"
+              height={14}
+              viewBox="0 0 24 24"
+              width={14}
+            >
+              <path
+                d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
+              />
+            </svg>
+            <p
+              className="tooltip c11 c12"
+            >
+              Use 10% unless you have server-side support.
+            </p>
+          </div>
+        </span>
+      </h4>
+      <div
+        className="css-3q53pl"
+        onKeyDown={[Function]}
+      >
+        <div
+          className="css-1rcfx4g"
+          onMouseDown={[Function]}
+          onTouchEnd={[Function]}
+        >
+          <div
+            className="css-1hwfws3"
+          >
+            <div
+              className="css-1492t68"
+            >
+              Select...
+            </div>
+            <div
+              className="css-1g6gooi"
+            >
+              <div
+                className=""
+                style={
+                  Object {
+                    "display": "inline-block",
+                  }
+                }
+              >
+                <input
+                  aria-autocomplete="list"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  disabled={false}
+                  id="react-select-3-input"
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  onFocus={[Function]}
+                  spellCheck="false"
+                  style={
+                    Object {
+                      "background": 0,
+                      "border": 0,
+                      "boxSizing": "content-box",
+                      "color": "inherit",
+                      "fontSize": "inherit",
+                      "opacity": 1,
+                      "outline": 0,
+                      "padding": 0,
+                      "width": "1px",
+                    }
+                  }
+                  tabIndex="0"
+                  type="text"
+                  value=""
+                />
+                <div
+                  style={
+                    Object {
+                      "height": 0,
+                      "left": 0,
+                      "overflow": "scroll",
+                      "position": "absolute",
+                      "top": 0,
+                      "visibility": "hidden",
+                      "whiteSpace": "pre",
+                    }
+                  }
+                >
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="css-1wy0on6"
+          >
+            <span
+              className="css-d8oujb"
+            />
+            <div
+              aria-hidden="true"
+              className="css-1ep9fjw"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <svg
+                aria-hidden="true"
+                className="css-19bqh2r"
+                focusable="false"
+                height={20}
+                viewBox="0 0 20 20"
+                width={20}
+              >
+                <path
+                  d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <input
+          name="progress"
+          type="hidden"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="c6"
+  >
+    <div
+      className="form-group undefined c0"
+    >
+      <h4
+        className="c1"
+        htmlFor="uiStyle"
+      >
+        UI Style
+      </h4>
+      <div
+        className="css-3q53pl"
+        onKeyDown={[Function]}
+      >
+        <div
+          className="css-1rcfx4g"
+          onMouseDown={[Function]}
+          onTouchEnd={[Function]}
+        >
+          <div
+            className="css-1hwfws3"
+          >
+            <div
+              className="css-1492t68"
+            >
+              Select...
+            </div>
+            <div
+              className="css-1g6gooi"
+            >
+              <div
+                className=""
+                style={
+                  Object {
+                    "display": "inline-block",
+                  }
+                }
+              >
+                <input
+                  aria-autocomplete="list"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  disabled={false}
+                  id="react-select-4-input"
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  onFocus={[Function]}
+                  spellCheck="false"
+                  style={
+                    Object {
+                      "background": 0,
+                      "border": 0,
+                      "boxSizing": "content-box",
+                      "color": "inherit",
+                      "fontSize": "inherit",
+                      "opacity": 1,
+                      "outline": 0,
+                      "padding": 0,
+                      "width": "1px",
+                    }
+                  }
+                  tabIndex="0"
+                  type="text"
+                  value=""
+                />
+                <div
+                  style={
+                    Object {
+                      "height": 0,
+                      "left": 0,
+                      "overflow": "scroll",
+                      "position": "absolute",
+                      "top": 0,
+                      "visibility": "hidden",
+                      "whiteSpace": "pre",
+                    }
+                  }
+                >
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="css-1wy0on6"
+          >
+            <span
+              className="css-d8oujb"
+            />
+            <div
+              aria-hidden="true"
+              className="css-1ep9fjw"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <svg
+                aria-hidden="true"
+                className="css-19bqh2r"
+                focusable="false"
+                height={20}
+                viewBox="0 0 20 20"
+                width={20}
+              >
+                <path
+                  d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <input
+          name="uiStyle"
+          type="hidden"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

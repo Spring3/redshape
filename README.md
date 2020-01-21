@@ -63,6 +63,30 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
 ## rNoz changes
 
+The next features are listed in development order. Therefore, new features can improve and extend previous features.
+
+### AUR package
+
+Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
+
+```sh
+bash support/package-aur/manager.sh pack # can be omitted if using the archive from the repo
+bash support/package-aur/manager.sh makepkg
+```
+
+Before publishing a release, you have to update the PKGBUILD:
+
+```sh
+# using npm script:
+npm run release:aur
+
+# alternatively, with the shell:
+bash support/package-aur/manager.sh pack pkgbuild
+```
+
+The second target (`pkgbuild`) will update the version and md5sums of the PKGBUILD.
+
+
 ### Auth
 
 - Login accepts both API or Username+Password as login method:
@@ -183,13 +207,13 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
 ### Edit issue
 
-- Progress (done ratio) can be edited in a new modal. It supports an input range to slide the percetage of progress (0 to 100). 
+- Progress (done ratio) can be edited in a new modal. It supports an input range to slide the percetage of progress (0 to 100).
 
   ![](docs/changes/edit_issue_progress.png)
 
-- Estimation (hours) and Due date can also be edited. 
+- Estimation (hours) and Due date can also be edited.
 
-  ![](docs/changes/edit_issue_estimation_due_date.png) 
+  ![](docs/changes/edit_issue_estimation_due_date.png)
 
 - If editing a parent task, some non-editable fields are omitted.
 
@@ -205,32 +229,30 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 
 ### More settings
 
-- Issue progress slider can be changed with 1% step if configured (by default is 10%). 
+- Issue progress slider can be changed with 1% step if configured (by default is 10%).
   Enable this if you have support in the server side (ruby, redmine) to use every percentage (33%, 81%, etc).
 
   ![](docs/changes/settings_progress.png)
 
+### Issue fields
 
-### AUR package
+- When enabling in server side (via plugins), Redshape will show more fields, like:
 
-Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
+- Issue: tags
 
-```sh
-bash support/package-aur/manager.sh pack # can be omitted if using the archive from the repo
-bash support/package-aur/manager.sh makepkg
-```
+- Issues: spent hours, total spent hours and total estimated hours.
 
-Before publishing a release, you have to update the PKGBUILD:
+### New settings menu
 
-```sh
-# using npm script:
-npm run release:aur
+- Removed the settings menu from the window menu. Everything is ported as a new page. New components.
 
-# alternatively, with the shell:
-bash support/package-aur/manager.sh pack pkgbuild
-```
+### New style
 
-The second target (`pkgbuild`) will update the version and md5sums of the PKGBUILD.
+- Three styles: default, default with colors and enhanced. The latter, enhanced, is a custom Group4Layers theme (originally based on the Purplemine theme). Therefore, it may modify the interface without restrictions associated to the original design of Redshape.
+
+### Migrations
+
+- Added migration of settings between versions.
 
 ### Known issues
 

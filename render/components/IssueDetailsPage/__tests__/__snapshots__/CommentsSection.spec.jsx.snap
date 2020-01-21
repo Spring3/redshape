@@ -249,8 +249,8 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   background: #FFFFFF;
   border: 1px solid #E9E9E9;
   border-radius: 3px;
-  width: 74%;
   min-height: 100px;
+  width: 74%;
 }
 
 .c4 {

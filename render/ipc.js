@@ -6,14 +6,14 @@ let currentTimer;
 
 ipcRenderer.on('settings', (event, {key, value}) => {
   switch(key){
-    case 'ADVANCED_TIMER_CONTROLS':
-      store.dispatch(actions.settings.setAdvancedTimerControls(value));
+    case 'ADVANCED_SHOW_ADVANCED_TIMER_CONTROLS':
+      store.dispatch(actions.settings.setShowAdvancedTimerControls(value));
       break;
-    case 'PROGRESS_SLIDER_STEP_1':
-      store.dispatch(actions.settings.setProgressWithStep1(value));
+    case 'PROGRESS_PROGRESS_SLIDER':
+      store.dispatch(actions.settings.setProgressSlider(value));
       break;
-    case 'DISCARD_IDLE_TIME':
-      store.dispatch(actions.settings.setDiscardIdleTime(value));
+    case 'IDLE_TIME_DISCARD':
+      store.dispatch(actions.settings.setIdleTimeDiscard(value));
       break;
     case 'IDLE_BEHAVIOR':
       store.dispatch(actions.settings.setIdleBehavior(value));

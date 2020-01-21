@@ -25,13 +25,13 @@ describe('Settings reducer', () => {
 
   it('should handle SETTINGS_SHOW_CLOSED_ISSUES action', () => {
     const data = {
-      showClosed: true,
+      showClosedIssues: true,
       redmineEndpoint: 'https://redmine.redmine',
       userId: 1
     };
     const expectedNextState = {
       ...initialState,
-      showClosedIssues: data.showClosed
+      showClosedIssues: data.showClosedIssues
     };
 
     expect(
@@ -49,22 +49,22 @@ describe('Settings reducer', () => {
     );
   });
 
-  it('should handle SETTINGS_USE_COLORS action', () => {
+  it('should handle SETTINGS_UI_STYLE action', () => {
     const data = {
-      useColors: true,
+      uiStyle: 'colors',
       redmineEndpoint: 'https://redmine.redmine',
       userId: 1
     };
     const expectedNextState = {
       ...initialState,
-      useColors: data.useColors
+      uiStyle: data.uiStyle
     };
 
     expect(
       reducer(
         _cloneDeep(initialState),
         {
-          type: actions.SETTINGS_USE_COLORS,
+          type: actions.SETTINGS_UI_STYLE,
           data
         }
       )

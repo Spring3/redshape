@@ -20,11 +20,6 @@ exports[`Timer component should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c4:hover {
-  background: undefined;
-  color: undefined;
-}
-
 .c0 {
   -webkit-animation: gOHwoP .7s ease-in;
   animation: gOHwoP .7s ease-in;
@@ -147,7 +142,6 @@ exports[`Timer component should match the snapshot 1`] = `
     trackedDuration={4000}
   >
     <Timer
-      advancedTimerControls={false}
       continueTimer={[Function]}
       discardIdleTime={true}
       idleBehavior={0}
@@ -467,12 +461,14 @@ exports[`Timer component should match the snapshot 1`] = `
                     >
                       <Link__StyledLink
                         className="c3"
+                        clickable="#"
                         href="#"
                         onClick={[Function]}
                         rel="noopener noreferer"
                       >
                         <StyledComponent
                           className="c3"
+                          clickable="#"
                           forwardedComponent={
                             Object {
                               "$$typeof": Symbol(react.forward_ref),
@@ -484,7 +480,11 @@ exports[`Timer component should match the snapshot 1`] = `
                                 "rules": Array [
                                   "color:",
                                   [Function],
-                                  ";font-size:14px;padding:2px;cursor:pointer;",
+                                  ";font-size:",
+                                  [Function],
+                                  ";padding:2px;cursor:",
+                                  [Function],
+                                  ";",
                                   [Function],
                                 ],
                               },

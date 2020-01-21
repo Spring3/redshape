@@ -30,7 +30,9 @@ const state = {
       { label: 'Spent', value: 'spent_hours' },
       { label: 'Total Spent', value: 'total_spent_hours' },
       { label: 'Progress', value: 'done_ratio' },
-      { label: 'Due Date', value: 'due_date' }
+      { label: 'Tags', value: 'tags' },
+      { label: 'Due Date', value: 'due_date' },
+      { label: 'Attachments', value: 'attachments' },
     ]
   },
   issues: {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import { connect } from 'react-redux';
+import styled, { css, withTheme } from 'styled-components';
 import { remote } from 'electron';
 
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
@@ -45,7 +46,6 @@ const Comments = styled.ul`
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      min-width: 20%;
 
       ${({theme}) => css`
         h3 {
@@ -65,6 +65,12 @@ const Comments = styled.ul`
           margin-bottom: 20px;
         }
       `}
+      
+      ${props => props.isEnhanced ? css`
+      width: 300px;      
+      ` : css`
+      min-width: 20%;
+      `}
 
     }
 
@@ -74,8 +80,11 @@ const Comments = styled.ul`
       background: ${props => props.theme.bg};
       border: 1px solid ${props => props.theme.bgDarker};
       border-radius: 3px;
-      width: 74%;
       min-height: 100px;
+      
+      ${props => (!props.isEnhanced) && css`
+      width: 74%;
+      `}
     }
   }
 `;
@@ -102,12 +111,12 @@ class CommentsSection extends Component {
   }
 
   render() {
-    const { journalEntries } = this.props;
+    const { journalEntries, uiStyle } = this.props;
     return (
       <Section>
         <div>
           <h2>Comments</h2>
-          <Comments>
+          <Comments isEnhanced={uiStyle === 'enhanced'}>
             {journalEntries.map(entry => (
               <li key={entry.id}>
                 <div className="commentsHeader">
@@ -151,7 +160,15 @@ CommentsSection.propTypes = {
     }).isRequired,
     created_on: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  publishComments: PropTypes.func.isRequired
+  publishComments: PropTypes.func.isRequired,
+  uiStyle: PropTypes.string.isRequired,
 };
 
-export default CommentsSection;
+const mapStateToProps = state => ({
+  uiStyle: state.settings.uiStyle,
+});
+
+// export default CommentsSection;
+export default withTheme(connect(mapStateToProps)(CommentsSection));
+
+

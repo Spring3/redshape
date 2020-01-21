@@ -1,14 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
+import Button from "../../components/Button";
+
+import EyeIcon from "mdi-react/EyeIcon";
 
 import { IssueFilter } from '../../actions/helper';
 import actions from '../../actions';
-import { Input } from '../../components/Input';
+import { Input, Label } from '../../components/Input';
 import IssuesTable from '../../components/SummaryPage/IssuesTable';
+import OptionsBlock from '../../components/SettingsPage/OptionsBlock';
+import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
+
+const EyeIconButton = styled(EyeIcon)`
+  cursor: pointer;
+  margin-left: 4px;
+`;
 
 const Grid = styled.div`
   display: grid;
@@ -31,20 +41,15 @@ const IssuesSection = styled(Section)`
 const OptionsGrid = styled.div`
   display: grid;
   // grid-template-columns: minmax(200px, auto) 1fr;
-  grid-template-columns: 1fr minmax(80px, auto);
-  // grid-template-columns: auto auto;
+  grid-template-columns: auto;
   grid-template-rows: auto;
   grid-row-gap: 20px;
   grid-column-gap: 20px;
   margin-bottom: 20px;
-  
-  // background-color: #EFEFEF;
-  // border-radius: 4px;
-  // border: 1px solid #A0A0A0;
 `;
 
-const Box = styled.div`
-  align-self: center;
+const GridRow = styled.div`
+  grid-column: 1/-1;
 `;
 
 class SummaryPage extends Component {
@@ -55,7 +60,7 @@ class SummaryPage extends Component {
       search: undefined,
       sortBy: undefined,
       sortDirection: undefined,
-      searchIncludeID: false
+      showExampleView: false
     };
 
     this.deboucedFetch = debounce(this.fetchIssues, 500);
@@ -98,42 +103,17 @@ class SummaryPage extends Component {
     }, () => this.deboucedFetch());
   }
 
-  toggleClosedIssuesDisplay = () => {
-    const { settingsShowClosedIssues, showClosedIssues } = this.props;
-    settingsShowClosedIssues(!showClosedIssues);
-  }
-
   render() {
-    const { theme, showClosedIssues } = this.props;
+    const { theme } = this.props;
     return (
       <Grid>
         <IssuesSection>
-          <h2>Issues assigned to me</h2>
-          <OptionsGrid>
-              <Input
-                icon={
-                  <MagnifyIcon
-                    xmlns="http://www.w3.org/2000/svg"
-                    color={theme.main}
-                  />
-                }
-                type="text"
-                name="search"
-                placeholder="Search..."
-                onChange={this.onSearchChange}
-              />
-              <Box>
-              <label>
-                <Input
-                  type="checkbox"
-                  checked={showClosedIssues}
-                  onChange={this.toggleClosedIssuesDisplay}
-                />
-                <span>Closed</span>
-              </label>
-              </Box>
-          </OptionsGrid>
+          <h2>Settings</h2>
+          <OptionsBlock />
+          <ColumnHeadersSelect/>
+          <Label label="Example view"></Label>
           <IssuesTable
+            limit={10}
             onSort={this.onSort}
             fetchIssuePage={this.fetchIssues}
           />
@@ -150,8 +130,7 @@ SummaryPage.propTypes = {
   ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
   fetchIssues: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired,
-  settingsShowClosedIssues: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -160,8 +139,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page)),
-  settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
+  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));

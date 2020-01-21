@@ -18,6 +18,9 @@ describe('Navbar component', () => {
         id: 1,
         name: 'Anonymous',
         api_key: 1
+      },
+      settings: {
+        uiStyle: 'default'
       }
     });
     const tree = renderer.create(
@@ -36,6 +39,9 @@ describe('Navbar component', () => {
         id: 1,
         name: 'Anonymous',
         api_key: 1
+      },
+      settings: {
+        uiStyle: 'default'
       }
     });
     const wrapper = mount(

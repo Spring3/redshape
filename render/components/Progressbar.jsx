@@ -16,6 +16,7 @@ const Background = styled.div`
   position: relative;
   border-radius: 5px;
   height: ${props => props.height}px;
+  width: ${props => props.width}px;
 `;
 
 export const Progress = styled.div`
@@ -31,7 +32,7 @@ export const Progress = styled.div`
   `}
 `;
 
-const Progressbar = ({ percent, background, id, className, height, mode, theme }) => {
+const Progressbar = ({ percent, background, id, className, height, width, mode, theme }) => {
   let percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
   let percentageOver;
   let percentageText = `${percentage.toFixed(0)}%`;
@@ -61,6 +62,7 @@ const Progressbar = ({ percent, background, id, className, height, mode, theme }
       <Tooltip text={percentageText}>
       <Background
         height={height}
+        width={width}
       >
         <Progress
           percent={percentage}

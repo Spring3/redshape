@@ -140,7 +140,6 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
 
 .c0 {
   background: white;
-  padding-top: 35px;
   max-height: 550px;
   min-width: 350px;
 }

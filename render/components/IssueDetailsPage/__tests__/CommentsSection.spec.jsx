@@ -1,11 +1,15 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 
 import CommentsSection from '../CommentsSection';
 import theme from '../../../theme';
 
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+const mockStore = configureStore([thunk]);
 
 describe('IssueDetails => CommentsSEction componnet', () => {
   it('should match the snapshot', () => {
@@ -31,11 +35,18 @@ describe('IssueDetails => CommentsSEction componnet', () => {
       ],
       publishComments: jest.fn()
     };
-
+    const state = {
+      settings: {
+        uiStyle: 'colors',
+      },
+    };
+    const store = mockStore(state);
     const tree = renderer.create(
-      <ThemeProvider theme={theme}>
-        <CommentsSection {...props} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CommentsSection {...props} />
+        </ThemeProvider>
+      </Provider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -63,10 +74,18 @@ describe('IssueDetails => CommentsSEction componnet', () => {
       ],
       publishComments: jest.fn()
     };
+    const state = {
+      settings: {
+        uiStyle: 'colors',
+      },
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <CommentsSection {...props} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CommentsSection {...props} />
+        </ThemeProvider>
+      </Provider>
     );
     const section = wrapper.find('CommentsSection').instance();
     expect(section).toBeTruthy();

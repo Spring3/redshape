@@ -18,6 +18,8 @@ import { GhostButton } from './Button';
 import { animationSlideUp } from '../animations';
 import Link from './Link';
 
+import { IssueId } from "./Issue";
+
 import IPC from '../ipc';
 
 import desktopIdle from 'desktop-idle';
@@ -26,7 +28,7 @@ const ActiveTimer = styled.div`
   animation: ${animationSlideUp} .7s ease-in;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 15px 20px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -34,14 +36,14 @@ const ActiveTimer = styled.div`
   display: ${props => props.isEnabled ? 'flex' : 'none'};
   align-items: center;
   box-shadow: 0px -2px 20px ${props => props.theme.bgDark};
-  border-top: 2px solid ${props => props.theme.bgDark};
+  border-top: 2px solid ${props => props.isEnhanced ? props.theme.main : props.theme.bgDark};
   
   div.panel {
     flex-grow: 0;
     min-width: 520px;
     display: flex;
     align-items: center;
-    max-width: ${props => props.advancedTimerControls ? '900px' : '1800px'};
+    max-width: ${props => props.showAdvancedTimerControls ? '900px' : '1800px'};
   }
   
   div.buttons {
@@ -57,7 +59,7 @@ const ActiveTimer = styled.div`
 
   div.buttons {
     a {
-      padding: 10px 0px;
+      padding: 5px 0px;
 
       &:hover {
         background: ${props => props.theme.bgDark};
@@ -145,7 +147,7 @@ class Timer extends Component {
   pauseByIdle(idleTime){
     this.stopIntervalIdle();
     let discardedMessage = '';
-    if (this.props.discardIdleTime){
+    if (this.props.idleTimeDiscard){
       const { value } = this.state;
       const min = 0;
       let nvalue = value - idleTime;
@@ -167,11 +169,14 @@ class Timer extends Component {
 
   setIntervalIdle(){
     const { idleBehavior } = this.props;
-    if (!idleBehavior){ return; }
+    if (!idleBehavior || idleBehavior === 'none'){
+      return;
+    }
+    const idleMinutes = idleBehavior === '1h' ? 60 : (Number(idleBehavior.replace('m', '')));
 
     const checkTime = 2 * 60; // every 2 minute
     const warnTime = 15; // at least for 15 s.
-    const maxIdleTime = idleBehavior * 60;
+    const maxIdleTime = idleMinutes * 60;
     let warningIdle = false;
     this.intervalIdle = setInterval(() => {
       if (warningIdle){ return; }
@@ -357,11 +362,12 @@ class Timer extends Component {
 
   render() {
     const { value, comments } = this.state;
-    const { isEnabled, trackedIssue, isPaused, advancedTimerControls } = this.props;
+    const { isEnabled, trackedIssue, isPaused, showAdvancedTimerControls, uiStyle } = this.props;
+    const isEnhanced = uiStyle === 'enhanced';
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
       <Fragment>
-        <ActiveTimer isEnabled={isEnabled}>
+        <ActiveTimer isEnabled={isEnabled} isEnhanced={isEnhanced}>
           <div className="panel">
             <div className="buttons">
               <StyledButton
@@ -387,19 +393,29 @@ class Timer extends Component {
               }
             </div>
             <div className="issueName">
+              { isEnabled && isEnhanced && (
+                    <IssueId
+                      value={trackedIssue.id}
+                      tracker={trackedIssue.tracker.id}
+                      fontSize={'16px'}
+                      clickable={true}
+                      onClick={this.redirectToTrackedLink}
+                    >
+                    </IssueId>
+                  ) }
               { (isEnabled ?
-                <MaskedLink
-                  href='#'
-                  onClick={this.redirectToTrackedLink}
-                >
-                  {trackedIssue.subject}
-                </MaskedLink>
+                  <MaskedLink
+                    href='#'
+                    onClick={this.redirectToTrackedLink}
+                  >
+                    {trackedIssue.subject}
+                  </MaskedLink>
                 : null)}
             </div>
             <div className="time">
               <span>{timeString}</span>
             </div>
-            { advancedTimerControls && (
+            { showAdvancedTimerControls && (
               <div className="buttons buttons-advanced">
                 { (
                   <StyledButton
@@ -436,7 +452,7 @@ class Timer extends Component {
               </div>
             )}
           </div>
-          { advancedTimerControls && (
+          { showAdvancedTimerControls && (
             <Input
               type="text"
               name="comment"
@@ -481,9 +497,10 @@ Timer.propTypes = {
   continueTimer: PropTypes.func.isRequired,
   stopTimer: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  idleBehavior: PropTypes.number.isRequired,
-  discardIdleTime: PropTypes.bool.isRequired,
-  advancedTimerControls: PropTypes.bool.isRequired,
+  idleBehavior: PropTypes.string.isRequired,
+  idleTimeDiscard: PropTypes.bool.isRequired,
+  showAdvancedTimerControls: PropTypes.bool.isRequired,
+  uiStyle: PropTypes.string.isRequired,
 };
 
 Timer.defaultProps = {
@@ -500,8 +517,9 @@ const mapStateToProps = state => ({
   trackedIssue: state.tracking.issue,
   trackedComments: state.tracking.comments,
   idleBehavior: state.settings.idleBehavior,
-  discardIdleTime: state.settings.discardIdleTime,
-  advancedTimerControls: state.settings.advancedTimerControls,
+  idleTimeDiscard: state.settings.idleTimeDiscard,
+  showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
+  uiStyle: state.settings.uiStyle,
 });
 
 const mapDispatchToProps = dispatch => ({
