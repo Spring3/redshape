@@ -50,7 +50,7 @@ const generateMenu = () => {
         aboutWindow.focus();
       }
       aboutWindow.show();
-      if (isDev) {
+      if (isDev || process.env.DEV_TOOLS) {
         aboutWindow.webContents.openDevTools();
       }
     }
@@ -107,7 +107,7 @@ const generateMenu = () => {
       ]
     },
     // { role: 'viewMenu' }
-    ...(isDev
+    ...(isDev || process.env.DEV_TOOLS
         ? [{
           label: 'View',
           submenu: [
