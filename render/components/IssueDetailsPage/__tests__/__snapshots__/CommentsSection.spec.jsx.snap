@@ -180,14 +180,24 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
 
 .c14 {
   font-size: 12px;
-  margin-top: 30px;
+  margin: 0;
+  margin-top: 0.5rem;
   color: #A0A0A0;
   font-weight: bold;
+  opacity: 0;
+  height: auto;
+  -webkit-transition: opacity 1s,height 1s;
+  transition: opacity 1s,height 1s;
 }
 
 .c14 a {
   font-size: inherit !important;
   margin-right: 5px;
+}
+
+.c14.visible {
+  opacity: 1;
+  height: auto;
 }
 
 .c1 {
@@ -709,7 +719,9 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
         <textarea
           className="c12 c13"
           disabled={false}
+          onBlur={[Function]}
           onChange={[Function]}
+          onFocus={[Function]}
           onKeyDown={[Function]}
           rows={1}
           value=""

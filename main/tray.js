@@ -19,8 +19,8 @@ let timerLabel;
 let timerPaused;
 
 const showMenuItem = { label: 'Show window', click: () => mainWindow.show() };
-const pauseTimerMenuItem = { label: 'Pause timer', click: () => mainWindow.webContents.send('timer', { action: 'pause', mainWindowHidden }) };
-const resumeTimerMenuItem = { label: 'Resume timer', click: () => mainWindow.webContents.send('timer', { action: 'resume', mainWindowHidden }) };
+const pauseTimerMenuItem = { label: 'Pause timer', click: () => mainWindow.webContents.send('timer', { action: 'pause' }) };
+const resumeTimerMenuItem = { label: 'Resume timer', click: () => mainWindow.webContents.send('timer', { action: 'resume' }) };
 const hideMenuItem = { label: 'Hide in tray', role: 'close' };
 const quitMenuItem = { role: 'quit' };
 const sepMenuItem = { type: 'separator' };

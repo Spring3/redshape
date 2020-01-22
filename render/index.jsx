@@ -11,7 +11,6 @@ import App from './App';
 if (module.hot) {
   module.hot.accept();
 }
-
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>

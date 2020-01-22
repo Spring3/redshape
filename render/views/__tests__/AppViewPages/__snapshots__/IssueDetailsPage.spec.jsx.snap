@@ -393,14 +393,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 
 .c33 {
   font-size: 12px;
-  margin-top: 30px;
+  margin: 0;
+  margin-top: 0.5rem;
   color: #A0A0A0;
   font-weight: bold;
+  opacity: 0;
+  height: auto;
+  -webkit-transition: opacity 1s,height 1s;
+  transition: opacity 1s,height 1s;
 }
 
 .c33 a {
   font-size: inherit !important;
   margin-right: 5px;
+}
+
+.c33.visible {
+  opacity: 1;
+  height: auto;
 }
 
 .c25 {
@@ -1242,7 +1252,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           <textarea
             className="c31 c32"
             disabled={false}
+            onBlur={[Function]}
             onChange={[Function]}
+            onFocus={[Function]}
             onKeyDown={[Function]}
             rows={1}
             value=""

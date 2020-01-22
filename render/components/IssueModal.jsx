@@ -1,4 +1,3 @@
-import _debounce from 'lodash/debounce';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -77,10 +76,10 @@ const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14
 
 const compSelectStyles = {
   container: (base, state) => {
-    return { ...base, minWidth: 185, borderColor: '#A0A0A0' };
+    return { ...base, minWidth: 185, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' };
   },
   control: (base, state) => {
-    return { ...base, borderColor: '#A0A0A0' };
+    return { ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' };
   },
 };
 
@@ -254,7 +253,7 @@ class IssueModal extends Component {
         <Fragment>
           <FlexRow>
             <Title>Edit issue
-              <LabelIcon><Tooltip text="Parent tasks cannot edit 'Progress' and 'Due date'.\nField 'Status' needs server-side support."><HelpIconStyled size={14}/></Tooltip></LabelIcon>
+              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Field 'Status' needs server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14}/></Tooltip></LabelIcon>
             </Title>
           </FlexRow>
           <FlexRow>
@@ -276,6 +275,7 @@ class IssueModal extends Component {
                     value={status}
                     onChange={this.onStatusChange}
                     isClearable={false}
+                    isDisabled={!isEditable || !isUserAuthor}
                     theme={(defaultTheme) => ({
                       ...defaultTheme,
                       borderRadius: 3,

@@ -39,9 +39,10 @@ ipcRenderer.on('window', (event, {action}) => {
   }
 });
 
-ipcRenderer.on('timer', (ev, {action, mainWindowHidden}) => {
+ipcRenderer.on('timer', (ev, {action}) => {
   if (!currentTimer){ return; }
-  if (mainWindowHidden) {
+  const isTimestamped = currentTimer.isTimestamped(); // if timestamp != null, then mainWindowHidden
+  if (isTimestamped) {
     currentTimer.restoreFromTimestamp(false);
   }
   if (action === 'resume'){
@@ -49,7 +50,7 @@ ipcRenderer.on('timer', (ev, {action, mainWindowHidden}) => {
   }else if (action === 'pause'){
     currentTimer.onPause();
   }
-  if (mainWindowHidden){
+  if (isTimestamped){
     currentTimer.storeToTimestamp();
   }
 });

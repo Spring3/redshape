@@ -261,6 +261,13 @@ app.once('ready', () => {
   if (!isDev) {
     autoUpdater.checkForUpdatesAndNotify();
   }
+  const { powerMonitor } = require('electron');
+  powerMonitor.on('suspend', () => {
+    mainWindow.webContents.send('timer', { action: 'pause' });
+  });
+  powerMonitor.on('shutdown', () => {
+    mainWindow.webContents.send('timer', { action: 'pause' });
+  });
 });
 
 app.on('window-all-closed', () => {

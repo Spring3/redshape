@@ -22,6 +22,7 @@ import { IssueId } from "./Issue";
 
 import IPC from '../ipc';
 
+// TODO: may be better to use the powerMonitor module from electron
 import desktopIdle from 'desktop-idle';
 
 const ActiveTimer = styled.div`
@@ -119,6 +120,12 @@ const MaskedLink = styled(Link)`
   text-decoration: none;
 `;
 
+/**
+ * interval: ticks when window is open, every second
+ * intervalIdle: ticks every ~2 minutes to analyze if the system is idle
+ * intervalCheckpoint: ticks every ~3 minutes to save the state in case the system is suddenly shutdown,
+ *   so, we lose last 3 minutes only
+ */
 class Timer extends Component {
   constructor(props) {
     super(props);
@@ -136,7 +143,7 @@ class Timer extends Component {
       IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue})
     }
 
-    if (props.isEnabled && !props.isPaused){
+    if (isEnabled && !isPaused){
       this.interval = setInterval(this.tick, 1000);
       this.setIntervalIdle();
     }else{
@@ -164,6 +171,7 @@ class Timer extends Component {
     if (this.intervalIdle){
       this.stopIntervalIdle();
       this.setIntervalIdle();
+      this.stopIntervalCheckpoint();
     }
   }
 
@@ -196,6 +204,30 @@ class Timer extends Component {
     }, checkTime * 1000)
   }
 
+  setIntervalCheckpoint(ts, topic){
+    this.intervalCheckpoint = setInterval(() => {
+      const { isEnabled, isPaused, saveTimer } = this.props;
+      const { timestamp } = this.state;
+      if (isEnabled){
+        if (!isPaused) {
+          if (timestamp){
+            this.restoreFromTimestamp(false);
+            saveTimer(this.state.value, this.state.comments)
+            this.storeToTimestamp();
+          }else{
+            saveTimer(this.state.value, this.state.comments)
+          }
+        }
+      }else{
+        this.stopIntervalCheckpoint();
+      }
+    }, 5 * 60 * 1000);
+  }
+
+  /* check if is using the optimization now */
+  isTimestamped(){
+    return this.state.timestamp != null;
+  }
   /* stop time interval and store tracked time + current datetime */
   storeToTimestamp(){
     const { timestamp } = this.state;
@@ -246,6 +278,12 @@ class Timer extends Component {
       }
     }
   }
+  stopIntervalCheckpoint = () => {
+    if (this.intervalCheckpoint) {
+      clearInterval(this.intervalCheckpoint);
+      this.intervalCheckpoint = undefined;
+    }
+  }
 
   cleanup = () => {
     const { isEnabled, isPaused, saveTimer } = this.props;
@@ -258,6 +296,7 @@ class Timer extends Component {
     }
     this.stopInterval();
     this.stopIntervalIdle();
+    this.stopIntervalCheckpoint();
     window.removeEventListener('beforeunload', this.cleanup);
   }
 
@@ -266,8 +305,6 @@ class Timer extends Component {
     if (isEnabled) {
       saveTimer(this.state.value, this.state.comments)
     }
-    this.stopInterval();
-    this.stopIntervalIdle();
   }
 
   componentWillMount() {
@@ -276,6 +313,9 @@ class Timer extends Component {
 
   componentWillUnmount() {
     this.saveState();
+    this.stopInterval();
+    this.stopIntervalIdle();
+    this.stopIntervalCheckpoint();
   }
 
   componentDidUpdate(oldProps) {
@@ -283,10 +323,14 @@ class Timer extends Component {
     if (isEnabled !== oldProps.isEnabled) {
       this.stopInterval();
       this.stopIntervalIdle();
+      this.stopIntervalCheckpoint();
       // if was disabled, but now is enabled
       if (isEnabled) {
         this.interval = setInterval(this.tick, 1000);
         this.setIntervalIdle();
+        if (!isPaused){
+          this.setIntervalCheckpoint(new Date(), 'update');
+        }
         IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue });
       }
       // otherwise, if was enabled, but now it's disabled, we don't do anything
@@ -297,6 +341,7 @@ class Timer extends Component {
   onPause = () => {
     this.stopInterval();
     this.stopIntervalIdle();
+    this.stopIntervalCheckpoint();
     const { onPause, trackedIssue, pauseTimer } = this.props;
     const { value, comments } = this.state;
     pauseTimer(value, comments);
@@ -309,6 +354,9 @@ class Timer extends Component {
   onContinue = () => {
     this.interval = setInterval(this.tick, 1000);
     this.setIntervalIdle();
+    if (!this.intervalCheckpoint){
+      this.setIntervalCheckpoint(new Date(), 'continue');
+    }
     const { onContinue, trackedIssue, continueTimer } = this.props;
     const { value, comments } = this.state;
     continueTimer(value, comments);
@@ -321,6 +369,7 @@ class Timer extends Component {
   onStop = () => {
     this.stopInterval();
     this.stopIntervalIdle();
+    this.stopIntervalCheckpoint();
     const { value, comments } = this.state;
     const { onStop, trackedIssue, stopTimer } = this.props;
     stopTimer(value, comments);

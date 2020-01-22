@@ -11,9 +11,9 @@ import storage from '../../common/storage';
 export const initialState = {
   issue: {},
   isEnabled: false,
-  isPaused: false,
+  isPaused: true,
   duration: 0,
-  comments: ''
+  comments: '',
 };
 
 export default (state = initialState, action) => {

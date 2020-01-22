@@ -34,7 +34,9 @@ const TextArea = ({
   className,
   maxLength,
   forwardedRef,
-  onKeyDown
+  onKeyDown,
+  onBlur,
+  onFocus,
 }) => (
   <StyledTextArea
     ref={forwardedRef}
@@ -47,6 +49,8 @@ const TextArea = ({
     className={className}
     value={value}
     onKeyDown={onKeyDown}
+    onBlur={onBlur}
+    onFocus={onFocus}
   />
 );
 
@@ -72,7 +76,9 @@ TextArea.propTypes = {
     PropTypes.string
   ]),
   forwardedRef: PropTypes.object,
-  onKeyDown: PropTypes.func
+  onKeyDown: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
 };
 
 TextArea.defaultProps = {

@@ -130,7 +130,7 @@ class MarkdownEditor extends PureComponent {
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${currentValue.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${currentValue.substring(textarea.selectionEnd)}`;
     }
     this.setState({
-      value: newValue 
+      value: newValue
     });
     if (onChange) {
       onChange(newValue);
@@ -152,7 +152,7 @@ class MarkdownEditor extends PureComponent {
   makeStrikethrough = () => {
     this.applyMarkdown('~~', '~~');
   }
-  
+
   makeCode = () => {
     this.applyMarkdown('\r\n```\r\n', '\r\n```\r\n');
   }
@@ -239,7 +239,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, isDisabled, maxLength } = this.props;
+    const { className, id, onBlur, onFocus, isDisabled, maxLength } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -330,6 +330,7 @@ class MarkdownEditor extends PureComponent {
               onChange={this.onTextAreaTyped}
               onKeyDown={this.onKeyDown}
               onBlur={onBlur}
+              onFocus={onFocus}
               value={value}
               maxLength={maxLength}
             />
@@ -355,7 +356,8 @@ MarkdownEditor.propTypes = {
   ]),
   preview: PropTypes.bool,
   onSubmit: PropTypes.func,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
 };
 
 MarkdownEditor.defaultProps = {

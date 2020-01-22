@@ -16,13 +16,21 @@ const Section = styled.section`
 
 const SmallNotice = styled.p`
   font-size: 12px;
-  margin-top: 30px;
+  margin: 0;
+  margin-top: 0.5rem;
   color: ${props => props.theme.minorText};
   font-weight: bold;
+  opacity: 0;
+  height: auto;
+  transition: opacity 1s, height 1s;
 
   a {
     font-size: inherit !important;
     margin-right: 5px;
+  }
+  &.visible {
+    opacity: 1;
+    height: auto;
   }
 `;
 
@@ -103,6 +111,13 @@ const CommentsForm = styled.div`
 `;
 
 class CommentsSection extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      showNotice: false
+    };
+  }
+
   sendComments = (comments) => {
     if (comments) {
       const { issueId, publishComments } = this.props;
@@ -112,6 +127,7 @@ class CommentsSection extends Component {
 
   render() {
     const { journalEntries, uiStyle } = this.props;
+    const { showNotice } = this.state;
     return (
       <Section>
         <div>
@@ -131,9 +147,11 @@ class CommentsSection extends Component {
             <MarkdownEditor
               id="commentsForm"
               onSubmit={this.sendComments}
+              onBlur={() => this.setState({ showNotice: false })}
+              onFocus={() => this.setState({ showNotice: true })}
             />
             <div>
-              <SmallNotice>
+              <SmallNotice className={showNotice && 'visible'}>
                 Press&nbsp;
                 {
                   remote.process.platform === 'darwin'
@@ -168,7 +186,6 @@ const mapStateToProps = state => ({
   uiStyle: state.settings.uiStyle,
 });
 
-// export default CommentsSection;
 export default withTheme(connect(mapStateToProps)(CommentsSection));
 
 

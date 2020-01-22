@@ -88,6 +88,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
     )
   ))
     .catch((error) => {
+      console.log(error);
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
       dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
     });
