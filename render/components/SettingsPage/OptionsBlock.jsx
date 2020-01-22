@@ -19,11 +19,12 @@ const FlexRow = styled.div`
 const DiscardLabel = styled.label`
   display: flex;
   align-items: center;
+  margin-left: 1rem;
 `;
 
 const compSelectStyles = {
   container: (base, state) => {
-    return { ...base, minWidth: 240, marginRight: '1rem' };
+    return { ...base, minWidth: 240 };
   },
 };
 
@@ -34,16 +35,19 @@ const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
 `
-const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
+const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not)."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
 const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
 const TimerBehaviorInfo = (<LabelIcon><Tooltip text="Detect if the system is idle to pause the timer."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
+const CheckpointInfo = (<LabelIcon><Tooltip text="Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system)."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: minmax(auto, 400px) minmax(auto, 500px);
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 5px;
+  grid-column-gap: 80px;
   
   @media (max-width: 1200px) {
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: auto 1fr;
   }
   
   @media (max-width: 950px) {
@@ -51,11 +55,20 @@ const Grid = styled.div`
   }
 `;
 
+const OptionList = styled.div`
+  label {
+    display: block;
+  }
+  label:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+`;
+
 class OptionsBlock extends Component {
   constructor(props){
     super(props);
-    const { uiStyle, idleBehavior, progressSlider } = availableOptions;
-    this.options = { uiStyle, idleBehavior, progressSlider };
+    const { uiStyle, idleBehavior, progressSlider, timerCheckpoint } = availableOptions;
+    this.options = { uiStyle, idleBehavior, progressSlider, timerCheckpoint };
   }
 
   toggleShowAdvancedTimerControls = () => {
@@ -81,17 +94,25 @@ class OptionsBlock extends Component {
     settingsProgressSlider(progressSlider.value);
   }
 
+  toggleIssueAlwaysEditable = () => {
+    const { settingsIssueAlwaysEditable, isIssueAlwaysEditable } = this.props;
+    settingsIssueAlwaysEditable(!isIssueAlwaysEditable);
+  }
+  onTimerCheckpointChange = (timerCheckpoint) => {
+    const { settingsTimerCheckpoint } = this.props;
+    settingsTimerCheckpoint(timerCheckpoint.value);
+  }
 
   render() {
-    const { showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme } = this.props;
-    const values = {idleBehavior, progressSlider, uiStyle};
+    const { showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint } = this.props;
+    const values = {idleBehavior, progressSlider, uiStyle, timerCheckpoint};
     const options = this.options;
     const selections = Object.fromEntries(Object.entries(options).map(([key, group]) => [key, group.find(el => el.value === values[key])]));
     const idleTimeDiscardDisabled = (idleBehavior === 'none') ? true : false;
     return (
       <Grid>
-        <Label htmlFor="queryOptions" label="Options" rightOfLabel={OptionsInfo}>
-          <div id="queryOptions">
+        <Label label="Options" rightOfLabel={OptionsInfo}>
+          <OptionList>
             <label>
               <Input
                 type="checkbox"
@@ -100,7 +121,15 @@ class OptionsBlock extends Component {
               />
               <span>Use advanced timer controls</span>
             </label>
-          </div>
+            <label>
+              <Input
+                type="checkbox"
+                checked={isIssueAlwaysEditable}
+                onChange={this.toggleIssueAlwaysEditable}
+              />
+              <span>Issue is always editable</span>
+            </label>
+          </OptionList>
         </Label>
         <Label htmlFor="idleBehavior" label="Timer behavior" rightOfLabel={TimerBehaviorInfo}>
           <FlexRow>
@@ -133,6 +162,27 @@ class OptionsBlock extends Component {
           </FlexRow>
         </Label>
         <FlexRow>
+          <Label htmlFor="checkpoint" label="Timer checkpoint" rightOfLabel={CheckpointInfo}>
+            <Select
+              name="checkpoint"
+              options={options.timerCheckpoint}
+              styles={compSelectStyles}
+              value={selections.timerCheckpoint}
+              onChange={this.onTimerCheckpointChange}
+              isClearable={false}
+              theme={(defaultTheme) => ({
+                ...defaultTheme,
+                borderRadius: 3,
+                colors: {
+                  ...defaultTheme.colors,
+                  primary: theme.main,
+                },
+              })
+              }
+            />
+          </Label>
+        </FlexRow>
+        <FlexRow>
           <Label htmlFor="progress" label="Progress values" rightOfLabel={ProgressInfo}>
             <Select
               name="progress"
@@ -154,7 +204,7 @@ class OptionsBlock extends Component {
           </Label>
         </FlexRow>
         <FlexRow>
-          <Label htmlFor="uiStyle" label="UI Style">
+          <Label htmlFor="uiStyle" label="UI style">
             <Select
               name="uiStyle"
               options={options.uiStyle}
@@ -190,11 +240,15 @@ OptionsBlock.propTypes = {
   idleBehavior: PropTypes.string.isRequired,
   idleTimeDiscard: PropTypes.bool.isRequired,
   progressSlider: PropTypes.string.isRequired,
+  isIssueAlwaysEditable: PropTypes.bool.isRequired,
+  timerCheckpoint: PropTypes.string.isRequired,
   settingsShowAdvancedTimerControls: PropTypes.func.isRequired,
   settingsUiStyle: PropTypes.func.isRequired,
   settingsIdleBehavior: PropTypes.func.isRequired,
   settingsIdleTimeDiscard: PropTypes.func.isRequired,
   settingsProgressSlider: PropTypes.func.isRequired,
+  settingsIssueAlwaysEditable: PropTypes.func.isRequired,
+  settingsTimerCheckpoint: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -205,6 +259,8 @@ const mapStateToProps = state => ({
   idleBehavior: state.settings.idleBehavior,
   idleTimeDiscard: state.settings.idleTimeDiscard,
   progressSlider: state.settings.progressSlider,
+  isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
+  timerCheckpoint: state.settings.timerCheckpoint,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -213,6 +269,8 @@ const mapDispatchToProps = dispatch => ({
   settingsIdleBehavior: value => dispatch(actions.settings.setIdleBehavior(value)),
   settingsIdleTimeDiscard: value => dispatch(actions.settings.setIdleTimeDiscard(value)),
   settingsProgressSlider: value => dispatch(actions.settings.setProgressSlider(value)),
+  settingsIssueAlwaysEditable: value => dispatch(actions.settings.setIssueAlwaysEditable(value)),
+  settingsTimerCheckpoint: value => dispatch(actions.settings.setTimerCheckpoint(value)),
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(OptionsBlock));

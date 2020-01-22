@@ -72,6 +72,12 @@ const IssueDetails = styled.div`
   flex-grow: 1;
 `;
 
+const Title = styled.h2`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: auto minmax(auto, 340px) auto 1fr;
@@ -187,6 +193,8 @@ class IssueDetailsPage extends Component {
     const tags = selectedIssue.tags;
     const children = selectedIssue.children;
     const isEnhanced = uiStyle === 'enhanced';
+    const assigned_to = selectedIssue.assigned_to;
+    const assignee_id = assigned_to && assigned_to.id
     return selectedIssue.id
       ? (
         <Section>
@@ -194,10 +202,10 @@ class IssueDetailsPage extends Component {
             <IssueDetails>
               <IssueHeader>
                 <FlexRow>
-                  <h2>
+                  <Title>
                     {isEnhanced ? (<IssueId value={selectedIssue.id} tracker={selectedIssue.tracker.id}/>) : (<span>#{selectedIssue.id}&nbsp;</span>)}
                     <span>{selectedIssue.subject}</span>
-                  </h2>
+                  </Title>
                   <SmallNotice>
                     Created {isEnhanced && (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>)}by&nbsp;
                     <Link>{selectedIssue.author.name}</Link>
@@ -235,7 +243,7 @@ class IssueDetailsPage extends Component {
                 <div><DateComponent date={selectedIssue.due_date} /></div>
 
                 <div>Assignee: </div>
-                <div>{selectedIssue.assigned_to.name}</div>
+                <div>{assigned_to && assigned_to.name}</div>
 
                 <div>Estimation: </div>
                 <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
@@ -311,6 +319,7 @@ class IssueDetailsPage extends Component {
           </Flex>
           <CommentsSection
             journalEntries={this.getIssueComments()}
+            // publishComments={(issueId, comments) => this.postCurrentComment(issueId, comments)}
             publishComments={postComments}
             issueId={selectedIssue.id}
           />
@@ -327,7 +336,7 @@ class IssueDetailsPage extends Component {
           {selectedIssue && (
           <IssueModal
             isOpen={showIssueModal}
-            isEditable={selectedIssue.assigned_to.id === userId}
+            isEditable={assignee_id === userId}
             isUserAuthor={selectedIssue.author.id === userId}
             issueEntry={selectedIssue}
             onClose={this.closeIssueModal}
@@ -357,7 +366,7 @@ IssueDetailsPage.propTypes = {
       assigned_to: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
-      }).isRequired,
+      }),
       done_ratio: PropTypes.number.isRequired,
       start_date: PropTypes.string.isRequired,
       due_date: PropTypes.string.isRequired,

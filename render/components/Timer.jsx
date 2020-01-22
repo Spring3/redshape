@@ -84,6 +84,9 @@ const ActiveTimer = styled.div`
   div.issueName {
     padding: 0 20px;
     max-width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   div.time {
@@ -120,11 +123,18 @@ const MaskedLink = styled(Link)`
   text-decoration: none;
 `;
 
+const extractPeriodOption = (period) => {
+  if (!period || period === 'none'){
+    return;
+  }
+  return period === '1h' ? 60 : (Number(period.replace('m', '')));
+}
+
 /**
  * interval: ticks when window is open, every second
  * intervalIdle: ticks every ~2 minutes to analyze if the system is idle
- * intervalCheckpoint: ticks every ~3 minutes to save the state in case the system is suddenly shutdown,
- *   so, we lose last 3 minutes only
+ * intervalCheckpoint: ticks every X (configurable) minutes to save the state in case the system is suddenly shutdown,
+ *   so, we lose those minutes only
  */
 class Timer extends Component {
   constructor(props) {
@@ -177,10 +187,10 @@ class Timer extends Component {
 
   setIntervalIdle(){
     const { idleBehavior } = this.props;
-    if (!idleBehavior || idleBehavior === 'none'){
+    const idleMinutes = extractPeriodOption(idleBehavior);
+    if (!idleMinutes){
       return;
     }
-    const idleMinutes = idleBehavior === '1h' ? 60 : (Number(idleBehavior.replace('m', '')));
 
     const checkTime = 2 * 60; // every 2 minute
     const warnTime = 15; // at least for 15 s.
@@ -205,6 +215,12 @@ class Timer extends Component {
   }
 
   setIntervalCheckpoint(ts, topic){
+    const { timerCheckpoint } = this.props;
+    const checkpointMinutes = extractPeriodOption(timerCheckpoint);
+    if (!checkpointMinutes){
+      return;
+    }
+
     this.intervalCheckpoint = setInterval(() => {
       const { isEnabled, isPaused, saveTimer } = this.props;
       const { timestamp } = this.state;
@@ -221,7 +237,7 @@ class Timer extends Component {
       }else{
         this.stopIntervalCheckpoint();
       }
-    }, 5 * 60 * 1000);
+    }, checkpointMinutes * 60 * 1000);
   }
 
   /* check if is using the optimization now */
@@ -329,7 +345,7 @@ class Timer extends Component {
         this.interval = setInterval(this.tick, 1000);
         this.setIntervalIdle();
         if (!isPaused){
-          this.setIntervalCheckpoint(new Date(), 'update');
+          this.setIntervalCheckpoint();
         }
         IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue });
       }
@@ -355,7 +371,7 @@ class Timer extends Component {
     this.interval = setInterval(this.tick, 1000);
     this.setIntervalIdle();
     if (!this.intervalCheckpoint){
-      this.setIntervalCheckpoint(new Date(), 'continue');
+      this.setIntervalCheckpoint();
     }
     const { onContinue, trackedIssue, continueTimer } = this.props;
     const { value, comments } = this.state;
@@ -550,6 +566,7 @@ Timer.propTypes = {
   idleTimeDiscard: PropTypes.bool.isRequired,
   showAdvancedTimerControls: PropTypes.bool.isRequired,
   uiStyle: PropTypes.string.isRequired,
+  timerCheckpoint: PropTypes.string.isRequired,
 };
 
 Timer.defaultProps = {
@@ -569,6 +586,7 @@ const mapStateToProps = state => ({
   idleTimeDiscard: state.settings.idleTimeDiscard,
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
   uiStyle: state.settings.uiStyle,
+  timerCheckpoint: state.settings.timerCheckpoint,
 });
 
 const mapDispatchToProps = dispatch => ({

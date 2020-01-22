@@ -1,6 +1,6 @@
 export const availableOptions = {
   // Used in OptionsBlock.jsx and settings.reducer.js
-  // uiStyle, idleBehavior, progressSlider
+  // uiStyle, idleBehavior, progressSlider, timerCheckpoint
   uiStyle: [
     {value: 'default', label: 'Default'},
     {value: 'colors', label: 'Default with colors'},
@@ -24,6 +24,16 @@ export const availableOptions = {
     {value: '5%', label: 'Slider with 5% steps'},
     {value: '10%', label: 'Slider with 10% steps'},
   ],
+  timerCheckpoint: [
+    {value: 'none', label: 'Do not save state periodically'},
+    {value: '1m', label: 'Save state every minute'},
+    {value: '2m', label: 'Save state every 2 minutes'},
+    {value: '3m', label: 'Save state every 3 minutes'},
+    {value: '5m', label: 'Save state every 5 minutes'},
+    {value: '10m', label: 'Save state every 10 minutes'},
+    {value: '15m', label: 'Save state every 15 minutes'},
+    {value: '30m', label: 'Save state every 30 minutes'},
+  ],
   // Used in ColumnHeadersSelect.jsx and settings.reducer.js
   // issueHeaders
   issueHeaders: [
@@ -41,6 +51,8 @@ export const availableOptions = {
     { label: 'Tags', value: 'tags', format: 'tags' },
     { label: 'Due Date', value: 'due_date', format: 'date' },
     { label: 'Attachments', value: 'attachments', format: 'count' },
+    { label: 'Assigned', value: 'assigned_to.name' },
+    { label: 'Author', value: 'author.name' },
     { label: 'Updated', value: 'updated_on', format: 'date' },
     { label: 'Created', value: 'created_on', format: 'date' },
   ]

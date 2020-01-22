@@ -217,6 +217,17 @@ exports[`AppView should match the snapshot 1`] = `
 .c7 div.issueName {
   padding: 0 20px;
   max-width: 500px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .c7 div.time {
@@ -292,10 +303,19 @@ exports[`AppView should match the snapshot 1`] = `
       <li>
         <a
           aria-current={null}
-          href="#/app/summary"
+          href="#/app/summary/assigned"
           onClick={[Function]}
         >
-          Summary
+          Assigned
+        </a>
+      </li>
+      <li>
+        <a
+          aria-current={null}
+          href="#/app/summary/author"
+          onClick={[Function]}
+        >
+          Author
         </a>
       </li>
     </ul>

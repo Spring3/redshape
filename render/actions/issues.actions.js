@@ -70,27 +70,28 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
       }
     },
     method: 'PUT'
-  }).then(() => dispatch(
-    notify.ok(
-      ISSUES_COMMENTS_SEND,
-      {
-        created_on: moment().toLocaleString(),
-        details: [],
-        id: Date.now(),
-        notes: comments,
-        private_notes: false,
-        user: {
-          id: user.id,
-          name: user.name
-        }
-      },
-      { subject: 'comments' }
-    )
-  ))
+  }).then(() => {
+    dispatch(
+      notify.ok(
+        ISSUES_COMMENTS_SEND,
+        {
+          created_on: moment().toLocaleString(),
+          details: [],
+          id: Date.now(),
+          notes: comments,
+          private_notes: false,
+          user: {
+            id: user.id,
+            name: user.name
+          }
+        },
+        {subject: 'comments'}
+      ));
+  })
     .catch((error) => {
-      console.log(error);
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
       dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
+      return error; // To be consumed by MarkdownEditor to avoid cleaning the comment
     });
 };
 

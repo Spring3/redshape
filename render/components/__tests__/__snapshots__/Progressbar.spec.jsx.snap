@@ -15,7 +15,7 @@ exports[`Progressbar component should match the snapshot 1`] = `
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
-  top: -50px;
+  bottom: 75%;
   left: 50%;
 }
 
@@ -113,7 +113,7 @@ exports[`Progressbar component should match the snapshot when using progress-gra
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
-  top: -50px;
+  bottom: 75%;
   left: 50%;
 }
 
@@ -211,7 +211,7 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
-  top: -50px;
+  bottom: 75%;
   left: 50%;
 }
 
@@ -325,7 +325,7 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
-  top: -50px;
+  bottom: 75%;
   left: 50%;
 }
 

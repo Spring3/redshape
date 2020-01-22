@@ -91,6 +91,17 @@ exports[`Timer component should match the snapshot 1`] = `
 .c0 div.issueName {
   padding: 0 20px;
   max-width: 500px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .c0 input[name="comment"] {
@@ -197,7 +208,7 @@ exports[`Timer component should match the snapshot 1`] = `
                   [Function],
                   ";}div.buttons{margin:0 20px;display:flex;}div.time{margin:0 20px;font-size:16px;font-weight:bold;}div.buttons{a{padding:5px 0px;&:hover{background:",
                   [Function],
-                  ";}}a:first-child{margin-right:20px;}}div.buttons.buttons-advanced{a{margin-right:5px;}a:last-child{margin-right:initial;}}div.issueName{padding:0 20px;max-width:500px;}div.time{color:",
+                  ";}}a:first-child{margin-right:20px;}}div.buttons.buttons-advanced{a{margin-right:5px;}a:last-child{margin-right:initial;}}div.issueName{padding:0 20px;max-width:500px;display:flex;flex-direction:row;align-items:center;}div.time{color:",
                   [Function],
                   ";}input[name=\\"comment\\"]{flex-grow:2;margin-left:20px;width:initial;border:none;border-radius:0;border-bottom:1px ",
                   [Function],

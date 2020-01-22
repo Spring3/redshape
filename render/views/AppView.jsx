@@ -100,6 +100,8 @@ class AppView extends Component {
         <Navbar />
         <Content>
           <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props}/>} />
+          <Route exact path={`${match.path}/summary/assigned`} component={props => <SummaryPage {...props}/>} />
+          <Route exact path={`${match.path}/summary/author`} component={props => <SummaryPage mode="author" {...props}/>} />
           <Route exact path={`${match.path}/settings`} component={props => <SettingsPage {...props}/>} />
           <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props}/>} />
           <Timer

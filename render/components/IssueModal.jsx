@@ -224,7 +224,7 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider } = this.props;
+    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable } = this.props;
     const { issueEntry, wasModified, progress_info, instance, statusTransitions } = this.state;
     const { progress, estimated_duration, due_date, children, status } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
@@ -243,6 +243,8 @@ class IssueModal extends Component {
       }
     }
     const progressInfo = `${progress_info.toFixed(0)}%`;
+    const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
+    const assigned_to = propsIssueEntry.assigned_to;
     return (
       <Modal
         open={!!isOpen}
@@ -258,7 +260,7 @@ class IssueModal extends Component {
           </FlexRow>
           <FlexRow>
             <Label htmlFor="assignee" label="Assignee">
-              <div name="assignee">{propsIssueEntry.assigned_to.name}</div>
+              <div name="assignee">{assigned_to && assigned_to.name}</div>
             </Label>
           </FlexRow>
           <Label htmlFor="issue" label="Issue">
@@ -275,7 +277,7 @@ class IssueModal extends Component {
                     value={status}
                     onChange={this.onStatusChange}
                     isClearable={false}
-                    isDisabled={!isEditable || !isUserAuthor}
+                    isDisabled={disableField}
                     theme={(defaultTheme) => ({
                       ...defaultTheme,
                       borderRadius: 3,
@@ -302,7 +304,7 @@ class IssueModal extends Component {
                     name="estimated_duration"
                     value={estimated_duration}
                     onBlur={() => this.runValidation(['estimated_duration'])}
-                    disabled={!isEditable || !isUserAuthor}
+                    disabled={disableField}
                     onChange={this.onEstimatedDurationChange}
                   />
                   <FieldAdjacentInfo>{estimatedDurationInfo}</FieldAdjacentInfo>
@@ -320,7 +322,7 @@ class IssueModal extends Component {
                     key={instance}
                     name="due_date"
                     value={due_date}
-                    isDisabled={!isEditable || !isUserAuthor}
+                    isDisabled={disableField}
                     onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
                   />
                 </Label>
@@ -350,7 +352,7 @@ class IssueModal extends Component {
                         max={100}
                         step={progressSlider === '1%' ? 1 : 10}
                         defaultValue={progress}
-                        disabled={!isEditable || !isUserAuthor}
+                        disabled={disableField}
                         onAfterChange={(value) => this.onProgressChange(value) && this.runValidation('progress')}
                       />
                       <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
@@ -401,7 +403,7 @@ IssueModal.propTypes = {
     assigned_to: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
-    }).isRequired,
+    }),
     done_ratio: PropTypes.number.isRequired,
     start_date: PropTypes.string.isRequired,
     due_date: PropTypes.string.isRequired,
@@ -442,11 +444,13 @@ IssueModal.propTypes = {
   validateBeforeUpdate: PropTypes.func.isRequired,
   resetValidation: PropTypes.func.isRequired,
   progressSlider: PropTypes.string.isRequired,
+  isIssueAlwaysEditable: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   issue: state.issue,
   progressSlider: state.settings.progressSlider,
+  isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -114,5 +114,13 @@ module.exports = {
       mainWindow.webContents.send('window', { action: 'hide' });
       updateTrayMenu();
     });
+
+    tray.on('click', () => {
+      if (mainWindowHidden){
+        mainWindow.show();
+      }else{
+        mainWindow.hide();
+      }
+    })
   }
 };

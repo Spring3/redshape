@@ -27,7 +27,10 @@ const TooltipText = styled.p`
   
   ${props => props.position === 'top' ? css`
     transform: translateX(-50%);
-    top: -50px;
+    // transform: translate(-50%, -50%);
+    // top: calc(-250% + 5px);
+    // top: -50px;
+    bottom: 75%;
     left: 50%;
     
     &::after {
@@ -36,8 +39,9 @@ const TooltipText = styled.p`
       transform: translateX(-50%);
     }
   ` : css`
-    top: -100%;
     left: 30px;
+    transform: translateY(-50%);
+    top: calc(-50% + 5px);
     
     &::after {
       top: calc(50% - 5px);

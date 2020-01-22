@@ -75,12 +75,18 @@ class SummaryPage extends Component {
     const { search, sortBy, sortDirection } = this.state;
     const { userId, showClosedIssues } = this.props;
     if (userId) {
-      const queryFilter = new IssueFilter()
-        .assignee(userId)
-        .status({ open: true, closed: showClosedIssues })
-        .title(search)
-        .sort(sortBy, sortDirection)
-        .build();
+      const showByAuthor = this.props.mode === 'author';
+      let queryFilter = new IssueFilter();
+      if (showByAuthor) {
+        queryFilter = queryFilter.author(userId);
+      }else {
+        queryFilter = queryFilter.assignee(userId);
+      }
+      queryFilter = queryFilter
+          .status({ open: true, closed: showClosedIssues })
+          .title(search)
+          .sort(sortBy, sortDirection)
+          .build();
       this.props.fetchIssues(queryFilter, page);
     }
   }
@@ -104,11 +110,11 @@ class SummaryPage extends Component {
   }
 
   render() {
-    const { theme, showClosedIssues } = this.props;
+    const { theme, showClosedIssues, mode } = this.props;
     return (
       <Grid>
         <IssuesSection>
-          <h2>Issues assigned to me</h2>
+          <h2>Issues { mode === 'author' ? 'created by' : 'assigned to'} me</h2>
           <OptionsGrid>
               <Input
                 icon={
@@ -152,6 +158,7 @@ SummaryPage.propTypes = {
   fetchIssues: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
   settingsShowClosedIssues: PropTypes.func.isRequired,
+  mode: PropTypes.string,
 };
 
 const mapStateToProps = state => ({

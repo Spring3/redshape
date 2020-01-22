@@ -12,7 +12,7 @@ import {
   SETTINGS_UI_STYLE,
   SETTINGS_IDLE_BEHAVIOR,
   SETTINGS_PROGRESS_SLIDER,
-  SETTINGS_IDLE_TIME_DISCARD,
+  SETTINGS_IDLE_TIME_DISCARD, SETTINGS_ISSUE_ALWAYS_EDITABLE, SETTINGS_TIMER_CHECKPOINT,
 } from '../../../actions/settings.actions';
 import OptionsBlock from '../OptionsBlock';
 import { getInstance, reset, initialize } from '../../../../common/request';
@@ -93,12 +93,12 @@ describe('SummaryPage => OptionsBlock component', () => {
     });
   });
 
-  it('should set use of ui style when select option is chosen', () => {
+  it('should set use of issue always editable when select option is chosen', () => {
     const state = {
       settings: {
         showAdvancedTimerControls: false,
         showClosedIssues: true,
-        uiStyle: 'default',
+        isIssueAlwaysEditable: false,
       },
       user: {
         id: 1,
@@ -114,15 +114,14 @@ describe('SummaryPage => OptionsBlock component', () => {
       </Provider>
     );
 
-    const selects = wrapper.find('Select');
-    selects.at(2).instance().selectOption({ label: 'Default with colors', value: 'colors' });
+    wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true } });
     expect(store.getActions().length).toBe(1);
     expect(store.getActions()[0]).toEqual({
-      type: SETTINGS_UI_STYLE,
+      type: SETTINGS_ISSUE_ALWAYS_EDITABLE,
       data: {
         userId: state.user.id,
         redmineEndpoint: state.user.redmineEndpoint,
-        uiStyle: 'colors'
+        isIssueAlwaysEditable: true
       }
     });
   });
@@ -162,7 +161,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
 
-    wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true } });
+    wrapper.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } });
     expect(store.getActions().length).toBe(2);
     expect(store.getActions()[1]).toEqual({
       type: SETTINGS_IDLE_TIME_DISCARD,
@@ -184,7 +183,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
 
-    expect(wrapper.find('input[type="checkbox"]').at(1).props().checked).toBe(false);
+    expect(wrapper.find('input[type="checkbox"]').at(2).props().checked).toBe(false);
 
     selects.at(0).instance().selectOption({ label: 'Pause if idle for 5 minutes', value: '5m' });
     expect(store.getActions().length).toBe(4);
@@ -194,6 +193,43 @@ describe('SummaryPage => OptionsBlock component', () => {
         userId: state.user.id,
         redmineEndpoint: state.user.redmineEndpoint,
         idleBehavior: '5m'
+      }
+    });
+  });
+
+  it('should set use of timer checkpoint when select option is chosen', () => {
+    const state = {
+      settings: {
+        showAdvancedTimerControls: false,
+        showClosedIssues: true,
+        uiStyle: 'default',
+        idleBehavior: 'none',
+        progressSlider: '10%',
+        timerCheckpoint: 'none',
+      },
+      user: {
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <OptionsBlock />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    const selects = wrapper.find('Select');
+    selects.at(1).instance().selectOption({ value: '10m' });
+    expect(store.getActions().length).toBe(1);
+    expect(store.getActions()[0]).toEqual({
+      type: SETTINGS_TIMER_CHECKPOINT,
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        timerCheckpoint: '10m'
       }
     });
   });
@@ -222,7 +258,7 @@ describe('SummaryPage => OptionsBlock component', () => {
     );
 
     const selects = wrapper.find('Select');
-    selects.at(1).instance().selectOption({ value: '1%' });
+    selects.at(2).instance().selectOption({ value: '1%' });
     expect(store.getActions().length).toBe(1);
     expect(store.getActions()[0]).toEqual({
       type: SETTINGS_PROGRESS_SLIDER,
@@ -233,4 +269,39 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
   });
+
+  it('should set use of ui style when select option is chosen', () => {
+    const state = {
+      settings: {
+        showAdvancedTimerControls: false,
+        showClosedIssues: true,
+        uiStyle: 'default',
+      },
+      user: {
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <OptionsBlock />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    const selects = wrapper.find('Select');
+    selects.at(3).instance().selectOption({ label: 'Default with colors', value: 'colors' });
+    expect(store.getActions().length).toBe(1);
+    expect(store.getActions()[0]).toEqual({
+      type: SETTINGS_UI_STYLE,
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        uiStyle: 'colors'
+      }
+    });
+  });
+
 });

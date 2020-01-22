@@ -121,7 +121,7 @@ class CommentsSection extends Component {
   sendComments = (comments) => {
     if (comments) {
       const { issueId, publishComments } = this.props;
-      publishComments(issueId, comments);
+      return publishComments(issueId, comments);
     }
   }
 

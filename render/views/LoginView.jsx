@@ -62,7 +62,7 @@ class LoginView extends Component {
   componentDidMount() {
     const { userId, api_key } = this.props;
     if (userId && api_key) {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/app/summary/assigned');
     }
   }
 
@@ -90,7 +90,7 @@ class LoginView extends Component {
     checkLogin({...values, useApiKey: this.state.useApiKey}).then(() => {
       const { loginError, userId } = this.props;
       if (!loginError && userId) {
-        this.props.history.push('/app/summary');
+        this.props.history.push('/app/summary/assigned');
       }
       setSubmitting(false);
     });

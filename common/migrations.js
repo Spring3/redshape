@@ -6,8 +6,10 @@ import { version } from '../package.json';
 const VERSION = version.split('.').map(el => Number(el));
 
 /**
- *  This method should be extended when we alter the names/valid values of the settings
- *  Check the const `initialState` and also the Component `ColumnHeadersSelect.jsx`
+ * This method should be extended when we alter the names/valid values of the settings
+ * Check the const `initialState` and also the Component `ColumnHeadersSelect.jsx`
+ *
+ * The migration does not remove the previous non-conflicting settings (user can still recover them)
  */
 export const migrateSettings = (s) => {
   if (s == null){ // no config file, initial state will be given later
@@ -20,11 +22,23 @@ export const migrateSettings = (s) => {
     const [major, minor, patch] = migration.split('.').map(el => Number(el));
     if (major >= 0 && minor >= 0 && patch >= 0){
       const [vmajor, vminor, vpatch] = VERSION;
-      if (vmajor === major && vminor === minor && vpatch === patch) {
+      if (vmajor === major && vminor === minor && vpatch === patch) { // same version
         return s;
       }else{
-        console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
-        return initialStateSettings;
+        if (vmajor === major && vminor === minor){
+          if (vmajor === 1 && vminor === 3) {
+            if (patch < 2) { // 1.3.0, 1.3.1: not public
+              const keys = ['isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
+              keys.forEach(key => s[key] = initialStateSettings[key]);
+              return s;
+            }
+          }
+          console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
+          return initialStateSettings;
+        }else {
+          console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
+          return initialStateSettings;
+        }
       }
     }else{
       console.error(`[Settings] Invalid version ${migration}. Resetting to the new version.`);
@@ -73,15 +87,16 @@ export const migrateSettings = (s) => {
   const { issueHeaders } = settings;
   if (issueHeaders){
     const available = availableOptions.issueHeaders;
-    const headers = issueHeaders.map(el => {
-      return available.find(it => it.value === el.value);
+    const headers = available.map(el => {
+      const found = issueHeaders.find(it => it.value === el.value);
+      return found ? el : null;
     }).filter(el => el != null);
     settings.issueHeaders = headers;
   }
 
-  settings.version = version;
-
-  // the migration does not remove the previous non-conflicting settings (user can still recover them)
+  // 1.3.2
+  const keys = ['isIssueAlwaysEditable', 'timerCheckpoint'];
+  keys.forEach(key => settings[key] = initialStateSettings[key]);
 
   return settings;
 }

@@ -7,6 +7,8 @@ export const SETTINGS_UI_STYLE = 'SETTINGS_UI_STYLE';
 export const SETTINGS_ISSUE_HEADERS = 'SETTINGS_ISSUE_HEADERS';
 export const SETTINGS_BACKUP = 'SETTINGS_BACKUP';
 export const SETTINGS_RESTORE = 'SETTINGS_RESTORE';
+export const SETTINGS_ISSUE_ALWAYS_EDITABLE = 'SETTINGS_ISSUE_ALWAYS_EDITABLE';
+export const SETTINGS_TIMER_CHECKPOINT = 'SETTINGS_TIMER_CHECKPOINT';
 
 const setShowAdvancedTimerControls = showAdvancedTimerControls => (dispatch, getState) => {
   const { user } = getState();
@@ -105,6 +107,28 @@ const restore = () => (dispatch, getState) => {
     }
   });
 };
+const setIssueAlwaysEditable = isIssueAlwaysEditable => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_ISSUE_ALWAYS_EDITABLE,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      isIssueAlwaysEditable
+    }
+  });
+};
+const setTimerCheckpoint = timerCheckpoint => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_TIMER_CHECKPOINT,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      timerCheckpoint
+    }
+  });
+};
 
 export default {
   setShowAdvancedTimerControls,
@@ -114,6 +138,8 @@ export default {
   setShowClosedIssues,
   setUiStyle,
   setIssueHeaders,
+  setIssueAlwaysEditable,
+  setTimerCheckpoint,
   backup,
   restore
 };

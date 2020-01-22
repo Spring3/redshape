@@ -124,6 +124,7 @@ const Navbar = styled.nav`
     padding: 10px 40px;
     background: white;
     border-bottom: 2px solid ${props.theme.main};
+    box-shadow: 0px 2px 20px #F9F9F9;
   ` : css`
     padding: 20px 40px 0px 40px;
     background: linear-gradient(to bottom, ${props => props.theme.bg} 85%, transparent);
@@ -246,16 +247,22 @@ class NavigationBar extends Component {
             )}
           </li>
           <li>
-            <NavLink to="/app/summary">
+            <NavLink to="/app/summary/assigned">
               { isEnhanced && (<ListIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
-              Summary
+              Assigned
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/app/summary/author">
+              { isEnhanced && (<ListIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+              Author
             </NavLink>
           </li>
         </ul>
         { isEnhanced ? (
           <Bubble>
             <div className="Drop">
-              <div className="Label">R</div>
+              <div className="Label">{name.charAt(0)}</div>
               <ul className="dropdown">
                 <li className="dropdown-ghost"></li>
                 <li>

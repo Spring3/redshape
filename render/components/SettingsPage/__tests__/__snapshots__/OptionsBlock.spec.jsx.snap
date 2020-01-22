@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
-.c10 {
+.c12 {
   border: 0;
   -webkit-clip: rect(0 0 0 0);
   clip: rect(0 0 0 0);
@@ -16,7 +16,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   width: 1px;
 }
 
-.c11 {
+.c13 {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -28,29 +28,29 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   border-color: #FF7079;
 }
 
-.c11 svg {
+.c13 svg {
   visibility: hidden;
   position: relative;
   vertical-align: middle;
   bottom: 3px;
 }
 
-.c9:not(:disabled):hover + .c11,
-.c9:focus + .c11 {
+.c11:not(:disabled):hover + .c13,
+.c11:focus + .c13 {
   box-shadow: 0px 0px 5px 1px #FF7F87;
 }
 
-.c9:disabled + .c11 {
+.c11:disabled + .c13 {
   background: #F9F9F9;
   border-color: lightgrey;
 }
 
-.c8 {
+.c10 {
   display: inline-block;
   vertical-align: middle;
 }
 
-.c8 + span {
+.c10 + span {
   margin-left: 10px;
   vertical-align: middle;
 }
@@ -77,8 +77,11 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
   z-index: 99;
-  top: -100%;
   left: 30px;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: calc(-50% + 5px);
 }
 
 .c7::after {
@@ -98,7 +101,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   transform: rotate(90deg);
 }
 
-.c12 {
+.c14 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -114,11 +117,11 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
-  top: -50px;
+  bottom: 75%;
   left: 50%;
 }
 
-.c12::after {
+.c14::after {
   content: ' ';
   position: absolute;
   width: auto;
@@ -127,7 +130,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c12::after {
+.c14::after {
   top: 100%;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -144,14 +147,24 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   display: block;
 }
 
-.c13 {
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c14 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -160,6 +173,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-left: 1rem;
 }
 
 .c5 {
@@ -173,12 +187,22 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
 
 .c0 {
   display: grid;
-  grid-template-columns: minmax(auto,400px) minmax(auto,500px);
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 5px;
+  grid-column-gap: 80px;
+}
+
+.c9 label {
+  display: block;
+}
+
+.c9 label:not(:last-child) {
+  margin-bottom: 0.5rem;
 }
 
 @media (max-width:1200px) {
   .c0 {
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: auto 1fr;
   }
 }
 
@@ -196,7 +220,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   >
     <h4
       className="c2"
-      htmlFor="queryOptions"
+      htmlFor=""
     >
       Options
       <span
@@ -219,28 +243,37 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
           <p
             className="tooltip c6 c7"
           >
-            - Advanced timer controls: timer and comment are modifiable at runtime.
+            <div
+              className="c8"
+            >
+              <span>
+                - Advanced timer controls: timer and comment are modifiable at runtime.
+              </span>
+              <span>
+                - Issue always editable: server will check permissions and update (or not).
+              </span>
+            </div>
           </p>
         </div>
       </span>
     </h4>
     <div
-      id="queryOptions"
+      className="c9"
     >
       <label>
         <div
-          className="c8"
+          className="c10"
         >
           <input
             checked={false}
-            className="c9 c10"
+            className="c11 c12"
             disabled={false}
             onChange={[Function]}
             type="checkbox"
           />
           <div
             checked={false}
-            className="c11"
+            className="c13"
           >
             <svg
               className="mdi-icon "
@@ -257,6 +290,38 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         </div>
         <span>
           Use advanced timer controls
+        </span>
+      </label>
+      <label>
+        <div
+          className="c10"
+        >
+          <input
+            checked={false}
+            className="c11 c12"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c13"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Issue is always editable
         </span>
       </label>
     </div>
@@ -287,7 +352,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
             />
           </svg>
           <p
-            className="tooltip c6 c12"
+            className="tooltip c6 c14"
           >
             Detect if the system is idle to pause the timer.
           </p>
@@ -295,10 +360,10 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
       </span>
     </h4>
     <div
-      className="c13"
+      className="c15"
     >
       <div
-        className="css-3q53pl"
+        className="css-zerhbt"
         onKeyDown={[Function]}
       >
         <div
@@ -405,21 +470,21 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         />
       </div>
       <label
-        className="c14"
+        className="c16"
       >
         <div
-          className="c8"
+          className="c10"
         >
           <input
             checked={false}
-            className="c9 c10"
+            className="c11 c12"
             disabled={false}
             onChange={[Function]}
             type="checkbox"
           />
           <div
             checked={false}
-            className="c11"
+            className="c13"
           >
             <svg
               className="mdi-icon "
@@ -441,16 +506,16 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="c13"
+    className="c15"
   >
     <div
       className="form-group undefined c1"
     >
       <h4
         className="c2"
-        htmlFor="progress"
+        htmlFor="checkpoint"
       >
-        Progress values
+        Timer checkpoint
         <span
           className="c3"
         >
@@ -469,15 +534,24 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               />
             </svg>
             <p
-              className="tooltip c6 c12"
+              className="tooltip c6 c14"
             >
-              Use 10% unless you have server-side support.
+              <div
+                className="c8"
+              >
+                <span>
+                  Save the state of the timer periodically to avoid losing temporary data
+                </span>
+                <span>
+                  (eg. killing/suspend/shutdown not working properly in your system).
+                </span>
+              </div>
             </p>
           </div>
         </span>
       </h4>
       <div
-        className="css-3q53pl"
+        className="css-zerhbt"
         onKeyDown={[Function]}
       >
         <div
@@ -578,6 +652,151 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
           </div>
         </div>
         <input
+          name="checkpoint"
+          type="hidden"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="c15"
+  >
+    <div
+      className="form-group undefined c1"
+    >
+      <h4
+        className="c2"
+        htmlFor="progress"
+      >
+        Progress values
+        <span
+          className="c3"
+        >
+          <div
+            className="c4"
+          >
+            <svg
+              className="mdi-icon c5"
+              fill="currentColor"
+              height={14}
+              viewBox="0 0 24 24"
+              width={14}
+            >
+              <path
+                d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
+              />
+            </svg>
+            <p
+              className="tooltip c6 c14"
+            >
+              Use 10% unless you have server-side support.
+            </p>
+          </div>
+        </span>
+      </h4>
+      <div
+        className="css-zerhbt"
+        onKeyDown={[Function]}
+      >
+        <div
+          className="css-1rcfx4g"
+          onMouseDown={[Function]}
+          onTouchEnd={[Function]}
+        >
+          <div
+            className="css-1hwfws3"
+          >
+            <div
+              className="css-1492t68"
+            >
+              Select...
+            </div>
+            <div
+              className="css-1g6gooi"
+            >
+              <div
+                className=""
+                style={
+                  Object {
+                    "display": "inline-block",
+                  }
+                }
+              >
+                <input
+                  aria-autocomplete="list"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  disabled={false}
+                  id="react-select-4-input"
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  onFocus={[Function]}
+                  spellCheck="false"
+                  style={
+                    Object {
+                      "background": 0,
+                      "border": 0,
+                      "boxSizing": "content-box",
+                      "color": "inherit",
+                      "fontSize": "inherit",
+                      "opacity": 1,
+                      "outline": 0,
+                      "padding": 0,
+                      "width": "1px",
+                    }
+                  }
+                  tabIndex="0"
+                  type="text"
+                  value=""
+                />
+                <div
+                  style={
+                    Object {
+                      "height": 0,
+                      "left": 0,
+                      "overflow": "scroll",
+                      "position": "absolute",
+                      "top": 0,
+                      "visibility": "hidden",
+                      "whiteSpace": "pre",
+                    }
+                  }
+                >
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="css-1wy0on6"
+          >
+            <span
+              className="css-d8oujb"
+            />
+            <div
+              aria-hidden="true"
+              className="css-1ep9fjw"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <svg
+                aria-hidden="true"
+                className="css-19bqh2r"
+                focusable="false"
+                height={20}
+                viewBox="0 0 20 20"
+                width={20}
+              >
+                <path
+                  d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <input
           name="progress"
           type="hidden"
           value=""
@@ -586,7 +805,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="c13"
+    className="c15"
   >
     <div
       className="form-group undefined c1"
@@ -595,10 +814,10 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         className="c2"
         htmlFor="uiStyle"
       >
-        UI Style
+        UI style
       </h4>
       <div
-        className="css-3q53pl"
+        className="css-zerhbt"
         onKeyDown={[Function]}
       >
         <div
@@ -631,7 +850,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
                   autoComplete="off"
                   autoCorrect="off"
                   disabled={false}
-                  id="react-select-4-input"
+                  id="react-select-5-input"
                   onBlur={[Function]}
                   onChange={[Function]}
                   onFocus={[Function]}

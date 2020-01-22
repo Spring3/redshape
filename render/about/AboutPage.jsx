@@ -197,7 +197,7 @@ class AboutPage extends Component {
                   </Link>
                 </div>
                 <Contributors>
-                  <span>Contributors</span>
+                  <span>Major Contributors</span>
                   <Link
                     href="https://www.group4layers.com"
                     type="external"

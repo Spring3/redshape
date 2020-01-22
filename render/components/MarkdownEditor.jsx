@@ -213,29 +213,31 @@ class MarkdownEditor extends PureComponent {
 
   onKeyDown = (e) => {
     const { onSubmit } = this.props;
+    let trySend = false;
     if (remote.process.platform === 'darwin') {
       if (e.metaKey && e.keyCode === KEY_ENTER) {
-        if (onSubmit) {
-          onSubmit(xssFilter(this.state.value));
-          this.setState({
-            value: ''
-          });
-        }
+        trySend = true;
       } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
         this.applyMarkdown('\r\n');
       }
     } else {
       if (e.ctrlKey && e.keyCode === KEY_ENTER) {
-        if (onSubmit) {
-          onSubmit(xssFilter(this.state.value));
-          this.setState({
-            value: ''
-          });
-        }
+        trySend = true;
+      }
+    }
+    if (trySend && onSubmit) {
+      const resp = onSubmit(xssFilter(this.state.value))
+      if (resp){
+        resp.then((err) => { // succeeded, clear textarea:
+          if (!(err instanceof Error)){
+            this.setState({
+              value: ''
+            });
+          }
+        }).catch(() => {})
       }
     }
   }
-
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {

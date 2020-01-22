@@ -12,6 +12,8 @@ import {
   SETTINGS_ISSUE_HEADERS,
   SETTINGS_BACKUP,
   SETTINGS_RESTORE,
+  SETTINGS_ISSUE_ALWAYS_EDITABLE,
+  SETTINGS_TIMER_CHECKPOINT,
 } from '../actions/settings.actions';
 
 export const initialState = {
@@ -31,6 +33,8 @@ export const initialState = {
     { label: 'Estimation', value: 'estimated_hours', format: 'hours' },
     { label: 'Due Date', value: 'due_date', format: 'date' }
   ],
+  isIssueAlwaysEditable: false,
+  timerCheckpoint: 'none',
   version,
 };
 
@@ -121,6 +125,24 @@ export default (state = initialState, action) => {
     case SETTINGS_RESTORE: {
       const { userId, redmineEndpoint } = action.data;
       return storage.get(`settings.${redmineEndpoint}.${userId}`, initialState);
+    }
+    case SETTINGS_ISSUE_ALWAYS_EDITABLE: {
+      const { userId, redmineEndpoint, isIssueAlwaysEditable } = action.data;
+      const nextState = {
+        ...state,
+        isIssueAlwaysEditable: !!isIssueAlwaysEditable
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_TIMER_CHECKPOINT: {
+      const { userId, redmineEndpoint, timerCheckpoint } = action.data;
+      const nextState = {
+        ...state,
+        timerCheckpoint,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
     }
     default:
       return state;

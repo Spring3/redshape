@@ -62,8 +62,8 @@ describe('MarkdownEditor component', () => {
     expect(wrapper.find(MarkdownText).prop('markdownText')).toBe(wrapper.find(MarkdownEditor).state('value'));
   });
 
-  it('should submit and reset the state after it', () => {
-    const onSubmit = jest.fn();
+  it('should submit and reset the state after it when it success', () => {
+    const onSubmit = jest.fn().mockImplementation(() => Promise.resolve());
     const xssSpy = jest.spyOn(utils, 'xssFilter');
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -76,7 +76,28 @@ describe('MarkdownEditor component', () => {
     wrapper.update();
     expect(onSubmit).toHaveBeenCalled();
     expect(xssSpy).toHaveBeenCalled();
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('');
+    setTimeout(() => {
+      expect(wrapper.find(MarkdownEditor).state('value')).toBe('');
+    }, 50);
+  });
+
+  it('should submit and not reset the state after it when it fails', () => {
+    const onSubmit = jest.fn().mockImplementation(() => Promise.reject(new Error()));
+    const xssSpy = jest.spyOn(utils, 'xssFilter');
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
+      </ThemeProvider>
+    );
+
+    const KEY_ENTER = 13;
+    wrapper.find('textarea').simulate('keyDown', { keyCode: KEY_ENTER, metaKey: true, ctrlKey: true });
+    wrapper.update();
+    expect(onSubmit).toHaveBeenCalled();
+    expect(xssSpy).toHaveBeenCalled();
+    setTimeout(() => {
+      expect(wrapper.find(MarkdownEditor).state('value')).toBe("Lorem ipsum dolor");
+    }, 50);
   });
 
   it('should add a newline on macos if ctrl+enter was pressed', () => {
