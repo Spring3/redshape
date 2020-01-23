@@ -143,7 +143,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
       onClick={[Function]}
     >
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -152,7 +152,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -161,7 +161,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -170,7 +170,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c1"
@@ -180,7 +180,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -189,7 +189,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c2"
@@ -199,7 +199,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -226,7 +226,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
       onClick={[Function]}
     >
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -235,7 +235,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -244,7 +244,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -253,7 +253,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c1"
@@ -263,7 +263,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -272,7 +272,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c2"
@@ -282,7 +282,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -309,7 +309,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
       onClick={[Function]}
     >
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -318,7 +318,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -327,7 +327,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -336,7 +336,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c1"
@@ -346,7 +346,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""
@@ -355,7 +355,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className="c1"
@@ -365,7 +365,7 @@ exports[`SummaryPage => IssuesTable component should match the snapshot 1`] = `
         </span>
       </td>
       <td
-        className={false}
+        className=""
       >
         <span
           className=""

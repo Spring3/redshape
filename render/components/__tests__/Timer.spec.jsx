@@ -11,6 +11,13 @@ import Timer from '../Timer';
 
 const mockStore = configureStore([thunk]);
 
+const stateSettings = {
+  idleBehavior: 0,
+  discardIdleTime: true,
+  advancedTimerControls: false,
+  progressWithStep1: false,
+};
+
 const waitSeconds = (n = 1) => new Promise(resolve => setTimeout(() => resolve(), n * 1000));
 
 describe('Timer component', () => {
@@ -24,7 +31,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
     const store = mockStore(state);
     const wrapper = mount(
@@ -48,11 +56,13 @@ describe('Timer component', () => {
         isEnabled: true,
         isPaused: false,
         duration: 4000,
+        comments: '',
         issue: {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -94,7 +104,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -135,7 +146,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -154,15 +166,64 @@ describe('Timer component', () => {
     const timer = wrapper.find('Timer').instance();
     expect(timer).toBeTruthy();
 
-    const cleanupSpy = jest.spyOn(timer, 'cleanup');
+    // const cleanupSpy = jest.spyOn(timer, 'cleanup');
+    const saveStateSpy = jest.spyOn(timer, 'saveState');
 
     expect(timer.interval).toBeDefined();
     await waitSeconds(1);
     expect(timer.state.value).toBe(5000);
     wrapper.unmount();
 
-    expect(cleanupSpy).toHaveBeenCalled();
-    expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
+    expect(saveStateSpy).toHaveBeenCalled();
+    // we do not call onPause if we unmount
+    // expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
+    expect(store.getActions()).toEqual([{ type: 'TRACKING_SAVE', data: { duration: 5000, comments: "" } }]);
+  });
+
+  it('should automatically save the progress and stop before unload', async () => {
+    const onStop = jest.fn();
+    const onPause = jest.fn();
+    const onContinue = jest.fn();
+
+    const state = {
+      tracking: {
+        isEnabled: true,
+        isPaused: false,
+        duration: 4000,
+        issue: {
+          id: '123abc',
+          subject: 'Test issue'
+        }
+      },
+      settings: stateSettings,
+    };
+
+    const store = mockStore(state);
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <Timer
+          onStop={onStop}
+          onPause={onPause}
+          onContinue={onContinue}
+        />
+      </Provider>,
+      { context: { store } }
+    );
+
+    const timer = wrapper.find('Timer').instance();
+    expect(timer).toBeTruthy();
+
+    expect(timer.interval).toBeDefined();
+    await waitSeconds(1);
+    timer.cleanup();
+    expect(timer.state.value).toBe(5000);
+    // TODO: fire a window 'unload' event. Now we just call cleanup here
+    // const unloadEv = new Event('unload');
+    // wrapper.first().getDOMNode().dispatchEvent(unloadEv);
+    // expect(cleanupSpy).toHaveBeenCalled();
+
+    expect(onPause).toHaveBeenCalledWith(state.tracking.issue, 5000, "");
   });
 
   it('should allow to pause the timer', async () => {
@@ -179,7 +240,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -207,7 +269,7 @@ describe('Timer component', () => {
     wrapper.find('.buttons').childAt(1).find('GhostButton').simulate('click');
     wrapper.update();
 
-    expect(onPause).toHaveBeenCalledWith(1000, state.tracking.issue);
+    expect(onPause).toHaveBeenCalledWith(state.tracking.issue, 1000, "");
   });
 
   it('should allow to resume the paused timer', async () => {
@@ -224,7 +286,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -274,7 +337,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -302,7 +366,7 @@ describe('Timer component', () => {
     wrapper.find('.buttons').childAt(0).find('GhostButton').simulate('click');
     wrapper.update();
 
-    expect(onStop).toHaveBeenCalledWith(1000, state.tracking.issue);
+    expect(onStop).toHaveBeenCalledWith(state.tracking.issue, 1000, "");
     expect(timer.interval).not.toBeDefined();
 
     expect(onStop).toHaveBeenCalledTimes(1);
@@ -322,7 +386,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);

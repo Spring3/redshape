@@ -3,11 +3,15 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, Notification, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
+
+const { setupTray } = require('./tray');
+
+const NAME = 'Redshape';
 
 const utils = require('./utils');
 require('./exceptionCatcher')();
@@ -28,13 +32,34 @@ if (env.error || !process.env.ENCRYPTION_KEY) {
   dotenv.config({ silent: true, path: configFilePath });
 }
 
-const { PORT } = require('../common/config');
+const config = require('../common/config');
+const { PORT } = config;
 require('../common/request'); // to initialize from storage
 
 let mainWindow;
 let aboutWindow;
 
-const initializeMenu = () => {
+const updateSettings = ({ idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 }, settings) => {
+  if (idleBehavior >= 0){
+    settings.idleBehavior = idleBehavior;
+    mainWindow.webContents.send('settings', { key: 'IDLE_BEHAVIOR', value: idleBehavior })
+  }
+  if (discardIdleTime != null){
+    settings.discardIdleTime = discardIdleTime;
+    mainWindow.webContents.send('settings', { key: 'IDLE_TIME_DISCARD', value: discardIdleTime })
+  }
+  if (advancedTimerControls != null){
+    settings.advancedTimerControls = advancedTimerControls;
+    mainWindow.webContents.send('settings', { key: 'ADVANCED_TIMER_CONTROLS', value: advancedTimerControls })
+  }
+  if (progressWithStep1 != null){
+    settings.progressWithStep1 = progressWithStep1;
+    mainWindow.webContents.send('settings', { key: 'PROGRESS_SLIDER_STEP_1', value: progressWithStep1 })
+  }
+  generateMenu({ settings });
+}
+
+const generateMenu = ({ settings }) => {
   const isMac = process.platform === 'darwin';
   const aboutSubmenu = {
     label: 'About Redshape',
@@ -53,7 +78,7 @@ const initializeMenu = () => {
   const menu = Menu.buildFromTemplate([
     // { role: 'appMenu' }
     ...(isMac ? [{
-      label: 'Redshape',
+      label: NAME,
       submenu: [
         aboutSubmenu,
         { type: 'separator' },
@@ -63,7 +88,7 @@ const initializeMenu = () => {
         { role: 'hideothers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' }
+        { role: 'quit' },
       ]
     }] : []),
     {
@@ -103,16 +128,16 @@ const initializeMenu = () => {
     },
     // { role: 'viewMenu' }
     ...(isDev
-      ? [{
-        label: 'View',
-        submenu: [
-          { role: 'reload' },
-          { role: 'forcereload' },
-          { role: 'toggledevtools' },
-          { type: 'separator' }
-        ]
-      }]
-      : []
+        ? [{
+          label: 'View',
+          submenu: [
+            { role: 'reload' },
+            { role: 'forcereload' },
+            { role: 'toggledevtools' },
+            { type: 'separator' }
+          ]
+        }]
+        : []
     ),
     // { role: 'windowMenu' }
     {
@@ -126,10 +151,38 @@ const initializeMenu = () => {
           { type: 'separator' },
           { role: 'window' }
         ] : [
-          { role: 'close' }
+          { label: 'Hide in tray', role: 'close' }
         ])
       ]
     },
+    ...(settings ? [
+      {
+        label: 'Settings',
+        submenu: [
+          {
+            label: 'Idle behavior',
+            submenu: [
+              {label: 'Do nothing', type: 'radio', checked: !settings.idleBehavior, click: () => updateSettings({ idleBehavior: 0 }, settings) },
+              {label: 'Pause if idle for 5m', type: 'radio', checked: settings.idleBehavior === 5, click: () => updateSettings({ idleBehavior: 5 }, settings) },
+              {label: 'Pause if idle for 10m', type: 'radio', checked: settings.idleBehavior === 10, click: () => updateSettings({ idleBehavior: 10 }, settings) },
+              {label: 'Pause if idle for 15m', type: 'radio', checked: settings.idleBehavior === 15, click: () => updateSettings({ idleBehavior: 15 }, settings) },
+              {type: 'separator'},
+              {label: 'Auto discard idle time from timer', type: 'checkbox', enabled: !!settings.idleBehavior, checked: settings.discardIdleTime, click: (el) => updateSettings({ discardIdleTime: el.checked }, settings) },
+            ]
+          },
+          {
+            label: 'Use advanced timer controls',
+            type: 'checkbox',
+            checked: settings.advancedTimerControls, click: (el) => updateSettings({ advancedTimerControls: el.checked }, settings),
+          },
+          {
+            label: 'Use progress slider with 1% steps',
+            type: 'checkbox',
+            checked: settings.progressWithStep1, click: (el) => updateSettings({ progressWithStep1: el.checked }, settings),
+          },
+        ]
+      },
+    ] : []),
     {
       role: 'help',
       submenu: [
@@ -146,10 +199,14 @@ const initializeMenu = () => {
   ]);
 
   Menu.setApplicationMenu(menu);
+}
+
+const initializeMenu = () => {
+  generateMenu({});
 };
 
 const createAboutWindow = () => {
-  const windowConfig = {
+  const windowConfig = utils.fixIcon({
     width: 480,
     height: 400,
     minWidth: 480,
@@ -162,9 +219,9 @@ const createAboutWindow = () => {
     webPreferences: {
       nodeIntegration: true
     },
-  };
+  });
 
-  aboutWindow = new BrowserWindow(utils.fixIcon(windowConfig));
+  aboutWindow = new BrowserWindow(windowConfig);
 
   aboutWindow.loadURL(
     isDev
@@ -189,7 +246,7 @@ const createAboutWindow = () => {
 };
 
 const initialize = () => {
-  const windowConfig = {
+  const windowConfig = utils.fixIcon({
     width: 1024,
     height: 768,
     minWidth: 744,
@@ -198,7 +255,7 @@ const initialize = () => {
     webPreferences: {
       nodeIntegration: true
     }
-  };
+  });
 
   const indexPath = isDev
     ? url.format({
@@ -213,7 +270,7 @@ const initialize = () => {
       slashes: true
     });
 
-  mainWindow = new BrowserWindow(utils.fixIcon(windowConfig));
+  mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
 
   mainWindow.once('ready-to-show', () => {
@@ -226,6 +283,24 @@ const initialize = () => {
   mainWindow.once('closed', () => {
     mainWindow = null;
   });
+
+  setupTray({ app, mainWindow, NAME, windowConfig });
+
+  ipcMain.on('notify', (ev, { message, critical, keep }) => {
+    const notification = new Notification({
+      title: 'System is idle',
+      body: message || 'Timer will be paused if system continues idle',
+      icon: windowConfig.icon,
+      timeoutType: keep ? 'never' : 'default',
+      urgency: critical ? 'critical' : 'normal',
+      silent: false,
+    });
+    notification.show();
+  });
+  ipcMain.on('menu', (ev, {settings}) => {
+    generateMenu({ settings });
+  });
+
 };
 
 app.once('ready', () => {

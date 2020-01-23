@@ -52,6 +52,28 @@ describe('Login view', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('should match the snapshot when using api key', () => {
+    const store = mockStore({ user: {} });
+    const wrapper = mount(
+      <Provider store={store}>
+        <HashRouter>
+          <ThemeProvider theme={theme}>
+            <LoginView />
+          </ThemeProvider>
+        </HashRouter>
+      </Provider>
+    );
+
+    let inputs = wrapper.find('input');
+    const checkbox = inputs.at(1);
+    checkbox.simulate('change', { target: {checked: true}});
+    inputs = wrapper.find('input');
+    expect(inputs.length).toBe(3);
+    const apiKeyInput = wrapper.find('input[name="apiKey"]');
+    expect(apiKeyInput).toBeTruthy();
+
+    expect(wrapper).toMatchSnapshot();
+  });
 
   it('should validate the username', () => {
     const store = mockStore({ user: {} });
@@ -228,10 +250,12 @@ describe('[integration] LoginView', () => {
     expect(wrapper.exists('button[type="submit"]')).toBe(true);
 
     const inputs = wrapper.find('input');
-    expect(inputs.length).toBe(3);
-    const usernameInput = inputs.at(0);
-    const passwordInput = inputs.at(1);
-    const redmineEndpointInput = inputs.at(2);
+    expect(inputs.length).toBe(4);
+    const redmineEndpointInput = inputs.at(0);
+    const checkbox = inputs.at(1);
+    const usernameInput = inputs.at(2);
+    const passwordInput = inputs.at(3);
+    expect(checkbox.prop('name')).toBe('loginMode');
     expect(usernameInput.prop('name')).toBe('username');
     expect(passwordInput.prop('name')).toBe('password');
     expect(redmineEndpointInput.prop('name')).toBe('redmineEndpoint');

@@ -8,15 +8,18 @@ import styled, { css, withTheme } from 'styled-components';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import Link from '../../components/Link';
-import { GhostButton } from '../../components/Button';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
+import IssueModal from "../../components/IssueModal";
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
+
+import EditIcon from 'mdi-react/EditIcon';
+import Button, { GhostButton } from "../../components/Button";
 
 import actions from '../../actions';
 
@@ -50,12 +53,18 @@ const ColumnList = styled.ul`
   }
 
   li div {
-    width: 150px;
+    width: 220px;
   }
 
   li div:first-child {
     font-weight: bold;
+    width: 150px;
   }
+`;
+
+const FlexButton = styled(Button) `
+  display: inline-flex;
+  align-items: center;
 `;
 
 const SmallNotice = styled.p`
@@ -91,6 +100,14 @@ const IconButton = styled(GhostButton)`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  a:first-child {
+    margin-right: 2rem;
+  }
+`;
+
 const BackButton = styled(IconButton)`
   svg {
     animation: ${animationSlideRight} 2s ease-in infinite;
@@ -104,13 +121,14 @@ const IssueDetails = styled.div`
   flex-grow: 1;
 `;
 
-class IssueDetailsPage extends Component { 
+class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activities: [],
       selectedTimeEntry: undefined,
-      showTimeEntryModal: false
+      showTimeEntryModal: false,
+      showIssueModal: false
     };
   }
 
@@ -141,7 +159,8 @@ class IssueDetailsPage extends Component {
           id: selectedIssue.project.id,
           name: selectedIssue.project.name
         },
-        hours: 0,
+        hours: undefined,
+        duration: "",
         spent_on: moment().format('YYYY-MM-DD')
       };
     selectedTimeEntry.issue.name = selectedIssue.subject;
@@ -149,7 +168,8 @@ class IssueDetailsPage extends Component {
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       selectedTimeEntry,
-      showTimeEntryModal: true
+      showTimeEntryModal: true,
+      showIssueModal: false
     });
   }
 
@@ -157,24 +177,43 @@ class IssueDetailsPage extends Component {
     this.setState({
       activities: [],
       selectedTimeEntry: undefined,
-      showTimeEntryModal: false
+      showTimeEntryModal: false,
+      showIssueModal: false
     });
+  }
+
+  closeIssueModal = (changes) => {
+    this.setState({
+      showIssueModal: false
+    })
+  }
+
+  openIssueModal = () => () => {
+    this.setState({ showIssueModal: true })
   }
 
   getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
 
   render() {
     const { selectedIssueState, history, userId, theme, postComments } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal, activities } = this.state;
+    const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
+    const cfields = selectedIssue.custom_fields;
+    const children = selectedIssue.children;
     return selectedIssue.id
       ? (
         <Section>
           <Flex>
             <IssueDetails>
-              <BackButton onClick={history.goBack.bind(this)}>
-                <ArrowLeftIcon size={30} />
-              </BackButton>
+              <Buttons className="buttons">
+                <BackButton onClick={history.goBack.bind(this)}>
+                  <ArrowLeftIcon size={30} />
+                </BackButton>
+                <FlexButton onClick={this.openIssueModal()}>
+                  <EditIcon size={22} />
+                  <span>&nbsp;Edit</span>
+                </FlexButton>
+              </Buttons>
               <h2>
                 <span>#{selectedIssue.id}&nbsp;</span>
                 <span>{selectedIssue.subject}</span>
@@ -214,10 +253,19 @@ class IssueDetailsPage extends Component {
                     <div>
                       <Progressbar
                         percent={selectedIssue.done_ratio}
+                        mode="progress-gradient"
                         background={theme.main}
                       />
                     </div>
                   </li>
+                  {
+                    children && (
+                      <li><div>Children issues:</div><div>{children.map((el) => (<Link onClick={() => this.props.history.push(`/app/issue/${el.id}/`)}>{`#${el.id}`}</Link>))}</div></li>
+                    )
+                  }
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                  }
                 </ColumnList>
                 <ColumnList>
                   <li>
@@ -234,21 +282,40 @@ class IssueDetailsPage extends Component {
                   </li>
                   <li>
                     <div>Estimation: </div>
-                    <div>{selectedIssue.total_estimated_hours ? `${selectedIssue.total_estimated_hours} hours` : undefined}</div>
+                    <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
+                    {
+                      (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
+                        <span> (Total: {selectedIssue.total_estimated_hours.toFixed(2)} h)</span>
+                      )
+                    }
+                    </div>
                   </li>
                   <li>
                     <div>Time spent: </div>
-                    <div>{selectedIssue.spent_hours.toFixed(2)} hours</div>
+                    <div>{selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                      {
+                        (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
+                          <span> (Total: {selectedIssue.total_spent_hours.toFixed(2)} h)</span>
+                        )
+                      }
+                    </div>
                   </li>
                   <li>
                     <div>Time cap: </div>
                     <div>
                       <Progressbar
                         percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
+                        mode="time-tracking"
                         background={theme.main}
                       />
                     </div>
                   </li>
+                  {
+                    children && (<li></li>)
+                  }
+                  {
+                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                  }
                 </ColumnList>
               </Wrapper>
               <div>
@@ -275,6 +342,15 @@ class IssueDetailsPage extends Component {
               onClose={this.closeTimeEntryModal}
             />
           )}
+          {selectedIssue && (
+          <IssueModal
+            isOpen={showIssueModal}
+            isEditable={selectedIssue.assigned_to.id === userId}
+            isUserAuthor={selectedIssue.author.id === userId}
+            issueEntry={selectedIssue}
+            onClose={this.closeIssueModal}
+          />
+          )}
         </Section>
       )
       : <OverlayProcessIndicator />;
@@ -299,11 +375,12 @@ IssueDetailsPage.propTypes = {
       assigned_to: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
-      }).siRequired,
+      }).isRequired,
       done_ratio: PropTypes.number.isRequired,
       start_date: PropTypes.string.isRequired,
       due_date: PropTypes.string.isRequired,
       total_estimated_hours: PropTypes.number,
+      total_spent_hours: PropTypes.number,
       spent_hours: PropTypes.number,
       tracker: PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -316,7 +393,12 @@ IssueDetailsPage.propTypes = {
       author: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
-      }).isRequired
+      }).isRequired,
+      custom_fields: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired
+      }))
     }),
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)

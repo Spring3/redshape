@@ -10,7 +10,9 @@ export default {
   normalText: '#3F3844',
   hoverText: '#FFFFFF',
   red: '#FF634D',
+  'yellow-red': '#FF875A',
   yellow: '#FFDA77',
+  'yellow-green': '#C6D369',
   green: '#6CCA51',
   shadow: '#D0D0D0',
   transitionTime: '.2s'

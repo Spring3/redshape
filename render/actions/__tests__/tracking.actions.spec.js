@@ -45,7 +45,10 @@ describe('Time tracking actions', () => {
 
   it('TRACKING_CONTINUE action', () => {
     expect(trackingActions.default.trackingContinue()).toEqual({
-      type: trackingActions.TRACKING_CONTINUE
+      type: trackingActions.TRACKING_CONTINUE,
+      data: {
+        duration: undefined
+      }
     });
   });
 

@@ -39,7 +39,7 @@ const state = {
           status: { name: 'Open' },
           subject: 'Task #1',
           priority: { name: 'High' },
-          estimated_hours: '10',
+          estimated_hours: 10,
           due_date: '2011-01-01'
         },
         {
@@ -49,7 +49,7 @@ const state = {
           status: { name: 'Open' },
           subject: 'Task #2',
           priority: { name: 'Normal' },
-          estimated_hours: '5',
+          estimated_hours: 5,
           due_date: '2011-01-01'
         },
         {
@@ -59,7 +59,7 @@ const state = {
           status: { name: 'Open' },
           subject: 'Task #3',
           priority: { name: 'Low' },
-          estimated_hours: '2',
+          estimated_hours: 2,
           due_date: '2011-01-01'
         }
       ]

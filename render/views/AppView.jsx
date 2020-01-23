@@ -15,6 +15,10 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
+import { hoursToDuration } from "../datetime";
+
+import IPC from '../ipc';
+
 const Grid = styled.div`
   height: 100%;
   display: grid;
@@ -36,15 +40,23 @@ class AppView extends Component {
       showTimeEntryModal: false,
       timeEntry: null
     };
+
+    this.modifyUserMenu();
+  }
+
+  modifyUserMenu(){
+    const { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } = this.props;
+    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
   }
 
   componentWillMount() {
     this.props.getProjectData();
   }
 
-  onTrackingStop = (value, trackedIssue) => {
+  onTrackingStop = (trackedIssue, value, comments) => {
     const { userId, userName, projects } = this.props;
     const activities = _get(projects[trackedIssue.project.id], 'activities', []);
+    const hours = parseFloat((value / 3600000).toFixed(3));
     this.setState({
       activities: activities.map(({ id, name }) => ({ value: id, label: name })),
       showTimeEntryModal: true,
@@ -54,8 +66,9 @@ class AppView extends Component {
           id: trackedIssue.id,
           name: trackedIssue.subject
         },
-        hours: (value / 3600000).toFixed(2),
-        comments: '',
+        hours,
+        duration: hoursToDuration(hours),
+        comments: comments || '',
         project: {
           id: trackedIssue.project.id,
           name: trackedIssue.project.name
@@ -85,19 +98,19 @@ class AppView extends Component {
         { (!userId || !api_key) ? (<Redirect to="/" />) : null }
         <Navbar />
         <Content>
-          <Route exact path={`${match.path}/summary`} component={SummaryPage} />
-          <Route path={`${match.path}/issue/:id`} component={IssueDetailsPage} />
+          <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props}/>} />
+          <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props}/>} />
           <Timer
             onStop={this.onTrackingStop}
             history={this.props.history}
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
-            isEditable={false}
-            onClose={this.closeTimeEntryModal}
+            isEditable={true}
             activities={activities}
             isUserAuthor={true}
             timeEntry={timeEntry}
+            initialVolatileContent={true}
             onClose={this.closeTimeEntryModal}
           />
         </Content>
@@ -121,14 +134,22 @@ AppView.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired).isRequired
-  }).isRequired
+  }).isRequired,
+  idleBehavior: PropTypes.number.isRequired,
+  discardIdleTime: PropTypes.bool.isRequired,
+  advancedTimerControls: PropTypes.bool.isRequired,
+  progressWithStep1: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.user.id,
   userName: state.user.name,
   api_key: state.user.api_key,
-  projects: state.projects.data
+  projects: state.projects.data,
+  idleBehavior: state.settings.idleBehavior,
+  discardIdleTime: state.settings.discardIdleTime,
+  advancedTimerControls: state.settings.advancedTimerControls,
+  progressWithStep1: state.settings.progressWithStep1,
 });
 
 const mapDispatchToProps = dispatch => ({

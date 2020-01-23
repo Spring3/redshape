@@ -108,18 +108,6 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 0px;
 }
 
-.c8 {
-  color: #FF7079;
-  font-size: 14px;
-  padding: 2px;
-  cursor: pointer;
-}
-
-.c8:hover {
-  background: #FF7079;
-  color: #FFFFFF;
-}
-
 .c5 {
   -webkit-animation: gOHwoP .7s ease-in;
   animation: gOHwoP .7s ease-in;
@@ -139,8 +127,29 @@ exports[`AppView should match the snapshot 1`] = `
   border-top: 2px solid #F9F9F9;
 }
 
+.c5 div.panel {
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  min-width: 520px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  max-width: 1800px;
+}
+
 .c5 div.buttons {
   margin: 0 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c5 div.time {
@@ -161,22 +170,45 @@ exports[`AppView should match the snapshot 1`] = `
   margin-right: 20px;
 }
 
+.c5 div.buttons.buttons-advanced a {
+  margin-right: 5px;
+}
+
+.c5 div.buttons.buttons-advanced a:last-child {
+  margin-right: initial;
+}
+
+.c5 div.issueName {
+  padding: 0 20px;
+  max-width: 500px;
+}
+
 .c5 div.time {
   color: #FF7079;
 }
 
-.c6 {
-  padding: 0px;
+.c5 input[name="comment"] {
+  -webkit-box-flex: 2;
+  -webkit-flex-grow: 2;
+  -ms-flex-positive: 2;
+  flex-grow: 2;
+  margin-left: 20px;
+  width: initial;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px #F9F9F9 solid;
+  color: #A4A4A4;
 }
 
-.c7 {
-  color: inherit;
-  padding: 0;
-  margin: 0 20px;
-  font-size: 16px;
-  font-weight: bold;
-  -webkit-text-decoration: none;
-  text-decoration: none;
+.c5 input[name="comment"]:focus {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px #FF7079 solid;
+  box-shadow: none;
+}
+
+.c6 {
+  padding: 0px;
 }
 
 .c1 {
@@ -250,63 +282,58 @@ exports[`AppView should match the snapshot 1`] = `
       className="c5"
     >
       <div
-        className="buttons"
+        className="panel"
       >
-        <a
-          className="c6 c3"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
+        <div
+          className="buttons"
         >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={35}
-            viewBox="0 0 24 24"
-            width={35}
+          <a
+            className="c6 c3"
+            disabled={false}
+            href="#"
+            onClick={[Function]}
           >
-            <path
-              d="M18,18H6V6H18V18Z"
-            />
-          </svg>
-        </a>
-        <a
-          className="c6 c3"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
-        >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={35}
-            viewBox="0 0 24 24"
-            width={35}
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={35}
+              viewBox="0 0 24 24"
+              width={35}
+            >
+              <path
+                d="M18,18H6V6H18V18Z"
+              />
+            </svg>
+          </a>
+          <a
+            className="c6 c3"
+            disabled={false}
+            href="#"
+            onClick={[Function]}
           >
-            <path
-              d="M14,19H18V5H14M6,19H10V5H6V19Z"
-            />
-          </svg>
-        </a>
-      </div>
-      <div
-        className="issueName"
-      >
-        <a
-          className="c7 c8"
-          href="#"
-          onClick={[Function]}
-          rel="noopener noreferer"
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={35}
+              viewBox="0 0 24 24"
+              width={35}
+            >
+              <path
+                d="M14,19H18V5H14M6,19H10V5H6V19Z"
+              />
+            </svg>
+          </a>
+        </div>
+        <div
+          className="issueName"
+        />
+        <div
+          className="time"
         >
-          Test issue
-        </a>
-      </div>
-      <div
-        className="time"
-      >
-        <span>
-          00:00:00
-        </span>
+          <span>
+            00:00:00
+          </span>
+        </div>
       </div>
     </div>
   </div>

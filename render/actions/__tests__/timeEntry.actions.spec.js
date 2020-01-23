@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import moment from 'moment';
 import { notify } from '../helper';
 import * as timeEntryActions from '../timeEntry.actions';
+import { hoursToDuration, durationToHours } from "../../datetime";
 import axios from '../../../common/request';
 
 const redmineEndpoint = 'redmine.test.com';
@@ -42,6 +43,36 @@ describe('Time actions', () => {
     expect(timeEntryActions.default.reset).toBeTruthy();
   });
 
+  describe('duration casts', () => {
+    const casts = [
+      {hours: 0, duration: '0s'},
+      {hours: 1, duration: '1h'},
+      {hours: 0.50, duration: '30m'},
+      {hours: 1.50, duration: '1h 30m'},
+      {hours: 1.52, duration: '1h 31m 12s'},
+      {hours: 24.02, duration: '1d 1m 12s'},
+    ];
+
+    it('should cast properly hours to duration', () => {
+      expect(hoursToDuration(null)).toBe('');
+      for (const {hours, duration} of casts) {
+        expect(hoursToDuration(hours)).toBe(duration);
+      }
+    });
+
+    it('should cast properly duration to hours', () => {
+      expect(() => {
+        durationToHours(null);
+      }).toThrow('Cannot read property');
+      expect(() => {
+        durationToHours(3);
+      }).toThrow('is not a function');
+      for (const {hours, duration} of casts) {
+        expect(durationToHours(duration)).toBe(hours);
+      }
+    });
+  });
+
   describe('validateBeforePublish action', () => {
     it('should pass through the validation if the format is correct', () => {
       expect(timeEntryActions.default.validateBeforePublish({
@@ -51,13 +82,14 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: 'Yolo',
         spent_on: '2011-01-01'
       })).toEqual({ type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED });
     });
 
-    
+
     it('should fail if activity.id is not a number', () => {
       const validation = timeEntryActions.default.validateBeforePublish({
         activity: {
@@ -89,10 +121,11 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
+        duration: '-15.2',
         hours: -15.2
       });
       expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_FAILED);
-      expect(validation.data.details[0].path).toEqual(['hours']);
+      expect(validation.data.details[0].path).toEqual(['duration']);
     });
 
     it('should fail if comments is not a string', () => {
@@ -103,6 +136,7 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: undefined
       });
@@ -118,6 +152,7 @@ describe('Time actions', () => {
         issue: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: '',
         spent_on: new Date()
@@ -141,6 +176,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: new Date(),
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -176,6 +212,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: '2011-01-01',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -219,6 +256,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: '2011-01-01',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -258,6 +296,7 @@ describe('Time actions', () => {
         activity: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: 'Yolo',
         spent_on: '2011-01-01'
@@ -280,10 +319,11 @@ describe('Time actions', () => {
         activity: {
           id: 1
         },
+        duration: '-15.2',
         hours: -15.2
       });
       expect(validation.type).toBe(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED);
-      expect(validation.data.details[0].path).toEqual(['hours']);
+      expect(validation.data.details[0].path).toEqual(['duration']);
     });
 
     it('should fail if comments is not a string', () => {
@@ -291,6 +331,7 @@ describe('Time actions', () => {
         activity: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: undefined
       });
@@ -303,6 +344,7 @@ describe('Time actions', () => {
         activity: {
           id: 1
         },
+        duration: '15.2',
         hours: 15.2,
         comments: '',
         spent_on: new Date()
@@ -320,6 +362,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: new Date(),
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -332,6 +375,7 @@ describe('Time actions', () => {
 
       const changes = {
         comments: 'I win',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 2
@@ -355,6 +399,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: '2011-01-01',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -367,6 +412,7 @@ describe('Time actions', () => {
 
       const changes = {
         comments: 'I win',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 2
@@ -408,6 +454,7 @@ describe('Time actions', () => {
           id: 1
         },
         spent_on: '2011-01-01',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 1
@@ -420,6 +467,7 @@ describe('Time actions', () => {
 
       const changes = {
         comments: 'I win',
+        duration: '1.5',
         hours: 1.5,
         activity: {
           id: 2

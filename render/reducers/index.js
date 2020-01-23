@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import usersReducer from './user.reducer';
 import settingsReducer from './settings.reducer';
 import allIssuesReducer from './issues.reducer';
+import issueReducer from './issue.reducer';
 import selectedIssueReducer from './issue.selected.reducer';
 import trackingReducer from './tracking.reducer';
 import projectReducer from './project.reducer';
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
     all: allIssuesReducer,
     selected: selectedIssueReducer
   }),
+  issue: issueReducer,
   projects: projectReducer,
   tracking: trackingReducer,
   timeEntry: timeEntryReducer

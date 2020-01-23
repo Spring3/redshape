@@ -21,6 +21,8 @@ jest.mock('electron-store');
 
 import storage from '../../../common/storage';
 
+import { hoursToDuration } from '../../datetime';
+
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
 const token = 'multipass';
@@ -77,6 +79,12 @@ describe('AppView', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        idleBehavior: 0,
+        discardIdleTime: true,
+        advancedTimerControls: false,
+        progressWithStep1: false,
       }
     });
     const tree = renderer.create(
@@ -132,6 +140,12 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
+          progressWithStep1: false,
         }
       });
 
@@ -201,6 +215,12 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
+          progressWithStep1: false,
         }
       });
 
@@ -273,7 +293,7 @@ describe('AppView', () => {
         },
         tracking: {
           isEnabled: false,
-          duration: 41000,
+          ms: 41000,
           issue: {
             id: 321,
             subject: 'Test issue',
@@ -286,6 +306,12 @@ describe('AppView', () => {
         timeEntry: {
           isFetching: false,
           error: undefined
+        },
+        settings: {
+          idleBehavior: 0,
+          discardIdleTime: true,
+          advancedTimerControls: false,
+          progressWithStep1: false,
         }
       };
       const store = mockStore(state);
@@ -326,7 +352,10 @@ describe('AppView', () => {
       const view = wrapper.find('AppView').instance();
       expect(view).toBeTruthy();
 
-      view.onTrackingStop(state.tracking.duration, state.tracking.issue);
+      const hours = Number((state.tracking.ms / 3600000).toFixed(3));
+      const duration = hoursToDuration(hours);
+
+      view.onTrackingStop(state.tracking.issue, state.tracking.ms);
       expect(view.state.showTimeEntryModal).toBe(true);
       expect(view.state.timeEntry).toEqual({
         activity: {},
@@ -334,7 +363,8 @@ describe('AppView', () => {
           id: state.tracking.issue.id,
           name: state.tracking.issue.subject
         },
-        hours: (state.tracking.duration / 3600000).toFixed(2),
+        hours,
+        duration,
         comments: '',
         project: {
           id: state.tracking.issue.project.id,

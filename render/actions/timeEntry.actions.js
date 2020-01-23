@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import request, { notify } from './helper';
+
+import { durationToHours, hoursToDuration } from "../datetime";
 
 export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
 export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
@@ -12,22 +14,50 @@ export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
-const validateBeforePublish = (timeEntry) => {
-  const validationSchema = Joi.object().keys({
+const validateDuration = (value, helpers) => {
+  const hours = durationToHours(value);
+  if (hours == null){
+    return helpers.message('"duration" requires a value in hours or a duration string (eg. 34m, 1 day 5m)');
+  }else if (hours <= 0){
+    return helpers.message(`"duration" requires a positive duration (${hours} hours)`);
+  }
+  return hours;
+}
+
+const validateBeforeCommon = (timeEntry, checkFields) => {
+  let schema = {};
+  const schemaFields = {
     activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required(),
+      // label: bugfix "activity.activity" is required, when "Add" new time spent and fill first the duration
+      id: Joi.number().integer().positive().required().label('activity'),
       name: Joi.string()
     }).unknown().required(),
     issue: Joi.object().keys({
       id: Joi.number().integer().positive().required(),
       name: Joi.string()
     }).unknown().required(),
-    hours: Joi.number().positive().precision(2).required(),
+    duration: Joi.string().required().custom(validateDuration, 'duration validator'),
+    hours: Joi.number().positive().precision(2).required().label('duration'),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
-  }).unknown().required();
+  };
+  if (checkFields){
+    if (!(checkFields instanceof Array)){
+      checkFields = [checkFields];
+    }
+    for (const checkField of checkFields){
+      schema[checkField] = schemaFields[checkField];
+    }
+  }else{
+    schema = schemaFields;
+  }
+  const validationSchema = Joi.object().keys(schema).unknown().required();
+  const validationResult = validationSchema.validate(timeEntry);
+  return validationResult;
+};
 
-  const validationResult = Joi.validate(timeEntry, validationSchema);
+const validateBeforePublish = (timeEntry, checkFields) => {
+  const validationResult = validateBeforeCommon(timeEntry, checkFields);
   return validationResult.error
     ? {
       type: TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
@@ -68,18 +98,11 @@ const publish = timeEntryData => (dispatch, getState) => {
     });
 };
 
-const validateBeforeUpdate = (changes) => {
-  const validationSchema = Joi.object().keys({
-    activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required(),
-      name: Joi.string()
-    }).unknown().required(),
-    hours: Joi.number().positive().precision(2).required(),
-    comments: Joi.string().required().allow(''),
-    spent_on: Joi.string().required()
-  }).unknown().required();
-
-  const validationResult = Joi.validate(changes, validationSchema);
+const validateBeforeUpdate = (timeEntry, checkFields) => {
+  if (!checkFields){
+    checkFields = ['activity', 'duration', 'hours', 'comments', 'spent_on'];
+  }
+  const validationResult = validateBeforeCommon(timeEntry, checkFields);
   return validationResult.error
     ? {
       type: TIME_ENTRY_UPDATE_VALIDATION_FAILED,

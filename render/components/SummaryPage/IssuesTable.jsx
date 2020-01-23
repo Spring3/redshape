@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { connect } from 'react-redux';
@@ -129,10 +129,13 @@ class IssuesTable extends Component {
     this.props.history.push(`/app/issue/${id}/`);
   }
 
-  paint = (item, mapping) => {
+  /**
+   * @param value to be used (@param mapping is discarded)
+   */
+  paint = (item, mapping, value) => {
     const { theme, useColors } = this.props;
-    const textValue = _get(item, mapping);
-    
+    const textValue = value != null ? value : _get(item, mapping);
+
     const color = (useColors && typeof textValue === 'string'
       ? colorMap[textValue.toLowerCase()]
       : undefined);
@@ -152,9 +155,10 @@ class IssuesTable extends Component {
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
     return (
-      <Table>
+      <Fragment>
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
-        <thead>
+        <Table>
+          <thead>
           <tr>
             {issueHeaders.map(header => (
               <th
@@ -171,36 +175,41 @@ class IssuesTable extends Component {
               </th>
             ))}
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <InfiniteScroll
             load={this.loadIssuePage}
             isEnd={userTasks.length === issues.totalCount}
             hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
             container={window}
-            loadIndicator={<ProcessIndicatorContainer><ProcessIndicator className="container" /></ProcessIndicatorContainer>}
+            loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
             immediate={true}
           >
             {userTasks.map(task => (
               <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
                 {
-                  issueHeaders.map(header => (
-                    <td
-                      key={header.value}
-                      className={header.value === 'due_date' && header.value}
-                    >
-                      {header.value === 'due_date'
-                        ? <Date date={_get(task, header.value)} />
-                        : this.paint(task, header.value)
-                      }
-                    </td>
-                  ))
+                  issueHeaders.map(header => {
+                    const date = header.value === 'due_date' && _get(task, header.value);
+                    let forcedValue;
+                    let estimated_hours = header.value === 'estimated_hours' && _get(task, header.value);
+                    if (estimated_hours){
+                      forcedValue = Number(estimated_hours.toFixed(2))
+                    }
+                    return (
+                      <td
+                        key={header.value}
+                        className={header.value === 'due_date' ? header.value : ""}
+                      >
+                        { date ? (<Date date={date}/>) : this.paint(task, header.value, forcedValue) }
+                      </td>
+                    )})
                 }
               </tr>
             ))}
           </InfiniteScroll>
-        </tbody>
-      </Table>
+          </tbody>
+        </Table>
+      </Fragment>
     );
   }
 }

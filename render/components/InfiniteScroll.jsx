@@ -47,7 +47,7 @@ class InfiniteScroll extends Component {
       }
     }
 
-    if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {      
+    if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {
       if (this.props.container && this.shouldLoad()) {
         this.throttledScrollHandler()
       }
@@ -105,7 +105,7 @@ InfiniteScroll.propTypes = {
   hasMore: PropTypes.bool.isRequired,
   isEnd: PropTypes.bool.isRequired,
   load: PropTypes.func.isRequired,
-  container: PropTypes.element,
+  container: PropTypes.object,
   loadIndicator: PropTypes.node,
   threshold: PropTypes.number,
   immediate: PropTypes.bool
