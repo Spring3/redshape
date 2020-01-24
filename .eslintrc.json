@@ -27,8 +27,9 @@
         "no-underscore-dangle": [ "error", {
             "allow": ["__initialize", "__reset"]
         }],
+        "no-restricted-syntax": "off",
         "camelcase": [ "error", {
-            "allow": ["api_key"]
+            "allow": ["api_key", "time_entry", "spent_on", "issue_id", "activity_id", "user_id"]
         }],
         "jsx-a11y/label-has-for": [ 2, {
             "required": {

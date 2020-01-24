@@ -1,5 +1,6 @@
 import moment from 'moment';
-var momentDurationFormatSetup = require("moment-duration-format");
+import momentDurationFormatSetup from 'moment-duration-format';
+
 momentDurationFormatSetup(moment);
 
 const reDuration = /^(?!$) *(?:(\d+) *(?:d|days?))? *(?:(\d+) *(?:h|hours?))? *(?:(\d+) *(?:m|mins?|minutes?))? *(?:(\d+) *(?:s|secs?|seconds?))? *$/;
@@ -14,13 +15,13 @@ export const durationToHours = (value) => {
   let hours;
   if (m) {
     hours = parseFloat(value);
-  }else{
+  } else {
     m = value.match(reDuration);
     if (m) {
-      let d = {day: m[1], hour: m[2], minute: m[3], second: m[4]};
+      const d = { day: m[1], hour: m[2], minute: m[3], second: m[4] };
       for (const [k, v] of Object.entries(d)) {
         if (v) {
-          d[k] = parseInt(v);
+          d[k] = parseInt(v, 10);
         }
       }
       hours = moment.duration(d).asHours();
@@ -32,10 +33,11 @@ export const durationToHours = (value) => {
   //   hours = Number(hours.toFixed(2));
   // }
   return hours;
-}
+};
 
-export const hoursToDuration = (hours) => {
-  return hours == null ? '' : moment.duration(parseFloat(hours), "hours").format("d[d] h[h] m[m] s[s]", {
-    trim: "both mid"
+// eslint-disable-next-line no-confusing-arrow
+export const hoursToDuration = hours => hours == null
+  ? ''
+  : moment.duration(parseFloat(hours), 'hours').format('d[d] h[h] m[m] s[s]', {
+    trim: 'both mid'
   });
-}

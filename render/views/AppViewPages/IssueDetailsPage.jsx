@@ -209,14 +209,13 @@ class IssueDetailsPage extends Component {
                 <BackButton onClick={history.goBack.bind(this)}>
                   <ArrowLeftIcon size={30} />
                 </BackButton>
-                <FlexButton onClick={this.openIssueModal()}>
-                  <EditIcon size={22} />
-                  <span>&nbsp;Edit</span>
-                </FlexButton>
               </Buttons>
               <h2>
                 <span>#{selectedIssue.id}&nbsp;</span>
                 <span>{selectedIssue.subject}</span>
+                <IconButton onClick={this.openIssueModal()}>
+                  <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }}/>
+                </IconButton>
               </h2>
               <SmallNotice>
                 Created by&nbsp;

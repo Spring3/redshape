@@ -3,7 +3,7 @@ import moment from 'moment';
 import Joi from '@hapi/joi';
 import request, { notify } from './helper';
 
-import { durationToHours, hoursToDuration } from "../datetime";
+import { durationToHours } from '../datetime';
 
 export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
 export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
@@ -16,13 +16,14 @@ export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
 const validateDuration = (value, helpers) => {
   const hours = durationToHours(value);
-  if (hours == null){
+  if (hours == null) {
     return helpers.message('"duration" requires a value in hours or a duration string (eg. 34m, 1 day 5m)');
-  }else if (hours <= 0){
+  }
+  if (hours <= 0.0) {
     return helpers.message(`"duration" requires a positive duration (${hours} hours)`);
   }
   return hours;
-}
+};
 
 const validateBeforeCommon = (timeEntry, checkFields) => {
   let schema = {};
@@ -37,18 +38,18 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
       name: Joi.string()
     }).unknown().required(),
     duration: Joi.string().required().custom(validateDuration, 'duration validator'),
-    hours: Joi.number().positive().precision(2).required().label('duration'),
+    hours: Joi.number().positive().precision(4).required().label('duration'),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
   };
-  if (checkFields){
-    if (!(checkFields instanceof Array)){
+  if (checkFields) {
+    if (!(checkFields instanceof Array)) {
       checkFields = [checkFields];
     }
-    for (const checkField of checkFields){
+    for (const checkField of checkFields) {
       schema[checkField] = schemaFields[checkField];
     }
-  }else{
+  } else {
     schema = schemaFields;
   }
   const validationSchema = Joi.object().keys(schema).unknown().required();
@@ -58,6 +59,7 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
 
 const validateBeforePublish = (timeEntry, checkFields) => {
   const validationResult = validateBeforeCommon(timeEntry, checkFields);
+  console.log('validationResult', validationResult);
   return validationResult.error
     ? {
       type: TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
@@ -99,7 +101,8 @@ const publish = timeEntryData => (dispatch, getState) => {
 };
 
 const validateBeforeUpdate = (timeEntry, checkFields) => {
-  if (!checkFields){
+  if (!checkFields) {
+    // eslint-disable-next-line no-param-reassign
     checkFields = ['activity', 'duration', 'hours', 'comments', 'spent_on'];
   }
   const validationResult = validateBeforeCommon(timeEntry, checkFields);
