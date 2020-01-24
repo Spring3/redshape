@@ -29,7 +29,17 @@
         }],
         "no-restricted-syntax": "off",
         "camelcase": [ "error", {
-            "allow": ["api_key", "time_entry", "spent_on", "issue_id", "activity_id", "user_id"]
+            "allow": [
+                "api_key",
+                "time_entry",
+                "spent_on",
+                "issue_id",
+                "activity_id",
+                "user_id",
+                "spent_hours",
+                "total_spent_hours",
+                "time_entries"
+            ]
         }],
         "jsx-a11y/label-has-for": [ 2, {
             "required": {

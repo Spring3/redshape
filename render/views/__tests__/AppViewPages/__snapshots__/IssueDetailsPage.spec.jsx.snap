@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`IssueDetails page should match the snapshot 1`] = `
-.c9 {
+.c8 {
   color: #FF7079;
   font-size: 14px;
   padding: 2px;
   cursor: pointer;
 }
 
-.c9:hover {
+.c8:hover {
   background: #FF7079;
   color: #FFFFFF;
 }
 
-.c17 {
+.c16 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -32,7 +32,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   box-shadow: 0px 2px 7px #A0A0A0;
 }
 
-.c17::after {
+.c16::after {
   content: ' ';
   position: absolute;
   top: 100%;
@@ -46,16 +46,16 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c13 {
+.c12 {
   display: inline-block;
   position: relative;
 }
 
-.c13:hover .c16 {
+.c12:hover .c15 {
   display: block;
 }
 
-.c12 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -73,14 +73,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c14 {
+.c13 {
   background: #F9F9F9;
   position: relative;
   border-radius: 5px;
   height: 5px;
 }
 
-.c15 {
+.c14 {
   border-radius: 5px;
   max-width: 100%;
   width: 0;
@@ -92,7 +92,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF634D;
 }
 
-.c19 {
+.c18 {
   border-radius: 5px;
   max-width: 100%;
   width: 0;
@@ -116,7 +116,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c7 {
+.c23 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -133,18 +133,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c7:hover,
-.c7:focus {
+.c23:hover,
+.c23:focus {
   background: #FF7079;
   color: #FFFFFF !important;
 }
 
-.c7:hover svg,
-.c7:focus svg {
+.c23:hover svg,
+.c23:focus svg {
   fill: #FFFFFF;
 }
 
-.c7:active {
+.c23:active {
   background: #EF6069;
 }
 
@@ -227,29 +227,29 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border: 2px solid #FF7079;
 }
 
-.c20 {
+.c19 {
   box-sizing: border-box;
   overflow: hidden;
 }
 
-.c18 {
+.c17 {
   position: relative;
   display: inline-grid;
   grid-template-rows: 1fr;
 }
 
-.c18 span {
+.c17 span {
   float: left;
   grid-row: 1;
   grid-column: 1;
 }
 
-.c18 span:last-child {
+.c17 span:last-child {
   opacity: 0;
   display: none;
 }
 
-.c22 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -265,24 +265,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c22 h2 {
+.c21 h2 {
   display: inline-block;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.c22 > div {
+.c21 > div {
   margin-right: 15px;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
-.c22 > div button {
+.c21 > div button {
   background: #FFFFFF;
   margin: 0px 5px;
 }
 
-.c23 {
+.c22 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -294,7 +294,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF7F87;
 }
 
-.c21 {
+.c20 {
   background: white;
   padding-top: 35px;
   max-height: 550px;
@@ -495,7 +495,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-bottom: 60px;
 }
 
-.c11 {
+.c10 {
   list-style-type: none;
   font-weight: 500;
   margin: 0;
@@ -506,7 +506,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c11 li {
+.c10 li {
   -webkit-columns: 2;
   columns: 2;
   margin-bottom: 10px;
@@ -521,41 +521,43 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c11 li div {
+.c10 li div {
   width: 220px;
 }
 
-.c11 li div:first-child {
+.c10 li div:first-child {
   font-weight: bold;
   width: 150px;
 }
 
-.c6 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c8 {
+.c7 {
   font-size: 12px;
   margin-top: 0px;
   color: #A0A0A0;
 }
 
-.c8 a {
+.c7 a {
   font-size: inherit !important;
   margin-right: 5px;
 }
 
-.c10 {
+.c9 {
   display: inline-block;
   width: 100%;
   margin-top: 10px;
+}
+
+.c6 svg {
+  border-radius: 3px;
+  color: #FF7079;
+  border: 2px solid transparent;
+  -webkit-transition: all ease .2s;
+  transition: all ease .2s;
+}
+
+.c6 svg:hover {
+  color: #FF7079;
+  border: 2px solid #FF7079;
 }
 
 .c3 {
@@ -633,27 +635,6 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             />
           </svg>
         </a>
-        <button
-          className="c6 c7"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
-        >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={22}
-            viewBox="0 0 24 24"
-            width={22}
-          >
-            <path
-              d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
-            />
-          </svg>
-          <span>
-             Edit
-          </span>
-        </button>
       </div>
       <h2>
         <span>
@@ -664,13 +645,37 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         <span>
           Test
         </span>
+        <a
+          className="c6 c5"
+          disabled={false}
+          href="#"
+          onClick={[Function]}
+        >
+          <svg
+            className="mdi-icon "
+            fill="currentColor"
+            height={20}
+            style={
+              Object {
+                "marginLeft": ".5rem",
+                "verticalAlign": "bottom",
+              }
+            }
+            viewBox="0 0 24 24"
+            width={20}
+          >
+            <path
+              d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+            />
+          </svg>
+        </a>
       </h2>
       <p
-        className="c8"
+        className="c7"
       >
         Created by 
         <a
-          className="c9"
+          className="c8"
           onClick={[Function]}
           rel="noopener noreferer"
         >
@@ -678,10 +683,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </a>
       </p>
       <div
-        className="c10"
+        className="c9"
       >
         <ul
-          className="c11"
+          className="c10"
         >
           <li>
             <div>
@@ -729,22 +734,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </div>
             <div>
               <div
-                className="c12"
+                className="c11"
               >
                 <div
-                  className="c13"
+                  className="c12"
                 >
                   <div
-                    className="c14"
+                    className="c13"
                     height={5}
                   >
                     <div
-                      className="c15"
+                      className="c14"
                       height={5}
                     />
                   </div>
                   <p
-                    className="tooltip c16 c17"
+                    className="tooltip c15 c16"
                   >
                     1%
                   </p>
@@ -754,7 +759,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           </li>
         </ul>
         <ul
-          className="c11"
+          className="c10"
         >
           <li>
             <div>
@@ -767,7 +772,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Start date: 
             </div>
             <span
-              className="c18"
+              className="c17"
             >
               <span>
                 Jan 01 2011
@@ -782,7 +787,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Due date: 
             </div>
             <span
-              className="c18"
+              className="c17"
             >
               <span>
                 Jan 01 2011
@@ -818,22 +823,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </div>
             <div>
               <div
-                className="c12"
+                className="c11"
               >
                 <div
-                  className="c13"
+                  className="c12"
                 >
                   <div
-                    className="c14"
+                    className="c13"
                     height={5}
                   >
                     <div
-                      className="c19"
+                      className="c18"
                       height={5}
                     />
                   </div>
                   <p
-                    className="tooltip c16 c17"
+                    className="tooltip c15 c16"
                   >
                     0%
                   </p>
@@ -848,7 +853,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Description
         </h3>
         <iframe
-          className="c20"
+          className="c19"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Fixture test issue</p>"
@@ -857,10 +862,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="c21"
+      className="c20"
     >
       <div
-        className="c22"
+        className="c21"
       >
         <h2
           className="padded"
@@ -869,7 +874,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </h2>
         <div>
           <button
-            className="c23 c7"
+            className="c22 c23"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -890,7 +895,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </span>
           </button>
           <button
-            className="c23 c7"
+            className="c22 c23"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -941,7 +946,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -955,7 +960,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Bold text
                 </p>
@@ -966,7 +971,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -980,7 +985,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Italic text
                 </p>
@@ -991,7 +996,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1005,7 +1010,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Underlined text
                 </p>
@@ -1016,7 +1021,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1030,7 +1035,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Crossed out text
                 </p>
@@ -1041,7 +1046,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1055,7 +1060,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Code block
                 </p>
@@ -1066,7 +1071,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1080,7 +1085,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   XL Header
                 </p>
@@ -1091,7 +1096,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1105,7 +1110,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   L Header
                 </p>
@@ -1116,7 +1121,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1130,7 +1135,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   M Header
                 </p>
@@ -1141,7 +1146,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1155,7 +1160,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Bulleted List
                 </p>
@@ -1166,7 +1171,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1180,7 +1185,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Ordered List
                 </p>
@@ -1191,7 +1196,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1205,7 +1210,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Quote block
                 </p>
@@ -1216,7 +1221,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1230,7 +1235,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Hyperlink
                 </p>
@@ -1241,7 +1246,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               onClick={[Function]}
             >
               <div
-                className="c13"
+                className="c12"
               >
                 <svg
                   className="mdi-icon "
@@ -1255,7 +1260,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  className="tooltip c16 c17"
+                  className="tooltip c15 c16"
                 >
                   Embeded Image
                 </p>
@@ -1302,7 +1307,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           >
             Press 
             <a
-              className="c9"
+              className="c8"
               href="#"
               onClick={[Function]}
               rel="noopener noreferer"

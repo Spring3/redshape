@@ -59,7 +59,6 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
 
 const validateBeforePublish = (timeEntry, checkFields) => {
   const validationResult = validateBeforeCommon(timeEntry, checkFields);
-  console.log('validationResult', validationResult);
   return validationResult.error
     ? {
       type: TIME_ENTRY_PUBLISH_VALIDATION_FAILED,

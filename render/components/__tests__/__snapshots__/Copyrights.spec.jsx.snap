@@ -22,7 +22,7 @@ exports[`Copyrights Component should match the snapshot 1`] = `
   Created by 
   <a
     className="c1"
-    href="https://spring3.github.io/website/"
+    href="https://www.dvasylenko.com"
     onClick={[Function]}
     rel="noopener noreferer"
     type="external"

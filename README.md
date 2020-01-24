@@ -35,6 +35,18 @@ Download the latest [Redshape release](https://github.com/Spring3/redshape/relea
 
 The application will automatically update when a new release is available.
 
+## Development
+
+If you don't have access to a deployed instance of redmine, you can now run it in docker
+
+Unfortuantely, you will have to configure it then yourself
+
+```
+docker-compose -f stack.yml up
+```
+
+Then after you run the project with `npm run dev`, use `http://localhost` as redmine endpoint on the login form and provide the credentials or the API token 
+
 ## FAQ
 
 #### - I try to log in, but it returns an error

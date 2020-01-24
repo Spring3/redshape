@@ -316,13 +316,21 @@ exports[`Timer component should match the snapshot 1`] = `
                             href="#"
                             onClick={[Function]}
                           >
-                            <StopIcon
+                            <Memo(StopIcon)
                               size={35}
                             >
-                              <path
-                                d="M18,18H6V6H18V18Z"
-                              />
-                            </StopIcon>
+                              <svg
+                                className="mdi-icon "
+                                fill="currentColor"
+                                height={35}
+                                viewBox="0 0 24 24"
+                                width={35}
+                              >
+                                <path
+                                  d="M18,18H6V6H18V18Z"
+                                />
+                              </svg>
+                            </Memo(StopIcon)>
                           </a>
                         </StyledComponent>
                       </Button__StyledLink>
@@ -411,13 +419,21 @@ exports[`Timer component should match the snapshot 1`] = `
                             href="#"
                             onClick={[Function]}
                           >
-                            <PlayIcon
+                            <Memo(PlayIcon)
                               size={35}
                             >
-                              <path
-                                d="M8,5.14V19.14L19,12.14L8,5.14Z"
-                              />
-                            </PlayIcon>
+                              <svg
+                                className="mdi-icon "
+                                fill="currentColor"
+                                height={35}
+                                viewBox="0 0 24 24"
+                                width={35}
+                              >
+                                <path
+                                  d="M8,5.14V19.14L19,12.14L8,5.14Z"
+                                />
+                              </svg>
+                            </Memo(PlayIcon)>
                           </a>
                         </StyledComponent>
                       </Button__StyledLink>

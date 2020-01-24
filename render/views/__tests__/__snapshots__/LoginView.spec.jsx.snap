@@ -340,7 +340,7 @@ exports[`Login view should match the snapshot 1`] = `
       Created by 
       <a
         className="c15"
-        href="https://spring3.github.io/website/"
+        href="https://www.dvasylenko.com"
         onClick={[Function]}
         rel="noopener noreferer"
         type="external"
@@ -1253,14 +1253,22 @@ exports[`Login view should match the snapshot when using api key 1`] = `
                                                         checked={true}
                                                         className="c10"
                                                       >
-                                                        <CheckIcon
+                                                        <Memo(CheckIcon)
                                                           color="white"
                                                           size="18"
                                                         >
-                                                          <path
-                                                            d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
-                                                          />
-                                                        </CheckIcon>
+                                                          <svg
+                                                            className="mdi-icon "
+                                                            fill="white"
+                                                            height="18"
+                                                            viewBox="0 0 24 24"
+                                                            width="18"
+                                                          >
+                                                            <path
+                                                              d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                                            />
+                                                          </svg>
+                                                        </Memo(CheckIcon)>
                                                       </div>
                                                     </StyledComponent>
                                                   </Input__StyledCheckbox>
@@ -1672,11 +1680,11 @@ exports[`Login view should match the snapshot when using api key 1`] = `
                                     >
                                       Created by 
                                       <Link
-                                        href="https://spring3.github.io/website/"
+                                        href="https://www.dvasylenko.com"
                                         type="external"
                                       >
                                         <Link__StyledLink
-                                          href="https://spring3.github.io/website/"
+                                          href="https://www.dvasylenko.com"
                                           onClick={[Function]}
                                           rel="noopener noreferer"
                                           type="external"
@@ -1708,14 +1716,14 @@ exports[`Login view should match the snapshot when using api key 1`] = `
                                               }
                                             }
                                             forwardedRef={null}
-                                            href="https://spring3.github.io/website/"
+                                            href="https://www.dvasylenko.com"
                                             onClick={[Function]}
                                             rel="noopener noreferer"
                                             type="external"
                                           >
                                             <a
                                               className="c15"
-                                              href="https://spring3.github.io/website/"
+                                              href="https://www.dvasylenko.com"
                                               onClick={[Function]}
                                               rel="noopener noreferer"
                                               type="external"
