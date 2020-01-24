@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const { app, BrowserWindow, Menu, Notification, ipcMain } = require('electron');
+const {
+  app, BrowserWindow, Menu, Notification, ipcMain
+} = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
@@ -33,31 +35,34 @@ if (env.error || !process.env.ENCRYPTION_KEY) {
 }
 
 const config = require('../common/config');
+
 const { PORT } = config;
 require('../common/request'); // to initialize from storage
 
 let mainWindow;
 let aboutWindow;
 
-const updateSettings = ({ idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 }, settings) => {
-  if (idleBehavior >= 0){
+const updateSettings = ({
+  idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
+}, settings) => {
+  if (idleBehavior >= 0) {
     settings.idleBehavior = idleBehavior;
-    mainWindow.webContents.send('settings', { key: 'IDLE_BEHAVIOR', value: idleBehavior })
+    mainWindow.webContents.send('settings', { key: 'IDLE_BEHAVIOR', value: idleBehavior });
   }
-  if (discardIdleTime != null){
+  if (discardIdleTime != null) {
     settings.discardIdleTime = discardIdleTime;
-    mainWindow.webContents.send('settings', { key: 'IDLE_TIME_DISCARD', value: discardIdleTime })
+    mainWindow.webContents.send('settings', { key: 'IDLE_TIME_DISCARD', value: discardIdleTime });
   }
-  if (advancedTimerControls != null){
+  if (advancedTimerControls != null) {
     settings.advancedTimerControls = advancedTimerControls;
-    mainWindow.webContents.send('settings', { key: 'ADVANCED_TIMER_CONTROLS', value: advancedTimerControls })
+    mainWindow.webContents.send('settings', { key: 'ADVANCED_TIMER_CONTROLS', value: advancedTimerControls });
   }
-  if (progressWithStep1 != null){
+  if (progressWithStep1 != null) {
     settings.progressWithStep1 = progressWithStep1;
-    mainWindow.webContents.send('settings', { key: 'PROGRESS_SLIDER_STEP_1', value: progressWithStep1 })
+    mainWindow.webContents.send('settings', { key: 'PROGRESS_SLIDER_STEP_1', value: progressWithStep1 });
   }
   generateMenu({ settings });
-}
+};
 
 const generateMenu = ({ settings }) => {
   const isMac = process.platform === 'darwin';
@@ -128,16 +133,16 @@ const generateMenu = ({ settings }) => {
     },
     // { role: 'viewMenu' }
     ...(isDev
-        ? [{
-          label: 'View',
-          submenu: [
-            { role: 'reload' },
-            { role: 'forcereload' },
-            { role: 'toggledevtools' },
-            { type: 'separator' }
-          ]
-        }]
-        : []
+      ? [{
+        label: 'View',
+        submenu: [
+          { role: 'reload' },
+          { role: 'forcereload' },
+          { role: 'toggledevtools' },
+          { type: 'separator' }
+        ]
+      }]
+      : []
     ),
     // { role: 'windowMenu' }
     {
@@ -162,23 +167,35 @@ const generateMenu = ({ settings }) => {
           {
             label: 'Idle behavior',
             submenu: [
-              {label: 'Do nothing', type: 'radio', checked: !settings.idleBehavior, click: () => updateSettings({ idleBehavior: 0 }, settings) },
-              {label: 'Pause if idle for 5m', type: 'radio', checked: settings.idleBehavior === 5, click: () => updateSettings({ idleBehavior: 5 }, settings) },
-              {label: 'Pause if idle for 10m', type: 'radio', checked: settings.idleBehavior === 10, click: () => updateSettings({ idleBehavior: 10 }, settings) },
-              {label: 'Pause if idle for 15m', type: 'radio', checked: settings.idleBehavior === 15, click: () => updateSettings({ idleBehavior: 15 }, settings) },
-              {type: 'separator'},
-              {label: 'Auto discard idle time from timer', type: 'checkbox', enabled: !!settings.idleBehavior, checked: settings.discardIdleTime, click: (el) => updateSettings({ discardIdleTime: el.checked }, settings) },
+              {
+                label: 'Do nothing', type: 'radio', checked: !settings.idleBehavior, click: () => updateSettings({ idleBehavior: 0 }, settings)
+              },
+              {
+                label: 'Pause if idle for 5m', type: 'radio', checked: settings.idleBehavior === 5, click: () => updateSettings({ idleBehavior: 5 }, settings)
+              },
+              {
+                label: 'Pause if idle for 10m', type: 'radio', checked: settings.idleBehavior === 10, click: () => updateSettings({ idleBehavior: 10 }, settings)
+              },
+              {
+                label: 'Pause if idle for 15m', type: 'radio', checked: settings.idleBehavior === 15, click: () => updateSettings({ idleBehavior: 15 }, settings)
+              },
+              { type: 'separator' },
+              {
+                label: 'Auto discard idle time from timer', type: 'checkbox', enabled: !!settings.idleBehavior, checked: settings.discardIdleTime, click: (el) => updateSettings({ discardIdleTime: el.checked }, settings)
+              },
             ]
           },
           {
             label: 'Use advanced timer controls',
             type: 'checkbox',
-            checked: settings.advancedTimerControls, click: (el) => updateSettings({ advancedTimerControls: el.checked }, settings),
+            checked: settings.advancedTimerControls,
+            click: (el) => updateSettings({ advancedTimerControls: el.checked }, settings),
           },
           {
             label: 'Use progress slider with 1% steps',
             type: 'checkbox',
-            checked: settings.progressWithStep1, click: (el) => updateSettings({ progressWithStep1: el.checked }, settings),
+            checked: settings.progressWithStep1,
+            click: (el) => updateSettings({ progressWithStep1: el.checked }, settings),
           },
         ]
       },
@@ -199,7 +216,7 @@ const generateMenu = ({ settings }) => {
   ]);
 
   Menu.setApplicationMenu(menu);
-}
+};
 
 const initializeMenu = () => {
   generateMenu({});
@@ -284,7 +301,9 @@ const initialize = () => {
     mainWindow = null;
   });
 
-  setupTray({ app, mainWindow, NAME, windowConfig });
+  setupTray({
+    app, mainWindow, NAME, windowConfig
+  });
 
   ipcMain.on('notify', (ev, { message, critical, keep }) => {
     const notification = new Notification({
@@ -297,10 +316,9 @@ const initialize = () => {
     });
     notification.show();
   });
-  ipcMain.on('menu', (ev, {settings}) => {
+  ipcMain.on('menu', (ev, { settings }) => {
     generateMenu({ settings });
   });
-
 };
 
 app.once('ready', () => {

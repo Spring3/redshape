@@ -1,7 +1,7 @@
 const { openNewGitHubIssue, debugInfo } = require('electron-util');
 
 module.exports = {
-  report: error => openNewGitHubIssue({
+  report: (error) => openNewGitHubIssue({
     user: 'Spring3',
     repo: 'redshape',
     body: error && error instanceof Error

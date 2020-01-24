@@ -4,8 +4,8 @@ import actions from './actions';
 
 let currentTimer;
 
-ipcRenderer.on('settings', (event, {key, value}) => {
-  switch(key){
+ipcRenderer.on('settings', (event, { key, value }) => {
+  switch (key) {
     case 'ADVANCED_TIMER_CONTROLS':
       store.dispatch(actions.settings.setAdvancedTimerControls(value));
       break;
@@ -17,16 +17,16 @@ ipcRenderer.on('settings', (event, {key, value}) => {
       break;
     case 'IDLE_BEHAVIOR':
       store.dispatch(actions.settings.setIdleBehavior(value));
-      if (currentTimer){
+      if (currentTimer) {
         currentTimer.resetIntervalIdle();
       }
       break;
   }
 });
 
-ipcRenderer.on('window', (event, {action}) => {
-  if (!currentTimer){ return; }
-  switch(action){
+ipcRenderer.on('window', (event, { action }) => {
+  if (!currentTimer) { return; }
+  switch (action) {
     case 'show':
       currentTimer.restoreFromTimestamp();
       break;
@@ -39,17 +39,17 @@ ipcRenderer.on('window', (event, {action}) => {
   }
 });
 
-ipcRenderer.on('timer', (ev, {action, mainWindowHidden}) => {
-  if (!currentTimer){ return; }
+ipcRenderer.on('timer', (ev, { action, mainWindowHidden }) => {
+  if (!currentTimer) { return; }
   if (mainWindowHidden) {
     currentTimer.restoreFromTimestamp(false);
   }
-  if (action === 'resume'){
+  if (action === 'resume') {
     currentTimer.onContinue();
-  }else if (action === 'pause'){
+  } else if (action === 'pause') {
     currentTimer.onPause();
   }
-  if (mainWindowHidden){
+  if (mainWindowHidden) {
     currentTimer.storeToTimestamp();
   }
 });

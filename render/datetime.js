@@ -18,7 +18,9 @@ export const durationToHours = (value) => {
   } else {
     m = value.match(reDuration);
     if (m) {
-      const d = { day: m[1], hour: m[2], minute: m[3], second: m[4] };
+      const d = {
+        day: m[1], hour: m[2], minute: m[3], second: m[4]
+      };
       for (const [k, v] of Object.entries(d)) {
         if (v) {
           d[k] = parseInt(v, 10);
@@ -36,7 +38,7 @@ export const durationToHours = (value) => {
 };
 
 // eslint-disable-next-line no-confusing-arrow
-export const hoursToDuration = hours => hours == null
+export const hoursToDuration = (hours) => hours == null
   ? ''
   : moment.duration(parseFloat(hours), 'hours').format('d[d] h[h] m[m] s[s]', {
     trim: 'both mid'

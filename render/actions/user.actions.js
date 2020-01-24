@@ -11,7 +11,9 @@ const signout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT });
 };
 
-const checkLogin = ({ useApiKey, apiKey, username, password, redmineEndpoint }) => (dispatch) => {
+const checkLogin = ({
+  useApiKey, apiKey, username, password, redmineEndpoint
+}) => (dispatch) => {
   if (!redmineEndpoint) throw new Error('Unable to login to an undefined redmine endpoint');
 
   dispatch(notify.start(USER_LOGIN));
@@ -20,7 +22,7 @@ const checkLogin = ({ useApiKey, apiKey, username, password, redmineEndpoint }) 
   if (useApiKey) {
     headers['X-Redmine-API-Key'] = apiKey;
   } else {
-    headers['Authorization'] = `Basic ${btoa(`${username}:${password}`)}`;
+    headers.Authorization = `Basic ${btoa(`${username}:${password}`)}`;
   }
 
   return login({

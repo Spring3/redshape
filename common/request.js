@@ -54,16 +54,16 @@ const handleReject = (error) => {
   // if this request was not cancelled
   if (!axios.isCancel(error)) {
     let errorMessage = 'Error';
-    let response = error.response;
-    let data = response && response.data;
-    let errors = data && data.errors;
+    const { response } = error;
+    const data = response && response.data;
+    const errors = data && data.errors;
     if (errors) {
-      if (errors.length > 1){
+      if (errors.length > 1) {
         errorMessage = `${errorMessage}s - ${errors.join(' - ')}`;
-      }else{
+      } else {
         errorMessage = `${errorMessage} ${errors[0]}`;
       }
-    }else if (error.status) {
+    } else if (error.status) {
       errorMessage = `${errorMessage} ${error.status}`;
     }
     errorMessage = `${errorMessage} (${error.statusText || error.message})`;

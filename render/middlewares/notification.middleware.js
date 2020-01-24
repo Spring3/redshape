@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import Notification from '../components/Notification';
 
-export default store => next => (action) => {
+export default (store) => (next) => (action) => {
   if (action.status === 'NOK') {
     const error = action.data;
     if (error instanceof Error) {

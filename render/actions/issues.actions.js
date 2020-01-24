@@ -41,7 +41,7 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
     });
 };
 
-const get = id => (dispatch) => {
+const get = (id) => (dispatch) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({

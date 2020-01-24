@@ -30,7 +30,8 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
   const schemaFields = {
     activity: Joi.object().keys({
       // label: bugfix "activity.activity" is required, when "Add" new time spent and fill first the duration
-      id: Joi.number().integer().positive().required().label('activity'),
+      id: Joi.number().integer().positive().required()
+        .label('activity'),
       name: Joi.string()
     }).unknown().required(),
     issue: Joi.object().keys({
@@ -38,7 +39,8 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
       name: Joi.string()
     }).unknown().required(),
     duration: Joi.string().required().custom(validateDuration, 'duration validator'),
-    hours: Joi.number().positive().precision(4).required().label('duration'),
+    hours: Joi.number().positive().precision(4).required()
+      .label('duration'),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
   };
@@ -67,7 +69,7 @@ const validateBeforePublish = (timeEntry, checkFields) => {
     : { type: TIME_ENTRY_PUBLISH_VALIDATION_PASSED };
 };
 
-const publish = timeEntryData => (dispatch, getState) => {
+const publish = (timeEntryData) => (dispatch, getState) => {
   const validationAction = validateBeforePublish(timeEntryData);
   dispatch(validationAction);
 
