@@ -369,70 +369,61 @@ class Timer extends Component {
               >
                 <StopIcon size={35} />
               </StyledButton>
-              { isPaused && (
-                <StyledButton
-                  onClick={this.onContinue}
-                >
-                  <PlayIcon size={35} />
-                </StyledButton>
-              )
-              }
-              { !isPaused && (
-                <StyledButton
-                  onClick={this.onPause}
-                >
-                  <PauseIcon size={35} />
-                </StyledButton>
-              )
+              { isPaused
+                ? (
+                  <StyledButton
+                    onClick={this.onContinue}
+                  >
+                    <PlayIcon size={35} />
+                  </StyledButton>
+                )
+                : (
+                  <StyledButton
+                    onClick={this.onPause}
+                  >
+                    <PauseIcon size={35} />
+                  </StyledButton>
+                )
               }
             </div>
             <div className="issueName">
-              { (isEnabled ?
-                <MaskedLink
-                  href='#'
-                  onClick={this.redirectToTrackedLink}
-                >
-                  {trackedIssue.subject}
-                </MaskedLink>
-                : null)}
+              { isEnabled
+                ? (
+                  <MaskedLink
+                    href='#'
+                    onClick={this.redirectToTrackedLink}
+                  >
+                    {trackedIssue.subject}
+                  </MaskedLink>
+                )
+                : null
+              }
             </div>
             <div className="time">
               <span>{timeString}</span>
             </div>
             { advancedTimerControls && (
               <div className="buttons buttons-advanced">
-                { (
-                  <StyledButton
-                    onClick={() => this.onBackward(5)}
-                  >
-                    <Rewind5Icon size={25} />
-                  </StyledButton>
-                )
-                }
-                { (
-                  <StyledButton
-                    onClick={() => this.onBackward(1)}
-                  >
-                    <Rewind1Icon size={25} />
-                  </StyledButton>
-                )
-                }
-                { (
-                  <StyledButton
-                    onClick={() => this.onForward(1)}
-                  >
-                    <FastForward1Icon size={25} />
-                  </StyledButton>
-                )
-                }
-                { (
-                  <StyledButton
-                    onClick={() => this.onForward(5)}
-                  >
-                    <FastForward5Icon size={25} />
-                  </StyledButton>
-                )
-                }
+                <StyledButton
+                  onClick={() => this.onBackward(5)}
+                >
+                  <Rewind5Icon size={25} />
+                </StyledButton>
+                <StyledButton
+                  onClick={() => this.onBackward(1)}
+                >
+                  <Rewind1Icon size={25} />
+                </StyledButton>
+                <StyledButton
+                  onClick={() => this.onForward(1)}
+                >
+                  <FastForward1Icon size={25} />
+                </StyledButton>
+                <StyledButton
+                  onClick={() => this.onForward(5)}
+                >
+                  <FastForward5Icon size={25} />
+                </StyledButton>
               </div>
             )}
           </div>
@@ -441,6 +432,7 @@ class Timer extends Component {
               type="text"
               name="comment"
               value={comments}
+              placeholder="Leave your WIP comment here"
               onChange={this.onCommentsChange}
               onBlur={this.saveState}
               maxLength={255}
