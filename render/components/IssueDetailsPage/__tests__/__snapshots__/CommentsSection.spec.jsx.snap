@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`] = `
-.c13 {
+.c16 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -13,7 +13,39 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   background: #FFFFFF;
 }
 
-.c11 {
+.c3 {
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  text-align: center;
+  background: #FFFFFF;
+  -webkit-transition: color ease .2s;
+  transition: color ease .2s;
+  -webkit-transition: background ease .2s;
+  transition: background ease .2s;
+  width: auto;
+  border: 2px solid #FF7079;
+  color: #FF7079;
+  cursor: pointer;
+}
+
+.c3:hover,
+.c3:focus {
+  background: #FF7079;
+  color: #FFFFFF !important;
+}
+
+.c3:hover svg,
+.c3:focus svg {
+  fill: #FFFFFF;
+}
+
+.c3:active {
+  background: #EF6069;
+}
+
+.c14 {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #FF7079;
@@ -21,21 +53,21 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   transition: color ease .2s;
 }
 
-.c11:hover {
+.c14:hover {
   color: #EF6069;
 }
 
-.c11:hover svg {
+.c14:hover svg {
   fill: #EF6069;
 }
 
-.c11:active,
-.c11:focus,
-.c11:visited {
+.c14:active,
+.c14:focus,
+.c14:visited {
   background: transparent;
 }
 
-.c10 {
+.c13 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -55,7 +87,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   left: 50%;
 }
 
-.c10::after {
+.c13::after {
   content: ' ';
   position: absolute;
   width: auto;
@@ -64,7 +96,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c10::after {
+.c13::after {
   top: 100%;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -72,47 +104,47 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   transform: translateX(-50%);
 }
 
-.c8 {
+.c11 {
   display: inline-block;
   position: relative;
 }
 
-.c8:hover .c9 {
+.c11:hover .c12 {
   display: block;
 }
 
-.c7 {
+.c10 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c7:hover svg {
+.c10:hover svg {
   color: #FF7079 !important;
 }
 
-.c5 {
+.c8 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c5 li:first-child {
+.c8 li:first-child {
   margin-left: 0;
 }
 
-.c5 li:last-child {
+.c8 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c5 .c6:last-child {
+.c8 .c9:last-child {
   bottom: 1px;
 }
 
-.c5 .c6:last-child a {
+.c8 .c9:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -123,51 +155,51 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   align-items: center;
 }
 
-.c12 {
+.c15 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #A0A0A0;
 }
 
-.c12:hover {
+.c15:hover {
   border-color: #FF7079;
 }
 
-.c12:focus {
+.c15:focus {
   border: 2px solid #FF7079;
 }
 
-.c3 {
+.c6 {
   box-sizing: border-box;
   overflow: hidden;
 }
 
-.c15 {
+.c18 {
   color: #FF7079;
   font-size: 14px;
   padding: 2px;
   cursor: pointer;
 }
 
-.c15:hover {
+.c18:hover {
   background: #FF7079;
   color: #FFFFFF;
 }
 
-.c2 {
+.c5 {
   position: relative;
   display: inline-grid;
   grid-template-rows: 1fr;
 }
 
-.c2 span {
+.c5 span {
   float: left;
   grid-row: 1;
   grid-column: 1;
 }
 
-.c2 span:last-child {
+.c5 span:last-child {
   opacity: 0;
   display: none;
 }
@@ -178,7 +210,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   margin-bottom: 20px;
 }
 
-.c14 {
+.c17 {
   font-size: 12px;
   margin: 0;
   margin-top: 0.5rem;
@@ -190,17 +222,17 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   transition: opacity 1s,height 1s;
 }
 
-.c14 a {
+.c17 a {
   font-size: inherit !important;
   margin-right: 5px;
 }
 
-.c14.visible {
+.c17.visible {
   opacity: 1;
   height: auto;
 }
 
-.c1 {
+.c4 {
   list-style-type: none;
   padding: 20px 0px;
   margin: 0px;
@@ -208,11 +240,11 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   background: #F9F9F9;
 }
 
-.c1 li:first-child {
+.c4 li:first-child {
   margin-top: 20px;
 }
 
-.c1 li {
+.c4 li {
   margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -224,7 +256,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   justify-content: space-around;
 }
 
-.c1 li div.commentsHeader {
+.c4 li div.commentsHeader {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -239,13 +271,13 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   min-width: 20%;
 }
 
-.c1 li div.commentsHeader h3 {
+.c4 li div.commentsHeader h3 {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #FF7079;
 }
 
-.c1 li div.commentsHeader span:last-child {
+.c4 li div.commentsHeader span:last-child {
   color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -253,11 +285,11 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   margin-bottom: 20px;
 }
 
-.c1 li div.commentsHeader span:last-child:hover {
+.c4 li div.commentsHeader span:last-child:hover {
   color: #3F3844;
 }
 
-.c1 li iframe {
+.c4 li iframe {
   margin-left: 20px;
   padding: 5px 20px 0px 20px;
   background: #FFFFFF;
@@ -267,29 +299,69 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
   width: 74%;
 }
 
-.c4 {
+.c7 {
   background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
 }
 
-.c4 #commentsForm {
+.c7 #commentsForm {
   background: #FFFFFF;
   padding: 20px;
   border-radius: 3px;
   border: 1px solid #E9E9E9;
 }
 
+.c1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.c2 {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
 <section
   className="c0"
 >
   <div>
-    <h2>
-      Comments
-    </h2>
-    <ul
+    <div
       className="c1"
+    >
+      <h2>
+        Comments
+      </h2>
+      <button
+        className="c2 c3"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        <svg
+          className="mdi-icon "
+          fill="currentColor"
+          height={14}
+          viewBox="0 0 24 24"
+          width={14}
+        >
+          <path
+            d="M10 11V13H18V11H10M10 17V19H14V17H10M10 5V7H22V5H10M6 7H8.5L5 3.5L1.5 7H4V20H6V7Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <ul
+      className="c4"
     >
       <li>
         <div
@@ -301,7 +373,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
             John Wayne
           </h3>
           <span
-            className="c2"
+            className="c5"
           >
             <span
               className="date"
@@ -316,7 +388,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
           </span>
         </div>
         <iframe
-          className="c3"
+          className="c6"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Hello there</p>"
@@ -333,7 +405,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
             John Wayne
           </h3>
           <span
-            className="c2"
+            className="c5"
           >
             <span
               className="date"
@@ -348,7 +420,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
           </span>
         </div>
         <iframe
-          className="c3"
+          className="c6"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Does your town need a hero?</p>"
@@ -357,20 +429,20 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
       </li>
     </ul>
     <div
-      className="c4"
+      className="c7"
     >
       <div
         id="commentsForm"
       >
         <ul
-          className="c5"
+          className="c8"
         >
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -384,18 +456,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Bold text
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -409,18 +481,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Italic text
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -434,18 +506,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Underlined text
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -459,18 +531,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Crossed out text
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -484,18 +556,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Code block
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -509,18 +581,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 XL Header
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -534,18 +606,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 L Header
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -559,18 +631,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 M Header
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -584,18 +656,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Bulleted List
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -609,18 +681,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Ordered List
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -634,18 +706,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Quote block
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -659,18 +731,18 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Hyperlink
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
             onClick={[Function]}
           >
             <div
-              className="c8"
+              className="c11"
             >
               <svg
                 className="mdi-icon "
@@ -684,17 +756,17 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
                 />
               </svg>
               <p
-                className="tooltip c9 c10"
+                className="tooltip c12 c13"
               >
                 Embeded Image
               </p>
             </div>
           </li>
           <li
-            className="c6 c7"
+            className="c9 c10"
           >
             <a
-              className="c11"
+              className="c14"
               disabled={false}
               href="#"
               onClick={[Function]}
@@ -717,7 +789,7 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
           </li>
         </ul>
         <textarea
-          className="c12 c13"
+          className="c15 c16"
           disabled={false}
           onBlur={[Function]}
           onChange={[Function]}
@@ -729,11 +801,11 @@ exports[`IssueDetails => CommentsSEction componnet should match the snapshot 1`]
       </div>
       <div>
         <p
-          className="c14"
+          className="c17"
         >
           Press 
           <a
-            className="c15"
+            className="c18"
             href="#"
             onClick={[Function]}
             rel="noopener noreferer"

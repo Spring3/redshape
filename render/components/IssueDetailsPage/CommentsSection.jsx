@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 import { remote } from 'electron';
 
+import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
+import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
+
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import Link from '../Link';
 import DateComponent from '../Date';
+import Button from "../Button";
 
 const Section = styled.section`
   background: white;
@@ -40,7 +44,7 @@ const Comments = styled.ul`
   margin: 0px;
   border-radius: 3px;
   background: ${props => props.theme.bgDark};
-  
+
   li:first-child {
     margin-top: 20px;
   }
@@ -73,9 +77,9 @@ const Comments = styled.ul`
           margin-bottom: 20px;
         }
       `}
-      
+
       ${props => props.isEnhanced ? css`
-      width: 300px;      
+      width: 300px;
       ` : css`
       min-width: 20%;
       `}
@@ -89,7 +93,7 @@ const Comments = styled.ul`
       border: 1px solid ${props => props.theme.bgDarker};
       border-radius: 3px;
       min-height: 100px;
-      
+
       ${props => (!props.isEnhanced) && css`
       width: 74%;
       `}
@@ -110,11 +114,23 @@ const CommentsForm = styled.div`
   }
 `;
 
+const CommentsHeader = styled.div`
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const FlexButton = styled(Button) `
+  align-self: center;
+`;
+
 class CommentsSection extends Component {
   constructor(props){
     super(props)
     this.state = {
-      showNotice: false
+      showNotice: false,
+      sortDescending: false,
+      entries: props.journalEntries,
     };
   }
 
@@ -125,43 +141,69 @@ class CommentsSection extends Component {
     }
   }
 
+  toggleSortDirection = () => {
+    const { sortDescending, entries } = this.state;
+    this.setState({
+      sortDescending: !sortDescending,
+      entries: entries.reverse()
+    })
+  }
+
   render() {
-    const { journalEntries, uiStyle } = this.props;
-    const { showNotice } = this.state;
+    const { uiStyle } = this.props;
+    const { showNotice, sortDescending, entries } = this.state;
+
+    const comments = (
+      <Comments isEnhanced={uiStyle === 'enhanced'}>
+        {entries.map(entry => (
+          <li key={entry.id}>
+            <div className="commentsHeader">
+              <h3 className="username">{entry.user.name}</h3>
+              <DateComponent className="date" date={entry.created_on} />
+            </div>
+            <MarkdownText markdownText={entry.notes} />
+          </li>
+        ))}
+      </Comments>
+    );
+    const commentsForm = (
+      <CommentsForm>
+        <MarkdownEditor
+          id="commentsForm"
+          onSubmit={this.sendComments}
+          onBlur={() => this.setState({ showNotice: false })}
+          onFocus={() => this.setState({ showNotice: true })}
+        />
+        <div>
+          <SmallNotice className={showNotice && 'visible'}>
+            Press&nbsp;
+            {
+              remote.process.platform === 'darwin'
+                ? (<Link href="#">Cmd + Enter</Link>)
+                : (<Link href="#">Ctrl + Enter</Link>)
+            }
+            to send
+          </SmallNotice>
+        </div>
+      </CommentsForm>
+    );
+
     return (
       <Section>
         <div>
-          <h2>Comments</h2>
-          <Comments isEnhanced={uiStyle === 'enhanced'}>
-            {journalEntries.map(entry => (
-              <li key={entry.id}>
-                <div className="commentsHeader">
-                  <h3 className="username">{entry.user.name}</h3>
-                  <DateComponent className="date" date={entry.created_on} />
-                </div>
-                <MarkdownText markdownText={entry.notes} />
-              </li>
-            ))}
-          </Comments>
-          <CommentsForm>
-            <MarkdownEditor
-              id="commentsForm"
-              onSubmit={this.sendComments}
-              onBlur={() => this.setState({ showNotice: false })}
-              onFocus={() => this.setState({ showNotice: true })}
-            />
-            <div>
-              <SmallNotice className={showNotice && 'visible'}>
-                Press&nbsp;
-                {
-                  remote.process.platform === 'darwin'
-                    ? (<Link href="#">Cmd + Enter</Link>)
-                    : (<Link href="#">Ctrl + Enter</Link>)
-                }
-                to send
-              </SmallNotice>
-            </div>
-          </CommentsForm>
+          <CommentsHeader>
+            <h2>Comments</h2>
+            <FlexButton onClick={this.toggleSortDirection}>
+            {sortDescending && (
+              <SortDescendingIcon size={14}/>
+            ) || (
+              <SortAscendingIcon size={14}/>
+            )
+            }
+          </FlexButton>
+          </CommentsHeader>
+          { sortDescending ? (commentsForm) : (comments) }
+          { sortDescending ? (comments) : (commentsForm) }
         </div>
       </Section>
     );
