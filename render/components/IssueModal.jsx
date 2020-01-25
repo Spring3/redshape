@@ -37,7 +37,7 @@ const OptionButtons = styled.div`
   padding-top: 20px;
   border-top: 2px solid ${props => props.theme.bgDark};
   display: flex;
-  
+
   button {
     padding: 8px 15px;
   }
@@ -52,8 +52,8 @@ const Title = styled.h4`
   font-size: 1rem;
 `;
 
-const DurationField = styled.div`
-  max-width: 350px;
+const LargeField = styled.div`
+  width: 350px;
 `;
 const FieldAdjacentInfo = styled.div`
   align-self: center;
@@ -83,14 +83,14 @@ const compSelectStyles = {
   },
 };
 
-const extractStatusTransitions = (transitions) => {
-  const status = transitions && transitions.status;
-  let statuses;
-  if (status){
-    statuses = status.sort((a, b) => a.position - b.position)
+const extractFromTransitions = (transitions, key) => {
+  const list = transitions && transitions[key];
+  let values;
+  if (list){
+    values = list.sort((a, b) => a.position - b.position)
       .map(el => ({value: el.id, label: el.name}));
   }
-  return statuses;
+  return values;
 }
 
 class IssueModal extends Component {
@@ -99,15 +99,18 @@ class IssueModal extends Component {
     let propsIssueEntry = props.issueEntry;
     let issueEntry = {};
     let statusTransitions;
+    let priorityTransitions;
     if (propsIssueEntry){
-      const { estimated_hours, done_ratio, due_date, children, transitions, status } = propsIssueEntry;
-      statusTransitions = extractStatusTransitions(transitions);
+      const { estimated_hours, done_ratio, due_date, children, transitions, status, priority } = propsIssueEntry;
+      statusTransitions = extractFromTransitions(transitions, 'status');
+      priorityTransitions = extractFromTransitions(transitions, 'priority');
       issueEntry = {
         estimated_duration: hoursToDuration(estimated_hours),
         progress: done_ratio,
         due_date: due_date || '',
         children: children ? children.length : 0,
-        status: {value: status.id, label: status.name},
+        ...(statusTransitions && { status: {value: status.id, label: status.name} }),
+        ...(priorityTransitions && { priority: {value: priority.id, label: priority.name} }),
       };
     }
     this.state = {
@@ -116,6 +119,7 @@ class IssueModal extends Component {
       progress_info: issueEntry.progress || 0,
       wasModified: false,
       statusTransitions,
+      priorityTransitions,
     };
   }
 
@@ -124,8 +128,9 @@ class IssueModal extends Component {
       const { issueEntry } = this.props;
 
       if (issueEntry) {
-        const { estimated_hours, done_ratio, due_date, children, transitions, status } = issueEntry;
-        let statusTransitions = extractStatusTransitions(transitions);
+        const { estimated_hours, done_ratio, due_date, children, transitions, status, priority } = issueEntry;
+        let statusTransitions = extractFromTransitions(transitions, 'status');
+        let priorityTransitions = extractFromTransitions(transitions, 'priority');
         this.setState({
           // issueEntry,
           issueEntry: {
@@ -133,12 +138,14 @@ class IssueModal extends Component {
             progress: done_ratio,
             due_date: due_date || '',
             children: children ? children.length : 0,
-            status: {value: status.id, label: status.name},
+            ...(statusTransitions && { status: {value: status.id, label: status.name} }),
+            ...(priorityTransitions && { priority: {value: priority.id, label: priority.name} }),
           },
           instance: new Date().getTime(),
           progress_info: done_ratio,
           wasModified: false,
           statusTransitions,
+          priorityTransitions,
         });
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
@@ -218,6 +225,16 @@ class IssueModal extends Component {
     });
   }
 
+  onPriorityChange = (priority) => {
+    this.setState({
+      issueEntry: {
+        ...this.state.issueEntry,
+        priority,
+      },
+      wasModified: true
+    });
+  }
+
   getErrorMessage = (error) => {
     if (!error) return null;
     return error.message.replace(new RegExp(error.context.key, 'g'), error.path[0]);
@@ -225,14 +242,15 @@ class IssueModal extends Component {
 
   render() {
     const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable } = this.props;
-    const { issueEntry, wasModified, progress_info, instance, statusTransitions } = this.state;
-    const { progress, estimated_duration, due_date, children, status } = issueEntry;
+    const { issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions } = this.state;
+    const { progress, estimated_duration, due_date, children, status, priority } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
         progress: issue.error.details.find(error => error.path[0] === 'progress'),
         estimated_duration: issue.error.details.find(error => error.path[0] === 'estimated_duration'),
         due_date: issue.error.details.find(error => error.path[0] === 'due_date'),
         status: issue.error.details.find(error => error.path[0] === 'status'),
+        priority: issue.error.details.find(error => error.path[0] === 'priority'),
       }
       : {};
     let estimatedDurationInfo = '';
@@ -255,7 +273,7 @@ class IssueModal extends Component {
         <Fragment>
           <FlexRow>
             <Title>Edit issue
-              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Field 'Status' needs server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14}/></Tooltip></LabelIcon>
+              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Fields 'Status' and 'Priority' need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14}/></Tooltip></LabelIcon>
             </Title>
           </FlexRow>
           <FlexRow>
@@ -263,19 +281,54 @@ class IssueModal extends Component {
               <div name="assignee">{assigned_to && assigned_to.name}</div>
             </Label>
           </FlexRow>
+          <FlexRow>
           <Label htmlFor="issue" label="Issue">
             <div name="issue">#{propsIssueEntry.id}&nbsp;{propsIssueEntry.subject}</div>
           </Label>
+          </FlexRow>
+          <FlexRow>
           {
             status != null && (
-              <Label htmlFor="status" label="Status">
+              <LargeField>
+                <Label htmlFor="status" label="Status">
+                  <FlexRow>
+                    <Select
+                      name="status"
+                      options={statusTransitions}
+                      styles={compSelectStyles}
+                      value={status}
+                      onChange={this.onStatusChange}
+                      isClearable={false}
+                      isDisabled={disableField}
+                      theme={(defaultTheme) => ({
+                        ...defaultTheme,
+                        borderRadius: 3,
+                        colors: {
+                          ...defaultTheme.colors,
+                          primary: theme.main,
+                        },
+                      })
+                      }
+                    />
+                  </FlexRow>
+                  <ErrorMessage show={!!validationErrors.status}>
+                    {this.getErrorMessage(validationErrors.status)}
+                  </ErrorMessage>
+                </Label>
+              </LargeField>
+            )
+          }
+          {
+            priority != null && (
+              <div>
+              <Label htmlFor="priority" label="Priority">
                 <FlexRow>
                   <Select
-                    name="status"
-                    options={statusTransitions}
+                    name="priority"
+                    options={priorityTransitions}
                     styles={compSelectStyles}
-                    value={status}
-                    onChange={this.onStatusChange}
+                    value={priority}
+                    onChange={this.onPriorityChange}
                     isClearable={false}
                     isDisabled={disableField}
                     theme={(defaultTheme) => ({
@@ -289,17 +342,20 @@ class IssueModal extends Component {
                     }
                   />
                 </FlexRow>
-                <ErrorMessage show={!!validationErrors.status}>
-                  {this.getErrorMessage(validationErrors.status)}
+                <ErrorMessage show={!!validationErrors.priority}>
+                  {this.getErrorMessage(validationErrors.priority)}
                 </ErrorMessage>
               </Label>
+              </div>
             )
           }
+          </FlexRow>
           <FlexRow>
-            <DurationField>
+            <LargeField>
               <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
                 <FlexRow>
                   <Input
+                    style={{width:185}}
                     type="text"
                     name="estimated_duration"
                     value={estimated_duration}
@@ -313,12 +369,13 @@ class IssueModal extends Component {
               <ErrorMessage show={!!validationErrors.estimated_duration}>
                 {this.getErrorMessage(validationErrors.estimated_duration)}
               </ErrorMessage>
-            </DurationField>
+            </LargeField>
             {
               !children && (
               <div>
                 <Label htmlFor="due_date" label="Due date">
                   <DatePicker
+                    style={{width:185}}
                     key={instance}
                     name="due_date"
                     value={due_date}
@@ -430,6 +487,11 @@ IssueModal.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string.isRequired),
     transitions: PropTypes.shape({
       status: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        position: PropTypes.number.isRequired,
+      })),
+      priority: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         position: PropTypes.number.isRequired,

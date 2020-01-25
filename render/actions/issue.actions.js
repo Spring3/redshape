@@ -38,7 +38,11 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
     status: Joi.object().keys({
       value: Joi.number().integer().required(),
       label: Joi.string().required(),
-    })
+    }),
+    priority: Joi.object().keys({
+      value: Joi.number().integer().required(),
+      label: Joi.string().required(),
+    }),
   };
   if (checkFields){
     if (!(checkFields instanceof Array)){
@@ -58,7 +62,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
 
 const validateBeforeUpdate = (issueEntry, checkFields) => {
   if (!checkFields){
-    checkFields = ['progress', 'estimated_duration', 'due_date', 'status'];
+    checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority'];
   }
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
   return validationResult.error
@@ -93,8 +97,12 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     updates.done_ratio = progress;
   }
   const status = changes.status;
-  if (originalIssueEntry.status != null && originalIssueEntry.status.id !== status.value){
+  if (status != null && originalIssueEntry.status != null && originalIssueEntry.status.id !== status.value){
     updates.status_id = status.value;
+  }
+  const priority = changes.priority;
+  if (priority != null && originalIssueEntry.priority != null && originalIssueEntry.priority.id !== priority.value){
+    updates.priority_id = priority.value;
   }
   if (!Object.keys(updates).length){
     return Promise.resolve({unchanged: true});

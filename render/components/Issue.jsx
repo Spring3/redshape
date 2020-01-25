@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import styled, { withTheme, css } from 'styled-components';
 
-import ArrowLow from "mdi-react/ChevronDownCircleOutlineIcon";
-import ArrowNormal from "mdi-react/ChevronRightCircleOutlineIcon";
-import ArrowHigh from "mdi-react/ChevronUpCircleOutlineIcon";
-import ArrowUrgent from "mdi-react/ArrowTopDropCircleOutlineIcon";
-import ArrowImmediate from "mdi-react/ArrowTopBoldCircleOutlineIcon";
+import ArrowLow from 'mdi-react/ChevronDownCircleOutlineIcon';
+import ArrowNormal from 'mdi-react/ChevronRightCircleOutlineIcon';
+import ArrowHigh from 'mdi-react/ChevronUpCircleOutlineIcon';
+import ArrowUrgent from 'mdi-react/ArrowTopDropCircleOutlineIcon';
+import ArrowImmediate from 'mdi-react/ArrowTopBoldCircleOutlineIcon';
 
 import Link from './Link';
-import {withRouter} from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 const PrioritySpan = styled.span`
   display: flex;
@@ -27,7 +27,6 @@ class PriorityComponent extends Component {
 
   render(){
     const { theme, value, centered } = this.props;
-    // const { theme } = this.props;
     let icon;
     let textColor;
     switch(value){
@@ -35,7 +34,8 @@ class PriorityComponent extends Component {
       case 'High': { icon = <ArrowHigh color={theme['yellow-red']} size={20}/>; } break
       case 'Urgent': { textColor = theme['yellow-red']; icon = <ArrowUrgent color={theme.red} size={20}/>; } break
       case 'Immediate': { textColor = theme.red; icon = <ArrowImmediate color={theme.red} color="red" size={20}/>; } break
-      default: { icon = <ArrowNormal color={theme.cyan} size={20}/>; }
+      case 'Normal': { icon = <ArrowNormal color={theme.cyan} size={20}/>; } break
+      default: { icon = undefined; } // custom priorities without icon
     }
     return (<PrioritySpan centered={centered} color={textColor}>{icon}{value}</PrioritySpan>);
   }
@@ -52,7 +52,7 @@ const IdLink = styled(Link)`
     border-radius: 2px 6px 6px 2px;
     color: white;
     background-color: #888888;
-      
+
     &.tracker-1 {
       &::before {
         color: ${props => props.theme.lightRed};
@@ -98,7 +98,7 @@ class IdComponent extends Component {
 };
 
 const StatusSpan = styled.span`
-    
+
   ${props => props.simple ? css`
     color: #614BA6;
     &.Closed {
@@ -115,7 +115,7 @@ const StatusSpan = styled.span`
     color: white;
     text-transform: uppercase;
     font-size: 13px;
-    
+
     &.Closed {
       background-color: ${props.theme.red};
     }
@@ -123,7 +123,7 @@ const StatusSpan = styled.span`
       background-color: ${props.theme.darkBlue};
     }
   `}
-  
+
 `;
 
 class StatusComponent extends Component {

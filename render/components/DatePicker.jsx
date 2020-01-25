@@ -184,14 +184,14 @@ const StyledDatePicker = styled.div`
 
 class DatePicker extends Component {
   render() {
-    const { theme, value, name, isDisabled, onChange } = this.props;
+    const { theme, value, name, isDisabled, onChange, style } = this.props;
     return (
       <StyledDatePicker
         buttonLeft={encodeURIComponent(renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
         buttonRight={encodeURIComponent(renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
       >
         <DayPickerInput
-          styles={this.styles}
+          style={style}
           name={name}
           value={value}
           inputProps={{

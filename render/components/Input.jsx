@@ -14,7 +14,7 @@ const StyledInput = styled.input`
   min-height: 35px;
   outline: none;
   font-weight: bold;
-  
+
   ${({ theme }) => css`
     transition: background ${theme.transitionTime};
     border: 1px solid ${theme.minorText};
@@ -117,9 +117,9 @@ const CheckboxContainer = styled.div`
   }
 `
 
-const FormGroup = styled.div`  
+const FormGroup = styled.div`
   h4 {
-    margin-bottom: 10px;    
+    margin-bottom: 10px;
     color: ${props => props.theme.minorText};
   }
 `;
@@ -133,7 +133,7 @@ const StyledLabel = styled.label`
   color: ${props => props.theme.minorText};
 `;
 
-const Label = ({ label, htmlFor, children, className, inline, rightToLeft, rightOfLabel }) => ( 
+const Label = ({ label, htmlFor, children, className, inline, rightToLeft, rightOfLabel }) => (
   <FormGroup className={`form-group ${className}`}>
     { rightToLeft === true && (children) }
     { inline === false
@@ -193,12 +193,14 @@ class Input extends PureComponent {
       id,
       name,
       disabled,
-      icon
+      icon,
+      style
     } = this.props;
     return type.toLowerCase() === 'checkbox'
       ? (
         <CheckboxContainer className={className}>
           <HiddenCheckbox
+            style={style}
             onChange={onChange}
             onBlur={onBlur}
             checked={checked}
@@ -213,6 +215,7 @@ class Input extends PureComponent {
       )
       : (
         <StyledInput
+          style={style}
           icon={icon && encodeURIComponent(renderToStaticMarkup(icon))}
           type={type}
           placeholder={placeholder}
