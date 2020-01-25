@@ -3,22 +3,13 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
-import MagnifyIcon from 'mdi-react/MagnifyIcon';
-import Button from "../../components/Button";
-
-import EyeIcon from "mdi-react/EyeIcon";
 
 import { IssueFilter } from '../../actions/helper';
 import actions from '../../actions';
 import { Input, Label } from '../../components/Input';
 import IssuesTable from '../../components/SummaryPage/IssuesTable';
 import OptionsBlock from '../../components/SettingsPage/OptionsBlock';
-import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
-
-const EyeIconButton = styled(EyeIcon)`
-  cursor: pointer;
-  margin-left: 4px;
-`;
+import ColumnHeadersSelect from '../../components/SettingsPage/ColumnHeadersSelect';
 
 const Grid = styled.div`
   display: grid;
@@ -38,21 +29,7 @@ const IssuesSection = styled(Section)`
   grid-row: auto;
 `;
 
-const OptionsGrid = styled.div`
-  display: grid;
-  // grid-template-columns: minmax(200px, auto) 1fr;
-  grid-template-columns: auto;
-  grid-template-rows: auto;
-  grid-row-gap: 20px;
-  grid-column-gap: 20px;
-  margin-bottom: 20px;
-`;
-
-const GridRow = styled.div`
-  grid-column: 1/-1;
-`;
-
-class SummaryPage extends Component {
+class SettingsPage extends Component {
   constructor(props) {
     super(props);
 
@@ -90,6 +67,10 @@ class SummaryPage extends Component {
     }
   }
 
+  onRefresh = () => {
+    this.fetchIssues();
+  }
+
   onSearchChange = (e) => {
     this.setState({
       search: e.target.value
@@ -123,7 +104,7 @@ class SummaryPage extends Component {
   }
 }
 
-SummaryPage.propTypes = {
+SettingsPage.propTypes = {
   userId: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
@@ -142,4 +123,4 @@ const mapDispatchToProps = dispatch => ({
   fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SettingsPage));

@@ -43,6 +43,8 @@ class AppView extends Component {
     };
 
     this.modifyUserMenu();
+
+    this.childRoutePage = React.createRef();
   }
 
   modifyUserMenu(){
@@ -89,6 +91,13 @@ class AppView extends Component {
     this.props.resetTimer();
   }
 
+  onRefresh = () => {
+    const {current} = this.childRoutePage;
+    if (current && current.onRefresh) {
+      current.onRefresh();
+    }
+  }
+
   render() {
     const { showTimeEntryModal, timeEntry, activities } = this.state;
     const { userId, api_key, match } = this.props;
@@ -97,13 +106,13 @@ class AppView extends Component {
       <Grid>
         <DragArea />
         { (!userId || !api_key) ? (<Redirect to="/" />) : null }
-        <Navbar />
+        <Navbar onRefresh={this.onRefresh} />
         <Content>
-          <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props}/>} />
-          <Route exact path={`${match.path}/summary/assigned`} component={props => <SummaryPage {...props}/>} />
-          <Route exact path={`${match.path}/summary/author`} component={props => <SummaryPage mode="author" {...props}/>} />
-          <Route exact path={`${match.path}/settings`} component={props => <SettingsPage {...props}/>} />
-          <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props}/>} />
+          <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props} ref={this.childRoutePage}/>} />
+          <Route exact path={`${match.path}/summary/assigned`} component={props => <SummaryPage {...props} ref={this.childRoutePage}/>}/>
+          <Route exact path={`${match.path}/summary/author`} component={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage}/>} />
+          <Route exact path={`${match.path}/settings`} component={props => <SettingsPage {...props}  ref={this.childRoutePage}/>} />
+          <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props} ref={this.childRoutePage}/>} />
           <Timer
             onStop={this.onTrackingStop}
             history={this.props.history}

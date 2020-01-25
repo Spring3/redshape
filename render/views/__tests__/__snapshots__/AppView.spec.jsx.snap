@@ -281,24 +281,26 @@ exports[`AppView should match the snapshot 1`] = `
   >
     <ul>
       <li>
-        <a
-          className="c3 c4"
-          disabled={false}
-          href="#"
-          onClick={[Function]}
-        >
-          <svg
-            className="mdi-icon "
-            fill="currentColor"
-            height={30}
-            viewBox="0 0 24 24"
-            width={30}
+        <div>
+          <a
+            className="c3 c4"
+            disabled={false}
+            href="#"
+            onClick={[Function]}
           >
-            <path
-              d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-            />
-          </svg>
-        </a>
+            <svg
+              className="mdi-icon "
+              fill="currentColor"
+              height={30}
+              viewBox="0 0 24 24"
+              width={30}
+            >
+              <path
+                d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+              />
+            </svg>
+          </a>
+        </div>
       </li>
       <li>
         <a

@@ -84,7 +84,7 @@ const Grid = styled.div`
   grid-row-gap: 5px;
   grid-column-gap: 30px;
   margin-right: 30px;
-  
+
   > div {
     display: flex;
     align-items: center;
@@ -93,13 +93,13 @@ const Grid = styled.div`
       font-weight: bold;
     }
   }
-  
+
   @media (max-width: 1400px) {
     grid-template-columns: auto minmax(auto, 250px) auto 1fr;
     grid-column-gap: 20px;
     margin-right: 20px;
   }
-  
+
   @media (max-width: 1150px) {
     grid-template-columns: auto 1fr;
   }
@@ -174,6 +174,11 @@ class IssueDetailsPage extends Component {
 
   openIssueModal = () => () => {
     this.setState({ showIssueModal: true })
+  }
+
+  onRefresh = () => {
+    const { match, fetchIssueDetails } = this.props;
+    fetchIssueDetails(match.params.id);
   }
 
   getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
@@ -430,4 +435,4 @@ const mapDispatchToProps = dispatch => ({
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(IssueDetailsPage));

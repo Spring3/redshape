@@ -9,6 +9,7 @@ import { GhostButton } from './Button';
 
 import { animationSlideRight } from '../animations';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+import RefreshIcon from "mdi-react/RefreshIcon";
 import LogoutIcon from 'mdi-react/LogoutIcon';
 import GearIcon from 'mdi-react/GearIcon';
 import ListIcon from 'mdi-react/ViewListIcon';
@@ -53,13 +54,13 @@ const Bubble = styled.div`
       opacity: 0;
       overflow: hidden;
       height: 0;
-      
+
       right: 30px;
       margin-left: -150px;
       margin-top: 16px;
       height: 150px;
       border: 2px solid ${props => props.theme.main};
-      
+
       display: flex;
       flex-direction: column;
       transition: height 0.8s ease-out, opacity 300ms;
@@ -95,11 +96,11 @@ const Bubble = styled.div`
     width: 100%;
     top: -40px;
     margin: 0;
-    
+
     &::after {
       content: ' ';
       position: absolute;
-      // width: auto;    
+      // width: auto;
       border: 2px solid ${props => props.theme.main};
       border-width: 12px;
       border-color: ${props => props.theme.main} transparent transparent transparent;
@@ -156,7 +157,7 @@ const Navbar = styled.nav`
           color: ${theme.main};
           border-bottom: 2px solid ${theme.main};
         }
-        
+
         &:hover {
           a {
             cursor: pointer;
@@ -171,7 +172,7 @@ const Navbar = styled.nav`
     li {
       margin: 0px 20px;
     }
-  
+
     li:first-child {
       margin-left: 0;
     }
@@ -206,7 +207,7 @@ const IconButton = styled(GhostButton)`
   }
 `;
 
-const BackButton = styled(IconButton)`
+const IconMovingButton = styled(IconButton)`
   svg {
     animation: ${animationSlideRight} 2s ease-in infinite;
     &:hover {
@@ -229,22 +230,33 @@ class NavigationBar extends Component {
   }
 
   render() {
-    const { user = {}, uiStyle, history } = this.props;
+    const { user = {}, uiStyle, history, onRefresh } = this.props;
     const { name } = user;
     const isEnhanced = uiStyle === 'enhanced';
     return (
       <Navbar isEnhanced={isEnhanced}>
         <ul>
           <li>
-            { isEnhanced ? (
-              <IconButton onClick={() => history.goBack()}>
-                <ArrowLeftIcon size={30} />
-              </IconButton>
-            ) : (
-              <BackButton onClick={() => history.goBack()}>
-                <ArrowLeftIcon size={30} />
-              </BackButton>
-            )}
+            <div>
+              { isEnhanced ? (
+                <IconButton onClick={() => history.goBack()}>
+                  <ArrowLeftIcon size={30} />
+                </IconButton>
+              ) : (
+                <IconMovingButton onClick={() => history.goBack()}>
+                  <ArrowLeftIcon size={30} />
+                </IconMovingButton>
+              )}
+              {
+                isEnhanced && (
+                  <li>
+                    <IconButton onClick={onRefresh}>
+                      <RefreshIcon size={30} />
+                    </IconButton>
+                  </li>
+                )
+              }
+            </div>
           </li>
           <li>
             <NavLink to="/app/summary/assigned">

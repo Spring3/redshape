@@ -37,7 +37,7 @@ const OptionsGrid = styled.div`
   grid-row-gap: 20px;
   grid-column-gap: 20px;
   margin-bottom: 20px;
-  
+
   // background-color: #EFEFEF;
   // border-radius: 4px;
   // border: 1px solid #A0A0A0;
@@ -89,6 +89,10 @@ class SummaryPage extends Component {
           .build();
       this.props.fetchIssues(queryFilter, page);
     }
+  }
+
+  onRefresh = () => {
+    this.fetchIssues();
   }
 
   onSearchChange = (e) => {
@@ -171,4 +175,4 @@ const mapDispatchToProps = dispatch => ({
   settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SummaryPage));
