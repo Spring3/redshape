@@ -239,9 +239,10 @@ After the modifications performed to this repository (listed in gnews.md), we re
 
 - Use advanced timer controls.
 - Issue is always editable (so, the creator/assignee can modify if possible).
+- Comments are editable (only if server-side support - REST API for journals).
 - Timer checkpoint: every 5/10 minutes (assuming suspend works by default in your system).
 - UI style: enhanced.
-- Progress values: 1% (only if server-side support)
+- Progress values: 1% (only if server-side support - viewing/editing 1% values in redmine web is possible).
 
 ## Known issues
 
