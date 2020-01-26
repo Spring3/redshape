@@ -223,6 +223,16 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ![](changes/issues_more_columns2.png)
 
+### Comments improved
+
+- If supported in server-side, comments can be removed and edited.
+
+- Comments can be sorted asc/desc.
+
+- Editor can be hidden/visible.
+
+![](changes/comments_editing_viewing.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in gnews.md), we recommend:

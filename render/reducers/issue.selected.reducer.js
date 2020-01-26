@@ -1,8 +1,10 @@
+import storage from '../../common/storage';
 import _ from 'lodash';
 
 import {
   ISSUES_GET,
   ISSUES_COMMENTS_SEND,
+  ISSUES_COMMENTS_UPDATE,
   ISSUES_RESET_SELECTION,
   ISSUES_TIME_ENTRY_GET
 } from '../actions/issues.actions';
@@ -45,6 +47,56 @@ export default (state = initialState, action) => {
       }
       return state;
     }
+    case ISSUES_COMMENTS_UPDATE: {
+      if (action.status === 'START') {
+        return {
+          ...state,
+          updates: {
+            ...state.updateStatus,
+            [action.info.subject]: {
+              ok: false,
+              isUpdating: true,
+              error: undefined
+            }
+          }
+        };
+      }
+      if (action.status === 'OK') {
+        const journals = state.data.journals
+          .map(el => el.id === action.data.id ?
+            (action.data.notes ? action.data : null) : el)
+          .filter(el => el != null);
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            journals
+          },
+          updates: {
+            ...state.updates,
+            [action.info.subject]: {
+              ok: true,
+              isUpdating: false,
+              error: undefined
+            }
+          }
+        };
+      }
+      if (action.status === 'NOK') {
+        return {
+          ...state,
+          updates: {
+            ...state.updates,
+            [action.info.subject]: {
+              ok: false,
+              isUpdating: false,
+              error: action.data
+            }
+          }
+        };
+      }
+      return state;
+    }
     case ISSUES_COMMENTS_SEND: {
       if (action.status === 'START') {
         return {
@@ -64,7 +116,7 @@ export default (state = initialState, action) => {
           ...state,
           data: {
             ...state.data,
-            journals: [...state.data.journals, action.data]
+            journals: action.data
           },
           updates: {
             ...state.updates,

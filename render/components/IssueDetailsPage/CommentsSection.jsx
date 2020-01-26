@@ -6,6 +6,7 @@ import { remote } from 'electron';
 
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
+import EditIcon from "mdi-react/EditIcon";
 
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import Link from '../Link';
@@ -18,14 +19,16 @@ const Section = styled.section`
   margin-bottom: 20px;
 `;
 
-const SmallNotice = styled.p`
+const SmallNotice = styled.span`
   font-size: 12px;
+  display: inline;
   margin: 0;
   margin-top: 0.5rem;
+  margin-right: 0.5rem;
   color: ${props => props.theme.minorText};
   font-weight: bold;
   opacity: 0;
-  height: auto;
+  height: 0;
   transition: opacity 1s, height 1s;
 
   a {
@@ -62,7 +65,6 @@ const Comments = styled.ul`
       ${({theme}) => css`
         h3 {
           margin-top: 20px;
-          margin-bottom: 20px;
           color: ${theme.main};
         }
 
@@ -74,7 +76,6 @@ const Comments = styled.ul`
           &:hover {
             color: ${theme.normalText};
           }
-          margin-bottom: 20px;
         }
       `}
 
@@ -109,8 +110,14 @@ const CommentsForm = styled.div`
   #commentsForm {
     background: ${props => props.theme.bg};
     padding: 20px;
+    padding-left: 22px;
     border-radius: 3px;
     border: 1px solid ${props => props.theme.bgDarker};
+
+    &.editing {
+      border-left: 3px solid ${props => props.theme.main};
+      padding-left: 20px;
+    }
   }
 `;
 
@@ -118,59 +125,161 @@ const CommentsHeader = styled.div`
   display: inline-flex;
   justify-content: space-between;
   width: 100%;
+
+  div:last-child {
+    display: flex;
+    button {
+      margin-right: 0.5rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 `;
 
 const FlexButton = styled(Button) `
   align-self: center;
 `;
 
+const Comment = styled.li`
+  padding: 8px;
+  transition: background-color 300ms;
+  padding-left: 11px;
+
+  ${props => props.editable && css`
+  cursor: pointer;
+  :hover {
+    background-color: #EEEEEE;
+    iframe {
+      background-color: white;
+    }
+  }
+  &.selected {
+    background-color: #EEEEEE;
+    border-left: 3px solid ${props => props.theme.main};
+    padding-left: 8px;
+  }
+  `}
+`;
+
 class CommentsSection extends Component {
   constructor(props){
     super(props)
+    const { entries, timestamp } = props.journalEntries;
+    const sortDescending = props.uiStyle === 'enhanced' ? true : false;
     this.state = {
       showNotice: false,
-      sortDescending: false,
-      entries: props.journalEntries,
+      sortDescending,
+      timestamp,
+      entries: sortDescending ? entries.reverse() : entries,
+      selected: null,
+      editorText: '',
+      showEditor: false
     };
+    this.editor = React.createRef();
+  }
+
+  componentDidUpdate(oldProps) {
+    const { timestamp: oldTimestamp } = oldProps.journalEntries;
+    const { entries, timestamp } = this.props.journalEntries;
+    if (oldTimestamp != timestamp){
+      const { sortDescending } = this.state;
+      this.setState({
+        entries: sortDescending ? entries.reverse() : entries,
+        timestamp,
+        selected: null,
+        editorText: ''
+      })
+    }
   }
 
   sendComments = (comments) => {
     if (comments) {
-      const { issueId, publishComments } = this.props;
-      return publishComments(issueId, comments);
+      const { selected } = this.state;
+      const { issueId, publishComments, publishUpdateComments } = this.props;
+      if (selected){
+        if (selected.notes === comments){
+          this.setState({
+            selected: null,
+            editorText: ''
+          })
+        }else{
+          return publishUpdateComments(issueId, selected.id, comments);
+        }
+      }else{
+        return publishComments(issueId, comments);
+      }
+    }
+  }
+
+  removeComment = () => {
+    const { selected } = this.state;
+    if (selected){
+      const { issueId, publishUpdateComments } = this.props;
+      return publishUpdateComments(issueId, selected.id, '');
     }
   }
 
   toggleSortDirection = () => {
     const { sortDescending, entries } = this.state;
+    const { current } = this.editor;
     this.setState({
       sortDescending: !sortDescending,
-      entries: entries.reverse()
+      entries: entries.reverse(),
+      ...(current && { editorText: current.state.value })
     })
   }
 
-  render() {
-    const { uiStyle } = this.props;
-    const { showNotice, sortDescending, entries } = this.state;
+  toggleEditor = () => {
+    const { showEditor } = this.state;
+    const { current } = this.editor;
+    this.setState({
+      showEditor: !showEditor,
+      ...(current && { editorText: current.state.value })
+    });
+  }
 
+  selectComment = (entry) => {
+    const { selected, showEditor } = this.state;
+    const sel = (selected && entry.id === selected.id) ? null : entry;
+    this.setState({
+      selected: sel,
+      ...(sel ? {
+        editorText: sel.notes,
+        showEditor: !showEditor ? true : showEditor
+      } : {
+        editorText: ''
+      })
+    });
+  }
+
+  render() {
+    const { uiStyle, areCommentsEditable } = this.props;
+    const { showNotice, sortDescending, entries, selected, editorText, showEditor } = this.state;
+    const anySelected = areCommentsEditable && selected != null;
     const comments = (
       <Comments isEnhanced={uiStyle === 'enhanced'}>
         {entries.map(entry => (
-          <li key={entry.id}>
+          <Comment key={entry.id} className={anySelected ? (selected.id === entry.id ? 'selected' : '') : ''} editable={areCommentsEditable} onClick={areCommentsEditable ? () => this.selectComment(entry) : undefined}>
             <div className="commentsHeader">
               <h3 className="username">{entry.user.name}</h3>
               <DateComponent className="date" date={entry.created_on} />
             </div>
             <MarkdownText markdownText={entry.notes} />
-          </li>
+          </Comment>
         ))}
       </Comments>
     );
     const commentsForm = (
       <CommentsForm>
         <MarkdownEditor
+          ref={this.editor}
+          className={selected && 'editing'}
+          initialValue={editorText}
+          editing={selected}
           id="commentsForm"
           onSubmit={this.sendComments}
+          onRemove={this.removeComment}
           onBlur={() => this.setState({ showNotice: false })}
           onFocus={() => this.setState({ showNotice: true })}
         />
@@ -182,7 +291,7 @@ class CommentsSection extends Component {
                 ? (<Link href="#">Cmd + Enter</Link>)
                 : (<Link href="#">Ctrl + Enter</Link>)
             }
-            to send
+            to { selected ? 'update the selected comment' : 'send a new comment' }.
           </SmallNotice>
         </div>
       </CommentsForm>
@@ -193,17 +302,22 @@ class CommentsSection extends Component {
         <div>
           <CommentsHeader>
             <h2>Comments</h2>
-            <FlexButton onClick={this.toggleSortDirection}>
-            {sortDescending && (
-              <SortDescendingIcon size={14}/>
-            ) || (
-              <SortAscendingIcon size={14}/>
-            )
-            }
-          </FlexButton>
+            <div>
+              <FlexButton onClick={this.toggleEditor}>
+                <EditIcon size={22}/>&nbsp;Editor
+              </FlexButton>
+              <FlexButton onClick={this.toggleSortDirection}>
+                {sortDescending && (
+                  <SortDescendingIcon size={22}/>
+                ) || (
+                  <SortAscendingIcon size={22}/>
+                )
+                }
+              </FlexButton>
+            </div>
           </CommentsHeader>
-          { sortDescending ? (commentsForm) : (comments) }
-          { sortDescending ? (comments) : (commentsForm) }
+          { sortDescending ? (showEditor && commentsForm) : (comments) }
+          { sortDescending ? (comments) : (showEditor && commentsForm) }
         </div>
       </Section>
     );
@@ -220,12 +334,15 @@ CommentsSection.propTypes = {
     }).isRequired,
     created_on: PropTypes.string.isRequired
   }).isRequired).isRequired,
+  areCommentsEditable: PropTypes.func.isRequired,
   publishComments: PropTypes.func.isRequired,
+  publishUpdateComments: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   uiStyle: state.settings.uiStyle,
+  areCommentsEditable: state.settings.areCommentsEditable,
 });
 
 export default withTheme(connect(mapStateToProps)(CommentsSection));

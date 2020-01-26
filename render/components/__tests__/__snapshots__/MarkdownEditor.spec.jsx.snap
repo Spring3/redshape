@@ -1,18 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MarkdownEditor component should match the snapshot 1`] = `
-.c8 {
-  font-size: 14px;
-  resize: none;
-  overflow: hidden;
-  height: auto;
-  font-family: inherit;
-  width: 100%;
-  line-height: 1.5rem;
-  box-sizing: border-box;
-  background: #FFFFFF;
-}
-
 .c6 {
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -33,6 +21,18 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
 .c6:focus,
 .c6:visited {
   background: transparent;
+}
+
+.c8 {
+  font-size: 14px;
+  resize: none;
+  overflow: hidden;
+  height: auto;
+  font-family: inherit;
+  width: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+  background: #FFFFFF;
 }
 
 .c5 {
@@ -106,6 +106,14 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
 .c0 li:last-child {
   float: right;
   margin-right: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 li:last-child a:last-child {
+  margin-left: 1rem;
 }
 
 .c0 .c1:last-child {
@@ -488,7 +496,8 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <span>
-           Preview
+           
+          Preview
         </span>
       </a>
     </li>
@@ -508,6 +517,14 @@ exports[`MarkdownText component should match the snapshot 1`] = `
 .c0 {
   box-sizing: border-box;
   overflow: hidden;
+}
+
+.c0.framed {
+  padding: 5px 20px 0px 20px;
+  background: #FFFFFF;
+  border: 1px solid #E9E9E9;
+  border-radius: 3px;
+  min-height: 100px;
 }
 
 <iframe

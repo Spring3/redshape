@@ -20,7 +20,7 @@ import {IssueId, Priority, Status, Tag, TagContainer} from "../../components/Iss
 
 import EditIcon from 'mdi-react/EditIcon';
 
-import Button, {StyledLink} from "../../components/Button";
+import Button from "../../components/Button";
 
 import actions from '../../actions';
 
@@ -181,10 +181,12 @@ class IssueDetailsPage extends Component {
     fetchIssueDetails(match.params.id);
   }
 
-  getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
+  getIssueComments = () => {
+    return { timestamp: new Date(), entries: this.props.selectedIssueState.data.journals.filter(entry => entry.notes) }
+  }
 
   render() {
-    const { selectedIssueState, history, userId, theme, postComments, uiStyle, redmineEndpoint } = this.props;
+    const { selectedIssueState, userId, theme, postComments, uiStyle, redmineEndpoint, postUpdateComments } = this.props;
     const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
     let morefields = selectedIssue.custom_fields;
@@ -324,8 +326,8 @@ class IssueDetailsPage extends Component {
           </Flex>
           <CommentsSection
             journalEntries={this.getIssueComments()}
-            // publishComments={(issueId, comments) => this.postCurrentComment(issueId, comments)}
             publishComments={postComments}
+            publishUpdateComments={postUpdateComments}
             issueId={selectedIssue.id}
           />
           { selectedTimeEntry && (
@@ -416,6 +418,7 @@ IssueDetailsPage.propTypes = {
   userName: PropTypes.string.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
+  postUpdateComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,
 };
@@ -432,6 +435,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
   postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
+  postUpdateComments: (issueId, commentId, comments) => dispatch(actions.issues.updateComments(issueId, commentId, comments)),
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });
 

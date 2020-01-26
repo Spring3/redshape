@@ -13,6 +13,7 @@ import {
   SETTINGS_BACKUP,
   SETTINGS_RESTORE,
   SETTINGS_ISSUE_ALWAYS_EDITABLE,
+  SETTINGS_COMMENTS_EDITABLE,
   SETTINGS_TIMER_CHECKPOINT,
 } from '../actions/settings.actions';
 
@@ -34,6 +35,7 @@ export const initialState = {
     { label: 'Due Date', value: 'due_date', format: 'date' }
   ],
   isIssueAlwaysEditable: false,
+  areCommentsEditable: false,
   timerCheckpoint: 'none',
   version,
 };
@@ -131,6 +133,15 @@ export default (state = initialState, action) => {
       const nextState = {
         ...state,
         isIssueAlwaysEditable: !!isIssueAlwaysEditable
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_COMMENTS_EDITABLE: {
+      const { userId, redmineEndpoint, areCommentsEditable } = action.data;
+      const nextState = {
+        ...state,
+        areCommentsEditable: !!areCommentsEditable
       };
       storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;

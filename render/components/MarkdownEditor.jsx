@@ -1,6 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components';
+import { connect } from 'react-redux';
+import styled, { css, withTheme } from 'styled-components';
 import showdown from 'showdown';
 import throttle from 'lodash/throttle';
 import { remote } from 'electron';
@@ -19,17 +20,19 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
 import ImageOutlineIcon from 'mdi-react/ImageOutlineIcon';
 import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
+import CloseIcon from 'mdi-react/CloseIcon';
 import { openExternalUrl, xssFilter } from '../../common/utils';
 
-import TextArea from './TextArea';
 import { GhostButton } from './Button';
+import Dialog from './Dialog';
+import TextArea from './TextArea';
 import Tooltip from './Tooltip';
 
 const MarkdownOption = styled.li`
   display: inline;
   margin-right: 10px;
   position: relative;
-  cursor: pointer;  
+  cursor: pointer;
 
   &:hover {
     svg {
@@ -51,6 +54,10 @@ const MarkdownOptionsList = styled.ul`
   li:last-child {
     float: right;
     margin-right: 0;
+    display: flex;
+    a:last-child {
+      margin-left: 1rem;
+    }
   }
 
   ${MarkdownOption}:last-child {
@@ -241,7 +248,7 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, onFocus, isDisabled, maxLength } = this.props;
+    const { className, id, onBlur, onFocus, isDisabled, maxLength, editing } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -315,15 +322,29 @@ class MarkdownEditor extends PureComponent {
             </Tooltip>
           </MarkdownOption>
           <MarkdownOption>
+            { editing && (
+              <Dialog title="Please Confirm" message="Are you sure you want to delete the selected comment?">
+                {
+                  requestConfirmation => (
+                    <GhostButton
+                      onClick={requestConfirmation(this.props.onRemove)}
+                    >
+                      <CloseIcon size={27}/>
+                      <span>&nbsp;Remove</span>
+                    </GhostButton>
+                  )
+                }
+              </Dialog>
+            )}
             <GhostButton onClick={this.togglePreview}>
               <CardBulletedOutlineIcon size={27} />
-              <span>&nbsp;Preview</span>
+              <span>&nbsp;{ showPreview ? 'Edit' : 'Preview' }</span>
             </GhostButton>
           </MarkdownOption>
         </MarkdownOptionsList>
         { showPreview
           ? (
-            <MarkdownText markdownText={value} />
+            <MarkdownText className="framed" markdownText={value} />
           )
           : (
             <ModifiedTextArea
@@ -375,6 +396,16 @@ MarkdownEditor.defaultProps = {
 const Iframe = styled.iframe`
   box-sizing: border-box;
   overflow: hidden;
+
+  &.framed {
+    ${props => props.isEnhanced && css`
+    padding: 5px 20px 0px 20px;
+    background: ${props => props.theme.bg};
+    border: 1px solid ${props => props.theme.bgDarker};
+    border-radius: 3px;
+    min-height: 100px;
+    `}
+  }
 `;
 
 class MarkdownText extends PureComponent {
@@ -462,10 +493,12 @@ class MarkdownText extends PureComponent {
   }
 
   render () {
-    const { markdownText, className } = this.props;
+    const { markdownText, className, uiStyle } = this.props;
     const markdown = xssFilter(converter.makeHtml(markdownText));
+    const isEnhanced = uiStyle === 'enhanced';
     return (
       <Iframe
+        isEnhanced={isEnhanced}
         ref={this.iframeRef}
         className={className}
         frameBorder="0"
@@ -479,7 +512,8 @@ class MarkdownText extends PureComponent {
 
 MarkdownText.propTypes = {
   markdownText: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  uiStyle: PropTypes.string.isRequired,
 };
 
 MarkdownText.defaultProps = {
@@ -487,10 +521,18 @@ MarkdownText.defaultProps = {
   className: undefined
 };
 
-MarkdownText = withTheme(MarkdownText);
+const mapStateToProps = state => ({
+  uiStyle: state.settings.uiStyle,
+});
+
+// MarkdownText = withTheme(MarkdownText);
+MarkdownText = withTheme(connect(mapStateToProps)(MarkdownText));
 
 export {
   MarkdownText
 };
 
-export default MarkdownEditor;
+// export default withTheme(MarkdownEditor);
+// export default forwardRef(MarkdownEditor);
+export default React.forwardRef((props, ref) =>  (<MarkdownEditor ref={ref} {...props} />));
+// export default React.forwardRef(MarkdownEditor);

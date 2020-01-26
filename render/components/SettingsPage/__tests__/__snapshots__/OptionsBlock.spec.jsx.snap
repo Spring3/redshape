@@ -252,6 +252,9 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               <span>
                 - Issue always editable: server will check permissions and update (or not).
               </span>
+              <span>
+                - Comments editable: needs server-side support to update notes (if valid permissions).
+              </span>
             </div>
           </p>
         </div>
@@ -322,6 +325,38 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
         </div>
         <span>
           Issue is always editable
+        </span>
+      </label>
+      <label>
+        <div
+          className="c10"
+        >
+          <input
+            checked={false}
+            className="c11 c12"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c13"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Comments are editable
         </span>
       </label>
     </div>

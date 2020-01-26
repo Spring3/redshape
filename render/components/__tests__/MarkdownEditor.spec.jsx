@@ -1,10 +1,14 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { ThemeProvider } from 'styled-components';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import utils from '../../../common/utils';
 import theme from '../../theme';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+const mockStore = configureStore([thunk]);
 
 describe('MarkdownEditor component', () => {
   it('should match the snapshot', () => {
@@ -29,7 +33,7 @@ describe('MarkdownEditor component', () => {
     wrapper.find('textarea').simulate('change', { target: { value: 'test' }, persist: () => {} });
     wrapper.update();
     expect(wrapper.find('textarea').prop('value')).toBe('test');
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('test');
+    expect(wrapper.find('MarkdownEditor').state('value')).toBe('test');
     expect(onChange).toHaveBeenCalled();
     onChange.mockReset();
 
@@ -46,29 +50,45 @@ describe('MarkdownEditor component', () => {
   });
 
   it('should display the preview when such option was clicked', () => {
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor initialValue="Lorem ipsum dolor" />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor initialValue="Lorem ipsum dolor" />
+        </ThemeProvider>
+      </Provider>
     );
     expect(wrapper.exists('button'));
-    expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(false);
+    expect(wrapper.find('MarkdownEditor').state('showPreview')).toBe(false);
     wrapper.find('GhostButton').simulate('click');
     wrapper.update();
-    expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(true);
+    expect(wrapper.find('MarkdownEditor').state('showPreview')).toBe(true);
 
     expect(wrapper.exists('textarea')).toBe(false);
-    expect(wrapper.exists(MarkdownText)).toBe(true);
-    expect(wrapper.find(MarkdownText).prop('markdownText')).toBe(wrapper.find(MarkdownEditor).state('value'));
+    expect(wrapper.exists('MarkdownText')).toBe(true);
+    expect(wrapper.find('MarkdownText').prop('markdownText')).toBe(wrapper.find('MarkdownEditor').state('value'));
   });
 
   it('should submit and reset the state after it when it success', () => {
     const onSubmit = jest.fn().mockImplementation(() => Promise.resolve());
     const xssSpy = jest.spyOn(utils, 'xssFilter');
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit}/>
+        </ThemeProvider>
+      </Provider>
     );
 
     const KEY_ENTER = 13;
@@ -77,17 +97,25 @@ describe('MarkdownEditor component', () => {
     expect(onSubmit).toHaveBeenCalled();
     expect(xssSpy).toHaveBeenCalled();
     setTimeout(() => {
-      expect(wrapper.find(MarkdownEditor).state('value')).toBe('');
+      expect(wrapper.find('MarkdownEditor').state('value')).toBe('');
     }, 50);
   });
 
   it('should submit and not reset the state after it when it fails', () => {
     const onSubmit = jest.fn().mockImplementation(() => Promise.reject(new Error()));
     const xssSpy = jest.spyOn(utils, 'xssFilter');
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
+        </ThemeProvider>
+      </Provider>
     );
 
     const KEY_ENTER = 13;
@@ -96,34 +124,64 @@ describe('MarkdownEditor component', () => {
     expect(onSubmit).toHaveBeenCalled();
     expect(xssSpy).toHaveBeenCalled();
     setTimeout(() => {
-      expect(wrapper.find(MarkdownEditor).state('value')).toBe("Lorem ipsum dolor");
+      expect(wrapper.find('MarkdownEditor').state('value')).toBe("Lorem ipsum dolor");
     }, 50);
   });
 
   it('should add a newline on macos if ctrl+enter was pressed', () => {
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor initialValue="Lorem ipsum dolor" />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor initialValue="Lorem ipsum dolor" />
+        </ThemeProvider>
+      </Provider>
     );
 
     const KEY_ENTER = 13;
     wrapper.find('textarea').simulate('keyDown', { keyCode: KEY_ENTER, ctrlKey: true });
     wrapper.update();
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('\r\nLorem ipsum dolor');
+    expect(wrapper.find('MarkdownEditor').state('value')).toBe('\r\nLorem ipsum dolor');
   });
 });
 
 describe('MarkdownText component', () => {
   it('should match the snapshot', () => {
-    const tree = renderer.create(<MarkdownText theme={theme} markdownText="Lorem ipsum" />).toJSON();
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
+    const tree = renderer.create(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownText markdownText="Lorem ipsum" />
+        </ThemeProvider>
+      </Provider>
+    ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('should apply xss filter to the output', () => {
+    const state = {
+      settings: {
+        uiStyle: 'enhanced',
+      }
+    };
+    const store = mockStore(state);
     const xssSpy = jest.spyOn(utils, 'xssFilter');
     const wrapper = mount(
-      <MarkdownText theme={theme} markdownText="Hello <a href='javascript::alert(\'Hello\')' />" />
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownText markdownText="Hello <a href='javascript::alert(\'Hello\')' />" />
+        </ThemeProvider>
+      </Provider>
     );
     expect(wrapper.exists('iframe'));
     expect(xssSpy).toHaveBeenCalled();

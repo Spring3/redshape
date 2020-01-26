@@ -225,6 +225,7 @@ describe('Issue actions', () => {
       });
       const getState = jest.fn().mockReturnValueOnce(state);
       axiosMock.onPut(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, undefined]));
+      axiosMock.onGet(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, { issue: { journals: [{id: 100, notes: comments}] } }]));
       await issuesActions.default.sendComments(issueId, comments)(dispatch, getState);
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
@@ -235,18 +236,13 @@ describe('Issue actions', () => {
       }));
       expect(axiosMock.history.put[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toBeCalledTimes(2);
-      expect(getState).toHaveBeenCalled();
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
       expect(dispatch).toBeCalledWith(notify.ok(
         issuesActions.ISSUES_COMMENTS_SEND,
-        {
-          created_on,
-          details: [],
-          id: commentId,
+        [{
+          id: 100,
           notes: comments,
-          private_notes: false,
-          user: state.user
-        },
+        }],
         { subject: 'comments' }
       ));
     });
@@ -269,7 +265,6 @@ describe('Issue actions', () => {
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
       expect(dispatch).toBeCalledTimes(2);
-      expect(getState).toHaveBeenCalled();
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
       expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), { subject: 'comments' }));
     });

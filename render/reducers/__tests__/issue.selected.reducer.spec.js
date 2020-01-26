@@ -5,6 +5,7 @@ import {
   ISSUES_RESET_SELECTION,
   ISSUES_GET,
   ISSUES_COMMENTS_SEND,
+  ISSUES_COMMENTS_UPDATE,
   ISSUES_TIME_ENTRY_GET
 } from '../../actions/issues.actions';
 import {
@@ -111,15 +112,17 @@ describe('Selected issue reducer', () => {
     });
 
     it('status OK', () => {
-      const data = {
-        hello: 'world'
-      };
+      const data = [
+        { id: 1, notes: 'hello' },
+        { id: 2, notes: 'world' },
+        { id: 3, notes: 'Hello World' }
+      ];
       expect(
         reducer(
           {
             ..._cloneDeep(initialState),
             data: {
-              journals: ['hello', 'world']
+              journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'world'}]
             },
             updates: {
               something: {
@@ -139,7 +142,7 @@ describe('Selected issue reducer', () => {
       ).toEqual({
         ..._cloneDeep(initialState),
         data: {
-          journals: ['hello', 'world', data]
+          journals: data
         },
         updates: {
           something: {
@@ -171,6 +174,104 @@ describe('Selected issue reducer', () => {
             }
           },
           notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' })
+        )
+      ).toEqual({
+        ..._cloneDeep(initialState),
+        updates: {
+          something: {
+            ok: true,
+            isUpdating: false,
+            error: undefined
+          },
+          comments: {
+            ok: false,
+            isUpdating: false,
+            error
+          }
+        }
+      });
+    });
+  });
+
+
+  describe('ISSUES_COMMENTS_UPDATE', () => {
+    it('status START', () => {
+      expect(
+        reducer(
+          _cloneDeep(initialState),
+          notify.start(ISSUES_COMMENTS_UPDATE, { subject: 'comments' })
+        )
+      ).toEqual({
+        ..._cloneDeep(initialState),
+        updates: {
+          comments: {
+            ok: false,
+            isUpdating: true,
+            error: undefined
+          }
+        }
+      });
+    });
+
+    it('status OK', () => {
+      const data = { id: 2, notes: "Changed" }
+      expect(
+        reducer(
+          {
+            ..._cloneDeep(initialState),
+            data: {
+              journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'world'}]
+            },
+            updates: {
+              something: {
+                ok: true,
+                isUpdating: false,
+                error: undefined
+              },
+              comments: {
+                ok: false,
+                isUpdating: true,
+                error: undefined
+              }
+            }
+          },
+          notify.ok(ISSUES_COMMENTS_UPDATE, data, { subject: 'comments' })
+        )
+      ).toEqual({
+        ..._cloneDeep(initialState),
+        data: {
+          journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'Changed'}]
+        },
+        updates: {
+          something: {
+            ok: true,
+            isUpdating: false,
+            error: undefined
+          },
+          comments: {
+            ok: true,
+            isUpdating: false,
+            error: undefined
+          }
+        }
+      });
+    });
+
+    it('status NOK', () => {
+      const error = new Error('Whoops');
+      expect(
+        reducer(
+          {
+            ..._cloneDeep(initialState),
+            updates: {
+              something: {
+                ok: true,
+                isUpdating: false,
+                error: undefined
+              }
+            }
+          },
+          notify.nok(ISSUES_COMMENTS_UPDATE, error, { subject: 'comments' })
         )
       ).toEqual({
         ..._cloneDeep(initialState),

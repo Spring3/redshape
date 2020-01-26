@@ -170,7 +170,7 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     method: 'DELETE'
   }).then(() => dispatch(notify.ok(TIME_ENTRY_DELETE, { timeEntryId, issueId })))
     .catch((error) => {
-      console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
+      console.error(`Error when deleting the time entry with id ${timeEntryId}`, error);
       dispatch(notify.nok(TIME_ENTRY_DELETE, error));
     });
 };

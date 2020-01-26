@@ -28,7 +28,7 @@ export const migrateSettings = (s) => {
         if (vmajor === major && vminor === minor){
           if (vmajor === 1 && vminor === 3) {
             if (patch < 2) { // 1.3.0, 1.3.1: not public
-              const keys = ['isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
+              const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
               keys.forEach(key => s[key] = initialStateSettings[key]);
               return s;
             }
@@ -95,7 +95,7 @@ export const migrateSettings = (s) => {
   }
 
   // 1.3.2
-  const keys = ['isIssueAlwaysEditable', 'timerCheckpoint'];
+  const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint'];
   keys.forEach(key => settings[key] = initialStateSettings[key]);
 
   return settings;

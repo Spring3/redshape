@@ -11,28 +11,31 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 const mockStore = configureStore([thunk]);
 
-describe('IssueDetails => CommentsSEction componnet', () => {
+describe('IssueDetails => CommentsSection component', () => {
   it('should match the snapshot', () => {
     const props = {
       issueId: 1,
-      journalEntries: [
-        {
-          notes: 'Hello there',
-          user: {
-            id: 1,
-            name: 'John Wayne'
+      journalEntries: {
+        timestamp: new Date(),
+        entries: [
+          {
+            notes: 'Hello there',
+            user: {
+              id: 1,
+              name: 'John Wayne'
+            },
+            created_on: '2011-01-01'
           },
-          created_on: '2011-01-01'
-        },
-        {
-          notes: 'Does your town need a hero?',
-          user: {
-            id: 1,
-            name: 'John Wayne'
-          },
-          created_on: '2011-01-02'
-        }
-      ],
+          {
+            notes: 'Does your town need a hero?',
+            user: {
+              id: 1,
+              name: 'John Wayne'
+            },
+            created_on: '2011-01-02'
+          }
+        ]
+      },
       publishComments: jest.fn()
     };
     const state = {
@@ -54,24 +57,27 @@ describe('IssueDetails => CommentsSEction componnet', () => {
   it('should invoke publishComments function only if the comments are not empty', () => {
     const props = {
       issueId: 1,
-      journalEntries: [
-        {
-          notes: 'Hello there',
-          user: {
-            id: 1,
-            name: 'John Wayne'
+      journalEntries: {
+        timestamp: new Date(),
+        entries: [
+          {
+            notes: 'Hello there',
+            user: {
+              id: 1,
+              name: 'John Wayne'
+            },
+            created_on: '2011-01-01'
           },
-          created_on: '2011-01-01'
-        },
-        {
-          notes: 'Does your town need a hero?',
-          user: {
-            id: 1,
-            name: 'John Wayne'
-          },
-          created_on: '2011-01-02'
-        }
-      ],
+          {
+            notes: 'Does your town need a hero?',
+            user: {
+              id: 1,
+              name: 'John Wayne'
+            },
+            created_on: '2011-01-02'
+          }
+        ]
+      },
       publishComments: jest.fn()
     };
     const state = {
