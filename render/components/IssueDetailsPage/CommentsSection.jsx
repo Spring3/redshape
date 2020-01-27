@@ -257,15 +257,16 @@ class CommentsSection extends Component {
     const { uiStyle, areCommentsEditable } = this.props;
     const { showNotice, sortDescending, entries, selected, editorText, showEditor } = this.state;
     const anySelected = areCommentsEditable && selected != null;
+    const isEnhanced = uiStyle === 'enhanced';
     const comments = (
-      <Comments isEnhanced={uiStyle === 'enhanced'}>
+      <Comments isEnhanced={isEnhanced}>
         {entries.map(entry => (
           <Comment key={entry.id} className={anySelected ? (selected.id === entry.id ? 'selected' : '') : ''} editable={areCommentsEditable} onClick={areCommentsEditable ? () => this.selectComment(entry) : undefined}>
             <div className="commentsHeader">
               <h3 className="username">{entry.user.name}</h3>
               <DateComponent className="date" date={entry.created_on} />
             </div>
-            <MarkdownText markdownText={entry.notes} />
+            <MarkdownText markdownText={entry.notes} isEnhanced={isEnhanced}/>
           </Comment>
         ))}
       </Comments>

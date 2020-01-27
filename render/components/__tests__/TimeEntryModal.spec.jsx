@@ -74,6 +74,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -131,6 +134,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -204,6 +210,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -261,6 +270,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       },
       user: {
         id: 1
@@ -339,6 +351,9 @@ describe('TimeEntryModal Component', () => {
         isFetching: false,
         error: undefined
       },
+      settings: {
+        uiStyle: 'enhanced'
+      },
       user: {
         id: 1
       }
@@ -413,6 +428,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -482,6 +500,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -542,6 +563,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -609,6 +633,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -676,6 +703,9 @@ describe('TimeEntryModal Component', () => {
       timeEntry: {
         isFetching: false,
         error: undefined
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);

@@ -322,7 +322,7 @@ class IssueDetailsPage extends Component {
               </Grid>
               <div>
                 <h3>Description</h3>
-                <MarkdownText markdownText={selectedIssue.description} />
+                <MarkdownText markdownText={selectedIssue.description} isEnhanced={isEnhanced} />
               </div>
             </IssueDetails>
             <TimeEntries

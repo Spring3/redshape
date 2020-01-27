@@ -12,20 +12,36 @@ const mockStore = configureStore([thunk]);
 
 describe('MarkdownEditor component', () => {
   it('should match the snapshot', () => {
+    const state = {
+      settings: {
+        uiStyle: 'enhanced'
+      }
+    };
+    const store = mockStore(state);
     const tree = renderer.create(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor />
+        </ThemeProvider>
+      </Provider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('should display a menu and a text area', () => {
     const onChange = jest.fn();
+    const state = {
+      settings: {
+        uiStyle: 'enhanced'
+      }
+    };
+    const store = mockStore(state);
     const wrapper = mount(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor onChange={onChange} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <MarkdownEditor onChange={onChange} />
+        </ThemeProvider>
+      </Provider>
     );
     expect(wrapper.find('ul')).toBeTruthy();
     expect(wrapper.find('textarea')).toBeTruthy();

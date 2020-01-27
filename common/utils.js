@@ -9,7 +9,18 @@ const openExternalUrl = url => new Promise((resolve, reject) => { // eslint-disa
   .then(link => shell.openExternal(link))
   .catch(error => console.error('Error when opening external url', url, error.message));
 
-const xssFilter = input => xss(input);
+const xssOptions = {
+  whiteList: {
+    ...xss.getDefaultWhiteList(),
+    ...{
+      code: ['class'],
+      pre: ['class'],
+      span: ['class'],
+    }
+  }
+};
+const customXss = new xss.FilterXSS(xssOptions);
+const xssFilter = input => customXss.process(input);
 
 module.exports = {
   openExternalUrl,

@@ -243,6 +243,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ![](changes/issue_time_spent_view.png)
 
+### Markdown improved
+
+- Code blocks are highlighted and slightly better styles rendering markdown in enhanced UI Style.
+
+![](changes/markdown_highlight.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in gnews.md), we recommend:

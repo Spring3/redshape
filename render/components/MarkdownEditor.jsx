@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 import showdown from 'showdown';
+import showdownHighlight from 'showdown-highlight';
 import throttle from 'lodash/throttle';
 import { remote } from 'electron';
+import highlightStyles from '!!raw-loader!highlight.js/styles/default.css';
 
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon';
@@ -92,7 +94,9 @@ const converter = new showdown.Converter({
   disableForced4SpacesIndentedSublists: true,
   simpleLineBreaks: true,
   emoji: true,
-  simplifiedAutoLink: true
+  simplifiedAutoLink: true,
+  ghCodeBlocks: true,
+  extensions: [showdownHighlight]
 });
 
 const KEY_ENTER = 13;
@@ -248,8 +252,9 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, onFocus, isDisabled, maxLength, editing } = this.props;
+    const { className, id, onBlur, onFocus, isDisabled, maxLength, editing, uiStyle } = this.props;
     const { value, showPreview } = this.state;
+    const isEnhanced = uiStyle === 'enhanced';
     return (
       <div
         className={className}
@@ -344,7 +349,7 @@ class MarkdownEditor extends PureComponent {
         </MarkdownOptionsList>
         { showPreview
           ? (
-            <MarkdownText className="framed" markdownText={value} />
+            <MarkdownText className="framed" isEnhanced={isEnhanced} markdownText={value} />
           )
           : (
             <ModifiedTextArea
@@ -381,6 +386,7 @@ MarkdownEditor.propTypes = {
   onSubmit: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
+  uiStyle: PropTypes.string.isRequired
 };
 
 MarkdownEditor.defaultProps = {
@@ -413,7 +419,7 @@ class MarkdownText extends PureComponent {
     super(props);
     this.iframeRef = React.createRef();
 
-    const { theme } = props;
+    const { theme, isEnhanced } = props;
     this.genericStyles = `
       body {
         margin: 0;
@@ -453,7 +459,26 @@ class MarkdownText extends PureComponent {
       pre {
         white-space: pre-wrap;
         word-break: keep-all;
+
       }
+
+      ${isEnhanced && css`
+      code {
+        background: #EEEEEE;
+        border-radius: 3px;
+        padding: 0 4px;
+      }
+      pre > code {
+        background: initial;
+        padding: initial;
+        border-radius: initial;
+        display: block;
+        border-left: 3px solid #EEEEEE;
+        padding-left: 6px;
+      }
+
+      ${highlightStyles}
+      `}
     `;
 
     this.throttledAdjustIframeSize = throttle(this.adjustIframeSize, 300);
@@ -521,18 +546,18 @@ MarkdownText.defaultProps = {
   className: undefined
 };
 
-const mapStateToProps = state => ({
+let mapStateToProps = state => ({
   uiStyle: state.settings.uiStyle,
 });
 
-// MarkdownText = withTheme(MarkdownText);
 MarkdownText = withTheme(connect(mapStateToProps)(MarkdownText));
 
 export {
   MarkdownText
 };
 
-// export default withTheme(MarkdownEditor);
-// export default forwardRef(MarkdownEditor);
-export default React.forwardRef((props, ref) =>  (<MarkdownEditor ref={ref} {...props} />));
-// export default React.forwardRef(MarkdownEditor);
+mapStateToProps = state => ({
+  uiStyle: state.settings.uiStyle,
+});
+
+export default connect(mapStateToProps, null, null, { forwardRef: true })(MarkdownEditor);
