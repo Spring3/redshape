@@ -114,6 +114,7 @@ class IssueDetailsPage extends Component {
       showTimeEntryModal: false,
       showIssueModal: false
     };
+    this.timeEntries = React.createRef();
   }
 
   componentWillMount() {
@@ -179,6 +180,10 @@ class IssueDetailsPage extends Component {
   onRefresh = () => {
     const { match, fetchIssueDetails } = this.props;
     fetchIssueDetails(match.params.id);
+    const { current } = this.timeEntries;
+    if (current){
+      current.onRefresh();
+    }
   }
 
   getIssueComments = () => {
@@ -321,6 +326,7 @@ class IssueDetailsPage extends Component {
               </div>
             </IssueDetails>
             <TimeEntries
+              ref={this.timeEntries}
               showTimeEntryModal={this.showTimeEntryModal}
             />
           </Flex>

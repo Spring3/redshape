@@ -35,6 +35,9 @@ const StyledDate = styled.span`
     grid-row: 1;
     grid-column: 1;
   }
+  ${props => props.align && css`
+    text-align: ${props.align};
+  `}
 
   span:last-child {
     opacity: 0;
@@ -56,7 +59,7 @@ const StyledDate = styled.span`
 
 class DateComponent extends PureComponent {
   render() {
-    const { date, className } = this.props;
+    const { date, className, align } = this.props;
     if (date) {
       const daysAgo = moment().endOf('day').diff(moment(date).endOf('day'), 'days');
       const precision = (daysAgo === 0
@@ -71,7 +74,7 @@ class DateComponent extends PureComponent {
         : moment(date).format('MMM DD YYYY');
       return (
         <StyledDate animated={shouldBeAnimated}>
-          <span className={className}>{displayedValue}</span>
+          <span className={className} align={align}>{displayedValue}</span>
           <span className={className}>{moment(date).format('MMM DD YYYY')}</span>
         </StyledDate>
       );

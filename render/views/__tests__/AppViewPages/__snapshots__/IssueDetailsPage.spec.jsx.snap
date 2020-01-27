@@ -223,7 +223,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c24 li div:first-child {
+.c24 li div.status {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -238,12 +238,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child a {
+.c24 li div.status a {
   margin-left: 10px;
   visibility: hidden;
 }
 
-.c24 li div:first-child div {
+.c24 li div.status div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -258,17 +258,46 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child div span.time,
-.c24 li div:first-child div span.date {
+.c24 li div.status div span.time,
+.c24 li div.status div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c24 li div:first-child div span.username {
+.c24 li div.status div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
+}
+
+.c24 li div.extra {
+  display: grid;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  grid-template-columns: 1fr auto;
+  grid-auto-flow: row;
+  grid-column-gap: 1rem;
+  grid-row-gap: 3px;
+  -webkit-align-items: end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: end;
+}
+
+.c24 li div.extra:not(:empty) {
+  margin-top: 0.5rem;
+}
+
+.c24 li div.extra span {
+  font-size: 12px;
+  color: #A0A0A0;
+}
+
+.c24 li div.extra span:nth-child(even) {
+  text-align: right;
 }
 
 .c24 li p {

@@ -73,7 +73,7 @@ const TimeEntriesList = styled.ul`
     border: 1px solid ${props => props.theme.bgDarker};
     background: ${props => props.theme.bg};
 
-    div:first-child {
+    div.status {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -81,6 +81,14 @@ const TimeEntriesList = styled.ul`
       a {
         margin-left: 10px;
         visibility: hidden;
+        ${props => props.isEnhanced && css`
+        position: absolute;
+        right: 0;
+        background: white;
+        border-radius: 50%;
+        border: 1px solid lightgray;
+        margin-top: -16px;
+        `}
       }
 
       div {
@@ -98,6 +106,30 @@ const TimeEntriesList = styled.ul`
           font-weight: bold;
           margin-right: 5px;
           color: ${props => props.theme.normalText};
+          ${props => props.isEnhanced && css` width: 150px; `}
+        }
+      }
+    }
+
+    div.extra {
+      display: grid;
+      justify-content: space-between;
+      grid-template-columns: 1fr auto;
+      grid-auto-flow: row;
+      grid-column-gap: 1rem;
+
+      grid-row-gap: 3px;
+      align-items: end;
+
+      &:not(:empty) {
+        margin-top: 0.5rem;
+      }
+
+      span {
+        font-size: 12px;
+        color: ${props => props.theme.minorText};
+        &:nth-child(even){
+          text-align: right;
         }
       }
     }
@@ -172,8 +204,14 @@ class TimeEntries extends Component {
     this.props.fetchIssueTimeEntries(selectedIssue.id, page + 1);
   }
 
+  onRefresh = () => {
+    const { fetchIssueTimeEntries, selectedIssue } = this.props;
+    fetchIssueTimeEntries(selectedIssue.id, 0);
+  }
+
   render() {
-    const { spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue } = this.props;
+    const { spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue, uiStyle } = this.props;
+    const isEnhanced = uiStyle === 'enhanced';
     return (
       <TimeEntriesContainer>
         <HeaderContainer>
@@ -191,7 +229,7 @@ class TimeEntries extends Component {
             </FlexButton>
           </div>
         </HeaderContainer>
-        <TimeEntriesList ref={this.listRef}>
+        <TimeEntriesList ref={this.listRef} isEnhanced={isEnhanced}>
           <InfiniteScroll
             load={this.loadSpentTime}
             isEnd={spentTime.data.length === spentTime.totalCount}
@@ -200,33 +238,51 @@ class TimeEntries extends Component {
             container={this.listRef.current}
             immediate={true}
           >
-            {spentTime.data.map(timeEntry => (
-              <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
-                <div>
-                  <div>
-                    <span className="username">{timeEntry.user.name}</span>
-                    <span className="time">{timeEntry.hours} hours</span>
-                    <DateComponent className="date" date={timeEntry.spent_on} />
+            {spentTime.data.map(timeEntry => {
+              let extra;
+              if (isEnhanced) {
+                let {custom_fields, activity} = timeEntry;
+                extra = [
+                  ...(activity ? [{value: activity.name}] : []),
+                  ...(custom_fields ? custom_fields : [])
+                ].filter(el => el.value != null);
+              }
+              return (<li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
+                  <div className="status">
+                    <div>
+                      <span className="username">{timeEntry.user.name}</span>
+                      <span className="time">{timeEntry.hours} hours</span>
+                      <DateComponent className="date" align={isEnhanced && "right"} date={timeEntry.spent_on} />
+                    </div>
+                    {
+                      userId === timeEntry.user.id && (
+                        <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
+                          {
+                            requestConfirmation => (
+                              <GhostButton
+                                onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
+                              >
+                                <CloseIcon color={theme.normalText} />
+                              </GhostButton>
+                            )
+                          }
+                        </Dialog>
+                      )
+                    }
                   </div>
-                  {
-                    userId === timeEntry.user.id && (
-                      <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
-                        {
-                          requestConfirmation => (
-                            <GhostButton
-                              onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
-                            >
-                              <CloseIcon color={theme.normalText} />
-                            </GhostButton>
-                          )
-                        }
-                      </Dialog>
-                    )
-                  }
-                </div>
-                <p>{timeEntry.comments}</p>
-              </li>
-            ))}
+                  <p>{timeEntry.comments}</p>
+                {
+                  extra && (
+                    <div className="extra">
+                      {extra.map(el => {
+                        let value = el.value;
+                        value = (value.length > 30) ? `${value.slice(0, 27)}...` : value;
+                        return (<span>{value}</span>);
+                      })}
+                    </div>)
+                }
+                </li>)}
+            )}
             </InfiniteScroll>
         </TimeEntriesList>
       </TimeEntriesContainer>
@@ -276,7 +332,9 @@ TimeEntries.propTypes = {
   trackedIssueId: PropTypes.number,
   removeTimeEntry: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
-  showTimeEntryModal: PropTypes.func.isRequired
+  showTimeEntryModal: PropTypes.func.isRequired,
+  onRefresh: PropTypes.func.isRequired,
+  uiStyle: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -285,7 +343,8 @@ const mapStateToProps = state => ({
   spentTime: state.issues.selected.spentTime,
   selectedIssue: state.issues.selected.data,
   isTimerEnabled: state.tracking.isEnabled,
-  trackedIssueId: state.tracking.issue.id
+  trackedIssueId: state.tracking.issue.id,
+  uiStyle: state.settings.uiStyle
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -294,4 +353,4 @@ const mapDispatchToProps = dispatch => ({
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntries));
+export default withTheme(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(TimeEntries));

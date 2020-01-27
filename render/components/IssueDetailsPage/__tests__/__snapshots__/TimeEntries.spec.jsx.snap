@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
+exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
 .c3 {
   border-radius: 3px;
   font-weight: bold;
@@ -166,7 +166,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c5 li div:first-child {
+.c5 li div.status {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -181,12 +181,18 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c5 li div:first-child a {
+.c5 li div.status a {
   margin-left: 10px;
   visibility: hidden;
+  position: absolute;
+  right: 0;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+  margin-top: -16px;
 }
 
-.c5 li div:first-child div {
+.c5 li div.status div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -201,17 +207,47 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c5 li div:first-child div span.time,
-.c5 li div:first-child div span.date {
+.c5 li div.status div span.time,
+.c5 li div.status div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c5 li div:first-child div span.username {
+.c5 li div.status div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
+  width: 150px;
+}
+
+.c5 li div.extra {
+  display: grid;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  grid-template-columns: 1fr auto;
+  grid-auto-flow: row;
+  grid-column-gap: 1rem;
+  grid-row-gap: 3px;
+  -webkit-align-items: end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: end;
+}
+
+.c5 li div.extra:not(:empty) {
+  margin-top: 0.5rem;
+}
+
+.c5 li div.extra span {
+  font-size: 12px;
+  color: #A0A0A0;
+}
+
+.c5 li div.extra span:nth-child(even) {
+  text-align: right;
 }
 
 .c5 li p {
@@ -287,7 +323,9 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
     <li
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="status"
+      >
         <div>
           <span
             className="username"
@@ -304,6 +342,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
             className="c6"
           >
             <span
+              align="right"
               className="date"
             >
               Jan 01 2011
@@ -337,11 +376,20 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
       <p>
         Let's get this done
       </p>
+      <div
+        className="extra"
+      >
+        <span>
+          Development
+        </span>
+      </div>
     </li>
     <li
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="status"
+      >
         <div>
           <span
             className="username"
@@ -358,6 +406,7 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
             className="c6"
           >
             <span
+              align="right"
               className="date"
             >
               Jan 01 2011
@@ -373,6 +422,13 @@ exports[`IssueDetails => TimeEntries componnet should match the snapshot 1`] = `
       <p>
         I know nothing
       </p>
+      <div
+        className="extra"
+      >
+        <span>
+          Testing
+        </span>
+      </div>
     </li>
   </ul>
 </div>

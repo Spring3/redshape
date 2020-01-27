@@ -203,12 +203,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 - Bugfixes: MarkdownEditor only clean the textarea when the comments are sent.
 
-- Two views: issues assigned to me or created by me. 
- 
+- Two views: issues assigned to me or created by me.
+
 - Editing an issue can be performed (configurable). The server will decide what to do (permissions).
 
 ![](changes/edit_settings.png)
-  
+
 ![](changes/issue_view.png)
 
 ![](changes/issue_detail.png)
@@ -232,6 +232,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 - Editor can be hidden/visible.
 
 ![](changes/comments_editing_viewing.png)
+
+### TimeEntries with more fields
+
+- Activity and custom fields are shown in Enhanced view:
+
+![](changes/issue_time_spent_view.png)
 
 ## Recommended settings
 

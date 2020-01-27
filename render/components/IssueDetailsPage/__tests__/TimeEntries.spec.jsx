@@ -20,7 +20,7 @@ const mockStore = configureStore([thunk]);
 
 let axiosMock;
 
-describe('IssueDetails => TimeEntries componnet', () => {
+describe('IssueDetails => TimeEntries component', () => {
   beforeAll(() => {
     initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(getInstance());
@@ -88,6 +88,9 @@ describe('IssueDetails => TimeEntries componnet', () => {
         issue: {
           id: 1
         }
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -139,6 +142,9 @@ describe('IssueDetails => TimeEntries componnet', () => {
         issue: {
           id: 1
         }
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -191,6 +197,9 @@ describe('IssueDetails => TimeEntries componnet', () => {
         issue: {
           id: 1
         }
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -247,6 +256,9 @@ describe('IssueDetails => TimeEntries componnet', () => {
         issue: {
           id: 10
         }
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
@@ -300,6 +312,9 @@ describe('IssueDetails => TimeEntries componnet', () => {
         issue: {
           id: 10
         }
+      },
+      settings: {
+        uiStyle: 'enhanced'
       }
     };
     const store = mockStore(state);
