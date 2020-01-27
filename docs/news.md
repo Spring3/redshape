@@ -2,6 +2,10 @@
 
 The next features are listed in development order. Therefore, new features can improve and extend previous features.
 
+> Some extended features work only with server-side support, usually via plugins.
+>
+> Check the document [docs/server.md](server.md) if you are interested in using those features.
+
 ## Main features
 
 ### AUR package
