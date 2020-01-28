@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _debounce from 'lodash/debounce';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import cleanStack from 'clean-stack';
@@ -56,6 +56,7 @@ export default class Routes extends Component {
       <Switch>
         <Route path="/" exact component={props => <LoginView {...props}/>} />
         <Route path="/app" component={props => <AppView {...props}/>} />
+        <Redirect to="/app"/>
       </Switch>
     );
   }

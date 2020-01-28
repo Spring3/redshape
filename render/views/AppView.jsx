@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
 
@@ -108,11 +108,13 @@ class AppView extends Component {
         { (!userId || !api_key) ? (<Redirect to="/" />) : null }
         <Navbar onRefresh={this.onRefresh} />
         <Content>
-          <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props} ref={this.childRoutePage}/>} />
-          <Route exact path={`${match.path}/summary/assigned`} component={props => <SummaryPage {...props} ref={this.childRoutePage}/>}/>
-          <Route exact path={`${match.path}/summary/author`} component={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage}/>} />
-          <Route exact path={`${match.path}/settings`} component={props => <SettingsPage {...props}  ref={this.childRoutePage}/>} />
-          <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props} ref={this.childRoutePage}/>} />
+          <Switch>
+            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage {...props} ref={this.childRoutePage}/>}/>
+            <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage}/>} />
+            <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage}/>} />
+            <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage {...props} ref={this.childRoutePage}/>} />
+            <Redirect to={`${match.path}/summary/assigned`}/>
+          </Switch>
           <Timer
             onStop={this.onTrackingStop}
             history={this.props.history}

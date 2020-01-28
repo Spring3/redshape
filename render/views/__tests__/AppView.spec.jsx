@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { HashRouter, Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { mount } from 'enzyme';
@@ -87,21 +87,35 @@ describe('AppView', () => {
         progressWithStep1: false,
       }
     });
+
+    const historyMock = {
+      location: {
+        pathname: '/app/summary/assigned'
+      },
+      replace: () => {},
+      listen: () => () => {},
+      push: jest.fn(),
+      createHref: () => {
+        historyMock.push('/');
+        window.location.path = '/';
+      }
+    };
+
     const tree = renderer.create(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <HashRouter>
+          <Router history={historyMock}>
             <AppView
               match={
                 {
                   isExact: false,
                   params: {},
                   path: undefined,
-                  url: '/app'
+                  url: '/app/summary/assigned'
                 }
               }
             />
-          </HashRouter>
+          </Router>
         </ThemeProvider>
       </Provider>
     ).toJSON();
@@ -151,8 +165,9 @@ describe('AppView', () => {
 
       const historyMock = {
         location: {
-          pathname: '/app'
+          pathname: '/app/summary/assigned'
         },
+        replace: () => {},
         listen: () => () => {},
         push: jest.fn(),
         createHref: () => {
@@ -171,7 +186,7 @@ describe('AppView', () => {
                     isExact: false,
                     params: {},
                     path: undefined,
-                    url: '/app'
+                    url: '/app/summary/assigned'
                   }
                 }
               />
@@ -226,9 +241,10 @@ describe('AppView', () => {
 
       const historyMock = {
         location: {
-          pathname: '/app'
+          pathname: '/app/summary/assigned'
         },
         listen: () => () => {},
+        replace: () => {},
         push: jest.fn(),
         createHref: () => {
           historyMock.push('/');
@@ -246,7 +262,7 @@ describe('AppView', () => {
                     isExact: false,
                     params: {},
                     path: undefined,
-                    url: '/app'
+                    url: '/app/summary/assigned'
                   }
                 }
               />
@@ -318,9 +334,10 @@ describe('AppView', () => {
 
       const historyMock = {
         location: {
-          pathname: '/app'
+          pathname: '/app/summary/assigned'
         },
         listen: () => () => {},
+        replace: () => {},
         push: jest.fn(),
         createHref: () => {
           historyMock.push('/');
@@ -340,7 +357,7 @@ describe('AppView', () => {
                     isExact: false,
                     params: {},
                     path: undefined,
-                    url: '/app'
+                    url: '/app/summary/assigned'
                   }
                 }
               />

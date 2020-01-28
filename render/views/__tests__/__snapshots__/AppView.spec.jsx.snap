@@ -304,9 +304,10 @@ exports[`AppView should match the snapshot 1`] = `
       </li>
       <li>
         <a
-          aria-current={null}
-          href="#/app/summary/assigned"
+          aria-current="page"
+          className="active"
           onClick={[Function]}
+          style={Object {}}
         >
           Assigned
         </a>
@@ -314,7 +315,6 @@ exports[`AppView should match the snapshot 1`] = `
       <li>
         <a
           aria-current={null}
-          href="#/app/summary/author"
           onClick={[Function]}
         >
           Author
@@ -325,7 +325,6 @@ exports[`AppView should match the snapshot 1`] = `
       <li>
         <a
           aria-current={null}
-          href="#/app/settings"
           onClick={[Function]}
         >
           Settings
