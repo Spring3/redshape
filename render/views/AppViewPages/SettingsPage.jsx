@@ -79,8 +79,8 @@ class SettingsPage extends Component {
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
-      sortBy: sortBy,
-      sortDirection: sortDirection
+      sortBy,
+      sortDirection
     }, () => this.deboucedFetch());
   }
 
@@ -91,8 +91,8 @@ class SettingsPage extends Component {
         <IssuesSection>
           <h2>Settings</h2>
           <OptionsBlock />
-          <ColumnHeadersSelect/>
-          <Label label="Example view"></Label>
+          <ColumnHeadersSelect />
+          <Label label="Example view" />
           <IssuesTable
             limit={10}
             onSort={this.onSort}

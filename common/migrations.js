@@ -12,49 +12,46 @@ const VERSION = version.split('.').map(el => Number(el));
  * The migration does not remove the previous non-conflicting settings (user can still recover them)
  */
 export const migrateSettings = (s) => {
-  if (s == null){ // no config file, initial state will be given later
+  if (s == null) { // no config file, initial state will be given later
     return initialStateSettings;
   }
-  const migration = s.version
+  const migration = s.version;
   if (migration === version) {
     return s;
-  } else if (migration){
+  } if (migration) {
     const [major, minor, patch] = migration.split('.').map(el => Number(el));
-    if (major >= 0 && minor >= 0 && patch >= 0){
+    if (major >= 0 && minor >= 0 && patch >= 0) {
       const [vmajor, vminor, vpatch] = VERSION;
       if (vmajor === major && vminor === minor && vpatch === patch) { // same version
         return s;
-      }else{
-        if (vmajor === major && vminor === minor){
-          if (vmajor === 1 && vminor === 3) {
-            if (patch < 2) { // 1.3.0, 1.3.1: not public
-              const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
-              keys.forEach(key => s[key] = initialStateSettings[key]);
-              return s;
-            }
-          }
-          console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
-          return initialStateSettings;
-        }else {
-          console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
-          return initialStateSettings;
-        }
       }
-    }else{
-      console.error(`[Settings] Invalid version ${migration}. Resetting to the new version.`);
+      if (vmajor === major && vminor === minor) {
+        if (vmajor === 1 && vminor === 3) {
+          if (patch < 2) { // 1.3.0, 1.3.1: not public
+            const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
+            keys.forEach(key => s[key] = initialStateSettings[key]);
+            return s;
+          }
+        }
+        console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
+        return initialStateSettings;
+      }
+      console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
       return initialStateSettings;
     }
+    console.error(`[Settings] Invalid version ${migration}. Resetting to the new version.`);
+    return initialStateSettings;
   } // else: previous to version 1.3.0
 
-  let settings = {...s};
+  const settings = { ...s };
 
   const migrations = [
     ['showAdvancedTimerControls', 'advancedTimerControls', 'boolean', 'boolean', value => value],
     ['idleTimeDiscard', 'discardIdleTime', 'boolean', 'boolean', value => value],
     ['uiStyle', 'useColors', 'string', 'boolean', value => (value ? 'colors' : 'default')],
     ['progressSlider', 'progressWithStep1', 'string', 'boolean', value => (value ? '1%' : '10%')],
-    ['idleBehavior', 'idleBehavior', 'string', 'number', value => {
-      switch(value){
+    ['idleBehavior', 'idleBehavior', 'string', 'number', (value) => {
+      switch (value) {
         default:
         case 0: return 'none'; break;
         case 5: return '5m'; break;
@@ -64,19 +61,19 @@ export const migrateSettings = (s) => {
     }],
   ];
 
-  for (let [to, from, toExpectType, fromExpectType, cb] of migrations){
+  for (const [to, from, toExpectType, fromExpectType, cb] of migrations) {
     let setting;
-    let toType = typeof settings[to];
-    if (toType !== toExpectType){
+    const toType = typeof settings[to];
+    if (toType !== toExpectType) {
       setting = settings[from];
-      let fromType = typeof setting;
-      if (fromType === fromExpectType){
+      const fromType = typeof setting;
+      if (fromType === fromExpectType) {
         delete settings[from];
         settings[to] = cb(setting);
-      }else{
+      } else {
         if (setting != null) {
           console.error(`[Settings] Cannot migrate setting '${from}' with value '${setting}' to new setting '${to}'. Default value applied.`);
-        }else {
+        } else {
           delete settings[from];
         }
         settings[to] = initialStateSettings[to];
@@ -85,9 +82,9 @@ export const migrateSettings = (s) => {
   }
 
   const { issueHeaders } = settings;
-  if (issueHeaders){
+  if (issueHeaders) {
     const available = availableOptions.issueHeaders;
-    const headers = available.map(el => {
+    const headers = available.map((el) => {
       const found = issueHeaders.find(it => it.value === el.value);
       return found ? el : null;
     }).filter(el => el != null);
@@ -99,14 +96,14 @@ export const migrateSettings = (s) => {
   keys.forEach(key => settings[key] = initialStateSettings[key]);
 
   return settings;
-}
+};
 
 export const migrateTracking = (s) => {
-  if (s == null){
+  if (s == null) {
     return initialStateTracking;
   }
   // after shutdown/sleep, it should be stopped
   // the user will check Redshape and will resume (or not)
   s.isPaused = true;
   return s;
-}
+};

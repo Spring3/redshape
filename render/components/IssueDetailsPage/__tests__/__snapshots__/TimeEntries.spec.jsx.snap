@@ -261,6 +261,18 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
   visibility: visible;
 }
 
+@media (min-width:1600px) {
+  .c0 {
+    min-width: 500px;
+  }
+}
+
+@media (min-width:1600px) {
+  .c5 li div.status div span.username {
+    width: 220px;
+  }
+}
+
 <div
   className="c0"
 >
@@ -335,8 +347,7 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
           <span
             className="time"
           >
-            3.2
-             hours
+            3.2 hours
           </span>
           <span
             className="c6"
@@ -399,8 +410,7 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
           <span
             className="time"
           >
-            3.2
-             hours
+            3.2 hours
           </span>
           <span
             className="c6"

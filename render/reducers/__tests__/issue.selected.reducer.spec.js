@@ -122,7 +122,7 @@ describe('Selected issue reducer', () => {
           {
             ..._cloneDeep(initialState),
             data: {
-              journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'world'}]
+              journals: [{ id: 1, notes: 'hello' }, { id: 2, notes: 'world' }]
             },
             updates: {
               something: {
@@ -214,13 +214,13 @@ describe('Selected issue reducer', () => {
     });
 
     it('status OK', () => {
-      const data = { id: 2, notes: "Changed" }
+      const data = { id: 2, notes: 'Changed' };
       expect(
         reducer(
           {
             ..._cloneDeep(initialState),
             data: {
-              journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'world'}]
+              journals: [{ id: 1, notes: 'hello' }, { id: 2, notes: 'world' }]
             },
             updates: {
               something: {
@@ -240,7 +240,7 @@ describe('Selected issue reducer', () => {
       ).toEqual({
         ..._cloneDeep(initialState),
         data: {
-          journals: [{ id: 1, notes: 'hello'}, {id: 2, notes: 'Changed'}]
+          journals: [{ id: 1, notes: 'hello' }, { id: 2, notes: 'Changed' }]
         },
         updates: {
           something: {

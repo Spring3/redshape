@@ -3,12 +3,13 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Input } from './Input';
 import PlayIcon from 'mdi-react/PlayIcon';
 import PauseIcon from 'mdi-react/PauseIcon';
 import StopIcon from 'mdi-react/StopIcon';
 import Rewind5Icon from 'mdi-react/Rewind5Icon';
 import FastForward5Icon from 'mdi-react/FastForward5Icon';
+import desktopIdle from 'desktop-idle';
+import { Input } from './Input';
 import Rewind1Icon from './icons/Rewind1Icon';
 import FastForward1Icon from './icons/FastForward1Icon';
 
@@ -18,12 +19,11 @@ import { GhostButton } from './Button';
 import { animationSlideUp } from '../animations';
 import Link from './Link';
 
-import { IssueId } from "./Issue";
+import { IssueId } from './Issue';
 
 import IPC from '../ipc';
 
 // TODO: may be better to use the powerMonitor module from electron
-import desktopIdle from 'desktop-idle';
 
 const ActiveTimer = styled.div`
   animation: ${animationSlideUp} .7s ease-in;
@@ -34,17 +34,17 @@ const ActiveTimer = styled.div`
   bottom: 0;
   width: 100%;
   background: ${props => props.theme.bg};
-  display: ${props => props.isEnabled ? 'flex' : 'none'};
+  display: ${props => (props.isEnabled ? 'flex' : 'none')};
   align-items: center;
   box-shadow: 0px -2px 20px ${props => props.theme.bgDark};
-  border-top: 2px solid ${props => props.isEnhanced ? props.theme.main : props.theme.bgDark};
+  border-top: 2px solid ${props => (props.isEnhanced ? props.theme.main : props.theme.bgDark)};
   
   div.panel {
     flex-grow: 0;
     min-width: 520px;
     display: flex;
     align-items: center;
-    max-width: ${props => props.showAdvancedTimerControls ? '900px' : '1800px'};
+    max-width: ${props => (props.showAdvancedTimerControls ? '900px' : '1800px')};
   }
   
   div.buttons {
@@ -124,11 +124,11 @@ const MaskedLink = styled(Link)`
 `;
 
 const extractPeriodOption = (period) => {
-  if (!period || period === 'none'){
+  if (!period || period === 'none') {
     return;
   }
   return period === '1h' ? 60 : (Number(period.replace('m', '')));
-}
+};
 
 /**
  * interval: ticks when window is open, every second
@@ -149,46 +149,46 @@ class Timer extends Component {
     IPC.setupTimer(this);
 
     const { isEnabled, isPaused, trackedIssue } = this.props;
-    if (isEnabled){
-      IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue})
+    if (isEnabled) {
+      IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
     }
 
-    if (isEnabled && !isPaused){
+    if (isEnabled && !isPaused) {
       this.interval = setInterval(this.tick, 1000);
       this.setIntervalIdle();
-    }else{
+    } else {
       this.interval = undefined;
     }
   }
 
-  pauseByIdle(idleTime){
+  pauseByIdle(idleTime) {
     this.stopIntervalIdle();
     let discardedMessage = '';
-    if (this.props.idleTimeDiscard){
+    if (this.props.idleTimeDiscard) {
       const { value } = this.state;
       const min = 0;
-      let nvalue = value - idleTime;
-      if (nvalue > min){
+      const nvalue = value - idleTime;
+      if (nvalue > min) {
         this.setState({ value: nvalue });
       }
       discardedMessage = '(discarded from timer)';
     }
     this.onPause();
-    IPC.send('notify', {message: `Timer is paused because the system was idle for ${(idleTime/(60*1000)).toFixed(2)} minutes ${discardedMessage}`, critical: true, keep: true});
+    IPC.send('notify', { message: `Timer is paused because the system was idle for ${(idleTime / (60 * 1000)).toFixed(2)} minutes ${discardedMessage}`, critical: true, keep: true });
   }
 
-  resetIntervalIdle(){
-    if (this.intervalIdle){
+  resetIntervalIdle() {
+    if (this.intervalIdle) {
       this.stopIntervalIdle();
       this.setIntervalIdle();
       this.stopIntervalCheckpoint();
     }
   }
 
-  setIntervalIdle(){
+  setIntervalIdle() {
     const { idleBehavior } = this.props;
     const idleMinutes = extractPeriodOption(idleBehavior);
-    if (!idleMinutes){
+    if (!idleMinutes) {
       return;
     }
 
@@ -197,73 +197,75 @@ class Timer extends Component {
     const maxIdleTime = idleMinutes * 60;
     let warningIdle = false;
     this.intervalIdle = setInterval(() => {
-      if (warningIdle){ return; }
+      if (warningIdle) { return; }
       const idle = desktopIdle.getIdleTime();
-      if (idle > (maxIdleTime)){
-        IPC.send('notify', {message: `Timer will be paused if system continues idle for another ${warnTime} seconds.`, critical: true});
+      if (idle > (maxIdleTime)) {
+        IPC.send('notify', { message: `Timer will be paused if system continues idle for another ${warnTime} seconds.`, critical: true });
         warningIdle = true;
         this.timeoutIdle = setTimeout(() => {
           const idle = desktopIdle.getIdleTime();
-          if (idle > (maxIdleTime)){
-            this.pauseByIdle(Number(idle.toFixed(0)) * 1000)
-          }else{
+          if (idle > (maxIdleTime)) {
+            this.pauseByIdle(Number(idle.toFixed(0)) * 1000);
+          } else {
             warningIdle = false;
           }
         }, warnTime * 1000);
       }
-    }, checkTime * 1000)
+    }, checkTime * 1000);
   }
 
-  setIntervalCheckpoint(ts, topic){
+  setIntervalCheckpoint(ts, topic) {
     const { timerCheckpoint } = this.props;
     const checkpointMinutes = extractPeriodOption(timerCheckpoint);
-    if (!checkpointMinutes){
+    if (!checkpointMinutes) {
       return;
     }
 
     this.intervalCheckpoint = setInterval(() => {
       const { isEnabled, isPaused, saveTimer } = this.props;
       const { timestamp } = this.state;
-      if (isEnabled){
+      if (isEnabled) {
         if (!isPaused) {
-          if (timestamp){
+          if (timestamp) {
             this.restoreFromTimestamp(false);
-            saveTimer(this.state.value, this.state.comments)
+            saveTimer(this.state.value, this.state.comments);
             this.storeToTimestamp();
-          }else{
-            saveTimer(this.state.value, this.state.comments)
+          } else {
+            saveTimer(this.state.value, this.state.comments);
           }
         }
-      }else{
+      } else {
         this.stopIntervalCheckpoint();
       }
     }, checkpointMinutes * 60 * 1000);
   }
 
   /* check if is using the optimization now */
-  isTimestamped(){
+  isTimestamped() {
     return this.state.timestamp != null;
   }
+
   /* stop time interval and store tracked time + current datetime */
-  storeToTimestamp(){
+  storeToTimestamp() {
     const { timestamp } = this.state;
     const { isEnabled, isPaused, trackedIssue } = this.props;
-    if (isEnabled && !isPaused){
+    if (isEnabled && !isPaused) {
       this.setState({
         timestamp: {
           value: this.state.value,
           datetime: moment()
         }
       });
-      this.stopInterval()
+      this.stopInterval();
     }
-    IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue})
+    IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
   }
+
   /* restore time interval based on stored tracked time + diff datetimes */
-  restoreFromTimestamp(enableInterval = true){
+  restoreFromTimestamp(enableInterval = true) {
     const { timestamp } = this.state;
     const { isEnabled, isPaused } = this.props;
-    if (timestamp && isEnabled && !isPaused){
+    if (timestamp && isEnabled && !isPaused) {
       const { value, datetime } = timestamp;
       const newValue = moment().diff(datetime, 'ms') + value;
       this.setState({ timestamp: null, value: newValue });
@@ -284,16 +286,18 @@ class Timer extends Component {
       this.interval = undefined;
     }
   }
+
   stopIntervalIdle = () => {
-    if (this.intervalIdle){
+    if (this.intervalIdle) {
       clearInterval(this.intervalIdle);
       this.intervalIdle = undefined;
-      if (this.timeoutIdle){
+      if (this.timeoutIdle) {
         clearTimeout((this.timeoutIdle));
         this.timeoutIdle = undefined;
       }
     }
   }
+
   stopIntervalCheckpoint = () => {
     if (this.intervalCheckpoint) {
       clearInterval(this.intervalCheckpoint);
@@ -303,11 +307,11 @@ class Timer extends Component {
 
   cleanup = () => {
     const { isEnabled, isPaused, saveTimer } = this.props;
-    if (isEnabled){
-      if (!isPaused){
+    if (isEnabled) {
+      if (!isPaused) {
         this.onPause();
-      }else{
-        saveTimer(this.state.value, this.state.comments)
+      } else {
+        saveTimer(this.state.value, this.state.comments);
       }
     }
     this.stopInterval();
@@ -319,7 +323,7 @@ class Timer extends Component {
   saveState = () => {
     const { isEnabled, saveTimer } = this.props;
     if (isEnabled) {
-      saveTimer(this.state.value, this.state.comments)
+      saveTimer(this.state.value, this.state.comments);
     }
   }
 
@@ -344,10 +348,10 @@ class Timer extends Component {
       if (isEnabled) {
         this.interval = setInterval(this.tick, 1000);
         this.setIntervalIdle();
-        if (!isPaused){
+        if (!isPaused) {
           this.setIntervalCheckpoint();
         }
-        IPC.send('timer-info', {isEnabled, isPaused, issue: trackedIssue });
+        IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
       }
       // otherwise, if was enabled, but now it's disabled, we don't do anything
       // because the interval was already cleared above
@@ -364,13 +368,13 @@ class Timer extends Component {
     if (onPause) {
       onPause(trackedIssue, value, comments);
     }
-    IPC.send('timer-info', {isEnabled: true, isPaused: true, issue: trackedIssue})
+    IPC.send('timer-info', { isEnabled: true, isPaused: true, issue: trackedIssue });
   }
 
   onContinue = () => {
     this.interval = setInterval(this.tick, 1000);
     this.setIntervalIdle();
-    if (!this.intervalCheckpoint){
+    if (!this.intervalCheckpoint) {
       this.setIntervalCheckpoint();
     }
     const { onContinue, trackedIssue, continueTimer } = this.props;
@@ -379,7 +383,7 @@ class Timer extends Component {
     if (onContinue) {
       onContinue(trackedIssue, value, comments);
     }
-    IPC.send('timer-info', {isEnabled: true, isPaused: false, issue: trackedIssue})
+    IPC.send('timer-info', { isEnabled: true, isPaused: false, issue: trackedIssue });
   }
 
   onStop = () => {
@@ -393,20 +397,21 @@ class Timer extends Component {
       onStop(trackedIssue, value, comments);
     }
     this.setState({ value: 0, comments: '' });
-    IPC.send('timer-info', {isEnabled: false, issue: trackedIssue})
+    IPC.send('timer-info', { isEnabled: false, issue: trackedIssue });
   }
 
   onBackward = (minutes) => {
     const { value } = this.state;
     const min = 0;
-    let nvalue = value - (minutes * 60 * 1000);
-    this.setState({ value: nvalue < min ? 0 : nvalue })
+    const nvalue = value - (minutes * 60 * 1000);
+    this.setState({ value: nvalue < min ? 0 : nvalue });
   }
+
   onForward = (minutes) => {
     const { value } = this.state;
     const max = 24 * 3600 * 1000;
-    let nvalue = value + (minutes * 60 * 1000);
-    if (nvalue < max){
+    const nvalue = value + (minutes * 60 * 1000);
+    if (nvalue < max) {
       this.setState({ value: nvalue });
     }
   }
@@ -418,16 +423,18 @@ class Timer extends Component {
 
   componentWillReceiveProps(newProps) {
     const { trackedTime, trackedComments } = newProps;
-    this.setState({ value: trackedTime, comments: trackedComments  })
+    this.setState({ value: trackedTime, comments: trackedComments });
   }
 
-  onCommentsChange = ev => {
-    this.setState({ comments: ev.target.value })
+  onCommentsChange = (ev) => {
+    this.setState({ comments: ev.target.value });
   }
 
   render() {
     const { value, comments } = this.state;
-    const { isEnabled, trackedIssue, isPaused, showAdvancedTimerControls, uiStyle } = this.props;
+    const {
+      isEnabled, trackedIssue, isPaused, showAdvancedTimerControls, uiStyle
+    } = this.props;
     const isEnhanced = uiStyle === 'enhanced';
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
@@ -459,22 +466,23 @@ class Timer extends Component {
             </div>
             <div className="issueName">
               { isEnabled && isEnhanced && (
-                    <IssueId
-                      value={trackedIssue.id}
-                      tracker={trackedIssue.tracker.id}
-                      fontSize={'16px'}
-                      clickable={true}
-                      onClick={this.redirectToTrackedLink}
-                    >
-                    </IssueId>
-                  ) }
-              { (isEnabled ?
+              <IssueId
+                value={trackedIssue.id}
+                tracker={trackedIssue.tracker.id}
+                fontSize="16px"
+                clickable={true}
+                onClick={this.redirectToTrackedLink}
+              />
+              ) }
+              { (isEnabled
+                ? (
                   <MaskedLink
-                    href='#'
+                    href="#"
                     onClick={this.redirectToTrackedLink}
                   >
                     {trackedIssue.subject}
                   </MaskedLink>
+                )
                 : null)}
             </div>
             <div className="time">
@@ -527,7 +535,7 @@ class Timer extends Component {
               maxLength={255}
             />
           )}
-      </ActiveTimer>
+        </ActiveTimer>
       </Fragment>
     );
   }

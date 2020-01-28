@@ -30,7 +30,7 @@ export default class Routes extends Component {
     if (event.error) {
       event.error.stack = cleanStack(event.error.stack);
     }
-    toast.error(<Notification error={event.error} />)
+    toast.error(<Notification error={event.error} />);
   }
 
   handleRejection = (event) => {
@@ -38,26 +38,26 @@ export default class Routes extends Component {
     if (event.reason) {
       event.reason.stack = cleanStack(event.reason.stack);
     }
-    toast.error(<Notification error={event.reason} />)
+    toast.error(<Notification error={event.reason} />);
   }
 
   componentWillMount() {
-		window.addEventListener('error', this.errorHandler);
-		window.addEventListener('unhandledrejection', this.rejectionHandler);
+    window.addEventListener('error', this.errorHandler);
+    window.addEventListener('unhandledrejection', this.rejectionHandler);
   }
 
   componentWillUnmount() {
     window.removeEventListener('error', this.errorHandler);
-		window.removeEventListener('unhandledrejection', this.rejectionHandler);
+    window.removeEventListener('unhandledrejection', this.rejectionHandler);
   }
 
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={props => <LoginView {...props}/>} />
-        <Route path="/app" component={props => <AppView {...props}/>} />
-        <Redirect to="/app"/>
+        <Route path="/" exact component={props => <LoginView {...props} />} />
+        <Route path="/app" component={props => <AppView {...props} />} />
+        <Redirect to="/app" />
       </Switch>
     );
   }
-};
+}

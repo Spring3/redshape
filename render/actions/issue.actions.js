@@ -1,8 +1,8 @@
 import Joi from '@hapi/joi';
+import moment from 'moment';
 import request, { notify } from './helper';
-import moment from "moment";
 
-import { durationToHours, hoursToDuration } from "../datetime";
+import { durationToHours, hoursToDuration } from '../datetime';
 
 export const ISSUE_UPDATE = 'ISSUE_UPDATE';
 export const ISSUE_RESET = 'ISSUE_RESET';
@@ -11,28 +11,28 @@ export const ISSUE_UPDATE_VALIDATION_PASSED = 'ISSUE_UPDATE_VALIDATION_PASSED';
 
 const validateEstimatedDuration = (value, helpers) => {
   const hours = durationToHours(value);
-  if (hours == null){
+  if (hours == null) {
     return helpers.message('"estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string');
-  }else if (hours <= 0){
+  } if (hours <= 0) {
     return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
   }
   return hours;
-}
+};
 
 const validateDate = (value, helpers) => {
-  let validDate = moment(value).isValid();
-  if (validDate || value === ''){
+  const validDate = moment(value).isValid();
+  if (validDate || value === '') {
     return value;
-  }else{
-    return helpers.message(`"due_date" requires a valid date or an empty string`);
   }
-}
+  return helpers.message('"due_date" requires a valid date or an empty string');
+};
 
 const validateBeforeCommon = (issueEntry, checkFields) => {
   let schema = {
   };
   const schemaFields = {
-    progress: Joi.number().integer().min(0).max(100).allow(''), // done_ratio
+    progress: Joi.number().integer().min(0).max(100)
+      .allow(''), // done_ratio
     estimated_duration: Joi.string().custom(validateEstimatedDuration, 'estimated duration validator').allow(''),
     due_date: Joi.string().custom(validateDate, 'due date validation').allow(null, ''),
     status: Joi.object().keys({
@@ -44,24 +44,24 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
       label: Joi.string().required(),
     }),
   };
-  if (checkFields){
-    if (!(checkFields instanceof Array)){
+  if (checkFields) {
+    if (!(checkFields instanceof Array)) {
       checkFields = [checkFields];
     }
-    for (const checkField of checkFields){
+    for (const checkField of checkFields) {
       schema[checkField] = schemaFields[checkField];
     }
-  }else{
+  } else {
     schema = schemaFields;
   }
 
   const validationSchema = Joi.object().keys(schema).unknown().required();
   const validationResult = validationSchema.validate(issueEntry);
   return validationResult;
-}
+};
 
 const validateBeforeUpdate = (issueEntry, checkFields) => {
-  if (!checkFields){
+  if (!checkFields) {
     checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority'];
   }
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
@@ -84,28 +84,28 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
   const updates = {};
 
   const estimated_hours = durationToHours(changes.estimated_duration);
-  let hours = originalIssueEntry.estimated_hours;
-  if (hours != estimated_hours){
+  const hours = originalIssueEntry.estimated_hours;
+  if (hours != estimated_hours) {
     updates.estimated_hours = estimated_hours;
   }
   const due_date = changes.due_date || null;
-  if (originalIssueEntry.due_date !== due_date){
+  if (originalIssueEntry.due_date !== due_date) {
     updates.due_date = due_date;
   }
-  const progress = changes.progress;
-  if (originalIssueEntry.done_ratio !== progress){
+  const { progress } = changes;
+  if (originalIssueEntry.done_ratio !== progress) {
     updates.done_ratio = progress;
   }
-  const status = changes.status;
-  if (status != null && originalIssueEntry.status != null && originalIssueEntry.status.id !== status.value){
+  const { status } = changes;
+  if (status != null && originalIssueEntry.status != null && originalIssueEntry.status.id !== status.value) {
     updates.status_id = status.value;
   }
-  const priority = changes.priority;
-  if (priority != null && originalIssueEntry.priority != null && originalIssueEntry.priority.id !== priority.value){
+  const { priority } = changes;
+  if (priority != null && originalIssueEntry.priority != null && originalIssueEntry.priority.id !== priority.value) {
     updates.priority_id = priority.value;
   }
-  if (!Object.keys(updates).length){
-    return Promise.resolve({unchanged: true});
+  if (!Object.keys(updates).length) {
+    return Promise.resolve({ unchanged: true });
   }
   updates.id = originalIssueEntry.id;
 
@@ -126,7 +126,7 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
       console.error('Error when updating the issue', error);
       dispatch(notify.nok(ISSUE_UPDATE, error));
     });
-}
+};
 
 const reset = () => ({ type: ISSUE_RESET });
 

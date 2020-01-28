@@ -3,26 +3,26 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 
+import ClockIcon from 'mdi-react/ClockIcon';
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
+import Select from 'react-select';
+import RawSlider from 'rc-slider';
 import { Input, Label } from './Input';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
-import Tooltip from "./Tooltip";
-import ClockIcon from "mdi-react/ClockIcon";
-import HelpCircleIcon from "mdi-react/HelpCircleIcon";
+import Tooltip from './Tooltip';
 import DatePicker from './DatePicker';
 
-import Select from 'react-select';
 
-import RawSlider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import './styles/rc-slider.css';
 
-import 'rc-slider/assets/index.css'
+import 'rc-slider/assets/index.css';
 import actions from '../actions';
 
-import { durationToHours, hoursToDuration } from '../datetime'
+import { durationToHours, hoursToDuration } from '../datetime';
 
 const FlexRow = styled.div`
   display: flex;
@@ -71,37 +71,35 @@ const HelpIconStyled = styled(HelpCircleIcon)`
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
-`
-const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14}/></Tooltip></LabelIcon>);
+`;
+const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const compSelectStyles = {
-  container: (base, state) => {
-    return { ...base, minWidth: 185, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' };
-  },
-  control: (base, state) => {
-    return { ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' };
-  },
+  container: (base, state) => ({ ...base, minWidth: 185, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
+  control: (base, state) => ({ ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
 };
 
 const extractFromTransitions = (transitions, key) => {
   const list = transitions && transitions[key];
   let values;
-  if (list){
+  if (list) {
     values = list.sort((a, b) => a.position - b.position)
-      .map(el => ({value: el.id, label: el.name}));
+      .map(el => ({ value: el.id, label: el.name }));
   }
   return values;
-}
+};
 
 class IssueModal extends Component {
   constructor(props) {
     super(props);
-    let propsIssueEntry = props.issueEntry;
+    const propsIssueEntry = props.issueEntry;
     let issueEntry = {};
     let statusTransitions;
     let priorityTransitions;
-    if (propsIssueEntry){
-      const { estimated_hours, done_ratio, due_date, children, transitions, status, priority } = propsIssueEntry;
+    if (propsIssueEntry) {
+      const {
+        estimated_hours, done_ratio, due_date, children, transitions, status, priority
+      } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
       issueEntry = {
@@ -109,8 +107,8 @@ class IssueModal extends Component {
         progress: done_ratio,
         due_date: due_date || '',
         children: children ? children.length : 0,
-        ...(statusTransitions && { status: {value: status.id, label: status.name} }),
-        ...(priorityTransitions && { priority: {value: priority.id, label: priority.name} }),
+        ...(statusTransitions && { status: { value: status.id, label: status.name } }),
+        ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
       };
     }
     this.state = {
@@ -128,9 +126,11 @@ class IssueModal extends Component {
       const { issueEntry } = this.props;
 
       if (issueEntry) {
-        const { estimated_hours, done_ratio, due_date, children, transitions, status, priority } = issueEntry;
-        let statusTransitions = extractFromTransitions(transitions, 'status');
-        let priorityTransitions = extractFromTransitions(transitions, 'priority');
+        const {
+          estimated_hours, done_ratio, due_date, children, transitions, status, priority
+        } = issueEntry;
+        const statusTransitions = extractFromTransitions(transitions, 'status');
+        const priorityTransitions = extractFromTransitions(transitions, 'priority');
         this.setState({
           // issueEntry,
           issueEntry: {
@@ -138,8 +138,8 @@ class IssueModal extends Component {
             progress: done_ratio,
             due_date: due_date || '',
             children: children ? children.length : 0,
-            ...(statusTransitions && { status: {value: status.id, label: status.name} }),
-            ...(priorityTransitions && { priority: {value: priority.id, label: priority.name} }),
+            ...(statusTransitions && { status: { value: status.id, label: status.name } }),
+            ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
           },
           instance: new Date().getTime(),
           progress_info: done_ratio,
@@ -175,7 +175,7 @@ class IssueModal extends Component {
         .then((ret) => {
           if (!this.props.issue.error) {
             const unchanged = ret && ret.unchanged;
-            if (!unchanged){
+            if (!unchanged) {
               this.props.issueGet(this.props.issueEntry.id);
             }
             this.props.onClose();
@@ -205,7 +205,7 @@ class IssueModal extends Component {
   }
 
   onEstimatedDurationChange = ({ target: { value } }) => {
-    value = '' + value
+    value = `${value}`;
     this.setState({
       issueEntry: {
         ...this.state.issueEntry,
@@ -241,9 +241,15 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable } = this.props;
-    const { issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions } = this.state;
-    const { progress, estimated_duration, due_date, children, status, priority } = issueEntry;
+    const {
+      isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable
+    } = this.props;
+    const {
+      issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions
+    } = this.state;
+    const {
+      progress, estimated_duration, due_date, children, status, priority
+    } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
         progress: issue.error.details.find(error => error.path[0] === 'progress'),
@@ -254,15 +260,15 @@ class IssueModal extends Component {
       }
       : {};
     let estimatedDurationInfo = '';
-    if (estimated_duration){
-      let hours = durationToHours(estimated_duration);
-      if (hours > 0){
+    if (estimated_duration) {
+      const hours = durationToHours(estimated_duration);
+      if (hours > 0) {
         estimatedDurationInfo = `${Number(hours.toFixed(2))} hours`;
       }
     }
     const progressInfo = `${progress_info.toFixed(0)}%`;
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
-    const assigned_to = propsIssueEntry.assigned_to;
+    const { assigned_to } = propsIssueEntry;
     return (
       <Modal
         open={!!isOpen}
@@ -272,8 +278,9 @@ class IssueModal extends Component {
       >
         <Fragment>
           <FlexRow>
-            <Title>Edit issue
-              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Fields 'Status' and 'Priority' need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14}/></Tooltip></LabelIcon>
+            <Title>
+Edit issue
+              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Fields 'Status' and 'Priority' need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
             </Title>
           </FlexRow>
           <FlexRow>
@@ -282,12 +289,16 @@ class IssueModal extends Component {
             </Label>
           </FlexRow>
           <FlexRow>
-          <Label htmlFor="issue" label="Issue">
-            <div name="issue">#{propsIssueEntry.id}&nbsp;{propsIssueEntry.subject}</div>
-          </Label>
+            <Label htmlFor="issue" label="Issue">
+              <div name="issue">
+#
+                {propsIssueEntry.id}
+                {propsIssueEntry.subject}
+              </div>
+            </Label>
           </FlexRow>
           <FlexRow>
-          {
+            {
             status != null && (
               <LargeField>
                 <Label htmlFor="status" label="Status">
@@ -300,7 +311,7 @@ class IssueModal extends Component {
                       onChange={this.onStatusChange}
                       isClearable={false}
                       isDisabled={disableField}
-                      theme={(defaultTheme) => ({
+                      theme={defaultTheme => ({
                         ...defaultTheme,
                         borderRadius: 3,
                         colors: {
@@ -318,34 +329,34 @@ class IssueModal extends Component {
               </LargeField>
             )
           }
-          {
+            {
             priority != null && (
               <div>
-              <Label htmlFor="priority" label="Priority">
-                <FlexRow>
-                  <Select
-                    name="priority"
-                    options={priorityTransitions}
-                    styles={compSelectStyles}
-                    value={priority}
-                    onChange={this.onPriorityChange}
-                    isClearable={false}
-                    isDisabled={disableField}
-                    theme={(defaultTheme) => ({
-                      ...defaultTheme,
-                      borderRadius: 3,
-                      colors: {
-                        ...defaultTheme.colors,
-                        primary: theme.main,
-                      },
-                    })
+                <Label htmlFor="priority" label="Priority">
+                  <FlexRow>
+                    <Select
+                      name="priority"
+                      options={priorityTransitions}
+                      styles={compSelectStyles}
+                      value={priority}
+                      onChange={this.onPriorityChange}
+                      isClearable={false}
+                      isDisabled={disableField}
+                      theme={defaultTheme => ({
+                        ...defaultTheme,
+                        borderRadius: 3,
+                        colors: {
+                          ...defaultTheme.colors,
+                          primary: theme.main,
+                        },
+                      })
                     }
-                  />
-                </FlexRow>
-                <ErrorMessage show={!!validationErrors.priority}>
-                  {this.getErrorMessage(validationErrors.priority)}
-                </ErrorMessage>
-              </Label>
+                    />
+                  </FlexRow>
+                  <ErrorMessage show={!!validationErrors.priority}>
+                    {this.getErrorMessage(validationErrors.priority)}
+                  </ErrorMessage>
+                </Label>
               </div>
             )
           }
@@ -355,7 +366,7 @@ class IssueModal extends Component {
               <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
                 <FlexRow>
                   <Input
-                    style={{width:185}}
+                    style={{ width: 185 }}
                     type="text"
                     name="estimated_duration"
                     value={estimated_duration}
@@ -375,12 +386,12 @@ class IssueModal extends Component {
               <div>
                 <Label htmlFor="due_date" label="Due date">
                   <DatePicker
-                    style={{width:185}}
+                    style={{ width: 185 }}
                     key={instance}
                     name="due_date"
                     value={due_date}
                     isDisabled={disableField}
-                    onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
+                    onChange={value => this.onDueDateChange(value) && this.runValidation('due_date')}
                   />
                 </Label>
                 <ErrorMessage show={!!validationErrors.due_date}>
@@ -396,21 +407,21 @@ class IssueModal extends Component {
                   <Label htmlFor="progress" label="Progress">
                     <FlexRow>
                       <Slider
-                        style={{width:180}}
+                        style={{ width: 180 }}
                         // bugfix: avoid sloppy dragging (value/onChange) using this key
                         key={instance}
                         name="progress"
-                        tipProps={{placement:'right'}}
-                        handleStyle={{borderColor:theme.green}}
-                        onChange={(value) => this.setState({ progress_info: value, wasModified: true })}
-                        trackStyle={{backgroundColor:theme.green}}
-                        tipFormatter={(value) => `${value}%`}
+                        tipProps={{ placement: 'right' }}
+                        handleStyle={{ borderColor: theme.green }}
+                        onChange={value => this.setState({ progress_info: value, wasModified: true })}
+                        trackStyle={{ backgroundColor: theme.green }}
+                        tipFormatter={value => `${value}%`}
                         min={0}
                         max={100}
                         step={progressSlider === '1%' ? 1 : 10}
                         defaultValue={progress}
                         disabled={disableField}
-                        onAfterChange={(value) => this.onProgressChange(value) && this.runValidation('progress')}
+                        onAfterChange={value => this.onProgressChange(value) && this.runValidation('progress')}
                       />
                       <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
                     </FlexRow>
@@ -426,7 +437,7 @@ class IssueModal extends Component {
               id="btn-update"
               onClick={this.onUpdate}
               disabled={issue.isFetching}
-              palette='success'
+              palette="success"
             >
               Submit
             </Button>
@@ -516,7 +527,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  issueGet: (id) => dispatch(actions.issues.get(id)),
+  issueGet: id => dispatch(actions.issues.get(id)),
   updateIssueEntry: (issueEntry, changes) => dispatch(actions.issue.update(issueEntry, changes)),
   validateBeforeUpdate: (changes, checkFields) => dispatch(actions.issue.validateBeforeUpdate(changes, checkFields)),
   resetValidation: () => dispatch(actions.issue.reset())

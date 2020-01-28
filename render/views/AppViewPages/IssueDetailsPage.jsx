@@ -1,26 +1,28 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import moment from 'moment';
-import styled, {css, withTheme} from 'styled-components';
+import styled, { css, withTheme } from 'styled-components';
 
 
+import EditIcon from 'mdi-react/EditIcon';
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
-import {MarkdownText} from '../../components/MarkdownEditor';
+import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
-import IssueModal from "../../components/IssueModal";
+import IssueModal from '../../components/IssueModal';
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
-import {OverlayProcessIndicator} from '../../components/ProcessIndicator';
+import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 
-import {IssueId, Priority, Status, Tag, TagContainer} from "../../components/Issue";
+import {
+  IssueId, Priority, Status, Tag, TagContainer
+} from '../../components/Issue';
 
-import EditIcon from 'mdi-react/EditIcon';
 
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 
 import actions from '../../actions';
 
@@ -43,7 +45,7 @@ const Section = styled.section`
   margin-bottom: 60px;
 `;
 
-const FlexButton = styled(Button) `
+const FlexButton = styled(Button)`
   display: inline-flex;
   align-items: center;
 `;
@@ -55,7 +57,7 @@ const SmallNotice = styled.p`
 
   a {
     font-size: inherit !important;
-    margin-right: 5px;
+    margin: 0 5px;
   }
 `;
 
@@ -127,27 +129,27 @@ class IssueDetailsPage extends Component {
   }
 
   showTimeEntryModal = (timeEntry) => {
-    const { selectedIssueState, userId, userName, projects } = this.props;
+    const {
+      selectedIssueState, userId, userName, projects
+    } = this.props;
     const selectedIssue = selectedIssueState.data;
-    const selectedTimeEntry = timeEntry
-      ? timeEntry
-      : {
-        user: {
-          id: userId,
-          name: userName
-        },
-        issue: {
-          id: selectedIssue.id
-        },
-        activity: {},
-        project: {
-          id: selectedIssue.project.id,
-          name: selectedIssue.project.name
-        },
-        hours: undefined,
-        duration: "",
-        spent_on: moment().format('YYYY-MM-DD')
-      };
+    const selectedTimeEntry = timeEntry || {
+      user: {
+        id: userId,
+        name: userName
+      },
+      issue: {
+        id: selectedIssue.id
+      },
+      activity: {},
+      project: {
+        id: selectedIssue.project.id,
+        name: selectedIssue.project.name
+      },
+      hours: undefined,
+      duration: '',
+      spent_on: moment().format('YYYY-MM-DD')
+    };
     selectedTimeEntry.issue.name = selectedIssue.subject;
     const activities = _.get(projects[selectedIssue.project.id], 'activities', []);
     this.setState({
@@ -170,43 +172,45 @@ class IssueDetailsPage extends Component {
   closeIssueModal = (changes) => {
     this.setState({
       showIssueModal: false
-    })
+    });
   }
 
   openIssueModal = () => () => {
-    this.setState({ showIssueModal: true })
+    this.setState({ showIssueModal: true });
   }
 
   onRefresh = () => {
     const { match, fetchIssueDetails } = this.props;
     fetchIssueDetails(match.params.id);
     const { current } = this.timeEntries;
-    if (current){
+    if (current) {
       current.onRefresh();
     }
   }
 
-  getIssueComments = () => {
-    return { timestamp: new Date(), entries: this.props.selectedIssueState.data.journals.filter(entry => entry.notes) }
-  }
+  getIssueComments = () => ({ timestamp: new Date(), entries: this.props.selectedIssueState.data.journals.filter(entry => entry.notes) })
 
   render() {
-    const { selectedIssueState, userId, theme, postComments, uiStyle, redmineEndpoint, postUpdateComments } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
+    const {
+      selectedIssueState, userId, theme, postComments, uiStyle, redmineEndpoint, postUpdateComments
+    } = this.props;
+    const {
+      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
+    } = this.state;
     const selectedIssue = selectedIssueState.data;
     let morefields = selectedIssue.custom_fields;
-    if (!morefields){
+    if (!morefields) {
       morefields = [];
     }
-    const attachments = selectedIssue.attachments;
-    if (attachments && attachments.length){
-      morefields.push({ name: 'Attachments', value: attachments.length })
+    const { attachments } = selectedIssue;
+    if (attachments && attachments.length) {
+      morefields.push({ name: 'Attachments', value: attachments.length });
     }
-    const tags = selectedIssue.tags;
-    const children = selectedIssue.children;
+    const { tags } = selectedIssue;
+    const { children } = selectedIssue;
     const isEnhanced = uiStyle === 'enhanced';
-    const assigned_to = selectedIssue.assigned_to;
-    const assignee_id = assigned_to && assigned_to.id
+    const { assigned_to } = selectedIssue;
+    const assignee_id = assigned_to && assigned_to.id;
     return selectedIssue.id
       ? (
         <Section>
@@ -215,24 +219,34 @@ class IssueDetailsPage extends Component {
               <IssueHeader>
                 <FlexRow>
                   <Title>
-                    {isEnhanced ? (<IssueId value={selectedIssue.id} tracker={selectedIssue.tracker.id}/>) : (<span>#{selectedIssue.id}&nbsp;</span>)}
+                    {isEnhanced ? (<IssueId value={selectedIssue.id} tracker={selectedIssue.tracker.id} />) : (
+                      <span>
+                        {`#${selectedIssue.id}`}
+&nbsp;
+                      </span>
+                    )}
                     <span>{selectedIssue.subject}</span>
                   </Title>
                   <SmallNotice>
-                    Created {isEnhanced && (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>)}by&nbsp;
+Created
+                    {isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>) : ' '}
+                    by
                     <Link>{selectedIssue.author.name}</Link>
                     <DateComponent date={selectedIssue.created_on} />
                   </SmallNotice>
                   {selectedIssue.closed_on && (
-                    <SmallNotice>Closed <DateComponent date={selectedIssue.closed_on} /></SmallNotice>
+                    <SmallNotice>
+                      {'Closed '}
+                      <DateComponent date={selectedIssue.closed_on} />
+                    </SmallNotice>
                   )}
                 </FlexRow>
-              <Buttons className="buttons">
-                <FlexButton onClick={this.openIssueModal()}>
-                  <EditIcon size={22} />
-                  <span>&nbsp;Edit</span>
-                </FlexButton>
-              </Buttons>
+                <Buttons className="buttons">
+                  <FlexButton onClick={this.openIssueModal()}>
+                    <EditIcon size={22} />
+                    <span>&nbsp;Edit</span>
+                  </FlexButton>
+                </Buttons>
               </IssueHeader>
               <Grid>
 
@@ -243,13 +257,13 @@ class IssueDetailsPage extends Component {
                 <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
 
                 <div>Status:</div>
-                <div>{ isEnhanced ? (<Status value={selectedIssue.status.name}/>) : (selectedIssue.status.name) }</div>
+                <div>{ isEnhanced ? (<Status value={selectedIssue.status.name} />) : (selectedIssue.status.name) }</div>
 
                 <div>Start date: </div>
                 <div><DateComponent date={selectedIssue.start_date} /></div>
 
                 <div>Priority: </div>
-                <div>{ isEnhanced ? (<Priority value={selectedIssue.priority.name}/>) : (selectedIssue.priority.name) }</div>
+                <div>{ isEnhanced ? (<Priority value={selectedIssue.priority.name} />) : (selectedIssue.priority.name) }</div>
 
                 <div>Due date: </div>
                 <div><DateComponent date={selectedIssue.due_date} /></div>
@@ -258,10 +272,11 @@ class IssueDetailsPage extends Component {
                 <div>{assigned_to && assigned_to.name}</div>
 
                 <div>Estimation: </div>
-                <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
+                <div>
+                  {selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
                   {
-                    (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
-                      <span> (Total: {selectedIssue.total_estimated_hours.toFixed(2)} h)</span>
+                    (selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
+                      <span>{` (Total: ${selectedIssue.total_estimated_hours.toFixed(2)} h)`}</span>
                     )
                   }
                 </div>
@@ -270,10 +285,11 @@ class IssueDetailsPage extends Component {
                 <div>{_.get(selectedIssue, 'project.name')}</div>
 
                 <div>Time spent: </div>
-                <div>{selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                <div>
+                  {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
                   {
-                    (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
-                      <span> (Total: {selectedIssue.total_spent_hours.toFixed(2)} h)</span>
+                    (selectedIssue.total_spent_hours !== selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
+                      <span>{` (Total: ${selectedIssue.total_spent_hours.toFixed(2)} h)`}</span>
                     )
                   }
                 </div>
@@ -301,21 +317,35 @@ class IssueDetailsPage extends Component {
                 </div>
 
                 {
-                  morefields && morefields.map((el, i) => (<Fragment><div>{el.name}:</div><div>{el.value}</div></Fragment>))
+                  morefields && morefields.map((el, i) => (
+                    <Fragment>
+                      <div>
+                        {el.name}
+:
+                      </div>
+                      <div>{el.value}</div>
+                    </Fragment>
+                  ))
                 }
 
                 {
                   tags && (
                     <Fragment>
                       <div>Tags:</div>
-                      <TagContainer>{tags.map(el => (
-                        <Tag mode={isEnhanced ? 'enhanced' : 'plain'} value={el}/>))}</TagContainer></Fragment>
+                      <TagContainer>
+                        {tags.map(el => (
+                          <Tag mode={isEnhanced ? 'enhanced' : 'plain'} value={el} />))}
+                      </TagContainer>
+                    </Fragment>
                   )
                 }
 
                 {
                   children && (
-                    <Fragment><div>Children issues:</div><div>{children.map((el) => (<IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id}/>))}</div></Fragment>
+                    <Fragment>
+                      <div>Children issues:</div>
+                      <div>{children.map(el => (<IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id} />))}</div>
+                    </Fragment>
                   )
                 }
 

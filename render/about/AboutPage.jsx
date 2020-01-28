@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import styled, { css } from 'styled-components';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab, Tabs, TabList, TabPanel
+} from 'react-tabs';
 
 import { version, name } from '../../package.json';
 import LogoIcon from '../../assets/icon.png';
@@ -68,7 +70,7 @@ const StyledTabPanel = styled(TabPanel)`
 
 const StyledTabs = styled(Tabs)`
   box-sizing: border-box;
-  height: ${props => props.modal ? 'auto' : '100vh'};
+  height: ${props => (props.modal ? 'auto' : '100vh')};
   flex-direction: column;
   display: flex;
   padding-top: 15px;
@@ -142,8 +144,8 @@ class AboutPage extends Component {
         <DragArea />
         <StyledTabs modal={modal}>
           <TabList>
-            <Tab></Tab>
-            <Tab></Tab>
+            <Tab />
+            <Tab />
           </TabList>
 
           <StyledTabPanel>
@@ -156,7 +158,10 @@ class AboutPage extends Component {
                   <img alt="App icon" height="70" src={LogoIcon} />
                 </Link>
                 <h2>{name}</h2>
-                <h2>v{version}</h2>
+                <h2>
+v
+                  {version}
+                </h2>
               </IconContainer>
               <CenteredDiv>
                 <h3>Time tracker for Redmine</h3>
@@ -217,6 +222,6 @@ class AboutPage extends Component {
       </Fragment>
     );
   }
-};
+}
 
 export default AboutPage;

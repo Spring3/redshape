@@ -39,7 +39,7 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const FlexButton = styled(Button) `
+const FlexButton = styled(Button)`
   display: inline-flex;
   align-items: center;
   ${props => css`
@@ -51,6 +51,9 @@ const TimeEntriesContainer = styled.div`
   background: white;
   max-height: 550px;
   min-width: 350px;
+  @media (min-width: 1600px) {
+    min-width: 500px;
+  }
 `;
 
 const TimeEntriesList = styled.ul`
@@ -106,7 +109,12 @@ const TimeEntriesList = styled.ul`
           font-weight: bold;
           margin-right: 5px;
           color: ${props => props.theme.normalText};
-          ${props => props.isEnhanced && css` width: 150px; `}
+          ${props => props.isEnhanced && css`
+          width: 150px;
+          @media (min-width: 1600px) {
+            width: 220px;
+          }
+          `}
         }
       }
     }
@@ -171,6 +179,7 @@ class TimeEntries extends Component {
     super(props);
     this.listRef = React.createRef();
   }
+
   componentWillMount() {
     const { fetchIssueTimeEntries, selectedIssue } = this.props;
     fetchIssueTimeEntries(selectedIssue.id, 0);
@@ -210,7 +219,9 @@ class TimeEntries extends Component {
   }
 
   render() {
-    const { spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue, uiStyle } = this.props;
+    const {
+      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue, uiStyle
+    } = this.props;
     const isEnhanced = uiStyle === 'enhanced';
     return (
       <TimeEntriesContainer>
@@ -223,7 +234,8 @@ class TimeEntries extends Component {
             </FlexButton>
             <FlexButton
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
-              onClick={this.startTimeTracking}>
+              onClick={this.startTimeTracking}
+            >
               <TimerIcon size={22} />
               <span>&nbsp;Track</span>
             </FlexButton>
@@ -238,21 +250,22 @@ class TimeEntries extends Component {
             container={this.listRef.current}
             immediate={true}
           >
-            {spentTime.data.map(timeEntry => {
+            {spentTime.data.map((timeEntry) => {
               let extra;
               if (isEnhanced) {
-                let {custom_fields, activity} = timeEntry;
+                const { custom_fields, activity } = timeEntry;
                 extra = [
-                  ...(activity ? [{value: activity.name}] : []),
-                  ...(custom_fields ? custom_fields : [])
+                  ...(activity ? [{ value: activity.name }] : []),
+                  ...(custom_fields || [])
                 ].filter(el => el.value != null);
               }
-              return (<li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
+              return (
+                <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
                   <div className="status">
                     <div>
                       <span className="username">{timeEntry.user.name}</span>
-                      <span className="time">{timeEntry.hours} hours</span>
-                      <DateComponent className="date" align={isEnhanced && "right"} date={timeEntry.spent_on} />
+                      <span className="time">{`${timeEntry.hours} hours`}</span>
+                      <DateComponent className="date" align={isEnhanced && 'right'} date={timeEntry.spent_on} />
                     </div>
                     {
                       userId === timeEntry.user.id && (
@@ -271,19 +284,21 @@ class TimeEntries extends Component {
                     }
                   </div>
                   <p>{timeEntry.comments}</p>
-                {
+                  {
                   extra && (
                     <div className="extra">
-                      {extra.map(el => {
-                        let value = el.value;
+                      {extra.map((el) => {
+                        let { value } = el;
                         value = (value.length > 30) ? `${value.slice(0, 27)}...` : value;
                         return (<span>{value}</span>);
                       })}
-                    </div>)
+                    </div>
+                  )
                 }
-                </li>)}
-            )}
-            </InfiniteScroll>
+                </li>
+              );
+            })}
+          </InfiniteScroll>
         </TimeEntriesList>
       </TimeEntriesContainer>
     );

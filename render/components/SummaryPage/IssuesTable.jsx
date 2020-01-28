@@ -10,9 +10,11 @@ import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 import InfiniteScroll from '../InfiniteScroll';
 import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
 import Date from '../Date';
-import Progressbar from "../Progressbar";
+import Progressbar from '../Progressbar';
 
-import { Tag, Status, IssueId, Priority } from "../Issue";
+import {
+  Tag, Status, IssueId, Priority
+} from '../Issue';
 
 const Table = styled.table`
   position: relative;
@@ -91,25 +93,25 @@ const ProcessIndicatorContainer = styled.tr`
 
 const ColorfulSpan = styled.span`
   ${
-    props => props.color
-    ? css `
+  props => (props.color
+    ? css`
       padding-bottom: 2px;
       background: linear-gradient(to bottom,transparent 0,transparent 90%,${props.color} 90%,${props.color} 100%);
     `
-    : null
-  }
+    : null)
+}
 `;
 
 const colorMap = {
-  'closed': 'red',
-  'high': 'yellow',
-  'urgent': 'red',
-  'immediate': 'red',
-  'critical': 'red',
-  'open': 'green',
-  'low': 'green',
-  'pending': 'yellow',
-  'normal': 'yellow'
+  closed: 'red',
+  high: 'yellow',
+  urgent: 'red',
+  immediate: 'red',
+  critical: 'red',
+  open: 'green',
+  low: 'green',
+  pending: 'yellow',
+  normal: 'yellow'
 };
 
 class IssuesTable extends Component {
@@ -122,7 +124,7 @@ class IssuesTable extends Component {
     };
   }
 
-  sortTable = (by) => () => {
+  sortTable = by => () => {
     const { onSort } = this.props;
     const { sortBy, sortDirection } = this.state;
     if (sortBy !== by) {
@@ -142,33 +144,32 @@ class IssuesTable extends Component {
 
   paint = (format, value, textValue, opts) => {
     const { theme, uiStyle } = this.props;
-    const isEnhanced = opts.isEnhanced;
+    const { isEnhanced } = opts;
 
-    if (isEnhanced){
+    if (isEnhanced) {
       if (format === 'id' && isEnhanced) {
-        return (<IssueId value={value} tracker={opts.tracker}/>);
-      }else if (format === 'status' && isEnhanced) {
-        return (<Status simple={true} value={value}/>);
-      }else if (format === 'progress' && isEnhanced) {
-        return (<Progressbar percent={value} width={80} mode="progress-gradient" height={7}/>);
-      }else if (format === 'priority' && isEnhanced) {
-        return (<Priority centered value={value}/>);
+        return (<IssueId value={value} tracker={opts.tracker} />);
+      } if (format === 'status' && isEnhanced) {
+        return (<Status simple={true} value={value} />);
+      } if (format === 'progress' && isEnhanced) {
+        return (<Progressbar percent={value} width={80} mode="progress-gradient" height={7} />);
+      } if (format === 'priority' && isEnhanced) {
+        return (<Priority centered value={value} />);
       }
     }
 
-    if (format === 'date'){
-      return (<Date date={value}/>);
-    }else if (format === 'tags' && value){
-      return (<Fragment>{ value ? value.map(el => <Tag key={el} mode={isEnhanced ? "simple" : "plain"} value={el}></Tag>) : undefined}</Fragment>);
-    }else{
-      const color = (uiStyle === 'colors' && typeof value === 'string'
-        ? colorMap[value.toLowerCase()]
-        : undefined);
-
-      return (
-        <ColorfulSpan color={theme[color]} className={opts && opts.className}>{textValue}</ColorfulSpan>
-      );
+    if (format === 'date') {
+      return (<Date date={value} />);
+    } if (format === 'tags' && value) {
+      return (<Fragment>{ value ? value.map(el => <Tag key={el} mode={isEnhanced ? 'simple' : 'plain'} value={el} />) : undefined}</Fragment>);
     }
+    const color = (uiStyle === 'colors' && typeof value === 'string'
+      ? colorMap[value.toLowerCase()]
+      : undefined);
+
+    return (
+      <ColorfulSpan color={theme[color]} className={opts && opts.className}>{textValue}</ColorfulSpan>
+    );
   }
 
   loadIssuePage = () => {
@@ -178,11 +179,13 @@ class IssuesTable extends Component {
   }
 
   render() {
-    const { issueHeaders, issues, limit, uiStyle } = this.props;
+    const {
+      issueHeaders, issues, limit, uiStyle
+    } = this.props;
     const { sortBy, sortDirection } = this.state;
     let userTasks = issues.data;
-    if (limit){
-      userTasks = userTasks.slice(0,  limit)
+    if (limit) {
+      userTasks = userTasks.slice(0, limit);
     }
     const isEnhanced = uiStyle === 'enhanced';
     return (
@@ -190,66 +193,68 @@ class IssuesTable extends Component {
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
         <Table>
           <thead>
-          <tr>
-            {issueHeaders.map(header => (
-              <th
-                key={header.value}
-                onClick={this.sortTable(header.value)}
-                className={isEnhanced ? header.value : ""}
-              >
-                {header.label}&nbsp;
-                {sortBy === header.value && sortDirection === 'asc' && (
+            <tr>
+              {issueHeaders.map(header => (
+                <th
+                  key={header.value}
+                  onClick={this.sortTable(header.value)}
+                  className={isEnhanced ? header.value : ''}
+                >
+                  {header.label}
+&nbsp;
+                  {sortBy === header.value && sortDirection === 'asc' && (
                   <SortAscendingIcon size={14} />
-                )}
-                {sortBy === header.value && sortDirection === 'desc' && (
+                  )}
+                  {sortBy === header.value && sortDirection === 'desc' && (
                   <SortDescendingIcon size={14} />
-                )}
-              </th>
-            ))}
-          </tr>
+                  )}
+                </th>
+              ))}
+            </tr>
           </thead>
           <tbody>
-          <InfiniteScroll
-            load={this.loadIssuePage}
-            isEnd={userTasks.length === issues.totalCount || limit === userTasks.length}
-            hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount && !limit}
-            container={window}
-            loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
-            immediate={true}
-          >
-            {userTasks.map((task)  => (
-              <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
-                {
-                  issueHeaders.map(header => {
-                    let opts = {};
+            <InfiniteScroll
+              load={this.loadIssuePage}
+              isEnd={userTasks.length === issues.totalCount || limit === userTasks.length}
+              hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount && !limit}
+              container={window}
+              loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
+              immediate={true}
+            >
+              {userTasks.map(task => (
+                <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
+                  {
+                  issueHeaders.map((header) => {
+                    const opts = {};
                     if (isEnhanced) {
                       opts.isEnhanced = isEnhanced;
                       opts.tracker = _get(task, 'tracker.id');
                     }
-                    const format = header.format;
-                    let value = _get(task, header.value);
+                    const { format } = header;
+                    const value = _get(task, header.value);
                     let textValue = value;
-                    if (format === 'hours'){
-                      if (value != null){
+                    if (format === 'hours') {
+                      if (value != null) {
                         textValue = Number(value.toFixed(2));
                       }
-                    }else if (format === 'progress'){
-                      textValue = `${value}%`
-                    }else if (format === 'count' && value && value.length){
-                      textValue = `${value.length}`
+                    } else if (format === 'progress') {
+                      textValue = `${value}%`;
+                    } else if (format === 'count' && value && value.length) {
+                      textValue = `${value.length}`;
                     }
                     return (
                       <td
                         key={header.value}
-                        className={isEnhanced ? header.value : (header.value === 'due_date' ? header.value : "")}
+                        className={isEnhanced ? header.value : (header.value === 'due_date' ? header.value : '')}
                       >
                         { this.paint(format, value, textValue, opts) }
                       </td>
-                    )})
+                    );
+                  })
                 }
-              </tr>
-            ))}
-          </InfiniteScroll>
+                </tr>
+              ))}
+            </InfiniteScroll>
           </tbody>
         </Table>
       </Fragment>

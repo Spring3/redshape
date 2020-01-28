@@ -12,7 +12,7 @@ import theme from '../../../theme';
 import SummaryPage from '../../AppViewPages/SummaryPage';
 import issueActions, { ISSUES_GET_PAGE } from '../../../actions/issues.actions';
 import { initialize, getInstance, reset } from '../../../../common/request';
-import {SETTINGS_SHOW_CLOSED_ISSUES} from "../../../actions/settings.actions";
+import { SETTINGS_SHOW_CLOSED_ISSUES } from '../../../actions/settings.actions';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';

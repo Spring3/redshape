@@ -19,7 +19,7 @@ class Dialog extends Component {
     };
   }
 
-  confirm = closeModal => event => {
+  confirm = closeModal => (event) => {
     this.state.onConfirm();
     closeModal();
   }
@@ -57,7 +57,7 @@ class Dialog extends Component {
     });
   }
 
-  displayDialog = onConfirm => event => {
+  displayDialog = onConfirm => (event) => {
     event.preventDefault();
     event.stopPropagation();
     const eventClone = {
@@ -65,7 +65,7 @@ class Dialog extends Component {
       preventDefault: () => {},
       stopPropagation: () => {},
       target: { ...event.target, value: event.target.value }
-    }
+    };
 
     this.setState({
       onConfirm: () => onConfirm(eventClone)

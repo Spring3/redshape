@@ -7,8 +7,8 @@ import ArrowHigh from 'mdi-react/ChevronUpCircleOutlineIcon';
 import ArrowUrgent from 'mdi-react/ArrowTopDropCircleOutlineIcon';
 import ArrowImmediate from 'mdi-react/ArrowTopBoldCircleOutlineIcon';
 
-import Link from './Link';
 import { withRouter } from 'react-router-dom';
+import Link from './Link';
 
 const PrioritySpan = styled.span`
   display: flex;
@@ -17,29 +17,34 @@ const PrioritySpan = styled.span`
     margin-right: 4px;
   }
   color: ${props => props.color};
-  justify-content: ${props => props.centered ? 'center' : 'left'};
+  justify-content: ${props => (props.centered ? 'center' : 'left')};
 `;
 
 class PriorityComponent extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
 
-  render(){
+  render() {
     const { theme, value, centered } = this.props;
     let icon;
     let textColor;
-    switch(value){
-      case 'Low': { icon = <ArrowLow color={theme.green} size={20}/>; } break
-      case 'High': { icon = <ArrowHigh color={theme['yellow-red']} size={20}/>; } break
-      case 'Urgent': { textColor = theme['yellow-red']; icon = <ArrowUrgent color={theme.red} size={20}/>; } break
-      case 'Immediate': { textColor = theme.red; icon = <ArrowImmediate color={theme.red} color="red" size={20}/>; } break
-      case 'Normal': { icon = <ArrowNormal color={theme.cyan} size={20}/>; } break
+    switch (value) {
+      case 'Low': { icon = <ArrowLow color={theme.green} size={20} />; } break;
+      case 'High': { icon = <ArrowHigh color={theme['yellow-red']} size={20} />; } break;
+      case 'Urgent': { textColor = theme['yellow-red']; icon = <ArrowUrgent color={theme.red} size={20} />; } break;
+      case 'Immediate': { textColor = theme.red; icon = <ArrowImmediate color={theme.red} color="red" size={20} />; } break;
+      case 'Normal': { icon = <ArrowNormal color={theme.cyan} size={20} />; } break;
       default: { icon = undefined; } // custom priorities without icon
     }
-    return (<PrioritySpan centered={centered} color={textColor}>{icon}{value}</PrioritySpan>);
+    return (
+      <PrioritySpan centered={centered} color={textColor}>
+        {icon}
+        {value}
+      </PrioritySpan>
+    );
   }
-};
+}
 
 const IdLink = styled(Link)`
     &::before {
@@ -84,22 +89,24 @@ const IdLink = styled(Link)`
       background-color: ${props => props.theme.darkOrange};
     }
   }
-`
+`;
 
 class IdComponent extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    const { theme, history, value, tracker, fontSize, clickable, mode } = this.props;
-    return (mode === 'plain' ? (<Link onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`#${value}`}</Link>) : (<IdLink fontSize={fontSize || "inherit"} className={`tracker-${tracker}`} onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`${value}`}</IdLink>));
+    const {
+      theme, history, value, tracker, fontSize, clickable, mode
+    } = this.props;
+    return (mode === 'plain' ? (<Link onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`#${value}`}</Link>) : (<IdLink fontSize={fontSize || 'inherit'} className={`tracker-${tracker}`} onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`${value}`}</IdLink>));
   }
-};
+}
 
 const StatusSpan = styled.span`
 
-  ${props => props.simple ? css`
+  ${props => (props.simple ? css`
     color: #614BA6;
     &.Closed {
       color: ${props.theme.red};
@@ -122,13 +129,13 @@ const StatusSpan = styled.span`
     &.New {
       background-color: ${props.theme.darkBlue};
     }
-  `}
+  `)}
 
 `;
 
 class StatusComponent extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
 
   render() {
@@ -143,19 +150,19 @@ const TagSpan = styled.span`
   font-size: 13px;
   ${props => props.mode !== 'plain' && css`
   background-color: #EFEFEF;
-  ${props => props.mode === 'simple' ? css`
+  ${props => (props.mode === 'simple' ? css`
   padding: 1px 3px;
   border-radius: 5px;
   ` : css`
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
-  `}
+  `)}
   `}
 `;
 
 class TagComponent extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
 
   render() {
@@ -167,7 +174,7 @@ class TagComponent extends Component {
 const TagContainerComponent = styled.div`
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 export const Priority = withTheme(PriorityComponent);
 export const IssueId = withRouter(withTheme(IdComponent));

@@ -29,9 +29,8 @@ class InfiniteScroll extends Component {
     const { container } = this.props;
     if (container === window) {
       return (container.innerHeight + container.scrollY) <= document.body.scrollHeight;
-    } else {
-      return container.scrollTop <= container.scrollHeight;
     }
+    return container.scrollTop <= container.scrollHeight;
   }
 
   componentDidUpdate(oldProps, oldState) {
@@ -49,7 +48,7 @@ class InfiniteScroll extends Component {
 
     if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {
       if (this.props.container && this.shouldLoad()) {
-        this.throttledScrollHandler()
+        this.throttledScrollHandler();
       }
     }
 
@@ -69,12 +68,14 @@ class InfiniteScroll extends Component {
   }
 
   onScroll = (event = {}) => {
-    const { load, threshold, hasMore, container } = this.props;
+    const {
+      load, threshold, hasMore, container
+    } = this.props;
     const { isLoading } = this.state;
     const target = event.target || container;
     const scrolledToBottom = container === window
-     ? (window.innerHeight + window.scrollY) >= document.body.scrollHeight
-     : Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight;
+      ? (window.innerHeight + window.scrollY) >= document.body.scrollHeight
+      : Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight;
     // if does not have an overflow, or scrolled to bottom
     if (!isLoading && scrolledToBottom && hasMore) {
       if (this.shouldLoad() || (target.scrollTop % target.scrollHeight) >= threshold) {
@@ -95,7 +96,7 @@ class InfiniteScroll extends Component {
       </Fragment>
     );
   }
-};
+}
 
 InfiniteScroll.propTypes = {
   children: PropTypes.oneOfType([

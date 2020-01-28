@@ -6,12 +6,12 @@ import { remote } from 'electron';
 
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
-import EditIcon from "mdi-react/EditIcon";
+import EditIcon from 'mdi-react/EditIcon';
 
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import Link from '../Link';
 import DateComponent from '../Date';
-import Button from "../Button";
+import Button from '../Button';
 
 const Section = styled.section`
   background: white;
@@ -62,7 +62,7 @@ const Comments = styled.ul`
       display: flex;
       flex-direction: column;
 
-      ${({theme}) => css`
+      ${({ theme }) => css`
         h3 {
           margin-top: 20px;
           color: ${theme.main};
@@ -79,11 +79,11 @@ const Comments = styled.ul`
         }
       `}
 
-      ${props => props.isEnhanced ? css`
+      ${props => (props.isEnhanced ? css`
       width: 300px;
       ` : css`
       min-width: 20%;
-      `}
+      `)}
 
     }
 
@@ -137,7 +137,7 @@ const CommentsHeader = styled.div`
   }
 `;
 
-const FlexButton = styled(Button) `
+const FlexButton = styled(Button)`
   align-self: center;
 `;
 
@@ -163,10 +163,10 @@ const Comment = styled.li`
 `;
 
 class CommentsSection extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     const { entries, timestamp } = props.journalEntries;
-    const sortDescending = props.uiStyle === 'enhanced' ? true : false;
+    const sortDescending = props.uiStyle === 'enhanced';
     this.state = {
       showNotice: false,
       sortDescending,
@@ -182,14 +182,14 @@ class CommentsSection extends Component {
   componentDidUpdate(oldProps) {
     const { timestamp: oldTimestamp } = oldProps.journalEntries;
     const { entries, timestamp } = this.props.journalEntries;
-    if (oldTimestamp != timestamp){
+    if (oldTimestamp != timestamp) {
       const { sortDescending } = this.state;
       this.setState({
         entries: sortDescending ? entries.reverse() : entries,
         timestamp,
         selected: null,
         editorText: ''
-      })
+      });
     }
   }
 
@@ -197,16 +197,16 @@ class CommentsSection extends Component {
     if (comments) {
       const { selected } = this.state;
       const { issueId, publishComments, publishUpdateComments } = this.props;
-      if (selected){
-        if (selected.notes === comments){
+      if (selected) {
+        if (selected.notes === comments) {
           this.setState({
             selected: null,
             editorText: ''
-          })
-        }else{
+          });
+        } else {
           return publishUpdateComments(issueId, selected.id, comments);
         }
-      }else{
+      } else {
         return publishComments(issueId, comments);
       }
     }
@@ -214,7 +214,7 @@ class CommentsSection extends Component {
 
   removeComment = () => {
     const { selected } = this.state;
-    if (selected){
+    if (selected) {
       const { issueId, publishUpdateComments } = this.props;
       return publishUpdateComments(issueId, selected.id, '');
     }
@@ -227,7 +227,7 @@ class CommentsSection extends Component {
       sortDescending: !sortDescending,
       entries: entries.reverse(),
       ...(current && { editorText: current.state.value })
-    })
+    });
   }
 
   toggleEditor = () => {
@@ -255,7 +255,9 @@ class CommentsSection extends Component {
 
   render() {
     const { uiStyle, areCommentsEditable } = this.props;
-    const { showNotice, sortDescending, entries, selected, editorText, showEditor } = this.state;
+    const {
+      showNotice, sortDescending, entries, selected, editorText, showEditor
+    } = this.state;
     const anySelected = areCommentsEditable && selected != null;
     const isEnhanced = uiStyle === 'enhanced';
     const comments = (
@@ -266,7 +268,7 @@ class CommentsSection extends Component {
               <h3 className="username">{entry.user.name}</h3>
               <DateComponent className="date" date={entry.created_on} />
             </div>
-            <MarkdownText markdownText={entry.notes} isEnhanced={isEnhanced}/>
+            <MarkdownText markdownText={entry.notes} isEnhanced={isEnhanced} />
           </Comment>
         ))}
       </Comments>
@@ -292,7 +294,10 @@ class CommentsSection extends Component {
                 ? (<Link href="#">Cmd + Enter</Link>)
                 : (<Link href="#">Ctrl + Enter</Link>)
             }
-            to { selected ? 'update the selected comment' : 'send a new comment' }.
+            to
+            {' '}
+            { selected ? 'update the selected comment' : 'send a new comment' }
+.
           </SmallNotice>
         </div>
       </CommentsForm>
@@ -305,13 +310,14 @@ class CommentsSection extends Component {
             <h2>Comments</h2>
             <div>
               <FlexButton onClick={this.toggleEditor}>
-                <EditIcon size={22}/>&nbsp;Editor
+                <EditIcon size={22} />
+&nbsp;Editor
               </FlexButton>
               <FlexButton onClick={this.toggleSortDirection}>
                 {sortDescending && (
-                  <SortDescendingIcon size={22}/>
+                  <SortDescendingIcon size={22} />
                 ) || (
-                  <SortAscendingIcon size={22}/>
+                  <SortAscendingIcon size={22} />
                 )
                 }
               </FlexButton>
@@ -347,5 +353,3 @@ const mapStateToProps = state => ({
 });
 
 export default withTheme(connect(mapStateToProps)(CommentsSection));
-
-

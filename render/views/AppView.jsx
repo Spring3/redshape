@@ -16,7 +16,7 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
-import { hoursToDuration } from "../datetime";
+import { hoursToDuration } from '../datetime';
 
 import IPC from '../ipc';
 
@@ -47,9 +47,15 @@ class AppView extends Component {
     this.childRoutePage = React.createRef();
   }
 
-  modifyUserMenu(){
-    const { idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider } = this.props;
-    IPC.send('menu', { settings: { idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider } });
+  modifyUserMenu() {
+    const {
+      idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider
+    } = this.props;
+    IPC.send('menu', {
+      settings: {
+        idleBehavior, idleTimeDiscard, showAdvancedTimerControls, progressSlider
+      }
+    });
   }
 
   componentWillMount() {
@@ -92,7 +98,7 @@ class AppView extends Component {
   }
 
   onRefresh = () => {
-    const {current} = this.childRoutePage;
+    const { current } = this.childRoutePage;
     if (current && current.onRefresh) {
       current.onRefresh();
     }
@@ -109,11 +115,11 @@ class AppView extends Component {
         <Navbar onRefresh={this.onRefresh} />
         <Content>
           <Switch>
-            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage {...props} ref={this.childRoutePage}/>}/>
-            <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage}/>} />
-            <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage}/>} />
-            <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage {...props} ref={this.childRoutePage}/>} />
-            <Redirect to={`${match.path}/summary/assigned`}/>
+            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage {...props} ref={this.childRoutePage} />} />
+            <Redirect to={`${match.path}/summary/assigned`} />
           </Switch>
           <Timer
             onStop={this.onTrackingStop}

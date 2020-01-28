@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import styled, { withTheme } from 'styled-components';
 
+import ClockIcon from 'mdi-react/ClockIcon';
 import { Input, Label } from './Input';
 import Button from './Button';
 import MarkdownEditor from './MarkdownEditor';
@@ -13,12 +14,11 @@ import ErrorMessage from './ErrorMessage';
 import DatePicker from './DatePicker';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
-import Tooltip from "./Tooltip";
-import ClockIcon from "mdi-react/ClockIcon";
+import Tooltip from './Tooltip';
 
 import actions from '../actions';
 
-import { durationToHours, hoursToDuration } from '../datetime'
+import { durationToHours, hoursToDuration } from '../datetime';
 
 const FlexRow = styled.div`
   display: flex;
@@ -56,8 +56,8 @@ const ClockIconStyled = styled(ClockIcon)`
 `;
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
-`
-const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14}/></Tooltip></LabelIcon>);
+`;
+const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const Title = styled.h4`
   margin: 0;
@@ -65,18 +65,16 @@ const Title = styled.h4`
 `;
 
 const selectStyles = {
-  container: (base, state) => {
-    return { ...base };
-  }
+  container: (base, state) => ({ ...base })
 };
 
 class TimeEntryModal extends Component {
   constructor(props) {
     super(props);
-    let tEntry = props.timeEntry;
-    if (tEntry){
-      if (tEntry.duration == null && tEntry.hours){
-        tEntry.duration = hoursToDuration(tEntry.hours)
+    const tEntry = props.timeEntry;
+    if (tEntry) {
+      if (tEntry.duration == null && tEntry.hours) {
+        tEntry.duration = hoursToDuration(tEntry.hours);
       }
     }
     this.state = {
@@ -91,7 +89,7 @@ class TimeEntryModal extends Component {
       },
       wasModified: false
     };
-    if (props.initialVolatileContent){ // TimeEntry filled with duration (from Timer)
+    if (props.initialVolatileContent) { // TimeEntry filled with duration (from Timer)
       this.state.wasModified = true;
     }
 
@@ -152,7 +150,7 @@ class TimeEntryModal extends Component {
   });
 
   onDurationChange = ({ target: { value } }) => {
-    value = '' + value
+    value = `${value}`;
     this.setState({
       timeEntry: {
         ...this.state.timeEntry,
@@ -164,13 +162,13 @@ class TimeEntryModal extends Component {
     this.debouncedDurationConversionChange(value);
   }
 
-  onDurationConversionChange = value => {
+  onDurationConversionChange = (value) => {
     this.setState({
       timeEntry: {
         ...this.state.timeEntry,
         hours: durationToHours(value)
       }
-    })
+    });
   }
 
   onCommentsChange = comments => this.setState({
@@ -181,7 +179,7 @@ class TimeEntryModal extends Component {
     wasModified: true
   });
 
-  onActivityChange = activity => {
+  onActivityChange = (activity) => {
     this.setState({
       timeEntry: {
         ...this.state.timeEntry,
@@ -202,7 +200,7 @@ class TimeEntryModal extends Component {
       spent_on: timeEntry.spent_on
     }).then(() => {
       if (!this.props.time.error) {
-        this.props.onClose()
+        this.props.onClose();
       }
     });
   };
@@ -220,7 +218,7 @@ class TimeEntryModal extends Component {
         if (!this.props.time.error) {
           this.props.onClose();
         }
-      })
+      });
     } else {
       this.props.onClose();
     }
@@ -232,9 +230,13 @@ class TimeEntryModal extends Component {
   }
 
   render() {
-    const { activities, isUserAuthor, isOpen, isEditable, onClose, theme, time } = this.props;
+    const {
+      activities, isUserAuthor, isOpen, isEditable, onClose, theme, time
+    } = this.props;
     const { timeEntry, wasModified } = this.state;
-    const { duration, hours, comments, spent_on, activity } = timeEntry;
+    const {
+      duration, hours, comments, spent_on, activity
+    } = timeEntry;
     const selectedActivity = { id: activity.id, label: activity.name };
     const validationErrors = time.error && time.error.isJoi
       ? {
@@ -246,7 +248,7 @@ class TimeEntryModal extends Component {
       }
       : {};
     let durationInfo = '';
-    if (hours > 0){
+    if (hours > 0) {
       durationInfo = `${Number(hours.toFixed(2))} hours`;
     }
     return (
@@ -257,12 +259,20 @@ class TimeEntryModal extends Component {
         center={true}
       >
         <Fragment>
-          <Title>{ timeEntry.id ? 'Edit' : 'New' } time entry</Title>
+          <Title>
+            { timeEntry.id ? 'Edit' : 'New' }
+            {' '}
+time entry
+          </Title>
           <Label htmlFor="author" label="Author">
             <div name="author">{timeEntry.user.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">#{timeEntry.issue.id}&nbsp;{timeEntry.issue.name}</div>
+            <div name="issue">
+#
+              {timeEntry.issue.id}
+              {timeEntry.issue.name}
+            </div>
           </Label>
           <Label htmlFor="activity" label="Activity">
             <Select
@@ -274,7 +284,7 @@ class TimeEntryModal extends Component {
               onBlur={() => this.runValidation('activity')}
               onChange={this.onActivityChange}
               isClearable={false}
-              theme={(defaultTheme) => ({
+              theme={defaultTheme => ({
                 ...defaultTheme,
                 borderRadius: 3,
                 colors: {
@@ -292,15 +302,15 @@ class TimeEntryModal extends Component {
             <DurationField>
               <Label htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
                 <FlexRow>
-                <Input
-                  type="text"
-                  name="duration"
-                  value={duration}
-                  onBlur={() => this.runValidation(['duration', 'hours'])}
-                  disabled={!isEditable || !isUserAuthor}
-                  onChange={this.onDurationChange}
-                />
-                <DurationInfo>{durationInfo}</DurationInfo>
+                  <Input
+                    type="text"
+                    name="duration"
+                    value={duration}
+                    onBlur={() => this.runValidation(['duration', 'hours'])}
+                    disabled={!isEditable || !isUserAuthor}
+                    onChange={this.onDurationChange}
+                  />
+                  <DurationInfo>{durationInfo}</DurationInfo>
                 </FlexRow>
               </Label>
               <ErrorMessage show={!!validationErrors.duration || validationErrors.hours}>
@@ -341,7 +351,7 @@ class TimeEntryModal extends Component {
                   id="btn-update"
                   onClick={this.onUpdate}
                   disabled={time.isFetching}
-                  palette='success'
+                  palette="success"
                 >
                 Submit
                 </Button>
@@ -354,7 +364,7 @@ class TimeEntryModal extends Component {
                   id="btn-add"
                   disabled={!wasModified || time.isFetching}
                   onClick={this.onAdd}
-                  palette='success'
+                  palette="success"
                 >
                 Submit
                 </Button>

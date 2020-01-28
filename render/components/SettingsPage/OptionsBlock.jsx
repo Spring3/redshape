@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import styled, {withTheme} from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
+import Select from 'react-select';
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 import actions from '../../actions';
 import { Input, Label } from '../Input';
-import Select from 'react-select';
-import Tooltip from "../Tooltip";
-import HelpCircleIcon from "mdi-react/HelpCircleIcon";
+import Tooltip from '../Tooltip';
 
-import { availableOptions } from "../../settings";
+import { availableOptions } from '../../settings';
 
 const FlexRow = styled.div`
   display: flex;
@@ -23,9 +23,7 @@ const DiscardLabel = styled.label`
 `;
 
 const compSelectStyles = {
-  container: (base, state) => {
-    return { ...base, minWidth: 240 };
-  },
+  container: (base, state) => ({ ...base, minWidth: 240 }),
 };
 
 const HelpIconStyled = styled(HelpCircleIcon)`
@@ -34,11 +32,11 @@ const HelpIconStyled = styled(HelpCircleIcon)`
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
-`
-const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions)."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
-const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
-const TimerBehaviorInfo = (<LabelIcon><Tooltip text="Detect if the system is idle to pause the timer."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
-const CheckpointInfo = (<LabelIcon><Tooltip text="Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system)."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
+`;
+const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const TimerBehaviorInfo = (<LabelIcon><Tooltip text="Detect if the system is idle to pause the timer."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const CheckpointInfo = (<LabelIcon><Tooltip text="Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const Grid = styled.div`
   display: grid;
@@ -65,10 +63,14 @@ const OptionList = styled.div`
 `;
 
 class OptionsBlock extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    const { uiStyle, idleBehavior, progressSlider, timerCheckpoint } = availableOptions;
-    this.options = { uiStyle, idleBehavior, progressSlider, timerCheckpoint };
+    const {
+      uiStyle, idleBehavior, progressSlider, timerCheckpoint
+    } = availableOptions;
+    this.options = {
+      uiStyle, idleBehavior, progressSlider, timerCheckpoint
+    };
   }
 
   toggleShowAdvancedTimerControls = () => {
@@ -87,7 +89,7 @@ class OptionsBlock extends Component {
   }
 
   onIdleBehaviorChange = (idleBehavior) => {
-    const {settingsIdleBehavior} = this.props;
+    const { settingsIdleBehavior } = this.props;
     settingsIdleBehavior(idleBehavior.value);
   }
 
@@ -112,11 +114,15 @@ class OptionsBlock extends Component {
   }
 
   render() {
-    const { showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable } = this.props;
-    const values = {idleBehavior, progressSlider, uiStyle, timerCheckpoint};
-    const options = this.options;
+    const {
+      showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable
+    } = this.props;
+    const values = {
+      idleBehavior, progressSlider, uiStyle, timerCheckpoint
+    };
+    const { options } = this;
     const selections = Object.fromEntries(Object.entries(options).map(([key, group]) => [key, group.find(el => el.value === values[key])]));
-    const idleTimeDiscardDisabled = (idleBehavior === 'none') ? true : false;
+    const idleTimeDiscardDisabled = (idleBehavior === 'none');
     return (
       <Grid>
         <Label label="Options" rightOfLabel={OptionsInfo}>
@@ -149,32 +155,32 @@ class OptionsBlock extends Component {
         </Label>
         <Label htmlFor="idleBehavior" label="Timer behavior" rightOfLabel={TimerBehaviorInfo}>
           <FlexRow>
-          <Select
-            name="idleBehavior"
-            options={options.idleBehavior}
-            styles={compSelectStyles}
-            value={selections.idleBehavior}
-            onChange={this.onIdleBehaviorChange}
-            isClearable={false}
-            theme={(defaultTheme) => ({
-              ...defaultTheme,
-              borderRadius: 3,
-              colors: {
-                ...defaultTheme.colors,
-                primary: theme.main,
-              },
-            })
+            <Select
+              name="idleBehavior"
+              options={options.idleBehavior}
+              styles={compSelectStyles}
+              value={selections.idleBehavior}
+              onChange={this.onIdleBehaviorChange}
+              isClearable={false}
+              theme={defaultTheme => ({
+                ...defaultTheme,
+                borderRadius: 3,
+                colors: {
+                  ...defaultTheme.colors,
+                  primary: theme.main,
+                },
+              })
             }
-          />
-          <DiscardLabel>
-            <Input
-              type="checkbox"
-              checked={idleTimeDiscardDisabled ? false : idleTimeDiscard}
-              disabled={idleTimeDiscardDisabled}
-              onChange={this.toggleIdleTimeDiscard}
             />
-            <span>Auto discard idle time from timer</span>
-          </DiscardLabel>
+            <DiscardLabel>
+              <Input
+                type="checkbox"
+                checked={idleTimeDiscardDisabled ? false : idleTimeDiscard}
+                disabled={idleTimeDiscardDisabled}
+                onChange={this.toggleIdleTimeDiscard}
+              />
+              <span>Auto discard idle time from timer</span>
+            </DiscardLabel>
           </FlexRow>
         </Label>
         <FlexRow>
@@ -186,7 +192,7 @@ class OptionsBlock extends Component {
               value={selections.timerCheckpoint}
               onChange={this.onTimerCheckpointChange}
               isClearable={false}
-              theme={(defaultTheme) => ({
+              theme={defaultTheme => ({
                 ...defaultTheme,
                 borderRadius: 3,
                 colors: {
@@ -207,7 +213,7 @@ class OptionsBlock extends Component {
               value={selections.progressSlider}
               onChange={this.onProgressSliderChange}
               isClearable={false}
-              theme={(defaultTheme) => ({
+              theme={defaultTheme => ({
                 ...defaultTheme,
                 borderRadius: 3,
                 colors: {
@@ -228,7 +234,7 @@ class OptionsBlock extends Component {
               value={selections.uiStyle}
               onChange={this.onUiStyleChange}
               isClearable={false}
-              theme={(defaultTheme) => ({
+              theme={defaultTheme => ({
                 ...defaultTheme,
                 borderRadius: 3,
                 colors: {

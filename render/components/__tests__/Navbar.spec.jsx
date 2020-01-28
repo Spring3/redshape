@@ -7,7 +7,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import { mount } from 'enzyme';
 import userActions, { USER_LOGOUT } from '../../actions/user.actions';
-import theme from "../../theme";
+import theme from '../../theme';
 
 import Navbar from '../Navbar';
 
@@ -29,7 +29,7 @@ describe('Navbar component', () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <HashRouter>
-            <Route path="/" component={props => <Navbar {...props}/>} />
+            <Route path="/" component={props => <Navbar {...props} />} />
           </HashRouter>
         </ThemeProvider>
       </Provider>
@@ -52,7 +52,7 @@ describe('Navbar component', () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <HashRouter>
-            <Route path="/" component={props => <Navbar {...props}/>} />
+            <Route path="/" component={props => <Navbar {...props} />} />
           </HashRouter>
         </ThemeProvider>
       </Provider>

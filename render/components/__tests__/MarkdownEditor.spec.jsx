@@ -3,11 +3,12 @@ import renderer from 'react-test-renderer';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { ThemeProvider } from 'styled-components';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import utils from '../../../common/utils';
 import theme from '../../theme';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 const mockStore = configureStore([thunk]);
 
 describe('MarkdownEditor component', () => {
@@ -102,7 +103,7 @@ describe('MarkdownEditor component', () => {
     const wrapper = mount(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit}/>
+          <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
         </ThemeProvider>
       </Provider>
     );
@@ -140,7 +141,7 @@ describe('MarkdownEditor component', () => {
     expect(onSubmit).toHaveBeenCalled();
     expect(xssSpy).toHaveBeenCalled();
     setTimeout(() => {
-      expect(wrapper.find('MarkdownEditor').state('value')).toBe("Lorem ipsum dolor");
+      expect(wrapper.find('MarkdownEditor').state('value')).toBe('Lorem ipsum dolor');
     }, 50);
   });
 

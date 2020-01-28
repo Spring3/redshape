@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { withTheme, css } from 'styled-components';
 import PropTypes from 'prop-types';
 
-import Tooltip from "./Tooltip";
+import Tooltip from './Tooltip';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const Background = styled.div`
 `;
 
 export const Progress = styled.div`
-  border-radius: ${props => props.float === 'right' ? '0 5px 5px 0' : (props.float === 'left' ? '5px 0 0 5px' : '5px')};
+  border-radius: ${props => (props.float === 'right' ? '0 5px 5px 0' : (props.float === 'left' ? '5px 0 0 5px' : '5px'))};
   max-width: 100%;
   width: 0;
   ${props => css`
@@ -30,17 +30,19 @@ export const Progress = styled.div`
   `}
 `;
 
-const Progressbar = ({ percent, background, id, className, height, width, mode, theme }) => {
+const Progressbar = ({
+  percent, background, id, className, height, width, mode, theme
+}) => {
   let percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
   let percentageOver;
-  let percentageText = `${percentage.toFixed(0)}%`;
+  const percentageText = `${percentage.toFixed(0)}%`;
   if (mode === 'progress-gradient') {
     const colors = ['red', 'yellow-red', 'yellow', 'yellow-green', 'green'];
     const ranges = [20, 40, 60, 80, 100];
     const colorIdx = ranges.findIndex(el => el >= percentage);
     const color = colors[colorIdx] || 'green';
     background = theme[color];
-  }else if (mode === 'time-tracking') {
+  } else if (mode === 'time-tracking') {
     background = theme.green;
     if (percentage >= 75.0) {
       background = theme['yellow-green'];
@@ -58,27 +60,27 @@ const Progressbar = ({ percent, background, id, className, height, width, mode, 
       className={className}
     >
       <Tooltip text={percentageText}>
-      <Background
-        height={height}
-        width={width}
-      >
-        <Progress
-          percent={percentage}
-          background={background}
+        <Background
           height={height}
-          float={percentageOver > 0 ? 'left' : 'none'}
-        />
-        {
+          width={width}
+        >
+          <Progress
+            percent={percentage}
+            background={background}
+            height={height}
+            float={percentageOver > 0 ? 'left' : 'none'}
+          />
+          {
           percentageOver > 0 && (
             <Progress
               float="right"
               percent={percentageOver}
               background={theme.red}
               height={height}
-              />
+            />
           )
         }
-      </Background>
+        </Background>
       </Tooltip>
     </Wrapper>
   );

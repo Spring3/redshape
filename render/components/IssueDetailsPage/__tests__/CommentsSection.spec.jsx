@@ -4,11 +4,12 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import CommentsSection from '../CommentsSection';
 import theme from '../../../theme';
 
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 const mockStore = configureStore([thunk]);
 
 describe('IssueDetails => CommentsSection component', () => {

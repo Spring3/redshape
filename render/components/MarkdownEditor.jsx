@@ -102,7 +102,7 @@ const converter = new showdown.Converter({
 const KEY_ENTER = 13;
 
 class MarkdownEditor extends PureComponent {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -231,28 +231,28 @@ class MarkdownEditor extends PureComponent {
       } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
         this.applyMarkdown('\r\n');
       }
-    } else {
-      if (e.ctrlKey && e.keyCode === KEY_ENTER) {
-        trySend = true;
-      }
+    } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+      trySend = true;
     }
     if (trySend && onSubmit) {
-      const resp = onSubmit(xssFilter(this.state.value))
-      if (resp){
+      const resp = onSubmit(xssFilter(this.state.value));
+      if (resp) {
         resp.then((err) => { // succeeded, clear textarea:
-          if (!(err instanceof Error)){
+          if (!(err instanceof Error)) {
             this.setState({
               value: ''
             });
           }
-        }).catch(() => {})
+        }).catch(() => {});
       }
     }
   }
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, onFocus, isDisabled, maxLength, editing, uiStyle } = this.props;
+    const {
+      className, id, onBlur, onFocus, isDisabled, maxLength, editing, uiStyle
+    } = this.props;
     const { value, showPreview } = this.state;
     const isEnhanced = uiStyle === 'enhanced';
     return (
@@ -334,7 +334,7 @@ class MarkdownEditor extends PureComponent {
                     <GhostButton
                       onClick={requestConfirmation(this.props.onRemove)}
                     >
-                      <CloseIcon size={27}/>
+                      <CloseIcon size={27} />
                       <span>&nbsp;Remove</span>
                     </GhostButton>
                   )
@@ -343,7 +343,7 @@ class MarkdownEditor extends PureComponent {
             )}
             <GhostButton onClick={this.togglePreview}>
               <CardBulletedOutlineIcon size={27} />
-              <span>&nbsp;{ showPreview ? 'Edit' : 'Preview' }</span>
+              { showPreview ? (<span>&nbsp;Edit</span>) : (<span>&nbsp;Preview</span>) }
             </GhostButton>
           </MarkdownOption>
         </MarkdownOptionsList>
@@ -517,7 +517,7 @@ class MarkdownText extends PureComponent {
     }
   }
 
-  render () {
+  render() {
     const { markdownText, className, uiStyle } = this.props;
     const markdown = xssFilter(converter.makeHtml(markdownText));
     const isEnhanced = uiStyle === 'enhanced';
@@ -533,7 +533,7 @@ class MarkdownText extends PureComponent {
       />
     );
   }
-};
+}
 
 MarkdownText.propTypes = {
   markdownText: PropTypes.string,

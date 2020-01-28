@@ -1,4 +1,6 @@
-const { Tray, Menu, ipcMain, nativeImage } = require('electron');
+const {
+  Tray, Menu, ipcMain, nativeImage
+} = require('electron');
 
 let NAME;
 
@@ -32,18 +34,18 @@ const updateTrayMenu = () => {
       resumeTimerMenuItem.label = timerLabel;
       template.push(resumeTimerMenuItem);
       tray.setImage(icons.pause);
-    }else{
+    } else {
       pauseTimerMenuItem.label = timerLabel;
       template.push(pauseTimerMenuItem);
       tray.setImage(icons.play);
     }
     template.push(sepMenuItem);
-  }else{
+  } else {
     tray.setImage(icons.default);
   }
   if (mainWindowHidden) {
     template.push(showMenuItem);
-  }else{
+  } else {
     template.push(hideMenuItem);
   }
   template.push(quitMenuItem);
@@ -53,14 +55,14 @@ const updateTrayMenu = () => {
 };
 
 
-ipcMain.on('timer-info', (ev, {isEnabled, isPaused, issue}) =>  {
+ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
   statusLabel = NAME;
   timerEnabled = false;
-  if (isEnabled){
-    let subject = issue.subject;
+  if (isEnabled) {
+    let { subject } = issue;
     const subjectLength = 20;
-    if (subject.length > (subjectLength + 3)){
-      subject = subject.substr(0, subjectLength) + '...';
+    if (subject.length > (subjectLength + 3)) {
+      subject = `${subject.substr(0, subjectLength)}...`;
     }
     timerEnabled = true;
     timerPaused = isPaused;
@@ -71,7 +73,9 @@ ipcMain.on('timer-info', (ev, {isEnabled, isPaused, issue}) =>  {
 });
 
 module.exports = {
-  setupTray({app, mainWindow: window, NAME: appName, statusLabel: label, windowConfig: config}) {
+  setupTray({
+    app, mainWindow: window, NAME: appName, statusLabel: label, windowConfig: config
+  }) {
     mainWindow = window;
     windowConfig = config;
 
@@ -89,7 +93,7 @@ module.exports = {
     };
 
     tray = new Tray(icons.default);
-    contextMenu = Menu.buildFromTemplate([ hideMenuItem, quitMenuItem ]);
+    contextMenu = Menu.buildFromTemplate([hideMenuItem, quitMenuItem]);
     tray.setContextMenu(contextMenu);
     tray.setToolTip(statusLabel);
 
@@ -98,8 +102,8 @@ module.exports = {
         ev.preventDefault();
         mainWindow.hide();
         ev.returnValue = false;
-      }else{
-        mainWindow.webContents.send('window', {action: 'quit'});
+      } else {
+        mainWindow.webContents.send('window', { action: 'quit' });
       }
     });
 
@@ -116,11 +120,11 @@ module.exports = {
     });
 
     tray.on('click', () => {
-      if (mainWindowHidden){
+      if (mainWindowHidden) {
         mainWindow.show();
-      }else{
+      } else {
         mainWindow.hide();
       }
-    })
+    });
   }
 };

@@ -66,7 +66,7 @@ describe('Login view', () => {
 
     let inputs = wrapper.find('input');
     const checkbox = inputs.at(1);
-    checkbox.simulate('change', { target: {checked: true}});
+    checkbox.simulate('change', { target: { checked: true } });
     inputs = wrapper.find('input');
     expect(inputs.length).toBe(3);
     const apiKeyInput = wrapper.find('input[name="apiKey"]');

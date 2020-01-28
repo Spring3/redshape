@@ -337,5 +337,4 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
   });
-
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
+import toJson from 'enzyme-to-json';
 import Progressbar, { Progress } from '../Progressbar';
 import theme from '../../theme';
 
-import toJson from "enzyme-to-json";
 
 describe('Progressbar component', () => {
   it('should match the snapshot', () => {
@@ -75,7 +75,7 @@ describe('Progressbar component', () => {
     const childs = wrapper.find(Progressbar);
     expect(childs.at(0).find(Progress).prop('background')).toBe(theme.green);
     const progress = childs.at(1).find(Progress);
-    expect(progress.length).toBe(2)
+    expect(progress.length).toBe(2);
     expect(progress.at(0).prop('background')).toBe(theme['yellow-green']);
     expect(progress.at(1).prop('background')).toBe(theme.red);
   });

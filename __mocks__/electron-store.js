@@ -28,7 +28,7 @@ class Store {
     values[key] = value;
   }
 
-  delete = (key) => delete values[key]; 
+  delete = key => delete values[key];
 
   clear = () => Store.__reset();
 }

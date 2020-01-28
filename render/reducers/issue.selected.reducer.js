@@ -1,5 +1,5 @@
-import storage from '../../common/storage';
 import _ from 'lodash';
+import storage from '../../common/storage';
 
 import {
   ISSUES_GET,
@@ -40,7 +40,9 @@ export default (state = initialState, action) => {
         return { ...state, isFetching: true };
       }
       if (action.status === 'OK') {
-        return { ...state, isFetching: false, data: _.get(action.data, 'issue', {}), error: undefined };
+        return {
+          ...state, isFetching: false, data: _.get(action.data, 'issue', {}), error: undefined
+        };
       }
       if (action.status === 'NOK') {
         return { ...state, isFetching: false, error: action.data };
@@ -63,8 +65,8 @@ export default (state = initialState, action) => {
       }
       if (action.status === 'OK') {
         const journals = state.data.journals
-          .map(el => el.id === action.data.id ?
-            (action.data.notes ? action.data : null) : el)
+          .map(el => (el.id === action.data.id
+            ? (action.data.notes ? action.data : null) : el))
           .filter(el => el != null);
         return {
           ...state,

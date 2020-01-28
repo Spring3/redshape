@@ -460,7 +460,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 
 .c6 a {
   font-size: inherit !important;
-  margin-right: 5px;
+  margin: 0 5px;
 }
 
 .c8 {
@@ -521,6 +521,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   font-weight: bold;
 }
 
+@media (min-width:1600px) {
+  .c21 {
+    min-width: 500px;
+  }
+}
+
 @media (max-width:1400px) {
   .c11 {
     grid-template-columns: auto minmax(auto,250px) auto 1fr;
@@ -554,8 +560,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             className="c5"
           >
             <span>
-              #
-              1
+              #1
                
             </span>
             <span>
@@ -565,8 +570,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           <p
             className="c6"
           >
-            Created 
-            by 
+            Created
+             
+            by
             <a
               className="c7"
               onClick={[Function]}
@@ -668,9 +674,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
         <div>
           <span>
-             (Total: 
-            15.00
-             h)
+             (Total: 15.00 h)
           </span>
         </div>
         <div>

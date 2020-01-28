@@ -25,7 +25,7 @@ const TooltipText = styled.p`
     border-color: ${props => props.theme.bg} transparent transparent transparent;
   }
   
-  ${props => props.position === 'top' ? css`
+  ${props => (props.position === 'top' ? css`
     transform: translateX(-50%);
     // transform: translate(-50%, -50%);
     // top: calc(-250% + 5px);
@@ -48,7 +48,7 @@ const TooltipText = styled.p`
       left: -10px; 
       transform: rotate(90deg);
     }
-  `}
+  `)}
 `;
 
 const TooltipContainer = styled.div`
@@ -65,11 +65,13 @@ const TooltipContainer = styled.div`
 const TooltipMultiline = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 class Tooltip extends Component {
   render() {
-    const { className, children, text, position } = this.props;
+    const {
+      className, children, text, position
+    } = this.props;
     const lines = text.split('\\n');
     return (
       <TooltipContainer

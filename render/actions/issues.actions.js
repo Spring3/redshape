@@ -69,26 +69,24 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
       }
     },
     method: 'PUT'
-  }).then(() => {
-    return request({
-      url: `/issues/${issueId}.json`,
-      query: {
-        include: 'journals'
-      },
-      id: `getIssueJournalsDetails:${issueId}`
-    }).then(({ data }) => {
-      dispatch(notify.ok(
-        ISSUES_COMMENTS_SEND,
-        data.issue.journals,
-        {subject: 'comments'}
-      ));
-    })
-      .catch((error) => {
-        console.error(`Error when trying to fetch the issue with id ${issueId} after sending comments:`, error.message);
-        dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
-        return error;
-      });
-  }).catch((error) => {
+  }).then(() => request({
+    url: `/issues/${issueId}.json`,
+    query: {
+      include: 'journals'
+    },
+    id: `getIssueJournalsDetails:${issueId}`
+  }).then(({ data }) => {
+    dispatch(notify.ok(
+      ISSUES_COMMENTS_SEND,
+      data.issue.journals,
+      { subject: 'comments' }
+    ));
+  })
+    .catch((error) => {
+      console.error(`Error when trying to fetch the issue with id ${issueId} after sending comments:`, error.message);
+      dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
+      return error;
+    })).catch((error) => {
     console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
     dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
     return error;
@@ -123,8 +121,9 @@ const updateComments = (issueId, commentId, comments) => (dispatch, getState) =>
             name: user.name
           }
         },
-        {subject: 'comments'}
-      ));
+        { subject: 'comments' }
+      )
+    );
   })
     .catch((error) => {
       console.error(`Error when trying to update the journal ${commentId} of the issue with id ${issueId}:`, error.message);

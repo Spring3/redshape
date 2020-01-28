@@ -188,7 +188,7 @@ describe('IssueDetails page', () => {
     wrapper.unmount();
 
     const actions = store.getActions();
-    actions.pop()
+    actions.pop();
     expect(actions.pop().type).toBe(ISSUES_RESET_SELECTION);
   });
 

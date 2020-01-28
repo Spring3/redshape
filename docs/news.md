@@ -249,6 +249,10 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ![](changes/markdown_highlight.png)
 
+### Custom Fields editing
+
+
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in gnews.md), we recommend:

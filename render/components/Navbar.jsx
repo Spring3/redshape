@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import styled, { css, withTheme } from 'styled-components';
 import { connect } from 'react-redux';
-import {Link, NavLink, withRouter} from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import actions from '../actions';
-import { GhostButton } from './Button';
 
-import { animationSlideRight } from '../animations';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
-import RefreshIcon from "mdi-react/RefreshIcon";
+import RefreshIcon from 'mdi-react/RefreshIcon';
 import LogoutIcon from 'mdi-react/LogoutIcon';
 import GearIcon from 'mdi-react/GearIcon';
 import ListIcon from 'mdi-react/ViewListIcon';
+import { animationSlideRight } from '../animations';
+import { GhostButton } from './Button';
+import actions from '../actions';
 
-import Modal from "./Modal";
-import AboutPage from "../about/AboutPage";
+import Modal from './Modal';
+import AboutPage from '../about/AboutPage';
 
 const Name = styled.span`
   color: ${props => props.theme.main};
@@ -121,7 +121,7 @@ const Navbar = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${props => props.isEnhanced ? css`
+  ${props => (props.isEnhanced ? css`
     padding: 10px 40px;
     background: white;
     border-bottom: 2px solid ${props.theme.main};
@@ -129,7 +129,7 @@ const Navbar = styled.nav`
   ` : css`
     padding: 20px 40px 0px 40px;
     background: linear-gradient(to bottom, ${props => props.theme.bg} 85%, transparent);
-  `}
+  `)}
 
   ul {
     list-style-type: none;
@@ -142,7 +142,7 @@ const Navbar = styled.nav`
       display: inline;
       font-size: 15px;
       font-weight: bold;
-      ${({theme}) => css`
+      ${({ theme }) => css`
         color: ${theme.normalText};
         transition: color ease ${theme.transitionTime};
 
@@ -194,7 +194,7 @@ const Navbar = styled.nav`
 const IconButton = styled(GhostButton)`
   svg {
     border-radius: 3px;
-    ${({theme}) => css`
+    ${({ theme }) => css`
       color: ${theme.main};
       border: 2px solid transparent;
       transition: all ease ${theme.transitionTime};
@@ -218,7 +218,7 @@ const IconMovingButton = styled(IconButton)`
 
 class NavigationBar extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isOpenAbout: false
     };
@@ -230,7 +230,9 @@ class NavigationBar extends Component {
   }
 
   render() {
-    const { user = {}, uiStyle, history, onRefresh } = this.props;
+    const {
+      user = {}, uiStyle, history, onRefresh
+    } = this.props;
     const { name } = user;
     const isEnhanced = uiStyle === 'enhanced';
     return (
@@ -260,13 +262,13 @@ class NavigationBar extends Component {
           </li>
           <li>
             <NavLink to="/app/summary/assigned">
-              { isEnhanced && (<ListIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+              { isEnhanced && (<ListIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
               Assigned
             </NavLink>
           </li>
           <li>
             <NavLink to="/app/summary/author">
-              { isEnhanced && (<ListIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+              { isEnhanced && (<ListIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
               Author
             </NavLink>
           </li>
@@ -276,15 +278,15 @@ class NavigationBar extends Component {
             <div className="Drop">
               <div className="Label">{name.charAt(0)}</div>
               <ul className="dropdown">
-                <li className="dropdown-ghost"></li>
+                <li className="dropdown-ghost" />
                 <li>
                   <NavLink to="/app/settings">
-                    { isEnhanced && (<GearIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+                    { isEnhanced && (<GearIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
                     Settings
                   </NavLink>
                 </li>
                 <li>
-                  <GhostButton onClick={() => this.setState({isOpenAbout: true})}>About Redshape</GhostButton>
+                  <GhostButton onClick={() => this.setState({ isOpenAbout: true })}>About Redshape</GhostButton>
                 </li>
                 <li>
                   <Name>{name}</Name>
@@ -294,18 +296,18 @@ class NavigationBar extends Component {
                     id="signout"
                     onClick={this.signout}
                   >
-                    {isEnhanced && (<LogoutIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+                    {isEnhanced && (<LogoutIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
                     Sign out
                   </GhostButton>
                 </li>
               </ul>
             </div>
           </Bubble>
-          ) : (
+        ) : (
           <ul>
             <li>
               <NavLink to="/app/settings">
-                { isEnhanced && (<GearIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+                { isEnhanced && (<GearIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
                 Settings
               </NavLink>
             </li>
@@ -317,7 +319,7 @@ class NavigationBar extends Component {
                 id="signout"
                 onClick={this.signout}
               >
-                {isEnhanced && (<LogoutIcon size={18} style={{marginTop:-2,marginRight:2}}/>)}
+                {isEnhanced && (<LogoutIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
                 Sign out
               </GhostButton>
             </li>
@@ -325,10 +327,10 @@ class NavigationBar extends Component {
         )}
         <Modal
           open={!!this.state.isOpenAbout}
-          onClose={() => this.setState({ isOpenAbout: false})}
+          onClose={() => this.setState({ isOpenAbout: false })}
           center={true}
         >
-          <AboutPage modal={true}></AboutPage>
+          <AboutPage modal={true} />
         </Modal>
       </Navbar>
     );

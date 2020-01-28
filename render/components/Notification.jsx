@@ -31,7 +31,7 @@ class Notification extends Component {
       </Fragment>
     );
   }
-};
+}
 
 Notification.propTypes = {
   error: PropTypes.instanceOf(Error).isRequired

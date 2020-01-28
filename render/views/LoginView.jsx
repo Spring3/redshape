@@ -66,11 +66,13 @@ class LoginView extends Component {
     }
   }
 
-  validate = ({ apiKey, username, password, redmineEndpoint }) => {
+  validate = ({
+    apiKey, username, password, redmineEndpoint
+  }) => {
     const errors = {
       redmineEndpoint: Joi.string().uri().required().validate(redmineEndpoint)
     };
-    if (this.state.useApiKey){
+    if (this.state.useApiKey) {
       errors.apiKey = Joi.string().required().validate(apiKey);
     } else {
       errors.username = Joi.string().required().validate(username);
@@ -87,7 +89,7 @@ class LoginView extends Component {
 
   onSubmit = (values, { setSubmitting }) => {
     const { checkLogin } = this.props;
-    checkLogin({...values, useApiKey: this.state.useApiKey}).then(() => {
+    checkLogin({ ...values, useApiKey: this.state.useApiKey }).then(() => {
       const { loginError, userId } = this.props;
       if (!loginError && userId) {
         this.props.history.push('/app/summary/assigned');
@@ -97,7 +99,7 @@ class LoginView extends Component {
   }
 
   onToggleLoginMode = () => {
-    this.setState({useApiKey: !this.state.useApiKey})
+    this.setState({ useApiKey: !this.state.useApiKey });
   }
 
   render() {
@@ -106,19 +108,21 @@ class LoginView extends Component {
       <Container>
         <DragArea />
         <Formik
-          initialValues={{username: '', password: '', apiKey: '', redmineEndpoint: ''}}
+          initialValues={{
+            username: '', password: '', apiKey: '', redmineEndpoint: ''
+          }}
           validate={this.validate}
           onSubmit={this.onSubmit}
         >
           {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting
-            }) => (
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting
+          }) => (
             <LoginForm onSubmit={handleSubmit}>
               <Headline>Redshape</Headline>
 
@@ -143,8 +147,12 @@ class LoginView extends Component {
                 htmlFor="loginMode"
               >
                 <label>
-                  <Input type="checkbox" name="loginMode" checked={this.state.useApiKey}
-                         onChange={this.onToggleLoginMode}/>
+                  <Input
+                    type="checkbox"
+                    name="loginMode"
+                    checked={this.state.useApiKey}
+                    onChange={this.onToggleLoginMode}
+                  />
                   <span>Use API Key</span>
                 </label>
               </Label>
@@ -230,7 +238,7 @@ LoginView.propTypes = {
   api_key: PropTypes.string,
   loginError: PropTypes.instanceOf(Error),
   checkLogin: PropTypes.func.isRequired
-}
+};
 
 const mapStateToProps = state => ({
   userId: state.user.id,

@@ -6,13 +6,13 @@ import storage from '../common/storage';
 import reducers from './reducers/index';
 import notificationMiddleware from './middlewares/notification.middleware';
 
+import { migrateSettings, migrateTracking } from '../common/migrations';
+
 const initialState = storage.store;
 
 const user = _get(initialState, 'user', {});
 const { id, redmineEndpoint } = user;
 const userSettings = _get(initialState, `settings.${redmineEndpoint}.${id}`);
-
-import { migrateSettings, migrateTracking } from '../common/migrations';
 
 export default createStore(reducers, {
   user,

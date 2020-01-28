@@ -496,8 +496,7 @@ exports[`MarkdownEditor component should match the snapshot 1`] = `
           />
         </svg>
         <span>
-           
-          Preview
+           Preview
         </span>
       </a>
     </li>

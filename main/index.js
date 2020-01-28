@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const { app, BrowserWindow, Menu, Notification, ipcMain } = require('electron');
+const {
+  app, BrowserWindow, Menu, Notification, ipcMain
+} = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
@@ -33,6 +35,7 @@ if (env.error || !process.env.ENCRYPTION_KEY) {
 }
 
 const config = require('../common/config');
+
 const { PORT } = config;
 require('../common/request'); // to initialize from storage
 
@@ -108,16 +111,16 @@ const generateMenu = () => {
     },
     // { role: 'viewMenu' }
     ...(isDev || process.env.DEV_TOOLS
-        ? [{
-          label: 'View',
-          submenu: [
-            { role: 'reload' },
-            { role: 'forcereload' },
-            { role: 'toggledevtools' },
-            { type: 'separator' }
-          ]
-        }]
-        : []
+      ? [{
+        label: 'View',
+        submenu: [
+          { role: 'reload' },
+          { role: 'forcereload' },
+          { role: 'toggledevtools' },
+          { type: 'separator' }
+        ]
+      }]
+      : []
     ),
     // { role: 'windowMenu' }
     {
@@ -151,7 +154,7 @@ const generateMenu = () => {
   ]);
 
   Menu.setApplicationMenu(menu);
-}
+};
 
 const initializeMenu = () => {
   generateMenu({});
@@ -236,7 +239,9 @@ const initialize = () => {
     mainWindow = null;
   });
 
-  setupTray({ app, mainWindow, NAME, windowConfig });
+  setupTray({
+    app, mainWindow, NAME, windowConfig
+  });
 
   ipcMain.on('notify', (ev, { message, critical, keep }) => {
     const notification = new Notification({
@@ -252,7 +257,6 @@ const initialize = () => {
   ipcMain.on('menu', () => {
     generateMenu();
   });
-
 };
 
 app.once('ready', () => {

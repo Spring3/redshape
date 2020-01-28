@@ -5,30 +5,22 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
 import styled, { withTheme } from 'styled-components';
-import { availableOptions } from "../../settings";
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
+import { availableOptions } from '../../settings';
 
 import actions from '../../actions';
 import { Label } from '../Input';
-import Tooltip from "../Tooltip";
-import HelpCircleIcon from "mdi-react/HelpCircleIcon";
+import Tooltip from '../Tooltip';
 
 const selectStyles = {
-  container: (base, state) => {
-    return { ...base };
-  },
-  multiValue: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
-      : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' };
-  },
-  multiValueLabel: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, paddingRight: 6, color: '#A4A4A4' }
-      : base;
-  },
-  multiValueRemove: (base, state) => {
-    return state.data.isFixed ? { ...base, display: 'none' } : base;
-  }
+  container: (base, state) => ({ ...base }),
+  multiValue: (base, state) => (state.data.isFixed
+    ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
+    : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' }),
+  multiValueLabel: (base, state) => (state.data.isFixed
+    ? { ...base, paddingRight: 6, color: '#A4A4A4' }
+    : base),
+  multiValueRemove: (base, state) => (state.data.isFixed ? { ...base, display: 'none' } : base)
 };
 
 const HelpIconStyled = styled(HelpCircleIcon)`
@@ -37,8 +29,8 @@ const HelpIconStyled = styled(HelpCircleIcon)`
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
-`
-const TableColumnsInfo = (<LabelIcon><Tooltip text="'Tags', 'Total Estimation', 'Total Spent'\nand 'Spent' need server-side support."><HelpIconStyled size={14}/></Tooltip></LabelIcon>)
+`;
+const TableColumnsInfo = (<LabelIcon><Tooltip text="'Tags', 'Total Estimation', 'Total Spent'\nand 'Spent' need server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 
 class ColumnHeadersSelect extends Component {
   constructor(props) {
@@ -74,7 +66,7 @@ class ColumnHeadersSelect extends Component {
           onChange={this.onHeadersSelectChange}
           isMulti={true}
           isClearable={false}
-          theme={(defaultTheme) => ({
+          theme={defaultTheme => ({
             ...defaultTheme,
             borderRadius: 3,
             colors: {

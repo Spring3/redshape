@@ -79,14 +79,14 @@ class SummaryPage extends Component {
       let queryFilter = new IssueFilter();
       if (showByAuthor) {
         queryFilter = queryFilter.author(userId);
-      }else {
+      } else {
         queryFilter = queryFilter.assignee(userId);
       }
       queryFilter = queryFilter
-          .status({ open: true, closed: showClosedIssues })
-          .title(search)
-          .sort(sortBy, sortDirection)
-          .build();
+        .status({ open: true, closed: showClosedIssues })
+        .title(search)
+        .sort(sortBy, sortDirection)
+        .build();
       this.props.fetchIssues(queryFilter, page);
     }
   }
@@ -103,8 +103,8 @@ class SummaryPage extends Component {
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
-      sortBy: sortBy,
-      sortDirection: sortDirection
+      sortBy,
+      sortDirection
     }, () => this.deboucedFetch());
   }
 
@@ -118,21 +118,23 @@ class SummaryPage extends Component {
     return (
       <Grid>
         <IssuesSection>
-          <h2>Issues { mode === 'author' ? 'created by' : 'assigned to'} me</h2>
+          <h2>
+            { mode === 'author' ? 'Issues created by me' : 'Issues assigned to me'}
+          </h2>
           <OptionsGrid>
-              <Input
-                icon={
-                  <MagnifyIcon
-                    xmlns="http://www.w3.org/2000/svg"
-                    color={theme.main}
-                  />
-                }
-                type="text"
-                name="search"
-                placeholder="Search..."
-                onChange={this.onSearchChange}
-              />
-              <Box>
+            <Input
+              icon={(
+                <MagnifyIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  color={theme.main}
+                />
+)}
+              type="text"
+              name="search"
+              placeholder="Search..."
+              onChange={this.onSearchChange}
+            />
+            <Box>
               <label>
                 <Input
                   type="checkbox"
@@ -141,7 +143,7 @@ class SummaryPage extends Component {
                 />
                 <span>Closed</span>
               </label>
-              </Box>
+            </Box>
           </OptionsGrid>
           <IssuesTable
             onSort={this.onSort}

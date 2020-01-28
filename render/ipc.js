@@ -4,8 +4,8 @@ import actions from './actions';
 
 let currentTimer;
 
-ipcRenderer.on('settings', (event, {key, value}) => {
-  switch(key){
+ipcRenderer.on('settings', (event, { key, value }) => {
+  switch (key) {
     case 'ADVANCED_SHOW_ADVANCED_TIMER_CONTROLS':
       store.dispatch(actions.settings.setShowAdvancedTimerControls(value));
       break;
@@ -17,16 +17,16 @@ ipcRenderer.on('settings', (event, {key, value}) => {
       break;
     case 'IDLE_BEHAVIOR':
       store.dispatch(actions.settings.setIdleBehavior(value));
-      if (currentTimer){
+      if (currentTimer) {
         currentTimer.resetIntervalIdle();
       }
       break;
   }
 });
 
-ipcRenderer.on('window', (event, {action}) => {
-  if (!currentTimer){ return; }
-  switch(action){
+ipcRenderer.on('window', (event, { action }) => {
+  if (!currentTimer) { return; }
+  switch (action) {
     case 'show':
       currentTimer.restoreFromTimestamp();
       break;
@@ -39,18 +39,18 @@ ipcRenderer.on('window', (event, {action}) => {
   }
 });
 
-ipcRenderer.on('timer', (ev, {action}) => {
-  if (!currentTimer){ return; }
+ipcRenderer.on('timer', (ev, { action }) => {
+  if (!currentTimer) { return; }
   const isTimestamped = currentTimer.isTimestamped(); // if timestamp != null, then mainWindowHidden
   if (isTimestamped) {
     currentTimer.restoreFromTimestamp(false);
   }
-  if (action === 'resume'){
+  if (action === 'resume') {
     currentTimer.onContinue();
-  }else if (action === 'pause'){
+  } else if (action === 'pause') {
     currentTimer.onPause();
   }
-  if (isTimestamped){
+  if (isTimestamped) {
     currentTimer.storeToTimestamp();
   }
 });

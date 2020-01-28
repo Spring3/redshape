@@ -25,7 +25,9 @@ export const initialState = {
   showClosedIssues: false,
   uiStyle: 'default',
   issueHeaders: [
-    { label: 'Id', isFixed: true, value: 'id', format: 'id' },
+    {
+      label: 'Id', isFixed: true, value: 'id', format: 'id'
+    },
     { label: 'Subject', isFixed: true, value: 'subject' },
     { label: 'Project', value: 'project.name' },
     { label: 'Tracker', value: 'tracker.name', format: 'tracker' },

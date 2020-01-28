@@ -225,7 +225,7 @@ describe('Issue actions', () => {
       });
       const getState = jest.fn().mockReturnValueOnce(state);
       axiosMock.onPut(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, undefined]));
-      axiosMock.onGet(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, { issue: { journals: [{id: 100, notes: comments}] } }]));
+      axiosMock.onGet(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, { issue: { journals: [{ id: 100, notes: comments }] } }]));
       await issuesActions.default.sendComments(issueId, comments)(dispatch, getState);
       expect(axiosMock.history.put.length).toBe(1);
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);

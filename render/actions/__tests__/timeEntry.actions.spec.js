@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import moment from 'moment';
 import { notify } from '../helper';
 import * as timeEntryActions from '../timeEntry.actions';
-import { hoursToDuration, durationToHours } from "../../datetime";
+import { hoursToDuration, durationToHours } from '../../datetime';
 import axios from '../../../common/request';
 
 const redmineEndpoint = 'redmine.test.com';
@@ -45,17 +45,17 @@ describe('Time actions', () => {
 
   describe('duration casts', () => {
     const casts = [
-      {hours: 0, duration: '0s'},
-      {hours: 1, duration: '1h'},
-      {hours: 0.50, duration: '30m'},
-      {hours: 1.50, duration: '1h 30m'},
-      {hours: 1.52, duration: '1h 31m 12s'},
-      {hours: 24.02, duration: '1d 1m 12s'},
+      { hours: 0, duration: '0s' },
+      { hours: 1, duration: '1h' },
+      { hours: 0.50, duration: '30m' },
+      { hours: 1.50, duration: '1h 30m' },
+      { hours: 1.52, duration: '1h 31m 12s' },
+      { hours: 24.02, duration: '1d 1m 12s' },
     ];
 
     it('should cast properly hours to duration', () => {
       expect(hoursToDuration(null)).toBe('');
-      for (const {hours, duration} of casts) {
+      for (const { hours, duration } of casts) {
         expect(hoursToDuration(hours)).toBe(duration);
       }
     });
@@ -67,7 +67,7 @@ describe('Time actions', () => {
       expect(() => {
         durationToHours(3);
       }).toThrow('is not a function');
-      for (const {hours, duration} of casts) {
+      for (const { hours, duration } of casts) {
         expect(durationToHours(duration)).toBe(hours);
       }
     });

@@ -17,11 +17,11 @@ import theme from '../../theme';
 
 import AppView from '../AppView';
 
-jest.mock('electron-store');
-
 import storage from '../../../common/storage';
 
 import { hoursToDuration } from '../../datetime';
+
+jest.mock('electron-store');
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
@@ -49,7 +49,9 @@ describe('AppView', () => {
   });
 
   it('should match the snapshot', () => {
-    axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+    axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, {
+      projects: [], totalCount: 10, offset: 0, limit: 10
+    }]));
     const store = mockStore({
       user: {
         id: 1,
@@ -124,7 +126,9 @@ describe('AppView', () => {
 
   describe('[integration] AppView', () => {
     it('should fetch projects data on mount', () => {
-      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, {
+        projects: [], totalCount: 10, offset: 0, limit: 10
+      }]));
       const store = mockStore({
         user: {
           id: 1,
@@ -200,7 +204,9 @@ describe('AppView', () => {
     });
 
     it('should logout when a user clicks the button', () => {
-      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, {
+        projects: [], totalCount: 10, offset: 0, limit: 10
+      }]));
       const store = mockStore({
         user: {
           id: 1,
@@ -284,7 +290,9 @@ describe('AppView', () => {
     });
 
     it('should open the modal with a new timeEntry if timer stops and wipe the storage', () => {
-      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, { projects: [], totalCount: 10, offset: 0, limit: 10 }]));
+      axiosMock.onGet('/projects.json').reply(() => Promise.resolve([200, {
+        projects: [], totalCount: 10, offset: 0, limit: 10
+      }]));
       const state = {
         user: {
           id: 1,
