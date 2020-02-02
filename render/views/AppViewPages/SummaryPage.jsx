@@ -148,6 +148,7 @@ class SummaryPage extends Component {
           <IssuesTable
             onSort={this.onSort}
             fetchIssuePage={this.fetchIssues}
+            view={mode}
           />
         </IssuesSection>
       </Grid>

@@ -109,10 +109,13 @@ exports[`SummaryPage => ColumnHeadersSelect componnet should match the snapshot 
             className="c7"
           >
             <span>
-              'Tags', 'Total Estimation', 'Total Spent'
+              'Tags', 'Total Estimation', 'Total Spent',
             </span>
             <span>
-              and 'Spent' need server-side support.
+              'Spent', 'Subtasks' and colored 'Parent'
+            </span>
+            <span>
+               need server-side support.
             </span>
           </div>
         </div>

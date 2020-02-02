@@ -38,7 +38,7 @@ const Table = styled.table`
 
       &:hover {
         cursor: pointer;
-        
+
         td {
           background: ${props => props.theme.bgDark};
         }
@@ -47,7 +47,7 @@ const Table = styled.table`
       td.due_date {
         white-space: nowrap;
       }
-      
+
       td.subject {
         text-align: left;
       }
@@ -66,11 +66,11 @@ const Table = styled.table`
           cursor: pointer;
           color: ${props => props.theme.main};
         }
-  
+
         svg {
           vertical-align: middle;
         }
-        
+
         &.subject {
           text-align: left;
         }
@@ -147,7 +147,7 @@ class IssuesTable extends Component {
     const { isEnhanced } = opts;
 
     if (isEnhanced) {
-      if (format === 'id' && isEnhanced) {
+      if (format === 'id' && isEnhanced && value) {
         return (<IssueId value={value} tracker={opts.tracker} />);
       } if (format === 'status' && isEnhanced) {
         return (<Status simple={true} value={value} />);
@@ -180,7 +180,7 @@ class IssuesTable extends Component {
 
   render() {
     const {
-      issueHeaders, issues, limit, uiStyle
+      issueHeaders, issues, limit, uiStyle, view
     } = this.props;
     const { sortBy, sortDirection } = this.state;
     let userTasks = issues.data;
@@ -188,13 +188,20 @@ class IssuesTable extends Component {
       userTasks = userTasks.slice(0, limit);
     }
     const isEnhanced = uiStyle === 'enhanced';
+    const issueHeadersFiltered = view != null ? issueHeaders.filter((header) => {
+      if (view === 'author') {
+        return (header.label === 'Author') ? null : header;
+      } if (view === 'assigned') {
+        return (header.label === 'Assigned') ? null : header;
+      }
+    }) : issueHeaders;
     return (
       <Fragment>
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
         <Table>
           <thead>
             <tr>
-              {issueHeaders.map(header => (
+              {issueHeadersFiltered.map(header => (
                 <th
                   key={header.value}
                   onClick={this.sortTable(header.value)}
@@ -224,11 +231,12 @@ class IssuesTable extends Component {
               {userTasks.map(task => (
                 <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
                   {
-                  issueHeaders.map((header) => {
+                  issueHeadersFiltered.map((header) => {
                     const opts = {};
                     if (isEnhanced) {
                       opts.isEnhanced = isEnhanced;
-                      opts.tracker = _get(task, 'tracker.id');
+                      const tracker = header.opts && header.opts.tracker;
+                      opts.tracker = _get(task, tracker || 'tracker.id');
                     }
                     const { format } = header;
                     const value = _get(task, header.value);

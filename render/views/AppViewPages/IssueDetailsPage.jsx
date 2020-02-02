@@ -288,7 +288,7 @@ Created
                 <div>Estimation: </div>
                 <div>
                   {
-                    estimated_hours && (
+                    estimated_hours > 0.0 && (
                       <TextMain>{`${estimated_hours.toFixed(2)} h`}</TextMain>
                     )
                   }
@@ -305,7 +305,7 @@ Created
                 <div>Time spent: </div>
                 <div>
                   {
-                    spent_hours && (
+                    spent_hours > 0.0 && (
                       <TextMain>{`${spent_hours.toFixed(2)} h`}</TextMain>
                     )
                   }

@@ -57,5 +57,9 @@ export const availableOptions = {
     { label: 'Author', value: 'author.name' },
     { label: 'Updated', value: 'updated_on', format: 'date' },
     { label: 'Created', value: 'created_on', format: 'date' },
+    { label: 'Subtasks', value: 'children', format: 'count' },
+    {
+      label: 'Parent', value: 'parent.id', format: 'id', opts: { tracker: 'parent.tracker' }
+    },
   ]
 };

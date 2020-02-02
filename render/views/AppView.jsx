@@ -121,7 +121,7 @@ class AppView extends Component {
         <Navbar onRefresh={this.onRefresh} />
         <Content>
           <Switch>
-            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage key="assigned" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage mode="assigned" key="assigned" {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" key="author" {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage key={props.match.params.id} {...props} ref={this.childRoutePage} />} />
