@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import _debounce from 'lodash/debounce';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
@@ -24,6 +25,7 @@ import actions from '../actions';
 
 import { durationToHours, hoursToDuration } from '../datetime';
 import CustomFields from './CustomFields';
+import MarkdownEditor from './MarkdownEditor';
 
 const FlexRow = styled.div`
 
@@ -155,7 +157,7 @@ class IssueModal extends Component {
     let customFieldsMap;
     if (propsIssueEntry) {
       const {
-        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields
+        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description
       } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
@@ -170,6 +172,7 @@ class IssueModal extends Component {
         customFieldsMap: {
           ...customFieldsMap
         },
+        description
       };
     }
     this.state = {
@@ -180,6 +183,8 @@ class IssueModal extends Component {
       statusTransitions,
       priorityTransitions,
     };
+
+    this.debouncedDescriptionChange = _debounce(this.onDescriptionChange, 300);
   }
 
   componentDidUpdate(oldProps) {
@@ -188,7 +193,7 @@ class IssueModal extends Component {
 
       if (issueEntry) {
         const {
-          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields
+          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description
         } = issueEntry;
         const statusTransitions = extractFromTransitions(transitions, 'status');
         const priorityTransitions = extractFromTransitions(transitions, 'priority');
@@ -204,6 +209,7 @@ class IssueModal extends Component {
             customFieldsMap: {
               ...customFieldsMap
             },
+            description
           },
           instance: new Date().getTime(),
           progress_info: done_ratio,
@@ -258,6 +264,14 @@ class IssueModal extends Component {
       this.onClose();
     }
   }
+
+  onDescriptionChange = description => this.setState({
+    issueEntry: {
+      ...this.state.issueEntry,
+      description
+    },
+    wasModified: true
+  });
 
   onDueDateChange = date => this.setState({
     issueEntry: {
@@ -337,7 +351,7 @@ class IssueModal extends Component {
       issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions
     } = this.state;
     const {
-      progress, estimated_duration, due_date, children, status, priority, customFieldsMap
+      progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description
     } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
@@ -523,6 +537,13 @@ class IssueModal extends Component {
             onChange={this.onFieldChange}
           />
         </Grid>
+        <Label label="Description" htmlFor="description">
+          <MarkdownEditor
+            isDisabled={disableField}
+            onChange={this.debouncedDescriptionChange}
+            initialValue={description}
+          />
+        </Label>
         <OptionButtons>
           <Button
             id="btn-update"
