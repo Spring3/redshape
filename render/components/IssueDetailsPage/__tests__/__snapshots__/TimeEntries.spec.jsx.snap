@@ -147,23 +147,26 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
 .c5 {
   position: relative;
   list-style-type: none;
-  padding: 0px 10px 10px 10px;
   border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
   background: #F9F9F9;
   box-shadow: inset 0px 0px 10px 0px #F9F9F9;
+  padding: 0px 15px 0px 10px;
+  border: 10px solid #F9F9F9;
+  border-width: 15px 0px 15px 10px;
 }
 
 .c5 li {
   cursor: pointer;
   display: block;
   padding: 10px;
-  margin: 10px auto 0px auto;
   border-radius: 3px;
   border: 1px solid #E9E9E9;
   background: #FFFFFF;
+  margin-top: 7px;
+  margin-bottom: 5px;
 }
 
 .c5 li div.status {
@@ -185,11 +188,11 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
   margin-left: 10px;
   visibility: hidden;
   position: absolute;
-  right: 0;
+  right: 3px;
   background: white;
   border-radius: 50%;
   border: 1px solid lightgray;
-  margin-top: -16px;
+  margin-top: -13px;
 }
 
 .c5 li div.status div {
@@ -254,7 +257,7 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
   margin-bottom: 0px;
   min-width: 100%;
   width: 0;
-  line-height: 2;
+  line-height: 1.5;
 }
 
 .c5 li:hover div:first-child a {

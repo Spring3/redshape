@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
+exports[`SettingsPage => OptionsBlock component should match the snapshot 1`] = `
 .c12 {
   border: 0;
   -webkit-clip: rect(0 0 0 0);
@@ -77,6 +77,8 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   left: 30px;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
@@ -114,6 +116,8 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -216,7 +220,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
   className="c0"
 >
   <div
-    className="form-group undefined c1"
+    className="form-group  c1"
   >
     <h4
       className="c2"
@@ -240,7 +244,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
             />
           </svg>
-          <p
+          <div
             className="tooltip c6 c7"
           >
             <div
@@ -255,8 +259,11 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               <span>
                 - Comments editable: needs server-side support to update notes (if valid permissions).
               </span>
+              <span>
+                - Custom Fields editable: needs server-side support to update them (if valid permissions).
+              </span>
             </div>
-          </p>
+          </div>
         </div>
       </span>
     </h4>
@@ -359,10 +366,42 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
           Comments are editable
         </span>
       </label>
+      <label>
+        <div
+          className="c10"
+        >
+          <input
+            checked={false}
+            className="c11 c12"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c13"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Custom fields are editable
+        </span>
+      </label>
     </div>
   </div>
   <div
-    className="form-group undefined c1"
+    className="form-group  c1"
   >
     <h4
       className="c2"
@@ -386,11 +425,11 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
               d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
             />
           </svg>
-          <p
+          <div
             className="tooltip c6 c14"
           >
             Detect if the system is idle to pause the timer.
-          </p>
+          </div>
         </div>
       </span>
     </h4>
@@ -544,7 +583,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     className="c15"
   >
     <div
-      className="form-group undefined c1"
+      className="form-group  c1"
     >
       <h4
         className="c2"
@@ -568,7 +607,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
                 d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
               />
             </svg>
-            <p
+            <div
               className="tooltip c6 c14"
             >
               <div
@@ -581,7 +620,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
                   (eg. killing/suspend/shutdown not working properly in your system).
                 </span>
               </div>
-            </p>
+            </div>
           </div>
         </span>
       </h4>
@@ -698,7 +737,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     className="c15"
   >
     <div
-      className="form-group undefined c1"
+      className="form-group  c1"
     >
       <h4
         className="c2"
@@ -722,11 +761,11 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
                 d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
               />
             </svg>
-            <p
+            <div
               className="tooltip c6 c14"
             >
               Use 10% unless you have server-side support.
-            </p>
+            </div>
           </div>
         </span>
       </h4>
@@ -843,7 +882,7 @@ exports[`SummaryPage => OptionsBlock component should match the snapshot 1`] = `
     className="c15"
   >
     <div
-      className="form-group undefined c1"
+      className="form-group  c1"
     >
       <h4
         className="c2"

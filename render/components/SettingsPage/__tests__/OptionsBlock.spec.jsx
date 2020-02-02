@@ -12,11 +12,16 @@ import {
   SETTINGS_UI_STYLE,
   SETTINGS_IDLE_BEHAVIOR,
   SETTINGS_PROGRESS_SLIDER,
-  SETTINGS_IDLE_TIME_DISCARD, SETTINGS_ISSUE_ALWAYS_EDITABLE, SETTINGS_TIMER_CHECKPOINT, SETTINGS_COMMENTS_EDITABLE,
+  SETTINGS_IDLE_TIME_DISCARD,
+  SETTINGS_ISSUE_ALWAYS_EDITABLE,
+  SETTINGS_TIMER_CHECKPOINT,
+  SETTINGS_COMMENTS_EDITABLE,
+  SETTINGS_CUSTOM_FIELDS_EDITABLE,
 } from '../../../actions/settings.actions';
 import OptionsBlock from '../OptionsBlock';
 import { getInstance, reset, initialize } from '../../../../common/request';
 import theme from '../../../theme';
+import { FIELD_GET_ALL } from '../../../actions/field.actions';
 
 const redmineEndpoint = 'redmint.test.test';
 const token = 'multipass';
@@ -24,7 +29,7 @@ const mockStore = configureStore([thunk]);
 
 let axiosMock;
 
-describe('SummaryPage => OptionsBlock component', () => {
+describe('SettingsPage => OptionsBlock component', () => {
   beforeAll(() => {
     initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(getInstance());
@@ -160,6 +165,45 @@ describe('SummaryPage => OptionsBlock component', () => {
     });
   });
 
+  it('should set use of customFields editable when select option is chosen', () => {
+    const state = {
+      settings: {
+        showAdvancedTimerControls: false,
+        showClosedIssues: true,
+        isIssueAlwaysEditable: false,
+        areCustomFieldsEditable: false,
+      },
+      user: {
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <OptionsBlock />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    wrapper.find('input[type="checkbox"]').at(3).simulate('change', { target: { checked: true } });
+    expect(store.getActions().length).toBe(2);
+    expect(store.getActions()[0]).toEqual({
+      type: SETTINGS_CUSTOM_FIELDS_EDITABLE,
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        areCustomFieldsEditable: true
+      }
+    });
+    expect(store.getActions()[1]).toEqual({
+      type: FIELD_GET_ALL,
+      info: {},
+      status: 'START'
+    });
+  });
+
   it('should set use of idle behavior when select option is chosen', () => {
     const state = {
       settings: {
@@ -195,7 +239,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
 
-    wrapper.find('input[type="checkbox"]').at(3).simulate('change', { target: { checked: true } });
+    wrapper.find('input[type="checkbox"]').at(4).simulate('change', { target: { checked: true } });
     expect(store.getActions().length).toBe(2);
     expect(store.getActions()[1]).toEqual({
       type: SETTINGS_IDLE_TIME_DISCARD,
@@ -217,7 +261,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     });
 
-    expect(wrapper.find('input[type="checkbox"]').at(3).props().checked).toBe(false);
+    expect(wrapper.find('input[type="checkbox"]').at(4).props().checked).toBe(false);
 
     selects.at(0).instance().selectOption({ label: 'Pause if idle for 5 minutes', value: '5m' });
     expect(store.getActions().length).toBe(4);

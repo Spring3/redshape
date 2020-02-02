@@ -15,6 +15,7 @@ import {
   SETTINGS_ISSUE_ALWAYS_EDITABLE,
   SETTINGS_COMMENTS_EDITABLE,
   SETTINGS_TIMER_CHECKPOINT,
+  SETTINGS_CUSTOM_FIELDS_EDITABLE,
 } from '../actions/settings.actions';
 
 export const initialState = {
@@ -39,6 +40,7 @@ export const initialState = {
   isIssueAlwaysEditable: false,
   areCommentsEditable: false,
   timerCheckpoint: 'none',
+  areCustomFieldsEditable: false,
   version,
 };
 
@@ -153,6 +155,15 @@ export default (state = initialState, action) => {
       const nextState = {
         ...state,
         timerCheckpoint,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_CUSTOM_FIELDS_EDITABLE: {
+      const { userId, redmineEndpoint, areCustomFieldsEditable } = action.data;
+      const nextState = {
+        ...state,
+        areCustomFieldsEditable,
       };
       storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;

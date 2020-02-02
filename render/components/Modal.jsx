@@ -16,7 +16,7 @@ class Modal extends Component {
 
     this.childRef = React.createRef();
 
-    const { theme } = this.props;
+    const { width, theme } = this.props;
     const bgColorHex = theme.bg.slice(1); // get rid of diez (#)
     const intColors = bgColorHex.split(/(?=(?:..)*$)/).map(str => parseInt(str, 16));
     const rgb = intColors.join(',');
@@ -30,6 +30,7 @@ class Modal extends Component {
         boxShadow: `0px 0px 20px ${theme.shadow}`,
         background: theme.bg,
         borderRadius: 3,
+        ...(width ? { width } : {})
       }
     };
   }

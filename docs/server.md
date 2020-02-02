@@ -393,23 +393,32 @@ More variations can be adapted under request.
 
 The following fields should be:
 
-- `name`: `string` type, to be shown in forms (label).
+- `name`: `string` type, to be shown as a label in forms.
 - `customized_type`: `"time_entry"` or `"issue"`.
 - `description` (optional): `null`, `undefined` or `string`. To be shown as tooltip.
-- `field_format`: `"list"`, `"string"`, `"float"` or `"int"`.
+- `field_format`: `"list"`, `"string"`, `"float"`, `"int"`, `"bool"`, `"text"`, `"date"` or `"link"`.
 - `is_required`: `true` or `false`.
-- `regexp`: `""` empty.
-- `min_length`: `null` not set.
-- `max_length`: `null` not set.
 - `default_value`: `string`, to be used when creating a new Time Entry.
 - `visible`: `true`.
-- `editable`: `true`.
-- `multiple`: `false`.
+- `multiple`: `false` or `true`. Only valid if used with type `"list"`.
 - `possible_values`: `[]` or `Value[]` (list of Value). Value: `{"value": "<string>", "label": "<string>"}`.
 - `is_computed` (optional): `null`, `undefined` or `false`.
+- `position` (optional): numeric order of the field.
 
 In case it does not match any of these, the custom field is discarded.
 
 The other fields are not processed.
 
+The fields:
+- `regexp`
+- `min_length`
+- `max_length`
 
+Are not processed. Therefore, no client-side validation is performed. When sending
+to the server, it will answer with an specific error if was not valid.
+
+The `default_value` is only assigned to the field when creating a new `TimeEntry`.
+
+To be considered an active/editable custom field, the field `visible` should be true.
+
+The field `"text"` is mapped as an `input`, not as a `textarea`.

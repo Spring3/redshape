@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 
@@ -59,22 +58,33 @@ const TimeEntriesContainer = styled.div`
 const TimeEntriesList = styled.ul`
   position: relative;
   list-style-type: none;
-  padding: 0px 10px 10px 10px;
   border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
   background: ${props => props.theme.bgDark};
   box-shadow: inset 0px 0px 10px 0px ${props => props.theme.bgDark};
+  ${props => (props.isEnhanced ? css`
+  padding: 0px 15px 0px 10px;
+  border: 10px solid ${props.theme.bgDark};
+  border-width: 15px 0px 15px 10px;
+  ` : css`
+  padding: 0px 10px 10px 10px;
+  `)}
 
   li {
     cursor: pointer;
     display: block;
     padding: 10px;
-    margin: 10px auto 0px auto;
     border-radius: 3px;
     border: 1px solid ${props => props.theme.bgDarker};
     background: ${props => props.theme.bg};
+    ${props => (props.isEnhanced ? css`
+    margin-top: 7px;
+    margin-bottom: 5px;
+    ` : css`
+    margin: 10px auto 0px auto;
+    `)}
 
     div.status {
       display: flex;
@@ -86,11 +96,13 @@ const TimeEntriesList = styled.ul`
         visibility: hidden;
         ${props => props.isEnhanced && css`
         position: absolute;
-        right: 0;
+        // right: 0;
+        right: 3px;
         background: white;
         border-radius: 50%;
         border: 1px solid lightgray;
-        margin-top: -16px;
+        // margin-top: -16px;
+        margin-top: -13px;
         `}
       }
 
@@ -146,7 +158,7 @@ const TimeEntriesList = styled.ul`
       margin-bottom: 0px;
       min-width: 100%;
       width: 0;
-      line-height: 2;
+      line-height: ${props => (props.isEnhanced ? 1.5 : 2)};
     }
 
     &:hover {
@@ -264,7 +276,7 @@ class TimeEntries extends Component {
                   <div className="status">
                     <div>
                       <span className="username">{timeEntry.user.name}</span>
-                      <span className="time">{`${timeEntry.hours} hours`}</span>
+                      <span className="time">{`${Number(timeEntry.hours.toFixed(2))} hours`}</span>
                       <DateComponent className="date" align={isEnhanced && 'right'} date={timeEntry.spent_on} />
                     </div>
                     {
@@ -288,9 +300,15 @@ class TimeEntries extends Component {
                   extra && (
                     <div className="extra">
                       {extra.map((el) => {
-                        let { value } = el;
-                        value = (value.length > 30) ? `${value.slice(0, 27)}...` : value;
-                        return (<span>{value}</span>);
+                        const { value, multiple } = el;
+                        let newValue = value || '';
+                        if (multiple && value) {
+                          newValue = value.join(', ');
+                        }
+                        if (newValue.length > 30) {
+                          newValue = `${newValue.slice(0, 27)}...`;
+                        }
+                        return (<span key={el.id || 0}>{newValue}</span>);
                       })}
                     </div>
                   )
@@ -321,34 +339,39 @@ TimeEntries.propTypes = {
   }).isRequired,
   userId: PropTypes.number.isRequired,
   userName: PropTypes.string.isRequired,
-  spentTime: PropTypes.arrayOf(PropTypes.shape({
-    activity: PropTypes.shape({
+  spentTime: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    limit: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    totalCount: PropTypes.number.isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({
+      activity: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      comments: PropTypes.string,
+      created_on: PropTypes.string.isRequired,
+      hours: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    comments: PropTypes.string,
-    created_on: PropTypes.string.isRequired,
-    hours: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    issue: PropTypes.shape({
-      id: PropTypes.number.isRequired
-    }).isRequired,
-    project: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    spent_on: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired
-  })).isRequired,
+      issue: PropTypes.shape({
+        id: PropTypes.number.isRequired
+      }).isRequired,
+      project: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      spent_on: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired
+    })).isRequired
+  }),
   isTimerEnabled: PropTypes.bool.isRequired,
   trackedIssueId: PropTypes.number,
   removeTimeEntry: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
   showTimeEntryModal: PropTypes.func.isRequired,
-  onRefresh: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired
 };
 

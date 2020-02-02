@@ -23,13 +23,24 @@ import 'rc-slider/assets/index.css';
 import actions from '../actions';
 
 import { durationToHours, hoursToDuration } from '../datetime';
+import CustomFields from './CustomFields';
 
 const FlexRow = styled.div`
-  display: flex;
-  justify-content: space-between;
+
 `;
 
 const Slider = RawSlider;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 250px 250px;
+  grid-column-gap: 40px;
+`;
+const GridRow = styled.div`
+  grid-column: 1 / -1;
+`;
+
+const inputStyle = { width: 250, minHeight: 38 };
 
 const OptionButtons = styled.div`
   position: relative;
@@ -52,14 +63,57 @@ const Title = styled.h4`
   font-size: 1rem;
 `;
 
-const LargeField = styled.div`
-  width: 350px;
+const ProgressInput = styled.div`
+  background: #EFEFEF;
+  border: 1px solid #A0A0A0;
+  height: 38px;
+  width: 538px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 3px;
+`;
+const Progress = styled.div`
+  background: white;
+  border-right: 1px solid #A0A0A0;
+  padding: 0 15px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
 `;
 const FieldAdjacentInfo = styled.div`
   align-self: center;
   color: gray;
-  margin-left: 0.5rem;
-  min-width: 10rem;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+const DurationInfo = styled.div`
+  color: gray;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 87px;
+  height: 36px;
+  border: 1px solid #A0A0A0;
+  border-radius: 0 3px 3px 0;
+  border-left: 0;
+  margin-left: -1px;
+  &[disabled] {
+    border-color: #E9E9E9;
+  }
+`;
+const CombinedInput = styled.div`
+  background: #EFEFEF;
+  height: 36px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 3px;
 `;
 
 const ClockIconStyled = styled(ClockIcon)`
@@ -75,7 +129,9 @@ const LabelIcon = styled.span`
 const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const compSelectStyles = {
-  container: (base, state) => ({ ...base, minWidth: 185, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
+  container: (base, state) => ({
+    ...base, minWidth: 250, maxWidth: 250, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0'
+  }),
   control: (base, state) => ({ ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
 };
 
@@ -93,15 +149,17 @@ class IssueModal extends Component {
   constructor(props) {
     super(props);
     const propsIssueEntry = props.issueEntry;
-    let issueEntry = {};
+    let issueEntry = { customFieldsMap: {} };
     let statusTransitions;
     let priorityTransitions;
+    let customFieldsMap;
     if (propsIssueEntry) {
       const {
-        estimated_hours, done_ratio, due_date, children, transitions, status, priority
+        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields
       } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
+      customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
       issueEntry = {
         estimated_duration: hoursToDuration(estimated_hours),
         progress: done_ratio,
@@ -109,6 +167,9 @@ class IssueModal extends Component {
         children: children ? children.length : 0,
         ...(statusTransitions && { status: { value: status.id, label: status.name } }),
         ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
+        customFieldsMap: {
+          ...customFieldsMap
+        },
       };
     }
     this.state = {
@@ -127,12 +188,12 @@ class IssueModal extends Component {
 
       if (issueEntry) {
         const {
-          estimated_hours, done_ratio, due_date, children, transitions, status, priority
+          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields
         } = issueEntry;
         const statusTransitions = extractFromTransitions(transitions, 'status');
         const priorityTransitions = extractFromTransitions(transitions, 'priority');
+        const customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
         this.setState({
-          // issueEntry,
           issueEntry: {
             estimated_duration: hoursToDuration(estimated_hours),
             progress: done_ratio,
@@ -140,6 +201,9 @@ class IssueModal extends Component {
             children: children ? children.length : 0,
             ...(statusTransitions && { status: { value: status.id, label: status.name } }),
             ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
+            customFieldsMap: {
+              ...customFieldsMap
+            },
           },
           instance: new Date().getTime(),
           progress_info: done_ratio,
@@ -168,6 +232,15 @@ class IssueModal extends Component {
     }, checkFields);
   }
 
+  onClose = () => {
+    this.setState({
+      issueEntry: {
+        customFieldsMap: {}
+      }
+    });
+    this.props.onClose();
+  }
+
   onUpdate = () => {
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
@@ -178,11 +251,11 @@ class IssueModal extends Component {
             if (!unchanged) {
               this.props.issueGet(this.props.issueEntry.id);
             }
-            this.props.onClose();
+            this.onClose();
           }
         });
     } else {
-      this.props.onClose();
+      this.onClose();
     }
   }
 
@@ -235,6 +308,22 @@ class IssueModal extends Component {
     });
   }
 
+  onFieldChange = (name, value) => {
+    const { issueEntry } = this.state;
+    const { customFieldsMap } = issueEntry;
+    const newState = {
+      issueEntry: {
+        ...issueEntry,
+      },
+      wasModified: true
+    };
+    newState.issueEntry.customFieldsMap = {
+      ...customFieldsMap,
+      [name]: value
+    };
+    this.setState(newState);
+  }
+
   getErrorMessage = (error) => {
     if (!error) return null;
     return error.message.replace(new RegExp(error.context.key, 'g'), error.path[0]);
@@ -242,13 +331,13 @@ class IssueModal extends Component {
 
   render() {
     const {
-      isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable
+      isUserAuthor, isOpen, isEditable, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable
     } = this.props;
     const {
       issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions
     } = this.state;
     const {
-      progress, estimated_duration, due_date, children, status, priority
+      progress, estimated_duration, due_date, children, status, priority, customFieldsMap
     } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
@@ -268,39 +357,32 @@ class IssueModal extends Component {
     }
     const progressInfo = `${progress_info.toFixed(0)}%`;
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
-    const { assigned_to } = propsIssueEntry;
+    const { assigned_to, author } = propsIssueEntry;
     return (
       <Modal
+        width={540}
         open={!!isOpen}
-        onClose={onClose}
+        onClose={this.onClose}
         needConfirm={wasModified}
         center={true}
       >
-        <Fragment>
-          <FlexRow>
-            <Title>
-Edit issue
-              <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Fields 'Status' and 'Priority' need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
-            </Title>
-          </FlexRow>
-          <FlexRow>
-            <Label htmlFor="assignee" label="Assignee">
-              <div name="assignee">{assigned_to && assigned_to.name}</div>
-            </Label>
-          </FlexRow>
-          <FlexRow>
-            <Label htmlFor="issue" label="Issue">
-              <div name="issue">
-#
-                {propsIssueEntry.id}
-                {propsIssueEntry.subject}
-              </div>
-            </Label>
-          </FlexRow>
-          <FlexRow>
-            {
+        <Title>
+            Edit issue
+          <LabelIcon><Tooltip text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- Fields 'Status' and 'Priority' need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
+        </Title>
+        <Label htmlFor="issue" label="Issue">
+          <div name="issue">{`#${propsIssueEntry.id} ${propsIssueEntry.subject}`}</div>
+        </Label>
+        <Grid>
+          <Label htmlFor="author" label="Author">
+            <div name="author">{author.name}</div>
+          </Label>
+          <Label htmlFor="assignee" label="Assignee">
+            <div name="assignee">{assigned_to && assigned_to.name}</div>
+          </Label>
+          {
             status != null && (
-              <LargeField>
+              <div>
                 <Label htmlFor="status" label="Status">
                   <FlexRow>
                     <Select
@@ -326,10 +408,10 @@ Edit issue
                     {this.getErrorMessage(validationErrors.status)}
                   </ErrorMessage>
                 </Label>
-              </LargeField>
+              </div>
             )
           }
-            {
+          {
             priority != null && (
               <div>
                 <Label htmlFor="priority" label="Priority">
@@ -360,13 +442,12 @@ Edit issue
               </div>
             )
           }
-          </FlexRow>
-          <FlexRow>
-            <LargeField>
-              <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
-                <FlexRow>
+          <div>
+            <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
+              <FlexRow>
+                <CombinedInput>
                   <Input
-                    style={{ width: 185 }}
+                    style={{ ...inputStyle, width: 163 }}
                     type="text"
                     name="estimated_duration"
                     value={estimated_duration}
@@ -374,19 +455,20 @@ Edit issue
                     disabled={disableField}
                     onChange={this.onEstimatedDurationChange}
                   />
-                  <FieldAdjacentInfo>{estimatedDurationInfo}</FieldAdjacentInfo>
-                </FlexRow>
-              </Label>
-              <ErrorMessage show={!!validationErrors.estimated_duration}>
-                {this.getErrorMessage(validationErrors.estimated_duration)}
-              </ErrorMessage>
-            </LargeField>
-            {
+                  <DurationInfo>{estimatedDurationInfo}</DurationInfo>
+                </CombinedInput>
+              </FlexRow>
+            </Label>
+            <ErrorMessage show={!!validationErrors.estimated_duration}>
+              {this.getErrorMessage(validationErrors.estimated_duration)}
+            </ErrorMessage>
+          </div>
+          {
               !children && (
               <div>
                 <Label htmlFor="due_date" label="Due date">
                   <DatePicker
-                    style={{ width: 185 }}
+                    style={inputStyle}
                     key={instance}
                     name="due_date"
                     value={due_date}
@@ -399,16 +481,16 @@ Edit issue
                 </ErrorMessage>
               </div>
               )}
-          </FlexRow>
           {
             !children && (
-              <FlexRow>
-                <div>
-                  <Label htmlFor="progress" label="Progress">
-                    <FlexRow>
+            <GridRow>
+              <Label htmlFor="progress" label="Progress">
+                <FlexRow>
+                  <ProgressInput>
+                    <Progress>
                       <Slider
-                        style={{ width: 180 }}
-                        // bugfix: avoid sloppy dragging (value/onChange) using this key
+                        style={{ width: 470 }}
+                            // bugfix: avoid sloppy dragging (value/onChange) using this key
                         key={instance}
                         name="progress"
                         tipProps={{ placement: 'right' }}
@@ -423,27 +505,35 @@ Edit issue
                         disabled={disableField}
                         onAfterChange={value => this.onProgressChange(value) && this.runValidation('progress')}
                       />
-                      <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
-                    </FlexRow>
-                  </Label>
-                  <ErrorMessage show={!!validationErrors.progress}>
-                    {this.getErrorMessage(validationErrors.progress)}
-                  </ErrorMessage>
-                </div>
-              </FlexRow>
-            )}
-          <OptionButtons>
-            <Button
-              id="btn-update"
-              onClick={this.onUpdate}
-              disabled={issue.isFetching}
-              palette="success"
-            >
+                    </Progress>
+                    <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
+                  </ProgressInput>
+                </FlexRow>
+              </Label>
+              <ErrorMessage show={!!validationErrors.progress}>
+                {this.getErrorMessage(validationErrors.progress)}
+              </ErrorMessage>
+            </GridRow>
+            )
+          }
+          <CustomFields
+            type="issue"
+            customFieldsMap={customFieldsMap}
+            isDisabled={disableField}
+            onChange={this.onFieldChange}
+          />
+        </Grid>
+        <OptionButtons>
+          <Button
+            id="btn-update"
+            onClick={this.onUpdate}
+            disabled={issue.isFetching}
+            palette="success"
+          >
               Submit
-            </Button>
-            { issue.isFetching && (<ProcessIndicator />) }
-          </OptionButtons>
-        </Fragment>
+          </Button>
+          { issue.isFetching && (<ProcessIndicator />) }
+        </OptionButtons>
       </Modal>
     );
   }
@@ -493,7 +583,7 @@ IssueModal.propTypes = {
     custom_fields: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired
     })),
     tags: PropTypes.arrayOf(PropTypes.string.isRequired),
     transitions: PropTypes.shape({
@@ -524,6 +614,7 @@ const mapStateToProps = state => ({
   issue: state.issue,
   progressSlider: state.settings.progressSlider,
   isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
+  fieldsData: state.fields.data,
 });
 
 const mapDispatchToProps = dispatch => ({

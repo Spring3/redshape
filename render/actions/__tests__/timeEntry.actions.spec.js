@@ -429,9 +429,10 @@ describe('Time actions', () => {
       expect(axiosMock.history.put[0].data).toEqual(JSON.stringify({
         time_entry: {
           comments: changes.comments,
-          hours: changes.hours,
+          // hours: changes.hours,
           activity_id: changes.activity.id,
-          spent_on: moment(changes.spent_on).format('YYYY-MM-DD')
+          // spent_on: moment(changes.spent_on).format('YYYY-MM-DD')
+          id: 1,
         }
       }));
       expect(axiosMock.history.put[0].headers['X-Redmine-API-Key']).toBe(token);

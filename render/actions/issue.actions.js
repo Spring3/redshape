@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import moment from 'moment';
+import { isEqual as _isEqual } from 'lodash';
 import request, { notify } from './helper';
 
 import { durationToHours, hoursToDuration } from '../datetime';
@@ -43,6 +44,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
       value: Joi.number().integer().required(),
       label: Joi.string().required(),
     }),
+    customFieldsMap: Joi.object()
   };
   if (checkFields) {
     if (!(checkFields instanceof Array)) {
@@ -62,7 +64,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
 
 const validateBeforeUpdate = (issueEntry, checkFields) => {
   if (!checkFields) {
-    checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority'];
+    checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority', 'customFieldsMap'];
   }
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
   return validationResult.error
@@ -104,6 +106,23 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
   if (priority != null && originalIssueEntry.priority != null && originalIssueEntry.priority.id !== priority.value) {
     updates.priority_id = priority.value;
   }
+  const { customFieldsMap } = changes;
+  if (customFieldsMap != null && originalIssueEntry.custom_fields != null) {
+    const customFieldsChanges = originalIssueEntry.custom_fields.map(({
+      id, multiple, name, value
+    }) => {
+      let changed = customFieldsMap[name];
+      if (multiple) { // mutate arrays, compare values
+        value = value ? value.sort() : value;
+        changed = changed ? changed.sort() : changed;
+      }
+      return _isEqual(changed, value) ? null : { id, name, value: changed };
+    }).filter(el => el != null);
+    if (customFieldsChanges.length) {
+      updates.custom_fields = customFieldsChanges;
+    }
+  }
+
   if (!Object.keys(updates).length) {
     return Promise.resolve({ unchanged: true });
   }

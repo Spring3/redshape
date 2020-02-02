@@ -77,6 +77,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -137,6 +140,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -213,6 +219,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -273,6 +282,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       },
       user: {
         id: 1
@@ -354,6 +366,9 @@ describe('TimeEntryModal Component', () => {
       settings: {
         uiStyle: 'enhanced'
       },
+      fields: {
+        data: {}
+      },
       user: {
         id: 1
       }
@@ -369,7 +384,7 @@ describe('TimeEntryModal Component', () => {
 
     const modal = wrapper.find('TimeEntryModal').instance();
     expect(modal).toBeTruthy();
-    modal.setState({ wasModified: true });
+    modal.setState({ timeEntry: { ...modal.state.timeEntry, spent_on: '2011-02-02' }, wasModified: true });
 
     expect(wrapper.exists('#btn-update')).toBe(true);
     const actionSpy = jest.spyOn(actions.default, 'update');
@@ -431,6 +446,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -503,6 +521,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -566,6 +587,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -636,6 +660,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -706,6 +733,9 @@ describe('TimeEntryModal Component', () => {
       },
       settings: {
         uiStyle: 'enhanced'
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);

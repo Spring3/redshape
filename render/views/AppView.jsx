@@ -60,10 +60,16 @@ class AppView extends Component {
 
   componentWillMount() {
     this.props.getProjectData();
+    const { areCustomFieldsEditable } = this.props;
+    if (areCustomFieldsEditable) {
+      this.props.getFieldsData();
+    }
   }
 
   onTrackingStop = (trackedIssue, value, comments) => {
-    const { userId, userName, projects } = this.props;
+    const {
+      userId, userName, projects
+    } = this.props;
     const activities = _get(projects[trackedIssue.project.id], 'activities', []);
     const hours = parseFloat((value / 3600000).toFixed(3));
     this.setState({
@@ -115,10 +121,10 @@ class AppView extends Component {
         <Navbar onRefresh={this.onRefresh} />
         <Content>
           <Switch>
-            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage {...props} ref={this.childRoutePage} />} />
-            <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage key="assigned" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" key="author" {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage} />} />
-            <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage key={props.match.params.id} {...props} ref={this.childRoutePage} />} />
             <Redirect to={`${match.path}/summary/assigned`} />
           </Switch>
           <Timer
@@ -160,6 +166,7 @@ AppView.propTypes = {
   idleTimeDiscard: PropTypes.bool.isRequired,
   showAdvancedTimerControls: PropTypes.bool.isRequired,
   progressSlider: PropTypes.string.isRequired,
+  areCustomFieldsEditable: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -171,11 +178,13 @@ const mapStateToProps = state => ({
   idleTimeDiscard: state.settings.idleTimeDiscard,
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
   progressSlider: state.settings.progressSlider,
+  areCustomFieldsEditable: state.settings.areCustomFieldsEditable,
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
+  getFieldsData: () => dispatch(actions.fields.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset())
 });
 

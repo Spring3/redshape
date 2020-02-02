@@ -333,15 +333,18 @@ class CommentsSection extends Component {
 
 CommentsSection.propTypes = {
   issueId: PropTypes.number.isRequired,
-  journalEntries: PropTypes.arrayOf(PropTypes.shape({
-    notes: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    created_on: PropTypes.string.isRequired
-  }).isRequired).isRequired,
-  areCommentsEditable: PropTypes.func.isRequired,
+  journalEntries: PropTypes.shape({
+    timestamp: PropTypes.object.isRequired,
+    entries: PropTypes.arrayOf(PropTypes.shape({
+      notes: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      created_on: PropTypes.string.isRequired
+    }).isRequired).isRequired
+  }).isRequired,
+  areCommentsEditable: PropTypes.bool.isRequired,
   publishComments: PropTypes.func.isRequired,
   publishUpdateComments: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,

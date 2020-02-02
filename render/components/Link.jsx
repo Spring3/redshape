@@ -50,7 +50,7 @@ Link.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['external', undefined, null]),
-  href: PropTypes.string.isRequired,
+  href: PropTypes.string,
   onClick: PropTypes.func
 };
 

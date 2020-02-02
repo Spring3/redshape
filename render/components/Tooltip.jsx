@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
-const TooltipText = styled.p`
+const TooltipText = styled.div`
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -16,15 +16,18 @@ const TooltipText = styled.p`
   box-shadow: 0px 2px 7px ${props => props.theme.minorText};
   z-index: 99;
 
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+
   &::after {
     content: ' ';
     position: absolute;
-    width: auto;    
+    width: auto;
     border: 2px solid black;
     border-width: 5px;
     border-color: ${props => props.theme.bg} transparent transparent transparent;
   }
-  
+
   ${props => (props.position === 'top' ? css`
     transform: translateX(-50%);
     // transform: translate(-50%, -50%);
@@ -32,20 +35,20 @@ const TooltipText = styled.p`
     // top: -50px;
     bottom: 75%;
     left: 50%;
-    
+
     &::after {
       top: 100%;
-      left: 50%; 
+      left: 50%;
       transform: translateX(-50%);
     }
   ` : css`
     left: 30px;
     transform: translateY(-50%);
     top: calc(-50% + 5px);
-    
+
     &::after {
       top: calc(50% - 5px);
-      left: -10px; 
+      left: -10px;
       transform: rotate(90deg);
     }
   `)}
@@ -78,7 +81,7 @@ class Tooltip extends Component {
         className={className}
       >
         {children}
-        <TooltipText position={position || 'top'} className="tooltip">{ lines.length > 1 ? (<TooltipMultiline>{ lines.map(el => (<span>{el}</span>))}</TooltipMultiline>) : text }</TooltipText>
+        <TooltipText position={position || 'top'} className="tooltip">{ lines.length > 1 ? (<TooltipMultiline>{ lines.map((el, i) => (<span key={i}>{el}</span>))}</TooltipMultiline>) : text }</TooltipText>
       </TooltipContainer>
     );
   }

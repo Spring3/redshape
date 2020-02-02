@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isEqual as _isEqual } from 'lodash';
 import moment from 'moment';
 import Joi from '@hapi/joi';
 import request, { notify } from './helper';
@@ -41,7 +41,8 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
     hours: Joi.number().positive().precision(2).required()
       .label('duration'),
     comments: Joi.string().required().allow(''),
-    spent_on: Joi.string().required()
+    spent_on: Joi.string().required(),
+    customFieldsMap: Joi.object()
   };
   if (checkFields) {
     if (!(checkFields instanceof Array)) {
@@ -68,7 +69,10 @@ const validateBeforePublish = (timeEntry, checkFields) => {
     : { type: TIME_ENTRY_PUBLISH_VALIDATION_PASSED };
 };
 
-const publish = timeEntryData => (dispatch, getState) => {
+/**
+ * @param fieldsData - used if editing custom fields
+ */
+const publish = (timeEntryData, extra) => (dispatch, getState) => {
   const validationAction = validateBeforePublish(timeEntryData);
   dispatch(validationAction);
 
@@ -77,20 +81,36 @@ const publish = timeEntryData => (dispatch, getState) => {
   }
 
   const { user = {} } = getState();
+
+  const timeEntry = {
+    issue_id: timeEntryData.issue.id,
+    spent_on: moment(timeEntryData.spent_on).format('YYYY-MM-DD'),
+    hours: timeEntryData.hours,
+    activity_id: timeEntryData.activity.id,
+    comments: timeEntryData.comments,
+    user_id: user.id || timeEntryData.user.id
+  };
+
+  const fieldsData = extra && extra.fieldsData;
+
+  const { customFieldsMap } = timeEntryData;
+  if (customFieldsMap != null && fieldsData && fieldsData.time_entry) {
+    const customFields = fieldsData.time_entry.map(({ id, multiple, name }) => {
+      const value = customFieldsMap[name];
+      return { id, name, value };
+    }).filter(el => el != null);
+    if (customFields.length) {
+      timeEntry.custom_fields = customFields;
+    }
+  }
+
   dispatch(notify.start(TIME_ENTRY_PUBLISH));
 
   return request({
     url: '/time_entries.json',
     method: 'POST',
     data: {
-      time_entry: {
-        issue_id: timeEntryData.issue.id,
-        spent_on: moment(timeEntryData.spent_on).format('YYYY-MM-DD'),
-        hours: timeEntryData.hours,
-        activity_id: timeEntryData.activity.id,
-        comments: timeEntryData.comments,
-        user_id: user.id || timeEntryData.user.id
-      }
+      time_entry: timeEntry
     }
   })
     .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_PUBLISH, data)))
@@ -102,7 +122,7 @@ const publish = timeEntryData => (dispatch, getState) => {
 
 const validateBeforeUpdate = (timeEntry, checkFields) => {
   if (!checkFields) {
-    checkFields = ['activity', 'duration', 'hours', 'comments', 'spent_on'];
+    checkFields = ['activity', 'duration', 'hours', 'comments', 'spent_on', 'customFieldsMap'];
   }
   const validationResult = validateBeforeCommon(timeEntry, checkFields);
   return validationResult.error
@@ -121,19 +141,46 @@ const update = (originalTimeEntry, changes) => (dispatch) => {
     return Promise.resolve();
   }
 
-  const mergeable = _.pick(changes, 'comments', 'hours', {});
+  const updates = {};
 
-  const updates = {
-    ...mergeable
-  };
-
-  if (changes.activity) {
-    updates.activity_id = changes.activity.id;
+  const { hours } = changes;
+  if (originalTimeEntry.hours !== hours) {
+    updates.hours = hours;
   }
-
-  if (changes.spent_on) {
+  const { comments } = changes;
+  if (originalTimeEntry.comments !== comments) {
+    updates.comments = comments;
+  }
+  const spent_on = changes.spent_on || null;
+  if (originalTimeEntry.spent_on !== spent_on) {
     updates.spent_on = moment(changes.spent_on).format('YYYY-MM-DD');
   }
+  const activity_id = changes.activity && changes.activity.id;
+  if (originalTimeEntry.activity.id !== activity_id) {
+    updates.activity_id = activity_id;
+  }
+
+  const { customFieldsMap } = changes;
+  if (customFieldsMap != null && originalTimeEntry.custom_fields != null) {
+    const customFieldsChanges = originalTimeEntry.custom_fields.map(({
+      id, multiple, name, value
+    }) => {
+      let changed = customFieldsMap[name];
+      if (multiple) { // mutate arrays, compare values
+        value = value ? value.sort() : value;
+        changed = changed ? changed.sort() : changed;
+      }
+      return _isEqual(changed, value) ? null : { id, name, value: changed };
+    }).filter(el => el != null);
+    if (customFieldsChanges.length) {
+      updates.custom_fields = customFieldsChanges;
+    }
+  }
+
+  if (!Object.keys(updates).length) {
+    return Promise.resolve({ unchanged: true });
+  }
+  updates.id = originalTimeEntry.id;
 
   dispatch(notify.start(TIME_ENTRY_UPDATE));
 
@@ -146,12 +193,21 @@ const update = (originalTimeEntry, changes) => (dispatch) => {
   }).then(() => {
     const updatedTimeEntry = {
       ...originalTimeEntry,
-      spent_on: updates.spent_on,
-      comments: updates.comments,
-      hours: updates.hours,
+      ...updates
     };
-    if (changes.activity) {
+    if (updates.activity_id != null) {
       updatedTimeEntry.activity = changes.activity;
+      delete updatedTimeEntry.activity_id;
+    }
+    if (updates.custom_fields) {
+      const updatedFields = Object.fromEntries(updates.custom_fields.map(el => [el.id, el.value]));
+      updatedTimeEntry.custom_fields = originalTimeEntry.custom_fields.map((el) => {
+        const { id } = el;
+        if (updatedFields.hasOwnProperty(id)) {
+          el.value = updatedFields[id];
+        }
+        return el;
+      });
     }
     return dispatch(notify.ok(TIME_ENTRY_UPDATE, updatedTimeEntry));
   })

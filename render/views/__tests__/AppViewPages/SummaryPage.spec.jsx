@@ -55,6 +55,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     });
     const tree = renderer.create(
@@ -90,6 +93,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -136,6 +142,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -175,6 +184,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -220,6 +232,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);
@@ -266,6 +281,9 @@ describe('AppView -> Summary Page', () => {
           { label: 'Id', isFixed: true, value: 'id' },
           { label: 'Subject', isFixed: true, value: 'subject' }
         ]
+      },
+      fields: {
+        data: {}
       }
     };
     const store = mockStore(state);

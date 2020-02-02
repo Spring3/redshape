@@ -30,8 +30,12 @@ export const migrateSettings = (s) => {
           if (patch < 2) { // 1.3.0, 1.3.1: not public
             const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
             keys.forEach(key => s[key] = initialStateSettings[key]);
-            return s;
           }
+          if (patch < 3) {
+            const keys = ['areCustomFieldsEditable', 'version'];
+            keys.forEach(key => s[key] = initialStateSettings[key]);
+          }
+          return s;
         }
         console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
         return initialStateSettings;
@@ -91,8 +95,12 @@ export const migrateSettings = (s) => {
     settings.issueHeaders = headers;
   }
 
+  let keys;
   // 1.3.2
-  const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint'];
+  keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint'];
+  keys.forEach(key => settings[key] = initialStateSettings[key]);
+  // 1.3.3
+  keys = ['areCustomFieldsEditable'];
   keys.forEach(key => settings[key] = initialStateSettings[key]);
 
   return settings;

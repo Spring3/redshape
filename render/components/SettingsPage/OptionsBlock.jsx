@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
 
@@ -23,7 +22,7 @@ const DiscardLabel = styled.label`
 `;
 
 const compSelectStyles = {
-  container: (base, state) => ({ ...base, minWidth: 240 }),
+  container: base => ({ ...base, minWidth: 240 }),
 };
 
 const HelpIconStyled = styled(HelpCircleIcon)`
@@ -33,7 +32,7 @@ const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
 `;
-const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions).\n- Custom Fields editable: needs server-side support to update them (if valid permissions)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const TimerBehaviorInfo = (<LabelIcon><Tooltip text="Detect if the system is idle to pause the timer."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const CheckpointInfo = (<LabelIcon><Tooltip text="Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
@@ -108,6 +107,15 @@ class OptionsBlock extends Component {
     settingsCommentsEditable(!areCommentsEditable);
   }
 
+  toggleCustomFieldsEditable = () => {
+    const { settingsCustomFieldsEditable, areCustomFieldsEditable, getFieldsData } = this.props;
+    const nowAreCustomFieldsEditable = !areCustomFieldsEditable;
+    settingsCustomFieldsEditable(nowAreCustomFieldsEditable);
+    if (nowAreCustomFieldsEditable) {
+      getFieldsData();
+    }
+  }
+
   onTimerCheckpointChange = (timerCheckpoint) => {
     const { settingsTimerCheckpoint } = this.props;
     settingsTimerCheckpoint(timerCheckpoint.value);
@@ -115,7 +123,7 @@ class OptionsBlock extends Component {
 
   render() {
     const {
-      showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable
+      showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable, areCustomFieldsEditable
     } = this.props;
     const values = {
       idleBehavior, progressSlider, uiStyle, timerCheckpoint
@@ -150,6 +158,14 @@ class OptionsBlock extends Component {
                 onChange={this.toggleCommentsEditable}
               />
               <span>Comments are editable</span>
+            </label>
+            <label>
+              <Input
+                type="checkbox"
+                checked={areCustomFieldsEditable}
+                onChange={this.toggleCustomFieldsEditable}
+              />
+              <span>Custom fields are editable</span>
             </label>
           </OptionList>
         </Label>
@@ -264,6 +280,7 @@ OptionsBlock.propTypes = {
   progressSlider: PropTypes.string.isRequired,
   isIssueAlwaysEditable: PropTypes.bool.isRequired,
   areCommentsEditable: PropTypes.bool.isRequired,
+  areCustomFieldsEditable: PropTypes.bool.isRequired,
   timerCheckpoint: PropTypes.string.isRequired,
   settingsShowAdvancedTimerControls: PropTypes.func.isRequired,
   settingsUiStyle: PropTypes.func.isRequired,
@@ -272,6 +289,7 @@ OptionsBlock.propTypes = {
   settingsProgressSlider: PropTypes.func.isRequired,
   settingsIssueAlwaysEditable: PropTypes.func.isRequired,
   settingsCommentsEditable: PropTypes.func.isRequired,
+  settingsCustomFieldsEditable: PropTypes.func.isRequired,
   settingsTimerCheckpoint: PropTypes.func.isRequired,
 };
 
@@ -285,6 +303,7 @@ const mapStateToProps = state => ({
   progressSlider: state.settings.progressSlider,
   isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
   areCommentsEditable: state.settings.areCommentsEditable,
+  areCustomFieldsEditable: state.settings.areCustomFieldsEditable,
   timerCheckpoint: state.settings.timerCheckpoint,
 });
 
@@ -296,7 +315,9 @@ const mapDispatchToProps = dispatch => ({
   settingsProgressSlider: value => dispatch(actions.settings.setProgressSlider(value)),
   settingsIssueAlwaysEditable: value => dispatch(actions.settings.setIssueAlwaysEditable(value)),
   settingsCommentsEditable: value => dispatch(actions.settings.setCommentsEditable(value)),
+  settingsCustomFieldsEditable: value => dispatch(actions.settings.setCustomFieldsEditable(value)),
   settingsTimerCheckpoint: value => dispatch(actions.settings.setTimerCheckpoint(value)),
+  getFieldsData: () => dispatch(actions.fields.getAll()),
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(OptionsBlock));

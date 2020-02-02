@@ -20,7 +20,6 @@ toast.configure({
 export default class Routes extends Component {
   constructor(props) {
     super(props);
-
     this.errorHandler = _debounce(this.handleError, 200);
     this.rejectionHandler = _debounce(this.handleRejection, 200);
   }
@@ -54,8 +53,8 @@ export default class Routes extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={props => <LoginView {...props} />} />
-        <Route path="/app" component={props => <AppView {...props} />} />
+        <Route path="/" exact render={props => <LoginView {...props} />} />
+        <Route path="/app" render={props => <AppView {...props} />} />
         <Redirect to="/app" />
       </Switch>
     );

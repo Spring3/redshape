@@ -12,6 +12,8 @@ exports[`Progressbar component should match the snapshot 1`] = `
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -89,11 +91,11 @@ exports[`Progressbar component should match the snapshot 1`] = `
         height={10}
       />
     </div>
-    <p
+    <div
       className="tooltip c4 c5"
     >
       25%
-    </p>
+    </div>
   </div>
 </div>
 `;
@@ -110,6 +112,8 @@ exports[`Progressbar component should match the snapshot when using progress-gra
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -187,11 +191,11 @@ exports[`Progressbar component should match the snapshot when using progress-gra
         height={10}
       />
     </div>
-    <p
+    <div
       className="tooltip c4 c5"
     >
       70%
-    </p>
+    </div>
   </div>
 </div>
 `;
@@ -208,6 +212,8 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -301,11 +307,11 @@ exports[`Progressbar component should match the snapshot when using time-trackin
         height={10}
       />
     </div>
-    <p
+    <div
       className="tooltip c5 c6"
     >
       130%
-    </p>
+    </div>
   </div>
 </div>
 `;
@@ -322,6 +328,8 @@ exports[`Progressbar component should match the snapshot when using time-trackin
   white-space: nowrap;
   box-shadow: 0px 2px 7px;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -399,11 +407,11 @@ exports[`Progressbar component should match the snapshot when using time-trackin
         height={10}
       />
     </div>
-    <p
+    <div
       className="tooltip c4 c5"
     >
       70%
-    </p>
+    </div>
   </div>
 </div>
 `;

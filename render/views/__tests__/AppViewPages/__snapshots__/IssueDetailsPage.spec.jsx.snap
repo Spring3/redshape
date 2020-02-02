@@ -1,14 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`IssueDetails page should match the snapshot 1`] = `
-.c7 {
-  color: #FF7079;
-  font-size: 14px;
-  padding: 2px;
-  cursor: inherit;
-}
-
-.c18 {
+.c20 {
   position: absolute;
   display: none;
   border-radius: 3px;
@@ -21,6 +14,8 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   white-space: nowrap;
   box-shadow: 0px 2px 7px #A0A0A0;
   z-index: 99;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -28,7 +23,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   left: 50%;
 }
 
-.c18::after {
+.c20::after {
   content: ' ';
   position: absolute;
   width: auto;
@@ -37,7 +32,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-color: #FFFFFF transparent transparent transparent;
 }
 
-.c18::after {
+.c20::after {
   top: 100%;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -45,16 +40,16 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   transform: translateX(-50%);
 }
 
-.c14 {
+.c16 {
   display: inline-block;
   position: relative;
 }
 
-.c14:hover .c17 {
+.c16:hover .c19 {
   display: block;
 }
 
-.c13 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -64,7 +59,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   flex-direction: column;
 }
 
-.c15 {
+.c17 {
   background: #F9F9F9;
   position: relative;
   border-radius: 5px;
@@ -72,7 +67,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   width: 150px;
 }
 
-.c16 {
+.c18 {
   border-radius: 5px;
   max-width: 100%;
   width: 0;
@@ -84,7 +79,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF634D;
 }
 
-.c19 {
+.c21 {
   border-radius: 5px;
   max-width: 100%;
   width: 0;
@@ -128,7 +123,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #EF6069;
 }
 
-.c20 {
+.c22 {
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -150,7 +145,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   display: none;
 }
 
-.c22 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -166,24 +161,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c22 h2 {
+.c24 h2 {
   display: inline-block;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.c22 > div {
+.c24 > div {
   margin-right: 15px;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
-.c22 > div button {
+.c24 > div button {
   background: #FFFFFF;
   margin: 0px 5px;
 }
 
-.c23 {
+.c25 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -195,35 +190,35 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF7F87;
 }
 
-.c21 {
+.c23 {
   background: white;
   max-height: 550px;
   min-width: 350px;
 }
 
-.c24 {
+.c26 {
   position: relative;
   list-style-type: none;
-  padding: 0px 10px 10px 10px;
   border-radius: 3px;
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
   background: #F9F9F9;
   box-shadow: inset 0px 0px 10px 0px #F9F9F9;
+  padding: 0px 10px 10px 10px;
 }
 
-.c24 li {
+.c26 li {
   cursor: pointer;
   display: block;
   padding: 10px;
-  margin: 10px auto 0px auto;
   border-radius: 3px;
   border: 1px solid #E9E9E9;
   background: #FFFFFF;
+  margin: 10px auto 0px auto;
 }
 
-.c24 li div.status {
+.c26 li div.status {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -238,12 +233,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div.status a {
+.c26 li div.status a {
   margin-left: 10px;
   visibility: hidden;
 }
 
-.c24 li div.status div {
+.c26 li div.status div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -258,20 +253,20 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div.status div span.time,
-.c24 li div.status div span.date {
+.c26 li div.status div span.time,
+.c26 li div.status div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c24 li div.status div span.username {
+.c26 li div.status div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
 }
 
-.c24 li div.extra {
+.c26 li div.extra {
   display: grid;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -287,37 +282,37 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: end;
 }
 
-.c24 li div.extra:not(:empty) {
+.c26 li div.extra:not(:empty) {
   margin-top: 0.5rem;
 }
 
-.c24 li div.extra span {
+.c26 li div.extra span {
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c24 li div.extra span:nth-child(even) {
+.c26 li div.extra span:nth-child(even) {
   text-align: right;
 }
 
-.c24 li p {
+.c26 li p {
   margin-bottom: 0px;
   min-width: 100%;
   width: 0;
   line-height: 2;
 }
 
-.c24 li:hover div:first-child a {
+.c26 li:hover div:first-child a {
   visibility: visible;
 }
 
-.c25 {
+.c27 {
   background: white;
   padding: 20px;
   margin-bottom: 20px;
 }
 
-.c28 {
+.c30 {
   list-style-type: none;
   padding: 20px 0px;
   margin: 0px;
@@ -325,11 +320,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #F9F9F9;
 }
 
-.c28 li:first-child {
+.c30 li:first-child {
   margin-top: 20px;
 }
 
-.c28 li {
+.c30 li {
   margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -341,7 +336,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-around;
 }
 
-.c28 li div.commentsHeader {
+.c30 li div.commentsHeader {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -356,23 +351,23 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-width: 20%;
 }
 
-.c28 li div.commentsHeader h3 {
+.c30 li div.commentsHeader h3 {
   margin-top: 20px;
   color: #FF7079;
 }
 
-.c28 li div.commentsHeader span:last-child {
+.c30 li div.commentsHeader span:last-child {
   color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
   text-align: left;
 }
 
-.c28 li div.commentsHeader span:last-child:hover {
+.c30 li div.commentsHeader span:last-child:hover {
   color: #3F3844;
 }
 
-.c28 li iframe {
+.c30 li iframe {
   margin-left: 20px;
   padding: 5px 20px 0px 20px;
   background: #FFFFFF;
@@ -382,7 +377,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   width: 74%;
 }
 
-.c26 {
+.c28 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -394,22 +389,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   width: 100%;
 }
 
-.c26 div:last-child {
+.c28 div:last-child {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c26 div:last-child button {
+.c28 div:last-child button {
   margin-right: 0.5rem;
 }
 
-.c26 div:last-child button:last-child {
+.c28 div:last-child button:last-child {
   margin-right: 0;
 }
 
-.c27 {
+.c29 {
   -webkit-align-self: center;
   -ms-flex-item-align: center;
   align-self: center;
@@ -456,6 +451,8 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   font-size: 12px;
   margin-top: 0px;
   color: #A0A0A0;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 }
 
 .c6 a {
@@ -497,6 +494,19 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
+.c14 {
+  margin-right: 0.5rem;
+}
+
+.c13 {
+  color: gray;
+}
+
+.c7 {
+  color: #FF7079;
+  padding: 0 0.3rem;
+}
+
 .c11 {
   display: grid;
   grid-template-columns: auto minmax(auto,340px) auto 1fr;
@@ -522,7 +532,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
 }
 
 @media (min-width:1600px) {
-  .c21 {
+  .c23 {
     min-width: 500px;
   }
 }
@@ -567,20 +577,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               Test
             </span>
           </h2>
-          <p
+          <div
             className="c6"
           >
             Created
              
             by
-            <a
+            <span
               className="c7"
-              onClick={[Function]}
-              rel="noopener noreferer"
             >
               Author 1
-            </a>
-          </p>
+            </span>
+          </div>
         </div>
         <div
           className="buttons c8"
@@ -673,8 +681,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Estimation: 
         </div>
         <div>
-          <span>
-             (Total: 15.00 h)
+          <span
+            className="c13"
+          >
+            (Total: 15.00 h)
           </span>
         </div>
         <div>
@@ -687,33 +697,37 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Time spent: 
         </div>
         <div>
-          2.00 h
+          <span
+            className="c14"
+          >
+            2.00 h
+          </span>
         </div>
         <div>
           Progress: 
         </div>
         <div>
           <div
-            className="c13"
+            className="c15"
           >
             <div
-              className="c14"
+              className="c16"
             >
               <div
-                className="c15"
+                className="c17"
                 height={7}
                 width={150}
               >
                 <div
-                  className="c16"
+                  className="c18"
                   height={7}
                 />
               </div>
-              <p
-                className="tooltip c17 c18"
+              <div
+                className="tooltip c19 c20"
               >
                 1%
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -722,26 +736,26 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
         <div>
           <div
-            className="c13"
+            className="c15"
           >
             <div
-              className="c14"
+              className="c16"
             >
               <div
-                className="c15"
+                className="c17"
                 height={7}
                 width={150}
               >
                 <div
-                  className="c19"
+                  className="c21"
                   height={7}
                 />
               </div>
-              <p
-                className="tooltip c17 c18"
+              <div
+                className="tooltip c19 c20"
               >
                 0%
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -751,7 +765,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           Description
         </h3>
         <iframe
-          className="c20"
+          className="c22"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Fixture test issue</p>"
@@ -760,10 +774,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="c21"
+      className="c23"
     >
       <div
-        className="c22"
+        className="c24"
       >
         <h2
           className="padded"
@@ -772,7 +786,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </h2>
         <div>
           <button
-            className="c23 c10"
+            className="c25 c10"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -793,7 +807,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </span>
           </button>
           <button
-            className="c23 c10"
+            className="c25 c10"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -816,23 +830,23 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
       </div>
       <ul
-        className="c24"
+        className="c26"
       />
     </div>
   </div>
   <section
-    className="c25"
+    className="c27"
   >
     <div>
       <div
-        className="c26"
+        className="c28"
       >
         <h2>
           Comments
         </h2>
         <div>
           <button
-            className="c27 c10"
+            className="c29 c10"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -851,7 +865,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
              Editor
           </button>
           <button
-            className="c27 c10"
+            className="c29 c10"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -871,7 +885,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
       </div>
       <ul
-        className="c28"
+        className="c30"
       />
     </div>
   </section>

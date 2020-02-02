@@ -251,11 +251,9 @@ class NavigationBar extends Component {
               )}
               {
                 isEnhanced && (
-                  <li>
-                    <IconButton onClick={onRefresh}>
-                      <RefreshIcon size={30} />
-                    </IconButton>
-                  </li>
+                  <IconButton onClick={onRefresh}>
+                    <RefreshIcon size={30} />
+                  </IconButton>
                 )
               }
             </div>

@@ -25,6 +25,7 @@ import {
 import Button from '../../components/Button';
 
 import actions from '../../actions';
+import Tooltip from '../../components/Tooltip';
 
 const IssueHeader = styled.div`
   display: flex;
@@ -50,10 +51,13 @@ const FlexButton = styled(Button)`
   align-items: center;
 `;
 
-const SmallNotice = styled.p`
+const SmallNotice = styled.div`
   font-size: 12px;
   margin-top: 0px;
   color: ${props => props.theme.minorText};
+
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 
   a {
     font-size: inherit !important;
@@ -78,6 +82,17 @@ const Title = styled.h2`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const TextMain = styled.span`
+  margin-right: 0.5rem;
+`;
+const TextAux = styled.span`
+  color: gray;
+`;
+const TextAuthor = styled.span`
+  color: ${props => props.theme.main};
+  padding: 0 0.3rem;
 `;
 
 const Grid = styled.div`
@@ -198,19 +213,18 @@ class IssueDetailsPage extends Component {
       selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
     } = this.state;
     const selectedIssue = selectedIssueState.data;
-    let morefields = selectedIssue.custom_fields;
-    if (!morefields) {
-      morefields = [];
-    }
-    const { attachments } = selectedIssue;
-    if (attachments && attachments.length) {
-      morefields.push({ name: 'Attachments', value: attachments.length });
-    }
-    const { tags } = selectedIssue;
-    const { children } = selectedIssue;
+    const {
+      attachments, total_estimated_hours, estimated_hours, total_spent_hours, spent_hours, custom_fields, tags, children, parent, assigned_to
+    } = selectedIssue;
+    const extra_fields = [
+      ...(attachments && attachments.length) ? [{ name: 'Attachments', value: attachments.length }] : [],
+      ...(custom_fields) || [],
+    ];
     const isEnhanced = uiStyle === 'enhanced';
-    const { assigned_to } = selectedIssue;
     const assignee_id = assigned_to && assigned_to.id;
+    const showTotalEstimatedHours = (total_estimated_hours !== estimated_hours && total_estimated_hours >= 0);
+    const showTotalSpentHours = (total_spent_hours !== spent_hours && total_spent_hours >= 0);
+
     return selectedIssue.id
       ? (
         <Section>
@@ -229,9 +243,9 @@ class IssueDetailsPage extends Component {
                   </Title>
                   <SmallNotice>
 Created
-                    {isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>) : ' '}
+                    {isEnhanced ? (<Tooltip text="open in web browser"><Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link></Tooltip>) : ' '}
                     by
-                    <Link>{selectedIssue.author.name}</Link>
+                    <TextAuthor>{selectedIssue.author.name}</TextAuthor>
                     <DateComponent date={selectedIssue.created_on} />
                   </SmallNotice>
                   {selectedIssue.closed_on && (
@@ -273,10 +287,14 @@ Created
 
                 <div>Estimation: </div>
                 <div>
-                  {selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
                   {
-                    (selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
-                      <span>{` (Total: ${selectedIssue.total_estimated_hours.toFixed(2)} h)`}</span>
+                    estimated_hours && (
+                      <TextMain>{`${estimated_hours.toFixed(2)} h`}</TextMain>
+                    )
+                  }
+                  {
+                    showTotalEstimatedHours && (
+                      <TextAux>{`(Total: ${total_estimated_hours.toFixed(2)} h)`}</TextAux>
                     )
                   }
                 </div>
@@ -286,10 +304,14 @@ Created
 
                 <div>Time spent: </div>
                 <div>
-                  {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
                   {
-                    (selectedIssue.total_spent_hours !== selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
-                      <span>{` (Total: ${selectedIssue.total_spent_hours.toFixed(2)} h)`}</span>
+                    spent_hours && (
+                      <TextMain>{`${spent_hours.toFixed(2)} h`}</TextMain>
+                    )
+                  }
+                  {
+                    showTotalSpentHours && (
+                      <TextAux>{`(Total: ${total_spent_hours.toFixed(2)} h)`}</TextAux>
                     )
                   }
                 </div>
@@ -308,7 +330,7 @@ Created
                 <div>Time cap: </div>
                 <div>
                   <Progressbar
-                    percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
+                    percent={total_spent_hours / total_estimated_hours * 100}
                     mode="time-tracking"
                     background={theme.main}
                     width={150}
@@ -317,13 +339,10 @@ Created
                 </div>
 
                 {
-                  morefields && morefields.map((el, i) => (
-                    <Fragment>
-                      <div>
-                        {el.name}
-:
-                      </div>
-                      <div>{el.value}</div>
+                  extra_fields && extra_fields.map(el => (
+                    <Fragment key={el.name}>
+                      <div>{`${el.name}:`}</div>
+                      <div>{el.multiple ? (el.value ? el.value.join(', ') : '') : el.value}</div>
                     </Fragment>
                   ))
                 }
@@ -334,17 +353,24 @@ Created
                       <div>Tags:</div>
                       <TagContainer>
                         {tags.map(el => (
-                          <Tag mode={isEnhanced ? 'enhanced' : 'plain'} value={el} />))}
+                          <Tag key={el} mode={isEnhanced ? 'enhanced' : 'plain'} value={el} />))}
                       </TagContainer>
                     </Fragment>
                   )
                 }
-
+                {
+                  parent && (
+                    <Fragment>
+                      <div>Parent issue:</div>
+                      <div><IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={parent.id} tracker={parent.tracker && parent.tracker.id} /></div>
+                    </Fragment>
+                  )
+                }
                 {
                   children && (
                     <Fragment>
                       <div>Children issues:</div>
-                      <div>{children.map(el => (<IssueId mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id} />))}</div>
+                      <div>{children.map(el => (<IssueId key={el.id} mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={el.id} tracker={el.tracker.id} />))}</div>
                     </Fragment>
                   )
                 }
@@ -412,7 +438,7 @@ IssueDetailsPage.propTypes = {
       }),
       done_ratio: PropTypes.number.isRequired,
       start_date: PropTypes.string.isRequired,
-      due_date: PropTypes.string.isRequired,
+      due_date: PropTypes.string,
       total_estimated_hours: PropTypes.number,
       total_spent_hours: PropTypes.number,
       spent_hours: PropTypes.number,
@@ -431,7 +457,7 @@ IssueDetailsPage.propTypes = {
       custom_fields: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired
       })),
       tags: PropTypes.arrayOf(PropTypes.string.isRequired),
       transitions: PropTypes.shape({
@@ -446,6 +472,21 @@ IssueDetailsPage.propTypes = {
       })),
       created_on: PropTypes.string.isRequired,
       updated_on: PropTypes.string.isRequired,
+      parent: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        tracker: PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired
+        })
+      }),
+      children: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        tracker: PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired
+        }).isRequired,
+        subject: PropTypes.string.isRequired,
+      })),
     }),
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)

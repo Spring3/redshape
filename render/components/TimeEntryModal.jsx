@@ -15,6 +15,7 @@ import DatePicker from './DatePicker';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
 import Tooltip from './Tooltip';
+import CustomFields from './CustomFields';
 
 import actions from '../actions';
 
@@ -31,7 +32,7 @@ const OptionButtons = styled.div`
   padding-top: 20px;
   border-top: 2px solid ${props => props.theme.bgDark};
   display: flex;
-  
+
   button {
     padding: 8px 15px;
   }
@@ -41,14 +42,42 @@ const OptionButtons = styled.div`
   }
 `;
 
-const DurationField = styled.div`
-  max-width: 350px;
+const inputStyle = { width: 250, minHeight: 38 };
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 250px 250px;
+  grid-column-gap: 40px;
+
+  > .grid-row {
+    grid-column: 1 / -1;
+  }
 `;
+
 const DurationInfo = styled.div`
-  align-self: center;
   color: gray;
-  margin-left: 0.5rem;
-  min-width: 10rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 87px;
+  height: 36px;
+  border: 1px solid #A0A0A0;
+  border-radius: 0 3px 3px 0;
+  border-left: 0;
+  margin-left: -1px;
+
+  &.disabled {
+    border-color: #E9E9E9;
+  }
+`;
+const CombinedInput = styled.div`
+  background: #EFEFEF;
+  height: 38px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 3px;
 `;
 
 const ClockIconStyled = styled(ClockIcon)`
@@ -64,48 +93,77 @@ const Title = styled.h4`
   font-size: 1rem;
 `;
 
-const selectStyles = {
-  container: (base, state) => ({ ...base })
+const compSelectStyles = {
+  container: (base, state) => ({ ...base, minWidth: 250, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
+  control: (base, state) => ({ ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
 };
 
 class TimeEntryModal extends Component {
   constructor(props) {
     super(props);
-    const tEntry = props.timeEntry;
-    if (tEntry) {
-      if (tEntry.duration == null && tEntry.hours) {
-        tEntry.duration = hoursToDuration(tEntry.hours);
+    this.setupState(props);
+
+    this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
+    this.debouncedDurationConversionChange = _debounce(this.onDurationConversionChange, 300);
+  }
+
+  setupState({ timeEntry, initialVolatileContent }) {
+    if (timeEntry) {
+      const {
+        id, activity, user, issue, hours, duration, comments, spent_on, custom_fields
+      } = timeEntry;
+      let customFieldsMap = {};
+      if (custom_fields) {
+        customFieldsMap = Object.fromEntries(custom_fields.map(el => [el.name, el.value]));
+      } else {
+        const { fieldsData } = this.props;
+        if (fieldsData && fieldsData.time_entry) {
+          customFieldsMap = Object.fromEntries(fieldsData.time_entry.map((el) => {
+            const defValue = el.default_value;
+            const value = el.multiple ? (defValue ? [defValue] : []) : el.default_value;
+            return [el.name, value];
+          }));
+        }
       }
-    }
-    this.state = {
-      timeEntry: props.timeEntry || {
+
+      timeEntry = {
+        id,
+        activity: { ...activity },
+        user: { ...user },
+        issue: { ...issue },
+        hours,
+        duration: (duration == null && hours) ? hoursToDuration(hours) : duration,
+        comments,
+        spent_on,
+        customFieldsMap: {
+          ...customFieldsMap
+        }
+      };
+    } else {
+      timeEntry = {
         activity: {},
         user: {},
         issue: {},
         hours: undefined,
         duration: undefined,
         comments: undefined,
-        spent_on: moment().format('YYYY-MM-DD')
-      },
+        spent_on: moment().format('YYYY-MM-DD'),
+        customFieldsMap: {}
+      };
+    }
+    this.state = {
+      timeEntry,
       wasModified: false
     };
-    if (props.initialVolatileContent) { // TimeEntry filled with duration (from Timer)
+    if (initialVolatileContent) { // TimeEntry filled with duration (from Timer)
       this.state.wasModified = true;
     }
-
-    this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
-    this.debouncedDurationConversionChange = _debounce(this.onDurationConversionChange, 300);
   }
 
   componentDidUpdate(oldProps) {
     if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
-      const { timeEntry, initialVolatileContent } = this.props;
-
-      if (timeEntry) {
-        this.setState({
-          timeEntry,
-          wasModified: !!initialVolatileContent
-        });
+      if (this.props.timeEntry) {
+        this.setupState(this.props);
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
       this.props.resetValidation();
@@ -197,8 +255,9 @@ class TimeEntryModal extends Component {
       hours: timeEntry.hours,
       duration: timeEntry.duration,
       issue: timeEntry.issue,
-      spent_on: timeEntry.spent_on
-    }).then(() => {
+      spent_on: timeEntry.spent_on,
+      customFieldsMap: timeEntry.customFieldsMap
+    }, { fieldsData: this.props.fieldsData }).then(() => {
       if (!this.props.time.error) {
         this.props.onClose();
       }
@@ -208,12 +267,13 @@ class TimeEntryModal extends Component {
   onUpdate = () => {
     const { wasModified, timeEntry } = this.state;
     if (wasModified) {
-      this.props.updateTimeEntry(timeEntry, {
+      this.props.updateTimeEntry(this.props.timeEntry, {
         comments: timeEntry.comments,
         hours: timeEntry.hours,
         duration: timeEntry.duration,
         spent_on: timeEntry.spent_on,
-        activity: timeEntry.activity
+        activity: timeEntry.activity,
+        customFieldsMap: timeEntry.customFieldsMap
       }).then(() => {
         if (!this.props.time.error) {
           this.props.onClose();
@@ -223,6 +283,22 @@ class TimeEntryModal extends Component {
       this.props.onClose();
     }
   };
+
+  onFieldChange = (name, value) => {
+    const { timeEntry } = this.state;
+    const { customFieldsMap } = timeEntry;
+    const newState = {
+      timeEntry: {
+        ...timeEntry,
+      },
+      wasModified: true
+    };
+    newState.timeEntry.customFieldsMap = {
+      ...customFieldsMap,
+      [name]: value
+    };
+    this.setState(newState);
+  }
 
   getErrorMessage = (error) => {
     if (!error) return null;
@@ -235,7 +311,7 @@ class TimeEntryModal extends Component {
     } = this.props;
     const { timeEntry, wasModified } = this.state;
     const {
-      duration, hours, comments, spent_on, activity
+      duration, hours, comments, spent_on, activity, customFieldsMap
     } = timeEntry;
     const selectedActivity = { id: activity.id, label: activity.name };
     const validationErrors = time.error && time.error.isJoi
@@ -251,8 +327,10 @@ class TimeEntryModal extends Component {
     if (hours > 0) {
       durationInfo = `${Number(hours.toFixed(2))} hours`;
     }
+    const hasEvenFields = (customFieldsMap && Object.keys(customFieldsMap).length % 2 === 0);
     return (
       <Modal
+        width={540}
         open={!!isOpen}
         onClose={onClose}
         needConfirm={wasModified}
@@ -260,66 +338,68 @@ class TimeEntryModal extends Component {
       >
         <Fragment>
           <Title>
-            { timeEntry.id ? 'Edit' : 'New' }
-            {' '}
-time entry
+            { timeEntry.id ? 'Edit time entry' : 'New time entry' }
           </Title>
-          <Label htmlFor="author" label="Author">
-            <div name="author">{timeEntry.user.name}</div>
-          </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">
-#
-              {timeEntry.issue.id}
-              {timeEntry.issue.name}
-            </div>
-          </Label>
-          <Label htmlFor="activity" label="Activity">
-            <Select
-              name="activity"
-              options={activities}
-              styles={selectStyles}
-              value={selectedActivity}
-              isDisabled={!isUserAuthor}
-              onBlur={() => this.runValidation('activity')}
-              onChange={this.onActivityChange}
-              isClearable={false}
-              theme={defaultTheme => ({
-                ...defaultTheme,
-                borderRadius: 3,
-                colors: {
-                  ...defaultTheme.colors,
-                  primary: theme.main,
-                },
-              })
-              }
-            />
+            <div name="issue">{`#${timeEntry.issue.id} ${timeEntry.issue.name}`}</div>
           </Label>
           <ErrorMessage show={!!validationErrors.activity}>
             {this.getErrorMessage(validationErrors.activity)}
           </ErrorMessage>
-          <FlexRow>
-            <DurationField>
+          <Grid>
+            <div className={hasEvenFields ? '' : 'grid-row'}>
+              <Label htmlFor="author" label="Author">
+                <div name="author">{timeEntry.user.name}</div>
+              </Label>
+            </div>
+            <div className={hasEvenFields ? 'grid-row' : ''}>
+              <Label htmlFor="activity" label="Activity">
+                <Select
+                  name="activity"
+                  options={activities}
+                  styles={compSelectStyles}
+                  value={selectedActivity}
+                  isDisabled={!isUserAuthor}
+                  onBlur={() => this.runValidation('activity')}
+                  onChange={this.onActivityChange}
+                  isClearable={false}
+                  theme={defaultTheme => ({
+                    ...defaultTheme,
+                    borderRadius: 3,
+                    colors: {
+                      ...defaultTheme.colors,
+                      primary: theme.main,
+                    },
+                  })
+                }
+                />
+              </Label>
+            </div>
+            <div>
               <Label htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
                 <FlexRow>
-                  <Input
-                    type="text"
-                    name="duration"
-                    value={duration}
-                    onBlur={() => this.runValidation(['duration', 'hours'])}
-                    disabled={!isEditable || !isUserAuthor}
-                    onChange={this.onDurationChange}
-                  />
-                  <DurationInfo>{durationInfo}</DurationInfo>
+                  <CombinedInput>
+                    <Input
+                      type="text"
+                      name="duration"
+                      style={{ ...inputStyle, width: 163 }}
+                      value={duration}
+                      onBlur={() => this.runValidation(['duration', 'hours'])}
+                      disabled={!isEditable || !isUserAuthor}
+                      onChange={this.onDurationChange}
+                    />
+                    <DurationInfo className={(!isEditable || !isUserAuthor) ? 'disabled' : ''}>{durationInfo}</DurationInfo>
+                  </CombinedInput>
                 </FlexRow>
               </Label>
               <ErrorMessage show={!!validationErrors.duration || validationErrors.hours}>
                 {this.getErrorMessage(validationErrors.duration || validationErrors.hours)}
               </ErrorMessage>
-            </DurationField>
+            </div>
             <div>
               <Label htmlFor="spent_on" label="Date">
                 <DatePicker
+                  style={inputStyle}
                   name="date"
                   value={new Date(spent_on)}
                   isDisabled={!isEditable || !isUserAuthor}
@@ -331,7 +411,13 @@ time entry
                 {this.getErrorMessage(validationErrors.spentOn)}
               </ErrorMessage>
             </div>
-          </FlexRow>
+            <CustomFields
+              type="time_entry"
+              customFieldsMap={customFieldsMap}
+              isDisabled={!isEditable || !isUserAuthor}
+              onChange={this.onFieldChange}
+            />
+          </Grid>
           <Label label="Comments" htmlFor="comments">
             <MarkdownEditor
               isDisabled={!isUserAuthor}
@@ -405,7 +491,12 @@ TimeEntryModal.propTypes = {
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    custom_fields: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired
+    })),
   }),
   time: PropTypes.shape({
     isFetching: PropTypes.bool.isRequired,
@@ -421,11 +512,12 @@ TimeEntryModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  time: state.timeEntry
+  time: state.timeEntry,
+  fieldsData: state.fields.data,
 });
 
 const mapDispatchToProps = dispatch => ({
-  publishTimeEntry: timeEntry => dispatch(actions.timeEntry.publish(timeEntry)),
+  publishTimeEntry: (timeEntry, data) => dispatch(actions.timeEntry.publish(timeEntry, data)),
   updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
   validateBeforePublish: (timeEntry, checkFields) => dispatch(actions.timeEntry.validateBeforePublish(timeEntry, checkFields)),
   validateBeforeUpdate: (changes, checkFields) => dispatch(actions.timeEntry.validateBeforeUpdate(changes, checkFields)),

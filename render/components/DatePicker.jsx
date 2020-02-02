@@ -200,9 +200,9 @@ class DatePicker extends Component {
             disabled: isDisabled
           }}
           disabled={isDisabled}
-          placeholder={false}
+          placeholder=""
           onDayChange={onChange}
-          component={props => (<Input {...props} />)}
+          component={props => (<Input style={style} {...props} />)}
         />
       </StyledDatePicker>
     );

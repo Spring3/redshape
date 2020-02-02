@@ -96,6 +96,9 @@ const state = {
     discardIdleTime: true,
     advancedTimerControls: false,
     progressWithStep1: false,
+  },
+  fields: {
+    data: {}
   }
 };
 

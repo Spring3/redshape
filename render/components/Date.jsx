@@ -85,11 +85,12 @@ class DateComponent extends PureComponent {
 
 DateComponent.propTypes = {
   className: PropTypes.string,
-  date: PropTypes.string.isRequired
+  date: PropTypes.string
 };
 
 DateComponent.defaultProps = {
-  className: undefined
+  className: undefined,
+  date: null
 };
 
 export default DateComponent;

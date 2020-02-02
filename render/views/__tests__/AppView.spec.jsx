@@ -87,6 +87,9 @@ describe('AppView', () => {
         discardIdleTime: true,
         advancedTimerControls: false,
         progressWithStep1: false,
+      },
+      fields: {
+        data: {}
       }
     });
 
@@ -164,6 +167,9 @@ describe('AppView', () => {
           discardIdleTime: true,
           advancedTimerControls: false,
           progressWithStep1: false,
+        },
+        fields: {
+          data: {}
         }
       });
 
@@ -242,6 +248,9 @@ describe('AppView', () => {
           discardIdleTime: true,
           advancedTimerControls: false,
           progressWithStep1: false,
+        },
+        fields: {
+          data: {}
         }
       });
 
@@ -336,6 +345,9 @@ describe('AppView', () => {
           discardIdleTime: true,
           advancedTimerControls: false,
           progressWithStep1: false,
+        },
+        fields: {
+          data: {}
         }
       };
       const store = mockStore(state);

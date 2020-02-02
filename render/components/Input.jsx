@@ -136,7 +136,7 @@ const StyledLabel = styled.label`
 const Label = ({
   label, htmlFor, children, className, inline, rightToLeft, rightOfLabel
 }) => (
-  <FormGroup className={`form-group ${className}`}>
+  <FormGroup className={`form-group ${className || ''}`}>
     { rightToLeft === true && (children) }
     { inline === false
       ? (

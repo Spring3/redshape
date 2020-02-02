@@ -98,9 +98,19 @@ class IdComponent extends Component {
 
   render() {
     const {
-      theme, history, value, tracker, fontSize, clickable, mode
+      history, value, tracker, fontSize, clickable, mode
     } = this.props;
-    return (mode === 'plain' ? (<Link onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`#${value}`}</Link>) : (<IdLink fontSize={fontSize || 'inherit'} className={`tracker-${tracker}`} onClick={clickable ? () => history.push(`/app/issue/${value}/`) : undefined}>{`${value}`}</IdLink>));
+    let link;
+    let onClick;
+    if (clickable) {
+      onClick = () => history.push(`/app/issue/${value}/`);
+    }
+    if (mode === 'plain') {
+      link = (<Link onClick={onClick}>{`#${value}`}</Link>);
+    } else {
+      link = (<IdLink fontSize={fontSize || 'inherit'} className={`tracker-${tracker}`} onClick={onClick}>{`${value}`}</IdLink>);
+    }
+    return link;
   }
 }
 

@@ -6,6 +6,7 @@ import issueReducer from './issue.reducer';
 import selectedIssueReducer from './issue.selected.reducer';
 import trackingReducer from './tracking.reducer';
 import projectReducer from './project.reducer';
+import fieldReducer from './field.reducer';
 import timeEntryReducer from './timeEntry.reducer';
 
 import { USER_LOGOUT } from '../actions/user.actions';
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   }),
   issue: issueReducer,
   projects: projectReducer,
+  fields: fieldReducer,
   tracking: trackingReducer,
   timeEntry: timeEntryReducer
 });
