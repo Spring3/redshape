@@ -186,6 +186,10 @@ const ProcessIndicatorWrapper = styled.li`
   }
 `;
 
+const Comment = styled.p`
+  word-break: break-word;
+`;
+
 class TimeEntries extends Component {
   constructor(props) {
     super(props);
@@ -295,7 +299,7 @@ class TimeEntries extends Component {
                       )
                     }
                   </div>
-                  <p>{timeEntry.comments}</p>
+                  <Comment>{timeEntry.comments}</Comment>
                   {
                   extra && (
                     <div className="extra">

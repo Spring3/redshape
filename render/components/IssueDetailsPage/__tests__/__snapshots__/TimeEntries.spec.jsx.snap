@@ -264,6 +264,10 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
   visibility: visible;
 }
 
+.c8 {
+  word-break: break-word;
+}
+
 @media (min-width:1600px) {
   .c0 {
     min-width: 500px;
@@ -387,7 +391,9 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
           </svg>
         </a>
       </div>
-      <p>
+      <p
+        className="c8"
+      >
         Let's get this done
       </p>
       <div
@@ -432,7 +438,9 @@ exports[`IssueDetails => TimeEntries component should match the snapshot 1`] = `
           </span>
         </div>
       </div>
-      <p>
+      <p
+        className="c8"
+      >
         I know nothing
       </p>
       <div

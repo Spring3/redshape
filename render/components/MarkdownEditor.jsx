@@ -427,6 +427,7 @@ class MarkdownText extends PureComponent {
         font-size: 14px;
         font-weight: 500;
         color: ${theme.normalText};
+        word-break: break-word;
       }
 
       a {
@@ -458,8 +459,7 @@ class MarkdownText extends PureComponent {
 
       pre {
         white-space: pre-wrap;
-        word-break: keep-all;
-
+        // word-break: keep-all;
       }
 
       ${isEnhanced && css`
