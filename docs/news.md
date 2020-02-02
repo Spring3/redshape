@@ -251,11 +251,37 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ### Custom Fields editing
 
+- Custom fields are editable (if server-side support), both in issues and time entries. Check `server.md` to see all the formats supported.
 
+![](changes/custom_field_time_entry.png)
+
+![](changes/custom_fields_issue.png)
+
+### Description editable
+
+- Issue description is editable.
+
+![](changes/custom_fields_edit_issue.png)
+
+### More fields and layouts
+
+- Better layouts in issue detail page: fields and time entries.
+
+- Parent issue is shown if current issue is a subtask.
+
+- Parent issue is colored based on the track if server-side support.
+
+- Author/Assigned to columns are shown only when it is relevant (based on the view).
+
+- New columns: number of subtasks (if server-side support) and parent task.
+
+![](changes/parent_issue.png)
+
+![](changes/parent_issue_subtasks.png)
 
 ## Recommended settings
 
-After the modifications performed to this repository (listed in gnews.md), we recommend:
+After the modifications performed to this repository (listed in news.md), we recommend:
 
 - Use advanced timer controls.
 - Issue is always editable (so, the creator/assignee can modify if possible).
@@ -263,6 +289,7 @@ After the modifications performed to this repository (listed in gnews.md), we re
 - Timer checkpoint: every 5/10 minutes (assuming suspend works by default in your system).
 - UI style: enhanced.
 - Progress values: 1% (only if server-side support - viewing/editing 1% values in redmine web is possible).
+- Custom Fields are editable (only if server-side support).
 
 ## Known issues
 

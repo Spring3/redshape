@@ -130,6 +130,35 @@ Should return 200 OK with every issue json object with optional fields:
 - `spent_hours` (optional): `integer`, `float`, `null` or `undefined`.
 - `total_spent_hours` (optional): `integer`, `float`, `null` or `undefined`.
 
+### Subtasks
+
+To show the number of subtasks when listing issues:
+
+Endpoint: `/issues.json?include=children`
+
+Should return 200 OK with every issue json object with optional fields:
+
+- `children` (optional): `Child[]`, `null` or `undefined`.
+
+Being `Child` an object with:
+
+- `id`: `number`
+- `tracker`: `null`, `undefined` or an object composed of:
+  - `id`: `number`
+  - `name`: `string`
+
+### Parent with tracker colored
+
+Endpoing: `/issues/:id.json` and `/issues.json`
+
+Should return 200 OK with the issue / every issue json object with the optional field:
+
+- `parent` (optional): `null`, `undefined` or an object composed of:
+  - `id`: `number`
+  - `tracker`: `null`, `undefined` or an object composed of:
+    - `id`: `number`
+    - `name`: `string`
+
 ### Transitions
 
 To be able to modify the issue priority and status.
@@ -407,15 +436,13 @@ The following fields should be:
 
 In case it does not match any of these, the custom field is discarded.
 
-The other fields are not processed.
-
 The fields:
 - `regexp`
 - `min_length`
 - `max_length`
 
-Are not processed. Therefore, no client-side validation is performed. When sending
-to the server, it will answer with an specific error if was not valid.
+Are not processed (and those not listed). Therefore, no client-side validation is performed. When sending
+to the server, it will answer with an specific error if was not valid (server-side validation/requirements).
 
 The `default_value` is only assigned to the field when creating a new `TimeEntry`.
 
