@@ -101,13 +101,13 @@ const compSelectStyles = {
 class TimeEntryModal extends Component {
   constructor(props) {
     super(props);
-    this.setupState(props);
+    this.state = this.generateState(props);
 
     this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
     this.debouncedDurationConversionChange = _debounce(this.onDurationConversionChange, 300);
   }
 
-  setupState({ timeEntry, initialVolatileContent }) {
+  generateState({ timeEntry, initialVolatileContent }) {
     if (timeEntry) {
       const {
         id, activity, user, issue, hours, duration, comments, spent_on, custom_fields
@@ -151,19 +151,16 @@ class TimeEntryModal extends Component {
         customFieldsMap: {}
       };
     }
-    this.state = {
+    return {
       timeEntry,
-      wasModified: false
+      wasModified: !!initialVolatileContent
     };
-    if (initialVolatileContent) { // TimeEntry filled with duration (from Timer)
-      this.state.wasModified = true;
-    }
   }
 
   componentDidUpdate(oldProps) {
     if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
       if (this.props.timeEntry) {
-        this.setupState(this.props);
+        this.setState(this.generateState(this.props));
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
       this.props.resetValidation();
@@ -343,9 +340,6 @@ class TimeEntryModal extends Component {
           <Label htmlFor="issue" label="Issue">
             <div name="issue">{`#${timeEntry.issue.id} ${timeEntry.issue.name}`}</div>
           </Label>
-          <ErrorMessage show={!!validationErrors.activity}>
-            {this.getErrorMessage(validationErrors.activity)}
-          </ErrorMessage>
           <Grid>
             <div className={hasEvenFields ? '' : 'grid-row'}>
               <Label htmlFor="author" label="Author">
@@ -374,6 +368,9 @@ class TimeEntryModal extends Component {
                 }
                 />
               </Label>
+              <ErrorMessage show={!!validationErrors.activity}>
+                {this.getErrorMessage(validationErrors.activity)}
+              </ErrorMessage>
             </div>
             <div>
               <Label htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
