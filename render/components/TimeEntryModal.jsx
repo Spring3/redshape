@@ -7,6 +7,7 @@ import Select from 'react-select';
 import styled, { withTheme } from 'styled-components';
 
 import ClockIcon from 'mdi-react/ClockIcon';
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 import { Input, Label } from './Input';
 import Button from './Button';
 import MarkdownEditor from './MarkdownEditor';
@@ -85,12 +86,16 @@ const ClockIconStyled = styled(ClockIcon)`
 `;
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
+  color: #A0A0A0;
 `;
 const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const Title = styled.h4`
   margin: 0;
   font-size: 1rem;
+`;
+const HelpIconStyled = styled(HelpCircleIcon)`
+  padding-bottom: 1px;
 `;
 
 const compSelectStyles = {
@@ -336,6 +341,7 @@ class TimeEntryModal extends Component {
         <Fragment>
           <Title>
             { timeEntry.id ? 'Edit time entry' : 'New time entry' }
+            <LabelIcon><Tooltip position="right" text="- Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
           </Title>
           <Label htmlFor="issue" label="Issue">
             <div name="issue">{`#${timeEntry.issue.id} ${timeEntry.issue.name}`}</div>
