@@ -88,13 +88,15 @@ const request = ({
   data,
   headers,
   query,
-  id
+  id,
+  responseType
 }) => {
   const requestConfig = {
     url,
     method,
     headers,
-    id
+    id,
+    responseType
   };
 
   if (!['GET', 'DELETE'].includes(method)) {

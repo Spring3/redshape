@@ -3,6 +3,7 @@ import request, { login, notify, logout } from './helper';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
+export const USER_AVATAR = 'USER_AVATAR';
 export const USER_GET_CURRENT = 'USER_GET_CURRENT';
 
 const signout = () => (dispatch) => {
@@ -52,8 +53,26 @@ const getCurrent = () => (dispatch) => {
     });
 };
 
+const fetchAvatar = id => (dispatch) => {
+  const size = 48;
+  return request({
+    url: '/people/avatar',
+    query: {
+      id,
+      size: `${size}x${size}`,
+    },
+    id: 'getCurrentUserAvatar',
+    responseType: 'arraybuffer'
+  }).then(({ data }) => {
+    const img = Buffer.from(data, 'binary')
+      .toString('base64');
+    dispatch({ type: USER_AVATAR, data: { size, img: `data:image;base64,${img}` } });
+  }).catch(() => {});
+};
+
 export default {
   checkLogin,
   getCurrent,
-  logout: signout
+  logout: signout,
+  fetchAvatar
 };

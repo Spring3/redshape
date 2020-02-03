@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { USER_LOGIN, USER_LOGOUT } from '../actions/user.actions';
+import { USER_LOGIN, USER_AVATAR, USER_LOGOUT } from '../actions/user.actions';
 import storage from '../../common/storage';
 
 export const initialState = {
@@ -8,7 +8,9 @@ export const initialState = {
   id: undefined,
   name: undefined,
   redmineEndpoint: undefined,
-  api_key: undefined
+  api_key: undefined,
+  avatar_id: undefined,
+  avatar: undefined
 };
 
 const handleUserLogin = (state, action) => {
@@ -19,7 +21,7 @@ const handleUserLogin = (state, action) => {
     case 'OK': {
       const userData = _.get(action.data, 'user', {});
       const { firstname, lastname } = userData;
-      const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key');
+      const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key', 'avatar_id');
       payload.name = `${firstname} ${lastname}`;
       storage.set('user', payload);
       return {
@@ -38,6 +40,12 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case USER_LOGIN: {
       return handleUserLogin(state, action);
+    }
+    case USER_AVATAR: {
+      return {
+        ...state,
+        avatar: action.data
+      };
     }
     case USER_LOGOUT: {
       // we keep settings cause they are general app settings

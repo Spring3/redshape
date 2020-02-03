@@ -449,3 +449,46 @@ The `default_value` is only assigned to the field when creating a new `TimeEntry
 To be considered an active/editable custom field, the field `visible` should be true.
 
 The field `"text"` is mapped as an `input`, not as a `textarea`.
+
+### Avatar
+
+This feature allows showing the avatar image in the menu if it is server-side supported,
+instead of the red bubble with the first letter of the user name.
+
+It needs support from two endpoints:
+
+Endpoint: `/users/current.json`
+
+It needs a 200 OK response with values like these:
+
+```json
+{
+  "user": {
+    "id": 3,
+    "login": "<username>",
+    "admin": false,
+    "firstname": "<Name>",
+    "lastname": "<Surname>",
+    "mail": "<email@address.org>",
+    "created_on": "2010-10-10T00:45:00Z",
+    "last_login_on": "2020-01-01T00:00:00Z",
+    "api_key": "<api-key>",
+    "avatar_id": 5
+  }
+}
+```
+
+The optional `avatar_id` key, if given, should be a number.
+
+This number should match the identifier to access the avatar (eg. thumbnail)
+image in the next endpoint:
+
+Endpoint: `/people/avatar?id=$ID`, replacing `$ID` with this number (`avatar_id`).
+
+And finally, it returns a 200 OK response with a binary stream of data with the contents of the image (eg. png),
+to be consumed by axios as a `arraybuffer`. It works with png and jpeg images (both tested).
+
+Currently, the expected (optimal) image returned should be 48x48 pixels.
+
+In case there is are valid endpoints, wrong `avatar_id` (id) or non valid response (wrong image payload),
+it will provide the red bubble with the first letter of the user name as a fallback.

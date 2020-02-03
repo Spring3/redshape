@@ -55,9 +55,14 @@ const Bubble = styled.div`
       overflow: hidden;
       height: 0;
 
+      ${props => (props.withAvatar ? css`
+      right: 35px;
+      margin-top: 11px;
+      ` : css`
       right: 30px;
-      margin-left: -150px;
       margin-top: 16px;
+      `)}
+      margin-left: -150px;
       height: 150px;
       border: 2px solid ${props => props.theme.main};
 
@@ -85,6 +90,12 @@ const Bubble = styled.div`
       margin: 0 30px;
       &:nth-child(2) {
         height: 60px;
+      }
+      &.User {
+        &.User-avatar {
+          margin-top: 35px;
+          margin-bottom: 20px;
+        }
       }
   }
   .Drop ul.dropdown li.name {
@@ -216,12 +227,34 @@ const IconMovingButton = styled(IconButton)`
   }
 `;
 
+const User = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:nth-child(2) {
+    margin-top: 5px;
+  }
+`;
+const Avatar = styled.img`
+  display: block;
+  border-radius: 5px;
+`;
+
 class NavigationBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpenAbout: false
+      isOpenAbout: false,
+      allowAvatar: true
     };
+
+    const { user, uiStyle, fetchAvatar } = this.props;
+    if (uiStyle === 'enhanced') {
+      const avatar_id = user && user.avatar_id;
+      if (avatar_id >= 0) {
+        fetchAvatar(avatar_id);
+      }
+    }
   }
 
   signout = () => {
@@ -229,12 +262,24 @@ class NavigationBar extends Component {
     logout();
   }
 
+  checkAvatar = ({ target: img }) => {
+    const fallback = !(img && img.complete && img.naturalWidth > 0);
+    if (fallback) {
+      this.setState({ allowAvatar: false });
+    }
+  }
+
   render() {
     const {
       user = {}, uiStyle, history, onRefresh
     } = this.props;
     const { name } = user;
+    const { allowAvatar } = this.state;
     const isEnhanced = uiStyle === 'enhanced';
+    let avatar;
+    if (isEnhanced && allowAvatar) {
+      avatar = user.avatar;
+    }
     return (
       <Navbar isEnhanced={isEnhanced}>
         <ul>
@@ -272,9 +317,21 @@ class NavigationBar extends Component {
           </li>
         </ul>
         { isEnhanced ? (
-          <Bubble>
+          <Bubble withAvatar={!!avatar}>
             <div className="Drop">
-              <div className="Label">{name.charAt(0)}</div>
+              {
+                avatar != null ? (
+                  <Avatar
+                    onError={this.checkAvatar}
+                    onLoad={this.checkAvatar}
+                    width={avatar.size}
+                    height={avatar.size}
+                    src={avatar.img}
+                  />
+                ) : (
+                  <div className="Label">{name.charAt(0) || 'Me'}</div>
+                )
+              }
               <ul className="dropdown">
                 <li className="dropdown-ghost" />
                 <li>
@@ -286,8 +343,13 @@ class NavigationBar extends Component {
                 <li>
                   <GhostButton onClick={() => this.setState({ isOpenAbout: true })}>About Redshape</GhostButton>
                 </li>
-                <li>
-                  <Name>{name}</Name>
+                <li className={avatar ? 'User User-avatar' : 'User'}>
+                  <User>
+                    {
+                      avatar != null && (<div className="Label">{name.charAt(0)}</div>)
+                    }
+                    <Name>{name}</Name>
+                  </User>
                 </li>
                 <li>
                   <GhostButton
@@ -355,7 +417,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(actions.user.logout())
+  logout: () => dispatch(actions.user.logout()),
+  fetchAvatar: id => dispatch(actions.user.fetchAvatar(id))
 });
 
 export default withRouter(withTheme(connect(mapStateToProps, mapDispatchToProps)(NavigationBar)));

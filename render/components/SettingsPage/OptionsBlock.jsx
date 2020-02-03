@@ -83,8 +83,12 @@ class OptionsBlock extends Component {
   }
 
   onUiStyleChange = (uiStyle) => {
-    const { settingsUiStyle } = this.props;
-    settingsUiStyle(uiStyle.value);
+    const { settingsUiStyle, fetchAvatar, avatar_id } = this.props;
+    const { value } = uiStyle;
+    if (value === 'enhanced' && avatar_id >= 0) {
+      fetchAvatar(avatar_id);
+    }
+    settingsUiStyle(value);
   }
 
   onIdleBehaviorChange = (idleBehavior) => {
@@ -272,6 +276,7 @@ OptionsBlock.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]).isRequired,
+  avatar_id: PropTypes.number,
   showClosedIssues: PropTypes.bool.isRequired,
   showAdvancedTimerControls: PropTypes.bool.isRequired,
   uiStyle: PropTypes.string.isRequired,
@@ -291,10 +296,12 @@ OptionsBlock.propTypes = {
   settingsCommentsEditable: PropTypes.func.isRequired,
   settingsCustomFieldsEditable: PropTypes.func.isRequired,
   settingsTimerCheckpoint: PropTypes.func.isRequired,
+  fetchAvatar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.user.id,
+  avatar_id: state.user.avatar_id,
   showClosedIssues: state.settings.showClosedIssues,
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
   uiStyle: state.settings.uiStyle,
@@ -317,6 +324,7 @@ const mapDispatchToProps = dispatch => ({
   settingsCommentsEditable: value => dispatch(actions.settings.setCommentsEditable(value)),
   settingsCustomFieldsEditable: value => dispatch(actions.settings.setCustomFieldsEditable(value)),
   settingsTimerCheckpoint: value => dispatch(actions.settings.setTimerCheckpoint(value)),
+  fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
   getFieldsData: () => dispatch(actions.fields.getAll()),
 });
 

@@ -10,6 +10,7 @@ import { Input, Label } from '../../components/Input';
 import IssuesTable from '../../components/SummaryPage/IssuesTable';
 import OptionsBlock from '../../components/SettingsPage/OptionsBlock';
 import ColumnHeadersSelect from '../../components/SettingsPage/ColumnHeadersSelect';
+import Link from '../../components/Link';
 
 const Grid = styled.div`
   display: grid;
@@ -27,6 +28,27 @@ const Section = styled.section`
 const IssuesSection = styled(Section)`
   grid-column: span 8;
   grid-row: auto;
+`;
+
+const Title = styled.h2`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const SmallNotice = styled.div`
+  font-size: 12px;
+  margin-top: 0px;
+  color: ${props => props.theme.minorText};
+
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+
+  a {
+    font-size: inherit !important;
+    margin: 0 5px;
+  }
 `;
 
 class SettingsPage extends Component {
@@ -85,11 +107,14 @@ class SettingsPage extends Component {
   }
 
   render() {
-    const { theme } = this.props;
+    const { uiStyle, redmineEndpoint } = this.props;
     return (
       <Grid>
         <IssuesSection>
-          <h2>Settings</h2>
+          <Title>
+Settings
+            { uiStyle === 'enhanced' && (<SmallNotice><Link clickable={true} type="external" href={`${redmineEndpoint}`}>{redmineEndpoint}</Link></SmallNotice>) }
+          </Title>
           <OptionsBlock />
           <ColumnHeadersSelect />
           <Label label="Example view" />
@@ -111,16 +136,19 @@ SettingsPage.propTypes = {
   ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
   fetchIssues: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  uiStyle: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.user.id,
-  showClosedIssues: state.settings.showClosedIssues
+  redmineEndpoint: state.user.redmineEndpoint,
+  showClosedIssues: state.settings.showClosedIssues,
+  uiStyle: state.settings.uiStyle,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
+  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page)),
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SettingsPage));

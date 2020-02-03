@@ -279,6 +279,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ![](changes/parent_issue_subtasks.png)
 
+### Avatar
+
+- Avatar image can be used in Enhanced UIStyle (if server-side support). The bubble with the first letter of the name is shown as fallback.
+
+![](changes/avatar.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:
