@@ -283,7 +283,7 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 - Avatar image can be used in Enhanced UIStyle (if server-side support). The bubble with the first letter of the name is shown as fallback.
 
-![](changes/avatar.png)
+  ![](changes/avatar.png)
 
 ## Recommended settings
 

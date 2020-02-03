@@ -60,14 +60,15 @@ ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
   timerEnabled = false;
   if (isEnabled) {
     let { subject } = issue;
-    const subjectLength = 20;
+    const subjectLength = 21;
+    subject = subject ? ` ${subject}` : '';
     if (subject.length > (subjectLength + 3)) {
       subject = `${subject.substr(0, subjectLength)}...`;
     }
     timerEnabled = true;
     timerPaused = isPaused;
     timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${issue.id} ${subject}`;
-    statusLabel = `${NAME} #${issue.id} ${subject} (${isPaused ? 'paused' : 'running'})`;
+    statusLabel = `${NAME} #${issue.id}${subject} (${isPaused ? 'paused' : 'running'})`;
   }
   updateTrayMenu();
 });
