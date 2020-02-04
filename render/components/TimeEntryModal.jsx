@@ -330,6 +330,7 @@ class TimeEntryModal extends Component {
       durationInfo = `${Number(hours.toFixed(2))} hours`;
     }
     const hasEvenFields = (customFieldsMap && Object.keys(customFieldsMap).length % 2 === 0);
+    const tooltipEntryModal = '- Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.';
     return (
       <Modal
         width={540}
@@ -341,7 +342,7 @@ class TimeEntryModal extends Component {
         <Fragment>
           <Title>
             { timeEntry.id ? 'Edit time entry' : 'New time entry' }
-            <LabelIcon><Tooltip position="right" text="- Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
+            <LabelIcon><Tooltip position="right" text={tooltipEntryModal}><HelpIconStyled size={14} /></Tooltip></LabelIcon>
           </Title>
           <Label htmlFor="issue" label="Issue">
             <div name="issue">{`#${timeEntry.issue.id} ${timeEntry.issue.name}`}</div>

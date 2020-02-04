@@ -75,7 +75,7 @@ class Tooltip extends Component {
     const {
       className, children, text, position
     } = this.props;
-    const lines = text.split('\\n');
+    const lines = text.split('\n');
     return (
       <TooltipContainer
         className={className}

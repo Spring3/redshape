@@ -32,10 +32,12 @@ const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
 `;
-const OptionsInfo = (<LabelIcon><Tooltip position="right" text="- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions).\n- Custom Fields editable: needs server-side support to update them (if valid permissions)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const tooltipOptions = '- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions).\n- Custom Fields editable: needs server-side support to update them (if valid permissions).';
+const tooltipCheckpoint = 'Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system).';
+const OptionsInfo = (<LabelIcon><Tooltip position="right" text={tooltipOptions}><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const TimerBehaviorInfo = (<LabelIcon><Tooltip text="Detect if the system is idle to pause the timer."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
-const CheckpointInfo = (<LabelIcon><Tooltip text="Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system)."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const CheckpointInfo = (<LabelIcon><Tooltip text={tooltipCheckpoint}><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 
 const Grid = styled.div`
   display: grid;

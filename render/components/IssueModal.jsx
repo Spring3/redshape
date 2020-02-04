@@ -372,6 +372,7 @@ class IssueModal extends Component {
     const progressInfo = `${progress_info.toFixed(0)}%`;
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
     const { assigned_to, author } = propsIssueEntry;
+    const tooltipIssueModal = "- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.";
     return (
       <Modal
         width={540}
@@ -382,7 +383,7 @@ class IssueModal extends Component {
       >
         <Title>
             Edit issue
-          <LabelIcon><Tooltip position="right" text="- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue."><HelpIconStyled size={14} /></Tooltip></LabelIcon>
+          <LabelIcon><Tooltip position="right" text={tooltipIssueModal}><HelpIconStyled size={14} /></Tooltip></LabelIcon>
         </Title>
         <Label htmlFor="issue" label="Issue">
           <div name="issue">{`#${propsIssueEntry.id} ${propsIssueEntry.subject}`}</div>

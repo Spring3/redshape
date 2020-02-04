@@ -30,7 +30,8 @@ const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
 `;
-const TableColumnsInfo = (<LabelIcon><Tooltip text="'Tags', 'Total Estimation', 'Total Spent',\n'Spent', 'Subtasks' and colored 'Parent'\n need server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
+const tooltipColumns = "'Tags', 'Total Estimation', 'Total Spent',\n'Spent', 'Subtasks' and colored 'Parent'\n need server-side support.";
+const TableColumnsInfo = (<LabelIcon><Tooltip text={tooltipColumns}><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 
 class ColumnHeadersSelect extends Component {
   constructor(props) {
