@@ -391,6 +391,7 @@ Created
             publishComments={postComments}
             publishUpdateComments={postUpdateComments}
             issueId={selectedIssue.id}
+            volatile={this.props.selectedIssueState.volatile}
           />
           { selectedTimeEntry && (
             <TimeEntryModal
@@ -489,7 +490,8 @@ IssueDetailsPage.propTypes = {
       })),
     }),
     isFetching: PropTypes.bool.isRequired,
-    error: PropTypes.instanceOf(Error)
+    error: PropTypes.instanceOf(Error),
+    volatile: PropTypes.object
   }).isRequired,
   userId: PropTypes.number.isRequired,
   userName: PropTypes.string.isRequired,
@@ -512,7 +514,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
   postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
-  postUpdateComments: (issueId, commentId, comments) => dispatch(actions.issues.updateComments(issueId, commentId, comments)),
+  postUpdateComments: (issueId, commentId, comments, remove) => dispatch(actions.issues.updateComments(issueId, commentId, comments, remove)),
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });
 

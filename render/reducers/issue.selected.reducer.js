@@ -27,10 +27,12 @@ export const initialState = {
   },
   isFetching: false,
   error: undefined,
-  updates: {}
+  updates: {},
+  volatile: undefined
 };
 
 export default (state = initialState, action) => {
+  state.volatile = undefined;
   switch (action.type) {
     case ISSUES_RESET_SELECTION: {
       return initialState;
@@ -93,8 +95,9 @@ export default (state = initialState, action) => {
               ok: false,
               isUpdating: false,
               error: action.data
-            }
-          }
+            },
+          },
+          volatile: action.info.volatile
         };
       }
       return state;
@@ -140,7 +143,8 @@ export default (state = initialState, action) => {
               isUpdating: false,
               error: action.data
             }
-          }
+          },
+          volatile: action.info.volatile
         };
       }
       return state;

@@ -266,7 +266,7 @@ describe('Issue actions', () => {
       expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), { subject: 'comments' }));
+      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), { subject: 'comments', volatile: { comments: 'Ping' } }));
     });
   });
 

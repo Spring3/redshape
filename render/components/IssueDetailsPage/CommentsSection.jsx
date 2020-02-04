@@ -181,14 +181,24 @@ class CommentsSection extends Component {
 
   componentDidUpdate(oldProps) {
     const { timestamp: oldTimestamp } = oldProps.journalEntries;
+    const { volatile } = this.props;
     const { entries, timestamp } = this.props.journalEntries;
-    if (oldTimestamp != timestamp) {
+    if (oldTimestamp !== timestamp) {
       const { sortDescending } = this.state;
+      let selected = null;
+      let editorText = '';
+      if (volatile) {
+        const { oldVolatile } = oldProps;
+        if (!oldVolatile || (volatile.comments !== oldVolatile.comments && volatile.commentId !== oldVolatile.commentId)) {
+          selected = entries.find(el => el.id === volatile.commentId);
+          editorText = volatile.comments;
+        }
+      }
       this.setState({
         entries: sortDescending ? entries.reverse() : entries,
         timestamp,
-        selected: null,
-        editorText: ''
+        selected,
+        editorText,
       });
     }
   }
@@ -204,19 +214,19 @@ class CommentsSection extends Component {
             editorText: ''
           });
         } else {
-          return publishUpdateComments(issueId, selected.id, comments);
+          publishUpdateComments(issueId, selected.id, comments);
         }
       } else {
-        return publishComments(issueId, comments);
+        publishComments(issueId, comments);
       }
     }
   }
 
-  removeComment = () => {
+  removeComment = (comments) => {
     const { selected } = this.state;
     if (selected) {
       const { issueId, publishUpdateComments } = this.props;
-      return publishUpdateComments(issueId, selected.id, '');
+      publishUpdateComments(issueId, selected.id, comments, true);
     }
   }
 
@@ -348,6 +358,7 @@ CommentsSection.propTypes = {
   publishComments: PropTypes.func.isRequired,
   publishUpdateComments: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,
+  volatile: PropTypes.object
 };
 
 const mapStateToProps = state => ({

@@ -116,7 +116,7 @@ class MarkdownEditor extends PureComponent {
 
   componentDidUpdate(oldProps, oldState) {
     if (this.props.initialValue !== oldProps.initialValue) {
-      this.setState({ value: this.props.initialValue });
+      this.setState({ value: this.props.initialValue || '' });
     }
 
     if (oldState.value !== this.state.value
@@ -235,16 +235,11 @@ class MarkdownEditor extends PureComponent {
       trySend = true;
     }
     if (trySend && onSubmit) {
-      const resp = onSubmit(xssFilter(this.state.value));
-      if (resp) {
-        resp.then((err) => { // succeeded, clear textarea:
-          if (!(err instanceof Error)) {
-            this.setState({
-              value: ''
-            });
-          }
-        }).catch(() => {});
-      }
+      const { value } = this.state;
+      this.setState({
+        value: ''
+      });
+      onSubmit(xssFilter(value));
     }
   }
 
@@ -332,7 +327,7 @@ class MarkdownEditor extends PureComponent {
                 {
                   requestConfirmation => (
                     <GhostButton
-                      onClick={requestConfirmation(this.props.onRemove)}
+                      onClick={requestConfirmation(() => this.props.onRemove(this.state.value))}
                     >
                       <CloseIcon size={27} />
                       <span>&nbsp;Remove</span>
