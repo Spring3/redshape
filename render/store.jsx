@@ -16,8 +16,8 @@ const userSettings = _get(initialState, `settings.${redmineEndpoint}.${id}`);
 
 export default createStore(reducers, {
   user,
-  settings: migrateSettings(userSettings),
+  settings: migrateSettings(userSettings, user),
   projects: initialState.projects,
-  tracking: migrateTracking(initialState.time_tracking)
+  tracking: migrateTracking(initialState.time_tracking, user)
 },
 applyMiddleware(thunk, notificationMiddleware));

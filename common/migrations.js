@@ -3,7 +3,28 @@ import { initialState as initialStateSettings } from '../render/reducers/setting
 import { initialState as initialStateTracking } from '../render/reducers/tracking.reducer';
 import { version } from '../package.json';
 
+import storage from './storage';
+
 const VERSION = version.split('.').map(el => Number(el));
+
+const log = (...args) => {
+  console.log('[Settings::Migration]', ...args);
+};
+const err = (...args) => {
+  console.error('[Settings::Migration]', ...args);
+};
+
+
+const save = (settings, user) => {
+  if (user) {
+    const { id, redmineEndpoint } = user;
+    if (id && redmineEndpoint) {
+      log(`Saving settings in storage for ${redmineEndpoint}.${id}`);
+      storage.set(`settings.${redmineEndpoint}.${id}`, settings);
+    }
+  }
+  return settings;
+};
 
 /**
  * This method should be extended when we alter the names/valid values of the settings
@@ -11,9 +32,10 @@ const VERSION = version.split('.').map(el => Number(el));
  *
  * The migration does not remove the previous non-conflicting settings (user can still recover them)
  */
-export const migrateSettings = (s) => {
-  if (s == null) { // no config file, initial state will be given later
-    return initialStateSettings;
+export const migrateSettings = (s, user) => {
+  if (s == null) {
+    log('No config file. Giving default settings.');
+    return save(initialStateSettings, user);
   }
   const migration = s.version;
   if (migration === version) {
@@ -28,24 +50,27 @@ export const migrateSettings = (s) => {
       if (vmajor === major && vminor === minor) {
         if (vmajor === 1 && vminor === 3) {
           if (patch < 2) { // 1.3.0, 1.3.1: not public
-            const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint', 'version'];
+            s.version = '1.3.2';
+            log(`Migrating from ${migration} to ${s.version}`);
+            const keys = ['areCommentsEditable', 'isIssueAlwaysEditable', 'timerCheckpoint'];
             keys.forEach(key => s[key] = initialStateSettings[key]);
           }
           if (patch < 3) {
-            const keys = ['areCustomFieldsEditable', 'version'];
+            s.version = version;
+            log(`Migrating from ${migration} to ${s.version}`);
+            const keys = ['areCustomFieldsEditable'];
             keys.forEach(key => s[key] = initialStateSettings[key]);
           }
-          return s;
+          return save(s, user);
         }
-        console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
-        return initialStateSettings;
       }
-      console.error(`[Settings] Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
-      return initialStateSettings;
+      err(`Migration from version ${migration} to ${version} not implemented. Resetting to the new version.`);
+      return save(initialStateSettings, user);
     }
-    console.error(`[Settings] Invalid version ${migration}. Resetting to the new version.`);
-    return initialStateSettings;
+    err(`Invalid version found: ${migration}. Resetting to the new version.`);
+    return save(initialStateSettings, user);
   } // else: previous to version 1.3.0
+  log(`Migrating from < 1.3.0 to ${version}.`);
 
   const settings = { ...s };
 
@@ -76,7 +101,7 @@ export const migrateSettings = (s) => {
         settings[to] = cb(setting);
       } else {
         if (setting != null) {
-          console.error(`[Settings] Cannot migrate setting '${from}' with value '${setting}' to new setting '${to}'. Default value applied.`);
+          err(`[Settings] Cannot migrate setting '${from}' with value '${setting}' to new setting '${to}'. Default value applied.`);
         } else {
           delete settings[from];
         }
@@ -103,7 +128,9 @@ export const migrateSettings = (s) => {
   keys = ['areCustomFieldsEditable'];
   keys.forEach(key => settings[key] = initialStateSettings[key]);
 
-  return settings;
+  settings.version = version;
+
+  return save(settings, user);
 };
 
 export const migrateTracking = (s) => {

@@ -18,6 +18,8 @@ import {
   SETTINGS_CUSTOM_FIELDS_EDITABLE,
 } from '../actions/settings.actions';
 
+import { migrateSettings } from '../../common/migrations';
+
 export const initialState = {
   showAdvancedTimerControls: false,
   progressSlider: '10%',
@@ -130,7 +132,8 @@ export default (state = initialState, action) => {
     }
     case SETTINGS_RESTORE: {
       const { userId, redmineEndpoint } = action.data;
-      return storage.get(`settings.${redmineEndpoint}.${userId}`, initialState);
+      const settings = storage.get(`settings.${redmineEndpoint}.${userId}`, initialState);
+      return migrateSettings(settings, { id: userId, redmineEndpoint });
     }
     case SETTINGS_ISSUE_ALWAYS_EDITABLE: {
       const { userId, redmineEndpoint, isIssueAlwaysEditable } = action.data;

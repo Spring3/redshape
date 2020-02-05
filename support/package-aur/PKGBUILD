@@ -10,7 +10,7 @@ groups=()
 depends=('electron' 'libxss' 'pkgconf')
 makedepends=('npm')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rNoz/redshape/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=("e1f218685db388aa79fee6db2274564c")
+md5sums=("6194db22e22875bef59798aba8eb3dd5")
 noextract=()
 name=Redshape
 
@@ -40,6 +40,7 @@ package() {
 cat << EOF > "${pkgname}.sh"
 #!/bin/sh
 export ELECTRON_IS_DEV=${ELECTRON_IS_DEV:-0}
+export DEV_TOOLS=${DEV_TOOLS:-0}
 exec electron /usr/lib/${pkgname}/app.asar "\$@"
 EOF
 
