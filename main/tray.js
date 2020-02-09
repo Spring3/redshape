@@ -58,17 +58,19 @@ const updateTrayMenu = () => {
 ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
   statusLabel = NAME;
   timerEnabled = false;
-  if (isEnabled) {
-    let { subject } = issue;
-    const subjectLength = 21;
-    subject = subject ? ` ${subject}` : '';
-    if (subject.length > (subjectLength + 3)) {
-      subject = `${subject.substr(0, subjectLength)}...`;
+  if (isEnabled && issue) {
+    let { id, subject } = issue;
+    if (id) {
+      const subjectLength = 21;
+      subject = subject ? ` ${subject}` : '';
+      if (subject.length > (subjectLength + 3)) {
+        subject = `${subject.substr(0, subjectLength)}...`;
+      }
+      timerEnabled = true;
+      timerPaused = isPaused;
+      timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${id} ${subject}`;
+      statusLabel = `${NAME} #${id}${subject} (${isPaused ? 'paused' : 'running'})`;
     }
-    timerEnabled = true;
-    timerPaused = isPaused;
-    timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${issue.id} ${subject}`;
-    statusLabel = `${NAME} #${issue.id}${subject} (${isPaused ? 'paused' : 'running'})`;
   }
   updateTrayMenu();
 });
