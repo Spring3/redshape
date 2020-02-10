@@ -28,7 +28,8 @@ const env = dotenv.config({ silent: true, path: configFilePath });
 
 if (env.error || !process.env.ENCRYPTION_KEY) {
   const key = crypto.randomBytes(32).toString('hex');
-  fs.appendFileSync(configFilePath, `ENCRYPTION_KEY=${key}`);
+  const writeToFile = isDev ? fs.appendFileSync : fs.writeFileSync;
+  writeToFile(configFilePath, `ENCRYPTION_KEY=${key}`);
   dotenv.config({ silent: true, path: configFilePath });
 }
 
@@ -323,6 +324,7 @@ const initialize = () => {
     if (isDev) {
       mainWindow.webContents.openDevTools();
     }
+    mainWindow.webContents.openDevTools();
   });
 
   mainWindow.once('closed', () => {

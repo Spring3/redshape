@@ -22,10 +22,10 @@ module.exports = {
     }
     return {
       ...windowConfig,
-      icon: path.join(__dirname, '../assets/icon.ico'),
-      iconTray: path.join(__dirname, '../assets/icon.ico'),
-      iconPause: path.join(__dirname, '../assets/icon-pause.ico'),
-      iconPlay: path.join(__dirname, '../assets/icon-play.ico')
+      icon: path.join(__dirname, '../assets/icon.png'),
+      iconTray: path.join(__dirname, '../assets/icon.png'),
+      iconPause: path.join(__dirname, '../assets/icon-pause.png'),
+      iconPlay: path.join(__dirname, '../assets/icon-play.png')
     };
   }
 };

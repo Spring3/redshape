@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import { remote } from 'electron';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -20,7 +21,7 @@ import Link from './Link';
 
 import IPC from '../ipc';
 
-import desktopIdle from 'desktop-idle';
+const { powerMonitor } = remote.require('electron');
 
 const ActiveTimer = styled.div`
   animation: ${animationSlideUp} .7s ease-in;
@@ -175,12 +176,13 @@ class Timer extends Component {
     let warningIdle = false;
     this.intervalIdle = setInterval(() => {
       if (warningIdle){ return; }
-      const idle = desktopIdle.getIdleTime();
+      const idle = powerMonitor.getSystemIdleTime();
+      console.log('system idle time', idle);
       if (idle > (maxIdleTime)){
         IPC.send('notify', {message: `Timer will be paused if system continues idle for another ${warnTime} seconds.`, critical: true});
         warningIdle = true;
         this.timeoutIdle = setTimeout(() => {
-          const idle = desktopIdle.getIdleTime();
+          const idle = powerMonitor.getSystemIdleTime();
           if (idle > (maxIdleTime)){
             this.pauseByIdle(Number(idle.toFixed(0)) * 1000)
           }else{
