@@ -42,7 +42,7 @@ jobs:
 
 workflows:
   version: 2
-  test-cover-push:
+  test:
     jobs:
       - lint
       - test

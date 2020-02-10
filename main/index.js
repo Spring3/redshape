@@ -11,9 +11,7 @@ const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
 
-const { setupTray } = require('./tray');
-
-const NAME = 'Redshape';
+const Tray = require('./tray');
 
 const utils = require('./utils');
 require('./exceptionCatcher')();
@@ -83,7 +81,7 @@ const generateMenu = ({ settings }) => {
   const menu = Menu.buildFromTemplate([
     // { role: 'appMenu' }
     ...(isMac ? [{
-      label: NAME,
+      label: app.name,
       submenu: [
         aboutSubmenu,
         { type: 'separator' },
@@ -290,6 +288,36 @@ const initialize = () => {
   mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
 
+  const tray = Tray.getInstance(windowConfig, mainWindow.webContents);
+
+  app.on('before-quit', () => {
+    tray.setHideWhenClosed(false);
+  });
+
+  mainWindow.on('close', (e) => {
+    if (tray.willHideWhenClosed()) {
+      e.preventDefault();
+      mainWindow.hide();
+      e.returnValue = false;
+    } else {
+      mainWindow.webContents.send('window', { action: 'quit' });
+    }
+  });
+
+  mainWindow.on('show', () => {
+    tray.appWindowVisibilityToggled();
+    mainWindow.webContents.send('window', { action: 'show' });
+    tray.update();
+  });
+
+  mainWindow.on('hide', () => {
+    tray.appWindowVisibilityToggled();
+    mainWindow.webContents.send('window', { action: 'hide' });
+    tray.update();
+  });
+
+  tray.setup();
+
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     if (isDev) {
@@ -299,10 +327,6 @@ const initialize = () => {
 
   mainWindow.once('closed', () => {
     mainWindow = null;
-  });
-
-  setupTray({
-    app, mainWindow, NAME, windowConfig
   });
 
   ipcMain.on('notify', (ev, { message, critical, keep }) => {
