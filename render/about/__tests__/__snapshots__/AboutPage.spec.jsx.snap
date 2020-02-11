@@ -221,6 +221,15 @@ Array [
         role="tab"
         tabIndex={null}
       />
+      <li
+        aria-controls="react-tabs-5"
+        aria-disabled="false"
+        aria-selected="false"
+        className="react-tabs__tab"
+        id="react-tabs-4"
+        role="tab"
+        tabIndex={null}
+      />
     </ul>
     <div
       aria-labelledby="react-tabs-0"
@@ -251,8 +260,7 @@ Array [
             Redshape
           </h2>
           <h2>
-            v
-            1.3.3
+            v1.3.3
           </h2>
         </div>
         <div
@@ -339,6 +347,12 @@ Array [
       aria-labelledby="react-tabs-2"
       className="c1 c2"
       id="react-tabs-3"
+      role="tabpanel"
+    />
+    <div
+      aria-labelledby="react-tabs-4"
+      className="c1 c2"
+      id="react-tabs-5"
       role="tabpanel"
     />
   </div>,
@@ -602,19 +616,19 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                     className="react-tabs__tab"
                     disabledClassName="react-tabs__tab--disabled"
                     focus={false}
-                    id="react-tabs-4"
+                    id="react-tabs-6"
                     key=".0"
-                    panelId="react-tabs-5"
+                    panelId="react-tabs-7"
                     selected={false}
                     selectedClassName="react-tabs__tab--selected"
                     tabRef={[Function]}
                   >
                     <li
-                      aria-controls="react-tabs-5"
+                      aria-controls="react-tabs-7"
                       aria-disabled="false"
                       aria-selected="false"
                       className="react-tabs__tab"
-                      id="react-tabs-4"
+                      id="react-tabs-6"
                       role="tab"
                       tabIndex={null}
                     />
@@ -623,83 +637,50 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                     className="react-tabs__tab"
                     disabledClassName="react-tabs__tab--disabled"
                     focus={false}
-                    id="react-tabs-6"
+                    id="react-tabs-8"
                     key=".1"
-                    panelId="react-tabs-7"
+                    panelId="react-tabs-9"
                     selected={true}
                     selectedClassName="react-tabs__tab--selected"
                     tabRef={[Function]}
                   >
                     <li
-                      aria-controls="react-tabs-7"
+                      aria-controls="react-tabs-9"
                       aria-disabled="false"
                       aria-selected="true"
                       className="react-tabs__tab react-tabs__tab--selected"
-                      id="react-tabs-6"
+                      id="react-tabs-8"
                       role="tab"
                       tabIndex="0"
+                    />
+                  </Tab>
+                  <Tab
+                    className="react-tabs__tab"
+                    disabledClassName="react-tabs__tab--disabled"
+                    focus={false}
+                    id="react-tabs-10"
+                    key=".2"
+                    panelId="react-tabs-11"
+                    selected={false}
+                    selectedClassName="react-tabs__tab--selected"
+                    tabRef={[Function]}
+                  >
+                    <li
+                      aria-controls="react-tabs-11"
+                      aria-disabled="false"
+                      aria-selected="false"
+                      className="react-tabs__tab"
+                      id="react-tabs-10"
+                      role="tab"
+                      tabIndex={null}
                     />
                   </Tab>
                 </ul>
               </TabList>
               <AboutPage__StyledTabPanel
-                id="react-tabs-5"
+                id="react-tabs-7"
                 key=".1"
                 selected={false}
-                tabId="react-tabs-4"
-              >
-                <StyledComponent
-                  forwardedComponent={
-                    Object {
-                      "$$typeof": Symbol(react.forward_ref),
-                      "attrs": Array [],
-                      "componentStyle": ComponentStyle {
-                        "componentId": "c2",
-                        "isStatic": false,
-                        "lastClassName": "c3",
-                        "rules": Array [
-                          "flex-grow:1;padding:20px;display:none;background:",
-                          [Function],
-                          ";",
-                        ],
-                      },
-                      "displayName": "AboutPage__StyledTabPanel",
-                      "foldedComponentIds": Array [],
-                      "render": [Function],
-                      "styledComponentId": "c2",
-                      "tabsRole": "TabPanel",
-                      "target": [Function],
-                      "toString": [Function],
-                      "warnTooManyClasses": [Function],
-                      "withComponent": [Function],
-                    }
-                  }
-                  forwardedRef={null}
-                  id="react-tabs-5"
-                  selected={false}
-                  tabId="react-tabs-4"
-                >
-                  <TabPanel
-                    className="c2 c3"
-                    forceRender={false}
-                    id="react-tabs-5"
-                    selected={false}
-                    selectedClassName="react-tabs__tab-panel--selected"
-                    tabId="react-tabs-4"
-                  >
-                    <div
-                      aria-labelledby="react-tabs-4"
-                      className="c2 c3"
-                      id="react-tabs-5"
-                      role="tabpanel"
-                    />
-                  </TabPanel>
-                </StyledComponent>
-              </AboutPage__StyledTabPanel>
-              <AboutPage__StyledTabPanel
-                id="react-tabs-7"
-                key=".2"
-                selected={true}
                 tabId="react-tabs-6"
               >
                 <StyledComponent
@@ -730,21 +711,75 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                   }
                   forwardedRef={null}
                   id="react-tabs-7"
-                  selected={true}
+                  selected={false}
                   tabId="react-tabs-6"
                 >
                   <TabPanel
                     className="c2 c3"
                     forceRender={false}
                     id="react-tabs-7"
-                    selected={true}
+                    selected={false}
                     selectedClassName="react-tabs__tab-panel--selected"
                     tabId="react-tabs-6"
                   >
                     <div
                       aria-labelledby="react-tabs-6"
-                      className="c2 c3 react-tabs__tab-panel--selected"
+                      className="c2 c3"
                       id="react-tabs-7"
+                      role="tabpanel"
+                    />
+                  </TabPanel>
+                </StyledComponent>
+              </AboutPage__StyledTabPanel>
+              <AboutPage__StyledTabPanel
+                id="react-tabs-9"
+                key=".2"
+                selected={true}
+                tabId="react-tabs-8"
+              >
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "c2",
+                        "isStatic": false,
+                        "lastClassName": "c3",
+                        "rules": Array [
+                          "flex-grow:1;padding:20px;display:none;background:",
+                          [Function],
+                          ";",
+                        ],
+                      },
+                      "displayName": "AboutPage__StyledTabPanel",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "c2",
+                      "tabsRole": "TabPanel",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                  id="react-tabs-9"
+                  selected={true}
+                  tabId="react-tabs-8"
+                >
+                  <TabPanel
+                    className="c2 c3"
+                    forceRender={false}
+                    id="react-tabs-9"
+                    selected={true}
+                    selectedClassName="react-tabs__tab-panel--selected"
+                    tabId="react-tabs-8"
+                  >
+                    <div
+                      aria-labelledby="react-tabs-8"
+                      className="c2 c3 react-tabs__tab-panel--selected"
+                      id="react-tabs-9"
                       role="tabpanel"
                     >
                       <AboutPage__FlexBox>
@@ -1218,6 +1253,60 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                         </StyledComponent>
                       </AboutPage__FlexBox>
                     </div>
+                  </TabPanel>
+                </StyledComponent>
+              </AboutPage__StyledTabPanel>
+              <AboutPage__StyledTabPanel
+                id="react-tabs-11"
+                key=".3"
+                selected={false}
+                tabId="react-tabs-10"
+              >
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "c2",
+                        "isStatic": false,
+                        "lastClassName": "c3",
+                        "rules": Array [
+                          "flex-grow:1;padding:20px;display:none;background:",
+                          [Function],
+                          ";",
+                        ],
+                      },
+                      "displayName": "AboutPage__StyledTabPanel",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "c2",
+                      "tabsRole": "TabPanel",
+                      "target": [Function],
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                  id="react-tabs-11"
+                  selected={false}
+                  tabId="react-tabs-10"
+                >
+                  <TabPanel
+                    className="c2 c3"
+                    forceRender={false}
+                    id="react-tabs-11"
+                    selected={false}
+                    selectedClassName="react-tabs__tab-panel--selected"
+                    tabId="react-tabs-10"
+                  >
+                    <div
+                      aria-labelledby="react-tabs-10"
+                      className="c2 c3"
+                      id="react-tabs-11"
+                      role="tabpanel"
+                    />
                   </TabPanel>
                 </StyledComponent>
               </AboutPage__StyledTabPanel>

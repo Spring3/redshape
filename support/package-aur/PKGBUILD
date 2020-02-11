@@ -10,7 +10,7 @@ groups=()
 depends=('electron' 'libxss' 'pkgconf')
 makedepends=('npm')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rNoz/redshape/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=("78f21a27ba7e2f7629fb96787af33066")
+md5sums=("8cc187dd8ad6c06cdedbd1116566f88d")
 noextract=()
 name=Redshape
 

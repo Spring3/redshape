@@ -18,7 +18,7 @@ const FlexBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 
   h3:nth-of-type(1) {
     margin: 15px auto;
@@ -55,7 +55,7 @@ const CenteredDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   div:nth-of-type(2) {
     margin-top: 15px;
   }
@@ -83,7 +83,7 @@ const StyledTabs = styled(Tabs)`
     display: inline-block;
     text-align: center;
     background: ${props => props.theme.bg};
-    
+
     li.react-tabs__tab {
       display: inline-block;
       position: relative;
@@ -128,9 +128,29 @@ const Contributors = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  
+
   a {
     margin-top: 5px;
+  }
+`;
+const Versions = styled.div`
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+
+  .list {
+    display: grid;
+    grid-template-columns: 150px 150px;
+    grid-column-gap: 0.3rem;
+    grid-row-gap: 0.3rem;
+    span {
+      text-align: left;
+    }
+    span:nth-child(odd) {
+      font-weight: bold;
+      text-align: right;
+    }
   }
 `;
 
@@ -146,6 +166,7 @@ class AboutPage extends Component {
           <TabList>
             <Tab />
             <Tab />
+            <Tab />
           </TabList>
 
           <StyledTabPanel>
@@ -158,10 +179,7 @@ class AboutPage extends Component {
                   <img alt="App icon" height="70" src={LogoIcon} />
                 </Link>
                 <h2>{name}</h2>
-                <h2>
-v
-                  {version}
-                </h2>
+                <h2>{`v${version}`}</h2>
               </IconContainer>
               <CenteredDiv>
                 <h3>Time tracker for Redmine</h3>
@@ -216,6 +234,23 @@ v
           <StyledTabPanel>
             <FlexBox>
               <License />
+            </FlexBox>
+          </StyledTabPanel>
+          <StyledTabPanel>
+            <FlexBox>
+              <Versions>
+                <h2>Versions</h2>
+                <div className="list">
+                  <span>{name}</span>
+                  <span>{version}</span>
+                  { Object.entries(process.versions).map(el => (
+                    <Fragment>
+                      <span>{el[0]}</span>
+                      <span>{el[1]}</span>
+                    </Fragment>
+                  )) }
+                </div>
+              </Versions>
             </FlexBox>
           </StyledTabPanel>
         </StyledTabs>
