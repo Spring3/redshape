@@ -122,6 +122,11 @@ const Grid = styled.div`
   }
 `;
 
+const Relations = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
 class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
@@ -214,7 +219,7 @@ class IssueDetailsPage extends Component {
     } = this.state;
     const selectedIssue = selectedIssueState.data;
     const {
-      attachments, total_estimated_hours, estimated_hours, total_spent_hours, spent_hours, custom_fields, tags, children, parent, assigned_to
+      attachments, total_estimated_hours, estimated_hours, total_spent_hours, spent_hours, custom_fields, relations, tags, children, parent, assigned_to
     } = selectedIssue;
     const extra_fields = [
       ...(attachments && attachments.length) ? [{ name: 'Attachments', value: attachments.length }] : [],
@@ -374,6 +379,51 @@ Created
                     </Fragment>
                   )
                 }
+                {
+                  relations && (
+                    <Fragment>
+                      <div>Relations:</div>
+                      <Relations>
+                        {relations.map((el) => {
+                          const rel = el.relation_type;
+                          let id; let relId; let
+                            toMe = false;
+                          if (el.issue_id === selectedIssue.id) {
+                            id = el.issue_id;
+                            relId = el.issue_to_id;
+                          } else {
+                            id = el.issue_to_id;
+                            relId = el.issue_id;
+                            toMe = true;
+                          }
+                          let delay = '';
+                          if (el.delay) {
+                            delay = ` (${el.delay} days)`;
+                          }
+                          let msg = rel;
+                          switch (rel) {
+                            case 'blocks':
+                              msg = toMe ? 'Blocked by' : 'Blocks';
+                              break;
+                            case 'precedes':
+                              msg = toMe ? 'Follows' : 'Precedes';
+                              break;
+                            case 'copied_to':
+                              msg = toMe ? 'Copied from' : 'Copied to';
+                              break;
+                            case 'duplicates':
+                              msg = toMe ? 'Has duplicate' : 'Duplicate of';
+                              break;
+                            case 'relates':
+                              msg = 'Related to';
+                              break;
+                          }
+                          return (<Tooltip text={`${msg}${delay} #${relId}`}><IssueId key={relId} mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={relId} /></Tooltip>);
+                        })}
+                      </Relations>
+                    </Fragment>
+                  )
+                }
 
               </Grid>
               <div>
@@ -459,6 +509,13 @@ IssueDetailsPage.propTypes = {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired
+      })),
+      relations: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        relation_type: PropTypes.string.isRequired,
+        issue_id: PropTypes.number.isRequired,
+        issue_to_id: PropTypes.number.isRequired,
+        delay: PropTypes.number,
       })),
       tags: PropTypes.arrayOf(PropTypes.string.isRequired),
       transitions: PropTypes.shape({

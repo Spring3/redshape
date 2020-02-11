@@ -285,6 +285,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/avatar.png)
 
+### Relations
+
+- Clickable relations of the issue are shown without tracker color and with the relation type as tooltip.
+
+  ![](changes/issue_relations.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:
