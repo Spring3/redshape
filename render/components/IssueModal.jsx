@@ -373,6 +373,7 @@ class IssueModal extends Component {
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
     const { assigned_to, author } = propsIssueEntry;
     const tooltipIssueModal = "- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.";
+    const progressSliderStep = progressSlider && Number(progressSlider.replace('%', ''));
     return (
       <Modal
         width={540}
@@ -515,7 +516,7 @@ class IssueModal extends Component {
                         tipFormatter={value => `${value}%`}
                         min={0}
                         max={100}
-                        step={progressSlider === '1%' ? 1 : 10}
+                        step={progressSliderStep || 10}
                         defaultValue={progress}
                         disabled={disableField}
                         onAfterChange={value => this.onProgressChange(value) && this.runValidation('progress')}
