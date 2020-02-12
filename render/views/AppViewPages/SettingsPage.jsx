@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
@@ -25,7 +26,7 @@ const Section = styled.section`
   border-radius: 5px;
 `;
 
-const IssuesSection = styled(Section)`
+const SettingsSection = styled(Section)`
   grid-column: span 8;
   grid-row: auto;
 `;
@@ -49,6 +50,16 @@ const SmallNotice = styled.div`
     font-size: inherit !important;
     margin: 0 5px;
   }
+`;
+
+const Logs = styled.div`
+  display: grid;
+  grid-template-columns: minmax(100px, 150px) minmax(150px, auto) auto;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
+  color: #888;
+  word-break: break-word;
+
 `;
 
 class SettingsPage extends Component {
@@ -107,10 +118,12 @@ class SettingsPage extends Component {
   }
 
   render() {
-    const { uiStyle, redmineEndpoint } = this.props;
+    const {
+      uiStyle, redmineEndpoint, logs, theme
+    } = this.props;
     return (
       <Grid>
-        <IssuesSection>
+        <SettingsSection>
           <Title>
 Settings
             { uiStyle === 'enhanced' && (<SmallNotice><Link clickable={true} type="external" href={`${redmineEndpoint}`}>{redmineEndpoint}</Link></SmallNotice>) }
@@ -123,7 +136,33 @@ Settings
             onSort={this.onSort}
             fetchIssuePage={this.fetchIssues}
           />
-        </IssuesSection>
+          { logs && logs.length ? (
+            <Fragment>
+              <h4 style={{ color: theme.main }}>Logs</h4>
+              <Logs>
+                <strong>Date</strong>
+                <strong>Message</strong>
+                <strong>Detail</strong>
+                { logs && (
+                  logs.map((el, i) => {
+                    const { date, message } = el;
+                    let { detail } = el;
+                    if (detail && typeof detail === 'object') {
+                      detail = JSON.stringify(detail, null, 2);
+                    }
+                    return (
+                      <Fragment key={i}>
+                        <span>{date}</span>
+                        <span>{message || ''}</span>
+                        <span>{detail || ''}</span>
+                      </Fragment>
+                    );
+                  })
+                )}
+              </Logs>
+            </Fragment>
+          ) : undefined }
+        </SettingsSection>
       </Grid>
     );
   }
@@ -145,6 +184,7 @@ const mapStateToProps = state => ({
   redmineEndpoint: state.user.redmineEndpoint,
   showClosedIssues: state.settings.showClosedIssues,
   uiStyle: state.settings.uiStyle,
+  logs: state.log.data,
 });
 
 const mapDispatchToProps = dispatch => ({

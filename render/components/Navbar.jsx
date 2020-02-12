@@ -266,6 +266,10 @@ class NavigationBar extends Component {
     const fallback = !(img && img.complete && img.naturalWidth > 0);
     if (fallback) {
       this.setState({ allowAvatar: false });
+      const detail = img && {
+        src: `${(img.src).slice(0, 50)}...`, srcLength: img.src.length, width: img.width, height: img.height, naturalWidth: img.naturalWidth, complete: img.complete
+      };
+      this.props.addLog({ message: 'Avatar cannot be shown', detail });
     }
   }
 
@@ -418,7 +422,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
-  fetchAvatar: id => dispatch(actions.user.fetchAvatar(id))
+  fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
+  addLog: reg => dispatch(actions.log.add(reg)),
 });
 
 export default withRouter(withTheme(connect(mapStateToProps, mapDispatchToProps)(NavigationBar)));

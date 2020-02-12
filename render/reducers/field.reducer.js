@@ -5,6 +5,7 @@ import { FIELD_GET_ALL } from '../actions/field.actions';
 
 export const initialState = {
   data: {},
+  invalid: null,
   isFetching: false,
   error: undefined
 };
@@ -20,6 +21,8 @@ const convertFieldData = (fieldData) => {
     issue: [],
     time_entry: []
   };
+
+  let invalidFields = null;
 
   public_custom_fields.forEach((el) => {
     const {
@@ -80,11 +83,22 @@ const convertFieldData = (fieldData) => {
     }
 
     if (!valid) {
-      console.error('Error: invalid custom field', el);
+      const message = 'Invalid editable custom field';
+      console.error(message, el);
+      if (!invalidFields) {
+        invalidFields = [];
+      }
+      if (is_computed) {
+        invalidFields.push({ message, detail: `'${name}' is computed (formula)` });
+      } else if (!visible) {
+        invalidFields.push({ message, detail: `'${name}' is not visible` });
+      } else {
+        invalidFields.push({ message, detail: el });
+      }
     }
   });
 
-  return mapFields;
+  return [mapFields, invalidFields];
 };
 
 export default (state = initialState, action) => {
@@ -95,11 +109,12 @@ export default (state = initialState, action) => {
           return { ...state, isFetching: true };
         }
         case 'OK': {
-          const data = convertFieldData(action.data);
+          const [mapFields, invalidFields] = convertFieldData(action.data);
           const nextState = {
             ...state,
             isFetching: false,
-            data,
+            data: mapFields,
+            invalid: invalidFields,
             error: undefined
           };
           storage.set('fields', nextState);

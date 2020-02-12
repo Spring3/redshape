@@ -8,6 +8,7 @@ import trackingReducer from './tracking.reducer';
 import projectReducer from './project.reducer';
 import fieldReducer from './field.reducer';
 import timeEntryReducer from './timeEntry.reducer';
+import logReducer from './log.reducer';
 
 import { USER_LOGOUT } from '../actions/user.actions';
 
@@ -22,7 +23,8 @@ const appReducer = combineReducers({
   projects: projectReducer,
   fields: fieldReducer,
   tracking: trackingReducer,
-  timeEntry: timeEntryReducer
+  timeEntry: timeEntryReducer,
+  log: logReducer
 });
 
 export default (state, action) => {

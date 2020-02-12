@@ -291,6 +291,15 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/issue_relations.png)
 
+### Logs
+
+- SettingsPage shows logs info. New action/reducer to allow writting relevant messages to the user.
+  Currently showing invalid editable custom fields and when the avatar has issues.
+
+  ![](changes/settings_logs.png)
+
+  ![](changes/settings_logs2.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:

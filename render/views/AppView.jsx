@@ -62,7 +62,12 @@ class AppView extends Component {
     this.props.getProjectData();
     const { areCustomFieldsEditable } = this.props;
     if (areCustomFieldsEditable) {
-      this.props.getFieldsData();
+      this.props.getFieldsData().then(() => {
+        const { customFieldsInvalid, addLog } = this.props;
+        if (customFieldsInvalid) {
+          customFieldsInvalid.forEach(el => addLog(el));
+        }
+      });
     }
   }
 
@@ -179,13 +184,15 @@ const mapStateToProps = state => ({
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
   progressSlider: state.settings.progressSlider,
   areCustomFieldsEditable: state.settings.areCustomFieldsEditable,
+  customFieldsInvalid: state.fields.invalid,
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
   getFieldsData: () => dispatch(actions.fields.getAll()),
-  resetTimer: () => dispatch(actions.tracking.trackingReset())
+  resetTimer: () => dispatch(actions.tracking.trackingReset()),
+  addLog: reg => dispatch(actions.log.add(reg)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppView);
