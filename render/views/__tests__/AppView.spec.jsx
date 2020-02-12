@@ -9,7 +9,7 @@ import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
 
-import { USER_LOGOUT } from '../../actions/user.actions';
+import { USER_LOGOUT, USER_GET_CURRENT } from '../../actions/user.actions';
 import { PROJECT_GET_ALL } from '../../actions/project.actions';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
@@ -206,7 +206,8 @@ describe('AppView', () => {
       );
 
       expect(store.getActions().length).toBeGreaterThan(0);
-      expect(store.getActions()[0].type).toBe(PROJECT_GET_ALL);
+      expect(store.getActions()[0].type).toBe(USER_GET_CURRENT);
+      expect(store.getActions()[1].type).toBe(PROJECT_GET_ALL);
     });
 
     it('should logout when a user clicks the button', () => {

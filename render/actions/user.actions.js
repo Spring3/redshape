@@ -43,7 +43,6 @@ const checkLogin = ({
 
 const getCurrent = () => (dispatch) => {
   dispatch(notify.start(USER_GET_CURRENT));
-
   return request({
     url: '/users/current.json',
     id: 'getCurrentUserInfo'

@@ -85,10 +85,10 @@ class OptionsBlock extends Component {
   }
 
   onUiStyleChange = (uiStyle) => {
-    const { settingsUiStyle, fetchAvatar, avatar_id } = this.props;
+    const { settingsUiStyle, fetchAvatar, avatarId } = this.props;
     const { value } = uiStyle;
-    if (value === 'enhanced' && avatar_id >= 0) {
-      fetchAvatar(avatar_id);
+    if (value === 'enhanced' && avatarId >= 0) {
+      fetchAvatar(avatarId);
     }
     settingsUiStyle(value);
   }
@@ -303,7 +303,7 @@ OptionsBlock.propTypes = {
 
 const mapStateToProps = state => ({
   userId: state.user.id,
-  avatar_id: state.user.avatar_id,
+  avatarId: state.user.avatar_id,
   showClosedIssues: state.settings.showClosedIssues,
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
   uiStyle: state.settings.uiStyle,

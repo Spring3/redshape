@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { USER_LOGIN, USER_AVATAR, USER_LOGOUT } from '../actions/user.actions';
+import {
+  USER_LOGIN, USER_AVATAR, USER_LOGOUT, USER_GET_CURRENT
+} from '../actions/user.actions';
 import storage from '../../common/storage';
 
 export const initialState = {
@@ -10,7 +12,8 @@ export const initialState = {
   redmineEndpoint: undefined,
   api_key: undefined,
   avatar_id: undefined,
-  avatar: undefined
+  avatar: undefined,
+  loggedFromServer: false,
 };
 
 const handleUserLogin = (state, action) => {
@@ -25,7 +28,7 @@ const handleUserLogin = (state, action) => {
       payload.name = `${firstname} ${lastname}`;
       storage.set('user', payload);
       return {
-        ...state, ...payload, isFetching: false, loginError: undefined
+        ...state, ...payload, loggedFromServer: true, isFetching: false, loginError: undefined
       };
     }
     case 'NOK': {
@@ -47,6 +50,29 @@ export default (state = initialState, action) => {
         avatar: action.data
       };
     }
+    case USER_GET_CURRENT: {
+      switch (action.status) {
+        case 'START': {
+          return { ...state, isFetching: true };
+        }
+        case 'OK': {
+          const userData = _.get(action.data, 'user', {});
+          const { firstname, lastname } = userData;
+          const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key', 'avatar_id');
+          payload.name = `${firstname} ${lastname}`;
+          if (state.redmineEndpoint) { // preserve from original login action
+            payload.redmineEndpoint = state.redmineEndpoint;
+          }
+          storage.set('user', payload);
+          return {
+            ...state, ...payload, loggedFromServer: false, isFetching: false, loginError: undefined
+          };
+        }
+        case 'NOK': {
+          return { ...state, loginError: action.data, isFetching: false };
+        }
+      }
+    }
     case USER_LOGOUT: {
       // we keep settings cause they are general app settings
       const settings = storage.get('settings');
@@ -56,7 +82,6 @@ export default (state = initialState, action) => {
       }
       return { ...initialState };
     }
-    default:
-      return state;
   }
+  return state;
 };

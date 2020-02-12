@@ -15,7 +15,8 @@ describe('User reducer', () => {
     firstname: undefined,
     lastname: undefined,
     redmineEndpoint: undefined,
-    api_key: undefined
+    api_key: undefined,
+    loggedFromServer: false,
   };
 
   it('should return the initial state by default', () => {
@@ -48,7 +49,8 @@ describe('User reducer', () => {
         id: data.user.id,
         name: `${data.user.firstname} ${data.user.lastname}`,
         redmineEndpoint: data.user.redmineEndpoint,
-        api_key: data.user.api_key
+        api_key: data.user.api_key,
+        loggedFromServer: true,
       });
       expect(storageSetSpy).toHaveBeenCalledWith('user', {
         id: data.user.id,

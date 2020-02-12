@@ -58,7 +58,20 @@ class AppView extends Component {
     });
   }
 
+  refreshUser() {
+    const { uiStyle, fetchAvatar, avatarId } = this.props;
+    if (uiStyle === 'enhanced' && avatarId >= 0) {
+      fetchAvatar(avatarId);
+    }
+  }
+
   componentWillMount() {
+    const { loggedFromServer, getCurrentUser } = this.props;
+    if (loggedFromServer) {
+      this.refreshUser();
+    } else {
+      getCurrentUser().then(() => this.refreshUser());
+    }
     this.props.getProjectData();
     const { areCustomFieldsEditable } = this.props;
     if (areCustomFieldsEditable) {
@@ -175,6 +188,7 @@ AppView.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  loggedFromServer: state.user.loggedFromServer,
   userId: state.user.id,
   userName: state.user.name,
   api_key: state.user.api_key,
@@ -185,6 +199,8 @@ const mapStateToProps = state => ({
   progressSlider: state.settings.progressSlider,
   areCustomFieldsEditable: state.settings.areCustomFieldsEditable,
   customFieldsInvalid: state.fields.invalid,
+  uiStyle: state.settings.uiStyle,
+  avatarId: state.user.avatar_id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -193,6 +209,8 @@ const mapDispatchToProps = dispatch => ({
   getFieldsData: () => dispatch(actions.fields.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset()),
   addLog: reg => dispatch(actions.log.add(reg)),
+  getCurrentUser: () => dispatch(actions.user.getCurrent()),
+  fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppView);

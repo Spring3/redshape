@@ -247,14 +247,6 @@ class NavigationBar extends Component {
       isOpenAbout: false,
       allowAvatar: true
     };
-
-    const { user, uiStyle, fetchAvatar } = this.props;
-    if (uiStyle === 'enhanced') {
-      const avatar_id = user && user.avatar_id;
-      if (avatar_id >= 0) {
-        fetchAvatar(avatar_id);
-      }
-    }
   }
 
   signout = () => {
@@ -333,7 +325,7 @@ class NavigationBar extends Component {
                     src={avatar.img}
                   />
                 ) : (
-                  <div className="Label">{name.charAt(0) || 'Me'}</div>
+                  <div className="Label">{name && name.charAt(0) || 'Me'}</div>
                 )
               }
               <ul className="dropdown">
