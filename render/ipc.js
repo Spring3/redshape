@@ -17,9 +17,8 @@ ipcRenderer.on('settings', (event, { key, value }) => {
       break;
     case 'IDLE_BEHAVIOR':
       store.dispatch(actions.settings.setIdleBehavior(value));
-      if (currentTimer) {
-        currentTimer.resetIntervalIdle();
-      }
+      break;
+    default:
       break;
   }
 });
@@ -35,6 +34,8 @@ ipcRenderer.on('window', (event, { action }) => {
       break;
     case 'quit':
       currentTimer.restoreFromTimestamp(false);
+      break;
+    default:
       break;
   }
 });

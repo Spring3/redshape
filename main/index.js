@@ -324,7 +324,6 @@ const initialize = () => {
     if (isDev) {
       mainWindow.webContents.openDevTools();
     }
-    mainWindow.webContents.openDevTools();
   });
 
   mainWindow.once('closed', () => {
@@ -342,6 +341,7 @@ const initialize = () => {
     });
     notification.show();
   });
+
   ipcMain.on('menu', (ev, { settings }) => {
     generateMenu({ settings });
   });

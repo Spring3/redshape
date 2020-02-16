@@ -5,7 +5,7 @@ module.exports = {
     if (process.platform === 'darwin') {
       return {
         ...windowConfig,
-        icon: path.join(__dirname, '../assets/icon.icns'),
+        icon: path.join(__dirname, '../assets/icon.png'),
         iconTray: path.join(__dirname, '../assets/icon-tray-macTemplate.png'),
         iconPause: path.join(__dirname, '../assets/icon-pause-tray-macTemplate.png'),
         iconPlay: path.join(__dirname, '../assets/icon-play-tray-macTemplate.png')
