@@ -20,26 +20,10 @@ app.setAppUserModelId('app.spring3.redshape');
 autoUpdater.logger = logger;
 autoUpdater.logger.transports.file.level = 'info';
 
-const configFilePath = isDev
-  ? path.join(__dirname, '../.env')
-  : path.join(app.getPath('userData'), '.env');
-
-const env = dotenv.config({ silent: true, path: configFilePath });
-
-if (env.error || !process.env.ENCRYPTION_KEY) {
-  const key = crypto.randomBytes(32).toString('hex');
-  const writeToFile = isDev ? fs.appendFileSync : fs.writeFileSync;
-  writeToFile(configFilePath, `ENCRYPTION_KEY=${key}`);
-  dotenv.config({ silent: true, path: configFilePath });
-}
-
-const config = require('../common/config');
-
-const { PORT } = config;
-require('../common/request'); // to initialize from storage
 
 let mainWindow;
 let aboutWindow;
+let PORT;
 
 const updateSettings = ({
   idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
@@ -63,7 +47,8 @@ const updateSettings = ({
   generateMenu({ settings });
 };
 
-const generateMenu = ({ settings }) => {
+const generateMenu = (config = {}) => {
+  const { settings } = config;
   const isMac = process.platform === 'darwin';
   const aboutSubmenu = {
     label: 'About Redshape',
@@ -217,10 +202,6 @@ const generateMenu = ({ settings }) => {
   Menu.setApplicationMenu(menu);
 };
 
-const initializeMenu = () => {
-  generateMenu({});
-};
-
 const createAboutWindow = () => {
   const windowConfig = utils.fixIcon({
     width: 480,
@@ -348,8 +329,24 @@ const initialize = () => {
 };
 
 app.once('ready', () => {
+  const configFilePath = isDev
+    ? path.join(__dirname, '../.env')
+    : path.join(app.getPath('userData'), '.env');
+
+  const env = dotenv.config({ path: configFilePath });
+  if (env.error || !process.env.ENCRYPTION_KEY) {
+    const key = crypto.randomBytes(32).toString('hex');
+    const writeToFile = isDev ? fs.appendFileSync : fs.writeFileSync;
+    writeToFile(configFilePath, `ENCRYPTION_KEY=${key}`, {});
+    dotenv.config({ path: configFilePath });
+  }
+
+  const config = require('../common/config');
+  PORT = config.PORT;
+  require('../common/request'); // to initialize from storage
+
   initialize();
-  initializeMenu();
+  generateMenu();
   if (!isDev) {
     autoUpdater.checkForUpdatesAndNotify();
   }
