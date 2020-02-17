@@ -270,7 +270,7 @@ const initialize = () => {
   mainWindow = new BrowserWindow(windowConfig);
   mainWindow.loadURL(indexPath);
 
-  const tray = Tray.getInstance(windowConfig, mainWindow.webContents);
+  const tray = Tray.getInstance(windowConfig, mainWindow);
 
   app.on('before-quit', () => {
     tray.setHideWhenClosed(false);

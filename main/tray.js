@@ -4,17 +4,17 @@ const {
 const { truncate } = require('lodash');
 
 let instance;
-let webContents;
+let mainWindow;
 
 const quitMenuItem = { role: 'quit' };
 const sepMenuItem = { type: 'separator' };
 const pauseTimerMenuItem = {
   label: 'Pause timer',
-  click: () => webContents.send('timer', { action: 'pause', mainWindowHidden: instance.getWindowVisibility() })
+  click: () => mainWindow.webContents.send('timer', { action: 'pause', mainWindowHidden: instance.getWindowVisibility() })
 };
 const resumeTimerMenuItem = {
   label: 'Resume timer',
-  click: () => webContents.send('timer', { action: 'resume', mainWindowHidden: instance.getWindowVisibility() })
+  click: () => mainWindow.webContents.send('timer', { action: 'resume', mainWindowHidden: instance.getWindowVisibility() })
 };
 
 function TrayHandler(windowConfig) {
@@ -78,6 +78,11 @@ function TrayHandler(windowConfig) {
       contextMenu = Menu.buildFromTemplate([quitMenuItem]);
       tray.setContextMenu(contextMenu);
       tray.setToolTip(statusLabel);
+      tray.on('click', () => {
+        if (!appWindowOpen) {
+          mainWindow.show();
+        }
+      });
       setupTimerListener();
     },
     update
@@ -87,9 +92,9 @@ function TrayHandler(windowConfig) {
 }
 
 module.exports = {
-  getInstance: (windowConfig, windowWebContents) => {
+  getInstance: (windowConfig, window) => {
     if (!instance) {
-      webContents = windowWebContents;
+      mainWindow = window;
       instance = new TrayHandler(windowConfig);
     }
     return instance;
