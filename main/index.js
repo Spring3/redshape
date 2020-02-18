@@ -1,3 +1,4 @@
+require('./exceptionCatcher')();
 const dotenv = require('dotenv');
 const crypto = require('crypto');
 const fs = require('fs');
@@ -16,7 +17,6 @@ const { setupTray } = require('./tray');
 const NAME = 'Redshape';
 
 const utils = require('./utils');
-require('./exceptionCatcher')();
 
 app.setAppUserModelId('app.spring3.redshape');
 autoUpdater.logger = logger;

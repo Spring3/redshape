@@ -300,6 +300,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/settings_logs2.png)
 
+### Errors
+
+- Show a general message in electron in case there are any errors when loading. It is checked after 2.5s since starting. Tested when the electron version does not match the expected one (rebuilding node modules).
+
+  ![](changes/abort_electron.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:

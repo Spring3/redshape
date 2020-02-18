@@ -13,17 +13,57 @@
         font-weight: 500;
         color: #3F3844;
       }
-  
+
       #root {
         height: 100vh;
       }
-  
+
       svg {
         vertical-align: middle;
+      }
+
+      #abort-panel {
+        opacity: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: calc(100% - 50px);
+        line-height: 1.5rem;
+        font-size: 0.9rem;
+        margin: 0 20%;
+        word-break: break-word;
+        transition: opacity 1s ease-out;
+      }
+      #abort-panel.show {
+        opacity: 1;
+      }
+      #abort-panel code {
+        background-color: #efefef;
+        border-radius: 3px;
+        padding: 3px;
+      }
+      #abort-panel strong {
+        color: #FF7079;
       }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+  <div id="root">
+    <div id="abort-panel">
+    <span>
+      <strong>Redshape should be running</strong>.
+      If you don't see anything, you may try to start Redshape from the shell to inspect any errors by enabling logs (<code>ELECTRON_ENABLE_LOGGING=1 redshape</code>) or by using the
+      developer tools (<code>DEV_TOOLS=1 redshape</code>).
+    </span>
+    </div>
+  </div>
+  <script>
+    setTimeout(() => {
+      var abort = document.getElementById('abort-panel');
+      if (abort){
+        abort.classList.add('show');
+      }
+    }, 2500)
+  </script>
   </body>
 </html>
