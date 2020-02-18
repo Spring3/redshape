@@ -19,7 +19,7 @@ import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
 
 import EditIcon from 'mdi-react/EditIcon';
-import Button, { GhostButton } from "../../components/Button";
+import { GhostButton } from "../../components/Button";
 
 import actions from '../../actions';
 
@@ -60,11 +60,6 @@ const ColumnList = styled.ul`
     font-weight: bold;
     width: 150px;
   }
-`;
-
-const FlexButton = styled(Button) `
-  display: inline-flex;
-  align-items: center;
 `;
 
 const SmallNotice = styled.p`
@@ -119,6 +114,18 @@ const BackButton = styled(IconButton)`
 
 const IssueDetails = styled.div`
   flex-grow: 1;
+`;
+
+const Subtasks = styled.div`
+  display: inline-block;
+`;
+
+const Subtask = styled.div`
+  padding: 10px 5px;
+  margin-right: 1rem;
+  margin-bottom: .75rem;
+  box-shadow: 0px 0px 5px ${props => props.theme.shadow};
+  border-radius: 3px;
 `;
 
 class IssueDetailsPage extends Component {
@@ -199,7 +206,7 @@ class IssueDetailsPage extends Component {
     const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
     const selectedIssue = selectedIssueState.data;
     const cfields = selectedIssue.custom_fields;
-    const children = selectedIssue.children;
+    const subtasks = selectedIssue.children;
     return selectedIssue.id
       ? (
         <Section>
@@ -258,12 +265,15 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    children && (
-                      <li><div>Children issues:</div><div>{children.map((el) => (<Link onClick={() => this.props.history.push(`/app/issue/${el.id}/`)}>{`#${el.id}`}</Link>))}</div></li>
+                    cfields && cfields.map((el, i) => (i % 2 == 0)
+                      ? (
+                        <li key={i}>
+                          <div>{el.name}:</div>
+                          <div>{el.value}</div>
+                        </li>
+                      )
+                      : undefined
                     )
-                  }
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
                   }
                 </ColumnList>
                 <ColumnList>
@@ -310,13 +320,40 @@ class IssueDetailsPage extends Component {
                     </div>
                   </li>
                   {
-                    children && (<li></li>)
-                  }
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
+                    cfields && cfields.map((el, i) => (i % 2 != 0)
+                      ? (
+                        <li key={i}>
+                          <div>{el.name}:</div>
+                          <div>{el.value}</div>
+                        </li>
+                      )
+                      : undefined
+                    )
                   }
                 </ColumnList>
               </Wrapper>
+              { subtasks && subtasks.length && (
+                <div>
+                  <h3>Subtasks:</h3>
+                  <Subtasks>
+                    {
+                      subtasks.map((subtask, i) => {
+                        console.log('subtask', subtask)
+                        return (
+                          <Subtask>
+                            <Link
+                              key={i}
+                              onClick={() => this.props.history.push(`/app/issue/${subtask.id}/`)}
+                            >
+                              {`#${subtask.id} - ${subtask.subject}`}
+                            </Link>
+                          </Subtask>
+                        );
+                      })
+                    }
+                  </Subtasks>
+                </div>
+              )}
               <div>
                 <h3>Description</h3>
                 <MarkdownText markdownText={selectedIssue.description} />
