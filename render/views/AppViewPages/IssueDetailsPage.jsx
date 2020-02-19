@@ -128,6 +128,18 @@ const Subtask = styled.div`
   border-radius: 3px;
 `;
 
+const CustomFields = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const FlexWrapper = styled(Wrapper)`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
 class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
@@ -264,17 +276,6 @@ class IssueDetailsPage extends Component {
                       />
                     </div>
                   </li>
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 == 0)
-                      ? (
-                        <li key={i}>
-                          <div>{el.name}:</div>
-                          <div>{el.value}</div>
-                        </li>
-                      )
-                      : undefined
-                    )
-                  }
                 </ColumnList>
                 <ColumnList>
                   <li>
@@ -319,41 +320,46 @@ class IssueDetailsPage extends Component {
                       />
                     </div>
                   </li>
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 != 0)
-                      ? (
-                        <li key={i}>
-                          <div>{el.name}:</div>
-                          <div>{el.value}</div>
-                        </li>
-                      )
-                      : undefined
-                    )
-                  }
                 </ColumnList>
               </Wrapper>
-              { subtasks && subtasks.length && (
-                <div>
-                  <h3>Subtasks:</h3>
-                  <Subtasks>
-                    {
-                      subtasks.map((subtask, i) => {
-                        console.log('subtask', subtask)
-                        return (
-                          <Subtask>
-                            <Link
-                              key={i}
-                              onClick={() => this.props.history.push(`/app/issue/${subtask.id}/`)}
-                            >
-                              {`#${subtask.id} - ${subtask.subject}`}
-                            </Link>
-                          </Subtask>
-                        );
-                      })
-                    }
-                  </Subtasks>
-                </div>
-              )}
+              <FlexWrapper>
+                <ColumnList>
+                  { subtasks && subtasks.length && (
+                    <>
+                      <h3>Subtasks:</h3>
+                      <Subtasks>
+                        {
+                          subtasks.map((subtask, i) => (
+                            <Subtask>
+                              <Link
+                                key={i}
+                                onClick={() => this.props.history.push(`/app/issue/${subtask.id}/`)}
+                              >
+                                {`#${subtask.id} - ${subtask.subject}`}
+                              </Link>
+                            </Subtask>
+                          ))
+                        }
+                      </Subtasks>
+                    </>
+                  )}
+                </ColumnList>
+                <ColumnList>
+                  {cfields && cfields.length && (
+                    <>
+                      <h3>Custom Fields:</h3>
+                      <CustomFields>
+                        {cfields.map((el, i) => (
+                          <li key={i}>
+                            <div>{el.name}: </div>
+                            <div>{el.value}</div>
+                          </li>
+                        ))}
+                      </CustomFields>
+                    </>
+                  )}
+                </ColumnList>
+              </FlexWrapper>
               <div>
                 <h3>Description</h3>
                 <MarkdownText markdownText={selectedIssue.description} />
