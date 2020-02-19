@@ -104,7 +104,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #6CCA51;
 }
 
-.c32 {
+.c33 {
   font-size: 14px;
   resize: none;
   overflow: hidden;
@@ -116,7 +116,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c23 {
+.c24 {
   border-radius: 3px;
   font-weight: bold;
   font-size: 14px;
@@ -133,18 +133,18 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   cursor: pointer;
 }
 
-.c23:hover,
-.c23:focus {
+.c24:hover,
+.c24:focus {
   background: #FF7079;
   color: #FFFFFF !important;
 }
 
-.c23:hover svg,
-.c23:focus svg {
+.c24:hover svg,
+.c24:focus svg {
   fill: #FFFFFF;
 }
 
-.c23:active {
+.c24:active {
   background: #EF6069;
 }
 
@@ -170,38 +170,38 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: transparent;
 }
 
-.c30 {
+.c31 {
   display: inline;
   margin-right: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.c30:hover svg {
+.c31:hover svg {
   color: #FF7079 !important;
 }
 
-.c28 {
+.c29 {
   list-style-type: none;
   margin: 0px 0px 10px 0px;
   padding: 5px 0px;
   width: 100%;
 }
 
-.c28 li:first-child {
+.c29 li:first-child {
   margin-left: 0;
 }
 
-.c28 li:last-child {
+.c29 li:last-child {
   float: right;
   margin-right: 0;
 }
 
-.c28 .c29:last-child {
+.c29 .c30:last-child {
   bottom: 1px;
 }
 
-.c28 .c29:last-child a {
+.c29 .c30:last-child a {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -212,22 +212,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
-.c31 {
+.c32 {
   padding: 10px;
   border-radius: 3px;
   outline: none;
   border: 1px solid #A0A0A0;
 }
 
-.c31:hover {
+.c32:hover {
   border-color: #FF7079;
 }
 
-.c31:focus {
+.c32:focus {
   border: 2px solid #FF7079;
 }
 
-.c19 {
+.c20 {
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -249,7 +249,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   display: none;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -265,24 +265,24 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   border-radius: 3px;
 }
 
-.c21 h2 {
+.c22 h2 {
   display: inline-block;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.c21 > div {
+.c22 > div {
   margin-right: 15px;
   padding: 0px 5px;
   border-radius: 3px;
 }
 
-.c21 > div button {
+.c22 > div button {
   background: #FFFFFF;
   margin: 0px 5px;
 }
 
-.c22 {
+.c23 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -294,14 +294,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FF7F87;
 }
 
-.c20 {
+.c21 {
   background: white;
   padding-top: 35px;
   max-height: 550px;
   min-width: 350px;
 }
 
-.c24 {
+.c25 {
   position: relative;
   list-style-type: none;
   padding: 0px 10px 10px 10px;
@@ -313,7 +313,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   box-shadow: inset 0px 0px 10px 0px #F9F9F9;
 }
 
-.c24 li {
+.c25 li {
   cursor: pointer;
   display: block;
   padding: 10px;
@@ -323,7 +323,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #FFFFFF;
 }
 
-.c24 li div:first-child {
+.c25 li div:first-child {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -338,12 +338,12 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child a {
+.c25 li div:first-child a {
   margin-left: 10px;
   visibility: hidden;
 }
 
-.c24 li div:first-child div {
+.c25 li div:first-child div {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -358,49 +358,49 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-between;
 }
 
-.c24 li div:first-child div span.time,
-.c24 li div:first-child div span.date {
+.c25 li div:first-child div span.time,
+.c25 li div:first-child div span.date {
   margin-right: 5px;
   font-size: 12px;
   color: #A0A0A0;
 }
 
-.c24 li div:first-child div span.username {
+.c25 li div:first-child div span.username {
   font-weight: bold;
   margin-right: 5px;
   color: #3F3844;
 }
 
-.c24 li p {
+.c25 li p {
   margin-bottom: 0px;
   min-width: 100%;
   width: 0;
   line-height: 2;
 }
 
-.c24 li:hover div:first-child a {
+.c25 li:hover div:first-child a {
   visibility: visible;
 }
 
-.c25 {
+.c26 {
   background: white;
   padding: 20px;
   margin-bottom: 20px;
 }
 
-.c33 {
+.c34 {
   font-size: 12px;
   margin-top: 30px;
   color: #A0A0A0;
   font-weight: bold;
 }
 
-.c33 a {
+.c34 a {
   font-size: inherit !important;
   margin-right: 5px;
 }
 
-.c26 {
+.c27 {
   list-style-type: none;
   padding: 20px 0px;
   margin: 0px;
@@ -408,11 +408,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   background: #F9F9F9;
 }
 
-.c26 li:first-child {
+.c27 li:first-child {
   margin-top: 20px;
 }
 
-.c26 li {
+.c27 li {
   margin: 40px 20px 20px 20px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -424,7 +424,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   justify-content: space-around;
 }
 
-.c26 li div.commentsHeader {
+.c27 li div.commentsHeader {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -439,13 +439,13 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-width: 20%;
 }
 
-.c26 li div.commentsHeader h3 {
+.c27 li div.commentsHeader h3 {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #FF7079;
 }
 
-.c26 li div.commentsHeader span:last-child {
+.c27 li div.commentsHeader span:last-child {
   color: #A0A0A0;
   -webkit-transition: color ease .2s;
   transition: color ease .2s;
@@ -453,11 +453,11 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   margin-bottom: 20px;
 }
 
-.c26 li div.commentsHeader span:last-child:hover {
+.c27 li div.commentsHeader span:last-child:hover {
   color: #3F3844;
 }
 
-.c26 li iframe {
+.c27 li iframe {
   margin-left: 20px;
   padding: 5px 20px 0px 20px;
   background: #FFFFFF;
@@ -467,14 +467,14 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   min-height: 100px;
 }
 
-.c27 {
+.c28 {
   background: #F9F9F9;
   padding: 20px;
   border-radius: 3px;
   border: 2px solid #F9F9F9;
 }
 
-.c27 #commentsForm {
+.c28 #commentsForm {
   background: #FFFFFF;
   padding: 20px;
   border-radius: 3px;
@@ -603,6 +603,23 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
+}
+
+.c19 {
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 <section
@@ -848,12 +865,22 @@ exports[`IssueDetails page should match the snapshot 1`] = `
           </li>
         </ul>
       </div>
+      <div
+        className="c19"
+      >
+        <ul
+          className="c10"
+        />
+        <ul
+          className="c10"
+        />
+      </div>
       <div>
         <h3>
           Description
         </h3>
         <iframe
-          className="c19"
+          className="c20"
           frameBorder="0"
           onLoad={[Function]}
           srcDoc="<p>Fixture test issue</p>"
@@ -862,10 +889,10 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="c20"
+      className="c21"
     >
       <div
-        className="c21"
+        className="c22"
       >
         <h2
           className="padded"
@@ -874,7 +901,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </h2>
         <div>
           <button
-            className="c22 c23"
+            className="c23 c24"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -895,7 +922,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </span>
           </button>
           <button
-            className="c22 c23"
+            className="c23 c24"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -918,31 +945,31 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
       </div>
       <ul
-        className="c24"
+        className="c25"
       />
     </div>
   </div>
   <section
-    className="c25"
+    className="c26"
   >
     <div>
       <h2>
         Comments
       </h2>
       <ul
-        className="c26"
+        className="c27"
       />
       <div
-        className="c27"
+        className="c28"
       >
         <div
           id="commentsForm"
         >
           <ul
-            className="c28"
+            className="c29"
           >
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -967,7 +994,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -992,7 +1019,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1017,7 +1044,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1042,7 +1069,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1067,7 +1094,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1092,7 +1119,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1117,7 +1144,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1142,7 +1169,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1167,7 +1194,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1192,7 +1219,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1217,7 +1244,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1242,7 +1269,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
               onClick={[Function]}
             >
               <div
@@ -1267,7 +1294,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               </div>
             </li>
             <li
-              className="c29 c30"
+              className="c30 c31"
             >
               <a
                 className="c5"
@@ -1293,7 +1320,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
             </li>
           </ul>
           <textarea
-            className="c31 c32"
+            className="c32 c33"
             disabled={false}
             onChange={[Function]}
             onKeyDown={[Function]}
@@ -1303,7 +1330,7 @@ exports[`IssueDetails page should match the snapshot 1`] = `
         </div>
         <div>
           <p
-            className="c33"
+            className="c34"
           >
             Press 
             <a
