@@ -42,7 +42,7 @@ If you don't have access to a deployed instance of redmine, you can now run it i
 Unfortuantely, you will have to configure it then yourself
 
 ```
-docker-compose -f stack.yml up
+docker-compose -f docker-compose.yml up
 ```
 
 Then after you run the project with `npm run dev`, use `http://localhost` as redmine endpoint on the login form and provide the credentials or the API token 
