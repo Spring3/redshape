@@ -1,6 +1,5 @@
 import reducer from '../user.reducer';
 import { USER_LOGIN, USER_LOGOUT } from '../../actions/user.actions';
-import actions from '../../actions';
 import { notify } from '../../actions/helper';
 
 import storage from '../../../common/storage';

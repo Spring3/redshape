@@ -44,11 +44,9 @@ const validateBeforeCommon = (timeEntry, checkFields) => {
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
   };
+  const fields = checkFields && !Array.isArray(checkFields) ? [checkFields] : checkFields;
   if (checkFields) {
-    if (!(checkFields instanceof Array)) {
-      checkFields = [checkFields];
-    }
-    for (const checkField of checkFields) {
+    for (const checkField of fields) {
       schema[checkField] = schemaFields[checkField];
     }
   } else {
@@ -96,6 +94,7 @@ const publish = (timeEntryData) => (dispatch, getState) => {
   })
     .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_PUBLISH, data)))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when submitting the time entry', error);
       dispatch(notify.nok(TIME_ENTRY_PUBLISH, error));
     });
@@ -158,6 +157,7 @@ const update = (originalTimeEntry, changes) => (dispatch) => {
     return dispatch(notify.ok(TIME_ENTRY_UPDATE, updatedTimeEntry));
   })
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when updating the time entry', error);
       dispatch(notify.nok(TIME_ENTRY_UPDATE, error));
     });
@@ -174,6 +174,7 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     method: 'DELETE'
   }).then(() => dispatch(notify.ok(TIME_ENTRY_DELETE, { timeEntryId, issueId })))
     .catch((error) => {
+      // eslint-disable-next-line
       console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
       dispatch(notify.nok(TIME_ENTRY_DELETE, error));
     });

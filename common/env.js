@@ -1,5 +1,6 @@
+// eslint-disable-next-line
 const { remote } = require('electron');
-const _pick = require('lodash/pick');
+const pick = require('lodash/pick');
 
 let config;
 
@@ -7,7 +8,7 @@ let config;
 const mainProcess = process && process.type !== 'renderer' ? process : remote.process;
 
 if (!config) {
-  config = _pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
+  config = pick(mainProcess.env, 'PORT', 'ENCRYPTION_KEY', 'NODE_ENV');
   config.platform = mainProcess.platform;
 }
 

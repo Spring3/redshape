@@ -2,7 +2,7 @@ import Joi from '@hapi/joi';
 import moment from 'moment';
 import request, { notify } from './helper';
 
-import { durationToHours, hoursToDuration } from '../datetime';
+import { durationToHours } from '../datetime';
 
 export const ISSUE_UPDATE = 'ISSUE_UPDATE';
 export const ISSUE_RESET = 'ISSUE_RESET';
@@ -12,7 +12,9 @@ export const ISSUE_UPDATE_VALIDATION_PASSED = 'ISSUE_UPDATE_VALIDATION_PASSED';
 const validateEstimatedDuration = (value, helpers) => {
   const hours = durationToHours(value);
   if (hours == null) {
-    return helpers.message('"estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string');
+    return helpers.message(`
+      "estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string
+    `);
   } if (hours <= 0) {
     return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
   }
@@ -37,10 +39,8 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
     due_date: Joi.string().custom(validateDate, 'due date validation').allow(null, '')
   };
   if (checkFields) {
-    if (!(checkFields instanceof Array)) {
-      checkFields = [checkFields];
-    }
-    for (const checkField of checkFields) {
+    const fields = Array.isArray(checkFields) ? checkFields : [checkFields];
+    for (const checkField of fields) {
       schema[checkField] = schemaFields[checkField];
     }
   } else {
@@ -52,10 +52,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
   return validationResult;
 };
 
-const validateBeforeUpdate = (issueEntry, checkFields) => {
-  if (!checkFields) {
-    checkFields = ['progress', 'estimated_duration', 'due_date'];
-  }
+const validateBeforeUpdate = (issueEntry, checkFields = ['progress', 'estimated_duration', 'due_date']) => {
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
   return validationResult.error
     ? {
@@ -77,10 +74,7 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
 
   const estimated_hours = durationToHours(changes.estimated_duration);
   const hours = originalIssueEntry.estimated_hours;
-  // if (hours){
-  //   hours = Number(hours.toFixed(2));
-  // }
-  if (hours != estimated_hours) {
+  if (hours !== estimated_hours) {
     updates.estimated_hours = estimated_hours;
   }
   const due_date = changes.due_date || null;
@@ -91,11 +85,6 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
   if (originalIssueEntry.done_ratio !== progress) {
     updates.done_ratio = progress;
   }
-  const pre = {
-    done: originalIssueEntry.done_ratio,
-    due: originalIssueEntry.due_date,
-    est: originalIssueEntry.estimated_hours
-  };
   if (!Object.keys(updates).length) {
     return Promise.resolve({ unchanged: true });
   }
@@ -115,6 +104,7 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     return dispatch(notify.ok(ISSUE_UPDATE, updatedIssueEntry));
   })
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when updating the issue', error);
       dispatch(notify.nok(ISSUE_UPDATE, error));
     });

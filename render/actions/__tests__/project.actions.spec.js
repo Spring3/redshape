@@ -61,7 +61,12 @@ describe('Project actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/projects.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(projectActions.PROJECT_GET_ALL));
-      expect(dispatch).toBeCalledWith(notify.nok(projectActions.PROJECT_GET_ALL, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(
+        notify.nok(
+          projectActions.PROJECT_GET_ALL,
+          new Error(`Error ${response.status} (${response.message})`)
+        )
+      );
     });
   });
 });

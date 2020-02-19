@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const axios = require('electron').remote.require('../common/request');
 
 function IssueFilter() {

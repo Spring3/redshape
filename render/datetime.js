@@ -3,6 +3,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 
 momentDurationFormatSetup(moment);
 
+// eslint-disable-next-line max-len
 const reDuration = /^(?!$) *(?:(\d+) *(?:d|days?))? *(?:(\d+) *(?:h|hours?))? *(?:(\d+) *(?:m|mins?|minutes?))? *(?:(\d+) *(?:s|secs?|seconds?))? *$/;
 const reDurationHours = /^ *\d+(?:\.\d+)? *$/;
 
@@ -31,15 +32,13 @@ export const durationToHours = (value) => {
       return null;
     }
   }
-  // if (hours){
-  //   hours = Number(hours.toFixed(2));
-  // }
   return hours;
 };
 
-// eslint-disable-next-line no-confusing-arrow
-export const hoursToDuration = (hours) => hours == null
+
+export const hoursToDuration = (hours) => (hours == null
   ? ''
   : moment.duration(parseFloat(hours), 'hours').format('d[d] h[h] m[m] s[s]', {
     trim: 'both mid'
-  });
+  })
+);

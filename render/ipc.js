@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcRenderer } from 'electron';
 import store from './store';
 import actions from './actions';

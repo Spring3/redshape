@@ -286,7 +286,12 @@ describe('Time actions', () => {
         type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED
       });
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_PUBLISH));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_PUBLISH, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(
+          timeEntryActions.TIME_ENTRY_PUBLISH,
+          new Error(`Error ${response.status} (${response.message})`)
+        )
+      );
     });
   });
 
@@ -484,7 +489,12 @@ describe('Time actions', () => {
       expect(dispatch).toHaveBeenCalledTimes(3);
       expect(dispatch).toHaveBeenCalledWith({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_UPDATE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(
+          timeEntryActions.TIME_ENTRY_UPDATE,
+          new Error(`Error ${response.status} (${response.message})`)
+        )
+      );
     });
   });
 
@@ -519,7 +529,12 @@ describe('Time actions', () => {
       expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(timeEntryActions.TIME_ENTRY_DELETE, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(
+          timeEntryActions.TIME_ENTRY_DELETE,
+          new Error(`Error ${response.status} (${response.message})`)
+        )
+      );
     });
   });
 

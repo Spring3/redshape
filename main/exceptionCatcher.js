@@ -1,6 +1,7 @@
 const cleanStack = require('clean-stack');
 const ensureError = require('ensure-error');
 const isDev = require('electron-is-dev');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { app, dialog, clipboard } = require('electron');
 const logger = require('electron-log');
 

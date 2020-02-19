@@ -1,5 +1,6 @@
 const {
   Tray, Menu, ipcMain, app, nativeImage
+// eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const { truncate } = require('lodash');
 
@@ -10,11 +11,15 @@ const quitMenuItem = { role: 'quit' };
 const sepMenuItem = { type: 'separator' };
 const pauseTimerMenuItem = {
   label: 'Pause timer',
-  click: () => mainWindow.webContents.send('timer', { action: 'pause', mainWindowHidden: instance.getWindowVisibility() })
+  click: () => mainWindow.webContents.send(
+    'timer', { action: 'pause', mainWindowHidden: instance.getWindowVisibility() }
+  )
 };
 const resumeTimerMenuItem = {
   label: 'Resume timer',
-  click: () => mainWindow.webContents.send('timer', { action: 'resume', mainWindowHidden: instance.getWindowVisibility() })
+  click: () => mainWindow.webContents.send(
+    'timer', { action: 'resume', mainWindowHidden: instance.getWindowVisibility() }
+  )
 };
 
 function TrayHandler(windowConfig) {

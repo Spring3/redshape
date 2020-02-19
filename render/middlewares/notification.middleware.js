@@ -3,10 +3,11 @@ import { toast } from 'react-toastify';
 
 import Notification from '../components/Notification';
 
-export default (store) => (next) => (action) => {
+export default () => (next) => (action) => {
   if (action.status === 'NOK') {
     const error = action.data;
     if (error instanceof Error) {
+      // eslint-disable-next-line react/jsx-filename-extension
       toast.error(<Notification error={error} />);
     }
   }

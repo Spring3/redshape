@@ -5,6 +5,7 @@ const url = require('url');
 const path = require('path');
 const {
   app, BrowserWindow, Menu, Notification, ipcMain
+// eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const electronUtils = require('electron-util');
@@ -28,23 +29,24 @@ let PORT;
 const updateSettings = ({
   idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
 }, settings) => {
+  const settingsCopy = { ...settings };
   if (idleBehavior >= 0) {
-    settings.idleBehavior = idleBehavior;
+    settingsCopy.idleBehavior = idleBehavior;
     mainWindow.webContents.send('settings', { key: 'IDLE_BEHAVIOR', value: idleBehavior });
   }
   if (discardIdleTime != null) {
-    settings.discardIdleTime = discardIdleTime;
+    settingsCopy.discardIdleTime = discardIdleTime;
     mainWindow.webContents.send('settings', { key: 'IDLE_TIME_DISCARD', value: discardIdleTime });
   }
   if (advancedTimerControls != null) {
-    settings.advancedTimerControls = advancedTimerControls;
+    settingsCopy.advancedTimerControls = advancedTimerControls;
     mainWindow.webContents.send('settings', { key: 'ADVANCED_TIMER_CONTROLS', value: advancedTimerControls });
   }
   if (progressWithStep1 != null) {
-    settings.progressWithStep1 = progressWithStep1;
+    settingsCopy.progressWithStep1 = progressWithStep1;
     mainWindow.webContents.send('settings', { key: 'PROGRESS_SLIDER_STEP_1', value: progressWithStep1 });
   }
-  generateMenu({ settings });
+  generateMenu({ settings: settingsCopy });
 };
 
 const generateMenu = (config = {}) => {
@@ -152,20 +154,36 @@ const generateMenu = (config = {}) => {
             label: 'Idle behavior',
             submenu: [
               {
-                label: 'Do nothing', type: 'radio', checked: !settings.idleBehavior, click: () => updateSettings({ idleBehavior: 0 }, settings)
+                label: 'Do nothing',
+                type: 'radio',
+                checked: !settings.idleBehavior,
+                click: () => updateSettings({ idleBehavior: 0 }, settings)
               },
               {
-                label: 'Pause if idle for 5m', type: 'radio', checked: settings.idleBehavior === 5, click: () => updateSettings({ idleBehavior: 5 }, settings)
+                label: 'Pause if idle for 5m',
+                type: 'radio',
+                checked: settings.idleBehavior === 5,
+                click: () => updateSettings({ idleBehavior: 5 }, settings)
               },
               {
-                label: 'Pause if idle for 10m', type: 'radio', checked: settings.idleBehavior === 10, click: () => updateSettings({ idleBehavior: 10 }, settings)
+                label: 'Pause if idle for 10m',
+                type: 'radio',
+                checked: settings.idleBehavior === 10,
+                click: () => updateSettings({ idleBehavior: 10 }, settings)
               },
               {
-                label: 'Pause if idle for 15m', type: 'radio', checked: settings.idleBehavior === 15, click: () => updateSettings({ idleBehavior: 15 }, settings)
+                label: 'Pause if idle for 15m',
+                type: 'radio',
+                checked: settings.idleBehavior === 15,
+                click: () => updateSettings({ idleBehavior: 15 }, settings)
               },
               { type: 'separator' },
               {
-                label: 'Auto discard idle time from timer', type: 'checkbox', enabled: !!settings.idleBehavior, checked: settings.discardIdleTime, click: (el) => updateSettings({ discardIdleTime: el.checked }, settings)
+                label: 'Auto discard idle time from timer',
+                type: 'checkbox',
+                enabled: !!settings.idleBehavior,
+                checked: settings.discardIdleTime,
+                click: (el) => updateSettings({ discardIdleTime: el.checked }, settings)
               },
             ]
           },
@@ -192,6 +210,7 @@ const generateMenu = (config = {}) => {
           click: () => electronUtils.openNewGitHubIssue({
             user: 'Spring3',
             repo: 'redshape',
+            // eslint-disable-next-line max-len
             body: `Please describe the issue as detailed as you can\n\n---\n### Debug Info:\n \`\`\`\n${electronUtils.debugInfo()}\n\`\`\``
           })
         }
@@ -341,8 +360,10 @@ app.once('ready', () => {
     dotenv.config({ path: configFilePath });
   }
 
+  // eslint-disable-next-line global-require
   const config = require('../common/config');
   PORT = config.PORT;
+  // eslint-disable-next-line global-require
   require('../common/request'); // to initialize from storage
 
   initialize();

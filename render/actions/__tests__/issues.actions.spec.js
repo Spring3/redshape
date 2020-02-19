@@ -93,7 +93,13 @@ describe('Issue actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_PAGE, { page: state.issues.all.page }));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_GET_PAGE, new Error(`Error ${response.status} (${response.message})`), { page: state.issues.all.page }));
+      expect(dispatch).toBeCalledWith(
+        notify.nok(
+          issuesActions.ISSUES_GET_PAGE,
+          new Error(`Error ${response.status} (${response.message})`),
+          { page: state.issues.all.page }
+        )
+      );
     });
   });
 
@@ -130,7 +136,9 @@ describe('Issue actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues/${id}.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_GET, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toBeCalledWith(
+        notify.nok(issuesActions.ISSUES_GET, new Error(`Error ${response.status} (${response.message})`))
+      );
     });
   });
 
@@ -197,7 +205,13 @@ describe('Issue actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(issuesActions.ISSUES_TIME_ENTRY_GET, { page }));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(issuesActions.ISSUES_TIME_ENTRY_GET, new Error(`Error ${response.status} (${response.message})`), { page }));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(
+          issuesActions.ISSUES_TIME_ENTRY_GET,
+          new Error(`Error ${response.status} (${response.message})`),
+          { page }
+        )
+      );
     });
   });
 
@@ -271,7 +285,13 @@ describe('Issue actions', () => {
       expect(dispatch).toBeCalledTimes(2);
       expect(getState).toHaveBeenCalled();
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));
-      expect(dispatch).toBeCalledWith(notify.nok(issuesActions.ISSUES_COMMENTS_SEND, new Error(`Error ${response.status} (${response.message})`), { subject: 'comments' }));
+      expect(dispatch).toBeCalledWith(
+        notify.nok(
+          issuesActions.ISSUES_COMMENTS_SEND,
+          new Error(`Error ${response.status} (${response.message})`),
+          { subject: 'comments' }
+        )
+      );
     });
   });
 

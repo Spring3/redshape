@@ -90,7 +90,9 @@ describe('User actions', () => {
       expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_LOGIN));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(userActions.USER_LOGIN, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(userActions.USER_LOGIN, new Error(`Error ${response.status} (${response.message})`))
+      );
     });
   });
 
@@ -121,7 +123,9 @@ describe('User actions', () => {
       expect(axiosInstanceMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_GET_CURRENT));
-      expect(dispatch).toHaveBeenCalledWith(notify.nok(userActions.USER_GET_CURRENT, new Error(`Error ${response.status} (${response.message})`)));
+      expect(dispatch).toHaveBeenCalledWith(
+        notify.nok(userActions.USER_GET_CURRENT, new Error(`Error ${response.status} (${response.message})`))
+      );
     });
   });
 

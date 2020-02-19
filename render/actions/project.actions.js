@@ -32,6 +32,7 @@ const getAll = () => async (dispatch) => {
       dispatch(notify.ok(PROJECT_GET_ALL, results));
     })
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when trying to get the info about the existing projects', error);
       dispatch(notify.nok(PROJECT_GET_ALL, error));
     });

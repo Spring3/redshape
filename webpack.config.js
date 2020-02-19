@@ -91,6 +91,7 @@ if (!isProduction) {
     },
     before: () => spawn('electron', ['.'], { shell: true, env: process.env, stdio: 'inherit' })
       .once('close', () => process.exit(0))
+      // eslint-disable-next-line
       .once('error', (spawnError) => console.error(spawnError))
   };
 

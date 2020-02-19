@@ -34,6 +34,7 @@ const checkLogin = ({
     dispatch(notify.ok(USER_LOGIN, data));
     dispatch(settingsActions.restore());
   }).catch((error) => {
+    // eslint-disable-next-line
     console.error('Error when trying to get the info about current user', error);
     dispatch(notify.nok(USER_LOGIN, error));
   });
@@ -47,6 +48,7 @@ const getCurrent = () => (dispatch) => {
     id: 'getCurrentUserInfo'
   }).then(({ data }) => dispatch(notify.ok(USER_GET_CURRENT, data)))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when trying to get the info about current user', error);
       dispatch(notify.nok(USER_GET_CURRENT, error));
     });
