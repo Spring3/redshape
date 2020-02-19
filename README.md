@@ -82,16 +82,6 @@ Created by [Daniyil Vasylenko](https://github.com/Spring3)
 
 [rNoz](https://github.com/rnoz) from [Group4Layers](https://www.group4layers.com)
 
-## rNoz changes
-
-### Issue fields
-
-- If is a parent task, it shows links to each of its subtasks.
-
-  If is a parent task, it shows the totals (estimated and spent time).
-
-  ![](docs/changes/issue_subtasks.png)
-
 ### AUR package
 
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
@@ -115,7 +105,5 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 ### Known issues
 
-- Tray new icons should be ported for Mac (png to icns; png2icns gives black background).
-- Changes not tested in Mac or Windows.
 - One test is omitted from the original repo (TimeEntryModal, it should match the snapshot) because it never finishes (throws JS heap out of memory).
 - As soon as Electron v8 is stable, it should be used (package.json). Redshape is prepared for future features (timeoutType), keeping the notification when the timer is paused due to system idle.
