@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { render, cleanup, wait } from 'react-testing-library';
+import { render, cleanup, wait } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';

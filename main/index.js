@@ -224,11 +224,11 @@ const generateMenu = (config = {}) => {
 const createAboutWindow = () => {
   const windowConfig = utils.fixIcon({
     width: 480,
-    height: 400,
+    height: 450,
     minWidth: 480,
-    minHeight: 400,
+    minHeight: 450,
     maxWidth: 600,
-    maxHeight: 520,
+    maxHeight: 550,
     useContentSize: true,
     titleBarStyle: 'hidden',
     show: false,

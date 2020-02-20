@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, mount } from 'enzyme';
-import * as reactTesting from 'react-testing-library';
+import * as reactTesting from '@testing-library/react';
 import styled from 'styled-components';
 import Button, { GhostButton } from '../Button';
 import theme from '../../theme';

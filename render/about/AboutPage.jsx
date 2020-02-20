@@ -123,17 +123,6 @@ const Paragraph = styled.p`
   text-align: justify;
 `;
 
-const Contributors = styled.div`
-  margin-top: 30px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  
-  a {
-    margin-top: 5px;
-  }
-`;
-
 class AboutPage extends Component {
   onReportButtonClick = () => report()
 
@@ -151,7 +140,7 @@ class AboutPage extends Component {
             <FlexBox>
               <IconContainer>
                 <Link
-                  href="https://spring3.github.io/website/redshape"
+                  href="https://www.dvasylenko.com/redshape/"
                   type="external"
                 >
                   <img alt="App icon" height="70" src={LogoIcon} />
@@ -182,7 +171,7 @@ class AboutPage extends Component {
                 <div>
                   <span>Visit the Redshape</span>
                   <Link
-                    href="https://spring3.github.io/website/redshape"
+                    href="https://www.dvasylenko.com/redshape/"
                     type="external"
                   >
                     homepage
@@ -192,23 +181,21 @@ class AboutPage extends Component {
               <Paragraph>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</Paragraph>
               <footer>
                 <div>
-                  Copyright © 2019&nbsp;
+                  Copyright © 2020&nbsp;
                   <Link
-                    href="https://spring3.github.io/website/"
+                    href="https://www.dvasylenko.com/redshape/"
                     type="external"
                   >
                     Daniyil Vasylenko
                   </Link>
-                </div>
-                <Contributors>
-                  <span>Contributors</span>
+                  &
                   <Link
-                    href="https://www.group4layers.com"
+                    href="https://github.com/Spring3/redshape/graphs/contributors"
                     type="external"
                   >
-                    rNoz (Group4Layers)
+                    Contributors
                   </Link>
-                </Contributors>
+                </div>
               </footer>
             </FlexBox>
           </StyledTabPanel>
