@@ -23,7 +23,7 @@ describe('Navbar component', () => {
     const tree = renderer.create(
       <Provider store={store}>
         <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
+          <Route path="/" component={(props) => <Navbar {...props} />} />
         </HashRouter>
       </Provider>
     );
@@ -41,7 +41,7 @@ describe('Navbar component', () => {
     const wrapper = mount(
       <Provider store={store}>
         <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
+          <Route path="/" component={(props) => <Navbar {...props} />} />
         </HashRouter>
       </Provider>
     );

@@ -188,7 +188,7 @@ describe('IssueDetails page', () => {
     wrapper.unmount();
 
     const actions = store.getActions();
-    actions.pop()
+    actions.pop();
     expect(actions.pop().type).toBe(ISSUES_RESET_SELECTION);
   });
 
@@ -243,12 +243,13 @@ describe('IssueDetails page', () => {
 
     expect(page.state.showTimeEntryModal).toBe(true);
     expect(page.state.selectedTimeEntry).toEqual(
-      Object.assign({}, timeEntry, {
+      {
+        ...timeEntry,
         issue: {
           id: 1,
           name: state.issues.selected.data.subject
         }
-      })
+      }
     );
     expect(page.state.activities).toEqual([
       { value: 1, label: 'Development' },
@@ -305,12 +306,13 @@ describe('IssueDetails page', () => {
 
     expect(page.state.showTimeEntryModal).toBe(true);
     expect(page.state.selectedTimeEntry).toEqual(
-      Object.assign({}, timeEntry, {
+      {
+        ...timeEntry,
         issue: {
           id: 1,
           name: state.issues.selected.data.subject
         }
-      })
+      }
     );
     expect(page.state.activities).toEqual([
       { value: 1, label: 'Development' },

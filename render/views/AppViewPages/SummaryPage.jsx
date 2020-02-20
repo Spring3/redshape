@@ -93,8 +93,8 @@ class SummaryPage extends Component {
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
-      sortBy: sortBy,
-      sortDirection: sortDirection
+      sortBy,
+      sortDirection
     }, () => this.deboucedFetch());
   }
 
@@ -109,12 +109,12 @@ class SummaryPage extends Component {
             <ColumnHeadersSelect />
             <GridRow>
               <Input
-                icon={
+                icon={(
                   <MagnifyIcon
                     xmlns="http://www.w3.org/2000/svg"
                     color={theme.main}
                   />
-                }
+                )}
                 type="text"
                 name="search"
                 placeholder="Search..."
@@ -142,12 +142,12 @@ SummaryPage.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   showClosedIssues: state.settings.showClosedIssues
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 

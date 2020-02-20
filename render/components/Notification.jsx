@@ -23,15 +23,15 @@ class Notification extends Component {
   render() {
     const { error } = this.props;
     return (
-      <Fragment>
+      <>
         <NotifyButton onClick={this.reportError} />
         <p>
           {error.message}
         </p>
-      </Fragment>
+      </>
     );
   }
-};
+}
 
 Notification.propTypes = {
   error: PropTypes.instanceOf(Error).isRequired

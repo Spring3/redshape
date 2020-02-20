@@ -25,7 +25,7 @@ const ProcessIndicator = styled.div`
 const Square = styled.div`
   width: 2em;
   height: 2em;
-  background-color: ${props => props.theme.main};
+  background-color: ${(props) => props.theme.main};
   transform: rotate(0);
   animation: ${flipAnimation} 1s infinite;
 `;
@@ -53,8 +53,8 @@ export const OverlayProcessIndicator = styled(ProcessIndicatorComponent)`
   top: 45%;
   left: 45%;
   z-index: 5;
-  background: ${props => props.theme.bg};
-  box-shadow: 0px 0px 10px ${props => props.theme.shadow};
+  background: ${(props) => props.theme.bg};
+  box-shadow: 0px 0px 10px ${(props) => props.theme.shadow};
   padding: 20px;
   border-radius: 3px;
 `;

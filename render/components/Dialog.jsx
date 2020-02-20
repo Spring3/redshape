@@ -19,12 +19,12 @@ class Dialog extends Component {
     };
   }
 
-  confirm = closeModal => event => {
+  confirm = (closeModal) => (event) => {
     this.state.onConfirm();
     closeModal();
   }
 
-  cancel = closeModal => (event) => {
+  cancel = (closeModal) => (event) => {
     if (this.props.onCancel) {
       this.props.onCancel();
     }
@@ -43,21 +43,21 @@ class Dialog extends Component {
             palette="danger"
             onClick={this.cancel(onClose)}
           >
-          Cancel
+            Cancel
           </PaddedButton>
           <PaddedButton
             theme={theme}
             palette="success"
             onClick={this.confirm(onClose)}
           >
-          Confirm
+            Confirm
           </PaddedButton>
         </div>
       )
     });
   }
 
-  displayDialog = onConfirm => event => {
+  displayDialog = (onConfirm) => (event) => {
     event.preventDefault();
     event.stopPropagation();
     const eventClone = {
@@ -65,7 +65,7 @@ class Dialog extends Component {
       preventDefault: () => {},
       stopPropagation: () => {},
       target: { ...event.target, value: event.target.value }
-    }
+    };
 
     this.setState({
       onConfirm: () => onConfirm(eventClone)
@@ -74,9 +74,9 @@ class Dialog extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         {this.props.children(this.displayDialog)}
-      </Fragment>
+      </>
     );
   }
 }

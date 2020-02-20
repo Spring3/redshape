@@ -119,7 +119,7 @@ describe('Button Component', () => {
           theme={theme}
           onClick={clickHandler}
         >
-        Click me
+          Click me
         </GhostButton>
       );
       expect(wrapper.find('a')).toBeTruthy();
@@ -159,7 +159,7 @@ describe('Button Component', () => {
           theme={theme}
           onClick={clickHandler}
         >
-        Click me
+          Click me
         </GhostButton>
       );
       expect(wrapper.find('a').prop('disabled')).toBe(true);

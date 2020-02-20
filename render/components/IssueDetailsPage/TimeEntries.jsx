@@ -33,16 +33,16 @@ const HeaderContainer = styled.div`
     border-radius: 3px;
 
     button {
-      background: ${props => props.theme.bg};
+      background: ${(props) => props.theme.bg};
       margin: 0px 5px;
     }
   }
 `;
 
-const FlexButton = styled(Button) `
+const FlexButton = styled(Button)`
   display: inline-flex;
   align-items: center;
-  ${props => css`
+  ${(props) => css`
     background: ${props.theme.mainLight};
   `}
 `;
@@ -62,8 +62,8 @@ const TimeEntriesList = styled.ul`
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
-  background: ${props => props.theme.bgDark};
-  box-shadow: inset 0px 0px 10px 0px ${props => props.theme.bgDark};
+  background: ${(props) => props.theme.bgDark};
+  box-shadow: inset 0px 0px 10px 0px ${(props) => props.theme.bgDark};
 
   li {
     cursor: pointer;
@@ -71,8 +71,8 @@ const TimeEntriesList = styled.ul`
     padding: 10px;
     margin: 10px auto 0px auto;
     border-radius: 3px;
-    border: 1px solid ${props => props.theme.bgDarker};
-    background: ${props => props.theme.bg};
+    border: 1px solid ${(props) => props.theme.bgDarker};
+    background: ${(props) => props.theme.bg};
 
     div:first-child {
       display: flex;
@@ -92,13 +92,13 @@ const TimeEntriesList = styled.ul`
         span.date {
           margin-right: 5px;
           font-size: 12px;
-          color: ${props => props.theme.minorText};
+          color: ${(props) => props.theme.minorText};
         }
 
         span.username {
           font-weight: bold;
           margin-right: 5px;
-          color: ${props => props.theme.normalText};
+          color: ${(props) => props.theme.normalText};
         }
       }
     }
@@ -140,6 +140,7 @@ class TimeEntries extends Component {
     super(props);
     this.listRef = React.createRef();
   }
+
   componentWillMount() {
     const { fetchIssueTimeEntries, selectedIssue } = this.props;
     fetchIssueTimeEntries(selectedIssue.id, 0);
@@ -151,7 +152,7 @@ class TimeEntries extends Component {
     }
   }
 
-  openModal = timeEntry => () => {
+  openModal = (timeEntry) => () => {
     this.props.showTimeEntryModal(timeEntry);
   }
 
@@ -160,7 +161,7 @@ class TimeEntries extends Component {
     startTimeTracking(selectedIssue);
   }
 
-  removeTimeEntry = timeEntryId => (e) => {
+  removeTimeEntry = (timeEntryId) => (e) => {
     e.preventDefault();
     e.stopPropagation();
     const { selectedIssue, removeTimeEntry } = this.props;
@@ -174,7 +175,9 @@ class TimeEntries extends Component {
   }
 
   render() {
-    const { spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue } = this.props;
+    const {
+      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue
+    } = this.props;
     return (
       <TimeEntriesContainer>
         <HeaderContainer>
@@ -186,7 +189,8 @@ class TimeEntries extends Component {
             </FlexButton>
             <FlexButton
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
-              onClick={this.startTimeTracking}>
+              onClick={this.startTimeTracking}
+            >
               <TimerIcon size={22} />
               <span>&nbsp;Track</span>
             </FlexButton>
@@ -201,19 +205,23 @@ class TimeEntries extends Component {
             container={this.listRef.current}
             immediate={true}
           >
-            {spentTime.data.map(timeEntry => (
+            {spentTime.data.map((timeEntry) => (
               <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
                 <div>
                   <div>
                     <span className="username">{timeEntry.user.name}</span>
-                    <span className="time">{timeEntry.hours} hours</span>
+                    <span className="time">
+                      {timeEntry.hours}
+                      {' '}
+                      hours
+                    </span>
                     <DateComponent className="date" date={timeEntry.spent_on} />
                   </div>
                   {
                     userId === timeEntry.user.id && (
                       <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
                         {
-                          requestConfirmation => (
+                          (requestConfirmation) => (
                             <GhostButton
                               onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
                             >
@@ -228,7 +236,7 @@ class TimeEntries extends Component {
                 <p>{timeEntry.comments}</p>
               </li>
             ))}
-            </InfiniteScroll>
+          </InfiniteScroll>
         </TimeEntriesList>
       </TimeEntriesContainer>
     );
@@ -280,7 +288,7 @@ TimeEntries.propTypes = {
   showTimeEntryModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   userName: state.user.name,
   spentTime: state.issues.selected.spentTime,
@@ -289,9 +297,9 @@ const mapStateToProps = state => ({
   trackedIssueId: state.tracking.issue.id
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   fetchIssueTimeEntries: (issueId, page) => dispatch(actions.issues.getTimeEntriesPage(issueId, undefined, page)),
-  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
+  startTimeTracking: (selectedIssue) => dispatch(actions.tracking.trackingStart(selectedIssue)),
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 

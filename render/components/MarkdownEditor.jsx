@@ -33,7 +33,7 @@ const MarkdownOption = styled.li`
 
   &:hover {
     svg {
-      color: ${props => props.theme.main} !important;
+      color: ${(props) => props.theme.main} !important;
     }
   }
 `;
@@ -66,14 +66,14 @@ const ModifiedTextArea = styled(TextArea)`
   padding: 10px;
   border-radius: 3px;
   outline: none;
-  border: 1px solid ${props => props.theme.minorText};
+  border: 1px solid ${(props) => props.theme.minorText};
 
   &:hover {
-    border-color: ${props => props.theme.main};
+    border-color: ${(props) => props.theme.main};
   }
 
   &:focus {
-    border: 2px solid ${props => props.theme.main};
+    border: 2px solid ${(props) => props.theme.main};
   }
 `;
 
@@ -91,7 +91,7 @@ const converter = new showdown.Converter({
 const KEY_ENTER = 13;
 
 class MarkdownEditor extends PureComponent {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -130,7 +130,7 @@ class MarkdownEditor extends PureComponent {
       newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${currentValue.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${currentValue.substring(textarea.selectionEnd)}`;
     }
     this.setState({
-      value: newValue 
+      value: newValue
     });
     if (onChange) {
       onChange(newValue);
@@ -152,7 +152,7 @@ class MarkdownEditor extends PureComponent {
   makeStrikethrough = () => {
     this.applyMarkdown('~~', '~~');
   }
-  
+
   makeCode = () => {
     this.applyMarkdown('\r\n```\r\n', '\r\n```\r\n');
   }
@@ -224,14 +224,12 @@ class MarkdownEditor extends PureComponent {
       } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
         this.applyMarkdown('\r\n');
       }
-    } else {
-      if (e.ctrlKey && e.keyCode === KEY_ENTER) {
-        if (onSubmit) {
-          onSubmit(xssFilter(this.state.value));
-          this.setState({
-            value: ''
-          });
-        }
+    } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+      if (onSubmit) {
+        onSubmit(xssFilter(this.state.value));
+        this.setState({
+          value: ''
+        });
       }
     }
   }
@@ -239,7 +237,9 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, isDisabled, maxLength } = this.props;
+    const {
+      className, id, onBlur, isDisabled, maxLength
+    } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -333,8 +333,7 @@ class MarkdownEditor extends PureComponent {
               value={value}
               maxLength={maxLength}
             />
-          )
-        }
+          )}
       </div>
     );
   }
@@ -457,7 +456,7 @@ class MarkdownText extends PureComponent {
     }
   }
 
-  render () {
+  render() {
     const { markdownText, className } = this.props;
     const markdown = xssFilter(converter.makeHtml(markdownText));
     return (
@@ -471,7 +470,7 @@ class MarkdownText extends PureComponent {
       />
     );
   }
-};
+}
 
 MarkdownText.propTypes = {
   markdownText: PropTypes.string,

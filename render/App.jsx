@@ -32,7 +32,7 @@ class Routes extends Component {
     if (event.error) {
       event.error.stack = cleanStack(event.error.stack);
     }
-    toast.error(<Notification error={event.error} />)
+    toast.error(<Notification error={event.error} />);
   }
 
   handleRejection = (event) => {
@@ -64,7 +64,7 @@ class Routes extends Component {
   }
 
   componentWillMount() {
-		window.addEventListener('error', this.errorHandler);
+    window.addEventListener('error', this.errorHandler);
     window.addEventListener('unhandledrejection', this.rejectionHandler);
     window.addEventListener('settings', this.settingsEventHandler);
   }
@@ -78,8 +78,8 @@ class Routes extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={props => <LoginView {...props}/>} />
-        <Route path="/app" component={props => <AppView {...props}/>} />
+        <Route path="/" exact component={(props) => <LoginView {...props} />} />
+        <Route path="/app" component={(props) => <AppView {...props} />} />
       </Switch>
     );
   }

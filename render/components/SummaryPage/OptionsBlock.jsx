@@ -64,15 +64,15 @@ OptionsBlock.propTypes = {
   settingsUseColors: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   showClosedIssues: state.settings.showClosedIssues,
   useColors: state.settings.useColors
 });
 
-const mapDispatchToProps = dispatch => ({
-  settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
-  settingsUseColors: value => dispatch(actions.settings.setUseColors(value))
+const mapDispatchToProps = (dispatch) => ({
+  settingsShowClosedIssues: (value) => dispatch(actions.settings.setShowClosedIssues(value)),
+  settingsUseColors: (value) => dispatch(actions.settings.setUseColors(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsBlock);

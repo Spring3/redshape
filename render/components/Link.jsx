@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import { openExternalUrl } from '../../common/utils';
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.main};
+  color: ${(props) => props.theme.main};
   font-size: 14px;
   padding: 2px;
   cursor: pointer;
 
-  ${props => css`
+  ${(props) => css`
     ${typeof props.children === 'string' ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }` : ''}
   `}
 `;
@@ -25,8 +25,11 @@ class Link extends PureComponent {
       onClick(event);
     }
   }
+
   render() {
-    const { children, type, href, className } = this.props;
+    const {
+      children, type, href, className
+    } = this.props;
     return (
       <StyledLink
         className={className}

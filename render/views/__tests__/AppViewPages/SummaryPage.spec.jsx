@@ -148,7 +148,7 @@ describe('AppView -> Summary Page', () => {
     expect(page.state.search).toBe('search');
     setTimeout(() => {
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
+      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -194,7 +194,7 @@ describe('AppView -> Summary Page', () => {
       expect(page.state.sortBy).toBe('id');
       expect(page.state.sortDirection).toBe('desc');
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
+      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -239,7 +239,7 @@ describe('AppView -> Summary Page', () => {
     setTimeout(() => {
       expect(page.state.showClosedIssues).toBe(true);
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter(action => action.type === ISSUES_GET_PAGE).length).toBe(2);
+      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });

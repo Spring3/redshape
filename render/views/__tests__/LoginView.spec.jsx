@@ -66,7 +66,7 @@ describe('Login view', () => {
 
     let inputs = wrapper.find('input');
     const checkbox = inputs.at(1);
-    checkbox.simulate('change', { target: {checked: true}});
+    checkbox.simulate('change', { target: { checked: true } });
     inputs = wrapper.find('input');
     expect(inputs.length).toBe(3);
     const apiKeyInput = wrapper.find('input[name="apiKey"]');
@@ -91,11 +91,11 @@ describe('Login view', () => {
     expect(usernameInput).toBeTruthy();
     usernameInput.simulate('focus');
     usernameInput.simulate('blur');
-    let error = wrapper.findWhere(item => item.text() === '"username" is not allowed to be empty');
+    let error = wrapper.findWhere((item) => item.text() === '"username" is not allowed to be empty');
     expect(error).toBeTruthy();
     usernameInput.simulate('change', { target: { value: 'username' }, preventDefault: () => {} });
     usernameInput.simulate('blur');
-    error = wrapper.findWhere(item => item.text() === '"username" is not allowed to be empty');
+    error = wrapper.findWhere((item) => item.text() === '"username" is not allowed to be empty');
     expect(error.exists()).toBeFalsy();
     expect(store.getActions().length).toBe(0);
   });
@@ -115,10 +115,10 @@ describe('Login view', () => {
     expect(passwordInput).toBeTruthy();
     passwordInput.simulate('focus');
     passwordInput.simulate('blur');
-    let error = wrapper.findWhere(item => item.text() === '"password" is not allowed to be empty');
+    let error = wrapper.findWhere((item) => item.text() === '"password" is not allowed to be empty');
     expect(error).toBeTruthy();
     passwordInput.simulate('change', { target: { value: 'password' } });
-    error = wrapper.findWhere(item => item.text() === '"password" is not allowed to be empty');
+    error = wrapper.findWhere((item) => item.text() === '"password" is not allowed to be empty');
     expect(error.exists()).toBeFalsy();
     expect(store.getActions().length).toBe(0);
   });
@@ -138,10 +138,10 @@ describe('Login view', () => {
     expect(redmineInput).toBeTruthy();
     redmineInput.simulate('focus');
     redmineInput.simulate('blur');
-    let error = wrapper.findWhere(item => item.text() === '"redmineEndpoint" is not allowed to be empty');
+    let error = wrapper.findWhere((item) => item.text() === '"redmineEndpoint" is not allowed to be empty');
     expect(error).toBeTruthy();
     redmineInput.simulate('change', { target: { value: 'url' } });
-    error = wrapper.findWhere(item => item.text() === '"redmineEndpoint" must be a valid uri');
+    error = wrapper.findWhere((item) => item.text() === '"redmineEndpoint" must be a valid uri');
     expect(error).toBeTruthy();
     redmineInput.simulate('change', { target: { value: 'https://redmine.domain' } });
     expect(error.exists()).toBeFalsy();
@@ -218,7 +218,7 @@ describe('[integration] LoginView', () => {
     expect(submitButton.exists()).toBeTruthy();
     submitButton.simulate('submit');
     setTimeout(() => {
-      expect(wrapper.findWhere(item => /is not allowed to be empty/.test(item.text())).exists()).toBe(true);
+      expect(wrapper.findWhere((item) => /is not allowed to be empty/.test(item.text())).exists()).toBe(true);
       expect(storageSetSpy).not.toHaveBeenCalled();
       expect(store.getActions().length).toBe(0);
       storageSetSpy.mockRestore();
@@ -278,7 +278,7 @@ describe('[integration] LoginView', () => {
 
     setTimeout(() => {
       wrapper.update();
-      expect(wrapper.findWhere(item => /is not allowed to be empty/.test(item.text())).length).toBe(0);
+      expect(wrapper.findWhere((item) => /is not allowed to be empty/.test(item.text())).length).toBe(0);
 
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe(`${returnedValues.redmineEndpoint}/users/current.json`);
@@ -340,7 +340,7 @@ describe('[integration] LoginView', () => {
       expect(axiosMock.history.get[0].url).toBe(`${returnedValues.redmineEndpoint}/users/current.json`);
       expect(axiosMock.history.get[0].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
-      expect(wrapper.findWhere(item => /Something went wrong/.test(item.text())).length).toBeGreaterThan(0);
+      expect(wrapper.findWhere((item) => /Something went wrong/.test(item.text())).length).toBeGreaterThan(0);
       const reduxActions = store.getActions();
       expect(reduxActions.length).toBe(2);
       expect(reduxActions[0]).toEqual(notify.start(USER_LOGIN));

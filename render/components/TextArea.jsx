@@ -11,9 +11,9 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   line-height: 1.5rem;
   box-sizing: border-box;
-  background: ${props => props.theme.bg};
+  background: ${(props) => props.theme.bg};
 
-  ${props => props.disabled && css`
+  ${(props) => props.disabled && css`
     background: ${props.theme.bgDisabled};
     border-color: ${props.theme.bgDarker} !important;
     color: ${props.theme.minorText};

@@ -11,12 +11,12 @@ const TooltipText = styled.p`
   width: auto;
   transform: translateX(-50%);
   padding: 5px;
-  background: ${props => props.theme.bg};
-  color: ${props => props.theme.mainDark};
+  background: ${(props) => props.theme.bg};
+  color: ${(props) => props.theme.mainDark};
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
-  box-shadow: 0px 2px 7px ${props => props.theme.minorText};
+  box-shadow: 0px 2px 7px ${(props) => props.theme.minorText};
 
   &::after {
     content: ' ';
@@ -27,7 +27,7 @@ const TooltipText = styled.p`
     transform: translateX(-50%);
     border: 2px solid black;
     border-width: 5px;
-    border-color: ${props => props.theme.bg} transparent transparent transparent;
+    border-color: ${(props) => props.theme.bg} transparent transparent transparent;
   }
 `;
 

@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import styled, { css } from 'styled-components';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab, Tabs, TabList, TabPanel
+} from 'react-tabs';
 
 import { version, name } from '../../package.json';
 import LogoIcon from '../../assets/icon.png';
@@ -63,7 +65,7 @@ const StyledTabPanel = styled(TabPanel)`
   flex-grow: 1;
   padding: 20px;
   display: none;
-  background: ${props => props.theme.bg};
+  background: ${(props) => props.theme.bg};
 `;
 
 const StyledTabs = styled(Tabs)`
@@ -80,7 +82,7 @@ const StyledTabs = styled(Tabs)`
     width: 100%;
     display: inline-block;
     text-align: center;
-    background: ${props => props.theme.bg};
+    background: ${(props) => props.theme.bg};
     
     li.react-tabs__tab {
       display: inline-block;
@@ -137,12 +139,12 @@ class AboutPage extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <DragArea />
         <StyledTabs>
           <TabList>
-            <Tab></Tab>
-            <Tab></Tab>
+            <Tab />
+            <Tab />
           </TabList>
 
           <StyledTabPanel>
@@ -155,7 +157,10 @@ class AboutPage extends Component {
                   <img alt="App icon" height="70" src={LogoIcon} />
                 </Link>
                 <h2>{name}</h2>
-                <h2>v{version}</h2>
+                <h2>
+                  v
+                  {version}
+                </h2>
               </IconContainer>
               <CenteredDiv>
                 <h3>Time tracker for Redmine</h3>
@@ -213,9 +218,9 @@ class AboutPage extends Component {
             </FlexBox>
           </StyledTabPanel>
         </StyledTabs>
-      </Fragment>
+      </>
     );
   }
-};
+}
 
 export default AboutPage;

@@ -7,19 +7,19 @@ import styled, { css, withTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
+import EditIcon from 'mdi-react/EditIcon';
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
-import IssueModal from "../../components/IssueModal";
+import IssueModal from '../../components/IssueModal';
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
 
-import EditIcon from 'mdi-react/EditIcon';
-import { GhostButton } from "../../components/Button";
+import { GhostButton } from '../../components/Button';
 
 import actions from '../../actions';
 
@@ -65,7 +65,7 @@ const ColumnList = styled.ul`
 const SmallNotice = styled.p`
   font-size: 12px;
   margin-top: 0px;
-  color: ${props => props.theme.minorText};
+  color: ${(props) => props.theme.minorText};
 
   a {
     font-size: inherit !important;
@@ -82,7 +82,7 @@ const Wrapper = styled.div`
 const IconButton = styled(GhostButton)`
   svg {
     border-radius: 3px;
-    ${({theme}) => css`
+    ${({ theme }) => css`
       color: ${theme.main};
       border: 2px solid transparent;
       transition: all ease ${theme.transitionTime};
@@ -124,7 +124,7 @@ const Subtask = styled.div`
   padding: 10px 5px;
   margin-right: 1rem;
   margin-bottom: .75rem;
-  box-shadow: 0px 0px 5px ${props => props.theme.shadow};
+  box-shadow: 0px 0px 5px ${(props) => props.theme.shadow};
   border-radius: 3px;
 `;
 
@@ -161,27 +161,27 @@ class IssueDetailsPage extends Component {
   }
 
   showTimeEntryModal = (timeEntry) => {
-    const { selectedIssueState, userId, userName, projects } = this.props;
+    const {
+      selectedIssueState, userId, userName, projects
+    } = this.props;
     const selectedIssue = selectedIssueState.data;
-    const selectedTimeEntry = timeEntry
-      ? timeEntry
-      : {
-        user: {
-          id: userId,
-          name: userName
-        },
-        issue: {
-          id: selectedIssue.id
-        },
-        activity: {},
-        project: {
-          id: selectedIssue.project.id,
-          name: selectedIssue.project.name
-        },
-        hours: undefined,
-        duration: "",
-        spent_on: moment().format('YYYY-MM-DD')
-      };
+    const selectedTimeEntry = timeEntry || {
+      user: {
+        id: userId,
+        name: userName
+      },
+      issue: {
+        id: selectedIssue.id
+      },
+      activity: {},
+      project: {
+        id: selectedIssue.project.id,
+        name: selectedIssue.project.name
+      },
+      hours: undefined,
+      duration: '',
+      spent_on: moment().format('YYYY-MM-DD')
+    };
     selectedTimeEntry.issue.name = selectedIssue.subject;
     const activities = _.get(projects[selectedIssue.project.id], 'activities', []);
     this.setState({
@@ -204,18 +204,22 @@ class IssueDetailsPage extends Component {
   closeIssueModal = (changes) => {
     this.setState({
       showIssueModal: false
-    })
+    });
   }
 
   openIssueModal = () => () => {
-    this.setState({ showIssueModal: true })
+    this.setState({ showIssueModal: true });
   }
 
-  getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
+  getIssueComments = () => this.props.selectedIssueState.data.journals.filter((entry) => entry.notes)
 
   render() {
-    const { selectedIssueState, history, userId, theme, postComments } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
+    const {
+      selectedIssueState, history, userId, theme, postComments
+    } = this.props;
+    const {
+      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
+    } = this.state;
     const selectedIssue = selectedIssueState.data;
     const cfields = selectedIssue.custom_fields;
     const subtasks = selectedIssue.children;
@@ -230,19 +234,26 @@ class IssueDetailsPage extends Component {
                 </BackButton>
               </Buttons>
               <h2>
-                <span>#{selectedIssue.id}&nbsp;</span>
+                <span>
+                  #
+                  {selectedIssue.id}
+&nbsp;
+                </span>
                 <span>{selectedIssue.subject}</span>
                 <IconButton onClick={this.openIssueModal()}>
-                  <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }}/>
+                  <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
                 </IconButton>
               </h2>
               <SmallNotice>
                 Created by&nbsp;
-                  <Link>{selectedIssue.author.name}</Link>
+                <Link>{selectedIssue.author.name}</Link>
                 <DateComponent date={selectedIssue.created_on} />
               </SmallNotice>
               {selectedIssue.closed_on && (
-                <SmallNotice>Closed <DateComponent date={selectedIssue.closed_on} /></SmallNotice>
+                <SmallNotice>
+                  Closed
+                  <DateComponent date={selectedIssue.closed_on} />
+                </SmallNotice>
               )}
               <Wrapper>
                 <ColumnList>
@@ -292,20 +303,34 @@ class IssueDetailsPage extends Component {
                   </li>
                   <li>
                     <div>Estimation: </div>
-                    <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
-                    {
+                    <div>
+                      {selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
+                      {
                       (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
-                        <span> (Total: {selectedIssue.total_estimated_hours.toFixed(2)} h)</span>
+                        <span>
+                          {' '}
+                          (Total:
+                          {selectedIssue.total_estimated_hours.toFixed(2)}
+                          {' '}
+                          h)
+                        </span>
                       )
                     }
                     </div>
                   </li>
                   <li>
                     <div>Time spent: </div>
-                    <div>{selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                    <div>
+                      {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
                       {
                         (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
-                          <span> (Total: {selectedIssue.total_spent_hours.toFixed(2)} h)</span>
+                          <span>
+                            {' '}
+                            (Total:
+                            {selectedIssue.total_spent_hours.toFixed(2)}
+                            {' '}
+                            h)
+                          </span>
                         )
                       }
                     </div>
@@ -351,7 +376,11 @@ class IssueDetailsPage extends Component {
                       <CustomFields>
                         {cfields.map((el, i) => (
                           <li key={i}>
-                            <div>{el.name}: </div>
+                            <div>
+                              {el.name}
+                              :
+                              {' '}
+                            </div>
                             <div>{el.value}</div>
                           </li>
                         ))}
@@ -452,15 +481,15 @@ IssueDetailsPage.propTypes = {
   resetSelectedIssue: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   projects: state.projects.data,
   userId: state.user.id,
   userName: state.user.name,
   selectedIssueState: state.issues.selected
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
+const mapDispatchToProps = (dispatch) => ({
+  fetchIssueDetails: (issueId) => dispatch(actions.issues.get(issueId)),
   postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });

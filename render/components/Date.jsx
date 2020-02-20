@@ -38,10 +38,10 @@ const StyledDate = styled.span`
 
   span:last-child {
     opacity: 0;
-    display: ${props => props.animated ? 'inherit' : 'none'};
+    display: ${(props) => (props.animated ? 'inherit' : 'none')};
   }
 
-  ${props => props.animated && css`
+  ${(props) => props.animated && css`
     &:focus > span:first-child,
     &:hover > span:first-child {
       animation: ${verticalSlideFadeOut} .5s ease forwards;
@@ -63,7 +63,7 @@ class DateComponent extends PureComponent {
         ? 'today'
         : daysAgo > 1
           ? `${daysAgo} days ago`
-          : `yesterday`
+          : 'yesterday'
       );
       const shouldBeAnimated = (daysAgo >= 0 && daysAgo <= 30);
       const displayedValue = shouldBeAnimated

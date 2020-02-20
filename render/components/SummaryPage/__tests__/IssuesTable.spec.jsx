@@ -113,7 +113,8 @@ describe('SummaryPage => IssuesTable component', () => {
       </Provider>
     );
     // 1st row, 1st column
-    wrapper.find('tr').at(0).find('th').at(0).simulate('click');
+    wrapper.find('tr').at(0).find('th').at(0)
+      .simulate('click');
     setImmediate(() => {
       expect(onSort).toHaveBeenCalledWith('id', 'asc');
       done();
