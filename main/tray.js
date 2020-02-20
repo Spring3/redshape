@@ -12,13 +12,13 @@ const sepMenuItem = { type: 'separator' };
 const pauseTimerMenuItem = {
   label: 'Pause timer',
   click: () => mainWindow.webContents.send(
-    'timer', { action: 'pause', mainWindowHidden: instance.getWindowVisibility() }
+    'timer', { action: 'pause', mainWindowHidden: !instance.isWindowOpen() }
   )
 };
 const resumeTimerMenuItem = {
   label: 'Resume timer',
   click: () => mainWindow.webContents.send(
-    'timer', { action: 'resume', mainWindowHidden: instance.getWindowVisibility() }
+    'timer', { action: 'resume', mainWindowHidden: !instance.isWindowOpen() }
   )
 };
 
@@ -74,10 +74,10 @@ function TrayHandler(windowConfig) {
       hideWhenClosed = val;
     },
     willHideWhenClosed: () => hideWhenClosed,
-    appWindowVisibilityToggled: () => {
-      appWindowOpen = !appWindowOpen;
+    setAppWindowVisibility: (value) => {
+      appWindowOpen = !!value;
     },
-    getWindowVisibility: () => appWindowOpen,
+    isWindowOpen: () => appWindowOpen,
     setup: () => {
       tray = new Tray(nativeImage.createFromPath(windowConfig.iconTray));
       contextMenu = Menu.buildFromTemplate([quitMenuItem]);

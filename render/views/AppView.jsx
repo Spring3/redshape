@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
+import { ipcRenderer } from 'electron';
 
 import actions from '../actions';
 import Navbar from '../components/Navbar';
@@ -16,8 +17,6 @@ import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
 import { hoursToDuration } from "../datetime";
-
-import IPC from '../ipc';
 
 const Grid = styled.div`
   height: 100%;
@@ -46,7 +45,7 @@ class AppView extends Component {
 
   modifyUserMenu(){
     const { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } = this.props;
-    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
+    ipcRenderer.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
   }
 
   componentWillMount() {

@@ -306,14 +306,14 @@ const initialize = () => {
   });
 
   mainWindow.on('show', () => {
-    tray.appWindowVisibilityToggled();
     mainWindow.webContents.send('window', { action: 'show' });
+    tray.setAppWindowVisibility(true);
     tray.update();
   });
 
   mainWindow.on('hide', () => {
-    tray.appWindowVisibilityToggled();
     mainWindow.webContents.send('window', { action: 'hide' });
+    tray.setAppWindowVisibility(false);
     tray.update();
   });
 
