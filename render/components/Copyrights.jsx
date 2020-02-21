@@ -13,6 +13,7 @@ export default () => (
     <Link
       type="external"
       href="https://www.dvasylenko.com"
+      testId="copyrights-link"
     >
       Daniyil Vasylenko
     </Link>
