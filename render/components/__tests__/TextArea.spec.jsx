@@ -1,17 +1,19 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import TextArea from '../TextArea';
 
 describe('TextArea component', () => {
+  afterEach(cleanup);
+
   it('should render the text area', () => {
-    const { debug } = render(<TextArea onChange={() => {}} />);
-    debug();
+    render(<TextArea onChange={() => {}} />);
+    expect(document.querySelector('textarea')).toBeDefined();
   });
 
   it('should react to the onChange event', () => {
     const onChange = jest.fn();
-    const { debug } = render(
+    render(
       <TextArea onChange={onChange} />
     );
 
@@ -23,8 +25,6 @@ describe('TextArea component', () => {
     };
 
     fireEvent.change(document.querySelector('textarea'), event);
-
-    debug();
 
     expect(onChange).toHaveBeenCalled();
   });
