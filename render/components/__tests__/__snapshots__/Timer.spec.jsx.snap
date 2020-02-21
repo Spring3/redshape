@@ -269,15 +269,18 @@ exports[`Timer component should match the snapshot 1`] = `
                   className="c3"
                   href="#"
                   onClick={[Function]}
+                  testId="link"
                 >
                   <Link__StyledLink
                     className="c3"
+                    data-testid="link"
                     href="#"
                     onClick={[Function]}
                     rel="noopener noreferer"
                   >
                     <a
                       className="c4 c3"
+                      data-testid="link"
                       href="#"
                       onClick={[Function]}
                       rel="noopener noreferer"

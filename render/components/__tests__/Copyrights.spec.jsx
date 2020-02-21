@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/extend-expect';
 import Copyrights from '../Copyrights';
 
 describe('Copyrights Component', () => {
-  it('should match the snapshot', () => {
+  it('should render the ref to the website', () => {
     const { queryByText, getByTestId } = render(<Copyrights />);
     expect(queryByText('Created by')).toBeInTheDOM();
     const copyrightsLink = getByTestId('copyrights-link');

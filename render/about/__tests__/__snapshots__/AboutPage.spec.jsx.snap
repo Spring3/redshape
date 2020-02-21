@@ -632,9 +632,12 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                               Copyright © 2007 Free Software Foundation, Inc. &lt;
                               <Link
                                 href="http://fsf.org/"
+                                onClick={[Function]}
+                                testId="link"
                                 type="external"
                               >
                                 <Link__StyledLink
+                                  data-testid="link"
                                   href="http://fsf.org/"
                                   onClick={[Function]}
                                   rel="noopener noreferer"
@@ -642,6 +645,7 @@ exports[`About page should match the snapshot [tab2] 1`] = `
                                 >
                                   <a
                                     className="c6"
+                                    data-testid="link"
                                     href="http://fsf.org/"
                                     onClick={[Function]}
                                     rel="noopener noreferer"
