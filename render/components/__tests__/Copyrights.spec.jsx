@@ -6,7 +6,7 @@ import Copyrights from '../Copyrights';
 describe('Copyrights Component', () => {
   it('should render the ref to the website', () => {
     const { queryByText, getByTestId } = render(<Copyrights />);
-    expect(queryByText('Created by')).toBeInTheDOM();
+    expect(queryByText('Created by')).toBeDefined();
     const copyrightsLink = getByTestId('copyrights-link');
     expect(copyrightsLink).toBeInTheDOM();
     expect(copyrightsLink).toHaveAttribute('href', 'https://www.dvasylenko.com');

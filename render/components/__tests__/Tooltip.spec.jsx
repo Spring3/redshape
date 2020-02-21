@@ -1,15 +1,17 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import Tooltip from '../Tooltip';
 
 describe('Tooltip component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(
+  it('should render the tooltip', () => {
+    const { getByText } = render(
       <Tooltip className="container" text="Hello world">
         <i className="test" />
       </Tooltip>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(getByText('Hello world')).toBeDefined();
+    expect(document.querySelector('i[class="test"]')).toBeDefined();
   });
 });

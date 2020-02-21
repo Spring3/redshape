@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -43,19 +43,14 @@ const TooltipContainer = styled.div`
 `;
 
 
-class Tooltip extends Component {
-  render() {
-    const { className, children, text } = this.props;
-    return (
-      <TooltipContainer
-        className={className}
-      >
-        {children}
-        <TooltipText className="tooltip">{text}</TooltipText>
-      </TooltipContainer>
-    );
-  }
-}
+const Tooltip = ({ className, children, text }) => (
+  <TooltipContainer
+    className={className}
+  >
+    {children}
+    <TooltipText className="tooltip">{text}</TooltipText>
+  </TooltipContainer>
+);
 
 Tooltip.propTypes = {
   className: PropTypes.string,
