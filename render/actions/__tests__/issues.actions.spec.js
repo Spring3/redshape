@@ -60,7 +60,7 @@ describe('Issue actions', () => {
       await issuesActions.default.getPage(filter, page, limit)(dispatch, getState);
       expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
+      expect(axiosMock.history.get[0].url).toBe('/issues.json');
       expect(axiosMock.history.get[0].params).toEqual({
         ...filter,
         include: 'attachments,children,relations,journals',
@@ -90,7 +90,7 @@ describe('Issue actions', () => {
       await issuesActions.default.getPage()(dispatch, getState);
       expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues.json`);
+      expect(axiosMock.history.get[0].url).toBe('/issues.json');
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET_PAGE, { page: state.issues.all.page }));
       expect(dispatch).toBeCalledWith(
@@ -115,7 +115,7 @@ describe('Issue actions', () => {
       axiosMock.onGet(`/issues/${id}.json`).replyOnce(() => Promise.resolve([200, response]));
       await issuesActions.default.get(id)(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues/${id}.json`);
+      expect(axiosMock.history.get[0].url).toBe(`/issues/${id}.json`);
       expect(axiosMock.history.get[0].params).toEqual({
         include: 'attachments,children,relations,journals'
       });
@@ -133,7 +133,7 @@ describe('Issue actions', () => {
       axiosMock.onGet(`/issues/${id}.json`).replyOnce(() => Promise.reject(response));
       await issuesActions.default.get(id)(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/issues/${id}.json`);
+      expect(axiosMock.history.get[0].url).toBe(`/issues/${id}.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_GET));
       expect(dispatch).toBeCalledWith(
@@ -169,7 +169,7 @@ describe('Issue actions', () => {
       await issuesActions.default.getTimeEntriesPage(issueId, projectId, page, limit)(dispatch, getState);
       expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(axiosMock.history.get[0].url).toBe('/time_entries.json');
       expect(axiosMock.history.get[0].params).toEqual({
         offset: page * limit,
         limit,
@@ -202,7 +202,7 @@ describe('Issue actions', () => {
       await issuesActions.default.getTimeEntriesPage(1, 2, page, 4)(dispatch, getState);
       expect(getState).toHaveBeenCalled();
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(axiosMock.history.get[0].url).toBe('/time_entries.json');
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(issuesActions.ISSUES_TIME_ENTRY_GET, { page }));
       expect(dispatch).toHaveBeenCalledWith(
@@ -241,7 +241,7 @@ describe('Issue actions', () => {
       axiosMock.onPut(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, undefined]));
       await issuesActions.default.sendComments(issueId, comments)(dispatch, getState);
       expect(axiosMock.history.put.length).toBe(1);
-      expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
+      expect(axiosMock.history.put[0].url).toBe('/issues/${issueId}.json');
       expect(axiosMock.history.put[0].data).toEqual(JSON.stringify({
         issue: {
           notes: comments
@@ -281,7 +281,7 @@ describe('Issue actions', () => {
       axiosMock.onPut(`/issues/${issueId}.json`).replyOnce(() => Promise.reject(response));
       await issuesActions.default.sendComments(issueId, comments)(dispatch, getState);
       expect(axiosMock.history.put.length).toBe(1);
-      expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/issues/${issueId}.json`);
+      expect(axiosMock.history.put[0].url).toBe(`/issues/${issueId}.json`);
       expect(dispatch).toBeCalledTimes(2);
       expect(getState).toHaveBeenCalled();
       expect(dispatch).toBeCalledWith(notify.start(issuesActions.ISSUES_COMMENTS_SEND, { subject: 'comments' }));

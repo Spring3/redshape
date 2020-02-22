@@ -58,7 +58,7 @@ describe('User actions', () => {
         redmineEndpoint
       })(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
+      expect(axiosMock.history.get[0].url).toBe('/users/current.json');
       expect(axiosMock.history.get[0].headers.Authorization).toBe(`Basic ${btoa(`${username}:${password}`)}`);
       expect(dispatch).toHaveBeenCalledTimes(3);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_LOGIN));
@@ -87,7 +87,7 @@ describe('User actions', () => {
       axiosMock.onGet('/users/current.json').replyOnce(() => Promise.reject(response));
       await userActions.default.checkLogin({ redmineEndpoint, username, password })(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
+      expect(axiosMock.history.get[0].url).toBe('/users/current.json');
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_LOGIN));
       expect(dispatch).toHaveBeenCalledWith(
@@ -106,7 +106,7 @@ describe('User actions', () => {
       axiosInstanceMock.onGet('/users/current.json').replyOnce(() => Promise.resolve([200, response]));
       await userActions.default.getCurrent()(dispatch);
       expect(axiosInstanceMock.history.get.length).toBe(1);
-      expect(axiosInstanceMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
+      expect(axiosInstanceMock.history.get[0].url).toBe('/users/current.json');
       expect(axiosInstanceMock.history.get[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_GET_CURRENT));
@@ -120,7 +120,7 @@ describe('User actions', () => {
       axiosInstanceMock.onGet('/users/current.json').replyOnce(() => Promise.reject(response));
       await userActions.default.getCurrent()(dispatch);
       expect(axiosInstanceMock.history.get.length).toBe(1);
-      expect(axiosInstanceMock.history.get[0].url).toBe(`${redmineEndpoint}/users/current.json`);
+      expect(axiosInstanceMock.history.get[0].url).toBe('/users/current.json');
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(userActions.USER_GET_CURRENT));
       expect(dispatch).toHaveBeenCalledWith(

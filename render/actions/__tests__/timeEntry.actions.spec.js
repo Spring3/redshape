@@ -230,7 +230,7 @@ describe('Time actions', () => {
 
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
-      expect(axiosMock.history.post[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(axiosMock.history.post[0].url).toBe('/time_entries.json');
       expect(axiosMock.history.post[0].data).toEqual(JSON.stringify({
         time_entry: {
           issue_id: timeEntry.issue.id,
@@ -280,7 +280,7 @@ describe('Time actions', () => {
       await timeEntryActions.default.publish(timeEntry)(dispatch, getState);
       expect(getState).toHaveBeenCalledTimes(1);
       expect(axiosMock.history.post.length).toBe(1);
-      expect(axiosMock.history.post[0].url).toBe(`${redmineEndpoint}/time_entries.json`);
+      expect(axiosMock.history.post[0].url).toBe('/time_entries.json');
       expect(dispatch).toHaveBeenCalledTimes(3);
       expect(dispatch).toHaveBeenCalledWith({
         type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED
@@ -430,7 +430,7 @@ describe('Time actions', () => {
       await timeEntryActions.default.update(timeEntry, changes)(dispatch);
 
       expect(axiosMock.history.put.length).toBe(1);
-      expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
+      expect(axiosMock.history.put[0].url).toBe(`/time_entries/${timeEntry.id}.json`);
       expect(axiosMock.history.put[0].data).toEqual(JSON.stringify({
         time_entry: {
           comments: changes.comments,
@@ -485,7 +485,7 @@ describe('Time actions', () => {
       axiosMock.onPut(`/time_entries/${timeEntry.id}.json`).reply(() => Promise.reject(response));
       await timeEntryActions.default.update(timeEntry, changes)(dispatch);
       expect(axiosMock.history.put.length).toBe(1);
-      expect(axiosMock.history.put[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntry.id}.json`);
+      expect(axiosMock.history.put[0].url).toBe(`/time_entries/${timeEntry.id}.json`);
       expect(dispatch).toHaveBeenCalledTimes(3);
       expect(dispatch).toHaveBeenCalledWith({ type: timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED });
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_UPDATE));
@@ -509,7 +509,7 @@ describe('Time actions', () => {
       await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
 
       expect(axiosMock.history.delete.length).toBe(1);
-      expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
+      expect(axiosMock.history.delete[0].url).toBe(`/time_entries/${timeEntryId}.json`);
       expect(axiosMock.history.delete[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
@@ -526,7 +526,7 @@ describe('Time actions', () => {
       axiosMock.onDelete(`/time_entries/${timeEntryId}.json`).reply(() => Promise.reject(response));
       await timeEntryActions.default.remove(timeEntryId, issueId)(dispatch);
       expect(axiosMock.history.delete.length).toBe(1);
-      expect(axiosMock.history.delete[0].url).toBe(`${redmineEndpoint}/time_entries/${timeEntryId}.json`);
+      expect(axiosMock.history.delete[0].url).toBe(`/time_entries/${timeEntryId}.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
       expect(dispatch).toHaveBeenCalledWith(

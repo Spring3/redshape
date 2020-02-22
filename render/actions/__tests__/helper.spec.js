@@ -146,7 +146,7 @@ describe('Helper module', () => {
 
       expect(axios.getInstance()).toBeTruthy();
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe('redmine.test.com/user');
+      expect(axiosMock.history.get[0].url).toBe('/user');
 
       const axiosInstanceMock = new MockAdapter(axios.getInstance());
       axiosInstanceMock.onGet('/test').replyOnce(() => Promise.resolve([200, undefined]));
@@ -157,7 +157,7 @@ describe('Helper module', () => {
 
       await expect(request({ url: '/test' })).resolves.toEqual({ data: undefined });
       expect(axiosInstanceMock.history.get.length).toBe(1);
-      expect(axiosInstanceMock.history.get[0].url).toBe('redmine.test.com/test');
+      expect(axiosInstanceMock.history.get[0].url).toBe('/test');
 
       try {
         await request({ url: '/errortest' });

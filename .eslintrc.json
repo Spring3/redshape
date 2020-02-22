@@ -56,6 +56,8 @@
                 "done_ratio"
             ]
         }],
+        "react/jsx-props-no-spreading": "off",
+        "max-classes-per-file": "off",
         "no-use-before-define": "off",
         "jsx-a11y/label-has-for": [ 2, {
             "required": {
