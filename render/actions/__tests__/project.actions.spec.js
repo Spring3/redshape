@@ -40,7 +40,7 @@ describe('Project actions', () => {
       await projectActions.default.getAll()(dispatch);
 
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/projects.json`);
+      expect(axiosMock.history.get[0].url).toBe('/projects.json');
       expect(axiosMock.history.get[0].params).toEqual({
         include: 'time_entry_activities',
         offset: 0
@@ -58,7 +58,7 @@ describe('Project actions', () => {
       axiosMock.onGet('/projects.json').replyOnce(() => Promise.reject(response));
       await projectActions.default.getAll()(dispatch);
       expect(axiosMock.history.get.length).toBe(1);
-      expect(axiosMock.history.get[0].url).toBe(`${redmineEndpoint}/projects.json`);
+      expect(axiosMock.history.get[0].url).toBe('/projects.json');
       expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toBeCalledWith(notify.start(projectActions.PROJECT_GET_ALL));
       expect(dispatch).toBeCalledWith(

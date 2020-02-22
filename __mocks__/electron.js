@@ -31,6 +31,7 @@ const remote = {
 const ipcRenderer = {
   on: jest.fn(),
   send: jest.fn(),
+  removeListener: jest.fn()
 };
 
 module.exports = {
