@@ -1,28 +1,37 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import toJSON from 'enzyme-to-json';
-import { mount } from 'enzyme';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+
 import { ThemeProvider } from 'styled-components';
 
 import AboutPage from '../AboutPage';
 import theme from '../../theme';
 
 describe('About page', () => {
-  it('should match the snapshot [tab1]', () => {
-    expect(renderer.create(
-      <ThemeProvider theme={theme}>
-        <AboutPage />
-      </ThemeProvider>
-    ).toJSON()).toMatchSnapshot();
-  });
-
-  it('should match the snapshot [tab2]', () => {
-    const wrapper = mount(
+  it('[tab1]', () => {
+    const { getByText } = render(
       <ThemeProvider theme={theme}>
         <AboutPage />
       </ThemeProvider>
     );
-    wrapper.find('Tab').at(1).simulate('click');
-    expect(toJSON(wrapper)).toMatchSnapshot();
+    const tabs = document.querySelectorAll('li[role="tab"]');
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+    expect(document.querySelector('a[href="https://www.dvasylenko.com/redshape/"]')).toBeDefined();
+    expect(getByText('Redshape')).toBeDefined();
+    expect(getByText('v1.0.0')).toBeDefined();
+    expect(getByText('Time tracker for Redmine')).toBeDefined();
+    expect(document.querySelector('a[href="mailto:redshape.app@gmail.com"]')).toBeDefined();
+  });
+
+  it('[tab2]', () => {
+    const { getByText } = render(
+      <ThemeProvider theme={theme}>
+        <AboutPage />
+      </ThemeProvider>
+    );
+    const tabs = document.querySelectorAll('li[role="tab"]');
+    fireEvent.click(tabs[1]);
+    expect(getByText('GNU GENERAL PUBLIC LICENSE')).toBeDefined();
   });
 });

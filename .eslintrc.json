@@ -53,7 +53,10 @@
                 "total_count",
                 "estimated_duration",
                 "estimated_hours",
-                "done_ratio"
+                "done_ratio",
+                "assigned_to",
+                "start_date",
+                "custom_fields"
             ]
         }],
         "react/jsx-props-no-spreading": "off",
