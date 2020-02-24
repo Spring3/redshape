@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -13,6 +12,7 @@ const MarginedDiv = styled.div`
 
 class OptionsBlock extends Component {
   toggleClosedIssuesDisplay = () => {
+    console.log('TOGGLING');
     const { settingsShowClosedIssues, showClosedIssues } = this.props;
     settingsShowClosedIssues(!showClosedIssues);
   }

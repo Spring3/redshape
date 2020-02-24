@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { render, fireEvent, cleanup, act } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
@@ -27,32 +27,12 @@ describe('SummaryPage => OptionsBlock component', () => {
 
   afterEach(() => {
     axiosMock.reset();
+    cleanup();
   });
 
   afterAll(() => {
     axiosMock.restore();
     reset();
-  });
-
-  it('should match the snapshot', () => {
-    const state = {
-      settings: {
-        useColors: true,
-        showClosedIssues: true
-      },
-      user: {
-        id: 1
-      }
-    };
-    const store = mockStore(state);
-    const tree = renderer.create(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <OptionsBlock />
-        </ThemeProvider>
-      </Provider>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
   });
 
   it('should toggle closed issues display when checkbox is clicked', () => {
@@ -67,7 +47,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     };
     const store = mockStore(state);
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <OptionsBlock />
@@ -75,8 +55,11 @@ describe('SummaryPage => OptionsBlock component', () => {
       </Provider>
     );
 
-    wrapper.find('input[type="checkbox"]').at(0).simulate('change', { target: { checked: false } });
-    expect(store.getActions().length).toBe(1);
+    const checkbox = document.querySelector('input[type="checkbox"]');
+    act(() => {
+      fireEvent.click(checkbox);
+    });
+    expect(store.getActions()).toHaveLength(1);
     expect(store.getActions()[0]).toEqual({
       type: SETTINGS_SHOW_CLOSED_ISSUES,
       data: {
@@ -99,7 +82,7 @@ describe('SummaryPage => OptionsBlock component', () => {
       }
     };
     const store = mockStore(state);
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <OptionsBlock />
@@ -107,7 +90,9 @@ describe('SummaryPage => OptionsBlock component', () => {
       </Provider>
     );
 
-    wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: false } });
+    act(() => {
+      fireEvent.click(document.querySelectorAll('input[type="checkbox"]')[1]);
+    });
     expect(store.getActions().length).toBe(1);
     expect(store.getActions()[0]).toEqual({
       type: SETTINGS_USE_COLORS,
