@@ -41,6 +41,7 @@ class Dialog extends Component {
           <PaddedButton
             theme={theme}
             palette="danger"
+            id="dialog-cancel"
             onClick={this.cancel(onClose)}
           >
             Cancel
@@ -48,6 +49,7 @@ class Dialog extends Component {
           <PaddedButton
             theme={theme}
             palette="success"
+            id="dialog-confirm"
             onClick={this.confirm(onClose)}
           >
             Confirm

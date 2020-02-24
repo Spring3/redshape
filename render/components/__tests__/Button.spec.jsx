@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import styled from 'styled-components';
 import Button, { GhostButton } from '../Button';
 import theme from '../../theme';
 

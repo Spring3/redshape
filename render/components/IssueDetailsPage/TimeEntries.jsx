@@ -183,11 +183,12 @@ class TimeEntries extends Component {
         <HeaderContainer>
           <h2 className="padded">Time spent</h2>
           <div>
-            <FlexButton onClick={this.openModal()}>
+            <FlexButton id="openModal" onClick={this.openModal()}>
               <PlusIcon size={22} />
               <span>&nbsp;Add</span>
             </FlexButton>
             <FlexButton
+              id="track"
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
               onClick={this.startTimeTracking}
             >
@@ -223,6 +224,7 @@ class TimeEntries extends Component {
                         {
                           (requestConfirmation) => (
                             <GhostButton
+                              id="confirmDeletion"
                               onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
                             >
                               <CloseIcon color={theme.normalText} />
