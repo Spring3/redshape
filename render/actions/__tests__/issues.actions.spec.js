@@ -241,7 +241,7 @@ describe('Issue actions', () => {
       axiosMock.onPut(`/issues/${issueId}.json`).replyOnce(() => Promise.resolve([200, undefined]));
       await issuesActions.default.sendComments(issueId, comments)(dispatch, getState);
       expect(axiosMock.history.put.length).toBe(1);
-      expect(axiosMock.history.put[0].url).toBe('/issues/${issueId}.json');
+      expect(axiosMock.history.put[0].url).toBe(`/issues/${issueId}.json`);
       expect(axiosMock.history.put[0].data).toEqual(JSON.stringify({
         issue: {
           notes: comments
