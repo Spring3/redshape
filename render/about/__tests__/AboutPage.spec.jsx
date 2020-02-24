@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import { ThemeProvider } from 'styled-components';
@@ -8,6 +8,7 @@ import AboutPage from '../AboutPage';
 import theme from '../../theme';
 
 describe('About page', () => {
+  afterEach(cleanup);
   it('[tab1]', () => {
     const { getByText } = render(
       <ThemeProvider theme={theme}>
