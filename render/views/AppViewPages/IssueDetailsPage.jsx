@@ -282,7 +282,6 @@ class IssueDetailsPage extends Component {
                     <div>
                       <Progressbar
                         percent={selectedIssue.done_ratio}
-                        mode="progress-gradient"
                         background={theme.main}
                       />
                     </div>

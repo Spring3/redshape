@@ -13,7 +13,7 @@ const mockStore = configureStore([thunk]);
 
 describe('Navbar component', () => {
   afterEach(cleanup);
-  it('should match the snapshot', () => {
+  it('should display the Navbar', () => {
     const state = {
       user: {
         id: 1,

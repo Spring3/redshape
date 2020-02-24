@@ -32,28 +32,10 @@ export const Progress = styled.div`
 `;
 
 const Progressbar = ({
-  percent, background, id, className, height, mode, theme
+  percent, background, id, className, height
 }) => {
-  let percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
-  let percentageOver;
+  const percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
   const percentageText = `${percentage.toFixed(0)}%`;
-  if (mode === 'progress-gradient') {
-    const colors = ['red', 'yellow-red', 'yellow', 'yellow-green', 'green'];
-    const ranges = [20, 40, 60, 80, 100];
-    const colorIdx = ranges.findIndex((el) => el >= percentage);
-    const color = colors[colorIdx] || 'green';
-    background = theme[color];
-  } else if (mode === 'time-tracking') {
-    background = theme.green;
-    if (percentage >= 75.0) {
-      background = theme['yellow-green'];
-    }
-    if (percentage >= 100.0) {
-      percentageOver = percentage - 100;
-      percentageOver = (percentageOver / percentage) * 100;
-      percentage = (100 / percentage) * 100;
-    }
-  }
 
   return (
     <Wrapper
@@ -69,16 +51,6 @@ const Progressbar = ({
             background={background}
             height={height}
           />
-          {
-          percentageOver > 0 && (
-            <Progress
-              float="right"
-              percent={percentageOver}
-              background={theme.red}
-              height={height}
-            />
-          )
-        }
         </Background>
       </Tooltip>
     </Wrapper>
@@ -93,15 +65,13 @@ Progressbar.propTypes = {
   height: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
-  ]),
-  mode: PropTypes.string
+  ])
 };
 
 Progressbar.defaultProps = {
   className: undefined,
   id: undefined,
-  height: 5,
-  mode: 'default'
+  height: 5
 };
 
 export default withTheme(Progressbar);
