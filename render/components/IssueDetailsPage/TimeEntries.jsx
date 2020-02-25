@@ -197,7 +197,7 @@ class TimeEntries extends Component {
             </FlexButton>
           </div>
         </HeaderContainer>
-        <TimeEntriesList ref={this.listRef}>
+        <TimeEntriesList ref={this.listRef} data-testId="time-entries">
           <InfiniteScroll
             load={this.loadSpentTime}
             isEnd={spentTime.data.length === spentTime.totalCount}
@@ -207,7 +207,7 @@ class TimeEntries extends Component {
             immediate={true}
           >
             {spentTime.data.map((timeEntry) => (
-              <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
+              <li key={timeEntry.id} onClick={this.openModal(timeEntry)} data-testId="time-entry">
                 <div>
                   <div>
                     <span className="username">{timeEntry.user.name}</span>

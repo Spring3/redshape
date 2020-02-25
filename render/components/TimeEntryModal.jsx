@@ -258,7 +258,7 @@ class TimeEntryModal extends Component {
             <div name="author">{timeEntry.user.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">
+            <div name="issue" data-testId="time-entry-modal-title">
               #
               {timeEntry.issue.id}
               {timeEntry.issue.name}
