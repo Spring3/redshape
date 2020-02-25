@@ -1,5 +1,5 @@
 import settingsActions from './settings.actions';
-import logActions from './log.actions';
+import sessionActions from './session.actions';
 import request, { login, notify, logout } from './helper';
 
 export const USER_LOGIN = 'USER_LOGIN';
@@ -68,7 +68,7 @@ const fetchAvatar = id => (dispatch) => {
       .toString('base64');
     dispatch({ type: USER_AVATAR, data: { size, img: `data:image;base64,${img}` } });
   }).catch((e) => {
-    dispatch(logActions.add({ message: 'User has avatar ID but cannot fetch thumbnail', detail: e.message }));
+    dispatch(sessionActions.addLog({ message: 'User has avatar ID but cannot fetch thumbnail', detail: e.message }));
   });
 };
 

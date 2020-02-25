@@ -415,7 +415,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(actions.user.logout()),
   fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
-  addLog: reg => dispatch(actions.log.add(reg)),
+  addLog: reg => dispatch(actions.session.addLog(reg)),
 });
 
 export default withRouter(withTheme(connect(mapStateToProps, mapDispatchToProps)(NavigationBar)));

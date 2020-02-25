@@ -30,6 +30,8 @@ import Dialog from './Dialog';
 import TextArea from './TextArea';
 import Tooltip from './Tooltip';
 
+import actions from '../actions';
+
 const MarkdownOption = styled.li`
   display: inline;
   margin-right: 10px;
@@ -489,6 +491,18 @@ class MarkdownText extends PureComponent {
     openExternalUrl(e.target.getAttribute('href') || e.target.innerText);
   }
 
+  interceptIframeHover = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.setStatusBar(e.target.getAttribute('href') || e.target.innerText);
+  }
+
+  interceptIframeHoverEnd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.setStatusBar();
+  }
+
   adjustIframeSize = () => {
     const iframe = this.iframeRef.current;
     if (iframe) {
@@ -506,6 +520,10 @@ class MarkdownText extends PureComponent {
       for (const elem of iframe.contentDocument.body.querySelectorAll(['a', 'img', 'button', 'input'])) {
         elem.removeEventListener('click', this.interceptIframeRedirect);
         elem.addEventListener('click', this.interceptIframeRedirect);
+        elem.removeEventListener('mouseenter', this.interceptIframeHover);
+        elem.addEventListener('mouseenter', this.interceptIframeHover);
+        elem.removeEventListener('mouseleave', this.interceptIframeHoverEnd);
+        elem.addEventListener('mouseleave', this.interceptIframeHoverEnd);
       }
       this.adjustIframeSize();
       window.addEventListener('resize', this.throttledAdjustIframeSize);
@@ -534,6 +552,7 @@ MarkdownText.propTypes = {
   markdownText: PropTypes.string,
   className: PropTypes.string,
   uiStyle: PropTypes.string.isRequired,
+  setStatusBar: PropTypes.func.isRequired,
 };
 
 MarkdownText.defaultProps = {
@@ -545,7 +564,11 @@ let mapStateToProps = state => ({
   uiStyle: state.settings.uiStyle,
 });
 
-MarkdownText = withTheme(connect(mapStateToProps)(MarkdownText));
+const mapDispatchToProps = dispatch => ({
+  setStatusBar: value => dispatch(actions.session.setStatusBar(value))
+});
+
+MarkdownText = withTheme(connect(mapStateToProps, mapDispatchToProps)(MarkdownText));
 
 export {
   MarkdownText

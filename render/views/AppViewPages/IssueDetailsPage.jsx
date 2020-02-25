@@ -127,6 +127,67 @@ const Relations = styled.div`
   flex-wrap: wrap;
 `;
 
+const StatusBar = styled.div`
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  bottom: 0;
+  background-color: #e6e6e6;
+  border: 1px solid #ababab;
+  padding: 3px 5px;
+  border-radius: 0px 3px 3px 0px;
+  font-size: 0.8rem;
+
+  transition: visibility 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+  ${props => (props.hasContent ? css`
+  visibility: visible;
+  opacity: 1;
+  ` : css`
+  visibility: hidden;
+  opacity: 0;
+  `)};
+}
+`;
+
+class StatusBarWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: props.content,
+      updating: false
+    };
+  }
+
+  componentDidUpdate(oldProps) {
+    const { content: oldcontent } = oldProps;
+    const { content } = this.props;
+    if (oldcontent !== content) {
+      if (!oldcontent && content) {
+        this.setState({
+          content,
+          updating: false
+        });
+      } else {
+        this.setState({ updating: true });
+        setTimeout(() => {
+          if (this.state.updating) {
+            this.setState({
+              content
+            });
+          }
+        }, 500);
+      }
+    }
+  }
+
+  render() {
+    const { content } = this.props;
+    const { content: scontent } = this.state;
+    return (<StatusBar hasContent={!!content}>{scontent}</StatusBar>);
+  }
+}
+
 class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
@@ -443,6 +504,7 @@ Created
             issueId={selectedIssue.id}
             volatile={this.props.selectedIssueState.volatile}
           />
+          <StatusBarWrapper content={this.props.statusBar} />
           { selectedTimeEntry && (
             <TimeEntryModal
               isOpen={showTimeEntryModal}
@@ -557,6 +619,7 @@ IssueDetailsPage.propTypes = {
   postUpdateComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,
+  statusBar: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -566,6 +629,7 @@ const mapStateToProps = state => ({
   selectedIssueState: state.issues.selected,
   uiStyle: state.settings.uiStyle,
   redmineEndpoint: state.user.redmineEndpoint,
+  statusBar: state.session.statusBar,
 });
 
 const mapDispatchToProps = dispatch => ({

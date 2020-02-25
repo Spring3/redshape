@@ -208,7 +208,7 @@ const mapDispatchToProps = dispatch => ({
   getProjectData: () => dispatch(actions.projects.getAll()),
   getFieldsData: () => dispatch(actions.fields.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset()),
-  addLog: reg => dispatch(actions.log.add(reg)),
+  addLog: reg => dispatch(actions.session.addLog(reg)),
   getCurrentUser: () => dispatch(actions.user.getCurrent()),
   fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
 });

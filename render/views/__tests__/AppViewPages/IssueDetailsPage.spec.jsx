@@ -99,6 +99,9 @@ const state = {
   },
   fields: {
     data: {}
+  },
+  session: {
+    statusBar: ''
   }
 };
 

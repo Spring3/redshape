@@ -184,7 +184,7 @@ const mapStateToProps = state => ({
   redmineEndpoint: state.user.redmineEndpoint,
   showClosedIssues: state.settings.showClosedIssues,
   uiStyle: state.settings.uiStyle,
-  logs: state.log.data,
+  logs: state.session.log,
 });
 
 const mapDispatchToProps = dispatch => ({

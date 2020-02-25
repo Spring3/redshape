@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { connect } from 'react-redux';
+import actions from '../actions';
+
 import { openExternalUrl } from '../../common/utils';
 
 const StyledLink = styled.a`
@@ -26,10 +29,23 @@ class Link extends PureComponent {
     }
   }
 
+  interceptHover = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.setStatusBar(e.target.getAttribute('href') || e.target.innerText);
+  }
+
+  interceptHoverEnd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.setStatusBar();
+  }
+
   render() {
     const {
       children, type, href, className, onClick, fontSize
     } = this.props;
+    const external = type === 'external';
     return (
       <StyledLink
         className={className}
@@ -39,6 +55,8 @@ class Link extends PureComponent {
         clickable={href || onClick}
         fontSize={fontSize}
         onClick={this.onClick}
+        onMouseEnter={external ? this.interceptHover : undefined}
+        onMouseLeave={external ? this.interceptHoverEnd : undefined}
       >
         {children}
       </StyledLink>
@@ -51,7 +69,8 @@ Link.propTypes = {
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['external', undefined, null]),
   href: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  setStatusBar: PropTypes.func.isRequired,
 };
 
 Link.defaultProps = {
@@ -59,4 +78,9 @@ Link.defaultProps = {
   type: undefined
 };
 
-export default Link;
+const mapDispatchToProps = dispatch => ({
+  setStatusBar: value => dispatch(actions.session.setStatusBar(value))
+});
+
+// export default Link;
+export default connect(null, mapDispatchToProps)(Link);

@@ -19,6 +19,8 @@ exports[`Copyrights Component should match the snapshot 1`] = `
     className="c1"
     href="https://spring3.github.io/website/"
     onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
     rel="noopener noreferer"
     type="external"
   >

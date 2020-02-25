@@ -306,6 +306,13 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/abort_electron.png)
 
+### Status bar
+
+- Every external link shows the URL in the status bar, behaving like a web browser (bottom left).
+  Working both in Markdown Texts (comments, descriptions) and Link components.
+
+  ![](changes/links_href.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:

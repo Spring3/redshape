@@ -1,9 +1,14 @@
 import moment from 'moment';
 import { notify } from './helper';
 
-export const LOG_ADD = 'LOG_ADD';
+/**
+ * Temporary usage or working session. Usually, it will live with the window/app.
+ */
 
-const add = reg => (dispatch) => {
+export const LOG_ADD = 'LOG_ADD';
+export const STATUSBAR_SET = 'STATUSBAR_SET';
+
+const addLog = reg => (dispatch) => {
   if (typeof reg === 'string') {
     reg = { message: reg };
   }
@@ -15,6 +20,11 @@ const add = reg => (dispatch) => {
   dispatch(notify.ok(LOG_ADD, reg));
 };
 
+const setStatusBar = (value = '') => (dispatch) => {
+  dispatch(notify.ok(STATUSBAR_SET, value));
+};
+
 export default {
-  add
+  addLog,
+  setStatusBar
 };

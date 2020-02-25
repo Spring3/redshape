@@ -6,7 +6,7 @@ import projectActions from './project.actions';
 import fieldActions from './field.actions';
 import timeEntryActions from './timeEntry.actions';
 import settingsActions from './settings.actions';
-import logActions from './log.actions';
+import sessionActions from './session.actions';
 
 export default {
   user: userActions,
@@ -17,5 +17,5 @@ export default {
   fields: fieldActions,
   timeEntry: timeEntryActions,
   settings: settingsActions,
-  log: logActions
+  session: sessionActions
 };

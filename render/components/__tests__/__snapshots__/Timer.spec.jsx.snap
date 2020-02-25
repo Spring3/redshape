@@ -443,6 +443,7 @@ exports[`Timer component should match the snapshot 1`] = `
                       Object {
                         "$$typeof": Symbol(react.forward_ref),
                         "$asyncbind": [Function],
+                        "WrappedComponent": [Function],
                         "attrs": Array [],
                         "componentStyle": ComponentStyle {
                           "componentId": "Timer__MaskedLink-d99dh7-2",
@@ -466,66 +467,73 @@ exports[`Timer component should match the snapshot 1`] = `
                     href="#"
                     onClick={[Function]}
                   >
-                    <Link
+                    <Connect(Link)
                       className="c3"
                       href="#"
                       onClick={[Function]}
                     >
-                      <Link__StyledLink
+                      <Link
                         className="c3"
-                        clickable="#"
                         href="#"
                         onClick={[Function]}
-                        rel="noopener noreferer"
+                        setStatusBar={[Function]}
                       >
-                        <StyledComponent
+                        <Link__StyledLink
                           className="c3"
                           clickable="#"
-                          forwardedComponent={
-                            Object {
-                              "$$typeof": Symbol(react.forward_ref),
-                              "attrs": Array [],
-                              "componentStyle": ComponentStyle {
-                                "componentId": "Link__StyledLink-qed6kb-0",
-                                "isStatic": false,
-                                "lastClassName": "c4",
-                                "rules": Array [
-                                  "color:",
-                                  [Function],
-                                  ";font-size:",
-                                  [Function],
-                                  ";padding:2px;cursor:",
-                                  [Function],
-                                  ";",
-                                  [Function],
-                                ],
-                              },
-                              "displayName": "Link__StyledLink",
-                              "foldedComponentIds": Array [],
-                              "render": [Function],
-                              "styledComponentId": "Link__StyledLink-qed6kb-0",
-                              "target": "a",
-                              "toString": [Function],
-                              "warnTooManyClasses": [Function],
-                              "withComponent": [Function],
-                            }
-                          }
-                          forwardedRef={null}
                           href="#"
                           onClick={[Function]}
                           rel="noopener noreferer"
                         >
-                          <a
-                            className="c3 c4"
+                          <StyledComponent
+                            className="c3"
+                            clickable="#"
+                            forwardedComponent={
+                              Object {
+                                "$$typeof": Symbol(react.forward_ref),
+                                "attrs": Array [],
+                                "componentStyle": ComponentStyle {
+                                  "componentId": "Link__StyledLink-qed6kb-0",
+                                  "isStatic": false,
+                                  "lastClassName": "c4",
+                                  "rules": Array [
+                                    "color:",
+                                    [Function],
+                                    ";font-size:",
+                                    [Function],
+                                    ";padding:2px;cursor:",
+                                    [Function],
+                                    ";",
+                                    [Function],
+                                  ],
+                                },
+                                "displayName": "Link__StyledLink",
+                                "foldedComponentIds": Array [],
+                                "render": [Function],
+                                "styledComponentId": "Link__StyledLink-qed6kb-0",
+                                "target": "a",
+                                "toString": [Function],
+                                "warnTooManyClasses": [Function],
+                                "withComponent": [Function],
+                              }
+                            }
+                            forwardedRef={null}
                             href="#"
                             onClick={[Function]}
                             rel="noopener noreferer"
                           >
-                            Test issue
-                          </a>
-                        </StyledComponent>
-                      </Link__StyledLink>
-                    </Link>
+                            <a
+                              className="c3 c4"
+                              href="#"
+                              onClick={[Function]}
+                              rel="noopener noreferer"
+                            >
+                              Test issue
+                            </a>
+                          </StyledComponent>
+                        </Link__StyledLink>
+                      </Link>
+                    </Connect(Link)>
                   </StyledComponent>
                 </Timer__MaskedLink>
               </div>

@@ -15,6 +15,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .jsx --ext .js common/ main/ render/ test/ __mocks__/",
     "test": "ELECTRON_RUN_AS_NODE=true electron node_modules/.bin/jest --forceExit --detectOpenHandles --maxWorkers=2",
+    "test-update": "ELECTRON_RUN_AS_NODE=true electron node_modules/.bin/jest --updateSnapshot --forceExit --detectOpenHandles --maxWorkers=2 -u",
+    "rebuild": "electron-rebuild",
     "release:aur": "npm run prepack && sh support/package-aur/manager.sh pack pkgbuild"
   },
   "repository": {
