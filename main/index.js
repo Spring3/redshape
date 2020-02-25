@@ -42,6 +42,18 @@ require('../common/request'); // to initialize from storage
 let mainWindow;
 let aboutWindow;
 
+const installExtensions = () => {
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = [
+    'REACT_DEVELOPER_TOOLS',
+  ];
+
+  return Promise
+    .all(extensions.map(name => installer.default(installer[name], forceDownload)))
+    .catch(console.log);
+};
+
 const generateMenu = () => {
   const isMac = process.platform === 'darwin';
   const aboutSubmenu = {
@@ -54,7 +66,9 @@ const generateMenu = () => {
       }
       aboutWindow.show();
       if (isDev || process.env.DEV_TOOLS) {
-        aboutWindow.webContents.openDevTools();
+        aboutWindow.webContents.on('did-frame-finish-load', (/* e, isMainFrame, frameProcessId, frameRoutingId */) => {
+          aboutWindow.webContents.openDevTools();
+        });
       }
     }
   };
@@ -231,7 +245,9 @@ const initialize = () => {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     if (isDev) {
-      mainWindow.webContents.openDevTools();
+      mainWindow.webContents.on('did-frame-finish-load', (/* e, isMainFrame, frameProcessId, frameRoutingId */) => {
+        mainWindow.webContents.openDevTools();
+      });
     }
   });
 
@@ -259,7 +275,11 @@ const initialize = () => {
   });
 };
 
+
 app.once('ready', () => {
+  if (isDev || process.env.DEV_TOOLS) {
+    installExtensions();
+  }
   initialize();
   initializeMenu();
   if (!isDev) {
