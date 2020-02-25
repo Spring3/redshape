@@ -6,14 +6,12 @@ import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
 import Joi from '@hapi/joi';
 import { withRouter } from 'react-router-dom';
-import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
 import actions from '../actions';
 
 import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
-import Link from '../components/Link';
 import Copyrights from '../components/Copyrights';
 import DragArea from '../components/DragArea';
 
