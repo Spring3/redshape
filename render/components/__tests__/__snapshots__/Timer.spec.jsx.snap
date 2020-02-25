@@ -180,23 +180,27 @@ exports[`Timer component should match the snapshot 1`] = `
               className="buttons"
             >
               <Timer__StyledButton
+                id="stop-timer"
                 onClick={[Function]}
               >
                 <GhostButton
                   className="c1"
                   disabled={false}
+                  id="stop-timer"
                   onClick={[Function]}
                 >
                   <Button__StyledLink
                     className="c1"
                     disabled={false}
                     href="#"
+                    id="stop-timer"
                     onClick={[Function]}
                   >
                     <a
                       className="c2 c1"
                       disabled={false}
                       href="#"
+                      id="stop-timer"
                       onClick={[Function]}
                     >
                       <Memo(StopIcon)
@@ -219,23 +223,27 @@ exports[`Timer component should match the snapshot 1`] = `
                 </GhostButton>
               </Timer__StyledButton>
               <Timer__StyledButton
+                id="continue-timer"
                 onClick={[Function]}
               >
                 <GhostButton
                   className="c1"
                   disabled={false}
+                  id="continue-timer"
                   onClick={[Function]}
                 >
                   <Button__StyledLink
                     className="c1"
                     disabled={false}
                     href="#"
+                    id="continue-timer"
                     onClick={[Function]}
                   >
                     <a
                       className="c2 c1"
                       disabled={false}
                       href="#"
+                      id="continue-timer"
                       onClick={[Function]}
                     >
                       <Memo(PlayIcon)

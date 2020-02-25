@@ -391,6 +391,7 @@ class Timer extends Component {
           <div className="panel">
             <div className="buttons">
               <StyledButton
+                id="stop-timer"
                 onClick={this.onStop}
               >
                 <StopIcon size={35} />
@@ -398,6 +399,7 @@ class Timer extends Component {
               { isPaused
                 ? (
                   <StyledButton
+                    id="continue-timer"
                     onClick={this.onContinue}
                   >
                     <PlayIcon size={35} />
@@ -405,6 +407,7 @@ class Timer extends Component {
                 )
                 : (
                   <StyledButton
+                    id="pause-timer"
                     onClick={this.onPause}
                   >
                     <PauseIcon size={35} />

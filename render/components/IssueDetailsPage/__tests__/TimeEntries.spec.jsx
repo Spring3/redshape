@@ -236,7 +236,7 @@ describe('IssueDetails => TimeEntries componnet', () => {
     };
     const store = mockStore(state);
     const showTimeEntryModal = jest.fn();
-    const { debug } = render(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <TimeEntries showTimeEntryModal={showTimeEntryModal} />
