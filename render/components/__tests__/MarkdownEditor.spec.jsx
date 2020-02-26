@@ -5,7 +5,6 @@ import { ThemeProvider } from 'styled-components';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import utils from '../../../common/utils';
 import theme from '../../theme';
-import { writeFileSync } from 'fs';
 
 describe('MarkdownEditor component', () => {
   afterEach(cleanup);
@@ -35,9 +34,17 @@ describe('MarkdownEditor component', () => {
       }
     });
 
+    let newLine;
+    if (process.platform === 'darwin' || process.platform === 'linux') {
+      newLine = '\n';
+    } else {
+      newLine = '\r\n';
+    }
+
     // it does not update the caret position, so the markdown items during tests are prepended, not appended
     // in reality, the value will be 'test******__~~~~\n```\n\n```\n# ## ### - 1. > [](url)![](image-url)'
-    expect(textarea).toHaveValue('![](image-url)[](url)> 1. - ### ## # \n```\n\n```\n~~~~__******test');
+    // eslint-disable-next-line
+    expect(textarea).toHaveValue('![](image-url)[](url)> 1. - ### ## # ' + newLine + '```' + newLine + newLine + '```' + newLine + '~~~~__******test');
   });
 
   it('should display the preview when such option was clicked', () => {
