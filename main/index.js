@@ -261,7 +261,7 @@ const initialize = () => {
 
   ipcMain.on('notify', (ev, { message, critical, keep }) => {
     const notification = new Notification({
-      title: 'System is idle',
+      title: 'Redshape Time Tracking',
       body: message || 'Timer will be paused if system continues idle',
       icon: windowConfig.icon,
       timeoutType: keep ? 'never' : 'default',

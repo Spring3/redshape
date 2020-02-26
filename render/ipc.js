@@ -26,6 +26,7 @@ ipcRenderer.on('settings', (event, { key, value }) => {
 
 ipcRenderer.on('window', (event, { action }) => {
   if (!currentTimer) { return; }
+  currentTimer.stopIntervalIdleResumer();
   switch (action) {
     case 'show':
       currentTimer.restoreFromTimestamp();
@@ -41,6 +42,7 @@ ipcRenderer.on('window', (event, { action }) => {
 
 ipcRenderer.on('timer', (ev, { action }) => {
   if (!currentTimer) { return; }
+  currentTimer.stopIntervalIdleResumer();
   const isTimestamped = currentTimer.isTimestamped(); // if timestamp != null, then mainWindowHidden
   if (isTimestamped) {
     currentTimer.restoreFromTimestamp(false);

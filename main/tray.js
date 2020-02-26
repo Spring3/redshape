@@ -122,6 +122,14 @@ module.exports = {
       updateTrayMenu();
     });
 
+    mainWindow.on('blur', (ev) => {
+      mainWindow.webContents.send('window', { action: 'blur' });
+    });
+
+    mainWindow.on('focus', (ev) => {
+      mainWindow.webContents.send('window', { action: 'focus' });
+    });
+
     tray.on('click', () => {
       if (mainWindowHidden) {
         mainWindow.show();

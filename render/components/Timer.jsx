@@ -38,7 +38,7 @@ const ActiveTimer = styled.div`
   align-items: center;
   box-shadow: 0px -2px 20px ${props => props.theme.bgDark};
   border-top: 2px solid ${props => (props.isEnhanced ? props.theme.main : props.theme.bgDark)};
-  
+
   div.panel {
     flex-grow: 0;
     min-width: 520px;
@@ -46,12 +46,12 @@ const ActiveTimer = styled.div`
     align-items: center;
     max-width: ${props => (props.showAdvancedTimerControls ? '900px' : '1800px')};
   }
-  
+
   div.buttons {
     margin: 0 20px;
     display: flex;
   }
-  
+
   div.time {
     margin: 0 20px;
     font-size: 16px;
@@ -71,7 +71,7 @@ const ActiveTimer = styled.div`
       margin-right: 20px;
     }
   }
-  
+
   div.buttons.buttons-advanced {
     a {
       margin-right: 5px;
@@ -80,7 +80,7 @@ const ActiveTimer = styled.div`
       margin-right: initial;
     }
   }
-  
+
   div.issueName {
     padding: 0 20px;
     max-width: 500px;
@@ -92,7 +92,7 @@ const ActiveTimer = styled.div`
   div.time {
     color: ${props => props.theme.main};
   }
-  
+
   input[name="comment"] {
     flex-grow: 2;
     margin-left: 20px;
@@ -108,7 +108,7 @@ const ActiveTimer = styled.div`
       box-shadow: none;
     }
   }
-  
+
 `;
 
 const StyledButton = styled(GhostButton)`
@@ -128,6 +128,11 @@ const extractPeriodOption = (period) => {
     return;
   }
   return period === '1h' ? 60 : (Number(period.replace('m', '')));
+};
+
+let mouseMoveTimer;
+const onMouseMove = () => {
+  mouseMoveTimer.stopIntervalIdleResumer();
 };
 
 /**
@@ -175,6 +180,7 @@ class Timer extends Component {
     }
     this.onPause();
     IPC.send('notify', { message: `Timer is paused because the system was idle for ${(idleTime / (60 * 1000)).toFixed(2)} minutes ${discardedMessage}`, critical: true, keep: true });
+    this.setIntervalIdleResumer();
   }
 
   resetIntervalIdle() {
@@ -182,7 +188,42 @@ class Timer extends Component {
       this.stopIntervalIdle();
       this.setIntervalIdle();
       this.stopIntervalCheckpoint();
+      this.stopIntervalIdleResumer();
     }
+  }
+
+  stopIntervalIdleResumer() {
+    if (this.intervalIdleResumer) {
+      clearInterval(this.intervalIdleResumer);
+      this.intervalIdleResumer = null;
+      mouseMoveTimer = null;
+      window.removeEventListener('mousemove', onMouseMove);
+    }
+  }
+
+  setIntervalIdleResumer() {
+    const { idleBehavior } = this.props;
+    const idleMinutes = extractPeriodOption(idleBehavior);
+    if (!idleMinutes) {
+      return;
+    }
+
+    const checkTime = 1 * 60;
+    const maxIdleTime = idleMinutes * 60;
+    // Check if system is not idle and user should be warned
+    this.intervalIdleResumer = setInterval(() => {
+      if (!this.intervalIdleResumer) {
+        this.stopIntervalIdleResumer();
+        return;
+      }
+      const idle = desktopIdle.getIdleTime();
+      if (idle < (maxIdleTime)) {
+        IPC.send('notify', { message: 'Timer was paused and you are here again. Remember to resume it.', critical: false });
+        this.stopIntervalIdleResumer();
+      }
+    }, checkTime * 1000);
+    mouseMoveTimer = this;
+    window.addEventListener('mousemove', onMouseMove);
   }
 
   setIntervalIdle() {
@@ -305,6 +346,13 @@ class Timer extends Component {
     }
   }
 
+  stopIntervals() {
+    this.stopInterval();
+    this.stopIntervalIdle();
+    this.stopIntervalCheckpoint();
+    this.stopIntervalIdleResumer();
+  }
+
   cleanup = () => {
     const { isEnabled, isPaused, saveTimer } = this.props;
     if (isEnabled) {
@@ -314,9 +362,7 @@ class Timer extends Component {
         saveTimer(this.state.value, this.state.comments);
       }
     }
-    this.stopInterval();
-    this.stopIntervalIdle();
-    this.stopIntervalCheckpoint();
+    this.stopIntervals();
     window.removeEventListener('beforeunload', this.cleanup);
   }
 
@@ -333,17 +379,13 @@ class Timer extends Component {
 
   componentWillUnmount() {
     this.saveState();
-    this.stopInterval();
-    this.stopIntervalIdle();
-    this.stopIntervalCheckpoint();
+    this.stopIntervals();
   }
 
   componentDidUpdate(oldProps) {
     const { isEnabled, isPaused, trackedIssue } = this.props;
     if (isEnabled !== oldProps.isEnabled) {
-      this.stopInterval();
-      this.stopIntervalIdle();
-      this.stopIntervalCheckpoint();
+      this.stopIntervals();
       // if was disabled, but now is enabled
       if (isEnabled) {
         this.interval = setInterval(this.tick, 1000);
@@ -359,9 +401,7 @@ class Timer extends Component {
   }
 
   onPause = () => {
-    this.stopInterval();
-    this.stopIntervalIdle();
-    this.stopIntervalCheckpoint();
+    this.stopIntervals();
     const { onPause, trackedIssue, pauseTimer } = this.props;
     const { value, comments } = this.state;
     pauseTimer(value, comments);
@@ -387,9 +427,7 @@ class Timer extends Component {
   }
 
   onStop = () => {
-    this.stopInterval();
-    this.stopIntervalIdle();
-    this.stopIntervalCheckpoint();
+    this.stopIntervals();
     const { value, comments } = this.state;
     const { onStop, trackedIssue, stopTimer } = this.props;
     stopTimer(value, comments);
