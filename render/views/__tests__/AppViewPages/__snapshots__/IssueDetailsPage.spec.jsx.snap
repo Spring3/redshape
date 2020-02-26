@@ -531,22 +531,6 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   font-weight: bold;
 }
 
-.c31 {
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  bottom: 0;
-  background-color: #e6e6e6;
-  border: 1px solid #ababab;
-  padding: 3px 5px;
-  border-radius: 0px 3px 3px 0px;
-  font-size: 0.8rem;
-  -webkit-transition: visibility 0.5s ease-in-out,opacity 0.5s ease-in-out;
-  transition: visibility 0.5s ease-in-out,opacity 0.5s ease-in-out;
-  visibility: hidden;
-  opacity: 0;
-}
-
 @media (min-width:1600px) {
   .c23 {
     min-width: 500px;
@@ -905,10 +889,5 @@ exports[`IssueDetails page should match the snapshot 1`] = `
       />
     </div>
   </section>
-  <div
-    className="c31"
-  >
-    
-  </div>
 </section>
 `;

@@ -90,6 +90,9 @@ describe('AppView', () => {
       },
       fields: {
         data: {}
+      },
+      session: {
+        statusBar: ''
       }
     });
 
@@ -170,6 +173,9 @@ describe('AppView', () => {
         },
         fields: {
           data: {}
+        },
+        session: {
+          statusBar: ''
         }
       });
 
@@ -252,6 +258,9 @@ describe('AppView', () => {
         },
         fields: {
           data: {}
+        },
+        session: {
+          statusBar: ''
         }
       });
 
@@ -349,6 +358,9 @@ describe('AppView', () => {
         },
         fields: {
           data: {}
+        },
+        session: {
+          statusBar: ''
         }
       };
       const store = mockStore(state);

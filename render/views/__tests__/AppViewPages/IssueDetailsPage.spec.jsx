@@ -100,9 +100,6 @@ const state = {
   fields: {
     data: {}
   },
-  session: {
-    statusBar: ''
-  }
 };
 
 describe('IssueDetails page', () => {

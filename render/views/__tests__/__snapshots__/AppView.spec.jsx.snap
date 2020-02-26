@@ -270,6 +270,22 @@ exports[`AppView should match the snapshot 1`] = `
   grid-row: 2 / -1;
 }
 
+.c9 {
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  bottom: 0;
+  background-color: #e6e6e6;
+  border: 1px solid #ababab;
+  padding: 3px 5px;
+  border-radius: 0px 3px 3px 0px;
+  font-size: 0.8rem;
+  -webkit-transition: visibility 0.5s ease-in-out,opacity 0.5s ease-in-out;
+  transition: visibility 0.5s ease-in-out,opacity 0.5s ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
 <div
   className="c0"
 >
@@ -411,6 +427,11 @@ exports[`AppView should match the snapshot 1`] = `
         </div>
       </div>
     </div>
+  </div>
+  <div
+    className="c9"
+  >
+    
   </div>
 </div>
 `;

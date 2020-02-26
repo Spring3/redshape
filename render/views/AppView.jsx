@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import _get from 'lodash/get';
@@ -31,6 +31,67 @@ const Content = styled.div`
   grid-column: span 12;
   grid-row: 2 / -1;
 `;
+
+const StatusBar = styled.div`
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  bottom: 0;
+  background-color: #e6e6e6;
+  border: 1px solid #ababab;
+  padding: 3px 5px;
+  border-radius: 0px 3px 3px 0px;
+  font-size: 0.8rem;
+
+  transition: visibility 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+  ${props => (props.hasContent ? css`
+  visibility: visible;
+  opacity: 1;
+  ` : css`
+  visibility: hidden;
+  opacity: 0;
+  `)};
+}
+`;
+
+class StatusBarWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: props.content,
+      updating: false
+    };
+  }
+
+  componentDidUpdate(oldProps) {
+    const { content: oldcontent } = oldProps;
+    const { content } = this.props;
+    if (oldcontent !== content) {
+      if (!oldcontent && content) {
+        this.setState({
+          content,
+          updating: false
+        });
+      } else {
+        this.setState({ updating: true });
+        setTimeout(() => {
+          if (this.state.updating) {
+            this.setState({
+              content
+            });
+          }
+        }, 500);
+      }
+    }
+  }
+
+  render() {
+    const { content } = this.props;
+    const { content: scontent } = this.state;
+    return (<StatusBar hasContent={!!content}>{scontent}</StatusBar>);
+  }
+}
 
 class AppView extends Component {
   constructor(props) {
@@ -159,6 +220,7 @@ class AppView extends Component {
             onClose={this.closeTimeEntryModal}
           />
         </Content>
+        <StatusBarWrapper content={this.props.statusBar} />
       </Grid>
     );
   }
@@ -185,6 +247,7 @@ AppView.propTypes = {
   showAdvancedTimerControls: PropTypes.bool.isRequired,
   progressSlider: PropTypes.string.isRequired,
   areCustomFieldsEditable: PropTypes.bool.isRequired,
+  statusBar: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -201,6 +264,7 @@ const mapStateToProps = state => ({
   customFieldsInvalid: state.fields.invalid,
   uiStyle: state.settings.uiStyle,
   avatarId: state.user.avatar_id,
+  statusBar: state.session.statusBar,
 });
 
 const mapDispatchToProps = dispatch => ({
