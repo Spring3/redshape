@@ -1,7 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { render, fireEvent, cleanup, act } from '@testing-library/react';
+import {
+  render, fireEvent, cleanup, act
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';

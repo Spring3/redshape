@@ -1,10 +1,11 @@
 import React from 'react';
-import moment from 'moment';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
-import { render, cleanup, fireEvent, act } from '@testing-library/react';
+import {
+  render, cleanup, fireEvent, act
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
@@ -14,12 +15,9 @@ import { PROJECT_GET_ALL } from '../../actions/project.actions';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
 import theme from '../../theme';
-
 import AppView from '../AppView';
-
 import storage from '../../../common/storage';
 
-import { hoursToDuration } from '../../datetime';
 
 jest.mock('electron-store');
 
@@ -306,7 +304,7 @@ describe('AppView', () => {
     fireEvent.click(document.querySelector('#btn-add'));
     setTimeout(() => {
       expect(
-        store.getActions().find(action => action.type === TRACKING_RESET)
+        store.getActions().find((action) => action.type === TRACKING_RESET)
       ).toBeDefined();
       storageSpy.mockRestore();
       done();

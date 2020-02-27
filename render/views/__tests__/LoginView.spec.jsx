@@ -2,7 +2,9 @@ import React from 'react';
 import { HashRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { render, cleanup, fireEvent, wait } from '@testing-library/react';
+import {
+  render, cleanup, fireEvent, wait
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
@@ -140,9 +142,18 @@ describe('Login view', () => {
 
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200, { user: userData }]));
 
-    fireEvent.change(usernameInput, { persist: () => {}, target: { value: returnedValues.username, name: 'username' } });
-    fireEvent.change(passwordInput, { persist: () => {}, target: { value: returnedValues.password, name: 'password' } });
-    fireEvent.change(redmineEndpointInput, { persist: () => {}, target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint } });
+    fireEvent.change(usernameInput, {
+      persist: () => {},
+      target: { value: returnedValues.username, name: 'username' }
+    });
+    fireEvent.change(passwordInput, {
+      persist: () => {},
+      target: { value: returnedValues.password, name: 'password' }
+    });
+    fireEvent.change(redmineEndpointInput, {
+      persist: () => {},
+      target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint }
+    });
     expect(usernameInput).toHaveValue(returnedValues.username);
     expect(passwordInput).toHaveValue(returnedValues.password);
     expect(redmineEndpointInput).toHaveValue(returnedValues.redmineEndpoint);
@@ -153,7 +164,8 @@ describe('Login view', () => {
 
       expect(axiosMock.history.get).toHaveLength(1);
       expect(axiosMock.history.get[0].url).toBe('/users/current.json');
-      expect(axiosMock.history.get[0].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
+      expect(axiosMock.history.get[0].headers.Authorization)
+        .toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
       expect(store.getActions()).toHaveLength(3);
       expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
@@ -214,7 +226,13 @@ describe('Login view', () => {
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200, { user: userData }]));
 
     fireEvent.change(apiKeyInput, { persist: () => {}, target: { value: returnedValues.apiKey, name: 'apiKey' } });
-    fireEvent.change(redmineEndpointInput, { persist: () => {}, target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint } });
+    fireEvent.change(redmineEndpointInput, {
+      persist: () => {},
+      target: {
+        name: 'redmineEndpoint',
+        value: returnedValues.redmineEndpoint
+      }
+    });
     expect(apiKeyInput).toHaveValue(returnedValues.apikey);
     expect(redmineEndpointInput).toHaveValue(returnedValues.redmineEndpoint);
     fireEvent.submit(document.querySelector('button[type="submit"]'), { preventDefault: () => {} });
@@ -267,9 +285,18 @@ describe('Login view', () => {
 
     axiosMock.onGet('/users/current.json').reply(() => Promise.reject(expectedError));
 
-    fireEvent.change(document.querySelector('input[name="username"]'), { persist: () => {}, target: { value: returnedValues.username, name: 'username' } });
-    fireEvent.change(document.querySelector('input[name="password"]'), { persist: () => {}, target: { value: returnedValues.password, name: 'password' } });
-    fireEvent.change(document.querySelector('input[name="redmineEndpoint"]'), { persist: () => {}, target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint } });
+    fireEvent.change(document.querySelector('input[name="username"]'), {
+      persist: () => {},
+      target: { value: returnedValues.username, name: 'username' }
+    });
+    fireEvent.change(document.querySelector('input[name="password"]'), {
+      persist: () => {},
+      target: { value: returnedValues.password, name: 'password' }
+    });
+    fireEvent.change(document.querySelector('input[name="redmineEndpoint"]'), {
+      persist: () => {},
+      target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint }
+    });
     expect(document.querySelector('input[name="username"]')).toHaveValue(returnedValues.username);
     expect(document.querySelector('input[name="password"]')).toHaveValue(returnedValues.password);
     expect(document.querySelector('input[name="redmineEndpoint"]')).toHaveValue(returnedValues.redmineEndpoint);
@@ -280,7 +307,8 @@ describe('Login view', () => {
       expect(loginActionSpy).toHaveBeenCalledWith(returnedValues);
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe('/users/current.json');
-      expect(axiosMock.history.get[0].headers.Authorization).toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
+      expect(axiosMock.history.get[0].headers.Authorization)
+        .toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
       expect(queryAllByText('Something went wrong').length).toBeGreaterThan(0);
       const reduxActions = store.getActions();

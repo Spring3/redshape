@@ -1,4 +1,5 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
+// eslint-disable-next-line
 import { remote, ipcRenderer } from 'electron';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -131,6 +132,36 @@ class Timer extends Component {
     this.warningTimeout = null;
   }
 
+  componentWillMount() {
+    window.addEventListener('beforeunload', this.cleanup);
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('timer', this.timerEventHandler);
+    ipcRenderer.on('tray-action', this.trayActionHandler);
+    ipcRenderer.on('window', this.windowEventHandler);
+
+    const { isEnabled, isPaused, trackedIssue } = this.props;
+
+    if (isEnabled) {
+      ipcRenderer.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
+    }
+
+    if (isEnabled && !isPaused) {
+      this.startTimer();
+      this.setIntervalIdle();
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { trackedTime, trackedComments } = newProps;
+    this.setState({ value: trackedTime, comments: trackedComments });
+  }
+
+  componentWillUnmount() {
+    this.cleanup();
+  }
+
   timerEventHandler = (ev, { action, mainWindowHidden }) => {
     if (mainWindowHidden) {
       this.restoreFromTimestamp(false);
@@ -169,40 +200,10 @@ class Timer extends Component {
     }
   }
 
-  componentWillMount() {
-    window.addEventListener('beforeunload', this.cleanup);
-  }
-
-  componentDidMount() {
-    ipcRenderer.on('timer', this.timerEventHandler);
-    ipcRenderer.on('tray-action', this.trayActionHandler);
-    ipcRenderer.on('window', this.windowEventHandler);
-
-    const { isEnabled, isPaused, trackedIssue } = this.props;
-
-    if (isEnabled) {
-      ipcRenderer.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
-    }
-
-    if (isEnabled && !isPaused) {
-      this.startTimer();
-      this.setIntervalIdle();
-    }
-  }
-
-
-  componentWillUnmount() {
-    this.cleanup();
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { trackedTime, trackedComments } = newProps;
-    this.setState({ value: trackedTime, comments: trackedComments });
-  }
-
   pauseByIdle = (idleTime) => {
+    const { discardIdleTime } = this.props;
     let discardedMessage = '';
-    if (this.props.discardIdleTime) {
+    if (discardIdleTime) {
       const { value } = this.state;
       const min = 0;
       const nvalue = value - idleTime;
@@ -243,9 +244,9 @@ class Timer extends Component {
           critical: true
         });
         this.warningTimeout = setTimeout(() => {
-          const idle = powerMonitor.getSystemIdleTime();
-          if (idle >= maxIdleTime) {
-            this.pauseByIdle(Number(idle.toFixed(0)) * 1000);
+          const idleTime = powerMonitor.getSystemIdleTime();
+          if (idleTime >= maxIdleTime) {
+            this.pauseByIdle(Number(idleTime.toFixed(0)) * 1000);
           }
           clearTimeout(this.warningTimeout);
           this.warningTimeout = null;
@@ -257,10 +258,11 @@ class Timer extends Component {
   /* stop time interval and store tracked time + current datetime */
   storeToTimestamp = () => {
     const { isEnabled, isPaused, trackedIssue } = this.props;
+    const { value } = this.state;
     if (isEnabled && !isPaused) {
       this.setState({
         timestamp: {
-          value: this.state.value,
+          value,
           datetime: moment()
         }
       });
@@ -305,11 +307,12 @@ class Timer extends Component {
 
   cleanup = () => {
     const { isEnabled, isPaused, saveTimer } = this.props;
+    const { value, comments } = this.state;
     if (isEnabled) {
       if (!isPaused) {
         this.onPause();
       } else {
-        saveTimer(this.state.value, this.state.comments);
+        saveTimer(value, comments);
       }
     }
     this.stopInterval();
@@ -321,11 +324,11 @@ class Timer extends Component {
 
   onPause = () => {
     this.stopInterval();
-    const { trackedIssue, pauseTimer } = this.props;
+    const { trackedIssue, pauseTimer, onPause } = this.props;
     const { value, comments } = this.state;
     pauseTimer(value, comments);
-    if (this.props.onPause) {
-      this.props.onPause(trackedIssue, value, comments);
+    if (onPause) {
+      onPause(trackedIssue, value, comments);
     }
     ipcRenderer.send('timer-info', { isEnabled: true, isPaused: true, issue: trackedIssue });
   }
@@ -372,7 +375,8 @@ class Timer extends Component {
 
   redirectToTrackedLink = (event) => {
     event.preventDefault();
-    this.props.history.push(`/app/issue/${this.props.trackedIssue.id}`);
+    const { history, trackedIssue } = this.props;
+    history.push(`/app/issue/${trackedIssue.id}`);
   }
 
   onCommentsChange = (ev) => {
@@ -382,7 +386,7 @@ class Timer extends Component {
   render() {
     const { value, comments } = this.state;
     const {
-      isEnabled, trackedIssue, isPaused, advancedTimerControls
+      isEnabled, trackedIssue, isPaused, advancedTimerControls, saveTimer
     } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
@@ -462,7 +466,7 @@ class Timer extends Component {
               placeholder="Leave your WIP comment here"
               onChange={this.onCommentsChange}
               onBlur={() => {
-                this.props.saveTimer(this.state.value, this.state.comments);
+                saveTimer(value, comments);
               }}
               maxLength={255}
             />
@@ -505,13 +509,13 @@ Timer.propTypes = {
   idleBehavior: PropTypes.number.isRequired,
   discardIdleTime: PropTypes.bool.isRequired,
   advancedTimerControls: PropTypes.bool.isRequired,
+  saveTimer: PropTypes.func.isRequired
 };
 
 Timer.defaultProps = {
   initialValue: 0,
   isEnabled: false,
-  isPaused: false,
-  issueTitle: ''
+  isPaused: false
 };
 
 const mapStateToProps = (state) => ({

@@ -157,7 +157,8 @@ class IssueDetailsPage extends Component {
   }
 
   componentWillUnmount() {
-    this.props.resetSelectedIssue();
+    const { resetSelectedIssue } = this.props;
+    resetSelectedIssue();
   }
 
   showTimeEntryModal = (timeEntry) => {
@@ -201,7 +202,7 @@ class IssueDetailsPage extends Component {
     });
   }
 
-  closeIssueModal = (changes) => {
+  closeIssueModal = () => {
     this.setState({
       showIssueModal: false
     });
@@ -211,7 +212,10 @@ class IssueDetailsPage extends Component {
     this.setState({ showIssueModal: true });
   }
 
-  getIssueComments = () => this.props.selectedIssueState.data.journals.filter((entry) => entry.notes)
+  getIssueComments = () => {
+    const { selectedIssueState } = this.props;
+    selectedIssueState.data.journals.filter((entry) => entry.notes);
+  }
 
   render() {
     const {
@@ -222,6 +226,7 @@ class IssueDetailsPage extends Component {
     } = this.state;
     const selectedIssue = selectedIssueState.data;
     const cfields = selectedIssue.custom_fields;
+    // eslint-disable-next-line react/prop-types
     const subtasks = selectedIssue.children;
     return selectedIssue.id
       ? (
@@ -229,6 +234,7 @@ class IssueDetailsPage extends Component {
           <Flex>
             <IssueDetails>
               <Buttons className="buttons">
+                { /* eslint-disable-next-line react/jsx-no-bind */ }
                 <BackButton onClick={history.goBack.bind(this)}>
                   <ArrowLeftIcon size={30} />
                 </BackButton>
@@ -303,18 +309,25 @@ class IssueDetailsPage extends Component {
                   <li>
                     <div>Estimation: </div>
                     <div>
-                      {selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
                       {
-                      (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
-                        <span>
-                          {' '}
-                          (Total:
-                          {selectedIssue.total_estimated_hours.toFixed(2)}
-                          {' '}
-                          h)
-                        </span>
-                      )
-                    }
+                        selectedIssue.estimated_hours
+                          ? `${selectedIssue.estimated_hours.toFixed(2)} h`
+                          : undefined
+                      }
+                      {
+                        (
+                          selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours
+                          && selectedIssue.total_estimated_hours >= 0
+                        ) && (
+                          <span>
+                            {' '}
+                            (Total:
+                            {selectedIssue.total_estimated_hours.toFixed(2)}
+                            {' '}
+                            h)
+                          </span>
+                        )
+                      }
                     </div>
                   </li>
                   <li>
@@ -322,7 +335,10 @@ class IssueDetailsPage extends Component {
                     <div>
                       {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
                       {
-                        (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
+                        (
+                          selectedIssue.total_spent_hours !== selectedIssue.spent_hours
+                          && selectedIssue.total_spent_hours >= 0
+                        ) && (
                           <span>
                             {' '}
                             (Total:
@@ -357,7 +373,7 @@ class IssueDetailsPage extends Component {
                             <Subtask>
                               <Link
                                 key={i}
-                                onClick={() => this.props.history.push(`/app/issue/${subtask.id}/`)}
+                                onClick={() => history.push(`/app/issue/${subtask.id}/`)}
                               >
                                 {`#${subtask.id} - ${subtask.subject}`}
                               </Link>
@@ -430,6 +446,10 @@ class IssueDetailsPage extends Component {
 IssueDetailsPage.propTypes = {
   selectedIssueState: PropTypes.shape({
     data: PropTypes.shape({
+      children: PropTypes.array,
+      created_on: PropTypes.string,
+      closed_on: PropTypes.string,
+      estimated_hours: PropTypes.number,
       id: PropTypes.number.isRequired,
       subject: PropTypes.string.isRequired,
       journals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -477,7 +497,11 @@ IssueDetailsPage.propTypes = {
   userName: PropTypes.string.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
-  resetSelectedIssue: PropTypes.func.isRequired
+  resetSelectedIssue: PropTypes.func.isRequired,
+  match: PropTypes.object,
+  theme: PropTypes.object,
+  projects: PropTypes.object,
+  history: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({

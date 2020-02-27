@@ -1,5 +1,5 @@
 import _debounce from 'lodash/debounce';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -57,10 +57,16 @@ const ClockIconStyled = styled(ClockIcon)`
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
 `;
-const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
+const DurationIcon = (
+  <LabelIcon>
+    <Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)">
+      <ClockIconStyled size={14} />
+    </Tooltip>
+  </LabelIcon>
+);
 
 const selectStyles = {
-  container: (base, state) => ({ ...base })
+  container: (base) => ({ ...base })
 };
 
 class TimeEntryModal extends Component {
@@ -93,22 +99,25 @@ class TimeEntryModal extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
+    const { isOpen, resetValidation } = this.props;
+    if (oldProps.isOpen !== isOpen && isOpen) {
       const { timeEntry, initialVolatileContent } = this.props;
 
       if (timeEntry) {
+        // eslint-disable-next-line
         this.setState({
           timeEntry,
           wasModified: !!initialVolatileContent
         });
       }
-    } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
-      this.props.resetValidation();
+    } else if (oldProps.isOpen !== isOpen && !isOpen) {
+      resetValidation();
     }
   }
 
   componentWillUnmount() {
-    this.props.resetValidation();
+    const { resetValidation } = this.props;
+    resetValidation();
   }
 
   runValidation = (checkFields) => {
@@ -136,20 +145,24 @@ class TimeEntryModal extends Component {
     }
   }
 
-  onDateChange = (date) => this.setState({
-    timeEntry: {
-      ...this.state.timeEntry,
-      spent_on: date != null ? date.toISOString().split('T')[0] : null,
-    },
-    wasModified: true
-  });
-
-  onDurationChange = ({ target: { value } }) => {
-    value = `${value}`;
+  onDateChange = (date) => {
+    const { timeEntry } = this.state;
     this.setState({
       timeEntry: {
-        ...this.state.timeEntry,
-        duration: value.replace(',', '.'),
+        ...timeEntry,
+        spent_on: date != null ? date.toISOString().split('T')[0] : null,
+      },
+      wasModified: true
+    });
+  }
+
+  onDurationChange = ({ target: { value } }) => {
+    const { timeEntry } = this.state;
+    const durationValue = `${value}`.replace(',', '.');
+    this.setState({
+      timeEntry: {
+        ...timeEntry,
+        duration: durationValue,
       },
       wasModified: true
     });
@@ -158,26 +171,31 @@ class TimeEntryModal extends Component {
   }
 
   onDurationConversionChange = (value) => {
+    const { timeEntry } = this.state;
     this.setState({
       timeEntry: {
-        ...this.state.timeEntry,
+        ...timeEntry,
         hours: durationToHours(value)
       }
     });
   }
 
-  onCommentsChange = (comments) => this.setState({
-    timeEntry: {
-      ...this.state.timeEntry,
-      comments
-    },
-    wasModified: true
-  });
-
-  onActivityChange = (activity) => {
+  onCommentsChange = (comments) => {
+    const { timeEntry } = this.state;
     this.setState({
       timeEntry: {
-        ...this.state.timeEntry,
+        ...timeEntry,
+        comments
+      },
+      wasModified: true
+    });
+  }
+
+  onActivityChange = (activity) => {
+    const { timeEntry } = this.state;
+    this.setState({
+      timeEntry: {
+        ...timeEntry,
         activity: { id: activity.value, name: activity.label }
       },
       wasModified: true
@@ -185,8 +203,9 @@ class TimeEntryModal extends Component {
   };
 
   onAdd = () => {
+    const { publishTimeEntry, time, onClose } = this.props;
     const { timeEntry } = this.state;
-    this.props.publishTimeEntry({
+    publishTimeEntry({
       activity: timeEntry.activity,
       comments: timeEntry.comments,
       hours: timeEntry.hours,
@@ -194,28 +213,29 @@ class TimeEntryModal extends Component {
       issue: timeEntry.issue,
       spent_on: timeEntry.spent_on
     }).then(() => {
-      if (!this.props.time.error) {
-        this.props.onClose();
+      if (!time.error) {
+        onClose();
       }
     });
   };
 
   onUpdate = () => {
+    const { updateTimeEntry, time, onClose } = this.props;
     const { wasModified, timeEntry } = this.state;
     if (wasModified) {
-      this.props.updateTimeEntry(timeEntry, {
+      updateTimeEntry(timeEntry, {
         comments: timeEntry.comments,
         hours: timeEntry.hours,
         duration: timeEntry.duration,
         spent_on: timeEntry.spent_on,
         activity: timeEntry.activity
       }).then(() => {
-        if (!this.props.time.error) {
-          this.props.onClose();
+        if (!time.error) {
+          onClose();
         }
       });
     } else {
-      this.props.onClose();
+      onClose();
     }
   };
 
@@ -406,6 +426,9 @@ TimeEntryModal.propTypes = {
   updateTimeEntry: PropTypes.func.isRequired,
   resetValidation: PropTypes.func.isRequired,
   initialVolatileContent: PropTypes.bool,
+  validateBeforePublish: PropTypes.func.isRequired,
+  validateBeforeUpdate: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -415,8 +438,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   publishTimeEntry: (timeEntry) => dispatch(actions.timeEntry.publish(timeEntry)),
   updateTimeEntry: (timeEntry, changes) => dispatch(actions.timeEntry.update(timeEntry, changes)),
-  validateBeforePublish: (timeEntry, checkFields) => dispatch(actions.timeEntry.validateBeforePublish(timeEntry, checkFields)),
-  validateBeforeUpdate: (changes, checkFields) => dispatch(actions.timeEntry.validateBeforeUpdate(changes, checkFields)),
+  validateBeforePublish: (timeEntry, checkFields) => dispatch(
+    actions.timeEntry.validateBeforePublish(timeEntry, checkFields)
+  ),
+  validateBeforeUpdate: (changes, checkFields) => dispatch(
+    actions.timeEntry.validateBeforeUpdate(changes, checkFields)
+  ),
   resetValidation: () => dispatch(actions.timeEntry.reset())
 });
 

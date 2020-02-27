@@ -1,12 +1,13 @@
 import React from 'react';
-import moment from 'moment';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { HashRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { render, cleanup, wait, fireEvent } from '@testing-library/react';
+import {
+  render, cleanup, fireEvent
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import theme from '../../../theme';

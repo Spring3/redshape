@@ -56,9 +56,16 @@
                 "done_ratio",
                 "assigned_to",
                 "start_date",
-                "custom_fields"
+                "custom_fields",
+                "closed_on"
             ]
         }],
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "react/no-array-index-key": "off",
+        "no-mixed-operators": "off",
+        "react/forbid-prop-types": "off",
+        "react/require-default-props": "off",
         "react/jsx-props-no-spreading": "off",
         "max-classes-per-file": "off",
         "no-use-before-define": "off",

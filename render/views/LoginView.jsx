@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
@@ -58,19 +57,20 @@ class LoginView extends Component {
   }
 
   componentDidMount() {
-    const { userId, api_key } = this.props;
+    const { userId, api_key, history } = this.props;
     if (userId && api_key) {
-      this.props.history.push('/app/summary');
+      history.push('/app/summary');
     }
   }
 
   validate = ({
     apiKey, username, password, redmineEndpoint
   }) => {
+    const { useApiKey } = this.state;
     const errors = {
       redmineEndpoint: Joi.string().uri().required().validate(redmineEndpoint)
     };
-    if (this.state.useApiKey) {
+    if (useApiKey) {
       errors.apiKey = Joi.string().required().validate(apiKey);
     } else {
       errors.username = Joi.string().required().validate(username);
@@ -87,21 +87,24 @@ class LoginView extends Component {
 
   onSubmit = (values, { setSubmitting }) => {
     const { checkLogin } = this.props;
-    checkLogin({ ...values, useApiKey: this.state.useApiKey }).then(() => {
-      const { loginError, userId } = this.props;
+    const { useApiKey } = this.state;
+    checkLogin({ ...values, useApiKey }).then(() => {
+      const { loginError, userId, history } = this.props;
       if (!loginError && userId) {
-        this.props.history.push('/app/summary');
+        history.push('/app/summary');
       }
       setSubmitting(false);
     });
   }
 
   onToggleLoginMode = () => {
-    this.setState({ useApiKey: !this.state.useApiKey });
+    const { useApiKey } = this.state;
+    this.setState({ useApiKey: !useApiKey });
   }
 
   render() {
     const { loginError } = this.props;
+    const { useApiKey } = this.state;
     return (
       <Container>
         <DragArea />
@@ -144,17 +147,17 @@ class LoginView extends Component {
                 label="Login mode"
                 htmlFor="loginMode"
               >
-                <label>
+                <label htmlFor="loginMode">
                   <Input
                     type="checkbox"
                     name="loginMode"
-                    checked={this.state.useApiKey}
+                    checked={useApiKey}
                     onChange={this.onToggleLoginMode}
                   />
                   <span>Use API Key</span>
                 </label>
               </Label>
-              {this.state.useApiKey ? (
+              {useApiKey ? (
                 <>
                   <Label
                     label="API Key"
@@ -235,7 +238,10 @@ LoginView.propTypes = {
   ]),
   api_key: PropTypes.string,
   loginError: PropTypes.instanceOf(Error),
-  checkLogin: PropTypes.func.isRequired
+  checkLogin: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
 };
 
 const mapStateToProps = (state) => ({

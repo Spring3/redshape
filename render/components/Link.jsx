@@ -16,7 +16,9 @@ const StyledLink = styled.a`
   `}
 `;
 
-const Link = ({ onClick, type, href, children, className, testId }) => {
+const Link = ({
+  onClick, type, href, children, className, testId
+}) => {
   const clickHandler = (event) => {
     event.preventDefault();
     if (type === 'external') {

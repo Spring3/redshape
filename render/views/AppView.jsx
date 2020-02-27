@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
+// eslint-disable-next-line
 import { ipcRenderer } from 'electron';
 
 import actions from '../actions';
@@ -43,19 +44,9 @@ class AppView extends Component {
     this.modifyUserMenu();
   }
 
-  modifyUserMenu() {
-    const {
-      idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
-    } = this.props;
-    ipcRenderer.send('menu', {
-      settings: {
-        idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
-      }
-    });
-  }
-
   componentWillMount() {
-    this.props.getProjectData();
+    const { getProjectData } = this.props;
+    getProjectData();
   }
 
   onTrackingStop = (trackedIssue, value, comments) => {
@@ -89,13 +80,30 @@ class AppView extends Component {
   }
 
   closeTimeEntryModal = () => {
+    const { resetTimer } = this.props;
     this.setState({ showTimeEntryModal: false, timeEntry: null });
-    this.props.resetTimer();
+    resetTimer();
+  }
+
+  modifyUserMenu() {
+    const {
+      idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
+    } = this.props;
+    ipcRenderer.send('menu', {
+      settings: {
+        idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
+      }
+    });
   }
 
   render() {
     const { showTimeEntryModal, timeEntry, activities } = this.state;
-    const { userId, api_key, match } = this.props;
+    const {
+      userId,
+      api_key,
+      match,
+      history
+    } = this.props;
 
     return (
       <Grid>
@@ -107,7 +115,7 @@ class AppView extends Component {
           <Route path={`${match.path}/issue/:id`} component={(props) => <IssueDetailsPage {...props} />} />
           <Timer
             onStop={this.onTrackingStop}
-            history={this.props.history}
+            history={history}
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
@@ -144,6 +152,7 @@ AppView.propTypes = {
   discardIdleTime: PropTypes.bool.isRequired,
   advancedTimerControls: PropTypes.bool.isRequired,
   progressWithStep1: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
