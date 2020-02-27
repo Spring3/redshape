@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+// eslint-disable-next-line
 import { remote } from 'electron';
 
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';

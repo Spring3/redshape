@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
@@ -10,7 +9,7 @@ import actions from '../../actions';
 import { Label } from '../Input';
 
 const selectStyles = {
-  container: (base, state) => ({ ...base }),
+  container: (base) => ({ ...base }),
   multiValue: (base, state) => (state.data.isFixed
     ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
     : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' }),
@@ -44,9 +43,12 @@ class ColumnHeadersSelect extends Component {
           return;
         }
         break;
+      default:
+        return;
     }
 
-    this.props.settingsChangeIssueHeaders(value);
+    const { settingsChangeIssueHeaders } = this.props;
+    settingsChangeIssueHeaders(value);
   }
 
   render() {
@@ -83,7 +85,8 @@ ColumnHeadersSelect.propTypes = {
     value: PropTypes.string.isRequired,
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
-  settingsChangeIssueHeaders: PropTypes.func.isRequired
+  settingsChangeIssueHeaders: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({

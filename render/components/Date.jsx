@@ -59,6 +59,7 @@ class DateComponent extends PureComponent {
     const { date, className } = this.props;
     if (date) {
       const daysAgo = moment().endOf('day').diff(moment(date).endOf('day'), 'days');
+      // eslint-disable-next-line
       const precision = (daysAgo === 0
         ? 'today'
         : daysAgo > 1

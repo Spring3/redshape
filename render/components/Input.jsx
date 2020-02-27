@@ -156,6 +156,7 @@ const Label = ({
 );
 
 Label.propTypes = {
+  rightOfLabel: PropTypes.string,
   htmlFor: PropTypes.string,
   label: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -179,6 +180,7 @@ class Input extends PureComponent {
       }
       return parseInt(value, 10);
     }
+    // eslint-disable-next-line
     if (isNaN(value) || !isFinite(value)) {
       return undefined;
     }
@@ -238,6 +240,7 @@ class Input extends PureComponent {
 }
 
 Input.propTypes = {
+  className: PropTypes.string,
   type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox', 'number']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
@@ -254,7 +257,9 @@ Input.propTypes = {
   ]),
   checked: (props, propName, componentName) => { // eslint-disable-line
     if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
-      return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);
+      return new Error(
+        `${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`
+      );
     }
   },
   icon: PropTypes.element

@@ -167,8 +167,9 @@ class GhostButton extends Component {
   preventDefault = (e) => {
     e.preventDefault();
     e.persist();
-    if (this.props.onClick && !this.props.disabled) {
-      this.props.onClick(e);
+    const { onClick, disabled } = this.props;
+    if (onClick && !disabled) {
+      onClick(e);
     }
   }
 

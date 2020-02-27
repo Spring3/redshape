@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import ModalWindow from 'react-responsive-modal';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
@@ -35,7 +35,8 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    if (this.props.open) {
+    const { open } = this.props;
+    if (open) {
       const root = document.getElementById('root');
       if (root) {
         root.classList.add('react-confirm-alert-blur');
@@ -55,10 +56,11 @@ class Modal extends Component {
     if (root) {
       root.classList.remove('react-confirm-alert-blur');
     }
-    this.props.onClose();
+    const { onClose } = this.props;
+    onClose();
   }
 
-  onConfirm = (ev) => {
+  onConfirm = () => {
     this.onCloseProxy();
   }
 
@@ -109,7 +111,8 @@ Modal.propTypes = {
   open: PropTypes.bool.isRequired,
   children: PropTypes.node,
   theme: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  needConfirm: PropTypes.bool.isRequired
 };
 
 export default withTheme(Modal);

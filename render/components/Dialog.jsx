@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled, { withTheme } from 'styled-components';
 import PropTypes from 'prop-types';
 import { confirmAlert } from 'react-confirm-alert';
@@ -19,14 +19,16 @@ class Dialog extends Component {
     };
   }
 
-  confirm = (closeModal) => (event) => {
-    this.state.onConfirm();
+  confirm = (closeModal) => () => {
+    const { onConfirm } = this.state;
+    onConfirm();
     closeModal();
   }
 
-  cancel = (closeModal) => (event) => {
-    if (this.props.onCancel) {
-      this.props.onCancel();
+  cancel = (closeModal) => () => {
+    const { onCancel } = this.props;
+    if (onCancel) {
+      onCancel();
     }
     closeModal();
   }
@@ -75,9 +77,10 @@ class Dialog extends Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <>
-        {this.props.children(this.displayDialog)}
+        {children(this.displayDialog)}
       </>
     );
   }
@@ -86,13 +89,15 @@ class Dialog extends Component {
 Dialog.propTypes = {
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func
+  onCancel: PropTypes.func,
+  children: PropTypes.func.isRequired,
+  theme: PropTypes.object
 };
 
 Dialog.defaultProps = {
   title: 'Confirmation',
   message: 'Are you sure you want to proceed?',
-  onClose: undefined
+  onCancel: () => {}
 };
 
 export default withTheme(Dialog);

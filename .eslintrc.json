@@ -57,7 +57,8 @@
                 "assigned_to",
                 "start_date",
                 "custom_fields",
-                "closed_on"
+                "closed_on",
+                "progress_info"
             ]
         }],
         "jsx-a11y/label-has-associated-control": "off",

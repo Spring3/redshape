@@ -1,5 +1,4 @@
-import _debounce from 'lodash/debounce';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
@@ -61,7 +60,13 @@ const ClockIconStyled = styled(ClockIcon)`
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
 `;
-const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14} /></Tooltip></LabelIcon>);
+const DurationIcon = (
+  <LabelIcon>
+    <Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)">
+      <ClockIconStyled size={14} />
+    </Tooltip>
+  </LabelIcon>
+);
 
 class IssueModal extends Component {
   constructor(props) {
@@ -88,13 +93,15 @@ class IssueModal extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
+    const { isOpen, resetValidation } = this.props;
+    if (oldProps.isOpen !== isOpen && isOpen) {
       const { issueEntry } = this.props;
 
       if (issueEntry) {
         const {
           estimated_hours, done_ratio, due_date, children
         } = issueEntry;
+        // eslint-disable-next-line
         this.setState({
           // issueEntry,
           issueEntry: {
@@ -108,13 +115,14 @@ class IssueModal extends Component {
           wasModified: false
         });
       }
-    } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
-      this.props.resetValidation();
+    } else if (oldProps.isOpen !== isOpen && !isOpen) {
+      resetValidation();
     }
   }
 
   componentWillUnmount() {
-    this.props.resetValidation();
+    const { resetValidation } = this.props;
+    resetValidation();
   }
 
   runValidation = (checkFields) => {
@@ -129,35 +137,46 @@ class IssueModal extends Component {
   }
 
   onUpdate = () => {
+    const {
+      updateIssueEntry,
+      issue,
+      issueGet,
+      onClose
+    } = this.props;
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
-      this.props.updateIssueEntry(this.props.issueEntry, issueEntry)
+      // eslint-disable-next-line
+      updateIssueEntry(this.props.issueEntry, issueEntry)
         .then((ret) => {
-          if (!this.props.issue.error) {
+          if (!issue.error) {
             const unchanged = ret && ret.unchanged;
             if (!unchanged) {
-              this.props.issueGet(this.props.issueEntry.id);
+              issueGet(issueEntry.id);
             }
-            this.props.onClose();
+            onClose();
           }
         });
     } else {
-      this.props.onClose();
+      onClose();
     }
   }
 
-  onDueDateChange = (date) => this.setState({
-    issueEntry: {
-      ...this.state.issueEntry,
-      due_date: date != null ? date.toISOString().split('T')[0] : null,
-    },
-    wasModified: true
-  });
-
-  onProgressChange = (progress) => {
+  onDueDateChange = (date) => {
+    const { issueEntry } = this.state;
     this.setState({
       issueEntry: {
-        ...this.state.issueEntry,
+        ...issueEntry,
+        due_date: date != null ? date.toISOString().split('T')[0] : null,
+      },
+      wasModified: true
+    });
+  }
+
+  onProgressChange = (progress) => {
+    const { issueEntry } = this.state;
+    this.setState({
+      issueEntry: {
+        ...issueEntry,
         progress,
       },
       wasModified: true
@@ -165,11 +184,12 @@ class IssueModal extends Component {
   }
 
   onEstimatedDurationChange = ({ target: { value } }) => {
-    value = `${value}`;
+    const duration = `${value}`;
+    const { issueEntry } = this.state;
     this.setState({
       issueEntry: {
-        ...this.state.issueEntry,
-        estimated_duration: value.replace(',', '.'),
+        ...issueEntry,
+        estimated_duration: duration.replace(',', '.'),
       },
       wasModified: true
     });
@@ -318,6 +338,7 @@ IssueModal.propTypes = {
     error: PropTypes.instanceOf(Error)
   }).isRequired,
   issueEntry: PropTypes.shape({
+    progress: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     subject: PropTypes.string.isRequired,
     journals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -356,7 +377,8 @@ IssueModal.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired
-    }))
+    })),
+    children: PropTypes.array
   }),
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
@@ -366,6 +388,7 @@ IssueModal.propTypes = {
   validateBeforeUpdate: PropTypes.func.isRequired,
   resetValidation: PropTypes.func.isRequired,
   progressWithStep1: PropTypes.bool.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({

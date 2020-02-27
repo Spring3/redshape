@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import {
   Tab, Tabs, TabList, TabPanel
@@ -178,7 +178,10 @@ class AboutPage extends Component {
                   </Link>
                 </div>
               </CenteredDiv>
-              <Paragraph>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</Paragraph>
+              <Paragraph>
+                { /* eslint-disable-next-line */ }
+                The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+              </Paragraph>
               <footer>
                 <div>
                   Copyright © 2020&nbsp;

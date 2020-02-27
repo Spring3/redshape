@@ -27,20 +27,34 @@ class Routes extends Component {
     this.rejectionHandler = _debounce(this.handleRejection, 200);
   }
 
-  handleError = (event) => {
-    event.preventDefault();
-    if (event.error) {
-      event.error.stack = cleanStack(event.error.stack);
-    }
-    toast.error(<Notification error={event.error} />);
+  componentWillMount() {
+    window.addEventListener('error', this.errorHandler);
+    window.addEventListener('unhandledrejection', this.rejectionHandler);
+    window.addEventListener('settings', this.settingsEventHandler);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('error', this.errorHandler);
+    window.removeEventListener('unhandledrejection', this.rejectionHandler);
+    window.removeEventListener('settings', this.settingsEventHandler);
   }
 
   handleRejection = (event) => {
     event.preventDefault();
     if (event.reason) {
+      // eslint-disable-next-line
       event.reason.stack = cleanStack(event.reason.stack);
     }
     toast.error(<Notification error={event.reason} />);
+  }
+
+  handleError = (event) => {
+    event.preventDefault();
+    if (event.error) {
+      // eslint-disable-next-line
+      event.error.stack = cleanStack(event.error.stack);
+    }
+    toast.error(<Notification error={event.error} />);
   }
 
   settingsEventHandler = (event, { key, value }) => {
@@ -61,18 +75,6 @@ class Routes extends Component {
       default:
         break;
     }
-  }
-
-  componentWillMount() {
-    window.addEventListener('error', this.errorHandler);
-    window.addEventListener('unhandledrejection', this.rejectionHandler);
-    window.addEventListener('settings', this.settingsEventHandler);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('error', this.errorHandler);
-    window.removeEventListener('unhandledrejection', this.rejectionHandler);
-    window.removeEventListener('settings', this.settingsEventHandler);
   }
 
   render() {

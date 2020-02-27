@@ -12,7 +12,6 @@ const MarginedDiv = styled.div`
 
 class OptionsBlock extends Component {
   toggleClosedIssuesDisplay = () => {
-    console.log('TOGGLING');
     const { settingsShowClosedIssues, showClosedIssues } = this.props;
     settingsShowClosedIssues(!showClosedIssues);
   }
@@ -54,10 +53,6 @@ class OptionsBlock extends Component {
 }
 
 OptionsBlock.propTypes = {
-  userId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
   useColors: PropTypes.bool.isRequired,
   settingsShowClosedIssues: PropTypes.func.isRequired,
@@ -65,7 +60,6 @@ OptionsBlock.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  userId: state.user.id,
   showClosedIssues: state.settings.showClosedIssues,
   useColors: state.settings.useColors
 });

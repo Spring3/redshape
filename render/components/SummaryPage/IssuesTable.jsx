@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { connect } from 'react-redux';
@@ -125,10 +125,6 @@ class IssuesTable extends Component {
     }
   }
 
-  showIssueDetails(id) {
-    this.props.history.push(`/app/issue/${id}/`);
-  }
-
   /**
    * @param value to be used (@param mapping is discarded)
    */
@@ -148,6 +144,11 @@ class IssuesTable extends Component {
     const { issues, fetchIssuePage } = this.props;
     const { page } = issues;
     fetchIssuePage(page + 1);
+  }
+
+  showIssueDetails(id) {
+    const { history } = this.props;
+    history.push(`/app/issue/${id}/`);
   }
 
   render() {
@@ -183,7 +184,13 @@ class IssuesTable extends Component {
               isEnd={userTasks.length === issues.totalCount}
               hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
               container={window}
-              loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
+              loadIndicator={(
+                <ProcessIndicatorContainer>
+                  <td>
+                    <ProcessIndicator className="container" />
+                  </td>
+                </ProcessIndicatorContainer>
+              )}
               immediate={true}
             >
               {userTasks.map((task) => (
@@ -219,6 +226,11 @@ class IssuesTable extends Component {
 IssuesTable.propTypes = {
   issues: PropTypes.shape({
     userTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    page: PropTypes.number,
+    data: PropTypes.array.isRequired,
+    error: PropTypes.instanceOf(Error),
+    isFetching: PropTypes.bool.isRequired,
+    totalCount: PropTypes.number.isRequired
   }).isRequired,
   useColors: PropTypes.bool.isRequired,
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
@@ -227,7 +239,9 @@ IssuesTable.propTypes = {
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
   onSort: PropTypes.func.isRequired,
-  fetchIssuePage: PropTypes.func.isRequired
+  fetchIssuePage: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({

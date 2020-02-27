@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 
@@ -14,14 +14,59 @@ class InfiniteScroll extends Component {
   }
 
   componentWillMount() {
-    if (this.props.container && this.props.immediate) {
+    const { container, immediate } = this.props;
+    if (container && immediate) {
       this.throttledScrollHandler();
     }
   }
 
+  componentDidUpdate(oldProps, oldState) {
+    const {
+      isEnd,
+      hasMore,
+      container,
+      immediate
+    } = this.props;
+    const { isLoading } = this.state;
+    if (oldProps.isEnd !== isEnd && isEnd) {
+      // eslint-disable-next-line
+      this.setState({
+        isLoading: false
+      });
+    }
+
+    if (oldProps.hasMore !== hasMore && !hasMore) {
+      if (container) {
+        container.removeEventListener('scroll', this.throttledScrollHandler);
+      }
+    }
+
+    if (oldState.isLoading !== isLoading && !isLoading) {
+      if (container && this.shouldLoad()) {
+        this.throttledScrollHandler();
+      }
+    }
+
+    if (oldProps.hasMore !== hasMore && hasMore) {
+      if (isLoading) {
+        // eslint-disable-next-line
+        this.setState({
+          isLoading: false
+        });
+      }
+      if (container) {
+        container.addEventListener('scroll', this.throttledScrollHandler);
+        if (immediate && this.shouldLoad()) {
+          this.throttledScrollHandler();
+        }
+      }
+    }
+  }
+
   componentWillUnmount() {
-    if (this.props.container) {
-      this.props.container.removeEventListener('scroll', this.throttledScrollHandler);
+    const { container } = this.props;
+    if (container) {
+      container.removeEventListener('scroll', this.throttledScrollHandler);
     }
   }
 
@@ -31,40 +76,6 @@ class InfiniteScroll extends Component {
       return (container.innerHeight + container.scrollY) <= document.body.scrollHeight;
     }
     return container.scrollTop <= container.scrollHeight;
-  }
-
-  componentDidUpdate(oldProps, oldState) {
-    if (oldProps.isEnd !== this.props.isEnd && this.props.isEnd) {
-      this.setState({
-        isLoading: false
-      });
-    }
-
-    if (oldProps.hasMore !== this.props.hasMore && !this.props.hasMore) {
-      if (this.props.container) {
-        this.props.container.removeEventListener('scroll', this.throttledScrollHandler);
-      }
-    }
-
-    if (oldState.isLoading !== this.state.isLoading && !this.state.isLoading) {
-      if (this.props.container && this.shouldLoad()) {
-        this.throttledScrollHandler();
-      }
-    }
-
-    if (oldProps.hasMore !== this.props.hasMore && this.props.hasMore) {
-      if (this.state.isLoading) {
-        this.setState({
-          isLoading: false
-        });
-      }
-      if (this.props.container) {
-        this.props.container.addEventListener('scroll', this.throttledScrollHandler);
-        if (this.props.immediate && this.shouldLoad()) {
-          this.throttledScrollHandler();
-        }
-      }
-    }
   }
 
   onScroll = (event = {}) => {

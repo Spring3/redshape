@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -17,7 +17,8 @@ const NotifyButton = styled.button`
 
 class Notification extends Component {
   reportError = () => {
-    report(this.props.error);
+    const { error } = this.props;
+    report(error);
   }
 
   render() {

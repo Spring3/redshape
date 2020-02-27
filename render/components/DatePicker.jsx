@@ -189,8 +189,16 @@ class DatePicker extends Component {
     } = this.props;
     return (
       <StyledDatePicker
-        buttonLeft={encodeURIComponent(renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
-        buttonRight={encodeURIComponent(renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
+        buttonLeft={
+          encodeURIComponent(
+            renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
+          )
+        }
+        buttonRight={
+          encodeURIComponent(
+            renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
+          )
+        }
       >
         <DayPickerInput
           styles={this.styles}

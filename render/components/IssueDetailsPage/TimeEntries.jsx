@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 
@@ -147,13 +146,15 @@ class TimeEntries extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.selectedIssue.id !== this.props.selectedIssue.id) {
-      this.props.fetchIssueTimeEntries(this.props.selectedIssue.id, 0);
+    const { selectedIssue, fetchIssueTimeEntries } = this.props;
+    if (oldProps.selectedIssue.id !== selectedIssue.id) {
+      fetchIssueTimeEntries(selectedIssue.id, 0);
     }
   }
 
   openModal = (timeEntry) => () => {
-    this.props.showTimeEntryModal(timeEntry);
+    const { showTimeEntryModal } = this.props;
+    showTimeEntryModal(timeEntry);
   }
 
   startTimeTracking = () => {
@@ -169,9 +170,9 @@ class TimeEntries extends Component {
   }
 
   loadSpentTime = () => {
-    const { spentTime, selectedIssue } = this.props;
+    const { spentTime, selectedIssue, fetchIssueTimeEntries } = this.props;
     const { page } = spentTime;
-    this.props.fetchIssueTimeEntries(selectedIssue.id, page + 1);
+    fetchIssueTimeEntries(selectedIssue.id, page + 1);
   }
 
   render() {
@@ -200,13 +201,17 @@ class TimeEntries extends Component {
         <TimeEntriesList ref={this.listRef} data-testId="time-entries">
           <InfiniteScroll
             load={this.loadSpentTime}
+            // eslint-disable-next-line
             isEnd={spentTime.data.length === spentTime.totalCount}
+            // eslint-disable-next-line
             hasMore={!spentTime.isFetching && !spentTime.error && spentTime.data.length < spentTime.totalCount}
             loadIndicator={<ProcessIndicatorWrapper><ProcessIndicator /></ProcessIndicatorWrapper>}
             container={this.listRef.current}
             immediate={true}
           >
+            { /* eslint-disable-next-line */ }
             {spentTime.data.map((timeEntry) => (
+              // eslint-disable-next-line
               <li key={timeEntry.id} onClick={this.openModal(timeEntry)} data-testId="time-entry">
                 <div>
                   <div>
@@ -260,7 +265,7 @@ TimeEntries.propTypes = {
     }).isRequired
   }).isRequired,
   userId: PropTypes.number.isRequired,
-  userName: PropTypes.string.isRequired,
+  startTimeTracking: PropTypes.func.isRequired,
   spentTime: PropTypes.arrayOf(PropTypes.shape({
     activity: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -281,13 +286,15 @@ TimeEntries.propTypes = {
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired
   })).isRequired,
   isTimerEnabled: PropTypes.bool.isRequired,
   trackedIssueId: PropTypes.number,
   removeTimeEntry: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
-  showTimeEntryModal: PropTypes.func.isRequired
+  showTimeEntryModal: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({

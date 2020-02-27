@@ -12,7 +12,9 @@ const StyledLink = styled.a`
   cursor: pointer;
 
   ${(props) => css`
-    ${typeof props.children === 'string' ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }` : ''}
+    ${typeof props.children === 'string'
+    ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }`
+    : ''}
   `}
 `;
 

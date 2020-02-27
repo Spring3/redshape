@@ -34,6 +34,7 @@ export const Progress = styled.div`
 const Progressbar = ({
   percent, background, id, className, height
 }) => {
+  // eslint-disable-next-line
   const percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
   const percentageText = `${percentage.toFixed(0)}%`;
 
