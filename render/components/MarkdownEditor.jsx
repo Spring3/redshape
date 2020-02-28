@@ -385,7 +385,7 @@ class MarkdownText extends PureComponent {
     super(props);
     this.iframeRef = React.createRef();
 
-    const { theme } = props;
+    const { theme = {} } = props;
     this.genericStyles = `
       body {
         margin: 0;

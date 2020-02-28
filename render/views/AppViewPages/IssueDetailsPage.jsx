@@ -214,7 +214,7 @@ class IssueDetailsPage extends Component {
 
   getIssueComments = () => {
     const { selectedIssueState } = this.props;
-    selectedIssueState.data.journals.filter((entry) => entry.notes);
+    return selectedIssueState.data.journals.filter((entry) => entry.notes);
   }
 
   render() {

@@ -57,9 +57,7 @@ describe('MarkdownEditor component', () => {
     );
     const button = queryByText('Preview');
     expect(button).toBeDefined();
-    act(() => {
-      fireEvent.click(button.parentElement);
-    });
+    fireEvent.click(button.parentElement);
 
     expect(document.querySelector('textarea')).toBeNull();
   });
