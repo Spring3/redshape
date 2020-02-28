@@ -147,7 +147,7 @@ class LoginView extends Component {
                 label="Login mode"
                 htmlFor="loginMode"
               >
-                <label htmlFor="loginMode">
+                <label>
                   <Input
                     type="checkbox"
                     name="loginMode"
