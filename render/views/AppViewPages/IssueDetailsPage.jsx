@@ -363,46 +363,42 @@ class IssueDetailsPage extends Component {
                 </ColumnList>
               </Wrapper>
               <FlexWrapper>
-                <ColumnList>
-                  { subtasks && subtasks.length && (
-                    <>
-                      <h3>Subtasks:</h3>
-                      <Subtasks>
-                        {
-                          subtasks.map((subtask, i) => (
-                            <Subtask>
-                              <Link
-                                key={i}
-                                onClick={() => history.push(`/app/issue/${subtask.id}/`)}
-                              >
-                                {`#${subtask.id} - ${subtask.subject}`}
-                              </Link>
-                            </Subtask>
-                          ))
-                        }
-                      </Subtasks>
-                    </>
-                  )}
-                </ColumnList>
-                <ColumnList>
-                  {cfields && cfields.length && (
-                    <>
-                      <h3>Custom Fields:</h3>
-                      <CustomFields>
-                        {cfields.map((el, i) => (
-                          <li key={i}>
-                            <div>
-                              {el.name}
-                              :
-                              {' '}
-                            </div>
-                            <div>{el.value}</div>
-                          </li>
-                        ))}
-                      </CustomFields>
-                    </>
-                  )}
-                </ColumnList>
+                { subtasks && subtasks.length && (
+                  <ColumnList>
+                    <h3>Subtasks:</h3>
+                    <Subtasks>
+                      {
+                        subtasks.map((subtask, i) => (
+                          <Subtask>
+                            <Link
+                              key={i}
+                              onClick={() => history.push(`/app/issue/${subtask.id}/`)}
+                            >
+                              {`#${subtask.id} - ${subtask.subject}`}
+                            </Link>
+                          </Subtask>
+                        ))
+                      }
+                    </Subtasks>
+                  </ColumnList>
+                )}
+                {cfields && cfields.length && (
+                  <ColumnList>
+                    <h3>Custom Fields:</h3>
+                    <CustomFields>
+                      {cfields.map((el, i) => (
+                        <li key={i}>
+                          <div>
+                            {el.name}
+                            :
+                            {' '}
+                          </div>
+                          <div>{el.value}</div>
+                        </li>
+                      ))}
+                    </CustomFields>
+                  </ColumnList>
+                )}
               </FlexWrapper>
               <div>
                 <h3>Description</h3>
