@@ -154,8 +154,16 @@ class Timer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { trackedTime, trackedComments } = newProps;
+    const {
+      trackedTime,
+      trackedComments,
+      isEnabled,
+      isPaused
+    } = newProps;
     this.setState({ value: trackedTime, comments: trackedComments });
+    if (isEnabled && !isPaused) {
+      this.onContinue();
+    }
   }
 
   componentWillUnmount() {

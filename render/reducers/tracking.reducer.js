@@ -19,9 +19,6 @@ export const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case TRACKING_START: {
-      if (state.isTracking) {
-        return state;
-      }
       const { issue } = action.data;
       const nextState = {
         issue,
