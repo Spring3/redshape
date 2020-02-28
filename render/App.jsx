@@ -5,6 +5,8 @@ import { Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import cleanStack from 'clean-stack';
+// eslint-disable-next-line
+import { ipcRenderer } from 'electron';
 
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
@@ -30,13 +32,13 @@ class Routes extends Component {
   componentWillMount() {
     window.addEventListener('error', this.errorHandler);
     window.addEventListener('unhandledrejection', this.rejectionHandler);
-    window.addEventListener('settings', this.settingsEventHandler);
+    ipcRenderer.on('settings', this.settingsEventHandler);
   }
 
   componentWillUnmount() {
     window.removeEventListener('error', this.errorHandler);
     window.removeEventListener('unhandledrejection', this.rejectionHandler);
-    window.removeEventListener('settings', this.settingsEventHandler);
+    ipcRenderer.removeListener('settings', this.settingsEventHandler);
   }
 
   handleRejection = (event) => {
