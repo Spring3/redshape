@@ -1,36 +1,44 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { HashRouter, Route } from 'react-router-dom';
 import thunk from 'redux-thunk';
-import { mount } from 'enzyme';
-import userActions, { USER_LOGOUT } from '../../actions/user.actions';
+import { render, cleanup, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
+import { USER_LOGOUT } from '../../actions/user.actions';
 import Navbar from '../Navbar';
 
 const mockStore = configureStore([thunk]);
 
 describe('Navbar component', () => {
-  it('should match the snapshot', () => {
-    const store = mockStore({
+  afterEach(cleanup);
+  it('should display the Navbar', () => {
+    const state = {
       user: {
         id: 1,
         name: 'Anonymous',
         api_key: 1
       }
-    });
-    const tree = renderer.create(
+    };
+    const store = mockStore(state);
+    const { getByText } = render(
       <Provider store={store}>
         <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
+          <Route path="/" component={(props) => <Navbar {...props} />} />
         </HashRouter>
       </Provider>
     );
-    expect(tree).toMatchSnapshot();
+    const summary = getByText('Summary');
+    expect(summary).toBeDefined();
+    expect(summary).toHaveAttribute('href', '#/app/summary');
+    const user = getByText(state.user.name);
+    expect(user).toBeDefined();
+    expect(user).toHaveAttribute('href', '#/app/summary');
+    expect(getByText('Sign out')).toBeDefined();
   });
 
-  it('should fire a logout actions when the signout button is clicked', () => {
+  it('should fire a logout action when the signout button is clicked', () => {
     const store = mockStore({
       user: {
         id: 1,
@@ -38,16 +46,18 @@ describe('Navbar component', () => {
         api_key: 1
       }
     });
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <HashRouter>
-          <Route path="/" component={props => <Navbar {...props}/>} />
+          <Route path="/" component={(props) => <Navbar {...props} />} />
         </HashRouter>
       </Provider>
     );
 
-    expect(wrapper.exists('#signout')).toBe(true);
-    wrapper.find('#signout').hostNodes().simulate('click');
+
+    const signoutBtn = document.querySelector('#signout');
+    expect(signoutBtn).toBeDefined();
+    fireEvent.click(signoutBtn);
     expect(store.getActions().length).toBe(2);
     expect(store.getActions().pop()).toEqual({
       type: USER_LOGOUT

@@ -36,14 +36,14 @@ const StyledInput = styled.input`
     }
   `}}
 
-  ${props => props.icon && css`
+  ${(props) => props.icon && css`
     background-image: url(data:image/svg+xml;utf8,${props.icon});
     background-repeat: no-repeat;
     background-position: 5px center;
     padding-left: 35px;
   `}
 
-  ${props => props.disabled && css`
+  ${(props) => props.disabled && css`
     background: ${props.theme.bgDisabled};
     border-color: ${props.theme.bgDarker};
     color: ${props.theme.minorText};
@@ -68,27 +68,27 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 const checkedStyles = css`
-  background: ${props => props.theme.main};
-  border-color: ${props => props.theme.main};
-`
+  background: ${(props) => props.theme.main};
+  border-color: ${(props) => props.theme.main};
+`;
 
 const uncheckedStyles = css`
   background: white;
-  border-color: ${props => props.theme.main};
-`
+  border-color: ${(props) => props.theme.main};
+`;
 
 const StyledCheckbox = styled.div`
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: ${props => props.checked ? props.theme.main : props.theme.bgDark}
-  transition: background ${props => props.theme.transitionTime};
+  background: ${(props) => (props.checked ? props.theme.main : props.theme.bgDark)}
+  transition: background ${(props) => props.theme.transitionTime};
   border: 2px solid transparent;
   border-radius: 3px;
   cursor: pointer;
 
   svg {
-    visibility: ${props => props.checked ? 'visible' : 'hidden'};
+    visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
     position: relative;
     vertical-align: middle;
     bottom: 3px;
@@ -96,16 +96,16 @@ const StyledCheckbox = styled.div`
 
   ${HiddenCheckbox}:not(:disabled):hover + &,
   ${HiddenCheckbox}:focus + & {
-    box-shadow: 0px 0px 5px 1px ${props => props.theme.mainLight};
+    box-shadow: 0px 0px 5px 1px ${(props) => props.theme.mainLight};
   }
 
   ${HiddenCheckbox}:disabled + & {
-    background: ${props => props.theme.bgDark};
+    background: ${(props) => props.theme.bgDark};
     border-color: lightgrey;
   }
 
-  ${props => props.checked ? checkedStyles : uncheckedStyles};
-`
+  ${(props) => (props.checked ? checkedStyles : uncheckedStyles)};
+`;
 
 const CheckboxContainer = styled.div`
   display: inline-block;
@@ -115,40 +115,48 @@ const CheckboxContainer = styled.div`
     margin-left: 10px;
     vertical-align: middle;
   }
-`
+`;
 
 const FormGroup = styled.div`  
   h4 {
     margin-bottom: 10px;    
-    color: ${props => props.theme.minorText};
+    color: ${(props) => props.theme.minorText};
   }
 `;
 
 
 const H4Label = styled.h4`
-  color: ${props => props.theme.minorText};
+  color: ${(props) => props.theme.minorText};
 `;
 
 const StyledLabel = styled.label`
-  color: ${props => props.theme.minorText};
+  color: ${(props) => props.theme.minorText};
 `;
 
-const Label = ({ label, htmlFor, children, className, inline, rightToLeft, rightOfLabel }) => ( 
+const Label = ({
+  label, htmlFor, children, className, inline, rightToLeft, rightOfLabel
+}) => (
   <FormGroup className={`form-group ${className}`}>
     { rightToLeft === true && (children) }
     { inline === false
       ? (
-        <H4Label htmlFor={htmlFor}>{label}{rightOfLabel}</H4Label>
+        <H4Label htmlFor={htmlFor}>
+          {label}
+          {rightOfLabel}
+        </H4Label>
       )
       : (
-        <StyledLabel htmlFor={htmlFor}>{label}{rightOfLabel}</StyledLabel>
-      )
-    }
+        <StyledLabel htmlFor={htmlFor}>
+          {label}
+          {rightOfLabel}
+        </StyledLabel>
+      )}
     { rightToLeft === false && (children) }
   </FormGroup>
 );
 
 Label.propTypes = {
+  rightOfLabel: PropTypes.string,
   htmlFor: PropTypes.string,
   label: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -172,6 +180,7 @@ class Input extends PureComponent {
       }
       return parseInt(value, 10);
     }
+    // eslint-disable-next-line
     if (isNaN(value) || !isFinite(value)) {
       return undefined;
     }
@@ -207,7 +216,7 @@ class Input extends PureComponent {
             name={name}
           />
           <StyledCheckbox checked={checked}>
-            <CheckIcon size="18" color='white' />
+            <CheckIcon size="18" color="white" />
           </StyledCheckbox>
         </CheckboxContainer>
       )
@@ -231,6 +240,7 @@ class Input extends PureComponent {
 }
 
 Input.propTypes = {
+  className: PropTypes.string,
   type: PropTypes.oneOf(['email', 'password', 'text', 'checkbox', 'number']),
   placeholder: PropTypes.string,
   id: PropTypes.string,
@@ -247,7 +257,9 @@ Input.propTypes = {
   ]),
   checked: (props, propName, componentName) => { // eslint-disable-line
     if (props.type === 'checkbox' && typeof props[propName] !== 'boolean') {
-      return new Error(`${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`);
+      return new Error(
+        `${propName} is maked as required for component ${componentName} type checkbox, but it's value is not boolean`
+      );
     }
   },
   icon: PropTypes.element

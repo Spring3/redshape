@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  lint:
     working_directory: ~/redshape
     docker:
       - image: circleci/node:10.15.3
@@ -8,6 +8,27 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+      - run: 'sudo apt install libxss-dev pkg-config'
+      - run:
+          name: Install Dependencies
+          command: 'npm install'
+      - save_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: 'Linting'
+          command: 'npm run lint'
+
+  test:
+    working_directory: ~/redshape
+    docker:
+      - image: circleci/node:10.15.3
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+      - run: 'sudo apt install libxss-dev libxext-dev libxtst6 libnss3 libgtk-3-0 libgtkextra-dev libasound2'
       - run:
           name: Install Dependencies
           command: 'npm install'
@@ -18,4 +39,10 @@ jobs:
       - run:
           name: Coverage
           command: 'npm test'
-      
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - lint
+      - test

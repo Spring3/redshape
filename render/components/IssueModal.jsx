@@ -1,26 +1,25 @@
-import _debounce from 'lodash/debounce';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 
+import ClockIcon from 'mdi-react/ClockIcon';
+import RawSlider from 'rc-slider';
 import { Input, Label } from './Input';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
 import ProcessIndicator from './ProcessIndicator';
-import Tooltip from "./Tooltip";
-import ClockIcon from "mdi-react/ClockIcon";
+import Tooltip from './Tooltip';
 import DatePicker from './DatePicker';
 
-import RawSlider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import './styles/rc-slider.css';
 
-import 'rc-slider/assets/index.css'
+
 import actions from '../actions';
 
-import { durationToHours, hoursToDuration } from '../datetime'
+import { durationToHours, hoursToDuration } from '../datetime';
 
 const FlexRow = styled.div`
   display: flex;
@@ -33,7 +32,7 @@ const OptionButtons = styled.div`
   position: relative;
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 2px solid ${props => props.theme.bgDark};
+  border-top: 2px solid ${(props) => props.theme.bgDark};
   display: flex;
   
   button {
@@ -60,16 +59,24 @@ const ClockIconStyled = styled(ClockIcon)`
 `;
 const LabelIcon = styled.span`
   margin-left: 0.2rem;
-`
-const DurationIcon = (<LabelIcon><Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)"><ClockIconStyled size={14}/></Tooltip></LabelIcon>);
+`;
+const DurationIcon = (
+  <LabelIcon>
+    <Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)">
+      <ClockIconStyled size={14} />
+    </Tooltip>
+  </LabelIcon>
+);
 
 class IssueModal extends Component {
   constructor(props) {
     super(props);
-    let propsIssueEntry = props.issueEntry;
+    const propsIssueEntry = props.issueEntry;
     let issueEntry = {};
-    if (propsIssueEntry){
-      const { estimated_hours, done_ratio, due_date, children } = propsIssueEntry;
+    if (propsIssueEntry) {
+      const {
+        estimated_hours, done_ratio, due_date, children
+      } = propsIssueEntry;
       issueEntry = {
         estimated_duration: hoursToDuration(estimated_hours),
         progress: done_ratio,
@@ -86,11 +93,15 @@ class IssueModal extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.isOpen !== this.props.isOpen && this.props.isOpen) {
+    const { isOpen, resetValidation } = this.props;
+    if (oldProps.isOpen !== isOpen && isOpen) {
       const { issueEntry } = this.props;
 
       if (issueEntry) {
-        const { estimated_hours, done_ratio, due_date, children } = issueEntry;
+        const {
+          estimated_hours, done_ratio, due_date, children
+        } = issueEntry;
+        // eslint-disable-next-line
         this.setState({
           // issueEntry,
           issueEntry: {
@@ -104,13 +115,14 @@ class IssueModal extends Component {
           wasModified: false
         });
       }
-    } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
-      this.props.resetValidation();
+    } else if (oldProps.isOpen !== isOpen && !isOpen) {
+      resetValidation();
     }
   }
 
   componentWillUnmount() {
-    this.props.resetValidation();
+    const { resetValidation } = this.props;
+    resetValidation();
   }
 
   runValidation = (checkFields) => {
@@ -125,35 +137,46 @@ class IssueModal extends Component {
   }
 
   onUpdate = () => {
+    const {
+      updateIssueEntry,
+      issue,
+      issueGet,
+      onClose
+    } = this.props;
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
-      this.props.updateIssueEntry(this.props.issueEntry, issueEntry)
+      // eslint-disable-next-line
+      updateIssueEntry(this.props.issueEntry, issueEntry)
         .then((ret) => {
-          if (!this.props.issue.error) {
+          if (!issue.error) {
             const unchanged = ret && ret.unchanged;
-            if (!unchanged){
-              this.props.issueGet(this.props.issueEntry.id);
+            if (!unchanged) {
+              issueGet(issueEntry.id);
             }
-            this.props.onClose();
+            onClose();
           }
         });
     } else {
-      this.props.onClose();
+      onClose();
     }
   }
 
-  onDueDateChange = date => this.setState({
-    issueEntry: {
-      ...this.state.issueEntry,
-      due_date: date != null ? date.toISOString().split('T')[0] : null,
-    },
-    wasModified: true
-  });
-
-  onProgressChange = (progress) => {
+  onDueDateChange = (date) => {
+    const { issueEntry } = this.state;
     this.setState({
       issueEntry: {
-        ...this.state.issueEntry,
+        ...issueEntry,
+        due_date: date != null ? date.toISOString().split('T')[0] : null,
+      },
+      wasModified: true
+    });
+  }
+
+  onProgressChange = (progress) => {
+    const { issueEntry } = this.state;
+    this.setState({
+      issueEntry: {
+        ...issueEntry,
         progress,
       },
       wasModified: true
@@ -161,11 +184,12 @@ class IssueModal extends Component {
   }
 
   onEstimatedDurationChange = ({ target: { value } }) => {
-    value = '' + value
+    const duration = `${value}`;
+    const { issueEntry } = this.state;
     this.setState({
       issueEntry: {
-        ...this.state.issueEntry,
-        estimated_duration: value.replace(',', '.'),
+        ...issueEntry,
+        estimated_duration: duration.replace(',', '.'),
       },
       wasModified: true
     });
@@ -177,20 +201,26 @@ class IssueModal extends Component {
   }
 
   render() {
-    const { isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressWithStep1 } = this.props;
-    const { issueEntry, wasModified, progress_info, instance } = this.state;
-    const { progress, estimated_duration, due_date, children } = issueEntry;
+    const {
+      isUserAuthor, isOpen, isEditable, onClose, theme, issue, issueEntry: propsIssueEntry, progressWithStep1
+    } = this.props;
+    const {
+      issueEntry, wasModified, progress_info, instance
+    } = this.state;
+    const {
+      progress, estimated_duration, due_date, children
+    } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
-        progress: issue.error.details.find(error => error.path[0] === 'progress'),
-        estimated_duration: issue.error.details.find(error => error.path[0] === 'estimated_duration'),
-        due_date: issue.error.details.find(error => error.path[0] === 'due_date'),
+        progress: issue.error.details.find((error) => error.path[0] === 'progress'),
+        estimated_duration: issue.error.details.find((error) => error.path[0] === 'estimated_duration'),
+        due_date: issue.error.details.find((error) => error.path[0] === 'due_date'),
       }
       : {};
     let estimatedDurationInfo = '';
-    if (estimated_duration){
-      let hours = durationToHours(estimated_duration);
-      if (hours > 0){
+    if (estimated_duration) {
+      const hours = durationToHours(estimated_duration);
+      if (hours > 0) {
         estimatedDurationInfo = `${Number(hours.toFixed(2))} hours`;
       }
     }
@@ -202,12 +232,16 @@ class IssueModal extends Component {
         needConfirm={wasModified}
         center={true}
       >
-        <Fragment>
+        <>
           <Label htmlFor="assignee" label="Assignee">
             <div name="assignee">{propsIssueEntry.assigned_to.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
-            <div name="issue">#{propsIssueEntry.id}&nbsp;{propsIssueEntry.subject}</div>
+            <div name="issue">
+              #
+              {propsIssueEntry.id}
+              {propsIssueEntry.subject}
+            </div>
           </Label>
           <FlexRow>
             <DurationField>
@@ -244,7 +278,8 @@ class IssueModal extends Component {
                   {this.getErrorMessage(validationErrors.due_date)}
                 </ErrorMessage>
               </div>
-              )}
+              )
+}
           </FlexRow>
           {
             !children && (
@@ -253,14 +288,14 @@ class IssueModal extends Component {
                   <Label htmlFor="progress" label="Progress">
                     <FlexRow>
                       <Slider
-                        style={{width:180}}
+                        style={{ width: 180 }}
                         // bugfix: avoid sloppy dragging (value/onChange) using this key
                         key={instance}
                         name="progress"
-                        tipProps={{placement:'right'}}
-                        handleStyle={{borderColor:theme.green}}
+                        tipProps={{ placement: 'right' }}
+                        handleStyle={{ borderColor: theme.green }}
                         onChange={(value) => this.setState({ progress_info: value, wasModified: true })}
-                        trackStyle={{backgroundColor:theme.green}}
+                        trackStyle={{ backgroundColor: theme.green }}
                         tipFormatter={(value) => `${value}%`}
                         min={0}
                         max={100}
@@ -277,19 +312,20 @@ class IssueModal extends Component {
                   </ErrorMessage>
                 </div>
               </FlexRow>
-            )}
+            )
+}
           <OptionButtons>
             <Button
               id="btn-update"
               onClick={this.onUpdate}
               disabled={issue.isFetching}
-              palette='success'
+              palette="success"
             >
               Submit
             </Button>
             { issue.isFetching && (<ProcessIndicator />) }
           </OptionButtons>
-        </Fragment>
+        </>
       </Modal>
     );
   }
@@ -302,6 +338,7 @@ IssueModal.propTypes = {
     error: PropTypes.instanceOf(Error)
   }).isRequired,
   issueEntry: PropTypes.shape({
+    progress: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     subject: PropTypes.string.isRequired,
     journals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -340,7 +377,8 @@ IssueModal.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired
-    }))
+    })),
+    children: PropTypes.array
   }),
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
@@ -350,14 +388,15 @@ IssueModal.propTypes = {
   validateBeforeUpdate: PropTypes.func.isRequired,
   resetValidation: PropTypes.func.isRequired,
   progressWithStep1: PropTypes.bool.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   issue: state.issue,
   progressWithStep1: state.settings.progressWithStep1,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   issueGet: (id) => dispatch(actions.issues.get(id)),
   updateIssueEntry: (issueEntry, changes) => dispatch(actions.issue.update(issueEntry, changes)),
   validateBeforeUpdate: (changes, checkFields) => dispatch(actions.issue.validateBeforeUpdate(changes, checkFields)),

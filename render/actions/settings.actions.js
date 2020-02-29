@@ -8,7 +8,7 @@ export const SETTINGS_ISSUE_HEADERS = 'SETTINGS_ISSUE_HEADERS';
 export const SETTINGS_BACKUP = 'SETTINGS_BACKUP';
 export const SETTINGS_RESTORE = 'SETTINGS_RESTORE';
 
-const setAdvancedTimerControls = advancedTimerControls => (dispatch, getState) => {
+const setAdvancedTimerControls = (advancedTimerControls) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_ADVANCED_TIMER_CONTROLS,
@@ -19,7 +19,7 @@ const setAdvancedTimerControls = advancedTimerControls => (dispatch, getState) =
     }
   });
 };
-const setProgressWithStep1 = progressWithStep1 => (dispatch, getState) => {
+const setProgressWithStep1 = (progressWithStep1) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_PROGRESS_SLIDER_STEP_1,
@@ -30,7 +30,7 @@ const setProgressWithStep1 = progressWithStep1 => (dispatch, getState) => {
     }
   });
 };
-const setDiscardIdleTime = discardIdleTime => (dispatch, getState) => {
+const setDiscardIdleTime = (discardIdleTime) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_DISCARD_IDLE_TIME,
@@ -41,7 +41,7 @@ const setDiscardIdleTime = discardIdleTime => (dispatch, getState) => {
     }
   });
 };
-const setIdleBehavior = idleBehavior => (dispatch, getState) => {
+const setIdleBehavior = (idleBehavior) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_IDLE_BEHAVIOR,
@@ -52,7 +52,7 @@ const setIdleBehavior = idleBehavior => (dispatch, getState) => {
     }
   });
 };
-const setShowClosedIssues = showClosed => (dispatch, getState) => {
+const setShowClosedIssues = (showClosed) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_SHOW_CLOSED_ISSUES,
@@ -63,7 +63,7 @@ const setShowClosedIssues = showClosed => (dispatch, getState) => {
     }
   });
 };
-const setUseColors = useColors => (dispatch, getState) => {
+const setUseColors = (useColors) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_USE_COLORS,
@@ -74,7 +74,7 @@ const setUseColors = useColors => (dispatch, getState) => {
     }
   });
 };
-const setIssueHeaders = data => (dispatch, getState) => {
+const setIssueHeaders = (data) => (dispatch, getState) => {
   const { user } = getState();
   dispatch({
     type: SETTINGS_ISSUE_HEADERS,

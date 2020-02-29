@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ const Table = styled.table`
   position: relative;
   min-height: 200px;
   width: 100%;
-  border: 2px solid ${props => props.theme.bgDark};
+  border: 2px solid ${(props) => props.theme.bgDark};
   border-spacing: 0px;
 
   tbody {
@@ -26,16 +26,16 @@ const Table = styled.table`
 
     tr {
       td {
-        border-bottom: 2px solid ${props => props.theme.bgDark};
+        border-bottom: 2px solid ${(props) => props.theme.bgDark};
         padding: 15px 5px;
-        transition: background ease ${props => props.theme.transitionTime};
+        transition: background ease ${(props) => props.theme.transitionTime};
       }
 
       &:hover {
         cursor: pointer;
         
         td {
-          background: ${props => props.theme.bgDark};
+          background: ${(props) => props.theme.bgDark};
         }
       }
 
@@ -50,12 +50,12 @@ const Table = styled.table`
     tr {
       th {
         padding: 15px 5px;
-        background: ${props => props.theme.bgDark};
-        border-bottom: 2px solid ${props => props.theme.bgDarker};
-        transition: color ease ${props => props.theme.transitionTime};
+        background: ${(props) => props.theme.bgDark};
+        border-bottom: 2px solid ${(props) => props.theme.bgDarker};
+        transition: color ease ${(props) => props.theme.transitionTime};
         &:hover {
           cursor: pointer;
-          color: ${props => props.theme.main};
+          color: ${(props) => props.theme.main};
         }
   
         svg {
@@ -80,25 +80,25 @@ const ProcessIndicatorContainer = styled.tr`
 
 const ColorfulSpan = styled.span`
   ${
-    props => props.color
-    ? css `
+  (props) => (props.color
+    ? css`
       padding-bottom: 2px;
       background: linear-gradient(to bottom,transparent 0,transparent 90%,${props.color} 90%,${props.color} 100%);
     `
-    : null
-  }
+    : null)
+}
 `;
 
 const colorMap = {
-  'closed': 'red',
-  'high': 'yellow',
-  'urgent': 'red',
-  'immediate': 'red',
-  'critical': 'red',
-  'open': 'green',
-  'low': 'green',
-  'pending': 'yellow',
-  'normal': 'yellow'
+  closed: 'red',
+  high: 'yellow',
+  urgent: 'red',
+  immediate: 'red',
+  critical: 'red',
+  open: 'green',
+  low: 'green',
+  pending: 'yellow',
+  normal: 'yellow'
 };
 
 class IssuesTable extends Component {
@@ -125,10 +125,6 @@ class IssuesTable extends Component {
     }
   }
 
-  showIssueDetails(id) {
-    this.props.history.push(`/app/issue/${id}/`);
-  }
-
   /**
    * @param value to be used (@param mapping is discarded)
    */
@@ -150,66 +146,79 @@ class IssuesTable extends Component {
     fetchIssuePage(page + 1);
   }
 
+  showIssueDetails(id) {
+    const { history } = this.props;
+    history.push(`/app/issue/${id}/`);
+  }
+
   render() {
     const { issueHeaders, issues } = this.props;
     const { sortBy, sortDirection } = this.state;
     const userTasks = issues.data;
     return (
-      <Fragment>
+      <>
         { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
         <Table>
           <thead>
-          <tr>
-            {issueHeaders.map(header => (
-              <th
-                key={header.value}
-                onClick={this.sortTable(header.value)}
-              >
-                {header.label}&nbsp;
-                {sortBy === header.value && sortDirection === 'asc' && (
+            <tr>
+              {issueHeaders.map((header) => (
+                <th
+                  key={header.value}
+                  onClick={this.sortTable(header.value)}
+                >
+                  {header.label}
+&nbsp;
+                  {sortBy === header.value && sortDirection === 'asc' && (
                   <SortAscendingIcon size={14} />
-                )}
-                {sortBy === header.value && sortDirection === 'desc' && (
+                  )}
+                  {sortBy === header.value && sortDirection === 'desc' && (
                   <SortDescendingIcon size={14} />
-                )}
-              </th>
-            ))}
-          </tr>
+                  )}
+                </th>
+              ))}
+            </tr>
           </thead>
           <tbody>
-          <InfiniteScroll
-            load={this.loadIssuePage}
-            isEnd={userTasks.length === issues.totalCount}
-            hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
-            container={window}
-            loadIndicator={<ProcessIndicatorContainer><td><ProcessIndicator className="container" /></td></ProcessIndicatorContainer>}
-            immediate={true}
-          >
-            {userTasks.map(task => (
-              <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
-                {
-                  issueHeaders.map(header => {
+            <InfiniteScroll
+              load={this.loadIssuePage}
+              isEnd={userTasks.length === issues.totalCount}
+              hasMore={!issues.isFetching && !issues.error && userTasks.length < issues.totalCount}
+              container={window}
+              loadIndicator={(
+                <ProcessIndicatorContainer>
+                  <td>
+                    <ProcessIndicator className="container" />
+                  </td>
+                </ProcessIndicatorContainer>
+              )}
+              immediate={true}
+            >
+              {userTasks.map((task) => (
+                <tr key={task.id} onClick={this.showIssueDetails.bind(this, task.id)}>
+                  {
+                  issueHeaders.map((header) => {
                     const date = header.value === 'due_date' && _get(task, header.value);
                     let forcedValue;
-                    let estimated_hours = header.value === 'estimated_hours' && _get(task, header.value);
-                    if (estimated_hours){
-                      forcedValue = Number(estimated_hours.toFixed(2))
+                    const estimated_hours = header.value === 'estimated_hours' && _get(task, header.value);
+                    if (estimated_hours) {
+                      forcedValue = Number(estimated_hours.toFixed(2));
                     }
                     return (
                       <td
                         key={header.value}
-                        className={header.value === 'due_date' ? header.value : ""}
+                        className={header.value === 'due_date' ? header.value : ''}
                       >
-                        { date ? (<Date date={date}/>) : this.paint(task, header.value, forcedValue) }
+                        { date ? (<Date date={date} />) : this.paint(task, header.value, forcedValue) }
                       </td>
-                    )})
+                    );
+                  })
                 }
-              </tr>
-            ))}
-          </InfiniteScroll>
+                </tr>
+              ))}
+            </InfiniteScroll>
           </tbody>
         </Table>
-      </Fragment>
+      </>
     );
   }
 }
@@ -217,6 +226,11 @@ class IssuesTable extends Component {
 IssuesTable.propTypes = {
   issues: PropTypes.shape({
     userTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    page: PropTypes.number,
+    data: PropTypes.array.isRequired,
+    error: PropTypes.instanceOf(Error),
+    isFetching: PropTypes.bool.isRequired,
+    totalCount: PropTypes.number.isRequired
   }).isRequired,
   useColors: PropTypes.bool.isRequired,
   issueHeaders: PropTypes.arrayOf(PropTypes.shape({
@@ -225,10 +239,12 @@ IssuesTable.propTypes = {
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
   onSort: PropTypes.func.isRequired,
-  fetchIssuePage: PropTypes.func.isRequired
+  fetchIssuePage: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   useColors: state.settings.useColors,
   issues: state.issues.all,
   issueHeaders: state.settings.issueHeaders,

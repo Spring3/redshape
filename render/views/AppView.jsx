@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
+// eslint-disable-next-line
+import { ipcRenderer } from 'electron';
 
 import actions from '../actions';
 import Navbar from '../components/Navbar';
@@ -15,9 +17,7 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 import storage from '../../common/storage';
 
-import { hoursToDuration } from "../datetime";
-
-import IPC from '../ipc';
+import { hoursToDuration } from '../datetime';
 
 const Grid = styled.div`
   height: 100%;
@@ -44,13 +44,9 @@ class AppView extends Component {
     this.modifyUserMenu();
   }
 
-  modifyUserMenu(){
-    const { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } = this.props;
-    IPC.send('menu', { settings: { idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1 } })
-  }
-
   componentWillMount() {
-    this.props.getProjectData();
+    const { getProjectData } = this.props;
+    getProjectData();
   }
 
   onTrackingStop = (trackedIssue, value, comments) => {
@@ -84,13 +80,30 @@ class AppView extends Component {
   }
 
   closeTimeEntryModal = () => {
+    const { resetTimer } = this.props;
     this.setState({ showTimeEntryModal: false, timeEntry: null });
-    this.props.resetTimer();
+    resetTimer();
+  }
+
+  modifyUserMenu() {
+    const {
+      idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
+    } = this.props;
+    ipcRenderer.send('menu', {
+      settings: {
+        idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
+      }
+    });
   }
 
   render() {
     const { showTimeEntryModal, timeEntry, activities } = this.state;
-    const { userId, api_key, match } = this.props;
+    const {
+      userId,
+      api_key,
+      match,
+      history
+    } = this.props;
 
     return (
       <Grid>
@@ -98,11 +111,11 @@ class AppView extends Component {
         { (!userId || !api_key) ? (<Redirect to="/" />) : null }
         <Navbar />
         <Content>
-          <Route exact path={`${match.path}/summary`} component={props => <SummaryPage {...props}/>} />
-          <Route path={`${match.path}/issue/:id`} component={props => <IssueDetailsPage {...props}/>} />
+          <Route exact path={`${match.path}/summary`} component={(props) => <SummaryPage {...props} />} />
+          <Route path={`${match.path}/issue/:id`} component={(props) => <IssueDetailsPage {...props} />} />
           <Timer
             onStop={this.onTrackingStop}
-            history={this.props.history}
+            history={history}
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
@@ -139,9 +152,10 @@ AppView.propTypes = {
   discardIdleTime: PropTypes.bool.isRequired,
   advancedTimerControls: PropTypes.bool.isRequired,
   progressWithStep1: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   userName: state.user.name,
   api_key: state.user.api_key,
@@ -152,7 +166,7 @@ const mapStateToProps = state => ({
   progressWithStep1: state.settings.progressWithStep1,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset())

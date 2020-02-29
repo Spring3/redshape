@@ -1,6 +1,7 @@
 const cleanStack = require('clean-stack');
 const ensureError = require('ensure-error');
 const isDev = require('electron-is-dev');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { app, dialog, clipboard } = require('electron');
 const logger = require('electron-log');
 
@@ -63,7 +64,7 @@ module.exports = (options = {}) => {
     Object.assign(config, options);
   }
 
-  process.on('uncaughtException', error => handleError('Unhandled Error', error));
+  process.on('uncaughtException', (error) => handleError('Unhandled Error', error));
   process.on('unhandledRejection', (error) => {
     if (error.message !== 'net::ERR_INTERNET_DISCONNECTED') {
       handleError('Unhandled Promise Rejection', error);

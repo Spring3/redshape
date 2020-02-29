@@ -7,19 +7,19 @@ import styled, { css, withTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
+import EditIcon from 'mdi-react/EditIcon';
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
-import IssueModal from "../../components/IssueModal";
+import IssueModal from '../../components/IssueModal';
 import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
 
-import EditIcon from 'mdi-react/EditIcon';
-import Button, { GhostButton } from "../../components/Button";
+import { GhostButton } from '../../components/Button';
 
 import actions from '../../actions';
 
@@ -62,15 +62,10 @@ const ColumnList = styled.ul`
   }
 `;
 
-const FlexButton = styled(Button) `
-  display: inline-flex;
-  align-items: center;
-`;
-
 const SmallNotice = styled.p`
   font-size: 12px;
   margin-top: 0px;
-  color: ${props => props.theme.minorText};
+  color: ${(props) => props.theme.minorText};
 
   a {
     font-size: inherit !important;
@@ -87,7 +82,7 @@ const Wrapper = styled.div`
 const IconButton = styled(GhostButton)`
   svg {
     border-radius: 3px;
-    ${({theme}) => css`
+    ${({ theme }) => css`
       color: ${theme.main};
       border: 2px solid transparent;
       transition: all ease ${theme.transitionTime};
@@ -121,6 +116,30 @@ const IssueDetails = styled.div`
   flex-grow: 1;
 `;
 
+const Subtasks = styled.div`
+  display: inline-block;
+`;
+
+const Subtask = styled.div`
+  padding: 10px 5px;
+  margin-right: 1rem;
+  margin-bottom: .75rem;
+  box-shadow: 0px 0px 5px ${(props) => props.theme.shadow};
+  border-radius: 3px;
+`;
+
+const CustomFields = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const FlexWrapper = styled(Wrapper)`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
 class IssueDetailsPage extends Component {
   constructor(props) {
     super(props);
@@ -138,31 +157,32 @@ class IssueDetailsPage extends Component {
   }
 
   componentWillUnmount() {
-    this.props.resetSelectedIssue();
+    const { resetSelectedIssue } = this.props;
+    resetSelectedIssue();
   }
 
   showTimeEntryModal = (timeEntry) => {
-    const { selectedIssueState, userId, userName, projects } = this.props;
+    const {
+      selectedIssueState, userId, userName, projects
+    } = this.props;
     const selectedIssue = selectedIssueState.data;
-    const selectedTimeEntry = timeEntry
-      ? timeEntry
-      : {
-        user: {
-          id: userId,
-          name: userName
-        },
-        issue: {
-          id: selectedIssue.id
-        },
-        activity: {},
-        project: {
-          id: selectedIssue.project.id,
-          name: selectedIssue.project.name
-        },
-        hours: undefined,
-        duration: "",
-        spent_on: moment().format('YYYY-MM-DD')
-      };
+    const selectedTimeEntry = timeEntry || {
+      user: {
+        id: userId,
+        name: userName
+      },
+      issue: {
+        id: selectedIssue.id
+      },
+      activity: {},
+      project: {
+        id: selectedIssue.project.id,
+        name: selectedIssue.project.name
+      },
+      hours: undefined,
+      duration: '',
+      spent_on: moment().format('YYYY-MM-DD')
+    };
     selectedTimeEntry.issue.name = selectedIssue.subject;
     const activities = _.get(projects[selectedIssue.project.id], 'activities', []);
     this.setState({
@@ -182,49 +202,64 @@ class IssueDetailsPage extends Component {
     });
   }
 
-  closeIssueModal = (changes) => {
+  closeIssueModal = () => {
     this.setState({
       showIssueModal: false
-    })
+    });
   }
 
   openIssueModal = () => () => {
-    this.setState({ showIssueModal: true })
+    this.setState({ showIssueModal: true });
   }
 
-  getIssueComments = () => this.props.selectedIssueState.data.journals.filter(entry => entry.notes)
+  getIssueComments = () => {
+    const { selectedIssueState } = this.props;
+    return selectedIssueState.data.journals.filter((entry) => entry.notes);
+  }
 
   render() {
-    const { selectedIssueState, history, userId, theme, postComments } = this.props;
-    const { selectedTimeEntry, showTimeEntryModal, showIssueModal, activities } = this.state;
+    const {
+      selectedIssueState, history, userId, theme, postComments
+    } = this.props;
+    const {
+      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
+    } = this.state;
     const selectedIssue = selectedIssueState.data;
     const cfields = selectedIssue.custom_fields;
-    const children = selectedIssue.children;
+    // eslint-disable-next-line react/prop-types
+    const subtasks = selectedIssue.children;
     return selectedIssue.id
       ? (
         <Section>
           <Flex>
             <IssueDetails>
               <Buttons className="buttons">
+                { /* eslint-disable-next-line react/jsx-no-bind */ }
                 <BackButton onClick={history.goBack.bind(this)}>
                   <ArrowLeftIcon size={30} />
                 </BackButton>
-                <FlexButton onClick={this.openIssueModal()}>
-                  <EditIcon size={22} />
-                  <span>&nbsp;Edit</span>
-                </FlexButton>
               </Buttons>
               <h2>
-                <span>#{selectedIssue.id}&nbsp;</span>
+                <span>
+                  #
+                  {selectedIssue.id}
+&nbsp;
+                </span>
                 <span>{selectedIssue.subject}</span>
+                <IconButton onClick={this.openIssueModal()}>
+                  <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
+                </IconButton>
               </h2>
               <SmallNotice>
                 Created by&nbsp;
-                  <Link>{selectedIssue.author.name}</Link>
+                <Link>{selectedIssue.author.name}</Link>
                 <DateComponent date={selectedIssue.created_on} />
               </SmallNotice>
               {selectedIssue.closed_on && (
-                <SmallNotice>Closed <DateComponent date={selectedIssue.closed_on} /></SmallNotice>
+                <SmallNotice>
+                  Closed
+                  <DateComponent date={selectedIssue.closed_on} />
+                </SmallNotice>
               )}
               <Wrapper>
                 <ColumnList>
@@ -253,19 +288,10 @@ class IssueDetailsPage extends Component {
                     <div>
                       <Progressbar
                         percent={selectedIssue.done_ratio}
-                        mode="progress-gradient"
                         background={theme.main}
                       />
                     </div>
                   </li>
-                  {
-                    children && (
-                      <li><div>Children issues:</div><div>{children.map((el) => (<Link onClick={() => this.props.history.push(`/app/issue/${el.id}/`)}>{`#${el.id}`}</Link>))}</div></li>
-                    )
-                  }
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 == 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
-                  }
                 </ColumnList>
                 <ColumnList>
                   <li>
@@ -282,20 +308,44 @@ class IssueDetailsPage extends Component {
                   </li>
                   <li>
                     <div>Estimation: </div>
-                    <div>{selectedIssue.estimated_hours ? `${selectedIssue.estimated_hours.toFixed(2)} h` : undefined}
-                    {
-                      (selectedIssue.total_estimated_hours != selectedIssue.estimated_hours && selectedIssue.total_estimated_hours >= 0) && (
-                        <span> (Total: {selectedIssue.total_estimated_hours.toFixed(2)} h)</span>
-                      )
-                    }
+                    <div>
+                      {
+                        selectedIssue.estimated_hours
+                          ? `${selectedIssue.estimated_hours.toFixed(2)} h`
+                          : undefined
+                      }
+                      {
+                        (
+                          selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours
+                          && selectedIssue.total_estimated_hours >= 0
+                        ) && (
+                          <span>
+                            {' '}
+                            (Total:
+                            {selectedIssue.total_estimated_hours.toFixed(2)}
+                            {' '}
+                            h)
+                          </span>
+                        )
+                      }
                     </div>
                   </li>
                   <li>
                     <div>Time spent: </div>
-                    <div>{selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                    <div>
+                      {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
                       {
-                        (selectedIssue.total_spent_hours != selectedIssue.spent_hours && selectedIssue.total_spent_hours >= 0) && (
-                          <span> (Total: {selectedIssue.total_spent_hours.toFixed(2)} h)</span>
+                        (
+                          selectedIssue.total_spent_hours !== selectedIssue.spent_hours
+                          && selectedIssue.total_spent_hours >= 0
+                        ) && (
+                          <span>
+                            {' '}
+                            (Total:
+                            {selectedIssue.total_spent_hours.toFixed(2)}
+                            {' '}
+                            h)
+                          </span>
                         )
                       }
                     </div>
@@ -310,14 +360,46 @@ class IssueDetailsPage extends Component {
                       />
                     </div>
                   </li>
-                  {
-                    children && (<li></li>)
-                  }
-                  {
-                    cfields && cfields.map((el, i) => (i % 2 != 0) ? (<li><div>{el.name}:</div><div>{el.value}</div></li>) : undefined)
-                  }
                 </ColumnList>
               </Wrapper>
+              <FlexWrapper>
+                { subtasks && subtasks.length && (
+                  <ColumnList>
+                    <h3>Subtasks:</h3>
+                    <Subtasks>
+                      {
+                        subtasks.map((subtask, i) => (
+                          <Subtask>
+                            <Link
+                              key={i}
+                              onClick={() => history.push(`/app/issue/${subtask.id}/`)}
+                            >
+                              {`#${subtask.id} - ${subtask.subject}`}
+                            </Link>
+                          </Subtask>
+                        ))
+                      }
+                    </Subtasks>
+                  </ColumnList>
+                )}
+                {cfields && cfields.length && (
+                  <ColumnList>
+                    <h3>Custom Fields:</h3>
+                    <CustomFields>
+                      {cfields.map((el, i) => (
+                        <li key={i}>
+                          <div>
+                            {el.name}
+                            :
+                            {' '}
+                          </div>
+                          <div>{el.value}</div>
+                        </li>
+                      ))}
+                    </CustomFields>
+                  </ColumnList>
+                )}
+              </FlexWrapper>
               <div>
                 <h3>Description</h3>
                 <MarkdownText markdownText={selectedIssue.description} />
@@ -360,6 +442,10 @@ class IssueDetailsPage extends Component {
 IssueDetailsPage.propTypes = {
   selectedIssueState: PropTypes.shape({
     data: PropTypes.shape({
+      children: PropTypes.array,
+      created_on: PropTypes.string,
+      closed_on: PropTypes.string,
+      estimated_hours: PropTypes.number,
       id: PropTypes.number.isRequired,
       subject: PropTypes.string.isRequired,
       journals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -407,18 +493,22 @@ IssueDetailsPage.propTypes = {
   userName: PropTypes.string.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
-  resetSelectedIssue: PropTypes.func.isRequired
+  resetSelectedIssue: PropTypes.func.isRequired,
+  match: PropTypes.object,
+  theme: PropTypes.object,
+  projects: PropTypes.object,
+  history: PropTypes.object
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   projects: state.projects.data,
   userId: state.user.id,
   userName: state.user.name,
   selectedIssueState: state.issues.selected
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchIssueDetails: issueId => dispatch(actions.issues.get(issueId)),
+const mapDispatchToProps = (dispatch) => ({
+  fetchIssueDetails: (issueId) => dispatch(actions.issues.get(issueId)),
   postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });

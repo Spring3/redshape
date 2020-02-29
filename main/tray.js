@@ -1,118 +1,107 @@
-const { Tray, Menu, ipcMain, nativeImage } = require('electron');
+const {
+  Tray, Menu, ipcMain, app, nativeImage
+// eslint-disable-next-line import/no-extraneous-dependencies
+} = require('electron');
+const { truncate } = require('lodash');
 
-let NAME;
-
+let instance;
 let mainWindow;
-let windowConfig;
 
-let tray;
-let contextMenu;
-
-let icons;
-
-let hideWhenClose = true;
-
-let mainWindowHidden = false;
-let statusLabel;
-let timerEnabled;
-let timerLabel;
-let timerPaused;
-
-const showMenuItem = { label: 'Show window', click: () => mainWindow.show() };
-const pauseTimerMenuItem = { label: 'Pause timer', click: () => mainWindow.webContents.send('timer', { action: 'pause', mainWindowHidden }) };
-const resumeTimerMenuItem = { label: 'Resume timer', click: () => mainWindow.webContents.send('timer', { action: 'resume', mainWindowHidden }) };
-const hideMenuItem = { label: 'Hide in tray', role: 'close' };
 const quitMenuItem = { role: 'quit' };
 const sepMenuItem = { type: 'separator' };
-
-const updateTrayMenu = () => {
-  const template = [];
-  if (timerEnabled) {
-    if (timerPaused) {
-      resumeTimerMenuItem.label = timerLabel;
-      template.push(resumeTimerMenuItem);
-      tray.setImage(icons.pause);
-    }else{
-      pauseTimerMenuItem.label = timerLabel;
-      template.push(pauseTimerMenuItem);
-      tray.setImage(icons.play);
-    }
-    template.push(sepMenuItem);
-  }else{
-    tray.setImage(icons.default);
-  }
-  if (mainWindowHidden) {
-    template.push(showMenuItem);
-  }else{
-    template.push(hideMenuItem);
-  }
-  template.push(quitMenuItem);
-  contextMenu = Menu.buildFromTemplate(template);
-  tray.setContextMenu(contextMenu);
-  tray.setToolTip(statusLabel);
+const pauseTimerMenuItem = {
+  label: 'Pause timer',
+  click: () => mainWindow.webContents.send(
+    'timer', { action: 'pause', mainWindowHidden: !instance.isWindowOpen() }
+  )
+};
+const resumeTimerMenuItem = {
+  label: 'Resume timer',
+  click: () => mainWindow.webContents.send(
+    'timer', { action: 'resume', mainWindowHidden: !instance.isWindowOpen() }
+  )
 };
 
+function TrayHandler(windowConfig) {
+  let hideWhenClosed = true;
+  let appWindowOpen = false;
+  let timerEnabled = false;
+  let timerPaused = false;
+  let timerLabel = '';
+  let statusLabel = app.name;
+  let tray;
+  let contextMenu;
 
-ipcMain.on('timer-info', (ev, {isEnabled, isPaused, issue}) =>  {
-  statusLabel = NAME;
-  timerEnabled = false;
-  if (isEnabled){
-    let subject = issue.subject;
-    const subjectLength = 20;
-    if (subject.length > (subjectLength + 3)){
-      subject = subject.substr(0, subjectLength) + '...';
+  const update = () => {
+    const template = [];
+    if (timerEnabled) {
+      if (timerPaused) {
+        resumeTimerMenuItem.label = timerLabel;
+        template.push(resumeTimerMenuItem);
+        tray.setImage(windowConfig.iconPause);
+      } else {
+        pauseTimerMenuItem.label = timerLabel;
+        template.push(pauseTimerMenuItem);
+        tray.setImage(windowConfig.iconPlay);
+      }
+      template.push(sepMenuItem);
+    } else {
+      tray.setImage(windowConfig.iconTray);
     }
-    timerEnabled = true;
-    timerPaused = isPaused;
-    timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${issue.id} ${subject}`;
-    statusLabel = `${NAME} #${issue.id} ${subject} (${isPaused ? 'paused' : 'running'})`;
-  }
-  updateTrayMenu();
-});
-
-module.exports = {
-  setupTray({app, mainWindow: window, NAME: appName, statusLabel: label, windowConfig: config}) {
-    mainWindow = window;
-    windowConfig = config;
-
-    NAME = appName;
-    statusLabel = NAME;
-
-    app.on('before-quit', () => {
-      hideWhenClose = false; // other apps/OS can quit it
-    });
-
-    icons = {
-      default: nativeImage.createFromPath(windowConfig.icon),
-      pause: nativeImage.createFromPath(windowConfig.iconPause),
-      play: nativeImage.createFromPath(windowConfig.iconPlay),
-    };
-
-    tray = new Tray(icons.default);
-    contextMenu = Menu.buildFromTemplate([ hideMenuItem, quitMenuItem ]);
+    template.push(quitMenuItem);
+    contextMenu = Menu.buildFromTemplate(template);
     tray.setContextMenu(contextMenu);
     tray.setToolTip(statusLabel);
+  };
 
-    mainWindow.on('close', (ev) => {
-      if (hideWhenClose) {
-        ev.preventDefault();
-        mainWindow.hide();
-        ev.returnValue = false;
-      }else{
-        mainWindow.webContents.send('window', {action: 'quit'});
+  const setupTimerListener = () => {
+    ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
+      statusLabel = app.name;
+      timerEnabled = false;
+      if (isEnabled) {
+        const trunkatedSubject = truncate(issue.subject, 20);
+        timerEnabled = true;
+        timerPaused = isPaused;
+        timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${issue.id} ${trunkatedSubject}`;
+        statusLabel = `#${issue.id} ${trunkatedSubject} (${isPaused ? 'paused' : 'running'})`;
       }
+      update();
     });
+  };
 
-    mainWindow.on('show', (ev) => {
-      mainWindowHidden = false;
-      mainWindow.webContents.send('window', { action: 'show' });
-      updateTrayMenu();
-    });
+  const api = {
+    setHideWhenClosed: (val) => {
+      hideWhenClosed = val;
+    },
+    willHideWhenClosed: () => hideWhenClosed,
+    setAppWindowVisibility: (value) => {
+      appWindowOpen = !!value;
+    },
+    isWindowOpen: () => appWindowOpen,
+    setup: () => {
+      tray = new Tray(nativeImage.createFromPath(windowConfig.iconTray));
+      contextMenu = Menu.buildFromTemplate([quitMenuItem]);
+      tray.setContextMenu(contextMenu);
+      tray.setToolTip(statusLabel);
+      tray.on('click', () => {
+        if (!appWindowOpen) {
+          mainWindow.show();
+        }
+      });
+      setupTimerListener();
+    },
+    update
+  };
 
-    mainWindow.on('hide', (ev) => {
-      mainWindowHidden = true;
-      mainWindow.webContents.send('window', { action: 'hide' });
-      updateTrayMenu();
-    });
+  return api;
+}
+
+module.exports = {
+  getInstance: (windowConfig, window) => {
+    if (!instance) {
+      mainWindow = window;
+      instance = new TrayHandler(windowConfig);
+    }
+    return instance;
   }
 };

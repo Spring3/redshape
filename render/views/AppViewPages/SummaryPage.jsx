@@ -30,11 +30,6 @@ const IssuesSection = styled(Section)`
   grid-row: auto;
 `;
 
-// const ActivitySection = styled(Section)`
-//   grid-column: span 3;
-//   grid-row: span 4;
-// `;
-
 const OptionsGrid = styled.div`
   display: grid;
   grid-template-columns: minmax(200px, auto) 1fr;
@@ -66,14 +61,15 @@ class SummaryPage extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.showClosedIssues !== this.props.showClosedIssues) {
+    const { showClosedIssues } = this.props;
+    if (oldProps.showClosedIssues !== showClosedIssues) {
       this.fetchIssues();
     }
   }
 
   fetchIssues = (page = 0) => {
     const { search, sortBy, sortDirection } = this.state;
-    const { userId, showClosedIssues } = this.props;
+    const { userId, showClosedIssues, fetchIssues } = this.props;
     if (userId) {
       const queryFilter = new IssueFilter()
         .assignee(userId)
@@ -81,7 +77,7 @@ class SummaryPage extends Component {
         .title(search)
         .sort(sortBy, sortDirection)
         .build();
-      this.props.fetchIssues(queryFilter, page);
+      fetchIssues(queryFilter, page);
     }
   }
 
@@ -93,8 +89,8 @@ class SummaryPage extends Component {
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
-      sortBy: sortBy,
-      sortDirection: sortDirection
+      sortBy,
+      sortDirection
     }, () => this.deboucedFetch());
   }
 
@@ -109,12 +105,12 @@ class SummaryPage extends Component {
             <ColumnHeadersSelect />
             <GridRow>
               <Input
-                icon={
+                icon={(
                   <MagnifyIcon
                     xmlns="http://www.w3.org/2000/svg"
                     color={theme.main}
                   />
-                }
+                )}
                 type="text"
                 name="search"
                 placeholder="Search..."
@@ -142,12 +138,12 @@ SummaryPage.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   showClosedIssues: state.settings.showClosedIssues
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
 });
 

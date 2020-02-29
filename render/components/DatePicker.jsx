@@ -63,12 +63,12 @@ const StyledDatePicker = styled.div`
     margin-right: 1.5em;
     left: 1.5em;
     right: unset;
-    background-image: url('data:image/svg+xml;utf8,${props => props.buttonLeft}');
+    background-image: url('data:image/svg+xml;utf8,${(props) => props.buttonLeft}');
     background-size: 1.5rem;
   }
 
   .DayPicker-NavButton--next {
-    background-image: url('data:image/svg+xml;utf8,${props => props.buttonRight}');
+    background-image: url('data:image/svg+xml;utf8,${(props) => props.buttonRight}');
     background-size: 1.5rem;
   }
 
@@ -100,7 +100,7 @@ const StyledDatePicker = styled.div`
   .DayPicker-Weekday {
     display: table-cell;
     padding: 0.5em;
-    color: ${props => props.theme.normalText};
+    color: ${(props) => props.theme.normalText};
     font-weight: bold;
     text-align: center;
     font-size: 0.875em;
@@ -138,28 +138,28 @@ const StyledDatePicker = styled.div`
 
 
   .DayPicker-Day--today {
-    color: ${props => props.theme.main};
+    color: ${(props) => props.theme.main};
     font-weight: 700;
   }
 
   .DayPicker-Day--disabled {
-    color: ${props => props.theme.minorText};
+    color: ${(props) => props.theme.minorText};
     cursor: default;
   }
 
 
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
-    background-color: ${props => props.theme.normalText};
-    color: ${props => props.theme.hoverText};
+    background-color: ${(props) => props.theme.normalText};
+    color: ${(props) => props.theme.hoverText};
     font-weight: bold;
   }
 
 
   .DayPicker:not(.DayPicker--interactionDisabled)
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-      background-color: ${props => props.theme.bgDark};
-      color: ${props => props.theme.normalText};
+      background-color: ${(props) => props.theme.bgDark};
+      color: ${(props) => props.theme.normalText};
   }
 
   .DayPickerInput {
@@ -177,18 +177,28 @@ const StyledDatePicker = styled.div`
     left: 0;
     z-index: 1;
 
-    background: ${props => props.theme.bg};
+    background: ${(props) => props.theme.bg};
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 `;
 
 class DatePicker extends Component {
   render() {
-    const { theme, value, name, isDisabled, onChange } = this.props;
+    const {
+      theme, value, name, isDisabled, onChange
+    } = this.props;
     return (
       <StyledDatePicker
-        buttonLeft={encodeURIComponent(renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
-        buttonRight={encodeURIComponent(renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />))}
+        buttonLeft={
+          encodeURIComponent(
+            renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
+          )
+        }
+        buttonRight={
+          encodeURIComponent(
+            renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
+          )
+        }
       >
         <DayPickerInput
           styles={this.styles}
@@ -199,7 +209,7 @@ class DatePicker extends Component {
           }}
           disabled={isDisabled}
           onDayChange={onChange}
-          component={props => (<Input {...props} />)}
+          component={(props) => (<Input {...props} />)}
         />
       </StyledDatePicker>
     );

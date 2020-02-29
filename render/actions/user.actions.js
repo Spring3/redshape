@@ -11,7 +11,9 @@ const signout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT });
 };
 
-const checkLogin = ({ useApiKey, apiKey, username, password, redmineEndpoint }) => (dispatch) => {
+const checkLogin = ({
+  useApiKey, apiKey, username, password, redmineEndpoint
+}) => (dispatch) => {
   if (!redmineEndpoint) throw new Error('Unable to login to an undefined redmine endpoint');
 
   dispatch(notify.start(USER_LOGIN));
@@ -20,7 +22,7 @@ const checkLogin = ({ useApiKey, apiKey, username, password, redmineEndpoint }) 
   if (useApiKey) {
     headers['X-Redmine-API-Key'] = apiKey;
   } else {
-    headers['Authorization'] = `Basic ${btoa(`${username}:${password}`)}`;
+    headers.Authorization = `Basic ${btoa(`${username}:${password}`)}`;
   }
 
   return login({
@@ -32,6 +34,7 @@ const checkLogin = ({ useApiKey, apiKey, username, password, redmineEndpoint }) 
     dispatch(notify.ok(USER_LOGIN, data));
     dispatch(settingsActions.restore());
   }).catch((error) => {
+    // eslint-disable-next-line
     console.error('Error when trying to get the info about current user', error);
     dispatch(notify.nok(USER_LOGIN, error));
   });
@@ -45,6 +48,7 @@ const getCurrent = () => (dispatch) => {
     id: 'getCurrentUserInfo'
   }).then(({ data }) => dispatch(notify.ok(USER_GET_CURRENT, data)))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when trying to get the info about current user', error);
       dispatch(notify.nok(USER_GET_CURRENT, error));
     });

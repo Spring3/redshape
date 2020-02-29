@@ -1,4 +1,5 @@
 {
+    "parser": "babel-eslint",
     "env": {
         "browser": true,
         "es6": true,
@@ -27,9 +28,48 @@
         "no-underscore-dangle": [ "error", {
             "allow": ["__initialize", "__reset"]
         }],
+        "max-len": ["error", { "code": 120, "ignoreComments": true }],
+        "no-restricted-syntax": "off",
         "camelcase": [ "error", {
-            "allow": ["api_key"]
+            "allow": [
+                "api_key",
+                "time_entry",
+                "spent_on",
+                "issue_id",
+                "activity_id",
+                "user_id",
+                "spent_hours",
+                "total_spent_hours",
+                "time_entries",
+                "project_id",
+                "tracker_id",
+                "status_id",
+                "assigned_to_id",
+                "author_id",
+                "due_date",
+                "created_on",
+                "priority_id",
+                "private_notes",
+                "total_count",
+                "estimated_duration",
+                "estimated_hours",
+                "done_ratio",
+                "assigned_to",
+                "start_date",
+                "custom_fields",
+                "closed_on",
+                "progress_info"
+            ]
         }],
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "react/no-array-index-key": "off",
+        "no-mixed-operators": "off",
+        "react/forbid-prop-types": "off",
+        "react/require-default-props": "off",
+        "react/jsx-props-no-spreading": "off",
+        "max-classes-per-file": "off",
+        "no-use-before-define": "off",
         "jsx-a11y/label-has-for": [ 2, {
             "required": {
                 "every": [ "nesting", "id" ]

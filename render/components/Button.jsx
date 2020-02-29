@@ -9,14 +9,14 @@ const StyledButton = styled.button`
   outline: none;
   text-align: center;
   
-  ${props => css`
+  ${(props) => css`
     background: ${props.theme.bg};
     transition: color ease ${props.theme.transitionTime};
     transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
   `}
 
-  ${props => {
+  ${(props) => {
     if (!props.disabled) {
       return css`
         border: 2px solid ${props.palette.light};    
@@ -45,19 +45,19 @@ const StyledButton = styled.button`
       svg {
         fill: ${props.theme.minorText};
       }
-    `
+    `;
   }
 }
 `;
 
 const StyledLink = styled.a`
   text-decoration: none;
-  color: ${props => props.theme.main};
-  transition: color ease ${props => props.theme.transitionTime};
+  color: ${(props) => props.theme.main};
+  transition: color ease ${(props) => props.theme.transitionTime};
 
-  ${props => {
-      if (!props.disabled) {
-        return css`
+  ${(props) => {
+    if (!props.disabled) {
+      return css`
           &:hover {
             color: ${props.theme.mainDark};
 
@@ -66,16 +66,16 @@ const StyledLink = styled.a`
             }
           }
         `;
-      }
-      return css`
+    }
+    return css`
         color: ${props.theme.minorText};
         
         svg {
           fill: ${props.theme.minorText};
         }
-      `
-    }
+      `;
   }
+}
 
   &:active,
   &:focus,
@@ -110,7 +110,7 @@ class Button extends Component {
         };
     }
   }
- 
+
   render() {
     const {
       id,
@@ -129,7 +129,7 @@ class Button extends Component {
         onClick={onClick}
         type={type}
         theme={theme}
-        disabled={disabled} 
+        disabled={disabled}
         block={block}
         className={className}
       >
@@ -137,7 +137,7 @@ class Button extends Component {
       </StyledButton>
     );
   }
-};
+}
 
 Button.propTypes = {
   id: PropTypes.oneOfType([
@@ -146,7 +146,7 @@ Button.propTypes = {
   ]),
   theme: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['button', 'submit' ]),
+  type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   block: PropTypes.bool,
   onClick: PropTypes.func,
@@ -167,13 +167,16 @@ class GhostButton extends Component {
   preventDefault = (e) => {
     e.preventDefault();
     e.persist();
-    if (this.props.onClick && !this.props.disabled) {
-      this.props.onClick(e);
+    const { onClick, disabled } = this.props;
+    if (onClick && !disabled) {
+      onClick(e);
     }
   }
 
   render() {
-    const { id, children, disabled, className } = this.props;
+    const {
+      id, children, disabled, className
+    } = this.props;
     return (
       <StyledLink
         id={id}
@@ -186,7 +189,7 @@ class GhostButton extends Component {
       </StyledLink>
     );
   }
-};
+}
 
 GhostButton.propTypes = {
   id: PropTypes.oneOfType([

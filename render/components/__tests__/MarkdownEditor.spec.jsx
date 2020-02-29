@@ -1,111 +1,104 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
+import {
+  render, cleanup, fireEvent, act
+} from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import { ThemeProvider } from 'styled-components';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import utils from '../../../common/utils';
 import theme from '../../theme';
 
 describe('MarkdownEditor component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(
-      <ThemeProvider theme={theme}>
-        <MarkdownEditor />
-      </ThemeProvider>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
+  afterEach(cleanup);
 
   it('should display a menu and a text area', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
+    render(
       <ThemeProvider theme={theme}>
         <MarkdownEditor onChange={onChange} />
       </ThemeProvider>
     );
-    expect(wrapper.find('ul')).toBeTruthy();
-    expect(wrapper.find('textarea')).toBeTruthy();
+    expect(document.querySelector('ul')).toBeDefined();
+    const textarea = document.querySelector('textarea');
+    expect(textarea).toBeDefined();
 
-    wrapper.find('textarea').simulate('change', { target: { value: 'test' }, persist: () => {} });
-    wrapper.update();
-    expect(wrapper.find('textarea').prop('value')).toBe('test');
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('test');
+    act(() => {
+      fireEvent.change(textarea, { target: { value: 'test' }, persist: () => {} });
+    });
+    expect(textarea).toHaveValue('test');
     expect(onChange).toHaveBeenCalled();
     onChange.mockReset();
 
-    const options = wrapper.find('li');
+    const options = document.querySelectorAll('li');
     options.forEach((option) => {
-      if (option.exists('.tooltip')) {
-        option.simulate('click');
+      if (option.querySelector('.tooltip')) {
+        fireEvent.click(option);
       }
     });
-    wrapper.update();
-    // enzyme does not update the caret position, so the markdown items during tests are prepended, not appended
-    // in reality, the value will be 'test******__~~~~\r\n```\r\n\r\n```\r\n# ## ### - 1. > [](url)![](image-url)'
-    expect(wrapper.find('textarea').prop('value')).toBe('![](image-url)[](url)> 1. - ### ## # \r\n```\r\n\r\n```\r\n~~~~__******test');
+
+    let newLine;
+    if (process.platform === 'darwin' || process.platform === 'linux') {
+      newLine = '\n';
+    } else {
+      newLine = '\r\n';
+    }
+
+    // it does not update the caret position, so the markdown items during tests are prepended, not appended
+    // in reality, the value will be 'test******__~~~~\n```\n\n```\n# ## ### - 1. > [](url)![](image-url)'
+    // eslint-disable-next-line
+    expect(textarea).toHaveValue('![](image-url)[](url)> 1. - ### ## # ' + newLine + '```' + newLine + newLine + '```' + newLine + '~~~~__******test');
   });
 
   it('should display the preview when such option was clicked', () => {
-    const wrapper = mount(
+    const { queryByText } = render(
       <ThemeProvider theme={theme}>
         <MarkdownEditor initialValue="Lorem ipsum dolor" />
       </ThemeProvider>
     );
-    expect(wrapper.exists('button'));
-    expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(false);
-    wrapper.find('GhostButton').simulate('click');
-    wrapper.update();
-    expect(wrapper.find(MarkdownEditor).state('showPreview')).toBe(true);
+    const button = queryByText('Preview');
+    expect(button).toBeDefined();
+    fireEvent.click(button.parentElement);
 
-    expect(wrapper.exists('textarea')).toBe(false);
-    expect(wrapper.exists(MarkdownText)).toBe(true);
-    expect(wrapper.find(MarkdownText).prop('markdownText')).toBe(wrapper.find(MarkdownEditor).state('value'));
+    expect(document.querySelector('textarea')).toBeNull();
   });
 
   it('should submit and reset the state after it', () => {
     const onSubmit = jest.fn();
     const xssSpy = jest.spyOn(utils, 'xssFilter');
-    const wrapper = mount(
+    render(
       <ThemeProvider theme={theme}>
         <MarkdownEditor initialValue="Lorem ipsum dolor" onSubmit={onSubmit} />
       </ThemeProvider>
     );
 
     const KEY_ENTER = 13;
-    wrapper.find('textarea').simulate('keyDown', { keyCode: KEY_ENTER, metaKey: true, ctrlKey: true });
-    wrapper.update();
+    fireEvent.keyDown(document.querySelector('textarea'), { keyCode: KEY_ENTER, metaKey: true, ctrlKey: true });
     expect(onSubmit).toHaveBeenCalled();
     expect(xssSpy).toHaveBeenCalled();
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('');
   });
 
   it('should add a newline on macos if ctrl+enter was pressed', () => {
-    const wrapper = mount(
+    render(
       <ThemeProvider theme={theme}>
         <MarkdownEditor initialValue="Lorem ipsum dolor" />
       </ThemeProvider>
     );
 
     const KEY_ENTER = 13;
-    wrapper.find('textarea').simulate('keyDown', { keyCode: KEY_ENTER, ctrlKey: true });
-    wrapper.update();
-    expect(wrapper.find(MarkdownEditor).state('value')).toBe('\r\nLorem ipsum dolor');
+    fireEvent.keyDown(document.querySelector('textarea'), { keyCode: KEY_ENTER, ctrlKey: true });
+    expect(document.querySelector('textarea')).toHaveValue('\nLorem ipsum dolor');
   });
 });
 
 describe('MarkdownText component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(<MarkdownText theme={theme} markdownText="Lorem ipsum" />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it('should apply xss filter to the output', () => {
     const xssSpy = jest.spyOn(utils, 'xssFilter');
-    const wrapper = mount(
+    render(
       <MarkdownText theme={theme} markdownText="Hello <a href='javascript::alert(\'Hello\')' />" />
     );
-    expect(wrapper.exists('iframe'));
+    const iframe = document.querySelector('iframe');
+    expect(iframe).toBeDefined();
     expect(xssSpy).toHaveBeenCalled();
-    expect(wrapper.find('iframe').prop('srcDoc').indexOf('javascript::alert(\'Hello\')')).toBe(-1); // eslint-disable-line
+    expect(iframe.getAttribute('srcDoc').indexOf('javascript::alert(\'Hello\')')).toBe(-1); // eslint-disable-line
   });
 });

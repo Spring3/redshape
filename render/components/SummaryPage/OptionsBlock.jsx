@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -54,25 +53,20 @@ class OptionsBlock extends Component {
 }
 
 OptionsBlock.propTypes = {
-  userId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
   useColors: PropTypes.bool.isRequired,
   settingsShowClosedIssues: PropTypes.func.isRequired,
   settingsUseColors: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  userId: state.user.id,
+const mapStateToProps = (state) => ({
   showClosedIssues: state.settings.showClosedIssues,
   useColors: state.settings.useColors
 });
 
-const mapDispatchToProps = dispatch => ({
-  settingsShowClosedIssues: value => dispatch(actions.settings.setShowClosedIssues(value)),
-  settingsUseColors: value => dispatch(actions.settings.setUseColors(value))
+const mapDispatchToProps = (dispatch) => ({
+  settingsShowClosedIssues: (value) => dispatch(actions.settings.setShowClosedIssues(value)),
+  settingsUseColors: (value) => dispatch(actions.settings.setUseColors(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsBlock);

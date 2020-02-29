@@ -2,8 +2,8 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { HashRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { cleanup, render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
@@ -78,6 +78,7 @@ describe('SummaryPage => IssuesTable component', () => {
 
   afterEach(() => {
     axiosMock.reset();
+    cleanup();
   });
 
   afterAll(() => {
@@ -85,25 +86,10 @@ describe('SummaryPage => IssuesTable component', () => {
     reset();
   });
 
-  it('should match the snapshot', () => {
-    const store = mockStore(state);
-    const onSort = jest.fn();
-    const tree = renderer.create(
-      <Provider store={store}>
-        <HashRouter>
-          <ThemeProvider theme={theme}>
-            <IssuesTable onSort={onSort} />
-          </ThemeProvider>
-        </HashRouter>
-      </Provider>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it('allow the table to be sorted', (done) => {
     const store = mockStore(state);
     const onSort = jest.fn();
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
@@ -113,7 +99,7 @@ describe('SummaryPage => IssuesTable component', () => {
       </Provider>
     );
     // 1st row, 1st column
-    wrapper.find('tr').at(0).find('th').at(0).simulate('click');
+    fireEvent.click(document.querySelector('tr:first-child > th:first-child'));
     setImmediate(() => {
       expect(onSort).toHaveBeenCalledWith('id', 'asc');
       done();

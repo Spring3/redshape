@@ -22,7 +22,9 @@ const handleUserLogin = (state, action) => {
       const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key');
       payload.name = `${firstname} ${lastname}`;
       storage.set('user', payload);
-      return { ...state, ...payload, isFetching: false, loginError: undefined };
+      return {
+        ...state, ...payload, isFetching: false, loginError: undefined
+      };
     }
     case 'NOK': {
       return { ...state, loginError: action.data, isFetching: false };

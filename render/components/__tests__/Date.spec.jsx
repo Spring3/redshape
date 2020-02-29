@@ -33,13 +33,16 @@ describe('Date component', () => {
     expect(wrapper.exists('#tenDays')).toBe(true);
 
     expect(wrapper.find('#today').find(DateComponent).find('span > span:first-child').text()).toBe('today');
-    expect(wrapper.find('#today').find(DateComponent).find('span > span:last-child').text()).toBe(moment(today).format('MMM DD YYYY'));
+    expect(wrapper.find('#today').find(DateComponent).find('span > span:last-child').text())
+      .toBe(moment(today).format('MMM DD YYYY'));
 
     expect(wrapper.find('#yesterday').find(DateComponent).find('span > span:first-child').text()).toBe('yesterday');
-    expect(wrapper.find('#yesterday').find(DateComponent).find('span > span:last-child').text()).toBe(moment(yesterday).format('MMM DD YYYY'));
+    expect(wrapper.find('#yesterday').find(DateComponent).find('span > span:last-child').text())
+      .toBe(moment(yesterday).format('MMM DD YYYY'));
 
     expect(wrapper.find('#tenDays').find(DateComponent).find('span > span:first-child').text()).toBe('10 days ago');
-    expect(wrapper.find('#tenDays').find(DateComponent).find('span > span:last-child').text()).toBe(moment(tenDays).format('MMM DD YYYY'));
+    expect(wrapper.find('#tenDays').find(DateComponent).find('span > span:last-child').text())
+      .toBe(moment(tenDays).format('MMM DD YYYY'));
   });
 
   it('should not display if a date was not given', () => {

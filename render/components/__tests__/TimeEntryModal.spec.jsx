@@ -4,7 +4,6 @@ import configureStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { ThemeProvider } from 'styled-components';
-import toJSON from 'enzyme-to-json';
 import { mount } from 'enzyme';
 
 import * as actions from '../../actions/timeEntry.actions';
@@ -31,63 +30,6 @@ describe('TimeEntryModal Component', () => {
     reset();
   });
 
-
-  it('it should match the snapshot', () => {
-    const props = {
-      activities: [{
-        id: 1,
-        name: 'Development'
-      }, {
-        id: 2,
-        name: 'Testing'
-      }],
-      isUserAuthor: true,
-      timeEntry: {
-        activity: {
-          id: 1,
-          name: 'Development'
-        },
-        comments: 'Hello world',
-        created_on: '2011-01-01',
-        duration: '10',
-        hours: 10,
-        id: 1,
-        issue: {
-          id: 1,
-          name: 'Cover a modal with tests'
-        },
-        project: {
-          id: 1,
-          name: 'Testing Project'
-        },
-        spent_on: '2011-01-01',
-        user: {
-          id: 1,
-          name: 'John Wayne'
-        }
-      },
-      onClose: jest.fn(),
-      isOpen: true,
-      isEditable: true
-    };
-    const state = {
-      timeEntry: {
-        isFetching: false,
-        error: undefined
-      }
-    };
-    const store = mockStore(state);
-    const wrapper = mount(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <TimeEntryModal {...props} />
-        </ThemeProvider>
-      </Provider>
-    );
-    // TODO (BUG): this test gives 'JavaScript heap out of memory' (never finishes) due to
-    // the Modal/Dialog functionality inside the TimeEntryModal
-    // expect(toJSON(wrapper)).toMatchSnapshot();
-  });
 
   it('should set wasModified to true if any of the editable data was modified', () => {
     const props = {
