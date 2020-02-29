@@ -73,15 +73,6 @@ Optionally, it can automatically discard the idle time from the current timer wh
 Issue progress slider can be changed with 1% step if configured (by default is 10%). 
 Enable this if you have support in the server side (ruby, redmine) to use every percentage (33%, 81%, etc).
 
-## License
-[GPL-3.0](https://github.com/Spring3/redshape/blob/master/LICENSE.md)
-
-Created by [Daniyil Vasylenko](https://github.com/Spring3)
-
-## Contributors
-
-[rNoz](https://github.com/rnoz) from [Group4Layers](https://www.group4layers.com)
-
 ### AUR package
 
 Electron-builder does not offer aur packages. Therefore, in the directory `support/package-aur` we can build those for ArchLinux/Manjaro distributions. It is "optimized" and just installs around 50MiB, using the system electron, as it is exposed here [issue 4059](https://github.com/electron-userland/electron-builder/issues/4059).
@@ -103,7 +94,12 @@ bash support/package-aur/manager.sh pack pkgbuild
 
 The second target (`pkgbuild`) will update the version and md5sums of the PKGBUILD.
 
-### Known issues
 
-- One test is omitted from the original repo (TimeEntryModal, it should match the snapshot) because it never finishes (throws JS heap out of memory).
-- As soon as Electron v8 is stable, it should be used (package.json). Redshape is prepared for future features (timeoutType), keeping the notification when the timer is paused due to system idle.
+## License
+[GPL-3.0](https://github.com/Spring3/redshape/blob/master/LICENSE.md)
+
+Created by [Daniyil Vasylenko](https://github.com/Spring3)
+
+## Contributors
+
+[rNoz](https://github.com/rnoz) from [Group4Layers](https://www.group4layers.com)
