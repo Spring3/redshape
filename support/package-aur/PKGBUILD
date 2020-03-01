@@ -1,0 +1,55 @@
+# Maintainer: rNoz <rnoz.commits@gmail.com>
+pkgname=redshape
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="Redmine time tracker"
+arch=('i686' 'x86_64')
+url="https://github.com/Spring3/redshape"
+license=('GPL-3.0')
+groups=()
+depends=('electron' 'libxss' 'pkgconf')
+makedepends=('npm')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rNoz/redshape/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
+md5sums=("3f4c869f535ce908707f841626a48dc2")
+noextract=()
+name=Redshape
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  export SHELL=sh
+  npm i
+  npm run prepack && ./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/electron-builder --dir dist --linux deb --config.deb.compression='gz' -c.electronDist /usr/lib/electron -c.electronVersion $(sed s/^v// /usr/lib/electron/version)
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+	case "$CARCH" in
+	'x86_64')
+		_deb_arch='amd64'
+		;;
+	'i686')
+		_deb_arch='i386'
+		;;
+	*)
+		_deb_arch=$CARCH
+		;;
+	esac
+
+cat << EOF > "${pkgname}.sh"
+#!/bin/sh
+export ELECTRON_IS_DEV=${ELECTRON_IS_DEV:-0}
+exec electron /usr/lib/${pkgname}/app.asar "\$@"
+EOF
+
+	bsdcpio -i -m --quiet data.tar.gz < "./build/${name}_${pkgver}_${_deb_arch}.deb"
+	tar -xzf ./data.tar.gz -C "${pkgdir}" ./{usr,opt/${name}/resources/app.asar}
+	install -Dm644 "${pkgdir}/opt/${name}/resources/app.asar" "${pkgdir}/usr/lib/${pkgname}/app.asar"
+	rm -rf "${pkgdir}/opt"
+	sed -i -E 's|Exec="?/opt/'${name}/${pkgname}'"?|Exec=/usr/bin/redshape|;s|Icon=.*$|Icon=/usr/share/icons/hicolor/0x0/apps/redshape.png|' "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+
+	install -Dm755 "${srcdir}/${pkgname}-${pkgver}/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,6 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab, Tabs, TabList, TabPanel
+} from 'react-tabs';
 
 import { version, name } from '../../package.json';
 import LogoIcon from '../../assets/icon.png';
@@ -48,7 +50,7 @@ const IconContainer = styled.div`
     bottom: -2px;
   }
   `;
-  
+
 const CenteredDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,12 +60,12 @@ const CenteredDiv = styled.div`
     margin-top: 15px;
   }
 `;
-  
+
 const StyledTabPanel = styled(TabPanel)`
   flex-grow: 1;
   padding: 20px;
   display: none;
-  background: ${props => props.theme.bg};
+  background: ${(props) => props.theme.bg};
 `;
 
 const StyledTabs = styled(Tabs)`
@@ -80,7 +82,7 @@ const StyledTabs = styled(Tabs)`
     width: 100%;
     display: inline-block;
     text-align: center;
-    background: ${props => props.theme.bg};
+    background: ${(props) => props.theme.bg};
     
     li.react-tabs__tab {
       display: inline-block;
@@ -126,25 +128,28 @@ class AboutPage extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <DragArea />
         <StyledTabs>
           <TabList>
-            <Tab></Tab>
-            <Tab></Tab>
+            <Tab />
+            <Tab />
           </TabList>
 
           <StyledTabPanel>
             <FlexBox>
               <IconContainer>
                 <Link
-                  href="https://spring3.github.io/website/redshape"
+                  href="https://www.dvasylenko.com/redshape/"
                   type="external"
                 >
                   <img alt="App icon" height="70" src={LogoIcon} />
                 </Link>
                 <h2>{name}</h2>
-                <h2>v{version}</h2>
+                <h2>
+                  v
+                  {version}
+                </h2>
               </IconContainer>
               <CenteredDiv>
                 <h3>Time tracker for Redmine</h3>
@@ -166,22 +171,32 @@ class AboutPage extends Component {
                 <div>
                   <span>Visit the Redshape</span>
                   <Link
-                    href="https://spring3.github.io/website/redshape"
+                    href="https://www.dvasylenko.com/redshape/"
                     type="external"
                   >
                     homepage
                   </Link>
                 </div>
               </CenteredDiv>
-              <Paragraph>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</Paragraph>
+              <Paragraph>
+                { /* eslint-disable-next-line */ }
+                The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+              </Paragraph>
               <footer>
                 <div>
-                  Copyright © 2019&nbsp;
+                  Copyright © 2020&nbsp;
                   <Link
-                    href="https://spring3.github.io/website/"
+                    href="https://www.dvasylenko.com/redshape/"
                     type="external"
                   >
                     Daniyil Vasylenko
+                  </Link>
+                  &
+                  <Link
+                    href="https://github.com/Spring3/redshape/graphs/contributors"
+                    type="external"
+                  >
+                    Contributors
                   </Link>
                 </div>
               </footer>
@@ -193,9 +208,9 @@ class AboutPage extends Component {
             </FlexBox>
           </StyledTabPanel>
         </StyledTabs>
-      </Fragment>
+      </>
     );
   }
-};
+}
 
 export default AboutPage;

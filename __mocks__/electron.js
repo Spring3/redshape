@@ -4,6 +4,10 @@ const shell = {
   openExternal: () => {}
 };
 
+const powerMonitor = {
+  getSystemIdleTime: jest.fn()
+};
+
 const remote = {
   shell,
   process: {
@@ -17,10 +21,20 @@ const remote = {
     if (path.includes('/common/request')) {
       return require('../common/request'); // eslint-disable-line
     }
+    if (path.includes('electron')) {
+      return { powerMonitor };
+    }
     return undefined;
   }
 };
 
+const ipcRenderer = {
+  on: jest.fn(),
+  send: jest.fn(),
+  removeListener: jest.fn()
+};
+
 module.exports = {
-  remote
+  remote,
+  ipcRenderer
 };

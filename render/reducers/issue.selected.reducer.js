@@ -38,7 +38,9 @@ export default (state = initialState, action) => {
         return { ...state, isFetching: true };
       }
       if (action.status === 'OK') {
-        return { ...state, isFetching: false, data: _.get(action.data, 'issue', {}), error: undefined };
+        return {
+          ...state, isFetching: false, data: _.get(action.data, 'issue', {}), error: undefined
+        };
       }
       if (action.status === 'NOK') {
         return { ...state, isFetching: false, error: action.data };
@@ -161,7 +163,7 @@ export default (state = initialState, action) => {
             spentTime: {
               ...state.spentTime,
               data: [...state.spentTime.data].map(
-                entry => (entry.id === action.data.id ? action.data : entry)
+                (entry) => (entry.id === action.data.id ? action.data : entry)
               )
             }
           };

@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import { withRouter } from 'react-router-dom';
-import GithubCircleIcon from 'mdi-react/GithubCircleIcon';
 
 import actions from '../actions';
 
 import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
-import Link from '../components/Link';
 import Copyrights from '../components/Copyrights';
 import DragArea from '../components/DragArea';
 
@@ -30,12 +27,13 @@ const LoginForm = styled.form`
   grid-column: 2 / 6;
   grid-row: 2 / 4;
   min-width: 300px;
+  min-height: 500px;
 `;
 
 const Headline = styled.h1`
   text-align: center;
   font-size: 40px;
-  color: ${props => props.theme.main};
+  color: ${(props) => props.theme.main};
 `;
 
 const CopyrightsContainer = styled.div`
@@ -50,20 +48,34 @@ const SubmitButton = styled(Button)`
   margin: 25px auto 0px auto;
 `;
 
-class LoginView extends Component {  
+class LoginView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      useApiKey: false
+    };
+  }
+
   componentDidMount() {
-    const { userId, api_key } = this.props;
+    const { userId, api_key, history } = this.props;
     if (userId && api_key) {
-      this.props.history.push('/app/summary');
+      history.push('/app/summary');
     }
   }
 
-  validate = ({ username, password, redmineEndpoint }) => {
+  validate = ({
+    apiKey, username, password, redmineEndpoint
+  }) => {
+    const { useApiKey } = this.state;
     const errors = {
-      username: Joi.validate(username, Joi.string().required()),
-      password: Joi.validate(password, Joi.string().required()),
-      redmineEndpoint: Joi.validate(redmineEndpoint, Joi.string().uri().required())
+      redmineEndpoint: Joi.string().uri().required().validate(redmineEndpoint)
     };
+    if (useApiKey) {
+      errors.apiKey = Joi.string().required().validate(apiKey);
+    } else {
+      errors.username = Joi.string().required().validate(username);
+      errors.password = Joi.string().required().validate(password);
+    }
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
       if (validation.error) {
@@ -75,22 +87,31 @@ class LoginView extends Component {
 
   onSubmit = (values, { setSubmitting }) => {
     const { checkLogin } = this.props;
-    checkLogin(values).then(() => {
-      const { loginError, userId } = this.props;
+    const { useApiKey } = this.state;
+    checkLogin({ ...values, useApiKey }).then(() => {
+      const { loginError, userId, history } = this.props;
       if (!loginError && userId) {
-        this.props.history.push('/app/summary');
+        history.push('/app/summary');
       }
       setSubmitting(false);
     });
   }
 
+  onToggleLoginMode = () => {
+    const { useApiKey } = this.state;
+    this.setState({ useApiKey: !useApiKey });
+  }
+
   render() {
-    const { loginError } = this.props; 
+    const { loginError } = this.props;
+    const { useApiKey } = this.state;
     return (
       <Container>
         <DragArea />
         <Formik
-          initialValues={{ username: '', password: '', redmineEndpoint: '' }}
+          initialValues={{
+            username: '', password: '', apiKey: '', redmineEndpoint: ''
+          }}
           validate={this.validate}
           onSubmit={this.onSubmit}
         >
@@ -105,36 +126,7 @@ class LoginView extends Component {
           }) => (
             <LoginForm onSubmit={handleSubmit}>
               <Headline>Redshape</Headline>
-              <Label
-                label="Login"
-                htmlFor="username"
-              >
-                <Input
-                  type="text"
-                  name="username"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                />
-              </Label>
-              <ErrorMessage show={errors.username && touched.username}>
-                {errors.username}
-              </ErrorMessage>
-              <Label
-                label="Password"
-                htmlFor="password"
-              >
-                <Input
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                />
-              </Label>
-              <ErrorMessage show={errors.password && touched.password}>
-                {errors.password}
-              </ErrorMessage>
+
               <Label
                 label="Redmine Endpoint"
                 htmlFor="redmineEndpoint"
@@ -150,6 +142,74 @@ class LoginView extends Component {
               <ErrorMessage show={errors.redmineEndpoint && touched.redmineEndpoint}>
                 {errors.redmineEndpoint}
               </ErrorMessage>
+
+              <Label
+                label="Login mode"
+                htmlFor="loginMode"
+              >
+                <label>
+                  <Input
+                    type="checkbox"
+                    name="loginMode"
+                    checked={useApiKey}
+                    onChange={this.onToggleLoginMode}
+                  />
+                  <span>Use API Key</span>
+                </label>
+              </Label>
+              {useApiKey ? (
+                <>
+                  <Label
+                    label="API Key"
+                    htmlFor="apiKey"
+                  >
+                    <Input
+                      type="text"
+                      name="apiKey"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.apiKey}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.apiKey && touched.apiKey}>
+                    {errors.apiKey}
+                  </ErrorMessage>
+                </>
+              ) : (
+                <>
+                  <Label
+                    label="Login"
+                    htmlFor="username"
+                  >
+                    <Input
+                      type="text"
+                      name="username"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.username && touched.username}>
+                    {errors.username}
+                  </ErrorMessage>
+                  <Label
+                    label="Password"
+                    htmlFor="password"
+                  >
+                    <Input
+                      type="password"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                    />
+                  </Label>
+                  <ErrorMessage show={errors.password && touched.password}>
+                    {errors.password}
+                  </ErrorMessage>
+                </>
+              )}
+
               <SubmitButton
                 type="submit"
                 disabled={isSubmitting}
@@ -178,17 +238,20 @@ LoginView.propTypes = {
   ]),
   api_key: PropTypes.string,
   loginError: PropTypes.instanceOf(Error),
-  checkLogin: PropTypes.func.isRequired
-}
+  checkLogin: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   api_key: state.user.api_key,
   loginError: state.user.loginError
 });
 
-const mapDispatchToProps = dispatch => ({
-  checkLogin: credentials => dispatch(actions.user.checkLogin(credentials))
+const mapDispatchToProps = (dispatch) => ({
+  checkLogin: (credentials) => dispatch(actions.user.checkLogin(credentials))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginView)));

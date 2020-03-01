@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable max-len */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -11,7 +13,11 @@ export default () => (
   <Container>
     <h3 align="center">GNU GENERAL PUBLIC LICENSE</h3>
     <p align="center">Version 3, 29 June 2007</p>
-    <p>Copyright &copy; 2007 Free Software Foundation, Inc. &lt;<Link href="http://fsf.org/" type="external">http://fsf.org/</Link>&gt;</p>
+    <p>
+      Copyright &copy; 2007 Free Software Foundation, Inc. &lt;
+      <Link href="http://fsf.org/" type="external">http://fsf.org/</Link>
+      &gt;
+    </p>
     <p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
     <h3>Preamble</h3>
     <p>The GNU General Public License is a free, copyleft license for software and other kinds of works.</p>

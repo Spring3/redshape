@@ -4,7 +4,6 @@ import configureStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { ThemeProvider } from 'styled-components';
-import toJSON from 'enzyme-to-json';
 import { mount } from 'enzyme';
 
 import * as actions from '../../actions/timeEntry.actions';
@@ -32,60 +31,6 @@ describe('TimeEntryModal Component', () => {
   });
 
 
-  it('it should match the snapshot', () => {
-    const props = {
-      activities: [{
-        id: 1,
-        name: 'Development'
-      }, {
-        id: 2,
-        name: 'Testing'
-      }],
-      isUserAuthor: true,
-      timeEntry: {
-        activity: {
-          id: 1,
-          name: 'Development'
-        },
-        comments: 'Hello world',
-        created_on: '2011-01-01',
-        hours: 10,
-        id: 1,
-        issue: {
-          id: 1,
-          name: 'Cover a modal with tests'
-        },
-        project: {
-          id: 1,
-          name: 'Testing Project'
-        },
-        spent_on: '2011-01-01',
-        user: {
-          id: 1,
-          name: 'John Wayne'
-        }
-      },
-      onClose: jest.fn(),
-      isOpen: true,
-      isEditable: true
-    };
-    const state = {
-      timeEntry: {
-        isFetching: false,
-        error: undefined
-      }
-    };
-    const store = mockStore(state);
-    const wrapper = mount(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <TimeEntryModal {...props} />
-        </ThemeProvider>
-      </Provider>
-    );
-    expect(toJSON(wrapper)).toMatchSnapshot();
-  });
-
   it('should set wasModified to true if any of the editable data was modified', () => {
     const props = {
       activities: [{
@@ -103,6 +48,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         id: 1,
         issue: {
@@ -146,7 +92,7 @@ describe('TimeEntryModal Component', () => {
     expect(modal.state.wasModified).toBe(true);
     modal.setState({ wasModified: false });
     expect(modal.state.wasModified).toBe(false);
-    modal.onHoursChange({ target: { value: '15.2' } });
+    modal.onDurationChange({ target: { value: '15.2' } });
     expect(modal.state.wasModified).toBe(true);
     modal.setState({ wasModified: false });
     expect(modal.state.wasModified).toBe(false);
@@ -175,6 +121,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         id: 1,
         issue: {
@@ -210,7 +157,7 @@ describe('TimeEntryModal Component', () => {
       </Provider>
     );
 
-    expect(wrapper.find('Input[name="hours"]').prop('disabled')).toBe(true);
+    expect(wrapper.find('Input[name="duration"]').prop('disabled')).toBe(true);
     expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
   });
 
@@ -232,6 +179,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -307,6 +255,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -382,6 +331,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -450,6 +400,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -485,7 +436,7 @@ describe('TimeEntryModal Component', () => {
     );
 
     expect(wrapper.find('Select').prop('isDisabled')).toBe(true);
-    expect(wrapper.find('input[name="hours"]').prop('disabled')).toBe(true);
+    expect(wrapper.find('input[name="duration"]').prop('disabled')).toBe(true);
     expect(wrapper.find('DatePicker[name="date"]').prop('isDisabled')).toBe(true);
     expect(wrapper.find('MarkdownEditor').prop('isDisabled')).toBe(true);
     expect(wrapper.exists('#btn-add')).toBe(false);
@@ -509,6 +460,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -575,6 +527,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,
@@ -641,6 +594,7 @@ describe('TimeEntryModal Component', () => {
         },
         comments: 'Hello world',
         created_on: '2011-01-01',
+        duration: '10',
         hours: 10,
         issue: {
           id: 1,

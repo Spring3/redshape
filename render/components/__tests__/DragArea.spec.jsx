@@ -1,11 +1,13 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import DragArea from '../DragArea';
 
 describe('DragArea', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(<DragArea />).toJSON();
-    expect(tree).toMatchSnapshot();
+  afterEach(cleanup);
+  it('should render the drag area', () => {
+    render(<DragArea />);
+    expect(document.querySelector('div[class*="DragArea"]')).toBeDefined();
   });
 });

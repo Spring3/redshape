@@ -1,6 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const axios = require('electron').remote.require('../common/request');
 
-function IssueFilter () {
+function IssueFilter() {
   const filter = {};
 
   this.issue = (ids) => {
@@ -130,8 +131,12 @@ const logout = () => axios.reset();
 
 const notify = {
   start: (type, info = {}) => ({ type, status: 'START', info }),
-  ok: (type, data, info = {}) => ({ type, data, status: 'OK', info }),
-  nok: (type, data, info = {}) => ({ type, data, status: 'NOK', info }),
+  ok: (type, data, info = {}) => ({
+    type, data, status: 'OK', info
+  }),
+  nok: (type, data, info = {}) => ({
+    type, data, status: 'NOK', info
+  }),
   cancel: (type, info = {}) => ({ type, status: 'CANCELLED', info })
 };
 

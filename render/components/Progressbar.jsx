@@ -1,6 +1,8 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { withTheme, css } from 'styled-components';
 import PropTypes from 'prop-types';
+
+import Tooltip from './Tooltip';
 
 const Wrapper = styled.div`
   display: flex;
@@ -10,17 +12,18 @@ const Wrapper = styled.div`
 `;
 
 const Background = styled.div`
-  background: ${props => props.theme.bgDark};
+  background: ${(props) => props.theme.bgDark};
   position: relative;
   border-radius: 5px;
-  height: ${props => props.height}px;
+  height: ${(props) => props.height}px;
 `;
 
-const Progress = styled.div`
+export const Progress = styled.div`
   border-radius: 5px;
   max-width: 100%;
   width: 0;
-  ${props => css`
+  ${(props) => css`
+    float: ${props.float || 'left'};
     transition: width ease ${props.transitionTime};
     width: ${props.percent}% !important;
     height: ${props.height}px;
@@ -28,22 +31,29 @@ const Progress = styled.div`
   `}
 `;
 
-const Progressbar = ({ percent, background, id, className, height }) => {
+const Progressbar = ({
+  percent, background, id, className, height
+}) => {
+  // eslint-disable-next-line
   const percentage = (isFinite(percent) && !isNaN(percent)) ? percent : 0;
+  const percentageText = `${percentage.toFixed(0)}%`;
+
   return (
     <Wrapper
       id={id}
       className={className}
     >
-      <Background
-        height={height}
-      >
-        <Progress
-          percent={percentage}
-          background={background}
+      <Tooltip text={percentageText}>
+        <Background
           height={height}
-        />
-      </Background>
+        >
+          <Progress
+            percent={percentage}
+            background={background}
+            height={height}
+          />
+        </Background>
+      </Tooltip>
     </Wrapper>
   );
 };
@@ -65,4 +75,4 @@ Progressbar.defaultProps = {
   height: 5
 };
 
-export default Progressbar;
+export default withTheme(Progressbar);

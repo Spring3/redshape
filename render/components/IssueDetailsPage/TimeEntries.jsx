@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
 
@@ -33,16 +32,16 @@ const HeaderContainer = styled.div`
     border-radius: 3px;
 
     button {
-      background: ${props => props.theme.bg};
+      background: ${(props) => props.theme.bg};
       margin: 0px 5px;
     }
   }
 `;
 
-const FlexButton = styled(Button) `
+const FlexButton = styled(Button)`
   display: inline-flex;
   align-items: center;
-  ${props => css`
+  ${(props) => css`
     background: ${props.theme.mainLight};
   `}
 `;
@@ -62,8 +61,8 @@ const TimeEntriesList = styled.ul`
   margin: 0;
   overflow-y: scroll;
   max-height: 500px;
-  background: ${props => props.theme.bgDark};
-  box-shadow: inset 0px 0px 10px 0px ${props => props.theme.bgDark};
+  background: ${(props) => props.theme.bgDark};
+  box-shadow: inset 0px 0px 10px 0px ${(props) => props.theme.bgDark};
 
   li {
     cursor: pointer;
@@ -71,8 +70,8 @@ const TimeEntriesList = styled.ul`
     padding: 10px;
     margin: 10px auto 0px auto;
     border-radius: 3px;
-    border: 1px solid ${props => props.theme.bgDarker};
-    background: ${props => props.theme.bg};
+    border: 1px solid ${(props) => props.theme.bgDarker};
+    background: ${(props) => props.theme.bg};
 
     div:first-child {
       display: flex;
@@ -92,13 +91,13 @@ const TimeEntriesList = styled.ul`
         span.date {
           margin-right: 5px;
           font-size: 12px;
-          color: ${props => props.theme.minorText};
+          color: ${(props) => props.theme.minorText};
         }
 
         span.username {
           font-weight: bold;
           margin-right: 5px;
-          color: ${props => props.theme.normalText};
+          color: ${(props) => props.theme.normalText};
         }
       }
     }
@@ -140,19 +139,22 @@ class TimeEntries extends Component {
     super(props);
     this.listRef = React.createRef();
   }
+
   componentWillMount() {
     const { fetchIssueTimeEntries, selectedIssue } = this.props;
     fetchIssueTimeEntries(selectedIssue.id, 0);
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.selectedIssue.id !== this.props.selectedIssue.id) {
-      this.props.fetchIssueTimeEntries(this.props.selectedIssue.id, 0);
+    const { selectedIssue, fetchIssueTimeEntries } = this.props;
+    if (oldProps.selectedIssue.id !== selectedIssue.id) {
+      fetchIssueTimeEntries(selectedIssue.id, 0);
     }
   }
 
-  openModal = timeEntry => () => {
-    this.props.showTimeEntryModal(timeEntry);
+  openModal = (timeEntry) => () => {
+    const { showTimeEntryModal } = this.props;
+    showTimeEntryModal(timeEntry);
   }
 
   startTimeTracking = () => {
@@ -160,7 +162,7 @@ class TimeEntries extends Component {
     startTimeTracking(selectedIssue);
   }
 
-  removeTimeEntry = timeEntryId => (e) => {
+  removeTimeEntry = (timeEntryId) => (e) => {
     e.preventDefault();
     e.stopPropagation();
     const { selectedIssue, removeTimeEntry } = this.props;
@@ -168,53 +170,66 @@ class TimeEntries extends Component {
   }
 
   loadSpentTime = () => {
-    const { spentTime, selectedIssue } = this.props;
+    const { spentTime, selectedIssue, fetchIssueTimeEntries } = this.props;
     const { page } = spentTime;
-    this.props.fetchIssueTimeEntries(selectedIssue.id, page + 1);
+    fetchIssueTimeEntries(selectedIssue.id, page + 1);
   }
 
   render() {
-    const { spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue } = this.props;
+    const {
+      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue
+    } = this.props;
     return (
       <TimeEntriesContainer>
         <HeaderContainer>
           <h2 className="padded">Time spent</h2>
           <div>
-            <FlexButton onClick={this.openModal()}>
+            <FlexButton id="openModal" onClick={this.openModal()}>
               <PlusIcon size={22} />
               <span>&nbsp;Add</span>
             </FlexButton>
             <FlexButton
+              id="track"
               disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
-              onClick={this.startTimeTracking}>
+              onClick={this.startTimeTracking}
+            >
               <TimerIcon size={22} />
               <span>&nbsp;Track</span>
             </FlexButton>
           </div>
         </HeaderContainer>
-        <TimeEntriesList ref={this.listRef}>
+        <TimeEntriesList ref={this.listRef} data-testId="time-entries">
           <InfiniteScroll
             load={this.loadSpentTime}
+            // eslint-disable-next-line
             isEnd={spentTime.data.length === spentTime.totalCount}
+            // eslint-disable-next-line
             hasMore={!spentTime.isFetching && !spentTime.error && spentTime.data.length < spentTime.totalCount}
             loadIndicator={<ProcessIndicatorWrapper><ProcessIndicator /></ProcessIndicatorWrapper>}
             container={this.listRef.current}
             immediate={true}
           >
-            {spentTime.data.map(timeEntry => (
-              <li key={timeEntry.id} onClick={this.openModal(timeEntry)}>
+            { /* eslint-disable-next-line */ }
+            {spentTime.data.map((timeEntry) => (
+              // eslint-disable-next-line
+              <li key={timeEntry.id} onClick={this.openModal(timeEntry)} data-testId="time-entry">
                 <div>
                   <div>
                     <span className="username">{timeEntry.user.name}</span>
-                    <span className="time">{timeEntry.hours} hours</span>
+                    <span className="time">
+                      {timeEntry.hours}
+                      {' '}
+                      hours
+                    </span>
                     <DateComponent className="date" date={timeEntry.spent_on} />
                   </div>
                   {
                     userId === timeEntry.user.id && (
                       <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
                         {
-                          requestConfirmation => (
+                          (requestConfirmation) => (
                             <GhostButton
+                              id="confirmDeletion"
                               onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
                             >
                               <CloseIcon color={theme.normalText} />
@@ -228,7 +243,7 @@ class TimeEntries extends Component {
                 <p>{timeEntry.comments}</p>
               </li>
             ))}
-            </InfiniteScroll>
+          </InfiniteScroll>
         </TimeEntriesList>
       </TimeEntriesContainer>
     );
@@ -250,7 +265,7 @@ TimeEntries.propTypes = {
     }).isRequired
   }).isRequired,
   userId: PropTypes.number.isRequired,
-  userName: PropTypes.string.isRequired,
+  startTimeTracking: PropTypes.func.isRequired,
   spentTime: PropTypes.arrayOf(PropTypes.shape({
     activity: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -271,16 +286,18 @@ TimeEntries.propTypes = {
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired
   })).isRequired,
   isTimerEnabled: PropTypes.bool.isRequired,
   trackedIssueId: PropTypes.number,
   removeTimeEntry: PropTypes.func.isRequired,
   fetchIssueTimeEntries: PropTypes.func.isRequired,
-  showTimeEntryModal: PropTypes.func.isRequired
+  showTimeEntryModal: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.user.id,
   userName: state.user.name,
   spentTime: state.issues.selected.spentTime,
@@ -289,9 +306,9 @@ const mapStateToProps = state => ({
   trackedIssueId: state.tracking.issue.id
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   fetchIssueTimeEntries: (issueId, page) => dispatch(actions.issues.getTimeEntriesPage(issueId, undefined, page)),
-  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
+  startTimeTracking: (selectedIssue) => dispatch(actions.tracking.trackingStart(selectedIssue)),
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import showdown from 'showdown';
 import throttle from 'lodash/throttle';
+// eslint-disable-next-line
 import { remote } from 'electron';
 
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
@@ -33,7 +34,7 @@ const MarkdownOption = styled.li`
 
   &:hover {
     svg {
-      color: ${props => props.theme.main} !important;
+      color: ${(props) => props.theme.main} !important;
     }
   }
 `;
@@ -66,14 +67,14 @@ const ModifiedTextArea = styled(TextArea)`
   padding: 10px;
   border-radius: 3px;
   outline: none;
-  border: 1px solid ${props => props.theme.minorText};
+  border: 1px solid ${(props) => props.theme.minorText};
 
   &:hover {
-    border-color: ${props => props.theme.main};
+    border-color: ${(props) => props.theme.main};
   }
 
   &:focus {
-    border: 2px solid ${props => props.theme.main};
+    border: 2px solid ${(props) => props.theme.main};
   }
 `;
 
@@ -91,7 +92,7 @@ const converter = new showdown.Converter({
 const KEY_ENTER = 13;
 
 class MarkdownEditor extends PureComponent {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -103,34 +104,39 @@ class MarkdownEditor extends PureComponent {
     this.throttledAdjustTextAreaHeight = throttle(this.adjustTextAreaHeight, 150);
   }
 
-  componentDidUpdate(oldProps, oldState) {
-    if (this.props.initialValue !== oldProps.initialValue) {
-      this.setState({ value: this.props.initialValue });
-    }
-
-    if (oldState.value !== this.state.value
-      || ((oldState.showPreview !== this.state.showPreview) && !this.state.showPreview)) {
-      this.throttledAdjustTextAreaHeight();
-    }
-  }
-
   componentDidMount() {
     this.adjustTextAreaHeight();
   }
 
+  componentDidUpdate(oldProps, oldState) {
+    const { initialValue } = this.props;
+    if (initialValue !== oldProps.initialValue) {
+      // eslint-disable-next-line
+      this.setState({ value: initialValue });
+    }
+
+    const { value, showPreview } = this.state;
+    if (oldState.value !== value
+      || ((oldState.showPreview !== showPreview) && !showPreview)) {
+      this.throttledAdjustTextAreaHeight();
+    }
+  }
+
   applyMarkdown = (symbolStart, symbolEnd = '') => {
     const { onChange, isDisabled } = this.props;
+    const { value } = this.state;
     if (isDisabled) { return; }
     const textarea = this.textareaRef.current;
-    const currentValue = this.state.value;
     let newValue;
     if (textarea.selectionStart === textarea.selectionEnd) {
-      newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${symbolEnd}${currentValue.substring(textarea.selectionStart)}`;
+      // eslint-disable-next-line max-len
+      newValue = `${value.substring(0, textarea.selectionStart)}${symbolStart}${symbolEnd}${value.substring(textarea.selectionStart)}`;
     } else {
-      newValue = `${currentValue.substring(0, textarea.selectionStart)}${symbolStart}${currentValue.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${currentValue.substring(textarea.selectionEnd)}`;
+      // eslint-disable-next-line max-len
+      newValue = `${value.substring(0, textarea.selectionStart)}${symbolStart}${value.substring(textarea.selectionStart, textarea.selectionEnd)}${symbolEnd}${value.substring(textarea.selectionEnd)}`;
     }
     this.setState({
-      value: newValue 
+      value: newValue
     });
     if (onChange) {
       onChange(newValue);
@@ -152,7 +158,7 @@ class MarkdownEditor extends PureComponent {
   makeStrikethrough = () => {
     this.applyMarkdown('~~', '~~');
   }
-  
+
   makeCode = () => {
     this.applyMarkdown('\r\n```\r\n', '\r\n```\r\n');
   }
@@ -206,17 +212,19 @@ class MarkdownEditor extends PureComponent {
   }
 
   togglePreview = () => {
+    const { showPreview } = this.state;
     this.setState({
-      showPreview: !this.state.showPreview
+      showPreview: !showPreview
     });
   }
 
   onKeyDown = (e) => {
     const { onSubmit } = this.props;
+    const { value } = this.state;
     if (remote.process.platform === 'darwin') {
       if (e.metaKey && e.keyCode === KEY_ENTER) {
         if (onSubmit) {
-          onSubmit(xssFilter(this.state.value));
+          onSubmit(xssFilter(value));
           this.setState({
             value: ''
           });
@@ -224,14 +232,12 @@ class MarkdownEditor extends PureComponent {
       } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
         this.applyMarkdown('\r\n');
       }
-    } else {
-      if (e.ctrlKey && e.keyCode === KEY_ENTER) {
-        if (onSubmit) {
-          onSubmit(xssFilter(this.state.value));
-          this.setState({
-            value: ''
-          });
-        }
+    } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+      if (onSubmit) {
+        onSubmit(xssFilter(value));
+        this.setState({
+          value: ''
+        });
       }
     }
   }
@@ -239,7 +245,9 @@ class MarkdownEditor extends PureComponent {
 
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
-    const { className, id, onBlur, isDisabled, maxLength } = this.props;
+    const {
+      className, id, onBlur, isDisabled, maxLength
+    } = this.props;
     const { value, showPreview } = this.state;
     return (
       <div
@@ -333,8 +341,7 @@ class MarkdownEditor extends PureComponent {
               value={value}
               maxLength={maxLength}
             />
-          )
-        }
+          )}
       </div>
     );
   }
@@ -378,7 +385,7 @@ class MarkdownText extends PureComponent {
     super(props);
     this.iframeRef = React.createRef();
 
-    const { theme } = props;
+    const { theme = {} } = props;
     this.genericStyles = `
       body {
         margin: 0;
@@ -457,7 +464,7 @@ class MarkdownText extends PureComponent {
     }
   }
 
-  render () {
+  render() {
     const { markdownText, className } = this.props;
     const markdown = xssFilter(converter.makeHtml(markdownText));
     return (
@@ -471,11 +478,12 @@ class MarkdownText extends PureComponent {
       />
     );
   }
-};
+}
 
 MarkdownText.propTypes = {
   markdownText: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  theme: PropTypes.object.isRequired
 };
 
 MarkdownText.defaultProps = {
@@ -483,10 +491,10 @@ MarkdownText.defaultProps = {
   className: undefined
 };
 
-MarkdownText = withTheme(MarkdownText);
+const MarkdownTextWithTheme = withTheme(MarkdownText);
 
 export {
-  MarkdownText
+  MarkdownTextWithTheme as MarkdownText
 };
 
 export default MarkdownEditor;

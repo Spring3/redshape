@@ -1,18 +1,21 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import DatePicker from '../DatePicker';
 import theme from '../../theme';
 
 describe('Date Picker', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(
+  afterEach(cleanup);
+  it('should render the date picker', () => {
+    render(
       <DatePicker
         theme={theme}
         value={123456789}
         onChange={() => {}}
       />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    const input = document.querySelector('input');
+    expect(input).toHaveAttribute('value', '123456789');
   });
 });

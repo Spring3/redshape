@@ -1,34 +1,34 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { shallow } from 'enzyme';
+import { render, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+
 import Progressbar from '../Progressbar';
 import theme from '../../theme';
 
+
 describe('Progressbar component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(
+  afterEach(cleanup);
+  it('should display the progressbar', () => {
+    const { getByText } = render(
       <Progressbar percent={25} background="yellow" height={10} />
     );
-    expect(tree).toMatchSnapshot();
+    expect(getByText('25%')).toBeDefined();
   });
 
   it('should fallback in case infinite number was given as percentage', () => {
-    const wrapper = shallow(
+    const { getAllByText } = render(
       <div>
         <Progressbar theme={theme} percent={Infinity} />
         <Progressbar theme={theme} percent={NaN} />
       </div>
     );
-
-    wrapper.find(Progressbar).forEach(node => expect(node.dive().childAt(0).childAt(0).prop('percent')).toBe(0));
+    expect(getAllByText('0%')).toHaveLength(2);
   });
 
-  it('should allow the height and background to be customized', () => {
-    const wrapper = shallow(
+  it('should allow the height to be customized', () => {
+    render(
       <Progressbar theme={theme} height={20} background="salmon" />
     );
-    expect(wrapper.dive().childAt(0).prop('height')).toBe(20);
-    expect(wrapper.dive().childAt(0).childAt(0).prop('background')).toBe('salmon');
-    expect(wrapper.dive().childAt(0).childAt(0).prop('height')).toBe(20);
+    expect(document.querySelectorAll('div[height="20"]')).toHaveLength(2);
   });
 });

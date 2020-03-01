@@ -36,12 +36,13 @@ const getPage = (filter, pageNumber, batchSize) => (dispatch, getState) => {
   })
     .then(({ data }) => dispatch(notify.ok(ISSUES_GET_PAGE, data, { page })))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when trying to get a list of issues:', error.message);
       dispatch(notify.nok(ISSUES_GET_PAGE, error, { page }));
     });
 };
 
-const get = id => (dispatch) => {
+const get = (id) => (dispatch) => {
   dispatch(notify.start(ISSUES_GET));
 
   return request({
@@ -52,6 +53,7 @@ const get = id => (dispatch) => {
     id: `getIssueDetails:${id}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error(`Error when trying to get the issue with id ${id}:`, error.message);
       dispatch(notify.nok(ISSUES_GET, error));
     });
@@ -88,6 +90,7 @@ const sendComments = (issueId, comments) => (dispatch, getState) => {
     )
   ))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error(`Error when trying to assign the issue with id ${issueId}:`, error.message);
       dispatch(notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' }));
     });
@@ -114,6 +117,7 @@ const getTimeEntriesPage = (issueId, projectId, pageNumber, batchSize) => (dispa
     id: `getIssueTimeEntries:${issueId}:${pageIndex}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_TIME_ENTRY_GET, data, { page: pageIndex })))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when trying to get the list of time entries', error);
       dispatch(notify.nok(ISSUES_TIME_ENTRY_GET, error, { page: pageIndex }));
     });

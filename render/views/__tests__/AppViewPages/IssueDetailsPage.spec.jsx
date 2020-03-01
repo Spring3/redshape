@@ -1,13 +1,14 @@
 import React from 'react';
-import moment from 'moment';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { HashRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import {
+  render, cleanup, fireEvent
+} from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import theme from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
@@ -34,6 +35,10 @@ const state = {
   user: {
     id: 1,
     name: 'John Wayne'
+  },
+  issue: {
+    isFetching: false,
+    error: undefined
   },
   issues: {
     selected: {
@@ -73,7 +78,49 @@ const state = {
         }
       },
       spentTime: {
-        data: [],
+        data: [{
+          id: 1,
+          user: {
+            id: 1,
+            name: 'John Wayne'
+          },
+          issue: {
+            id: 1,
+            name: 'Issue-1'
+          },
+          activity: {
+            id: 1,
+            name: 'Testing'
+          },
+          project: {
+            id: 1,
+            name: 'Test'
+          },
+          hours: 1.5,
+          spent_on: '2011-01-01'
+        },
+        {
+          id: 1,
+          activity: {
+            id: 1,
+            name: 'activity-1'
+          },
+          comments: 'Comment',
+          created_on: '2011-02-02',
+          hours: 1.5,
+          issue: {
+            id: 1
+          },
+          project: {
+            id: 1,
+            name: 'Project-1'
+          },
+          spent_on: '2011-02-02',
+          user: {
+            id: 1,
+            name: 'Username'
+          }
+        }],
         isFetching: false,
         error: undefined
       }
@@ -85,6 +132,12 @@ const state = {
     },
     isEnabled: false,
     duration: 0
+  },
+  settings: {
+    idleBehavior: 0,
+    discardIdleTime: true,
+    advancedTimerControls: false,
+    progressWithStep1: false,
   }
 };
 
@@ -96,6 +149,7 @@ describe('IssueDetails page', () => {
 
   afterEach(() => {
     axiosMock.reset();
+    cleanup();
   });
 
   afterAll(() => {
@@ -103,34 +157,10 @@ describe('IssueDetails page', () => {
     reset();
   });
 
-  it('should match the snapshot', () => {
-    axiosMock.onAny().reply(() => Promise.resolve([200, {}]));
-    const store = mockStore(state);
-    const tree = renderer.create(
-      <Provider store={store}>
-        <HashRouter>
-          <ThemeProvider theme={theme}>
-            <IssueDetailsPage
-              match={{
-                params: {
-                  id: 1
-                }
-              }}
-              history={{
-                goBack: jest.fn()
-              }}
-            />
-          </ThemeProvider>
-        </HashRouter>
-      </Provider>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it('should fetch the info about a selected issue', () => {
     axiosMock.onAny().reply(() => Promise.resolve([200, {}]));
     const store = mockStore(state);
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
@@ -155,7 +185,7 @@ describe('IssueDetails page', () => {
   it('should reset the selected issue on unmount', () => {
     axiosMock.onAny().reply(() => Promise.resolve([200, {}]));
     const store = mockStore(state);
-    const wrapper = mount(
+    const { unmount } = render(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
@@ -174,9 +204,11 @@ describe('IssueDetails page', () => {
       </Provider>
     );
 
-    wrapper.unmount();
+    unmount();
 
-    expect(store.getActions().pop().type).toBe(ISSUES_RESET_SELECTION);
+    const actions = store.getActions();
+    actions.pop();
+    expect(actions.pop().type).toBe(ISSUES_RESET_SELECTION);
   });
 
   it('should show the selected time entry in a modal', () => {
@@ -185,7 +217,7 @@ describe('IssueDetails page', () => {
       ...state,
       timeEntry: {}
     });
-    const wrapper = mount(
+    const { getByTestId } = render(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
@@ -204,43 +236,8 @@ describe('IssueDetails page', () => {
       </Provider>
     );
 
-    const page = wrapper.find('IssueDetailsPage').instance();
-    expect(page).toBeTruthy();
-    const timeEntry = {
-      user: {
-        id: 1,
-        name: 'John Wayne'
-      },
-      issue: {
-        id: 1
-      },
-      activity: {
-        id: 1,
-        name: 'Testing'
-      },
-      project: {
-        id: 1,
-        name: 'Test'
-      },
-      hours: 1.5,
-      spent_on: '2011-01-01'
-    };
-
-    page.showTimeEntryModal(timeEntry);
-
-    expect(page.state.showTimeEntryModal).toBe(true);
-    expect(page.state.selectedTimeEntry).toEqual(
-      Object.assign({}, timeEntry, {
-        issue: {
-          id: 1,
-          name: state.issues.selected.data.subject
-        }
-      })
-    );
-    expect(page.state.activities).toEqual([
-      { value: 1, label: 'Development' },
-      { value: 2, label: 'Testing' }
-    ]);
+    fireEvent.click(getByTestId('time-entries').querySelector('[data-testId="time-entry"]'));
+    expect(getByTestId('time-entry-modal-title').textContent).toEqual('#1Test');
   });
 
   it('should show a template for the time entry in a modal', () => {
@@ -249,7 +246,7 @@ describe('IssueDetails page', () => {
       ...state,
       timeEntry: {}
     });
-    const wrapper = mount(
+    const { getByTestId } = render(
       <Provider store={store}>
         <HashRouter>
           <ThemeProvider theme={theme}>
@@ -268,77 +265,7 @@ describe('IssueDetails page', () => {
       </Provider>
     );
 
-    const page = wrapper.find('IssueDetailsPage').instance();
-    expect(page).toBeTruthy();
-    const timeEntry = {
-      user: {
-        id: state.user.id,
-        name: state.user.name
-      },
-      issue: {
-        id: state.issues.selected.data.id
-      },
-      activity: {},
-      project: {
-        id: state.issues.selected.data.project.id,
-        name: state.issues.selected.data.project.name
-      },
-      hours: 0,
-      spent_on: moment().format('YYYY-MM-DD')
-    };
-
-    page.showTimeEntryModal();
-
-    expect(page.state.showTimeEntryModal).toBe(true);
-    expect(page.state.selectedTimeEntry).toEqual(
-      Object.assign({}, timeEntry, {
-        issue: {
-          id: 1,
-          name: state.issues.selected.data.subject
-        }
-      })
-    );
-    expect(page.state.activities).toEqual([
-      { value: 1, label: 'Development' },
-      { value: 2, label: 'Testing' }
-    ]);
-  });
-
-  it('should close the time entry modal', () => {
-    axiosMock.onAny().reply(() => Promise.resolve([200, {}]));
-    const store = mockStore({
-      ...state,
-      timeEntry: {}
-    });
-    const wrapper = mount(
-      <Provider store={store}>
-        <HashRouter>
-          <ThemeProvider theme={theme}>
-            <IssueDetailsPage
-              match={{
-                params: {
-                  id: 1
-                }
-              }}
-              history={{
-                goBack: jest.fn()
-              }}
-            />
-          </ThemeProvider>
-        </HashRouter>
-      </Provider>
-    );
-
-    const page = wrapper.find('IssueDetailsPage').instance();
-    expect(page).toBeTruthy();
-
-    page.showTimeEntryModal();
-    expect(page.state.showTimeEntryModal).toBe(true);
-
-    page.closeTimeEntryModal();
-    expect(page.state.showTimeEntryModal).toBe(false);
-
-    expect(page.state.selectedTimeEntry).toBe(undefined);
-    expect(page.state.activities).toEqual([]);
+    fireEvent.click(document.querySelector('#openModal'));
+    expect(getByTestId('time-entry-modal-title')).toBeDefined();
   });
 });

@@ -1,57 +1,63 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
+import { noop } from 'lodash';
 
 import { openExternalUrl } from '../../common/utils';
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.main};
+  color: ${(props) => props.theme.main};
   font-size: 14px;
   padding: 2px;
   cursor: pointer;
 
-  ${props => css`
-    ${typeof props.children === 'string' ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }` : ''}
+  ${(props) => css`
+    ${typeof props.children === 'string'
+    ? `&:hover { background: ${props.theme.main}; color: ${props.theme.hoverText}; }`
+    : ''}
   `}
 `;
 
-class Link extends PureComponent {
-  onClick = (event) => {
+const Link = ({
+  onClick, type, href, children, className, testId
+}) => {
+  const clickHandler = (event) => {
     event.preventDefault();
-    const { onClick, type, href } = this.props;
     if (type === 'external') {
       openExternalUrl(href);
     } else if (onClick) {
       onClick(event);
     }
-  }
-  render() {
-    const { children, type, href, className } = this.props;
-    return (
-      <StyledLink
-        className={className}
-        type={type}
-        href={href}
-        rel="noopener noreferer"
-        onClick={this.onClick}
-      >
-        {children}
-      </StyledLink>
-    );
-  }
-}
+  };
+
+  return (
+    <StyledLink
+      className={className}
+      type={type}
+      href={href}
+      rel="noopener noreferer"
+      onClick={clickHandler}
+      data-testid={testId}
+    >
+      {children}
+    </StyledLink>
+  );
+};
 
 Link.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['external', undefined, null]),
   href: PropTypes.string.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  testId: PropTypes.string
 };
 
 Link.defaultProps = {
   className: undefined,
-  type: undefined
+  type: undefined,
+  onClick: noop,
+  testId: 'link'
 };
 
 export default Link;

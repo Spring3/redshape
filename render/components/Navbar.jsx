@@ -14,7 +14,7 @@ const Navbar = styled.nav`
   right: 0px;
   z-index: 2;
   height: 50px;
-  background: linear-gradient(to bottom, ${props => props.theme.bg} 85%, transparent);
+  background: linear-gradient(to bottom, ${(props) => props.theme.bg} 85%, transparent);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,7 +31,7 @@ const Navbar = styled.nav`
       display: inline;
       font-size: 15px;
       font-weight: bold;
-      ${({theme}) => css`
+      ${({ theme }) => css`
         color: ${theme.normalText};
         transition: color ease ${theme.transitionTime};
 
@@ -132,11 +132,11 @@ NavigationBar.propTypes = {
   logout: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   user: state.user
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(actions.user.logout())
 });
 

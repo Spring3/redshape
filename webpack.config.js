@@ -91,7 +91,8 @@ if (!isProduction) {
     },
     before: () => spawn('electron', ['.'], { shell: true, env: process.env, stdio: 'inherit' })
       .once('close', () => process.exit(0))
-      .once('error', spawnError => console.error(spawnError))
+      // eslint-disable-next-line
+      .once('error', (spawnError) => console.error(spawnError))
   };
 
   config.plugins.push(new webpack.HotModuleReplacementPlugin());

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import makeAnimated from 'react-select/lib/animated';
@@ -10,22 +9,14 @@ import actions from '../../actions';
 import { Label } from '../Input';
 
 const selectStyles = {
-  container: (base, state) => {
-    return { ...base };
-  },
-  multiValue: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
-      : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' };
-  },
-  multiValueLabel: (base, state) => {
-    return state.data.isFixed
-      ? { ...base, paddingRight: 6, color: '#A4A4A4' }
-      : base;
-  },
-  multiValueRemove: (base, state) => {
-    return state.data.isFixed ? { ...base, display: 'none' } : base;
-  }
+  container: (base) => ({ ...base }),
+  multiValue: (base, state) => (state.data.isFixed
+    ? { ...base, backgroundColor: '#FAFAFA', border: '1px solid #A4A4A4' }
+    : { ...base, backgroundColor: 'transparent', border: '1px solid #3F3844' }),
+  multiValueLabel: (base, state) => (state.data.isFixed
+    ? { ...base, paddingRight: 6, color: '#A4A4A4' }
+    : base),
+  multiValueRemove: (base, state) => (state.data.isFixed ? { ...base, display: 'none' } : base)
 };
 
 class ColumnHeadersSelect extends Component {
@@ -52,9 +43,12 @@ class ColumnHeadersSelect extends Component {
           return;
         }
         break;
+      default:
+        return;
     }
 
-    this.props.settingsChangeIssueHeaders(value);
+    const { settingsChangeIssueHeaders } = this.props;
+    settingsChangeIssueHeaders(value);
   }
 
   render() {
@@ -78,8 +72,7 @@ class ColumnHeadersSelect extends Component {
               ...defaultTheme.colors,
               primary: theme.main,
             },
-          })
-          }
+          })}
         />
       </Label>
     );
@@ -92,15 +85,16 @@ ColumnHeadersSelect.propTypes = {
     value: PropTypes.string.isRequired,
     isFixed: PropTypes.bool
   }).isRequired).isRequired,
-  settingsChangeIssueHeaders: PropTypes.func.isRequired
+  settingsChangeIssueHeaders: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   issueHeaders: state.settings.issueHeaders,
 });
 
-const mapDispatchToProps = dispatch => ({
-  settingsChangeIssueHeaders: issueHeaders => dispatch(actions.settings.setIssueHeaders(issueHeaders))
+const mapDispatchToProps = (dispatch) => ({
+  settingsChangeIssueHeaders: (issueHeaders) => dispatch(actions.settings.setIssueHeaders(issueHeaders))
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(ColumnHeadersSelect));

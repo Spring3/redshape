@@ -1,17 +1,19 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import TextArea from '../TextArea';
 
 describe('TextArea component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(<TextArea onChange={() => {}} />).toJSON();
-    expect(tree).toMatchSnapshot();
+  afterEach(cleanup);
+
+  it('should render the text area', () => {
+    render(<TextArea onChange={() => {}} />);
+    expect(document.querySelector('textarea')).toBeDefined();
   });
 
   it('should react to the onChange event', () => {
     const onChange = jest.fn();
-    const wrapper = shallow(
+    render(
       <TextArea onChange={onChange} />
     );
 
@@ -22,9 +24,8 @@ describe('TextArea component', () => {
       persist: () => {}
     };
 
-    wrapper.simulate('change', event);
-    wrapper.update();
+    fireEvent.change(document.querySelector('textarea'), event);
 
-    expect(onChange).toHaveBeenCalledWith(event);
+    expect(onChange).toHaveBeenCalled();
   });
 });
