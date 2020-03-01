@@ -69,7 +69,10 @@
       "target": [
         "deb",
         "AppImage"
-      ]
+      ],
+      "desktop": {
+        "Icon": "/usr/share/icons/hicolor/0x0/apps/redshape.png"
+      }
     },
     "deb": {
       "category": "Development",
