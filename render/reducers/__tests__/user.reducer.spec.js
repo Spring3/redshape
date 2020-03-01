@@ -1,11 +1,10 @@
 import reducer from '../user.reducer';
 import { USER_LOGIN, USER_LOGOUT } from '../../actions/user.actions';
-import actions from '../../actions';
 import { notify } from '../../actions/helper';
 
-jest.mock('electron-store');
-
 import storage from '../../../common/storage';
+
+jest.mock('electron-store');
 
 describe('User reducer', () => {
   const initialState = {

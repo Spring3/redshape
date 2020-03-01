@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import request, { notify } from './helper';
+
+import { durationToHours } from '../datetime';
 
 export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
 export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
@@ -12,22 +14,51 @@ export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
-const validateBeforePublish = (timeEntry) => {
-  const validationSchema = Joi.object().keys({
+const validateDuration = (value, helpers) => {
+  const hours = durationToHours(value);
+  if (hours == null) {
+    return helpers.message('"duration" requires a value in hours or a duration string (eg. 34m, 1 day 5m)');
+  }
+  if (hours <= 0.0) {
+    return helpers.message(`"duration" requires a positive duration (${hours} hours)`);
+  }
+  return hours;
+};
+
+const validateBeforeCommon = (timeEntry, checkFields) => {
+  let schema = {};
+  const schemaFields = {
     activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required(),
+      // label: bugfix "activity.activity" is required, when "Add" new time spent and fill first the duration
+      id: Joi.number().integer().positive().required()
+        .label('activity'),
       name: Joi.string()
     }).unknown().required(),
     issue: Joi.object().keys({
       id: Joi.number().integer().positive().required(),
       name: Joi.string()
     }).unknown().required(),
-    hours: Joi.number().positive().precision(2).required(),
+    duration: Joi.string().required().custom(validateDuration, 'duration validator'),
+    hours: Joi.number().positive().precision(4).required()
+      .label('duration'),
     comments: Joi.string().required().allow(''),
     spent_on: Joi.string().required()
-  }).unknown().required();
+  };
+  const fields = checkFields && !Array.isArray(checkFields) ? [checkFields] : checkFields;
+  if (checkFields) {
+    for (const checkField of fields) {
+      schema[checkField] = schemaFields[checkField];
+    }
+  } else {
+    schema = schemaFields;
+  }
+  const validationSchema = Joi.object().keys(schema).unknown().required();
+  const validationResult = validationSchema.validate(timeEntry);
+  return validationResult;
+};
 
-  const validationResult = Joi.validate(timeEntry, validationSchema);
+const validateBeforePublish = (timeEntry, checkFields) => {
+  const validationResult = validateBeforeCommon(timeEntry, checkFields);
   return validationResult.error
     ? {
       type: TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
@@ -36,7 +67,7 @@ const validateBeforePublish = (timeEntry) => {
     : { type: TIME_ENTRY_PUBLISH_VALIDATION_PASSED };
 };
 
-const publish = timeEntryData => (dispatch, getState) => {
+const publish = (timeEntryData) => (dispatch, getState) => {
   const validationAction = validateBeforePublish(timeEntryData);
   dispatch(validationAction);
 
@@ -63,23 +94,18 @@ const publish = timeEntryData => (dispatch, getState) => {
   })
     .then(({ data }) => dispatch(notify.ok(TIME_ENTRY_PUBLISH, data)))
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when submitting the time entry', error);
       dispatch(notify.nok(TIME_ENTRY_PUBLISH, error));
     });
 };
 
-const validateBeforeUpdate = (changes) => {
-  const validationSchema = Joi.object().keys({
-    activity: Joi.object().keys({
-      id: Joi.number().integer().positive().required(),
-      name: Joi.string()
-    }).unknown().required(),
-    hours: Joi.number().positive().precision(2).required(),
-    comments: Joi.string().required().allow(''),
-    spent_on: Joi.string().required()
-  }).unknown().required();
-
-  const validationResult = Joi.validate(changes, validationSchema);
+const validateBeforeUpdate = (timeEntry, checkFields) => {
+  if (!checkFields) {
+    // eslint-disable-next-line no-param-reassign
+    checkFields = ['activity', 'duration', 'hours', 'comments', 'spent_on'];
+  }
+  const validationResult = validateBeforeCommon(timeEntry, checkFields);
   return validationResult.error
     ? {
       type: TIME_ENTRY_UPDATE_VALIDATION_FAILED,
@@ -131,6 +157,7 @@ const update = (originalTimeEntry, changes) => (dispatch) => {
     return dispatch(notify.ok(TIME_ENTRY_UPDATE, updatedTimeEntry));
   })
     .catch((error) => {
+      // eslint-disable-next-line
       console.error('Error when updating the time entry', error);
       dispatch(notify.nok(TIME_ENTRY_UPDATE, error));
     });
@@ -147,6 +174,7 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     method: 'DELETE'
   }).then(() => dispatch(notify.ok(TIME_ENTRY_DELETE, { timeEntryId, issueId })))
     .catch((error) => {
+      // eslint-disable-next-line
       console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
       dispatch(notify.nok(TIME_ENTRY_DELETE, error));
     });

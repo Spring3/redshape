@@ -1,9 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, cleanup, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import toJSON from 'enzyme-to-json';
 import thunk from 'redux-thunk';
+import { TRACKING_PAUSE } from '../../actions/tracking.actions';
 
 // using mount instead of shallow due to https://github.com/airbnb/enzyme/issues/1908
 
@@ -11,33 +12,17 @@ import Timer from '../Timer';
 
 const mockStore = configureStore([thunk]);
 
-const waitSeconds = (n = 1) => new Promise(resolve => setTimeout(() => resolve(), n * 1000));
+const stateSettings = {
+  idleBehavior: 0,
+  discardIdleTime: true,
+  advancedTimerControls: false,
+  progressWithStep1: false,
+};
+
+const waitSeconds = (n = 1) => new Promise((resolve) => setTimeout(() => resolve(), n * 1000));
 
 describe('Timer component', () => {
-  it('should match the snapshot', () => {
-    const state = {
-      tracking: {
-        isEnabled: true,
-        isPaused: true,
-        duration: 0,
-        issue: {
-          id: '123abc',
-          subject: 'Test issue'
-        }
-      }
-    };
-    const store = mockStore(state);
-    const wrapper = mount(
-      <Provider store={store}>
-        <Timer
-          trackedDuration={4000}
-        />
-      </Provider>,
-      { context: { store } }
-    );
-    expect(toJSON(wrapper)).toMatchSnapshot();
-  });
-
+  afterEach(cleanup);
   it('should automatically resume timer if trackedTime prop was provided', async () => {
     const onStop = jest.fn();
     const onPause = jest.fn();
@@ -48,16 +33,18 @@ describe('Timer component', () => {
         isEnabled: true,
         isPaused: false,
         duration: 4000,
+        comments: '',
         issue: {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
 
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <Timer
           onStop={onStop}
@@ -68,16 +55,19 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
-    expect(timer.interval).toBeDefined();
     await waitSeconds(1);
-    expect(timer.state.value).toBe(5000);
-    expect(wrapper.find('.buttons').children().length).toBe(2);
-    expect(wrapper.find('.buttons').childAt(1).exists('PauseIcon')).toBe(true);
-    wrapper.find('.buttons').childAt(1).find('GhostButton').simulate('click');
-    wrapper.update();
-    expect(timer.interval).not.toBeDefined();
+    const buttons = document.querySelector('.buttons');
+    expect(buttons.children).toHaveLength(2);
+    expect(buttons.lastElementChild).toHaveAttribute('id', 'pause-timer');
+    fireEvent.click(buttons.lastElementChild);
+    expect(onPause).toHaveBeenCalled();
+    expect(store.getActions()[0]).toEqual({
+      type: TRACKING_PAUSE,
+      data: {
+        duration: state.tracking.duration + 1000,
+        comments: state.tracking.comments
+      }
+    });
   });
 
   it('should start the counter from the initialValue if given', async () => {
@@ -94,15 +84,17 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
+    const initialValue = 3000;
 
-    const wrapper = mount(
+    const { unmount } = render(
       <Provider store={store}>
         <Timer
-          initialValue={3000}
+          initialValue={initialValue}
           onStop={onStop}
           onPause={onPause}
           onContinue={onContinue}
@@ -111,14 +103,16 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
-
-    expect(timer.interval).toBeDefined();
-    expect(timer.state.value).toBe(3000);
     await waitSeconds(1);
-    expect(timer.state.value).toBe(4000);
-    wrapper.unmount();
+    fireEvent.click(document.querySelector('.buttons').lastElementChild);
+    expect(store.getActions()[0]).toEqual({
+      type: TRACKING_PAUSE,
+      data: {
+        duration: initialValue + 1000,
+        comments: ''
+      }
+    });
+    unmount();
   });
 
   it('should automatically save the progress before unmount', async () => {
@@ -135,12 +129,13 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
 
-    const wrapper = mount(
+    const { unmount } = render(
       <Provider store={store}>
         <Timer
           onStop={onStop}
@@ -151,63 +146,11 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
-
-    const cleanupSpy = jest.spyOn(timer, 'cleanup');
-
-    expect(timer.interval).toBeDefined();
     await waitSeconds(1);
-    expect(timer.state.value).toBe(5000);
-    wrapper.unmount();
+    unmount();
 
-    expect(cleanupSpy).toHaveBeenCalled();
-    expect(onPause).toHaveBeenCalledWith(5000, state.tracking.issue);
-  });
-
-  it('should allow to pause the timer', async () => {
-    const onStop = jest.fn();
-    const onPause = jest.fn();
-    const onContinue = jest.fn();
-
-    const state = {
-      tracking: {
-        isEnabled: true,
-        isPaused: false,
-        duration: 0,
-        issue: {
-          id: '123abc',
-          subject: 'Test issue'
-        }
-      }
-    };
-
-    const store = mockStore(state);
-
-    const wrapper = mount(
-      <Provider store={store}>
-        <Timer
-          onStop={onStop}
-          onPause={onPause}
-          onContinue={onContinue}
-        />
-      </Provider>,
-      { context: { store } }
-    );
-
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
-    expect(timer.interval).toBeDefined();
-
-    await waitSeconds(1);
-    expect(wrapper.exists('.buttons')).toBe(true);
-    expect(wrapper.find('.buttons').children().length).toBe(2);
-    expect(wrapper.find('.buttons').childAt(1).exists('PauseIcon')).toBe(true);
-
-    wrapper.find('.buttons').childAt(1).find('GhostButton').simulate('click');
-    wrapper.update();
-
-    expect(onPause).toHaveBeenCalledWith(1000, state.tracking.issue);
+    expect(onPause).toHaveBeenCalled();
+    expect(store.getActions()).toEqual([{ type: 'TRACKING_PAUSE', data: { duration: 5000, comments: '' } }]);
   });
 
   it('should allow to resume the paused timer', async () => {
@@ -224,12 +167,13 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
 
-    const wrapper = mount(
+    const { unmount } = render(
       <Provider store={store}>
         <Timer
           onStop={onStop}
@@ -240,24 +184,16 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
+    const buttons = document.querySelector('.buttons');
+    expect(buttons).toBeDefined();
+    expect(buttons.children).toHaveLength(2);
+    expect(buttons.lastElementChild).toHaveAttribute('id', 'continue-timer');
 
-    const timerTick = jest.spyOn(timer, 'tick');
-    expect(timer.interval).not.toBeDefined();
-
-    expect(wrapper.exists('.buttons')).toBe(true);
-    expect(wrapper.find('.buttons').children().length).toBe(2);
-    expect(wrapper.find('.buttons').childAt(1).exists('PlayIcon')).toBe(true);
-
-    wrapper.find('.buttons').childAt(1).find('GhostButton').simulate('click');
+    fireEvent.click(buttons.lastElementChild);
     await waitSeconds(1);
-    wrapper.update();
     expect(onContinue).toHaveBeenCalledTimes(1);
-    expect(timerTick).toHaveBeenCalledTimes(1);
-    expect(timer.state.value).toBe(1000);
-    expect(timer.interval).toBeDefined();
-    wrapper.unmount();
+    unmount();
+    expect(store.getActions().pop()).toEqual({ type: 'TRACKING_SAVE', data: { duration: 1000, comments: '' } });
   });
 
   it('should be able to stop time timer', async () => {
@@ -274,12 +210,13 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
 
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <Timer
           onStop={onStop}
@@ -290,21 +227,15 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    const timer = wrapper.find('Timer').instance();
-    expect(timer).toBeTruthy();
-
-    expect(timer.interval).toBeDefined();
-    expect(wrapper.exists('.buttons')).toBe(true);
-    expect(wrapper.find('.buttons').children().length).toBe(2);
-    expect(wrapper.find('.buttons').childAt(0).exists('StopIcon')).toBe(true);
+    const buttons = document.querySelector('.buttons');
+    expect(buttons).toBeDefined();
+    expect(buttons.children).toHaveLength(2);
+    expect(buttons.firstElementChild).toHaveAttribute('id', 'stop-timer');
 
     await waitSeconds(1);
-    wrapper.find('.buttons').childAt(0).find('GhostButton').simulate('click');
-    wrapper.update();
+    fireEvent.click(buttons.firstElementChild);
 
-    expect(onStop).toHaveBeenCalledWith(1000, state.tracking.issue);
-    expect(timer.interval).not.toBeDefined();
-
+    expect(onStop).toHaveBeenCalledWith(state.tracking.issue, 1000, '');
     expect(onStop).toHaveBeenCalledTimes(1);
   });
 
@@ -322,7 +253,8 @@ describe('Timer component', () => {
           id: '123abc',
           subject: 'Test issue'
         }
-      }
+      },
+      settings: stateSettings,
     };
 
     const store = mockStore(state);
@@ -330,7 +262,7 @@ describe('Timer component', () => {
       push: jest.fn()
     };
 
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <Timer
           history={history}
@@ -342,7 +274,7 @@ describe('Timer component', () => {
       { context: { store } }
     );
 
-    wrapper.find('.issueName').childAt(0).simulate('click');
+    fireEvent.click(document.querySelector('.issueName').firstElementChild);
     expect(history.push).toHaveBeenCalledWith(`/app/issue/${state.tracking.issue.id}`);
   });
 });

@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from 'react-testing-library';
-import styled from 'styled-components';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Input, Label } from '../Input';
 import theme from '../../theme';
 

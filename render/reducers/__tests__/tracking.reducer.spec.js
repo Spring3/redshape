@@ -51,7 +51,8 @@ describe('Tracking Reducer', () => {
       ...initialState,
       isEnabled: false,
       isPaused: false,
-      duration: 1000
+      duration: 1000,
+      comments: undefined,
     };
 
     expect(
@@ -68,7 +69,8 @@ describe('Tracking Reducer', () => {
       ...initialState,
       isEnabled: true,
       isPaused: true,
-      duration: 1000
+      duration: 1000,
+      comments: undefined
     };
 
     expect(

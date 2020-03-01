@@ -16,7 +16,7 @@ ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
       <HashRouter>
-        <App />
+        <App dispatch={store.dispatch} />
       </HashRouter>
     </Provider>
   </ThemeProvider>,

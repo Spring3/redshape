@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { render, cleanup, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
@@ -28,77 +28,12 @@ describe('IssueDetails => TimeEntries componnet', () => {
 
   afterEach(() => {
     axiosMock.reset();
+    cleanup();
   });
 
   afterAll(() => {
     axiosMock.restore();
     reset();
-  });
-
-  it('should match the snapshot', () => {
-    axiosMock.onGet('/time_entries.json').reply(() => Promise.resolve([200]));
-    const state = {
-      user: {
-        id: 1,
-        name: 'John Wayne'
-      },
-      issues: {
-        selected: {
-          data: {
-            id: 1,
-            subject: 'Test',
-            journals: []
-          },
-          spentTime: {
-            data: [
-              {
-                id: 1,
-                user: {
-                  id: 1,
-                  name: 'John Wayne'
-                },
-                activity: {
-                  id: 1,
-                  name: 'Development'
-                },
-                hours: 3.2,
-                spent_on: '2011-01-01',
-                comments: 'Let\'s get this done'
-              },
-              {
-                id: 2,
-                user: {
-                  id: 2,
-                  name: 'John Snow'
-                },
-                activity: {
-                  id: 1,
-                  name: 'Testing'
-                },
-                hours: 3.2,
-                spent_on: '2011-01-01',
-                comments: 'I know nothing'
-              }
-            ]
-          }
-        }
-      },
-      tracking: {
-        isEnabled: false,
-        issue: {
-          id: 1
-        }
-      }
-    };
-    const store = mockStore(state);
-    const tree = renderer.create(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <TimeEntries />
-        </ThemeProvider>
-      </Provider>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
   });
 
   it('should fetch the time entries for the selected issue on mount', () => {
@@ -142,7 +77,7 @@ describe('IssueDetails => TimeEntries componnet', () => {
       }
     };
     const store = mockStore(state);
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <TimeEntries />
@@ -195,17 +130,14 @@ describe('IssueDetails => TimeEntries componnet', () => {
     };
     const store = mockStore(state);
     const showTimeEntry = jest.fn();
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <TimeEntries showTimeEntryModal={showTimeEntry} />
         </ThemeProvider>
       </Provider>
     );
-    const section = wrapper.find('TimeEntries').instance();
-    expect(section).toBeTruthy();
-
-    section.openModal()();
+    fireEvent.click(document.querySelector('#openModal'));
     expect(showTimeEntry).toHaveBeenCalled();
   });
 
@@ -250,14 +182,14 @@ describe('IssueDetails => TimeEntries componnet', () => {
       }
     };
     const store = mockStore(state);
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <TimeEntries />
         </ThemeProvider>
       </Provider>
     );
-    wrapper.find('TimeEntries__FlexButton').at(1).simulate('click');
+    fireEvent.click(document.querySelector('#track'));
     expect(store.getActions().pop().type).toBe(TRACKING_START);
   });
 
@@ -304,17 +236,18 @@ describe('IssueDetails => TimeEntries componnet', () => {
     };
     const store = mockStore(state);
     const showTimeEntryModal = jest.fn();
-    const wrapper = mount(
+    render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <TimeEntries showTimeEntryModal={showTimeEntryModal} />
         </ThemeProvider>
       </Provider>
     );
-    wrapper.find('TimeEntries').instance().removeTimeEntry(1)({
+    fireEvent.click(document.querySelector('#confirmDeletion'), {
       preventDefault: () => {},
       stopPropagation: () => {}
     });
+    fireEvent.click(document.querySelector('#dialog-confirm'));
     expect(store.getActions().pop().type).toBe(TIME_ENTRY_DELETE);
   });
 });

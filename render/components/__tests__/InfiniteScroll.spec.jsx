@@ -1,31 +1,18 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import InfiniteScroll from '../InfiniteScroll';
 
 describe('InfiniteScroll component', () => {
-  it('should match the snapshot', () => {
-    const tree = renderer.create(
-      <InfiniteScroll
-        immediate={true}
-        hasMore={true}
-        isEnd={false}
-        load={() => {}}
-        loadIndicator={<span>Loading...</span>}
-      >
-        <div>Hello</div>
-        <div>World</div>
-      </InfiniteScroll>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
+  afterEach(cleanup);
   it('should set the scroll event handler once initialized', () => {
     const containerMock = {
-      addEventListener: jest.fn()
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn()
     };
-    const wrapper = shallow(
+
+    const { queryByText, rerender } = render(
       <InfiniteScroll
         immediate={true}
         isEnd={false}
@@ -38,8 +25,24 @@ describe('InfiniteScroll component', () => {
         <div>World</div>
       </InfiniteScroll>
     );
-    wrapper.setProps({ hasMore: true });
+
+    rerender(
+      <InfiniteScroll
+        immediate={true}
+        isEnd={false}
+        hasMore={true}
+        load={() => {}}
+        loadIndicator={<span>Loading...</span>}
+        container={containerMock}
+      >
+        <div>Hello</div>
+        <div>World</div>
+      </InfiniteScroll>
+    );
+
     expect(containerMock.addEventListener).toHaveBeenCalled();
+    expect(queryByText('Hello')).toBeDefined();
+    expect(queryByText('World')).toBeDefined();
   });
 
   it('should remove the scroll event handle before unmount', () => {
@@ -47,7 +50,7 @@ describe('InfiniteScroll component', () => {
       addEventListener: jest.fn(),
       removeEventListener: jest.fn()
     };
-    const wrapper = shallow(
+    const { rerender, unmount } = render(
       <InfiniteScroll
         immediate={true}
         isEnd={false}
@@ -60,18 +63,7 @@ describe('InfiniteScroll component', () => {
         <div>World</div>
       </InfiniteScroll>
     );
-    wrapper.setProps({ hasMore: true });
-    expect(containerMock.addEventListener).toHaveBeenCalled();
-    wrapper.unmount();
-    expect(containerMock.removeEventListener).toHaveBeenCalled();
-  });
-
-  it('should set isLoading to false when isEnd is set to true', () => {
-    const containerMock = {
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn()
-    };
-    const wrapper = shallow(
+    rerender(
       <InfiniteScroll
         immediate={true}
         isEnd={false}
@@ -84,9 +76,9 @@ describe('InfiniteScroll component', () => {
         <div>World</div>
       </InfiniteScroll>
     );
-    wrapper.setState({ isLoading: true });
-    wrapper.setProps({ isEnd: true });
-    expect(wrapper.state('isLoading')).toBe(false);
+    expect(containerMock.addEventListener).toHaveBeenCalled();
+    unmount();
+    expect(containerMock.removeEventListener).toHaveBeenCalled();
   });
 
   it('should remove the scroll handler if hasMore is set to false', () => {
@@ -94,7 +86,7 @@ describe('InfiniteScroll component', () => {
       addEventListener: jest.fn(),
       removeEventListener: jest.fn()
     };
-    const wrapper = shallow(
+    const { rerender } = render(
       <InfiniteScroll
         immediate={true}
         isEnd={false}
@@ -107,18 +99,7 @@ describe('InfiniteScroll component', () => {
         <div>World</div>
       </InfiniteScroll>
     );
-    wrapper.setProps({ hasMore: false });
-    expect(containerMock.removeEventListener).toHaveBeenCalled();
-  });
-
-  it('should reset isLoading and add scroll handler if hasMore became true', () => {
-    const containerMock = {
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      scrollTop: 0,
-      scrollHeight: 300
-    };
-    const wrapper = shallow(
+    rerender(
       <InfiniteScroll
         immediate={true}
         isEnd={false}
@@ -131,9 +112,7 @@ describe('InfiniteScroll component', () => {
         <div>World</div>
       </InfiniteScroll>
     );
-    wrapper.setState({ isLoading: true });
-    wrapper.setProps({ hasMore: true });
-    wrapper.setState({ isLoading: false });
+    expect(containerMock.removeEventListener).toHaveBeenCalled();
   });
 
   describe('onScroll function', () => {
@@ -146,7 +125,7 @@ describe('InfiniteScroll component', () => {
         clientHeight: 300
       };
       const loadFn = jest.fn();
-      const wrapper = shallow(
+      const { queryByText, baseElement } = render(
         <InfiniteScroll
           immediate={true}
           isEnd={false}
@@ -159,10 +138,9 @@ describe('InfiniteScroll component', () => {
           <div>World</div>
         </InfiniteScroll>
       );
-      const instance = wrapper.instance();
-      instance.onScroll({});
+      fireEvent.scroll(baseElement, {});
       setTimeout(() => {
-        expect(wrapper.state('isLoading')).toBe(true);
+        expect(queryByText('Loading...')).toBeDefined();
         expect(loadFn).toHaveBeenCalled();
         done();
       }, 1);

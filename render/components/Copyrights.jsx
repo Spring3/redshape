@@ -12,7 +12,8 @@ export default () => (
     Created by&nbsp;
     <Link
       type="external"
-      href="https://spring3.github.io/website/"
+      href="https://www.dvasylenko.com"
+      testId="copyrights-link"
     >
       Daniyil Vasylenko
     </Link>

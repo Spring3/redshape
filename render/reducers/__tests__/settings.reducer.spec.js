@@ -4,7 +4,7 @@ import reducer, { initialState } from '../settings.reducer';
 import storage from '../../../common/storage';
 import * as actions from '../../actions/settings.actions';
 
-let storageSpy
+let storageSpy;
 
 describe('Settings reducer', () => {
   beforeAll(() => {
