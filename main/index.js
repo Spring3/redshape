@@ -347,6 +347,11 @@ const initialize = () => {
   });
 };
 
+app.on('certificate-error', (event, webContents, _url, error, certificate, callback) => {
+  event.preventDefault();
+  callback(['redshape', 'redshape application'].includes(certificate.subjectName.toLowerCase()));
+});
+
 app.once('ready', () => {
   const configFilePath = isDev
     ? path.join(__dirname, '../.env')
