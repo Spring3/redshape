@@ -137,16 +137,26 @@ const compSelectStyles = {
   control: (base, state) => ({ ...base, borderColor: state.isDisabled ? '#E9E9E9' : '#A0A0A0' }),
 };
 
-const extractFromTransitions = (transitions, key) => {
+const extractFromTransitions = (transitions, key, extra = {}) => {
   const list = transitions && transitions[key];
   let values;
   if (list) {
     if (key === 'assigned_to') {
+      let meFound = false;
+      const { myId } = extra;
       values = list.sort((a, b) => a.lastname.localeCompare(b.lastname))
-        .map(el => ({
-          value: el.id,
-          label: `${el.firstname} ${el.lastname}`
-        }));
+        .map((el) => {
+          if (el.id === myId) {
+            meFound = true;
+          }
+          return {
+            value: el.id,
+            label: `${el.firstname} ${el.lastname}`
+          };
+        });
+      if (meFound) {
+        values.splice(0, 0, { value: myId, label: '<< Me >>' });
+      }
     } else {
       values = list.sort((a, b) => a.position - b.position)
         .map(el => ({
@@ -173,7 +183,7 @@ class IssueModal extends Component {
       } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
-      assignedToTransitions = extractFromTransitions(transitions, 'assigned_to');
+      assignedToTransitions = extractFromTransitions(transitions, 'assigned_to', { myId: props.userId });
       customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
       issueEntry = {
         estimated_duration: hoursToDuration(estimated_hours),
@@ -212,7 +222,7 @@ class IssueModal extends Component {
         } = issueEntry;
         const statusTransitions = extractFromTransitions(transitions, 'status');
         const priorityTransitions = extractFromTransitions(transitions, 'priority');
-        const assignedToTransitions = extractFromTransitions(transitions, 'assigned_to');
+        const assignedToTransitions = extractFromTransitions(transitions, 'assigned_to', { myId: this.props.userId });
         const customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
         this.setState({
           issueEntry: {
@@ -401,7 +411,7 @@ class IssueModal extends Component {
     const progressInfo = `${progress_info.toFixed(0)}%`;
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
     const { author } = propsIssueEntry;
-    const tooltipIssueModal = "- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.";
+    const tooltipIssueModal = "- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority', 'Assignee' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.";
     const progressSliderStep = progressSlider && Number(progressSlider.replace('%', ''));
     return (
       <Modal
@@ -706,6 +716,7 @@ IssueModal.propTypes = {
   resetValidation: PropTypes.func.isRequired,
   progressSlider: PropTypes.string.isRequired,
   isIssueAlwaysEditable: PropTypes.bool.isRequired,
+  userId: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -713,6 +724,7 @@ const mapStateToProps = state => ({
   progressSlider: state.settings.progressSlider,
   isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
   fieldsData: state.fields.data,
+  userId: state.user.id,
 });
 
 const mapDispatchToProps = dispatch => ({
