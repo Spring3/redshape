@@ -48,7 +48,7 @@ const get = id => (dispatch) => {
   return request({
     url: `/issues/${id}.json`,
     query: {
-      include: 'attachments,children,relations,journals,tags,transitions'
+      include: 'attachments,children,relations,journals,tags,transitions,watchers'
     },
     id: `getIssueDetails:${id}`
   }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))

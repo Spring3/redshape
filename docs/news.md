@@ -319,6 +319,17 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/issue_assignee.png)
 
+### More views
+
+- Two new views: watching issues and all issues (assignable). Therefore, the user is able to work in other issues without going
+  to the redmine website (eg. unassigned, freed by other user, follow the progress of others, etc).
+
+  ![](changes/issues_views.png)
+
+### Watchers field
+
+- If the user is able to list watchers (permission), they will be listed in the issue detail page.
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:

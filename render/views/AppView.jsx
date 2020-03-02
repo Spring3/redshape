@@ -202,6 +202,8 @@ class AppView extends Component {
           <Switch>
             <Route path={`${match.path}/summary/assigned`} render={props => <SummaryPage mode="assigned" key="assigned" {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/summary/author`} render={props => <SummaryPage mode="author" key="author" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/watching`} render={props => <SummaryPage mode="watching" key="watching" {...props} ref={this.childRoutePage} />} />
+            <Route path={`${match.path}/summary/all`} render={props => <SummaryPage mode="all" key="all" {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/settings`} render={props => <SettingsPage {...props} ref={this.childRoutePage} />} />
             <Route path={`${match.path}/issue/:id`} render={props => <IssueDetailsPage key={props.match.params.id} {...props} ref={this.childRoutePage} />} />
             <Redirect to={`${match.path}/summary/assigned`} />

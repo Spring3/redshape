@@ -178,6 +178,24 @@ exports[`Navbar component should match the snapshot 1`] = `
         Author
       </a>
     </li>
+    <li>
+      <a
+        aria-current={null}
+        href="#/app/summary/watching"
+        onClick={[Function]}
+      >
+        Watching
+      </a>
+    </li>
+    <li>
+      <a
+        aria-current={null}
+        href="#/app/summary/all"
+        onClick={[Function]}
+      >
+        All
+      </a>
+    </li>
   </ul>
   <ul>
     <li>

@@ -75,12 +75,17 @@ class SummaryPage extends Component {
     const { search, sortBy, sortDirection } = this.state;
     const { userId, showClosedIssues } = this.props;
     if (userId) {
-      const showByAuthor = this.props.mode === 'author';
       let queryFilter = new IssueFilter();
-      if (showByAuthor) {
-        queryFilter = queryFilter.author(userId);
-      } else {
-        queryFilter = queryFilter.assignee(userId);
+      switch (this.props.mode) {
+        case 'author':
+          queryFilter = queryFilter.author(userId);
+          break;
+        case 'assigned':
+          queryFilter = queryFilter.assignee(userId);
+          break;
+        case 'watching':
+          queryFilter = queryFilter.watching(userId);
+          break;
       }
       queryFilter = queryFilter
         .status({ open: true, closed: showClosedIssues })
@@ -115,11 +120,25 @@ class SummaryPage extends Component {
 
   render() {
     const { theme, showClosedIssues, mode } = this.props;
+    let title;
+    switch (mode) {
+      case 'author':
+        title = 'Issues created by me';
+        break;
+      case 'assigned':
+        title = 'Issues assigned to me';
+        break;
+      case 'watching':
+        title = 'Issues I am watching';
+        break;
+      default:
+        title = 'Issues';
+    }
     return (
       <Grid>
         <IssuesSection>
           <h2>
-            { mode === 'author' ? 'Issues created by me' : 'Issues assigned to me'}
+            { title }
           </h2>
           <OptionsGrid>
             <Input

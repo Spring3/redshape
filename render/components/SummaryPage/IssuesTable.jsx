@@ -189,10 +189,15 @@ class IssuesTable extends Component {
     }
     const isEnhanced = uiStyle === 'enhanced';
     const issueHeadersFiltered = view != null ? issueHeaders.filter((header) => {
-      if (view === 'author') {
-        return (header.label === 'Author') ? null : header;
-      } if (view === 'assigned') {
-        return (header.label === 'Assigned') ? null : header;
+      switch (view) {
+        case 'author':
+          return (header.label === 'Author') ? null : header;
+          break;
+        case 'assigned':
+          return (header.label === 'Assigned') ? null : header;
+          break;
+        default: // watching, all
+          return header;
       }
     }) : issueHeaders;
     return (

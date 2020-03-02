@@ -9,7 +9,10 @@ import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 import RefreshIcon from 'mdi-react/RefreshIcon';
 import LogoutIcon from 'mdi-react/LogoutIcon';
 import GearIcon from 'mdi-react/GearIcon';
-import ListIcon from 'mdi-react/ViewListIcon';
+import PlaylistCheckIcon from 'mdi-react/PlaylistCheckIcon';
+import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
+import PlaylistStarIcon from 'mdi-react/PlaylistStarIcon';
+import ViewHeadlineIcon from 'mdi-react/ViewHeadlineIcon';
 import { animationSlideRight } from '../animations';
 import { GhostButton } from './Button';
 import actions from '../actions';
@@ -301,14 +304,26 @@ class NavigationBar extends Component {
           </li>
           <li>
             <NavLink to="/app/summary/assigned">
-              { isEnhanced && (<ListIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
+              { isEnhanced && (<PlaylistCheckIcon size={22} style={{ marginTop: -2, marginRight: 4 }} />)}
               Assigned
             </NavLink>
           </li>
           <li>
             <NavLink to="/app/summary/author">
-              { isEnhanced && (<ListIcon size={18} style={{ marginTop: -2, marginRight: 2 }} />)}
+              { isEnhanced && (<PlaylistPlusIcon size={22} style={{ marginTop: -2, marginRight: 4 }} />)}
               Author
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/app/summary/watching">
+              { isEnhanced && (<PlaylistStarIcon size={22} style={{ marginTop: -2, marginRight: 4 }} />)}
+              Watching
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/app/summary/all">
+              { isEnhanced && (<ViewHeadlineIcon size={18} style={{ height: 22, marginTop: -2, marginRight: 4 }} />)}
+              All
             </NavLink>
           </li>
         </ul>

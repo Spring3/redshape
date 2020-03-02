@@ -122,7 +122,7 @@ const Grid = styled.div`
   }
 `;
 
-const Relations = styled.div`
+const FlexWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
@@ -220,7 +220,7 @@ class IssueDetailsPage extends Component {
     } = this.state;
     const selectedIssue = selectedIssueState.data;
     const {
-      attachments, total_estimated_hours, estimated_hours, total_spent_hours, spent_hours, custom_fields, relations, tags, children, parent, assigned_to
+      attachments, total_estimated_hours, estimated_hours, total_spent_hours, spent_hours, custom_fields, relations, tags, children, parent, assigned_to, watchers
     } = selectedIssue;
     const extra_fields = [
       ...(attachments && attachments.length) ? [{ name: 'Attachments', value: attachments.length }] : [],
@@ -230,7 +230,6 @@ class IssueDetailsPage extends Component {
     const assignee_id = assigned_to && assigned_to.id;
     const showTotalEstimatedHours = (total_estimated_hours !== estimated_hours && total_estimated_hours >= 0);
     const showTotalSpentHours = (total_spent_hours !== spent_hours && total_spent_hours >= 0);
-
     return selectedIssue.id
       ? (
         <Section>
@@ -384,7 +383,7 @@ Created
                   relations && (
                     <Fragment>
                       <div>Relations:</div>
-                      <Relations>
+                      <FlexWrap>
                         {relations.map((el) => {
                           const rel = el.relation_type;
                           let id; let relId; let
@@ -421,7 +420,15 @@ Created
                           }
                           return (<Tooltip text={`${msg}${delay} #${relId}`}><IssueId key={relId} mode={isEnhanced ? 'enhanced' : 'plain'} clickable={true} value={relId} /></Tooltip>);
                         })}
-                      </Relations>
+                      </FlexWrap>
+                    </Fragment>
+                  )
+                }
+                {
+                  watchers && watchers.length > 0 && (
+                    <Fragment>
+                      <div>Watchers:</div>
+                      <div>{watchers.map(el => el.name).join(', ')}</div>
                     </Fragment>
                   )
                 }
@@ -545,6 +552,10 @@ IssueDetailsPage.propTypes = {
           name: PropTypes.string.isRequired
         }).isRequired,
         subject: PropTypes.string.isRequired,
+      })),
+      watchers: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
       })),
     }),
     isFetching: PropTypes.bool.isRequired,

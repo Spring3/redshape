@@ -336,6 +336,22 @@ exports[`AppView should match the snapshot 1`] = `
           Author
         </a>
       </li>
+      <li>
+        <a
+          aria-current={null}
+          onClick={[Function]}
+        >
+          Watching
+        </a>
+      </li>
+      <li>
+        <a
+          aria-current={null}
+          onClick={[Function]}
+        >
+          All
+        </a>
+      </li>
     </ul>
     <ul>
       <li>

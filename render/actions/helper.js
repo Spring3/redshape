@@ -42,6 +42,11 @@ function IssueFilter() {
     return this;
   };
 
+  this.watching = (id) => {
+    filter.watcher_id = id;
+    return this;
+  };
+
   this.title = (str) => {
     if (str) {
       filter.subject = encodeURIComponent(`~${str.trim()}`);
