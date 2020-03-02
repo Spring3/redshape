@@ -141,8 +141,19 @@ const extractFromTransitions = (transitions, key) => {
   const list = transitions && transitions[key];
   let values;
   if (list) {
-    values = list.sort((a, b) => a.position - b.position)
-      .map(el => ({ value: el.id, label: el.name }));
+    if (key === 'assigned_to') {
+      values = list.sort((a, b) => a.lastname.localeCompare(b.lastname))
+        .map(el => ({
+          value: el.id,
+          label: `${el.firstname} ${el.lastname}`
+        }));
+    } else {
+      values = list.sort((a, b) => a.position - b.position)
+        .map(el => ({
+          value: el.id,
+          label: el.name
+        }));
+    }
   }
   return values;
 };
@@ -154,13 +165,15 @@ class IssueModal extends Component {
     let issueEntry = { customFieldsMap: {} };
     let statusTransitions;
     let priorityTransitions;
+    let assignedToTransitions;
     let customFieldsMap;
     if (propsIssueEntry) {
       const {
-        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description
+        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to
       } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
+      assignedToTransitions = extractFromTransitions(transitions, 'assigned_to');
       customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
       issueEntry = {
         estimated_duration: hoursToDuration(estimated_hours),
@@ -169,6 +182,7 @@ class IssueModal extends Component {
         children: children ? children.length : 0,
         ...(statusTransitions && { status: { value: status.id, label: status.name } }),
         ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
+        ...(assignedToTransitions && assigned_to && { assigned_to: { value: assigned_to.id, label: assigned_to.name } }),
         customFieldsMap: {
           ...customFieldsMap
         },
@@ -182,6 +196,7 @@ class IssueModal extends Component {
       wasModified: false,
       statusTransitions,
       priorityTransitions,
+      assignedToTransitions,
     };
 
     this.debouncedDescriptionChange = _debounce(this.onDescriptionChange, 300);
@@ -193,10 +208,11 @@ class IssueModal extends Component {
 
       if (issueEntry) {
         const {
-          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description
+          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to
         } = issueEntry;
         const statusTransitions = extractFromTransitions(transitions, 'status');
         const priorityTransitions = extractFromTransitions(transitions, 'priority');
+        const assignedToTransitions = extractFromTransitions(transitions, 'assigned_to');
         const customFieldsMap = custom_fields ? Object.fromEntries(custom_fields.map(el => [el.name, el.value])) : {};
         this.setState({
           issueEntry: {
@@ -206,6 +222,7 @@ class IssueModal extends Component {
             children: children ? children.length : 0,
             ...(statusTransitions && { status: { value: status.id, label: status.name } }),
             ...(priorityTransitions && { priority: { value: priority.id, label: priority.name } }),
+            ...(assignedToTransitions && assigned_to && { assigned_to: { value: assigned_to.id, label: assigned_to.name } }),
             customFieldsMap: {
               ...customFieldsMap
             },
@@ -216,6 +233,7 @@ class IssueModal extends Component {
           wasModified: false,
           statusTransitions,
           priorityTransitions,
+          assignedToTransitions,
         });
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
@@ -322,6 +340,16 @@ class IssueModal extends Component {
     });
   }
 
+  onAssignedToChange = (assigned_to) => {
+    this.setState({
+      issueEntry: {
+        ...this.state.issueEntry,
+        assigned_to,
+      },
+      wasModified: true
+    });
+  }
+
   onFieldChange = (name, value) => {
     const { issueEntry } = this.state;
     const { customFieldsMap } = issueEntry;
@@ -348,10 +376,10 @@ class IssueModal extends Component {
       isUserAuthor, isOpen, isEditable, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable
     } = this.props;
     const {
-      issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions
+      issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions, assignedToTransitions
     } = this.state;
     const {
-      progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description
+      progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description, assigned_to
     } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
@@ -360,6 +388,7 @@ class IssueModal extends Component {
         due_date: issue.error.details.find(error => error.path[0] === 'due_date'),
         status: issue.error.details.find(error => error.path[0] === 'status'),
         priority: issue.error.details.find(error => error.path[0] === 'priority'),
+        assigned_to: issue.error.details.find(error => error.path[0] === 'assigned_to'),
       }
       : {};
     let estimatedDurationInfo = '';
@@ -371,7 +400,7 @@ class IssueModal extends Component {
     }
     const progressInfo = `${progress_info.toFixed(0)}%`;
     const disableField = isIssueAlwaysEditable ? false : (!isEditable || !isUserAuthor);
-    const { assigned_to, author } = propsIssueEntry;
+    const { author } = propsIssueEntry;
     const tooltipIssueModal = "- Parent tasks cannot edit 'Progress' and 'Due date'.\n- 'Status', 'Priority' and Custom Fields need server-side support (plugins).\n- Wrong permissions may show an error or not update the issue.";
     const progressSliderStep = progressSlider && Number(progressSlider.replace('%', ''));
     return (
@@ -393,11 +422,43 @@ class IssueModal extends Component {
           <Label htmlFor="author" label="Author">
             <div name="author">{author.name}</div>
           </Label>
-          <Label htmlFor="assignee" label="Assignee">
-            <div name="assignee">{assigned_to && assigned_to.name}</div>
-          </Label>
           {
-            status != null && (
+            assignedToTransitions ? (
+              <div>
+                <Label htmlFor="assignee" label="Assignee">
+                  <FlexRow>
+                    <Select
+                      name="assignee"
+                      options={assignedToTransitions}
+                      styles={compSelectStyles}
+                      value={assigned_to || undefined}
+                      onChange={this.onAssignedToChange}
+                      isClearable={true}
+                      isDisabled={disableField}
+                      theme={defaultTheme => ({
+                        ...defaultTheme,
+                        borderRadius: 3,
+                        colors: {
+                          ...defaultTheme.colors,
+                          primary: theme.main,
+                        },
+                      })
+                      }
+                    />
+                  </FlexRow>
+                  <ErrorMessage show={!!validationErrors.assigned_to}>
+                    {this.getErrorMessage(validationErrors.assigned_to)}
+                  </ErrorMessage>
+                </Label>
+              </div>
+            ) : (
+              <Label htmlFor="assignee" label="Assignee">
+                <div name="assignee">{propsIssueEntry.assigned_to && propsIssueEntry.assigned_to.name}</div>
+              </Label>
+            )
+          }
+          {
+            statusTransitions ? (
               <div>
                 <Label htmlFor="status" label="Status">
                   <FlexRow>
@@ -425,10 +486,14 @@ class IssueModal extends Component {
                   </ErrorMessage>
                 </Label>
               </div>
+            ) : (
+              <Label htmlFor="status" label="Status">
+                <div name="status">{propsIssueEntry.status && propsIssueEntry.status.name}</div>
+              </Label>
             )
           }
           {
-            priority != null && (
+            priorityTransitions ? (
               <div>
                 <Label htmlFor="priority" label="Priority">
                   <FlexRow>
@@ -456,6 +521,10 @@ class IssueModal extends Component {
                   </ErrorMessage>
                 </Label>
               </div>
+            ) : (
+              <Label htmlFor="priority" label="Priority">
+                <div name="priority">{propsIssueEntry.priority && propsIssueEntry.priority.name}</div>
+              </Label>
             )
           }
           <div>
@@ -620,6 +689,12 @@ IssueModal.propTypes = {
         name: PropTypes.string.isRequired,
         position: PropTypes.number.isRequired,
       })),
+      assigned_to: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        firstname: PropTypes.string.isRequired,
+        lastname: PropTypes.string.isRequired,
+        name: PropTypes.string
+      }),
     }),
   }),
   onClose: PropTypes.func.isRequired,
