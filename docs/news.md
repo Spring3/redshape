@@ -313,6 +313,12 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
   ![](changes/links_href.png)
 
+### Assignee
+
+- Assignee of the issue can be set or removed (if server-side support). With this feature, the user will remain much more time in Redshape.
+
+  ![](changes/issue_assignee.png)
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:

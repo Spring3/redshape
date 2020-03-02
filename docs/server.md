@@ -161,7 +161,7 @@ Should return 200 OK with the issue / every issue json object with the optional 
 
 ### Transitions
 
-To be able to modify the issue priority and status.
+To be able to modify the issue priority, status and assignee.
 
 Endpoint: `/issues/:id.json?include=transitions`
 
@@ -305,6 +305,18 @@ It needs a 200 OK response with values like these:
           "parent_id": null,
           "position_name": "highest"
         }
+      ],
+      "assigned_to": [
+        {
+          "id": 5,
+          "firstname": "XX",
+          "lastname": "XXXX"
+        },
+        {
+          "id": 6,
+          "firstname": "Noam",
+          "lastname": "Chomsky"
+        }
       ]
     }
   }
@@ -318,6 +330,7 @@ The issue may have:
 `Transition` is composed of two possible keys:
 - `status`: `Status[]` (list of Status).
 - `priority`: `Priority[]` (list of Priority).
+- `assigned_to`: `Assignee[]` (list of Assignee).
 
 Those lists should have the current state and the possible states that the current user could change to.
 
@@ -330,6 +343,11 @@ Those lists should have the current state and the possible states that the curre
 - `id`: `integer`.
 - `name`: `string`. Name of the priority.
 - `position`: `integer`. Order of the priority compared with the rest.
+
+`Assignee` should have:
+- `id`: `integer`.
+- `firstname`: `string`. Name of the user.
+- `lastname`: `string`. Surname of the user.
 
 ### Custom Fields
 
