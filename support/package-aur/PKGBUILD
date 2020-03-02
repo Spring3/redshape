@@ -1,6 +1,6 @@
 # Maintainer: rNoz <rnoz.commits@gmail.com>
 pkgname=redshape
-pkgver=1.3.6
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="Redmine time tracker"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ groups=()
 depends=('electron' 'libxss' 'pkgconf')
 makedepends=('npm')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rNoz/redshape/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=("b94a0dcf666b2d27f22d6e1a37571697")
+md5sums=("e34b81519f2062ab1a37d5c8601d1632")
 noextract=()
 name=Redshape
 

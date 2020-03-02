@@ -50,6 +50,7 @@ const OptionButtons = styled.div`
   padding-top: 20px;
   border-top: 2px solid ${props => props.theme.bgDark};
   display: flex;
+  justify-content: space-between;
 
   button {
     padding: 8px 15px;
@@ -57,6 +58,17 @@ const OptionButtons = styled.div`
 
   div {
     margin-left: 20px;
+  }
+`;
+
+const Notification = styled.div`
+  align-self: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  color: ${props => props.theme.green};
+
+  &.show {
+    opacity: 1;
   }
 `;
 
@@ -207,6 +219,7 @@ class IssueModal extends Component {
       statusTransitions,
       priorityTransitions,
       assignedToTransitions,
+      notification: props.notification
     };
 
     this.debouncedDescriptionChange = _debounce(this.onDescriptionChange, 300);
@@ -244,6 +257,7 @@ class IssueModal extends Component {
           statusTransitions,
           priorityTransitions,
           assignedToTransitions,
+          notification: this.props.notification
         });
       }
     } else if (oldProps.isOpen !== this.props.isOpen && !this.props.isOpen) {
@@ -278,7 +292,10 @@ class IssueModal extends Component {
   onUpdate = () => {
     const { wasModified, issueEntry } = this.state;
     if (wasModified) {
-      this.props.updateIssueEntry(this.props.issueEntry, issueEntry)
+      const extra = {
+        isStrictWorkflow: this.props.isStrictWorkflow,
+      };
+      this.props.updateIssueEntry(this.props.issueEntry, issueEntry, extra)
         .then((ret) => {
           if (!this.props.issue.error) {
             const unchanged = ret && ret.unchanged;
@@ -386,7 +403,7 @@ class IssueModal extends Component {
       isUserAuthor, isOpen, isEditable, theme, issue, issueEntry: propsIssueEntry, progressSlider, isIssueAlwaysEditable
     } = this.props;
     const {
-      issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions, assignedToTransitions
+      issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions, assignedToTransitions, notification
     } = this.state;
     const {
       progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description, assigned_to
@@ -635,6 +652,7 @@ class IssueModal extends Component {
               Submit
           </Button>
           { issue.isFetching && (<ProcessIndicator />) }
+          <Notification className={notification ? 'show' : ''}>Review if any field needs to be updated</Notification>
         </OptionButtons>
       </Modal>
     );
@@ -717,6 +735,7 @@ IssueModal.propTypes = {
   progressSlider: PropTypes.string.isRequired,
   isIssueAlwaysEditable: PropTypes.bool.isRequired,
   userId: PropTypes.number.isRequired,
+  isStrictWorkflow: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -725,11 +744,12 @@ const mapStateToProps = state => ({
   isIssueAlwaysEditable: state.settings.isIssueAlwaysEditable,
   fieldsData: state.fields.data,
   userId: state.user.id,
+  isStrictWorkflow: state.settings.isStrictWorkflow,
 });
 
 const mapDispatchToProps = dispatch => ({
   issueGet: id => dispatch(actions.issues.get(id)),
-  updateIssueEntry: (issueEntry, changes) => dispatch(actions.issue.update(issueEntry, changes)),
+  updateIssueEntry: (issueEntry, changes, extra) => dispatch(actions.issue.update(issueEntry, changes, extra)),
   validateBeforeUpdate: (changes, checkFields) => dispatch(actions.issue.validateBeforeUpdate(changes, checkFields)),
   resetValidation: () => dispatch(actions.issue.reset())
 });

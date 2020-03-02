@@ -47,8 +47,8 @@ export const migrateSettings = (s, user) => {
       if (vmajor === major && vminor === minor && vpatch === patch) { // same version
         return s;
       }
-      if (vmajor === major && vminor === minor) {
-        if (vmajor === 1 && vminor === 3) {
+      if (vmajor === major && vmajor === 1) { // && vminor === minor) {
+        if (minor === 3) {
           if (patch < 2) { // 1.3.0, 1.3.1: not public
             s.version = '1.3.2';
             log(`Migrating from ${migration} to ${s.version}`);
@@ -56,11 +56,19 @@ export const migrateSettings = (s, user) => {
             keys.forEach(key => s[key] = initialStateSettings[key]);
           }
           if (patch < 3) {
-            s.version = version;
+            s.version = '1.3.3';
             log(`Migrating from ${migration} to ${s.version}`);
             const keys = ['areCustomFieldsEditable'];
             keys.forEach(key => s[key] = initialStateSettings[key]);
           }
+          s.version = '1.4.0';
+          log(`Migrating from ${migration} to ${s.version}`);
+          const keys = ['isStrictWorkflow'];
+          keys.forEach(key => s[key] = initialStateSettings[key]);
+          return save(s, user);
+        } if (minor === 4) {
+          // unreachable in 1.4.0
+          s.version = '1.4.0';
           return save(s, user);
         }
       }
@@ -126,6 +134,9 @@ export const migrateSettings = (s, user) => {
   keys.forEach(key => settings[key] = initialStateSettings[key]);
   // 1.3.3
   keys = ['areCustomFieldsEditable'];
+  keys.forEach(key => settings[key] = initialStateSettings[key]);
+  // 1.4.0
+  keys = ['isStrictWorkflow'];
   keys.forEach(key => settings[key] = initialStateSettings[key]);
 
   settings.version = version;

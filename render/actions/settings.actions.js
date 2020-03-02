@@ -11,6 +11,7 @@ export const SETTINGS_ISSUE_ALWAYS_EDITABLE = 'SETTINGS_ISSUE_ALWAYS_EDITABLE';
 export const SETTINGS_COMMENTS_EDITABLE = 'SETTINGS_COMMENTS_EDITABLE';
 export const SETTINGS_CUSTOM_FIELDS_EDITABLE = 'SETTINGS_CUSTOM_FIELDS_EDITABLE';
 export const SETTINGS_TIMER_CHECKPOINT = 'SETTINGS_TIMER_CHECKPOINT';
+export const SETTINGS_STRICT_WORKFLOW = 'SETTINGS_STRICT_WORKFLOW';
 
 const setShowAdvancedTimerControls = showAdvancedTimerControls => (dispatch, getState) => {
   const { user } = getState();
@@ -153,6 +154,17 @@ const setTimerCheckpoint = timerCheckpoint => (dispatch, getState) => {
     }
   });
 };
+const setStrictWorkflow = isStrictWorkflow => (dispatch, getState) => {
+  const { user } = getState();
+  dispatch({
+    type: SETTINGS_STRICT_WORKFLOW,
+    data: {
+      userId: user.id,
+      redmineEndpoint: user.redmineEndpoint,
+      isStrictWorkflow
+    }
+  });
+};
 
 export default {
   setShowAdvancedTimerControls,
@@ -166,6 +178,7 @@ export default {
   setCommentsEditable,
   setCustomFieldsEditable,
   setTimerCheckpoint,
+  setStrictWorkflow,
   backup,
   restore
 };

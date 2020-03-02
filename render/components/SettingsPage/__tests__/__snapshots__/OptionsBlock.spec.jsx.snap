@@ -262,6 +262,9 @@ exports[`SettingsPage => OptionsBlock component should match the snapshot 1`] = 
               <span>
                 - Custom Fields editable: needs server-side support to update them (if valid permissions).
               </span>
+              <span>
+                - Strict workflow: opinionated workflow to avoid common pitfalls (eg. update issue progress after add time entry).
+              </span>
             </div>
           </div>
         </div>
@@ -396,6 +399,38 @@ exports[`SettingsPage => OptionsBlock component should match the snapshot 1`] = 
         </div>
         <span>
           Custom fields are editable
+        </span>
+      </label>
+      <label>
+        <div
+          className="c10"
+        >
+          <input
+            checked={false}
+            className="c11 c12"
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          <div
+            checked={false}
+            className="c13"
+          >
+            <svg
+              className="mdi-icon "
+              fill="white"
+              height="18"
+              viewBox="0 0 24 24"
+              width="18"
+            >
+              <path
+                d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span>
+          Strict workflow
         </span>
       </label>
     </div>

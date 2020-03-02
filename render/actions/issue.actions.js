@@ -80,7 +80,7 @@ const validateBeforeUpdate = (issueEntry, checkFields) => {
     : { type: ISSUE_UPDATE_VALIDATION_PASSED };
 };
 
-const update = (originalIssueEntry, changes) => (dispatch) => {
+const update = (originalIssueEntry, changes, extra = {}) => (dispatch) => {
   const validateAction = validateBeforeUpdate(changes);
   dispatch(validateAction);
 
@@ -143,6 +143,24 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     return Promise.resolve({ unchanged: true });
   }
   updates.id = originalIssueEntry.id;
+
+  if (extra.isStrictWorkflow) {
+    const hasAssignedTo = updates.hasOwnProperty('assigned_to_id') ? updates.assigned_to_id : originalIssueEntry.assigned_to;
+    if (!hasAssignedTo) {
+      if (updates.hasOwnProperty('status_id')) {
+        dispatch({
+          type: ISSUE_UPDATE_VALIDATION_FAILED,
+          data: {
+            isJoi: true,
+            details: [
+              { path: ['assigned_to'], message: '"Assignee" cannot be empty when updating the status', context: { key: 'assigned_to' } }
+            ]
+          }
+        });
+        return Promise.resolve();
+      }
+    }
+  }
 
   return request({
     url: `/issues/${originalIssueEntry.id}.json`,

@@ -133,6 +133,9 @@ describe('IssueDetails page', () => {
               history={{
                 goBack: jest.fn()
               }}
+              location={{
+                state: {}
+              }}
             />
           </ThemeProvider>
         </HashRouter>
@@ -156,6 +159,9 @@ describe('IssueDetails page', () => {
               }}
               history={{
                 goBack: jest.fn()
+              }}
+              location={{
+                state: {}
               }}
             />
           </ThemeProvider>
@@ -181,6 +187,9 @@ describe('IssueDetails page', () => {
               }}
               history={{
                 goBack: jest.fn()
+              }}
+              location={{
+                state: {}
               }}
             />
           </ThemeProvider>
@@ -213,6 +222,9 @@ describe('IssueDetails page', () => {
               }}
               history={{
                 goBack: jest.fn()
+              }}
+              location={{
+                state: {}
               }}
             />
           </ThemeProvider>
@@ -278,6 +290,9 @@ describe('IssueDetails page', () => {
               history={{
                 goBack: jest.fn()
               }}
+              location={{
+                state: {}
+              }}
             />
           </ThemeProvider>
         </HashRouter>
@@ -339,6 +354,9 @@ describe('IssueDetails page', () => {
               }}
               history={{
                 goBack: jest.fn()
+              }}
+              location={{
+                state: {}
               }}
             />
           </ThemeProvider>

@@ -138,6 +138,10 @@ class IssueDetailsPage extends Component {
       showIssueModal: false
     };
     this.timeEntries = React.createRef();
+    const { state } = props.location;
+    if (state && state.action === 'afterTimeEntryAdded') {
+      this.openIssueModalIfStrictWorkflow();
+    }
   }
 
   componentWillMount() {
@@ -181,19 +185,31 @@ class IssueDetailsPage extends Component {
     });
   }
 
-  closeTimeEntryModal = () => {
+  closeTimeEntryModal = (added) => {
     this.setState({
       activities: [],
       selectedTimeEntry: undefined,
       showTimeEntryModal: false,
       showIssueModal: false
     });
+    if (added) {
+      this.openIssueModalIfStrictWorkflow();
+    }
   }
 
   closeIssueModal = (changes) => {
     this.setState({
-      showIssueModal: false
+      showIssueModal: false,
+      notification: false
     });
+  }
+
+  openIssueModalIfStrictWorkflow() {
+    if (this.props.isStrictWorkflow) {
+      setTimeout(() => {
+        this.setState({ showIssueModal: true, notification: true });
+      }, 500);
+    }
   }
 
   openIssueModal = () => () => {
@@ -213,10 +229,10 @@ class IssueDetailsPage extends Component {
 
   render() {
     const {
-      selectedIssueState, userId, theme, postComments, uiStyle, redmineEndpoint, postUpdateComments
+      selectedIssueState, userId, theme, postComments, uiStyle, redmineEndpoint, postUpdateComments, isStrictWorkflow,
     } = this.props;
     const {
-      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
+      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities, notification
     } = this.state;
     const selectedIssue = selectedIssueState.data;
     const {
@@ -441,6 +457,7 @@ Created
             </IssueDetails>
             <TimeEntries
               ref={this.timeEntries}
+              disabled={isStrictWorkflow && selectedIssue.status.name === 'New'}
               showTimeEntryModal={this.showTimeEntryModal}
             />
           </Flex>
@@ -467,6 +484,7 @@ Created
             isEditable={assignee_id === userId}
             isUserAuthor={selectedIssue.author.id === userId}
             issueEntry={selectedIssue}
+            notification={notification}
             onClose={this.closeIssueModal}
           />
           )}
@@ -569,6 +587,13 @@ IssueDetailsPage.propTypes = {
   postUpdateComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired,
   uiStyle: PropTypes.string.isRequired,
+  isStrictWorkflow: PropTypes.bool.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    state: PropTypes.object,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
+  })
 };
 
 const mapStateToProps = state => ({
@@ -578,6 +603,7 @@ const mapStateToProps = state => ({
   selectedIssueState: state.issues.selected,
   uiStyle: state.settings.uiStyle,
   redmineEndpoint: state.user.redmineEndpoint,
+  isStrictWorkflow: state.settings.isStrictWorkflow,
 });
 
 const mapDispatchToProps = dispatch => ({

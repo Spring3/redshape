@@ -236,7 +236,7 @@ class TimeEntries extends Component {
 
   render() {
     const {
-      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue, uiStyle
+      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue, uiStyle, disabled
     } = this.props;
     const isEnhanced = uiStyle === 'enhanced';
     return (
@@ -244,12 +244,12 @@ class TimeEntries extends Component {
         <HeaderContainer>
           <h2 className="padded">Time spent</h2>
           <div>
-            <FlexButton onClick={this.openModal()}>
+            <FlexButton disabled={disabled} onClick={this.openModal()}>
               <PlusIcon size={22} />
               <span>&nbsp;Add</span>
             </FlexButton>
             <FlexButton
-              disabled={isTimerEnabled || trackedIssueId === selectedIssue.id}
+              disabled={disabled || isTimerEnabled || trackedIssueId === selectedIssue.id}
               onClick={this.startTimeTracking}
             >
               <TimerIcon size={22} />
@@ -386,7 +386,7 @@ const mapStateToProps = state => ({
   selectedIssue: state.issues.selected.data,
   isTimerEnabled: state.tracking.isEnabled,
   trackedIssueId: state.tracking.issue.id,
-  uiStyle: state.settings.uiStyle
+  uiStyle: state.settings.uiStyle,
 });
 
 const mapDispatchToProps = dispatch => ({

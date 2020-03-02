@@ -330,6 +330,14 @@ The second target (`pkgbuild`) will update the version and md5sums of the PKGBUI
 
 - If the user is able to list watchers (permission), they will be listed in the issue detail page.
 
+### Strict workflow
+
+- Based on common pitfalls, this option enforces the user to use Redshape with an opinionated workflow:
+
+1. Issue status can be set to in progress/feedback if has assignee.
+2. Add tracking/start tracking are enabled if issue is in progress/feedback.
+3. After a time entry is added, the issue edit modal is opened, suggesting common updated fields.
+
 ## Recommended settings
 
 After the modifications performed to this repository (listed in news.md), we recommend:
@@ -341,6 +349,7 @@ After the modifications performed to this repository (listed in news.md), we rec
 - UI style: enhanced.
 - Progress values: 1% (only if server-side support - viewing/editing 1% values in redmine web is possible).
 - Custom Fields are editable (only if server-side support).
+- Strict workflow: if you want to use Redshape with opinionated workflows
 
 ## Known issues
 
@@ -352,4 +361,4 @@ After the modifications performed to this repository (listed in news.md), we rec
 ## Acknowledgements
 
 - [Daniyil Vasylenko](redshape.app@gmail.com): original author of this interesting and useful project.
-- [Group4Layers](https://www.group4layers.com): it is possible to contribute to this repository and achieve the new features provided here thanks to this company and its efforts to promote and work with open source. A whole month of dedication has been given in hours assigned by the company.
+- [Group4Layers](https://www.group4layers.com): it is possible to contribute to this repository and achieve the new features provided here thanks to this company and its efforts to promote and work with open source. Two whole months of dedication have been given in hours assigned by the company.

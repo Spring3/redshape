@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import {
+  Route, Redirect, Switch, withRouter
+} from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
 
@@ -177,9 +179,26 @@ class AppView extends Component {
     storage.delete('time_tracking');
   }
 
-  closeTimeEntryModal = () => {
+  closeTimeEntryModal = (added) => {
+    const { timeEntry } = this.state;
+    const issueId = timeEntry && timeEntry.issue.id;
+
     this.setState({ showTimeEntryModal: false, timeEntry: null });
     this.props.resetTimer();
+
+    if (added && this.props.isStrictWorkflow && timeEntry) {
+      const { match, location } = this.props;
+      const nextRoute = `${match.path}/issue/${issueId}`;
+      if (location && location.pathname === nextRoute) {
+        const { current } = this.childRoutePage;
+        current.openIssueModalIfStrictWorkflow();
+      } else {
+        setTimeout(() => {
+          const { history } = this.props;
+          history.push({ pathname: nextRoute, state: { action: 'afterTimeEntryAdded' } });
+        }, 250);
+      }
+    }
   }
 
   onRefresh = () => {
@@ -192,7 +211,6 @@ class AppView extends Component {
   render() {
     const { showTimeEntryModal, timeEntry, activities } = this.state;
     const { userId, api_key, match } = this.props;
-
     return (
       <Grid>
         <DragArea />
@@ -250,6 +268,7 @@ AppView.propTypes = {
   progressSlider: PropTypes.string.isRequired,
   areCustomFieldsEditable: PropTypes.bool.isRequired,
   statusBar: PropTypes.string.isRequired,
+  isStrictWorkflow: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -267,6 +286,7 @@ const mapStateToProps = state => ({
   uiStyle: state.settings.uiStyle,
   avatarId: state.user.avatar_id,
   statusBar: state.session.statusBar,
+  isStrictWorkflow: state.settings.isStrictWorkflow,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -279,4 +299,4 @@ const mapDispatchToProps = dispatch => ({
   fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppView);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppView));

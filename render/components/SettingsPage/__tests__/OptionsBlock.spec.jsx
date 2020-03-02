@@ -17,6 +17,7 @@ import {
   SETTINGS_TIMER_CHECKPOINT,
   SETTINGS_COMMENTS_EDITABLE,
   SETTINGS_CUSTOM_FIELDS_EDITABLE,
+  SETTINGS_STRICT_WORKFLOW,
 } from '../../../actions/settings.actions';
 import OptionsBlock from '../OptionsBlock';
 import { getInstance, reset, initialize } from '../../../../common/request';
@@ -204,6 +205,41 @@ describe('SettingsPage => OptionsBlock component', () => {
     });
   });
 
+  it('should set use of strict workflow when select option is chosen', () => {
+    const state = {
+      settings: {
+        showAdvancedTimerControls: false,
+        showClosedIssues: true,
+        isIssueAlwaysEditable: false,
+        areCustomFieldsEditable: false,
+        isStrictWorkflow: false,
+      },
+      user: {
+        id: 1,
+        redmineEndpoint: 'https://redmine.redmine'
+      }
+    };
+    const store = mockStore(state);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <OptionsBlock />
+        </ThemeProvider>
+      </Provider>
+    );
+
+    wrapper.find('input[type="checkbox"]').at(4).simulate('change', { target: { checked: true } });
+    expect(store.getActions().length).toBe(1);
+    expect(store.getActions()[0]).toEqual({
+      type: SETTINGS_STRICT_WORKFLOW,
+      data: {
+        userId: state.user.id,
+        redmineEndpoint: state.user.redmineEndpoint,
+        isStrictWorkflow: true
+      }
+    });
+  });
+
   it('should set use of idle behavior when select option is chosen', () => {
     const state = {
       settings: {
@@ -239,7 +275,7 @@ describe('SettingsPage => OptionsBlock component', () => {
       }
     });
 
-    wrapper.find('input[type="checkbox"]').at(4).simulate('change', { target: { checked: true } });
+    wrapper.find('input[type="checkbox"]').at(5).simulate('change', { target: { checked: true } });
     expect(store.getActions().length).toBe(2);
     expect(store.getActions()[1]).toEqual({
       type: SETTINGS_IDLE_TIME_DISCARD,
@@ -261,7 +297,7 @@ describe('SettingsPage => OptionsBlock component', () => {
       }
     });
 
-    expect(wrapper.find('input[type="checkbox"]').at(4).props().checked).toBe(false);
+    expect(wrapper.find('input[type="checkbox"]').at(5).props().checked).toBe(false);
 
     selects.at(0).instance().selectOption({ label: 'Pause if idle for 5 minutes', value: '5m' });
     expect(store.getActions().length).toBe(4);

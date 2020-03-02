@@ -261,7 +261,7 @@ class TimeEntryModal extends Component {
       customFieldsMap: timeEntry.customFieldsMap
     }, { fieldsData: this.props.fieldsData }).then(() => {
       if (!this.props.time.error) {
-        this.props.onClose();
+        this.props.onClose(true);
       }
     });
   };

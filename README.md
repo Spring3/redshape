@@ -62,4 +62,4 @@ Mac OS build was signed by a **self-signed certificate**, while Windows and Linu
 ## Acknowledgements
 
 - [Daniyil Vasylenko](redshape.app@gmail.com): original author of this interesting and useful project.
-- [Group4Layers](https://www.group4layers.com): it is possible to contribute to this repository and achieve the new features provided here thanks to this company and its efforts to promote and work with open source. A whole month of dedication has been given in hours assigned by the company.
+- [Group4Layers](https://www.group4layers.com): it is possible to contribute to this repository and achieve the new features provided here thanks to this company and its efforts to promote and work with open source. Two whole months of dedication have been given in hours assigned by the company.

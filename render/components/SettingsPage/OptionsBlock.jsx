@@ -32,7 +32,7 @@ const LabelIcon = styled.span`
   margin-left: 0.2rem;
   color: #A0A0A0;
 `;
-const tooltipOptions = '- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions).\n- Custom Fields editable: needs server-side support to update them (if valid permissions).';
+const tooltipOptions = '- Advanced timer controls: timer and comment are modifiable at runtime.\n- Issue always editable: server will check permissions and update (or not).\n- Comments editable: needs server-side support to update notes (if valid permissions).\n- Custom Fields editable: needs server-side support to update them (if valid permissions).\n- Strict workflow: opinionated workflow to avoid common pitfalls (eg. update issue progress after add time entry).';
 const tooltipCheckpoint = 'Save the state of the timer periodically to avoid losing temporary data\n(eg. killing/suspend/shutdown not working properly in your system).';
 const OptionsInfo = (<LabelIcon><Tooltip position="right" text={tooltipOptions}><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
 const ProgressInfo = (<LabelIcon><Tooltip text="Use 10% unless you have server-side support."><HelpIconStyled size={14} /></Tooltip></LabelIcon>);
@@ -127,9 +127,14 @@ class OptionsBlock extends Component {
     settingsTimerCheckpoint(timerCheckpoint.value);
   }
 
+  toggleStrictWorkflow = () => {
+    const { settingsStrictWorkflow, isStrictWorkflow } = this.props;
+    settingsStrictWorkflow(!isStrictWorkflow);
+  }
+
   render() {
     const {
-      showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable, areCustomFieldsEditable
+      showAdvancedTimerControls, uiStyle, idleBehavior, idleTimeDiscard, progressSlider, theme, isIssueAlwaysEditable, timerCheckpoint, areCommentsEditable, areCustomFieldsEditable, isStrictWorkflow
     } = this.props;
     const values = {
       idleBehavior, progressSlider, uiStyle, timerCheckpoint
@@ -172,6 +177,14 @@ class OptionsBlock extends Component {
                 onChange={this.toggleCustomFieldsEditable}
               />
               <span>Custom fields are editable</span>
+            </label>
+            <label>
+              <Input
+                type="checkbox"
+                checked={isStrictWorkflow}
+                onChange={this.toggleStrictWorkflow}
+              />
+              <span>Strict workflow</span>
             </label>
           </OptionList>
         </Label>
@@ -289,6 +302,7 @@ OptionsBlock.propTypes = {
   areCommentsEditable: PropTypes.bool.isRequired,
   areCustomFieldsEditable: PropTypes.bool.isRequired,
   timerCheckpoint: PropTypes.string.isRequired,
+  isStrictWorkflow: PropTypes.bool.isRequired,
   settingsShowAdvancedTimerControls: PropTypes.func.isRequired,
   settingsUiStyle: PropTypes.func.isRequired,
   settingsIdleBehavior: PropTypes.func.isRequired,
@@ -298,6 +312,7 @@ OptionsBlock.propTypes = {
   settingsCommentsEditable: PropTypes.func.isRequired,
   settingsCustomFieldsEditable: PropTypes.func.isRequired,
   settingsTimerCheckpoint: PropTypes.func.isRequired,
+  settingsStrictWorkflow: PropTypes.func.isRequired,
   fetchAvatar: PropTypes.func.isRequired,
 };
 
@@ -314,6 +329,7 @@ const mapStateToProps = state => ({
   areCommentsEditable: state.settings.areCommentsEditable,
   areCustomFieldsEditable: state.settings.areCustomFieldsEditable,
   timerCheckpoint: state.settings.timerCheckpoint,
+  isStrictWorkflow: state.settings.isStrictWorkflow,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -326,6 +342,7 @@ const mapDispatchToProps = dispatch => ({
   settingsCommentsEditable: value => dispatch(actions.settings.setCommentsEditable(value)),
   settingsCustomFieldsEditable: value => dispatch(actions.settings.setCustomFieldsEditable(value)),
   settingsTimerCheckpoint: value => dispatch(actions.settings.setTimerCheckpoint(value)),
+  settingsStrictWorkflow: value => dispatch(actions.settings.setStrictWorkflow(value)),
   fetchAvatar: id => dispatch(actions.user.fetchAvatar(id)),
   getFieldsData: () => dispatch(actions.fields.getAll()),
 });

@@ -16,6 +16,7 @@ import {
   SETTINGS_COMMENTS_EDITABLE,
   SETTINGS_TIMER_CHECKPOINT,
   SETTINGS_CUSTOM_FIELDS_EDITABLE,
+  SETTINGS_STRICT_WORKFLOW,
 } from '../actions/settings.actions';
 
 import { migrateSettings } from '../../common/migrations';
@@ -43,6 +44,7 @@ export const initialState = {
   areCommentsEditable: false,
   timerCheckpoint: 'none',
   areCustomFieldsEditable: false,
+  isStrictWorkflow: false,
   version,
 };
 
@@ -167,6 +169,15 @@ export default (state = initialState, action) => {
       const nextState = {
         ...state,
         areCustomFieldsEditable,
+      };
+      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
+      return nextState;
+    }
+    case SETTINGS_STRICT_WORKFLOW: {
+      const { userId, redmineEndpoint, isStrictWorkflow } = action.data;
+      const nextState = {
+        ...state,
+        isStrictWorkflow: !!isStrictWorkflow
       };
       storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
