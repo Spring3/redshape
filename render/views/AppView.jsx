@@ -186,16 +186,17 @@ class AppView extends Component {
     this.setState({ showTimeEntryModal: false, timeEntry: null });
     this.props.resetTimer();
 
-    if (added && this.props.isStrictWorkflow && timeEntry) {
+    if (added && this.props.isStrictWorkflow && issueId) {
       const { match, location } = this.props;
-      const nextRoute = `${match.path}/issue/${issueId}`;
-      if (location && location.pathname === nextRoute) {
+      const pathnameIssue = `${match.path}/issue/${issueId}/`;
+      const pathname = location && location.pathname;
+      if (pathname === pathnameIssue) {
         const { current } = this.childRoutePage;
         current.openIssueModalIfStrictWorkflow();
       } else {
         setTimeout(() => {
           const { history } = this.props;
-          history.push({ pathname: nextRoute, state: { action: 'afterTimeEntryAdded' } });
+          history.push({ pathname: pathnameIssue, state: { action: 'afterTimeEntryAdded' } });
         }, 250);
       }
     }
