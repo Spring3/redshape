@@ -108,8 +108,14 @@ class TimeEntryModal extends Component {
     super(props);
     this.state = this.generateState(props);
 
-    this.debouncedCommentsChange = _debounce(this.onCommentsChange, 300);
-    this.debouncedDurationConversionChange = _debounce(this.onDurationConversionChange, 300);
+    this.debouncedCommentsChange = _debounce((comments) => {
+      this.onCommentsChange(comments);
+      this.runValidation('comments');
+    }, 300);
+    this.debouncedDurationConversionChange = _debounce((duration) => {
+      this.onDurationConversionChange(duration);
+      this.runValidation(['duration', 'hours']);
+    }, 300);
   }
 
   generateState({ timeEntry, initialVolatileContent }) {
@@ -231,13 +237,15 @@ class TimeEntryModal extends Component {
     });
   }
 
-  onCommentsChange = comments => this.setState({
-    timeEntry: {
-      ...this.state.timeEntry,
-      comments
-    },
-    wasModified: true
-  });
+  onCommentsChange = (comments) => {
+    this.setState({
+      timeEntry: {
+        ...this.state.timeEntry,
+        comments
+      },
+      wasModified: true
+    });
+  }
 
   onActivityChange = (activity) => {
     this.setState({
@@ -388,9 +396,9 @@ class TimeEntryModal extends Component {
                       name="duration"
                       style={{ ...inputStyle, width: 163 }}
                       value={duration}
-                      onBlur={() => this.runValidation(['duration', 'hours'])}
                       disabled={!isEditable || !isUserAuthor}
                       onChange={this.onDurationChange}
+                      // onBlur omitted on purpose
                     />
                     <DurationInfo className={(!isEditable || !isUserAuthor) ? 'disabled' : ''}>{durationInfo}</DurationInfo>
                   </CombinedInput>
@@ -426,7 +434,7 @@ class TimeEntryModal extends Component {
             <MarkdownEditor
               isDisabled={!isUserAuthor}
               onChange={this.debouncedCommentsChange}
-              onBlur={() => this.runValidation('comments')}
+              // onBlur omitted on purpose
               initialValue={comments}
               maxLength={255}
             />

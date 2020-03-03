@@ -32,13 +32,18 @@ class Link extends PureComponent {
   interceptHover = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.props.setStatusBar(e.target.getAttribute('href') || e.target.innerText);
+    const href = e.target.getAttribute('href') || e.target.innerText;
+    setTimeout(() => {
+      this.props.setStatusBar(href);
+    }, 0);
   }
 
   interceptHoverEnd = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.props.setStatusBar();
+    setTimeout(() => {
+      this.props.setStatusBar();
+    }, 0);
   }
 
   render() {

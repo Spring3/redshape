@@ -46,14 +46,13 @@ const StatusBar = styled.div`
   font-size: 0.8rem;
 
   transition: visibility 0.5s ease-in-out, opacity 0.5s ease-in-out;
-
-  ${props => (props.hasContent ? css`
-  visibility: visible;
-  opacity: 1;
-  ` : css`
   visibility: hidden;
   opacity: 0;
-  `)};
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 `;
 
@@ -64,12 +63,17 @@ class StatusBarWrapper extends Component {
       content: props.content,
       updating: false
     };
+    this.t = null;
   }
 
   componentDidUpdate(oldProps) {
     const { content: oldcontent } = oldProps;
     const { content } = this.props;
     if (oldcontent !== content) {
+      if (this.t) {
+        clearTimeout(this.t);
+        this.t = null;
+      }
       if (!oldcontent && content) {
         this.setState({
           content,
@@ -77,7 +81,7 @@ class StatusBarWrapper extends Component {
         });
       } else {
         this.setState({ updating: true });
-        setTimeout(() => {
+        this.t = setTimeout(() => {
           if (this.state.updating) {
             this.setState({
               content
@@ -91,7 +95,7 @@ class StatusBarWrapper extends Component {
   render() {
     const { content } = this.props;
     const { content: scontent } = this.state;
-    return (<StatusBar hasContent={!!content}>{scontent}</StatusBar>);
+    return (<StatusBar className={!content || 'show'}>{scontent}</StatusBar>);
   }
 }
 

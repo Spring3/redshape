@@ -72,6 +72,23 @@ const Notification = styled.div`
   }
 `;
 
+class NotificationWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false
+    };
+    this.t = setTimeout(() => {
+      this.setState({ show: true });
+    }, 100);
+  }
+
+  render() {
+    const { show } = this.state;
+    return (<Notification className={show && 'show'}>Review if any field needs to be updated</Notification>);
+  }
+}
+
 const Title = styled.h4`
   margin: 0;
   font-size: 1rem;
@@ -652,7 +669,7 @@ class IssueModal extends Component {
               Submit
           </Button>
           { issue.isFetching && (<ProcessIndicator />) }
-          <Notification className={notification ? 'show' : ''}>Review if any field needs to be updated</Notification>
+          { notification && <NotificationWrapper /> }
         </OptionButtons>
       </Modal>
     );

@@ -496,6 +496,7 @@ exports[`About page should match the snapshot [tab2] 1`] = `
       "bgDisabled": "hsl(0,0%,95%)",
       "cyan": "#57C5F7",
       "darkBlue": "#1974FF",
+      "darkCyan": "#008b8b",
       "darkGreen": "#009030",
       "darkOrange": "#E25A03",
       "darkRed": "#D20F37",

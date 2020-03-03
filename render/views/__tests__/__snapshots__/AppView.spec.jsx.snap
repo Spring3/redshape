@@ -286,6 +286,11 @@ exports[`AppView should match the snapshot 1`] = `
   opacity: 0;
 }
 
+.c9.show {
+  visibility: visible;
+  opacity: 1;
+}
+
 <div
   className="c0"
 >
@@ -445,7 +450,7 @@ exports[`AppView should match the snapshot 1`] = `
     </div>
   </div>
   <div
-    className="c9"
+    className="true c9"
   >
     
   </div>

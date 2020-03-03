@@ -73,7 +73,7 @@ class SettingsPage extends Component {
       showExampleView: false
     };
 
-    this.deboucedFetch = debounce(this.fetchIssues, 500);
+    this.debouncedFetch = debounce(this.fetchIssues, 500);
   }
 
   componentWillMount() {
@@ -107,14 +107,14 @@ class SettingsPage extends Component {
   onSearchChange = (e) => {
     this.setState({
       search: e.target.value
-    }, () => this.deboucedFetch());
+    }, () => this.debouncedFetch());
   }
 
   onSort = (sortBy, sortDirection) => {
     this.setState({
       sortBy,
       sortDirection
-    }, () => this.deboucedFetch());
+    }, () => this.debouncedFetch());
   }
 
   render() {

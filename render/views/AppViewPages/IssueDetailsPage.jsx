@@ -109,6 +109,13 @@ const Grid = styled.div`
     &:nth-child(odd) {
       font-weight: bold;
     }
+    ${props => props.isEnhanced && css`
+    &:nth-child(even) {
+      > a {
+        margin-left: -2px;
+      }
+    }
+    `}
   }
 
   @media (max-width: 1400px) {
@@ -246,6 +253,7 @@ class IssueDetailsPage extends Component {
     const assignee_id = assigned_to && assigned_to.id;
     const showTotalEstimatedHours = (total_estimated_hours !== estimated_hours && total_estimated_hours >= 0);
     const showTotalSpentHours = (total_spent_hours !== spent_hours && total_spent_hours >= 0);
+    const { fixed_version: version, project, author } = selectedIssue;
     return selectedIssue.id
       ? (
         <Section>
@@ -264,9 +272,9 @@ class IssueDetailsPage extends Component {
                   </Title>
                   <SmallNotice>
 Created
-                    {isEnhanced ? (<Tooltip text="open in web browser"><Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link></Tooltip>) : ' '}
+                    {isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/issues/${selectedIssue.id}`}>{`#${selectedIssue.id}`}</Link>) : ' '}
                     by
-                    <TextAuthor>{selectedIssue.author.name}</TextAuthor>
+                    {isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/people/${author.id}`}>{`${author.name}`}</Link>) : (<TextAuthor>{author.name}</TextAuthor>) }
                     <DateComponent date={selectedIssue.created_on} />
                   </SmallNotice>
                   {selectedIssue.closed_on && (
@@ -283,13 +291,13 @@ Created
                   </FlexButton>
                 </Buttons>
               </IssueHeader>
-              <Grid>
+              <Grid isEnhanced={isEnhanced}>
 
                 <div>Tracker: </div>
                 <div>{selectedIssue.tracker.name}</div>
 
                 <div>Target version: </div>
-                <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
+                <div>{ version && isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/versions/${version.id}`}>{version.name}</Link>) : _.get(version, 'name') }</div>
 
                 <div>Status:</div>
                 <div>{ isEnhanced ? (<Status value={selectedIssue.status.name} />) : (selectedIssue.status.name) }</div>
@@ -304,7 +312,7 @@ Created
                 <div><DateComponent date={selectedIssue.due_date} /></div>
 
                 <div>Assignee: </div>
-                <div>{assigned_to && assigned_to.name}</div>
+                <div>{ assigned_to && isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/people/${assigned_to.id}`}>{assigned_to.name}</Link>) : _.get(assigned_to, 'name') }</div>
 
                 <div>Estimation: </div>
                 <div>
@@ -321,7 +329,7 @@ Created
                 </div>
 
                 <div>Project: </div>
-                <div>{_.get(selectedIssue, 'project.name')}</div>
+                <div>{ project && isEnhanced ? (<Link clickable={true} type="external" href={`${redmineEndpoint}/projects/${project.id}`}>{project.name}</Link>) : _.get(project, 'name') }</div>
 
                 <div>Time spent: </div>
                 <div>

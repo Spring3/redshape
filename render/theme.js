@@ -25,6 +25,7 @@ export default {
   darkOrange: '#E25A03',
   lightOrange: '#FEC689',
   cyan: '#57C5F7',
+  darkCyan: '#008b8b',
   shadow: '#D0D0D0',
   transitionTime: '.2s'
 };

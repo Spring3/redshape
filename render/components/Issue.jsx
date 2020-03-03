@@ -124,6 +124,9 @@ const StatusSpan = styled.span`
     &.New {
       color: ${props.theme.darkBlue};
     }
+    &.Feedback {
+      color: ${props.theme.darkCyan};
+    }
   ` : css`
     font-weight: bold;
     background-color: #614BA6;
@@ -138,6 +141,9 @@ const StatusSpan = styled.span`
     }
     &.New {
       background-color: ${props.theme.darkBlue};
+    }
+    &.Feedback {
+      background-color: ${props.theme.darkCyan};
     }
   `)}
 
