@@ -101,7 +101,7 @@
     "babel-plugin-styled-components": "^1.10.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
-    "electron": "^7.1.7",
+    "electron": "^8.0.0",
     "electron-builder": "^20.41.0",
     "electron-rebuild": "^1.10.0",
     "enzyme": "^3.9.0",

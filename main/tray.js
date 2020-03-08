@@ -55,7 +55,9 @@ const updateTrayMenu = () => {
 };
 
 
-ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
+ipcMain.on('timer-info', (ev, {
+  isEnabled, isPaused, issue, actionDate
+}) => {
   statusLabel = NAME;
   timerEnabled = false;
   if (isEnabled && issue) {
@@ -69,7 +71,11 @@ ipcMain.on('timer-info', (ev, { isEnabled, isPaused, issue }) => {
       timerEnabled = true;
       timerPaused = isPaused;
       timerLabel = `${isPaused ? 'Resume' : 'Pause'} #${id} ${subject}`;
-      statusLabel = `${NAME} #${id}${subject} (${isPaused ? 'paused' : 'running'})`;
+      let status = isPaused ? 'paused' : 'running';
+      if (actionDate) {
+        status = `${status} ${isPaused ? 'on' : 'since'} ${actionDate.replace(' ', ' at ')}`;
+      }
+      statusLabel = `${NAME} #${id}${subject} \n(${status})`;
     }
   }
   updateTrayMenu();

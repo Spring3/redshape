@@ -23,6 +23,8 @@ import { IssueId } from './Issue';
 
 import IPC from '../ipc';
 
+const date = () => moment().format('YYYY-MM-DD HH:mm:ss');
+
 // TODO: may be better to use the powerMonitor module from electron
 
 const ActiveTimer = styled.div`
@@ -153,9 +155,13 @@ class Timer extends Component {
 
     IPC.setupTimer(this);
 
-    const { isEnabled, isPaused, trackedIssue } = this.props;
+    const {
+      isEnabled, isPaused, trackedIssue, actionDate
+    } = this.props;
     if (isEnabled) {
-      IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
+      IPC.send('timer-info', {
+        isEnabled, isPaused, issue: trackedIssue, actionDate
+      });
     }
 
     if (isEnabled && !isPaused) {
@@ -289,7 +295,9 @@ class Timer extends Component {
   /* stop time interval and store tracked time + current datetime */
   storeToTimestamp() {
     const { timestamp } = this.state;
-    const { isEnabled, isPaused, trackedIssue } = this.props;
+    const {
+      isEnabled, isPaused, trackedIssue, actionDate
+    } = this.props;
     if (isEnabled && !isPaused) {
       this.setState({
         timestamp: {
@@ -299,7 +307,9 @@ class Timer extends Component {
       });
       this.stopInterval();
     }
-    IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
+    IPC.send('timer-info', {
+      isEnabled, isPaused, issue: trackedIssue, actionDate
+    });
   }
 
   /* restore time interval based on stored tracked time + diff datetimes */
@@ -383,7 +393,9 @@ class Timer extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    const { isEnabled, isPaused, trackedIssue } = this.props;
+    const {
+      isEnabled, isPaused, trackedIssue, actionDate
+    } = this.props;
     if (isEnabled !== oldProps.isEnabled) {
       this.stopIntervals();
       // if was disabled, but now is enabled
@@ -393,7 +405,9 @@ class Timer extends Component {
         if (!isPaused) {
           this.setIntervalCheckpoint();
         }
-        IPC.send('timer-info', { isEnabled, isPaused, issue: trackedIssue });
+        IPC.send('timer-info', {
+          isEnabled, isPaused, issue: trackedIssue, actionDate
+        });
       }
       // otherwise, if was enabled, but now it's disabled, we don't do anything
       // because the interval was already cleared above
@@ -404,11 +418,14 @@ class Timer extends Component {
     this.stopIntervals();
     const { onPause, trackedIssue, pauseTimer } = this.props;
     const { value, comments } = this.state;
-    pauseTimer(value, comments);
+    const actionDate = date();
+    pauseTimer(value, comments, actionDate);
     if (onPause) {
       onPause(trackedIssue, value, comments);
     }
-    IPC.send('timer-info', { isEnabled: true, isPaused: true, issue: trackedIssue });
+    IPC.send('timer-info', {
+      isEnabled: true, isPaused: true, issue: trackedIssue, actionDate
+    });
   }
 
   onContinue = () => {
@@ -419,11 +436,14 @@ class Timer extends Component {
     }
     const { onContinue, trackedIssue, continueTimer } = this.props;
     const { value, comments } = this.state;
-    continueTimer(value, comments);
+    const actionDate = date();
+    continueTimer(value, comments, actionDate);
     if (onContinue) {
       onContinue(trackedIssue, value, comments);
     }
-    IPC.send('timer-info', { isEnabled: true, isPaused: false, issue: trackedIssue });
+    IPC.send('timer-info', {
+      isEnabled: true, isPaused: false, issue: trackedIssue, actionDate
+    });
   }
 
   onStop = () => {
@@ -607,6 +627,7 @@ Timer.propTypes = {
   pauseTimer: PropTypes.func.isRequired,
   continueTimer: PropTypes.func.isRequired,
   stopTimer: PropTypes.func.isRequired,
+  actionDate: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   idleBehavior: PropTypes.string.isRequired,
   idleTimeDiscard: PropTypes.bool.isRequired,
@@ -628,6 +649,7 @@ const mapStateToProps = state => ({
   trackedTime: state.tracking.duration,
   trackedIssue: state.tracking.issue,
   trackedComments: state.tracking.comments,
+  actionDate: state.tracking.actionDate,
   idleBehavior: state.settings.idleBehavior,
   idleTimeDiscard: state.settings.idleTimeDiscard,
   showAdvancedTimerControls: state.settings.showAdvancedTimerControls,
@@ -636,8 +658,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  pauseTimer: (duration, comments) => dispatch(actions.tracking.trackingPause(duration, comments)),
-  continueTimer: (duration, comments) => dispatch(actions.tracking.trackingContinue(duration, comments)),
+  pauseTimer: (duration, comments, actionDate) => dispatch(actions.tracking.trackingPause(duration, comments, actionDate)),
+  continueTimer: (duration, comments, actionDate) => dispatch(actions.tracking.trackingContinue(duration, comments, actionDate)),
   stopTimer: (duration, comments) => dispatch(actions.tracking.trackingStop(duration, comments)),
   saveTimer: (duration, comments) => dispatch(actions.tracking.trackingSave(duration, comments)),
 });

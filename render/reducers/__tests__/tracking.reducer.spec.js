@@ -29,18 +29,20 @@ describe('Tracking Reducer', () => {
   });
 
   it('TRACKING_START action', () => {
+    const date = '2020-01-03 10:20:22';
     const expectedNextState = {
       ...initialState,
       issue: { id: 1 },
       isEnabled: true,
       isPaused: false,
-      duration: 0
+      duration: 0,
+      actionDate: date,
     };
 
     expect(
       reducer(
         _cloneDeep(initialState),
-        actions.trackingStart({ id: 1 })
+        actions.trackingStart({ id: 1 }, date)
       )
     ).toEqual(expectedNextState);
     expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
@@ -53,6 +55,7 @@ describe('Tracking Reducer', () => {
       isPaused: false,
       duration: 1000,
       comments: undefined,
+      actionDate: null,
     };
 
     expect(
@@ -65,12 +68,14 @@ describe('Tracking Reducer', () => {
   });
 
   it('TRACKING_PAUSE action', () => {
+    const date = '2020-01-03 10:20:22';
     const expectedNextState = {
       ...initialState,
       isEnabled: true,
       isPaused: true,
       duration: 1000,
-      comments: undefined
+      comments: null,
+      actionDate: date,
     };
 
     expect(
@@ -79,18 +84,20 @@ describe('Tracking Reducer', () => {
           ..._cloneDeep(initialState),
           isEnabled: true
         },
-        actions.trackingPause(1000)
+        actions.trackingPause(1000, null, date)
       )
     ).toEqual(expectedNextState);
     expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
   });
 
   it('TRACKING_CONTINUE action', () => {
+    const date = '2020-01-03 10:20:22';
     const expectedNextState = {
       ...initialState,
       isEnabled: true,
       isPaused: false,
-      duration: 1000
+      duration: 1000,
+      actionDate: date,
     };
 
     expect(
@@ -101,7 +108,7 @@ describe('Tracking Reducer', () => {
           isEnabled: true,
           isPaused: true
         },
-        actions.trackingContinue()
+        actions.trackingContinue(1000, null, date)
       )
     ).toEqual(expectedNextState);
     expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);

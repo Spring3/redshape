@@ -14,6 +14,7 @@ export const initialState = {
   isPaused: true,
   duration: 0,
   comments: '',
+  actionDate: null,
 };
 
 export default (state = initialState, action) => {
@@ -22,13 +23,14 @@ export default (state = initialState, action) => {
       if (state.isTracking) {
         return state;
       }
-      const { issue } = action.data;
+      const { issue, actionDate } = action.data;
       const nextState = {
         issue,
         isEnabled: true,
         isPaused: false,
         duration: 0,
         comments: '',
+        actionDate,
       };
       storage.set('time_tracking', nextState);
       return nextState;
@@ -41,28 +43,31 @@ export default (state = initialState, action) => {
         isPaused: false,
         duration,
         comments,
+        actionDate: null
       };
       storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_PAUSE: {
-      const { duration, comments } = action.data;
+      const { duration, comments, actionDate } = action.data;
       const nextState = {
         ...state,
         isPaused: true,
         duration,
         comments,
+        actionDate,
       };
       storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_CONTINUE: {
-      const { duration, comments } = action.data;
+      const { duration, comments, actionDate } = action.data;
       const nextState = {
         ...state,
         isPaused: false,
         duration: duration || state.duration,
         comments: comments || state.comments,
+        actionDate,
       };
       storage.set('time_tracking', nextState);
       return nextState;

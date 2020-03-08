@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { css, withTheme } from 'styled-components';
@@ -13,6 +14,8 @@ import Button, { GhostButton } from '../Button';
 import DateComponent from '../Date';
 import Dialog from '../Dialog';
 import actions from '../../actions';
+
+const date = () => moment().format('YYYY-MM-DD HH:mm:ss');
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -391,7 +394,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchIssueTimeEntries: (issueId, page) => dispatch(actions.issues.getTimeEntriesPage(issueId, undefined, page)),
-  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
+  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue, date())),
   removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
 });
 
