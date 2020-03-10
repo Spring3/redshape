@@ -10,6 +10,31 @@ const GhostButtonRight = styled(GhostButton)`
   float: right;
 `;
 
+function cleanBlur() {
+  const root = document.getElementById('root');
+  if (root) {
+    root.classList.remove('react-confirm-alert-blur');
+  }
+}
+
+/**
+ * Working on this issue between 2020-03-05 and 2020-03-10
+ *
+ * Known bug but impossible to reproduce in more than 50 manual tests
+ * This is not pretty, but at least, since we established this (timeout),
+ * we don't see it again.
+ *
+ * The bug appeared 2 times along a week of Redshape usage, after ending
+ * a tracking session (new time entry) and increasing the progress
+ * of that issue (editing the modal due to the strict workflow setting). Then, after
+ * submitting, the window was kept blurred (root div with `react-confirm-alert-blur`),
+ * although there was no Modal component.
+ */
+function forceCleanBlur() {
+  cleanBlur();
+  setTimeout(cleanBlur, 80);
+}
+
 class Modal extends Component {
   constructor(props) {
     super(props);
@@ -45,17 +70,11 @@ class Modal extends Component {
   }
 
   componentWillUnmount() {
-    const root = document.getElementById('root');
-    if (root) {
-      root.classList.remove('react-confirm-alert-blur');
-    }
+    forceCleanBlur();
   }
 
   onCloseProxy = () => {
-    const root = document.getElementById('root');
-    if (root) {
-      root.classList.remove('react-confirm-alert-blur');
-    }
+    forceCleanBlur();
     this.props.onClose();
   }
 

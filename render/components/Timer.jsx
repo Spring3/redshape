@@ -461,8 +461,10 @@ class Timer extends Component {
   onBackward = (minutes) => {
     const { value } = this.state;
     const min = 0;
-    const nvalue = value - (minutes * 60 * 1000);
-    this.setState({ value: nvalue < min ? 0 : nvalue });
+    let nvalue = value - (minutes * 60 * 1000);
+    nvalue = nvalue < min ? 0 : nvalue;
+    this.setState({ value: nvalue });
+    this.props.saveTimer(nvalue, this.state.comments);
   }
 
   onForward = (minutes) => {
@@ -472,6 +474,7 @@ class Timer extends Component {
     if (nvalue < max) {
       this.setState({ value: nvalue });
     }
+    this.props.saveTimer(nvalue, this.state.comments);
   }
 
   redirectToTrackedLink = (event) => {
