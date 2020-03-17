@@ -208,7 +208,7 @@ class IssueModal extends Component {
     let customFieldsMap;
     if (propsIssueEntry) {
       const {
-        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to
+        estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to, subject
       } = propsIssueEntry;
       statusTransitions = extractFromTransitions(transitions, 'status');
       priorityTransitions = extractFromTransitions(transitions, 'priority');
@@ -225,7 +225,8 @@ class IssueModal extends Component {
         customFieldsMap: {
           ...customFieldsMap
         },
-        description
+        description,
+        subject
       };
     }
     this.state = {
@@ -248,7 +249,7 @@ class IssueModal extends Component {
 
       if (issueEntry) {
         const {
-          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to
+          estimated_hours, done_ratio, due_date, children, transitions, status, priority, custom_fields, description, assigned_to, subject
         } = issueEntry;
         const statusTransitions = extractFromTransitions(transitions, 'status');
         const priorityTransitions = extractFromTransitions(transitions, 'priority');
@@ -266,7 +267,8 @@ class IssueModal extends Component {
             customFieldsMap: {
               ...customFieldsMap
             },
-            description
+            description,
+            subject
           },
           instance: new Date().getTime(),
           progress_info: done_ratio,
@@ -294,6 +296,7 @@ class IssueModal extends Component {
       progress: issueEntry.progress,
       estimated_duration: issueEntry.estimated_duration,
       due_date: issueEntry.due_date,
+      subject: issueEntry.subject,
     }, checkFields);
   }
 
@@ -364,6 +367,16 @@ class IssueModal extends Component {
     });
   }
 
+  onSubjectChange = ({ target: { value } }) => {
+    this.setState({
+      issueEntry: {
+        ...this.state.issueEntry,
+        subject: value
+      },
+      wasModified: true
+    });
+  }
+
   onStatusChange = (status) => {
     this.setState({
       issueEntry: {
@@ -423,7 +436,7 @@ class IssueModal extends Component {
       issueEntry, wasModified, progress_info, instance, statusTransitions, priorityTransitions, assignedToTransitions, notification
     } = this.state;
     const {
-      progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description, assigned_to
+      progress, estimated_duration, due_date, children, status, priority, customFieldsMap, description, assigned_to, subject
     } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
@@ -433,6 +446,7 @@ class IssueModal extends Component {
         status: issue.error.details.find(error => error.path[0] === 'status'),
         priority: issue.error.details.find(error => error.path[0] === 'priority'),
         assigned_to: issue.error.details.find(error => error.path[0] === 'assigned_to'),
+        subject: issue.error.details.find(error => error.path[0] === 'subject'),
       }
       : {};
     let estimatedDurationInfo = '';
@@ -456,12 +470,9 @@ class IssueModal extends Component {
         center={true}
       >
         <Title>
-            Edit issue
+          Edit issue
           <LabelIcon><Tooltip position="right" text={tooltipIssueModal}><HelpIconStyled size={14} /></Tooltip></LabelIcon>
         </Title>
-        <Label htmlFor="issue" label="Issue">
-          <div name="issue">{`#${propsIssueEntry.id} ${propsIssueEntry.subject}`}</div>
-        </Label>
         <Grid>
           <Label htmlFor="author" label="Author">
             <div name="author">{author.name}</div>
@@ -501,6 +512,22 @@ class IssueModal extends Component {
               </Label>
             )
           }
+        </Grid>
+        <Label htmlFor="issue" label={`Issue #${propsIssueEntry.id}`}>
+          <Input
+            style={{ ...inputStyle, width: 540 }}
+            type="text"
+            name="issue"
+            value={subject}
+            onChange={this.onSubjectChange}
+            onBlur={() => this.runValidation(['subject'])}
+            disabled={disableField}
+          />
+          <ErrorMessage show={!!validationErrors.subject}>
+            {this.getErrorMessage(validationErrors.subject)}
+          </ErrorMessage>
+        </Label>
+        <Grid>
           {
             statusTransitions ? (
               <div>

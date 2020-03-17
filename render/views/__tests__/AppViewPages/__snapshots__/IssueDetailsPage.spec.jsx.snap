@@ -494,6 +494,15 @@ exports[`IssueDetails page should match the snapshot 1`] = `
   align-items: center;
 }
 
+.c5 a,
+.c5 span {
+  word-break: normal;
+}
+
+.c5 span.subject {
+  word-break: break-word;
+}
+
 .c14 {
   margin-right: 0.5rem;
 }
@@ -573,7 +582,9 @@ exports[`IssueDetails page should match the snapshot 1`] = `
               #1
                
             </span>
-            <span>
+            <span
+              className="subject"
+            >
               Test
             </span>
           </h2>

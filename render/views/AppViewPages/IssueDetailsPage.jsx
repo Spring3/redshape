@@ -82,6 +82,13 @@ const Title = styled.h2`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  a, span {
+    word-break: normal;
+  }
+  span.subject {
+    word-break: break-word;
+  }
 `;
 
 const TextMain = styled.span`
@@ -268,7 +275,7 @@ class IssueDetailsPage extends Component {
 &nbsp;
                       </span>
                     )}
-                    <span>{selectedIssue.subject}</span>
+                    <span className="subject">{selectedIssue.subject}</span>
                   </Title>
                   <SmallNotice>
 Created

@@ -50,6 +50,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
     }).allow(null),
     customFieldsMap: Joi.object(),
     description: Joi.string().allow(null, ''),
+    subject: Joi.string().required().trim()
   };
   if (checkFields) {
     if (!(checkFields instanceof Array)) {
@@ -69,7 +70,7 @@ const validateBeforeCommon = (issueEntry, checkFields) => {
 
 const validateBeforeUpdate = (issueEntry, checkFields) => {
   if (!checkFields) {
-    checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority', 'assigned_to', 'customFieldsMap', 'description'];
+    checkFields = ['progress', 'estimated_duration', 'due_date', 'status', 'priority', 'assigned_to', 'customFieldsMap', 'description', 'subject'];
   }
   const validationResult = validateBeforeCommon(issueEntry, checkFields);
   return validationResult.error
@@ -121,6 +122,10 @@ const update = (originalIssueEntry, changes, extra = {}) => (dispatch) => {
   const { description } = changes;
   if (originalIssueEntry.description !== description) {
     updates.description = description;
+  }
+  const { subject } = changes;
+  if (subject != null && originalIssueEntry.subject.trim() !== subject.trim()) {
+    updates.subject = subject.trim();
   }
   const { customFieldsMap } = changes;
   if (customFieldsMap != null && originalIssueEntry.custom_fields != null) {
