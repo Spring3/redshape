@@ -3,7 +3,6 @@ import moment from 'moment';
 import { shallow, mount } from 'enzyme';
 import DateComponent from '../Date';
 
-
 describe('Date component', () => {
   it('should render a date, relative to Date.now(), in days', () => {
     const today = new Date().toISOString();

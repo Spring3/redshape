@@ -42,7 +42,6 @@ const TooltipContainer = styled.div`
   }
 `;
 
-
 const Tooltip = ({ className, children, text }) => (
   <TooltipContainer
     className={className}

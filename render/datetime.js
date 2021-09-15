@@ -35,7 +35,6 @@ export const durationToHours = (value) => {
   return hours;
 };
 
-
 export const hoursToDuration = (hours) => (hours == null
   ? ''
   : moment.duration(parseFloat(hours), 'hours').format('d[d] h[h] m[m] s[s]', {

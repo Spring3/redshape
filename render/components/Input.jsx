@@ -124,7 +124,6 @@ const FormGroup = styled.div`
   }
 `;
 
-
 const H4Label = styled.h4`
   color: ${(props) => props.theme.minorText};
 `;

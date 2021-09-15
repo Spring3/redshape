@@ -242,7 +242,6 @@ class MarkdownEditor extends PureComponent {
     }
   }
 
-
   // https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax
   render() {
     const {

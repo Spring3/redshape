@@ -143,7 +143,6 @@ describe('Helper module', () => {
         url: '/user'
       })).resolves.toEqual({ data: response });
 
-
       expect(axios.getInstance()).toBeTruthy();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe('/user');

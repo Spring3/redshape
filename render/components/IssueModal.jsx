@@ -16,7 +16,6 @@ import DatePicker from './DatePicker';
 import 'rc-slider/assets/index.css';
 import './styles/rc-slider.css';
 
-
 import actions from '../actions';
 
 import { durationToHours, hoursToDuration } from '../datetime';

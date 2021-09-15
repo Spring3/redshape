@@ -89,7 +89,6 @@ describe('Time actions', () => {
       })).toEqual({ type: timeEntryActions.TIME_ENTRY_PUBLISH_VALIDATION_PASSED });
     });
 
-
     it('should fail if activity.id is not a number', () => {
       const validation = timeEntryActions.default.validateBeforePublish({
         activity: {

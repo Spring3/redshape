@@ -5,7 +5,6 @@ import '@testing-library/jest-dom/extend-expect';
 import Progressbar from '../Progressbar';
 import theme from '../../theme';
 
-
 describe('Progressbar component', () => {
   afterEach(cleanup);
   it('should display the progressbar', () => {
