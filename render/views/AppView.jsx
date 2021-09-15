@@ -44,7 +44,8 @@ class AppView extends Component {
     this.modifyUserMenu();
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     const { getProjectData } = this.props;
     getProjectData();
   }

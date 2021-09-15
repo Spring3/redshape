@@ -151,7 +151,8 @@ class IssueDetailsPage extends Component {
     };
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     const { match, fetchIssueDetails } = this.props;
     fetchIssueDetails(match.params.id);
   }

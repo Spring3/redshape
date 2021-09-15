@@ -132,7 +132,8 @@ class Timer extends Component {
     this.warningTimeout = null;
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     window.addEventListener('beforeunload', this.cleanup);
   }
 
@@ -153,7 +154,8 @@ class Timer extends Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(newProps) {
     const {
       trackedTime,
       trackedComments,
