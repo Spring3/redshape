@@ -5,3 +5,5 @@ build/
 .env
 .idea
 .DS_Store
+yarn-error.log
+*.tgz

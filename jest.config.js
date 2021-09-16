@@ -9,5 +9,6 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/__mocks__/style-mock.js',
     '\\.(png)$': '<rootDir>/__mocks__/image-mock.js',
     ipc$: '<rootDir>/__mocks__/ipc.js'
-  }
+  },
+  testEnvironment: 'jsdom'
 };
