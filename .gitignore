@@ -4,7 +4,3 @@ dist/
 build/
 .env
 .idea
-support/package-aur/*
-support/package-aur.zip
-!support/package-aur/manager.sh
-!support/package-aur/PKGBUILD
