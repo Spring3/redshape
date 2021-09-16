@@ -14,7 +14,7 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 2018,
+        "ecmaVersion": 11,
         "sourceType": "module"
     },
     "plugins": [
@@ -77,6 +77,7 @@
             "allowChildren": true
         }],
         "react/prefer-stateless-function": "off",
+        "import/prefer-default-export": "off",
         "react/jsx-boolean-value": "off"
     }
 }

@@ -1,23 +1,31 @@
-version: '3.1'
+version: '3.8'
 
 services:
-    redmine:
-      image: redmine:4.1
-      restart: always
-      ports:
-        - 80:3000
-      environment:
-        REDMINE_DB_MYSQL: db
-        REDMINE_DB_PASSWORD: example
+  redmine:
+    container_name: redmine
+    image: redmine:4.2
+    restart: always
+    ports:
+      - 80:3000
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_PASSWORD: example
+    depends_on:
+      - db
 
-    db:
-      image: mysql:5.7
-      restart: always
-      environment:
-        MYSQL_ROOT_PASSWORD: example
-        MYSQL_DATABASE: redmine
-      volumes:
-        - db-data:/var/lib/mysql/data
+  db:
+    container_name: db
+    image: mysql:5.6
+    user: "1000:50"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: redmine
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - db-data:/var/lib/mysql/data
 
 volumes:
   db-data:
