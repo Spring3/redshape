@@ -29,7 +29,8 @@ class Routes extends Component {
     this.rejectionHandler = _debounce(this.handleRejection, 200);
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     window.addEventListener('error', this.errorHandler);
     window.addEventListener('unhandledrejection', this.rejectionHandler);
     ipcRenderer.on('settings', this.settingsEventHandler);

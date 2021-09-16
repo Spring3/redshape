@@ -7,7 +7,6 @@ import { noop } from 'lodash';
 import CommentsSection from '../CommentsSection';
 import theme from '../../../theme';
 
-
 describe('IssueDetails => CommentsSEction componnet', () => {
   afterEach(cleanup);
   it('should render the comment section', () => {

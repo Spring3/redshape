@@ -18,7 +18,6 @@ import theme from '../../theme';
 import AppView from '../AppView';
 import storage from '../../../common/storage';
 
-
 jest.mock('electron-store');
 
 const mockStore = configureStore([thunk]);

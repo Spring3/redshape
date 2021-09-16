@@ -13,7 +13,8 @@ class InfiniteScroll extends Component {
     this.throttledScrollHandler = throttle(this.onScroll, 100);
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     const { container, immediate } = this.props;
     if (container && immediate) {
       this.throttledScrollHandler();

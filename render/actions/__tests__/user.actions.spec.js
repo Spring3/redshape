@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
 
-
 import * as userActions from '../user.actions';
 import { notify } from '../helper';
 import settingsActions from '../settings.actions';

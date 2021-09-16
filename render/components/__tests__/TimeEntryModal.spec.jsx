@@ -30,7 +30,6 @@ describe('TimeEntryModal Component', () => {
     reset();
   });
 
-
   it('should set wasModified to true if any of the editable data was modified', () => {
     const props = {
       activities: [{

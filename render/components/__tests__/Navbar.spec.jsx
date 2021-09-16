@@ -54,7 +54,6 @@ describe('Navbar component', () => {
       </Provider>
     );
 
-
     const signoutBtn = document.querySelector('#signout');
     expect(signoutBtn).toBeDefined();
     fireEvent.click(signoutBtn);

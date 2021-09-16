@@ -7,7 +7,7 @@ const redmineEndpoint = 'redmine.test.com';
 const token = 'multipass';
 let axiosMock;
 
-describe('Project actions', () => {
+describe.only('Project actions', () => {
   beforeAll(() => {
     axios.initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(axios.getInstance());

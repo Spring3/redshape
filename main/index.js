@@ -21,7 +21,6 @@ app.setAppUserModelId('app.spring3.redshape');
 autoUpdater.logger = logger;
 autoUpdater.logger.transports.file.level = 'info';
 
-
 let mainWindow;
 let aboutWindow;
 let PORT;

@@ -56,7 +56,8 @@ class SummaryPage extends Component {
     this.deboucedFetch = debounce(this.fetchIssues, 500);
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     this.fetchIssues();
   }
 

@@ -1,9 +1,9 @@
-version: 2
+version: 2.1
 jobs:
   lint:
     working_directory: ~/redshape
     docker:
-      - image: circleci/node:10.15.3
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -11,19 +11,19 @@ jobs:
       - run: 'sudo apt install libxss-dev pkg-config'
       - run:
           name: Install Dependencies
-          command: 'npm install'
+          command: yarn install --pure-lockfile
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
           name: 'Linting'
-          command: 'npm run lint'
+          command: yarn lint
 
   test:
     working_directory: ~/redshape
     docker:
-      - image: circleci/node:10.15.3
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -32,18 +32,85 @@ jobs:
       - run: 'sudo apt install libxss-dev libxext-dev libxtst6 libnss3 libgtk-3-0 libgtkextra-dev libasound2'
       - run:
           name: Install Dependencies
-          command: 'npm install'
+          command: yarn install --pure-lockfile
       - save_cache:
           key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
           name: Coverage
-          command: 'npm test'
+          command: 'yarn test'
+
+  build-windows:
+    working_directory: ~/redshape
+    docker:
+      - image: electronuserland/builder:wine
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --pure-lockfile
+      - save_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build
+          command: |
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+              yarn release -- -w --ia32 --x64
+            elif [ "$CIRCLE_BRANCH" == "develop" ]; then
+              yarn release:ci -- -w --ia32 --x64
+            else
+              yarn build -- -w --ia32 --x64
+            fi
+      - store_artifacts:
+          path: ~/redshape/build
+
+  build-linux:
+    working_directory: ~/redshape
+    docker:
+      - image: electronuserland/builder
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: 'yarn install --pure-lockfile'
+      - save_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build
+          command: |
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+              yarn release -- -l --ia32 --x64
+            elif [ "$CIRCLE_BRANCH" == "develop" ]; then
+              yarn release:ci -- -l --ia32 --x64
+            else
+              yarn build -- -l --ia32 --x64
+            fi
+      - store_artifacts:
+          path: ~/redshape/build
 
 workflows:
-  version: 2
   test:
     jobs:
       - lint
       - test
+  build:
+    jobs:
+      - build-windows:
+        filters:
+          branches:
+            ignore:
+              - /^v\\d+\\.\\d+\\.\\d+$/
+      - build-linux:
+        filters:
+          branches:
+            ignore:
+              - /^v\\d+\\.\\d+\\.\\d+$/

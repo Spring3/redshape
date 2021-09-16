@@ -140,7 +140,8 @@ class TimeEntries extends Component {
     this.listRef = React.createRef();
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     const { fetchIssueTimeEntries, selectedIssue } = this.props;
     fetchIssueTimeEntries(selectedIssue.id, 0);
   }
