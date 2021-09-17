@@ -5,6 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { spawn } = require('child_process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -24,8 +25,8 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        use: 'babel-loader'
+        test: /\.[tj]sx?$/,
+        use: 'ts-loader'
       },
       {
         test: /\.css$/,
@@ -49,10 +50,10 @@ const config = {
     ]
   },
   externals: [nodeExternals({
-    whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i]
+    allowlist: [/\.(?!(?:jsx?|json)$).{1,5}$/i]
   })],
   resolve: {
-    extensions: ['.js', '.jsx', '.css']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.css']
   },
   stats: {
     colors: true,
@@ -61,6 +62,7 @@ const config = {
     modules: false
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[name].css'
@@ -80,16 +82,18 @@ const config = {
 
 if (!isProduction) {
   config.devServer = {
-    contentBase: path.resolve(__dirname, './dist'),
-    publicPath: '/',
-    disableHostCheck: true,
-    port: process.env.PORT,
-    stats: {
-      colors: true,
-      chunks: false,
-      children: false
+    static: {
+      directory: path.resolve(__dirname, './dist'),
+      publicPath: '/',
+      watch: true,
     },
-    before: () => spawn('electron', ['.'], { shell: true, env: process.env, stdio: 'inherit' })
+    client: {
+      overlay: false,
+    },
+    hot: true,
+    liveReload: true,
+    port: process.env.PORT,
+    onBeforeSetupMiddleware: () => spawn('electron', ['.'], { shell: true, env: process.env, stdio: 'inherit' })
       .once('close', () => process.exit(0))
       // eslint-disable-next-line
       .once('error', (spawnError) => console.error(spawnError))

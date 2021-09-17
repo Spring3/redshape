@@ -12,6 +12,7 @@ module.exports = {
   plugins: [
     'module:fast-async',
     '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-export-default-from',
     ['babel-plugin-styled-components',
       {
         displayName: true,

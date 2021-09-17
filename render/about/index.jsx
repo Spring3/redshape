@@ -5,9 +5,10 @@ import { ThemeProvider } from 'styled-components';
 import AboutPage from './AboutPage';
 import theme from '../theme';
 
-if (module.hot) {
-  module.hot.accept();
-}
+try {
+  // eslint-disable-next-line import/no-extraneous-dependencies, global-require
+  require('electron-reloader')(module);
+} catch (_e) { /* noop */ }
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
