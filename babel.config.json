@@ -1,0 +1,30 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "exclude": ["transform-regenerator", "transform-async-to-generator"],
+        "targets": {
+          "browsers": "last 2 versions"
+        },
+        "modules": "auto"
+      }
+    ],
+    [
+      "@babel/react",
+      {
+        "exclude": ["transform-regenerator", "transform-async-to-generator"],
+        "debug": true,
+        "modules": false,
+        "useBuiltIns": "usage",
+        "modules": "auto"
+      }
+    ]
+  ],
+  "plugins": ["module:fast-async"],
+  "env": {
+    "test": {
+      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+    }
+  }
+}

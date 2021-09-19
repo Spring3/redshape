@@ -1,4 +1,4 @@
-const updateSettings = ({ state }) => {
+const updateSettings = () => {
 };
 
 export {

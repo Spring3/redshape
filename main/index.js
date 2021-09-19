@@ -272,8 +272,6 @@ const initialize = () => {
     }
   });
 
-  console.log('isDev', isDev);
-
   const indexPath = isDev
     ? url.format({
       protocol: 'http:',
