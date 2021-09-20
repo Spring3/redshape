@@ -1,5 +1,5 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "env": {
         "browser": true,
         "es6": true,
@@ -25,6 +25,7 @@
         "comma-dangle": "off",
         "object-curly-newline": "warn",
         "no-plusplus": "off",
+        "no-param-reassign": "warn",
         "no-underscore-dangle": [ "error", {
             "allow": ["__initialize", "__reset"]
         }],
@@ -78,6 +79,27 @@
         }],
         "react/prefer-stateless-function": "off",
         "import/prefer-default-export": "off",
-        "react/jsx-boolean-value": "off"
+        "react/jsx-boolean-value": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+              "js": "never",
+              "jsx": "never",
+              "ts": "never",
+              "tsx": "never"
+            }
+         ]
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {}
+        },
+        "import/extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+        ]
     }
 }

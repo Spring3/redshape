@@ -7,4 +7,6 @@ const storage = new Store({
   encryptionKey: ENCRYPTION_KEY
 });
 
+// TODO: save os.platform into the storage on start
+
 module.exports = storage;

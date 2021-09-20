@@ -9,13 +9,13 @@ import { createOvermind } from 'overmind';
 import store from './store';
 import theme from './theme';
 import App from './App';
-import { createStoreConfig } from './store/index';
+import { overmindStoreConfig } from './store/index';
 
 if (module.hot) {
   module.hot.accept();
 }
 
-const overmindStore = createOvermind(createStoreConfig());
+const overmindStore = createOvermind(overmindStoreConfig);
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>

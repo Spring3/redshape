@@ -1,6 +1,0 @@
-const updateSettings = () => {
-};
-
-export {
-  updateSettings
-};

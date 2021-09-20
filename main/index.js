@@ -12,6 +12,8 @@ const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
 
+const storage = require('../common/storage');
+
 const Tray = require('./tray');
 
 const utils = require('./utils');
@@ -329,7 +331,7 @@ const initialize = () => {
     mainWindow = null;
   });
 
-  ipcMain.on('notify', (ev, { message, critical, keep }) => {
+  ipcMain.on('notify', (event, { message, critical, keep }) => {
     const notification = new Notification({
       title: 'System is idle',
       body: message || 'Timer will be paused if system continues idle',
@@ -341,8 +343,18 @@ const initialize = () => {
     notification.show();
   });
 
-  ipcMain.on('menu', (ev, { settings }) => {
+  ipcMain.on('menu', (event, { settings }) => {
     generateMenu({ settings });
+  });
+
+  ipcMain.on('storage', (event, { action, data }) => {
+    if (action === 'read') {
+      event.reply('storage', storage.get('settings'));
+    } else if (action === 'save') {
+      storage.set('settings', data);
+    } else {
+      throw new Error('Unable to process the requested action', action);
+    }
   });
 };
 

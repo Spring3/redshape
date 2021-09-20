@@ -20,7 +20,7 @@ const mockStore = configureStore([thunk]);
 
 let axiosMock;
 
-describe.only('SummaryPage => OptionsBlock component', () => {
+describe('SummaryPage => OptionsBlock component', () => {
   beforeAll(() => {
     initialize(redmineEndpoint, token);
     axiosMock = new MockAdapter(getInstance());

@@ -1,4 +1,11 @@
-const state = {
+import type { IssueHeader } from 'types';
+
+type State = {
+  showClosedIssues: boolean;
+  issueHeaders: IssueHeader
+}
+
+const state: State = {
   showClosedIssues: false,
   issueHeaders: [
     { label: 'Id', isFixed: true, value: 'id' },
@@ -13,5 +20,9 @@ const state = {
 };
 
 export {
-  state
+  state,
+};
+
+export type {
+  State
 };
