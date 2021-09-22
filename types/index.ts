@@ -1,9 +1,9 @@
-type IssueHader = {
+type IssueHeader = {
   label: string;
   isFixed: boolean;
   value: string;
 };
 
-export {
-  IssueHader
+export type {
+  IssueHeader
 };

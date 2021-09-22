@@ -1,4 +1,4 @@
-import { IContext } from 'overmind';
+import type { IContext } from 'overmind';
 import {
   createActionsHook, createEffectsHook, createStateHook, createReactionHook
 } from 'overmind-react';
@@ -17,17 +17,16 @@ const overmindStoreConfig = merge(
   })
 );
 
-type RootState = typeof overmindStoreConfig.state;
-type Context = IContext<{
-  state: typeof overmindStoreConfig.state,
-  effects: typeof overmindStoreConfig.effects,
-  actions: typeof overmindStoreConfig.actions
-}>;
+type OvermindConfig = IContext<typeof overmindStoreConfig>;
+declare module 'overmind' {
+  // eslint-disable-next-line no-unused-vars
+  interface Context extends OvermindConfig {}
+}
 
-const useOvermindActions = createActionsHook<Context>();
-const useOvermindState = createStateHook<Context>();
-const useOvermindEffects = createEffectsHook<Context>();
-const useOvermindReaction = createReactionHook<Context>();
+const useOvermindActions = createActionsHook<OvermindConfig>();
+const useOvermindState = createStateHook<OvermindConfig>();
+const useOvermindEffects = createEffectsHook<OvermindConfig>();
+const useOvermindReaction = createReactionHook<OvermindConfig>();
 
 export {
   useOvermindEffects,
@@ -35,9 +34,4 @@ export {
   useOvermindState,
   useOvermindReaction,
   overmindStoreConfig
-};
-
-export type {
-  RootState,
-  Context
 };

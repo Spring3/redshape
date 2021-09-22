@@ -15,7 +15,7 @@ import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
-import storage from '../../common/storage';
+// import storage from '../../common/storage';
 
 import { hoursToDuration } from '../datetime';
 
@@ -77,7 +77,7 @@ class AppView extends Component {
         }
       }
     });
-    storage.delete('time_tracking');
+    // storage.delete('time_tracking');
   }
 
   closeTimeEntryModal = () => {

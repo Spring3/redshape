@@ -6,7 +6,7 @@ import {
   TRACKING_SAVE,
   TRACKING_RESET
 } from '../actions/tracking.actions';
-import storage from '../../common/storage';
+// import storage from '../../common/storage';
 
 export const initialState = {
   issue: {},
@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
         duration: 0,
         comments: '',
       };
-      storage.set('time_tracking', nextState);
+      // storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_STOP: {
@@ -39,7 +39,7 @@ export default (state = initialState, action) => {
         duration,
         comments,
       };
-      storage.set('time_tracking', nextState);
+      // storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_PAUSE: {
@@ -50,7 +50,7 @@ export default (state = initialState, action) => {
         duration,
         comments,
       };
-      storage.set('time_tracking', nextState);
+      // storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_CONTINUE: {
@@ -61,7 +61,7 @@ export default (state = initialState, action) => {
         duration: duration || state.duration,
         comments: comments || state.comments,
       };
-      storage.set('time_tracking', nextState);
+      // storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_SAVE: {
@@ -71,11 +71,11 @@ export default (state = initialState, action) => {
         duration,
         comments,
       };
-      storage.set('time_tracking', nextState);
+      // storage.set('time_tracking', nextState);
       return nextState;
     }
     case TRACKING_RESET: {
-      storage.delete('time_tracking');
+      // storage.delete('time_tracking');
       return initialState;
     }
     default:

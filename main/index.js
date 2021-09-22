@@ -349,9 +349,9 @@ const initialize = () => {
 
   ipcMain.on('storage', (event, { action, data }) => {
     if (action === 'read') {
-      event.reply('storage', storage.get('settings'));
+      event.reply('storage', storage.settings.get());
     } else if (action === 'save') {
-      storage.set('settings', data);
+      storage.settings.set(data);
     } else {
       throw new Error('Unable to process the requested action', action);
     }
@@ -381,6 +381,11 @@ app.once('ready', () => {
   PORT = config.PORT;
   // eslint-disable-next-line global-require
   require('../common/request'); // to initialize from storage
+
+  if (!storage.settings.isDefined()) {
+    // sets defaul value that storage.settings.get returns as a fallback
+    storage.settings.set(storage.settings.get());
+  }
 
   initialize();
   generateMenu();

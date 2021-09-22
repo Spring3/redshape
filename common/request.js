@@ -43,8 +43,8 @@ const getInstance = () => instance;
 
 const reset = () => { instance = undefined; };
 
-if (storage.has('user')) {
-  const { api_key, redmineEndpoint } = storage.get('user');
+if (storage.user.isDefined()) {
+  const { api_key, redmineEndpoint } = storage.user.get();
   if (api_key && redmineEndpoint) {
     initialize(redmineEndpoint, api_key);
   }

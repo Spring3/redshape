@@ -1,24 +1,31 @@
 import { ipcRenderer } from 'electron';
-import { Context } from '../index';
+import type { Context } from 'overmind';
+import type { State } from './state';
 
 // TODO: move into some proper file to store all these
 const ipcChannel = 'storage';
 
-enum StorageActions {
-  READ = 'read',
-  SAVE = 'save'
+enum StorageAction {
+  READ = 'READ',
+  SAVE = 'SAVE'
 }
+
+type SettingsReadArgs = {
+  userId: string;
+  endpoint: string;
+};
 
 const save = (data: Context['state']['settings']) => {
   ipcRenderer.send(ipcChannel, {
-    action: StorageActions.SAVE,
+    action: StorageAction.SAVE,
     data,
   });
 };
 
-const read = () => new Promise((resolve) => {
+const read = (payload: SettingsReadArgs): Promise<State> => new Promise((resolve) => {
   ipcRenderer.send(ipcChannel, {
-    action: StorageActions.READ,
+    action: StorageAction.READ,
+    payload
   });
 
   ipcRenderer.once(
@@ -30,3 +37,4 @@ const read = () => new Promise((resolve) => {
 });
 
 export { save, read };
+export type { SettingsReadArgs };

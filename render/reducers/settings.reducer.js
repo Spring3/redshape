@@ -1,4 +1,3 @@
-import storage from '../../common/storage';
 import {
   SETTINGS_ADVANCED_TIMER_CONTROLS,
   SETTINGS_DISCARD_IDLE_TIME,
@@ -46,76 +45,66 @@ const orderTableHeaders = (headers) => {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SETTINGS_ADVANCED_TIMER_CONTROLS: {
-      const { userId, redmineEndpoint, advancedTimerControls } = action.data;
+      const { advancedTimerControls } = action.data;
       const nextState = {
         ...state,
         advancedTimerControls,
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_PROGRESS_SLIDER_STEP_1: {
-      const { userId, redmineEndpoint, progressWithStep1 } = action.data;
+      const { progressWithStep1 } = action.data;
       const nextState = {
         ...state,
         progressWithStep1,
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_DISCARD_IDLE_TIME: {
-      const { userId, redmineEndpoint, discardIdleTime } = action.data;
+      const { discardIdleTime } = action.data;
       const nextState = {
         ...state,
         discardIdleTime,
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_IDLE_BEHAVIOR: {
-      const { userId, redmineEndpoint, idleBehavior } = action.data;
+      const { idleBehavior } = action.data;
       const nextState = {
         ...state,
         idleBehavior,
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_SHOW_CLOSED_ISSUES: {
-      const { userId, redmineEndpoint, showClosed } = action.data;
+      const { showClosed } = action.data;
       const nextState = {
         ...state,
         showClosedIssues: !!showClosed
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_USE_COLORS: {
-      const { userId, redmineEndpoint, useColors } = action.data;
+      const { useColors } = action.data;
       const nextState = {
         ...state,
         useColors: !!useColors
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_ISSUE_HEADERS: {
-      const { userId, redmineEndpoint, issueHeaders } = action.data;
+      const { issueHeaders } = action.data;
       const nextState = {
         ...state,
         issueHeaders: issueHeaders ? orderTableHeaders(issueHeaders) : state.issueHeaders
       };
-      storage.set(`settings.${redmineEndpoint}.${userId}`, nextState);
       return nextState;
     }
     case SETTINGS_BACKUP: {
-      const { userId, redmineEndpoint } = action.data;
-      storage.set(`settings.${redmineEndpoint}.${userId}`, state);
       return state;
     }
     case SETTINGS_RESTORE: {
-      const { userId, redmineEndpoint } = action.data;
-      return storage.get(`settings.${redmineEndpoint}.${userId}`, initialState);
+      return initialState;
     }
     default:
       return state;

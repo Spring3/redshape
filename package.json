@@ -5,7 +5,7 @@
   "main": "main/index.js",
   "scripts": {
     "start": "yarn prepack && cross-env ELECTRON_IS_DEV=0 electron --noDevServer ./main/index.js",
-    "dev": "webpack-dev-server",
+    "dev": "concurrently 'webpack-dev-server' 'overmind-devtools'",
     "pack": "electron-builder --dir dist",
     "prepack": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build": "yarn prepack && electron-builder",
