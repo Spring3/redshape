@@ -141,18 +141,20 @@ const FlexWrapper = styled(Wrapper)`
   flex-wrap: wrap;
 `;
 
-const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, selectedIssueState, projects, history, postComments }: any) => {
+const IssueDetailsPage = ({
+  match, fetchIssueDetails, resetSelectedIssue, selectedIssueState, projects, history, postComments
+}: any) => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [showIssueModal, setShowIssueModal] = useState(false);
 
   useEffect(() => {
-    fetchIssueDetails(match.params.id)
+    fetchIssueDetails(match.params.id);
 
     return () => {
-      resetSelectedIssue()
-    }
+      resetSelectedIssue();
+    };
   }, []);
 
   const state = useOvermindState();
@@ -160,7 +162,7 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
 
   const triggerTimeEntryModal = (timeEntry: any) => {
     const selectedIssue = selectedIssueState.data;
-    const selectedTimeEntry = timeEntry || {
+    const newSelectedTimeEntry = timeEntry || {
       user: {
         id: state.users.currentUser?.id,
         name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
@@ -177,127 +179,125 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
       duration: '',
       spent_on: moment().format('YYYY-MM-DD')
     };
-    selectedTimeEntry.issue.name = selectedIssue.subject;
+    newSelectedTimeEntry.issue.name = selectedIssue.subject;
     const existingActivities = _.get(projects[selectedIssue.project.id], 'activities', []);
-    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })))
-    setSelectedTimeEntry(selectedTimeEntry);
+    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
+    setSelectedTimeEntry(newSelectedTimeEntry);
     setShowTimeEntryModal(true);
     setShowIssueModal(false);
-  }
+  };
 
   const closeTimeEntryModal = () => {
     setActivities([]);
     setSelectedTimeEntry(undefined);
     setShowTimeEntryModal(false);
     setShowIssueModal(false);
-  }
+  };
 
   const closeIssueModal = () => {
     setShowIssueModal(false);
-  }
+  };
 
   const openIssueModal = () => {
     setShowIssueModal(true);
-  }
+  };
 
-  const getIssueComments = () => {
-    return selectedIssueState.data.journals.filter((entry: any) => entry.notes);
-  }
+  const getIssueComments = () => selectedIssueState.data.journals.filter((entry: any) => entry.notes);
 
-    const selectedIssue = selectedIssueState.data;
-    const cfields = selectedIssue.custom_fields;
-    // eslint-disable-next-line react/prop-types
-    const subtasks = selectedIssue.children;
-    return selectedIssue.id
-      ? (
-        <Section>
-          <Flex>
-            <IssueDetails>
-              <Buttons className="buttons">
-                { /* eslint-disable-next-line react/jsx-no-bind */ }
-                <BackButton onClick={history.goBack.bind(this)}>
-                  <ArrowLeftIcon size={30} />
-                </BackButton>
-              </Buttons>
-              <h2>
-                <span>
-                  #
-                  {selectedIssue.id}
+  const selectedIssue = selectedIssueState.data;
+  const cfields = selectedIssue.custom_fields;
+  // eslint-disable-next-line react/prop-types
+  const subtasks = selectedIssue.children;
+  return selectedIssue.id
+    ? (
+      <Section>
+        <Flex>
+          <IssueDetails>
+            <Buttons className="buttons">
+              { /* eslint-disable-next-line react/jsx-no-bind */ }
+              <BackButton onClick={history.goBack.bind(this)}>
+                <ArrowLeftIcon size={30} />
+              </BackButton>
+            </Buttons>
+            <h2>
+              <span>
+                #
+                {selectedIssue.id}
 &nbsp;
-                </span>
-                <span>{selectedIssue.subject}</span>
-                <IconButton onClick={openIssueModal}>
-                  <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
-                </IconButton>
-              </h2>
-              <SmallNotice>
-                Created by&nbsp;
-                <Link href="#">{selectedIssue.author.name}</Link>
-                <DateComponent date={selectedIssue.created_on} />
-              </SmallNotice>
-              {selectedIssue.closed_on && (
-                <SmallNotice>
-                  Closed
-                  <DateComponent date={selectedIssue.closed_on} />
-                </SmallNotice>
-              )}
-              <Wrapper>
-                <ColumnList>
-                  <li>
-                    <div>Tracker: </div>
-                    <div>{selectedIssue.tracker.name}</div>
-                  </li>
-                  <li>
-                    <div>Status:</div>
-                    <div>{selectedIssue.status.name}</div>
-                  </li>
-                  <li>
-                    <div>Priority: </div>
-                    <div>{selectedIssue.priority.name}</div>
-                  </li>
-                  <li>
-                    <div>Assignee: </div>
-                    <div>{selectedIssue.assigned_to.name}</div>
-                  </li>
-                  <li>
-                    <div>Project: </div>
-                    <div>{_.get(selectedIssue, 'project.name')}</div>
-                  </li>
-                  <li>
-                    <div>Progress: </div>
-                    <div>
-                      <Progressbar
-                        className={undefined}
-                        id={undefined}
-                        height={5}
-                        percent={selectedIssue.done_ratio}
-                        background={(theme as any).main}
-                      />
-                    </div>
-                  </li>
-                </ColumnList>
-                <ColumnList>
-                  <li>
-                    <div>Target version: </div>
-                    <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
-                  </li>
-                  <li>
-                    <div>Start date: </div>
-                    <DateComponent date={selectedIssue.start_date} />
-                  </li>
-                  <li>
-                    <div>Due date: </div>
-                    <DateComponent date={selectedIssue.due_date} />
-                  </li>
-                  <li>
-                    <div>Estimation: </div>
-                    <div>
-                      {
+              </span>
+              <span>{selectedIssue.subject}</span>
+              <IconButton onClick={openIssueModal}>
+                <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
+              </IconButton>
+            </h2>
+            <SmallNotice>
+              Created by&nbsp;
+              <Link href="#">{selectedIssue.author.name}</Link>
+              <DateComponent date={selectedIssue.created_on} />
+            </SmallNotice>
+            {selectedIssue.closed_on && (
+            <SmallNotice>
+              Closed
+              <DateComponent date={selectedIssue.closed_on} />
+            </SmallNotice>
+            )}
+            <Wrapper>
+              <ColumnList>
+                <li>
+                  <div>Tracker: </div>
+                  <div>{selectedIssue.tracker.name}</div>
+                </li>
+                <li>
+                  <div>Status:</div>
+                  <div>{selectedIssue.status.name}</div>
+                </li>
+                <li>
+                  <div>Priority: </div>
+                  <div>{selectedIssue.priority.name}</div>
+                </li>
+                <li>
+                  <div>Assignee: </div>
+                  <div>{selectedIssue.assigned_to.name}</div>
+                </li>
+                <li>
+                  <div>Project: </div>
+                  <div>{_.get(selectedIssue, 'project.name')}</div>
+                </li>
+                <li>
+                  <div>Progress: </div>
+                  <div>
+                    <Progressbar
+                      className={undefined}
+                      id={undefined}
+                      height={5}
+                      percent={selectedIssue.done_ratio}
+                      background={(theme as any).main}
+                    />
+                  </div>
+                </li>
+              </ColumnList>
+              <ColumnList>
+                <li>
+                  <div>Target version: </div>
+                  <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
+                </li>
+                <li>
+                  <div>Start date: </div>
+                  <DateComponent date={selectedIssue.start_date} />
+                </li>
+                <li>
+                  <div>Due date: </div>
+                  <DateComponent date={selectedIssue.due_date} />
+                </li>
+                <li>
+                  <div>Estimation: </div>
+                  <div>
+                    {
                         selectedIssue.estimated_hours
                           ? `${selectedIssue.estimated_hours.toFixed(2)} h`
                           : undefined
                       }
-                      {
+                    {
                         (
                           selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours
                           && selectedIssue.total_estimated_hours >= 0
@@ -311,13 +311,13 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
                           </span>
                         )
                       }
-                    </div>
-                  </li>
-                  <li>
-                    <div>Time spent: </div>
-                    <div>
-                      {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
-                      {
+                  </div>
+                </li>
+                <li>
+                  <div>Time spent: </div>
+                  <div>
+                    {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                    {
                         (
                           selectedIssue.total_spent_hours !== selectedIssue.spent_hours
                           && selectedIssue.total_spent_hours >= 0
@@ -331,28 +331,28 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
                           </span>
                         )
                       }
-                    </div>
-                  </li>
-                  <li>
-                    <div>Time cap: </div>
-                    <div>
-                      <Progressbar
-                        className={undefined}
-                        id={undefined}
-                        height={5}
-                        percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
-                        background={(theme as any).main}
-                      />
-                    </div>
-                  </li>
-                </ColumnList>
-              </Wrapper>
-              <FlexWrapper>
-                { subtasks && subtasks.length && (
-                  <ColumnList>
-                    <h3>Subtasks:</h3>
-                    <Subtasks>
-                      {
+                  </div>
+                </li>
+                <li>
+                  <div>Time cap: </div>
+                  <div>
+                    <Progressbar
+                      className={undefined}
+                      id={undefined}
+                      height={5}
+                      percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
+                      background={(theme as any).main}
+                    />
+                  </div>
+                </li>
+              </ColumnList>
+            </Wrapper>
+            <FlexWrapper>
+              { subtasks && subtasks.length && (
+              <ColumnList>
+                <h3>Subtasks:</h3>
+                <Subtasks>
+                  {
                         subtasks.map((subtask: any, i: number) => (
                           <Subtask>
                             <Link
@@ -365,52 +365,52 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
                           </Subtask>
                         ))
                       }
-                    </Subtasks>
-                  </ColumnList>
-                )}
-                {cfields && cfields.length && (
-                  <ColumnList>
-                    <h3>Custom Fields:</h3>
-                    <CustomFields>
-                      {cfields.map((el: any, i: number) => (
-                        <li key={i}>
-                          <div>
-                            {el.name}
-                            :
-                            {' '}
-                          </div>
-                          <div>{el.value}</div>
-                        </li>
-                      ))}
-                    </CustomFields>
-                  </ColumnList>
-                )}
-              </FlexWrapper>
-              <div>
-                <h3>Description</h3>
-                <MarkdownText markdownText={selectedIssue.description} />
-              </div>
-            </IssueDetails>
-            <TimeEntries
-              showTimeEntryModal={triggerTimeEntryModal}
-            />
-          </Flex>
-          <CommentsSection
-            journalEntries={getIssueComments()}
-            publishComments={postComments}
-            issueId={selectedIssue.id}
+                </Subtasks>
+              </ColumnList>
+              )}
+              {cfields && cfields.length && (
+              <ColumnList>
+                <h3>Custom Fields:</h3>
+                <CustomFields>
+                  {cfields.map((el: any, i: number) => (
+                    <li key={i}>
+                      <div>
+                        {el.name}
+                        :
+                        {' '}
+                      </div>
+                      <div>{el.value}</div>
+                    </li>
+                  ))}
+                </CustomFields>
+              </ColumnList>
+              )}
+            </FlexWrapper>
+            <div>
+              <h3>Description</h3>
+              <MarkdownText markdownText={selectedIssue.description} />
+            </div>
+          </IssueDetails>
+          <TimeEntries
+            showTimeEntryModal={triggerTimeEntryModal}
           />
-          { selectedTimeEntry && (
-            <TimeEntryModal
-              isOpen={showTimeEntryModal}
-              isEditable={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
-              activities={activities}
-              isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
-              timeEntry={selectedTimeEntry}
-              onClose={closeTimeEntryModal}
-            />
-          )}
-          {selectedIssue && (
+        </Flex>
+        <CommentsSection
+          journalEntries={getIssueComments()}
+          publishComments={postComments}
+          issueId={selectedIssue.id}
+        />
+        { selectedTimeEntry && (
+        <TimeEntryModal
+          isOpen={showTimeEntryModal}
+          isEditable={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
+          activities={activities}
+          isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
+          timeEntry={selectedTimeEntry}
+          onClose={closeTimeEntryModal}
+        />
+        )}
+        {selectedIssue && (
           <IssueModal
             isOpen={showIssueModal}
             isEditable={selectedIssue.assigned_to.id === state.users.currentUser?.id}
@@ -418,11 +418,11 @@ const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, select
             issueEntry={selectedIssue}
             onClose={closeIssueModal}
           />
-          )}
-        </Section>
-      )
-      : <OverlayProcessIndicator />;
-}
+        )}
+      </Section>
+    )
+    : <OverlayProcessIndicator />;
+};
 
 IssueDetailsPage.propTypes = {
   selectedIssueState: PropTypes.shape({
@@ -478,7 +478,6 @@ IssueDetailsPage.propTypes = {
   postComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired,
   match: PropTypes.object,
-  theme: PropTypes.object,
   projects: PropTypes.object,
   history: PropTypes.object
 };

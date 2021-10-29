@@ -54,7 +54,7 @@ describe('Login view', () => {
       location: {
         pathname: '/'
       },
-      listen: () => () => {},
+      listen: () => () => { /* noop */ },
       push: jest.fn()
     };
 
@@ -143,21 +143,21 @@ describe('Login view', () => {
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200, { user: userData }]));
 
     fireEvent.change(usernameInput, {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { value: returnedValues.username, name: 'username' }
     });
     fireEvent.change(passwordInput, {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { value: returnedValues.password, name: 'password' }
     });
     fireEvent.change(redmineEndpointInput, {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint }
     });
     expect(usernameInput).toHaveValue(returnedValues.username);
     expect(passwordInput).toHaveValue(returnedValues.password);
     expect(redmineEndpointInput).toHaveValue(returnedValues.redmineEndpoint);
-    fireEvent.submit(document.querySelector('button[type="submit"]'), { preventDefault: () => {} });
+    fireEvent.submit(document.querySelector('button[type="submit"]'), { preventDefault: () => { /* noop */ } });
 
     setTimeout(() => {
       expect(queryAllByText('is not allowed to be empty')).toHaveLength(0);
@@ -225,9 +225,9 @@ describe('Login view', () => {
 
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200, { user: userData }]));
 
-    fireEvent.change(apiKeyInput, { persist: () => {}, target: { value: returnedValues.apiKey, name: 'apiKey' } });
+    fireEvent.change(apiKeyInput, { persist: () => { /* noop */ }, target: { value: returnedValues.apiKey, name: 'apiKey' } });
     fireEvent.change(redmineEndpointInput, {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: {
         name: 'redmineEndpoint',
         value: returnedValues.redmineEndpoint
@@ -235,7 +235,7 @@ describe('Login view', () => {
     });
     expect(apiKeyInput).toHaveValue(returnedValues.apikey);
     expect(redmineEndpointInput).toHaveValue(returnedValues.redmineEndpoint);
-    fireEvent.submit(document.querySelector('button[type="submit"]'), { preventDefault: () => {} });
+    fireEvent.submit(document.querySelector('button[type="submit"]'), { preventDefault: () => { /* noop */ } });
 
     setTimeout(() => {
       expect(queryAllByText('is not allowed to be empty')).toHaveLength(0);
@@ -286,22 +286,22 @@ describe('Login view', () => {
     axiosMock.onGet('/users/current.json').reply(() => Promise.reject(expectedError));
 
     fireEvent.change(document.querySelector('input[name="username"]'), {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { value: returnedValues.username, name: 'username' }
     });
     fireEvent.change(document.querySelector('input[name="password"]'), {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { value: returnedValues.password, name: 'password' }
     });
     fireEvent.change(document.querySelector('input[name="redmineEndpoint"]'), {
-      persist: () => {},
+      persist: () => { /* noop */ },
       target: { name: 'redmineEndpoint', value: returnedValues.redmineEndpoint }
     });
     expect(document.querySelector('input[name="username"]')).toHaveValue(returnedValues.username);
     expect(document.querySelector('input[name="password"]')).toHaveValue(returnedValues.password);
     expect(document.querySelector('input[name="redmineEndpoint"]')).toHaveValue(returnedValues.redmineEndpoint);
 
-    fireEvent.click(document.querySelector('button[type="submit"]'), { preventDefault: () => {} });
+    fireEvent.click(document.querySelector('button[type="submit"]'), { preventDefault: () => { /* noop */ } });
 
     setTimeout(() => {
       expect(loginActionSpy).toHaveBeenCalledWith(returnedValues);

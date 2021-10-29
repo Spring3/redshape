@@ -12,7 +12,7 @@ describe('Date Picker', () => {
       <DatePicker
         theme={theme}
         value={123456789}
-        onChange={() => {}}
+        onChange={() => { /* noop */ }}
       />
     );
     const input = document.querySelector('input');

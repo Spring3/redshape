@@ -8,7 +8,6 @@ const update: IAction<State, void> = ({ state, effects }: Context, settings) => 
   effects.storage.save(state.settings);
 };
 
-
 const restore: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
   const settings = await effects.storage.read({
     userId: state.users.currentUser?.id as string,

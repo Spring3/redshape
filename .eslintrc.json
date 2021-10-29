@@ -5,7 +5,11 @@
     "es6": true,
     "jest": true
   },
-  "extends": ["airbnb", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -100,6 +104,7 @@
     "react/prefer-stateless-function": "off",
     "import/prefer-default-export": "off",
     "react/jsx-boolean-value": "off",
+    "@typescript-eslint/no-var-requires": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

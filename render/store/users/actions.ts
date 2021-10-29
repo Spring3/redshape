@@ -41,7 +41,7 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ effects, st
 };
 
 const logout = () => {
-
+  /* noop */
 };
 
 export {

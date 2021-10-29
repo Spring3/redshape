@@ -62,7 +62,7 @@ const SummaryPage = ({ showClosedIssues, fetchIssues }: any) => {
         .build();
       fetchIssues(queryFilter, page);
     }
-  }
+  };
 
   const deboucedFetch = debounce(sendFetchIssues, 500);
 
@@ -76,49 +76,48 @@ const SummaryPage = ({ showClosedIssues, fetchIssues }: any) => {
 
   const onSearchChange = (e: any) => {
     setSearch(e.target.value);
-  }
+  };
 
-  const onSort = (sortBy: any, sortDirection: any) => {
-    setSortBy(sortBy);
-    setSortDirection(sortDirection);
-  }
+  const onSort = (sortingBy: any, sortingDirection: any) => {
+    setSortBy(sortingBy);
+    setSortDirection(sortingDirection);
+  };
 
-    return (
-      <Grid>
-        <IssuesSection>
-          <h2>Issues assigned to me</h2>
-          <OptionsGrid>
-            <OptionsBlock />
-            <ColumnHeadersSelect />
-            <GridRow>
-              <Input
-                icon={(
-                  <MagnifyIcon
-                    xmlns="http://www.w3.org/2000/svg"
-                    color={(theme as any).main}
-                  />
+  return (
+    <Grid>
+      <IssuesSection>
+        <h2>Issues assigned to me</h2>
+        <OptionsGrid>
+          <OptionsBlock />
+          <ColumnHeadersSelect />
+          <GridRow>
+            <Input
+              icon={(
+                <MagnifyIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  color={(theme as any).main}
+                />
                 )}
-                type="text"
-                name="search"
-                placeholder="Search..."
-                onChange={onSearchChange}
-              />
-            </GridRow>
-          </OptionsGrid>
-          <IssuesTable
-          // @ts-expect-error
-            onSort={onSort}
-            fetchIssuePage={sendFetchIssues}
-          />
-        </IssuesSection>
-      </Grid>
-    );
+              type="text"
+              name="search"
+              placeholder="Search..."
+              onChange={onSearchChange}
+            />
+          </GridRow>
+        </OptionsGrid>
+        <IssuesTable
+          // @ts-expect-error needs proper ts typing
+          onSort={onSort}
+          fetchIssuePage={sendFetchIssues}
+        />
+      </IssuesSection>
+    </Grid>
+  );
 };
 
 SummaryPage.propTypes = {
   showClosedIssues: PropTypes.bool.isRequired,
-  fetchIssues: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  fetchIssues: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state: any) => ({

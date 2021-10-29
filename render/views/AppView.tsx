@@ -36,7 +36,9 @@ type AppViewProps = {
 
 }
 
-const AppView = ({ getProjectData, projects, resetTimer, history, match }: any) => {
+const AppView = ({
+  getProjectData, projects, resetTimer, history, match
+}: any) => {
   const [activities, setActivities] = useState([]);
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
@@ -48,9 +50,8 @@ const AppView = ({ getProjectData, projects, resetTimer, history, match }: any) 
 
     return () => {
       getProjectData();
-    }
+    };
   }, []);
-
 
   const onTrackingStop = (trackedIssue: any, value: any, comments: any) => {
     const existingActivities = _get(projects[trackedIssue.project.id], 'activities', []);
@@ -83,33 +84,33 @@ const AppView = ({ getProjectData, projects, resetTimer, history, match }: any) 
     setShowTimeEntryModal(false);
     setTimeEntry(null);
     resetTimer();
-  }
+  };
 
-    return (
-      <Grid>
-        <DragArea />
-        {!state.users.currentUser && (<Redirect to="/" />)}
-        <Navbar />
-        <Content>
-          <Route exact path={`${match.path}/summary`} component={(props: any) => <SummaryPage {...props} />} />
-          <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
-          <Timer
-            onStop={onTrackingStop}
-            history={history}
-          />
-          <TimeEntryModal
-            isOpen={showTimeEntryModal}
-            isEditable={true}
-            activities={activities}
-            isUserAuthor={true}
-            timeEntry={timeEntry}
-            initialVolatileContent={true}
-            onClose={closeTimeEntryModal}
-          />
-        </Content>
-      </Grid>
-    );
-}
+  return (
+    <Grid>
+      <DragArea />
+      {!state.users.currentUser && (<Redirect to="/" />)}
+      <Navbar />
+      <Content>
+        <Route exact path={`${match.path}/summary`} component={(props: any) => <SummaryPage {...props} />} />
+        <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
+        <Timer
+          onStop={onTrackingStop}
+          history={history}
+        />
+        <TimeEntryModal
+          isOpen={showTimeEntryModal}
+          isEditable={true}
+          activities={activities}
+          isUserAuthor={true}
+          timeEntry={timeEntry}
+          initialVolatileContent={true}
+          onClose={closeTimeEntryModal}
+        />
+      </Content>
+    </Grid>
+  );
+};
 
 AppView.propTypes = {
   api_key: PropTypes.string.isRequired,

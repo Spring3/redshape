@@ -7,7 +7,7 @@ describe('TextArea component', () => {
   afterEach(cleanup);
 
   it('should render the text area', () => {
-    render(<TextArea onChange={() => {}} />);
+    render(<TextArea onChange={() => { /* noop */ }} />);
     expect(document.querySelector('textarea')).toBeDefined();
   });
 
@@ -21,7 +21,7 @@ describe('TextArea component', () => {
       target: {
         value: '123test'
       },
-      persist: () => {}
+      persist: () => { /* noop */ }
     };
 
     fireEvent.change(document.querySelector('textarea'), event);

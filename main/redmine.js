@@ -1,7 +1,7 @@
 const got = require('got');
 const { transform } = require('./transformers/index');
 
-const createRequestClient = (config = {}) => {
+const createRequestClient = (initConfig = {}) => {
   let isInitialized = false;
   let instance;
 
@@ -35,7 +35,7 @@ const createRequestClient = (config = {}) => {
 
       if (response.statusCode === 200) {
         if (!isInitialized && data.route === 'users/current.json' && response.body.user?.api_key) {
-          initialize({ endpoint: config.endpoint, token: response.body.user?.api_key });
+          initialize({ endpoint: initConfig.endpoint, token: response.body.user?.api_key });
         }
 
         return {
@@ -50,7 +50,7 @@ const createRequestClient = (config = {}) => {
     }
   };
 
-  initialize(config);
+  initialize(initConfig);
 
   return {
     initialize,

@@ -12,7 +12,7 @@
     "release": "yarn prepack && electron-builder -p always",
     "release:ci": "yarn prepack && electron-builder -p onTagOrDraft",
     "postinstall": "electron-builder install-app-deps",
-    "lint": "eslint . --ext .js,jsx,.ts,.tsx --max-warnings 0",
+    "lint": "eslint . --ext .js,jsx,.ts,.tsx",
     "test": "tsdx test --watch --max-workers=2"
   },
   "repository": {

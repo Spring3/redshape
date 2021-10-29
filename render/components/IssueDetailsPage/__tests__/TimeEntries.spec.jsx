@@ -244,8 +244,8 @@ describe('IssueDetails => TimeEntries componnet', () => {
       </Provider>
     );
     fireEvent.click(document.querySelector('#confirmDeletion'), {
-      preventDefault: () => {},
-      stopPropagation: () => {}
+      preventDefault: () => { /* noop */ },
+      stopPropagation: () => { /* noop */ }
     });
     fireEvent.click(document.querySelector('#dialog-confirm'));
     expect(store.getActions().pop().type).toBe(TIME_ENTRY_DELETE);

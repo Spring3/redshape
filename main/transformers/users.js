@@ -2,11 +2,12 @@ const transform = (route, responseBody) => {
   const { user } = responseBody;
 
   switch (route) {
-    case 'users/current.json':
+    case 'users/current.json': {
       const {
-        login, admin, api_key, ...userPayload
+        _login, _admin, _api_key, ...userPayload
       } = user;
       return userPayload;
+    }
     default:
       return responseBody;
   }

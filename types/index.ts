@@ -20,6 +20,7 @@ type Response = {
   error?: Error;
 }
 
+// eslint-disable-next-line no-shadow
 enum StorageAction {
   READ = 'READ',
   SAVE = 'SAVE'

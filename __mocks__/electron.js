@@ -1,7 +1,7 @@
 import { name } from '../package.json';
 
 const shell = {
-  openExternal: () => {},
+  openExternal: () => { /* noop */ },
 };
 
 const powerMonitor = {

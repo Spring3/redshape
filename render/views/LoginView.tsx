@@ -77,16 +77,16 @@ const LoginView = () => {
         .validate(redmineEndpoint)
     };
     if (useApiKey) {
-      // @ts-expect-error
+      // @ts-expect-error needs proper typing
       errors.apiKey = Joi.string()
         .required()
         .validate(apiKey);
     } else {
-      // @ts-expect-error
+      // @ts-expect-error needs proper typing
       errors.username = Joi.string()
         .required()
         .validate(username);
-      // @ts-expect-error
+      // @ts-expect-error needs proper typing
       errors.password = Joi.string()
         .required()
         .validate(password);
@@ -94,7 +94,7 @@ const LoginView = () => {
     const results = {};
     for (const [prop, validation] of Object.entries(errors)) {
       if (validation.error) {
-        // @ts-expect-error
+        // @ts-expect-error needs proper typing
         results[prop] = validation.error.message.replace('value', prop);
       }
     }
