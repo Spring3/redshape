@@ -66,8 +66,8 @@ class Dialog extends Component {
     event.stopPropagation();
     const eventClone = {
       ...event,
-      preventDefault: () => {},
-      stopPropagation: () => {},
+      preventDefault: () => { /* noop */ },
+      stopPropagation: () => { /* noop */ },
       target: { ...event.target, value: event.target.value }
     };
 
@@ -97,7 +97,7 @@ Dialog.propTypes = {
 Dialog.defaultProps = {
   title: 'Confirmation',
   message: 'Are you sure you want to proceed?',
-  onCancel: () => {}
+  onCancel: () => { /* noop */ }
 };
 
 export default withTheme(Dialog);

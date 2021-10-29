@@ -12,6 +12,9 @@ const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
 
+const storage = require('../common/storage');
+const { redmineClient } = require('./redmine');
+
 const Tray = require('./tray');
 
 const utils = require('./utils');
@@ -329,7 +332,7 @@ const initialize = () => {
     mainWindow = null;
   });
 
-  ipcMain.on('notify', (ev, { message, critical, keep }) => {
+  ipcMain.on('notify', (event, { message, critical, keep }) => {
     const notification = new Notification({
       title: 'System is idle',
       body: message || 'Timer will be paused if system continues idle',
@@ -341,8 +344,31 @@ const initialize = () => {
     notification.show();
   });
 
-  ipcMain.on('menu', (ev, { settings }) => {
+  ipcMain.on('menu', (event, { settings }) => {
     generateMenu({ settings });
+  });
+
+  ipcMain.on('storage', (event, message) => {
+    const { action, data } = JSON.parse(message);
+    if (action === 'read') {
+      event.reply('storage', storage.settings.get());
+    } else if (action === 'save') {
+      storage.settings.set(data);
+    } else {
+      throw new Error('Unable to process the requested action', action);
+    }
+  });
+
+  ipcMain.on('request', async (event, message) => {
+    const { payload, config, id } = JSON.parse(message);
+    console.log('Received a request for query', { payload, config });
+    if (!redmineClient.isInitialized()) {
+      redmineClient.initialize(config);
+    }
+
+    const response = await redmineClient.send(payload);
+
+    event.reply(`response:${id}`, response);
   });
 };
 
@@ -369,6 +395,11 @@ app.once('ready', () => {
   PORT = config.PORT;
   // eslint-disable-next-line global-require
   require('../common/request'); // to initialize from storage
+
+  if (!storage.settings.isDefined()) {
+    // sets defaul value that storage.settings.get returns as a fallback
+    storage.settings.set(storage.settings.get());
+  }
 
   initialize();
   generateMenu();

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import storage from '../../common/storage';
+// import storage from '../../common/storage';
 import { PROJECT_GET_ALL } from '../actions/project.actions';
 
 export const initialState = {
@@ -43,7 +43,6 @@ export default (state = initialState, action) => {
             },
             error: undefined
           };
-          storage.set('projects', nextState);
           return nextState;
         }
         case 'NOK': {

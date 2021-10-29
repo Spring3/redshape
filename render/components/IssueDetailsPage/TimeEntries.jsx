@@ -178,7 +178,7 @@ class TimeEntries extends Component {
 
   render() {
     const {
-      spentTime, userId, theme, isTimerEnabled, trackedIssueId, selectedIssue
+      spentTime, /* userId, */ theme, isTimerEnabled, trackedIssueId, selectedIssue
     } = this.props;
     return (
       <TimeEntriesContainer>
@@ -224,7 +224,7 @@ class TimeEntries extends Component {
                     </span>
                     <DateComponent className="date" date={timeEntry.spent_on} />
                   </div>
-                  {
+                  {/* {
                     userId === timeEntry.user.id && (
                       <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
                         {
@@ -239,7 +239,7 @@ class TimeEntries extends Component {
                         }
                       </Dialog>
                     )
-                  }
+                  } */}
                 </div>
                 <p>{timeEntry.comments}</p>
               </li>
@@ -265,7 +265,7 @@ TimeEntries.propTypes = {
       name: PropTypes.string.isRequired
     }).isRequired
   }).isRequired,
-  userId: PropTypes.number.isRequired,
+  // userId: PropTypes.number.isRequired,
   startTimeTracking: PropTypes.func.isRequired,
   spentTime: PropTypes.arrayOf(PropTypes.shape({
     activity: PropTypes.shape({
@@ -299,8 +299,8 @@ TimeEntries.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  userId: state.user.id,
-  userName: state.user.name,
+  // userId: state.user.id,
+  // userName: state.user.name,
   spentTime: state.issues.selected.spentTime,
   selectedIssue: state.issues.selected.data,
   isTimerEnabled: state.tracking.isEnabled,

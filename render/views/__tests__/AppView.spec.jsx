@@ -95,7 +95,7 @@ describe('AppView', () => {
       location: {
         pathname: '/app'
       },
-      listen: () => () => {},
+      listen: () => () => { /* noop */ },
       push: jest.fn(),
       createHref: () => {
         historyMock.push('/');
@@ -174,7 +174,7 @@ describe('AppView', () => {
       location: {
         pathname: '/app'
       },
-      listen: () => () => {},
+      listen: () => () => { /* noop */ },
       push: jest.fn(),
       createHref: () => {
         historyMock.push('/');
@@ -271,7 +271,7 @@ describe('AppView', () => {
       location: {
         pathname: '/app'
       },
-      listen: () => () => {},
+      listen: () => () => { /* noop */ },
       push: jest.fn(),
       createHref: () => {
         historyMock.push('/');

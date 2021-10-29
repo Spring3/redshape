@@ -17,7 +17,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={false}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >
@@ -31,7 +31,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={true}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >
@@ -55,7 +55,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={false}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >
@@ -68,7 +68,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={true}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >
@@ -91,7 +91,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={true}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >
@@ -104,7 +104,7 @@ describe('InfiniteScroll component', () => {
         immediate={true}
         isEnd={false}
         hasMore={false}
-        load={() => {}}
+        load={() => { /* noop */ }}
         loadIndicator={<span>Loading...</span>}
         container={containerMock}
       >

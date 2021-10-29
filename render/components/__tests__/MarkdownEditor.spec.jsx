@@ -23,7 +23,7 @@ describe('MarkdownEditor component', () => {
     expect(textarea).toBeDefined();
 
     act(() => {
-      fireEvent.change(textarea, { target: { value: 'test' }, persist: () => {} });
+      fireEvent.change(textarea, { target: { value: 'test' }, persist: () => { /* noop */ } });
     });
     expect(textarea).toHaveValue('test');
     expect(onChange).toHaveBeenCalled();

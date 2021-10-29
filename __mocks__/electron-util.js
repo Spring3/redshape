@@ -1,4 +1,4 @@
-const openNewGitHubIssue = () => {};
+const openNewGitHubIssue = () => { /* noop */ };
 const debugInfo = () => '';
 
 export {

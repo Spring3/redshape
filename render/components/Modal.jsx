@@ -72,7 +72,7 @@ class Modal extends Component {
         // REFACTOR: Maybe someone with better React skills can refactor the whole Esc/Exit/Confirm behavior
         // Also, the Dialog components looks quite weird/messy. All these workarounds comes because
         // I try to re-use the same components as the original author (Dialog, GhostButton, Modal, etc).
-        childRef.props.onClick({ stopPropagation() {}, preventDefault() {}, target: { value: null } });
+        childRef.props.onClick({ stopPropagation() { /* noop */ }, preventDefault() { /* noop */ }, target: { value: null } });
       }
     } else {
       this.onConfirm();
@@ -86,7 +86,7 @@ class Modal extends Component {
         {...this.props}
         styles={this.modalStyles}
         showCloseIcon={false}
-        onClose={() => {}}
+        onClose={() => { /* noop */ }}
         onEscKeyDown={() => this.keyEscMaybeConfirm()}
       >
         <Dialog title="Please Confirm" message="Are you sure you want to close?">

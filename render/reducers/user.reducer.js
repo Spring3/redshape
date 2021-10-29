@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { USER_LOGIN, USER_LOGOUT } from '../actions/user.actions';
-import storage from '../../common/storage';
+// import storage from '../../common/storage';
 
 export const initialState = {
   isFetching: false,
@@ -21,7 +21,7 @@ const handleUserLogin = (state, action) => {
       const { firstname, lastname } = userData;
       const payload = _.pick(userData, 'id', 'redmineEndpoint', 'api_key');
       payload.name = `${firstname} ${lastname}`;
-      storage.set('user', payload);
+      // storage.user.set(payload);
       return {
         ...state, ...payload, isFetching: false, loginError: undefined
       };
@@ -41,11 +41,11 @@ export default (state = initialState, action) => {
     }
     case USER_LOGOUT: {
       // we keep settings cause they are general app settings
-      const settings = storage.get('settings');
-      storage.clear();
-      if (settings) {
-        storage.set('settings', settings);
-      }
+      // const settings = storage.settings.get('settings');
+      // storage.clear();
+      // if (settings) {
+      //    storage.set('settings', settings);
+      // }
       return { ...initialState };
     }
     default:
