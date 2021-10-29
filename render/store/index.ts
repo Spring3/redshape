@@ -5,22 +5,29 @@ import {
 import { merge, namespaced } from 'overmind/config';
 
 import * as settings from './settings';
+import * as users from './users';
+
+import { request, storage } from './effects';
 
 const overmindStoreConfig = merge(
   {
     state: {},
     actions: {},
-    effects: {}
+    effects: {
+      request,
+      storage
+    }
   },
   namespaced({
-    settings
+    settings,
+    users
   })
 );
 
 type OvermindConfig = IContext<typeof overmindStoreConfig>;
 declare module 'overmind' {
   // eslint-disable-next-line no-unused-vars
-  interface Context extends OvermindConfig {}
+  type Context = OvermindConfig
 }
 
 const useOvermindActions = createActionsHook<OvermindConfig>();

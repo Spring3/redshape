@@ -13,6 +13,7 @@ const isDev = require('electron-is-dev');
 const logger = require('electron-log');
 
 const storage = require('../common/storage');
+const { redmineClient } = require('./redmine');
 
 const Tray = require('./tray');
 
@@ -347,7 +348,8 @@ const initialize = () => {
     generateMenu({ settings });
   });
 
-  ipcMain.on('storage', (event, { action, data }) => {
+  ipcMain.on('storage', (event, message) => {
+    const { action, data } = JSON.parse(message);
     if (action === 'read') {
       event.reply('storage', storage.settings.get());
     } else if (action === 'save') {
@@ -355,6 +357,18 @@ const initialize = () => {
     } else {
       throw new Error('Unable to process the requested action', action);
     }
+  });
+
+  ipcMain.on('request', async (event, message) => {
+    const { payload, config, id } = JSON.parse(message);
+    console.log('Received a request for query', { payload, config });
+    if (!redmineClient.isInitialized()) {
+      redmineClient.initialize(config);
+    }
+
+    const response = await redmineClient.send(payload);
+
+    event.reply(`response:${id}`, response);
   });
 };
 

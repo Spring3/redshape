@@ -3,5 +3,5 @@ import * as actions from './actions';
 
 export {
   state,
-  actions,
+  actions
 };
