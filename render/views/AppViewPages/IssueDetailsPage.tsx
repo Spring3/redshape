@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import styled, { css, withTheme } from 'styled-components';
+import styled, { css, useTheme } from 'styled-components';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
@@ -22,6 +22,7 @@ import { animationSlideRight } from '../../animations';
 import { GhostButton } from '../../components/Button';
 
 import actions from '../../actions';
+import { useOvermindState } from '../../store';
 
 const Flex = styled.div`
   display: flex;
@@ -140,37 +141,29 @@ const FlexWrapper = styled(Wrapper)`
   flex-wrap: wrap;
 `;
 
-class IssueDetailsPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activities: [],
-      selectedTimeEntry: undefined,
-      showTimeEntryModal: false,
-      showIssueModal: false
-    };
-  }
+const IssueDetailsPage = ({ match, fetchIssueDetails, resetSelectedIssue, selectedIssueState, projects, history, postComments }: any) => {
+  const [activities, setActivities] = useState([]);
+  const [selectedTimeEntry, setSelectedTimeEntry] = useState();
+  const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
+  const [showIssueModal, setShowIssueModal] = useState(false);
 
-  // eslint-disable-next-line
-  UNSAFE_componentWillMount() {
-    const { match, fetchIssueDetails } = this.props;
-    fetchIssueDetails(match.params.id);
-  }
+  useEffect(() => {
+    fetchIssueDetails(match.params.id)
 
-  componentWillUnmount() {
-    const { resetSelectedIssue } = this.props;
-    resetSelectedIssue();
-  }
+    return () => {
+      resetSelectedIssue()
+    }
+  }, []);
 
-  showTimeEntryModal = (timeEntry) => {
-    const {
-      selectedIssueState, userId, userName, projects
-    } = this.props;
+  const state = useOvermindState();
+  const theme = useTheme();
+
+  const triggerTimeEntryModal = (timeEntry: any) => {
     const selectedIssue = selectedIssueState.data;
     const selectedTimeEntry = timeEntry || {
       user: {
-        id: userId,
-        name: userName
+        id: state.users.currentUser?.id,
+        name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       },
       issue: {
         id: selectedIssue.id
@@ -185,46 +178,32 @@ class IssueDetailsPage extends Component {
       spent_on: moment().format('YYYY-MM-DD')
     };
     selectedTimeEntry.issue.name = selectedIssue.subject;
-    const activities = _.get(projects[selectedIssue.project.id], 'activities', []);
-    this.setState({
-      activities: activities.map(({ id, name }) => ({ value: id, label: name })),
-      selectedTimeEntry,
-      showTimeEntryModal: true,
-      showIssueModal: false
-    });
+    const existingActivities = _.get(projects[selectedIssue.project.id], 'activities', []);
+    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })))
+    setSelectedTimeEntry(selectedTimeEntry);
+    setShowTimeEntryModal(true);
+    setShowIssueModal(false);
   }
 
-  closeTimeEntryModal = () => {
-    this.setState({
-      activities: [],
-      selectedTimeEntry: undefined,
-      showTimeEntryModal: false,
-      showIssueModal: false
-    });
+  const closeTimeEntryModal = () => {
+    setActivities([]);
+    setSelectedTimeEntry(undefined);
+    setShowTimeEntryModal(false);
+    setShowIssueModal(false);
   }
 
-  closeIssueModal = () => {
-    this.setState({
-      showIssueModal: false
-    });
+  const closeIssueModal = () => {
+    setShowIssueModal(false);
   }
 
-  openIssueModal = () => () => {
-    this.setState({ showIssueModal: true });
+  const openIssueModal = () => {
+    setShowIssueModal(true);
   }
 
-  getIssueComments = () => {
-    const { selectedIssueState } = this.props;
-    return selectedIssueState.data.journals.filter((entry) => entry.notes);
+  const getIssueComments = () => {
+    return selectedIssueState.data.journals.filter((entry: any) => entry.notes);
   }
 
-  render() {
-    const {
-      selectedIssueState, history, userId, theme, postComments
-    } = this.props;
-    const {
-      selectedTimeEntry, showTimeEntryModal, showIssueModal, activities
-    } = this.state;
     const selectedIssue = selectedIssueState.data;
     const cfields = selectedIssue.custom_fields;
     // eslint-disable-next-line react/prop-types
@@ -247,13 +226,13 @@ class IssueDetailsPage extends Component {
 &nbsp;
                 </span>
                 <span>{selectedIssue.subject}</span>
-                <IconButton onClick={this.openIssueModal()}>
+                <IconButton onClick={openIssueModal}>
                   <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
                 </IconButton>
               </h2>
               <SmallNotice>
                 Created by&nbsp;
-                <Link>{selectedIssue.author.name}</Link>
+                <Link href="#">{selectedIssue.author.name}</Link>
                 <DateComponent date={selectedIssue.created_on} />
               </SmallNotice>
               {selectedIssue.closed_on && (
@@ -288,8 +267,11 @@ class IssueDetailsPage extends Component {
                     <div>Progress: </div>
                     <div>
                       <Progressbar
+                        className={undefined}
+                        id={undefined}
+                        height={5}
                         percent={selectedIssue.done_ratio}
-                        background={theme.main}
+                        background={(theme as any).main}
                       />
                     </div>
                   </li>
@@ -355,9 +337,11 @@ class IssueDetailsPage extends Component {
                     <div>Time cap: </div>
                     <div>
                       <Progressbar
+                        className={undefined}
+                        id={undefined}
+                        height={5}
                         percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
-                        mode="time-tracking"
-                        background={theme.main}
+                        background={(theme as any).main}
                       />
                     </div>
                   </li>
@@ -369,9 +353,10 @@ class IssueDetailsPage extends Component {
                     <h3>Subtasks:</h3>
                     <Subtasks>
                       {
-                        subtasks.map((subtask, i) => (
+                        subtasks.map((subtask: any, i: number) => (
                           <Subtask>
                             <Link
+                              href="#"
                               key={i}
                               onClick={() => history.push(`/app/issue/${subtask.id}/`)}
                             >
@@ -387,7 +372,7 @@ class IssueDetailsPage extends Component {
                   <ColumnList>
                     <h3>Custom Fields:</h3>
                     <CustomFields>
-                      {cfields.map((el, i) => (
+                      {cfields.map((el: any, i: number) => (
                         <li key={i}>
                           <div>
                             {el.name}
@@ -407,37 +392,36 @@ class IssueDetailsPage extends Component {
               </div>
             </IssueDetails>
             <TimeEntries
-              showTimeEntryModal={this.showTimeEntryModal}
+              showTimeEntryModal={triggerTimeEntryModal}
             />
           </Flex>
           <CommentsSection
-            journalEntries={this.getIssueComments()}
+            journalEntries={getIssueComments()}
             publishComments={postComments}
             issueId={selectedIssue.id}
           />
           { selectedTimeEntry && (
             <TimeEntryModal
               isOpen={showTimeEntryModal}
-              isEditable={selectedTimeEntry.user.id === userId}
+              isEditable={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
               activities={activities}
-              isUserAuthor={selectedTimeEntry.user.id === userId}
+              isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
               timeEntry={selectedTimeEntry}
-              onClose={this.closeTimeEntryModal}
+              onClose={closeTimeEntryModal}
             />
           )}
           {selectedIssue && (
           <IssueModal
             isOpen={showIssueModal}
-            isEditable={selectedIssue.assigned_to.id === userId}
-            isUserAuthor={selectedIssue.author.id === userId}
+            isEditable={selectedIssue.assigned_to.id === state.users.currentUser?.id}
+            isUserAuthor={selectedIssue.author.id === state.users.currentUser?.id}
             issueEntry={selectedIssue}
-            onClose={this.closeIssueModal}
+            onClose={closeIssueModal}
           />
           )}
         </Section>
       )
       : <OverlayProcessIndicator />;
-  }
 }
 
 IssueDetailsPage.propTypes = {
@@ -490,8 +474,6 @@ IssueDetailsPage.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)
   }).isRequired,
-  userId: PropTypes.number.isRequired,
-  userName: PropTypes.string.isRequired,
   fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
   resetSelectedIssue: PropTypes.func.isRequired,
@@ -501,17 +483,15 @@ IssueDetailsPage.propTypes = {
   history: PropTypes.object
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   projects: state.projects.data,
-  userId: state.user.id,
-  userName: state.user.name,
   selectedIssueState: state.issues.selected
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchIssueDetails: (issueId) => dispatch(actions.issues.get(issueId)),
-  postComments: (issueId, comments) => dispatch(actions.issues.sendComments(issueId, comments)),
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchIssueDetails: (issueId: any) => dispatch(actions.issues.get(issueId)),
+  postComments: (issueId: any, comments: any) => dispatch(actions.issues.sendComments(issueId, comments)),
   resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage));
+export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);

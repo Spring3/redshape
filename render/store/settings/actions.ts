@@ -8,13 +8,12 @@ const update: IAction<State, void> = ({ state, effects }: Context, settings) => 
   effects.storage.save(state.settings);
 };
 
-type SettingsReadArgs = {
-  userId: string;
-  endpoint: string;
-}
 
-const restore: IAction<SettingsReadArgs, Promise<void>> = async ({ state, effects }: Context, { userId, endpoint }) => {
-  const settings = await effects.storage.read({ userId, endpoint });
+const restore: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
+  const settings = await effects.storage.read({
+    userId: state.users.currentUser?.id as string,
+    endpoint: state.settings.endpoint as string
+  });
   state.settings = { ...settings };
 };
 

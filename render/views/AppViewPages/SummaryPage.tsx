@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import { IssueFilter } from '../../actions/helper';
@@ -11,6 +11,7 @@ import { Input } from '../../components/Input';
 import IssuesTable from '../../components/SummaryPage/IssuesTable';
 import OptionsBlock from '../../components/SummaryPage/OptionsBlock';
 import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
+import { useOvermindState } from '../../store';
 
 const Grid = styled.div`
   display: grid;
@@ -43,37 +44,18 @@ const GridRow = styled.div`
   grid-column: 1/-1;
 `;
 
-class SummaryPage extends Component {
-  constructor(props) {
-    super(props);
+const SummaryPage = ({ showClosedIssues, fetchIssues }: any) => {
+  const [search, setSearch] = useState();
+  const [sortBy, setSortBy] = useState();
+  const [sortDirection, setSortDirection] = useState();
 
-    this.state = {
-      search: undefined,
-      sortBy: undefined,
-      sortDirection: undefined
-    };
+  const state = useOvermindState();
+  const theme = useTheme();
 
-    this.deboucedFetch = debounce(this.fetchIssues, 500);
-  }
-
-  // eslint-disable-next-line
-  UNSAFE_componentWillMount() {
-    this.fetchIssues();
-  }
-
-  componentDidUpdate(oldProps) {
-    const { showClosedIssues } = this.props;
-    if (oldProps.showClosedIssues !== showClosedIssues) {
-      this.fetchIssues();
-    }
-  }
-
-  fetchIssues = (page = 0) => {
-    const { search, sortBy, sortDirection } = this.state;
-    const { userId, showClosedIssues, fetchIssues } = this.props;
-    if (userId) {
+  const sendFetchIssues = (page = 0) => {
+    if (state.users.currentUser?.id) {
       const queryFilter = new IssueFilter()
-        .assignee(userId)
+        .assignee(state.users.currentUser?.id as string)
         .status({ open: true, closed: showClosedIssues })
         .title(search)
         .sort(sortBy, sortDirection)
@@ -82,21 +64,25 @@ class SummaryPage extends Component {
     }
   }
 
-  onSearchChange = (e) => {
-    this.setState({
-      search: e.target.value
-    }, () => this.deboucedFetch());
+  const deboucedFetch = debounce(sendFetchIssues, 500);
+
+  useEffect(() => {
+    sendFetchIssues();
+  }, [showClosedIssues]);
+
+  useEffect(() => {
+    deboucedFetch();
+  }, [search, sortBy, sortDirection]);
+
+  const onSearchChange = (e: any) => {
+    setSearch(e.target.value);
   }
 
-  onSort = (sortBy, sortDirection) => {
-    this.setState({
-      sortBy,
-      sortDirection
-    }, () => this.deboucedFetch());
+  const onSort = (sortBy: any, sortDirection: any) => {
+    setSortBy(sortBy);
+    setSortDirection(sortDirection);
   }
 
-  render() {
-    const { theme } = this.props;
     return (
       <Grid>
         <IssuesSection>
@@ -109,43 +95,38 @@ class SummaryPage extends Component {
                 icon={(
                   <MagnifyIcon
                     xmlns="http://www.w3.org/2000/svg"
-                    color={theme.main}
+                    color={(theme as any).main}
                   />
                 )}
                 type="text"
                 name="search"
                 placeholder="Search..."
-                onChange={this.onSearchChange}
+                onChange={onSearchChange}
               />
             </GridRow>
           </OptionsGrid>
           <IssuesTable
-            onSort={this.onSort}
-            fetchIssuePage={this.fetchIssues}
+          // @ts-expect-error
+            onSort={onSort}
+            fetchIssuePage={sendFetchIssues}
           />
         </IssuesSection>
       </Grid>
     );
-  }
-}
+};
 
 SummaryPage.propTypes = {
-  userId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
   showClosedIssues: PropTypes.bool.isRequired,
   fetchIssues: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({
-  userId: state.user.id,
+const mapStateToProps = (state: any) => ({
   showClosedIssues: state.settings.showClosedIssues
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchIssues: (filter, page) => dispatch(actions.issues.getPage(filter, page))
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchIssues: (filter: any, page: any) => dispatch(actions.issues.getPage(filter, page))
 });
 
-export default withTheme(connect(mapStateToProps, mapDispatchToProps)(SummaryPage));
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);

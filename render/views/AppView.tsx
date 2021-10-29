@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -18,6 +18,7 @@ import DragArea from '../components/DragArea';
 // import storage from '../../common/storage';
 
 import { hoursToDuration } from '../datetime';
+import { useOvermindState } from '../store';
 
 const Grid = styled.div`
   height: 100%;
@@ -31,91 +32,69 @@ const Content = styled.div`
   grid-row: 2 / -1;
 `;
 
-class AppView extends Component {
-  constructor(props) {
-    super(props);
+type AppViewProps = {
 
-    this.state = {
-      activities: [],
-      showTimeEntryModal: false,
-      timeEntry: null
-    };
+}
 
-    this.modifyUserMenu();
-  }
+const AppView = ({ getProjectData, projects, resetTimer, history, match }: any) => {
+  const [activities, setActivities] = useState([]);
+  const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
+  const [timeEntry, setTimeEntry] = useState<any>(null);
 
-  // eslint-disable-next-line
-  UNSAFE_componentWillMount() {
-    const { getProjectData } = this.props;
-    getProjectData();
-  }
+  const state = useOvermindState();
 
-  onTrackingStop = (trackedIssue, value, comments) => {
-    const { userId, userName, projects } = this.props;
-    const activities = _get(projects[trackedIssue.project.id], 'activities', []);
+  useEffect(() => {
+    ipcRenderer.send('menu', { settings: {} });
+
+    return () => {
+      getProjectData();
+    }
+  }, []);
+
+
+  const onTrackingStop = (trackedIssue: any, value: any, comments: any) => {
+    const existingActivities = _get(projects[trackedIssue.project.id], 'activities', []);
     const hours = parseFloat((value / 3600000).toFixed(3));
-    this.setState({
-      activities: activities.map(({ id, name }) => ({ value: id, label: name })),
-      showTimeEntryModal: true,
-      timeEntry: {
-        activity: {},
-        issue: {
-          id: trackedIssue.id,
-          name: trackedIssue.subject
-        },
-        hours,
-        duration: hoursToDuration(hours),
-        comments: comments || '',
-        project: {
-          id: trackedIssue.project.id,
-          name: trackedIssue.project.name
-        },
-        spent_on: moment().format('YYYY-MM-DD'),
-        user: {
-          id: userId,
-          name: userName
-        }
+    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
+    setShowTimeEntryModal(true);
+    setTimeEntry({
+      activity: {},
+      issue: {
+        id: trackedIssue.id,
+        name: trackedIssue.subject
+      },
+      hours,
+      duration: hoursToDuration(hours),
+      comments: comments || '',
+      project: {
+        id: trackedIssue.project.id,
+        name: trackedIssue.project.name
+      },
+      spent_on: moment().format('YYYY-MM-DD'),
+      user: {
+        id: state.users.currentUser?.id,
+        name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       }
     });
     // storage.delete('time_tracking');
-  }
+  };
 
-  closeTimeEntryModal = () => {
-    const { resetTimer } = this.props;
-    this.setState({ showTimeEntryModal: false, timeEntry: null });
+  const closeTimeEntryModal = () => {
+    setShowTimeEntryModal(false);
+    setTimeEntry(null);
     resetTimer();
   }
-
-  modifyUserMenu() {
-    const {
-      idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
-    } = this.props;
-    ipcRenderer.send('menu', {
-      settings: {
-        idleBehavior, discardIdleTime, advancedTimerControls, progressWithStep1
-      }
-    });
-  }
-
-  render() {
-    const { showTimeEntryModal, timeEntry, activities } = this.state;
-    const {
-      userId,
-      api_key,
-      match,
-      history
-    } = this.props;
 
     return (
       <Grid>
         <DragArea />
-        { (!userId || !api_key) ? (<Redirect to="/" />) : null }
+        {!state.users.currentUser && (<Redirect to="/" />)}
         <Navbar />
         <Content>
-          <Route exact path={`${match.path}/summary`} component={(props) => <SummaryPage {...props} />} />
-          <Route path={`${match.path}/issue/:id`} component={(props) => <IssueDetailsPage {...props} />} />
+          <Route exact path={`${match.path}/summary`} component={(props: any) => <SummaryPage {...props} />} />
+          <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
           <Timer
-            onStop={this.onTrackingStop}
+            onStop={onTrackingStop}
             history={history}
           />
           <TimeEntryModal
@@ -125,17 +104,14 @@ class AppView extends Component {
             isUserAuthor={true}
             timeEntry={timeEntry}
             initialVolatileContent={true}
-            onClose={this.closeTimeEntryModal}
+            onClose={closeTimeEntryModal}
           />
         </Content>
       </Grid>
     );
-  }
 }
 
 AppView.propTypes = {
-  userId: PropTypes.number.isRequired,
-  userName: PropTypes.string.isRequired,
   api_key: PropTypes.string.isRequired,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
@@ -156,9 +132,7 @@ AppView.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({
-  userId: state.user.id,
-  userName: state.user.name,
+const mapStateToProps = (state: any) => ({
   api_key: state.user.api_key,
   projects: state.projects.data,
   idleBehavior: state.settings.idleBehavior,
@@ -167,7 +141,7 @@ const mapStateToProps = (state) => ({
   progressWithStep1: state.settings.progressWithStep1,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset())

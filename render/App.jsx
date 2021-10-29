@@ -73,7 +73,7 @@ const Routes = ({ dispatch }) => {
 
   return (
     <Switch>
-      <Route path="/" exact component={(props) => <LoginView {...props} />} />
+      <Route path="/" exact component={LoginView} />
       <Route path="/app" component={(props) => <AppView {...props} />} />
     </Switch>
   );
