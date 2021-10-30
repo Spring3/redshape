@@ -1,24 +1,9 @@
 import _cloneDeep from 'lodash/cloneDeep';
 
 import reducer, { initialState } from '../settings.reducer';
-import storage from '../../../common/storage';
 import * as actions from '../../actions/settings.actions';
 
-let storageSpy;
-
 describe('Settings reducer', () => {
-  beforeAll(() => {
-    storageSpy = jest.spyOn(storage, 'set');
-  });
-
-  afterEach(() => {
-    storageSpy.mockReset();
-  });
-
-  afterAll(() => {
-    storageSpy.mockRestore();
-  });
-
   it('should return the initial state by default', () => {
     expect(reducer(undefined, { type: 'NONE' })).toEqual(initialState);
   });
@@ -43,10 +28,6 @@ describe('Settings reducer', () => {
         }
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith(
-      `settings.${data.redmineEndpoint}.${data.userId}`,
-      expectedNextState
-    );
   });
 
   it('should handle SETTINGS_USE_COLORS action', () => {
@@ -69,10 +50,6 @@ describe('Settings reducer', () => {
         }
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith(
-      `settings.${data.redmineEndpoint}.${data.userId}`,
-      expectedNextState
-    );
   });
 
   it('should handle SETTINGS_ISSUE_HEADERS action', () => {
@@ -101,10 +78,6 @@ describe('Settings reducer', () => {
         }
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith(
-      `settings.${data.redmineEndpoint}.${data.userId}`,
-      expectedNextState
-    );
   });
 
   it('should handle SETTINGS_BACKUP action', () => {
@@ -121,7 +94,6 @@ describe('Settings reducer', () => {
         }
       )
     ).toEqual(initialState);
-    expect(storageSpy).toHaveBeenCalledWith(`settings.${data.redmineEndpoint}.${data.userId}`, initialState);
   });
 
   it('should handle SETTINGS_RESTORE action', () => {
@@ -129,7 +101,7 @@ describe('Settings reducer', () => {
       redmineEndpoint: 'https://redmine.redmine',
       userId: 1
     };
-    const storageGetSpy = jest.spyOn(storage, 'get').mockReturnValue(_cloneDeep(initialState));
+
     expect(
       reducer(
         _cloneDeep(initialState),
@@ -139,6 +111,5 @@ describe('Settings reducer', () => {
         }
       )
     ).toEqual(initialState);
-    expect(storageGetSpy).toHaveBeenCalledWith(`settings.${data.redmineEndpoint}.${data.userId}`, initialState);
   });
 });

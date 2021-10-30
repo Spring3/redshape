@@ -3,7 +3,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 import reducer, { initialState } from '../project.reducer';
 import { notify } from '../../actions/helper';
 import * as actions from '../../actions/project.actions';
-import storage from '../../../common/storage';
 
 describe('Project reducer', () => {
   it('should return the initial state if an unknown action comes in', () => {
@@ -29,7 +28,6 @@ describe('Project reducer', () => {
     });
 
     it('status OK', () => {
-      const storageSpy = jest.spyOn(storage, 'set');
       const error = new Error('Whoops');
       const data = [
         {
@@ -128,8 +126,6 @@ describe('Project reducer', () => {
           notify.ok(actions.PROJECT_GET_ALL, data)
         )
       ).toEqual(expectedNextState);
-      expect(storageSpy).toHaveBeenCalledWith('projects', expectedNextState);
-      storageSpy.mockRestore();
     });
 
     it('status NOK', () => {

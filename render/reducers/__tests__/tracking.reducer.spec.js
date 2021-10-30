@@ -1,24 +1,9 @@
 import _cloneDeep from 'lodash/cloneDeep';
 
-import storage from '../../../common/storage';
 import reducer, { initialState } from '../tracking.reducer';
 import actions from '../../actions/tracking.actions';
 
-let storageSpy;
-
 describe('Tracking Reducer', () => {
-  beforeAll(() => {
-    storageSpy = jest.spyOn(storage, 'set');
-  });
-
-  afterEach(() => {
-    storageSpy.mockReset();
-  });
-
-  afterAll(() => {
-    storageSpy.mockRestore();
-  });
-
   it('should return the initial state if an unknown action comes in', () => {
     expect(
       reducer(
@@ -43,7 +28,6 @@ describe('Tracking Reducer', () => {
         actions.trackingStart({ id: 1 })
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
   });
 
   it('TRACKING_STOP action', () => {
@@ -61,7 +45,6 @@ describe('Tracking Reducer', () => {
         actions.trackingStop(1000)
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
   });
 
   it('TRACKING_PAUSE action', () => {
@@ -82,7 +65,6 @@ describe('Tracking Reducer', () => {
         actions.trackingPause(1000)
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
   });
 
   it('TRACKING_CONTINUE action', () => {
@@ -104,17 +86,14 @@ describe('Tracking Reducer', () => {
         actions.trackingContinue()
       )
     ).toEqual(expectedNextState);
-    expect(storageSpy).toHaveBeenCalledWith('time_tracking', expectedNextState);
   });
 
   it('TRACKING_RESET action', () => {
-    const storageDeleteSpy = jest.spyOn(storage, 'delete');
     expect(
       reducer(
         _cloneDeep(initialState),
         actions.trackingReset()
       )
     ).toEqual(initialState);
-    expect(storageDeleteSpy).toHaveBeenCalledWith('time_tracking');
   });
 });

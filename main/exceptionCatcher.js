@@ -5,7 +5,7 @@ const isDev = require('electron-is-dev');
 const { app, dialog, clipboard } = require('electron');
 const logger = require('electron-log');
 
-const { report } = require('../common/reporter');
+const { report } = require('./handlers/errorHandler');
 
 const config = {
   showDialog: !isDev,

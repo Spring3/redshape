@@ -1,7 +1,5 @@
 const axios = require('axios');
 
-const storage = require('./storage');
-
 let instance;
 
 const TWENTY_SECONDS = 20000;
@@ -42,13 +40,6 @@ const initialize = (redmineEndpoint, token) => {
 const getInstance = () => instance;
 
 const reset = () => { instance = undefined; };
-
-if (storage.user.isDefined()) {
-  const { api_key, redmineEndpoint } = storage.user.get();
-  if (api_key && redmineEndpoint) {
-    initialize(redmineEndpoint, api_key);
-  }
-}
 
 const handleReject = (error) => {
   // if this request was not cancelled

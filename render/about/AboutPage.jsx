@@ -9,7 +9,7 @@ import LogoIcon from '../../assets/icon.png';
 
 import DragArea from '../components/DragArea';
 import Link from '../components/Link';
-import { report } from '../../common/reporter';
+// import { report } from '../../common/reporter';
 import License from './License';
 
 const FlexBox = styled.div`
@@ -124,7 +124,7 @@ const Paragraph = styled.p`
 `;
 
 class AboutPage extends Component {
-  onReportButtonClick = () => report()
+  onReportButtonClick = () => { /* noop */ } // report()
 
   render() {
     return (

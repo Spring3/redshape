@@ -2,8 +2,6 @@ import reducer from '../user.reducer';
 import { USER_LOGIN, USER_LOGOUT } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
 
-import storage from '../../../common/storage';
-
 jest.mock('electron-store');
 
 describe('User reducer', () => {
@@ -22,8 +20,6 @@ describe('User reducer', () => {
   });
 
   describe('USER_LOGIN action', () => {
-    afterEach(storage.clear);
-
     it('should set isFetching to true during status START', () => {
       expect(reducer(initialState, notify.start(USER_LOGIN))).toEqual({
         ...initialState,
@@ -32,7 +28,6 @@ describe('User reducer', () => {
     });
 
     it('should get user data and put it in storage on OK', () => {
-      const storageSetSpy = jest.spyOn(storage, 'set');
       const data = {
         user: {
           id: 1,
@@ -49,14 +44,6 @@ describe('User reducer', () => {
         redmineEndpoint: data.user.redmineEndpoint,
         api_key: data.user.api_key
       });
-      expect(storageSetSpy).toHaveBeenCalledWith('user', {
-        id: data.user.id,
-        name: `${data.user.firstname} ${data.user.lastname}`,
-        redmineEndpoint: data.user.redmineEndpoint,
-        api_key: data.user.api_key
-      });
-
-      storageSetSpy.mockRestore();
     });
 
     it('should set error on NOK', () => {
@@ -70,13 +57,6 @@ describe('User reducer', () => {
 
   describe('USER_LOGOUT action', () => {
     it('should wipe the storage leaving only settings', () => {
-      const storageGetSpy = jest.spyOn(storage, 'get').mockImplementation(() => ({
-        cors: true,
-        theme: 'dark'
-      }));
-      const storageSetSpy = jest.spyOn(storage, 'set');
-      const storageClearSpy = jest.spyOn(storage, 'clear');
-
       const defaultState = {
         isFetching: false,
         loginError: undefined,
@@ -94,17 +74,6 @@ describe('User reducer', () => {
           }
         )
       );
-
-      expect(storageGetSpy).toHaveBeenCalledWith('settings');
-      expect(storageClearSpy).toHaveBeenCalled();
-      expect(storageSetSpy).toHaveBeenCalledWith('settings', {
-        cors: true,
-        theme: 'dark'
-      });
-
-      storageGetSpy.mockRestore();
-      storageClearSpy.mockRestore();
-      storageSetSpy.mockRestore();
     });
   });
 });

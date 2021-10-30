@@ -16,7 +16,6 @@ import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
 import theme from '../../theme';
 import AppView from '../AppView';
-import storage from '../../../common/storage';
 
 jest.mock('electron-store');
 
@@ -279,8 +278,6 @@ describe('AppView', () => {
       }
     };
 
-    const storageSpy = jest.spyOn(storage, 'delete');
-
     render(
       <Provider store={store}>
         <Router history={historyMock}>
@@ -299,13 +296,11 @@ describe('AppView', () => {
     );
 
     fireEvent.click(document.querySelector('#stop-timer'));
-    expect(storageSpy).toHaveBeenCalledWith('time_tracking');
     fireEvent.click(document.querySelector('#btn-add'));
     setTimeout(() => {
       expect(
         store.getActions().find((action) => action.type === TRACKING_RESET)
       ).toBeDefined();
-      storageSpy.mockRestore();
       done();
     }, 1);
   });

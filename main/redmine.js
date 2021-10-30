@@ -39,7 +39,7 @@ const createRequestClient = (initConfig = {}) => {
         }
 
         return {
-          data: transform(data.route, response.body),
+          payload: transform(data.route, response.body),
           success: true,
         };
       }

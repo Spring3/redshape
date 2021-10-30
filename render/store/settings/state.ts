@@ -3,7 +3,6 @@ import type { IssueHeader } from '../../../types';
 type State = {
   showClosedIssues: boolean;
   issueHeaders: IssueHeader[];
-  apiKey?: string;
   endpoint?: string;
 }
 
@@ -19,7 +18,6 @@ const state: State = {
     { label: 'Estimation', isFixed: false, value: 'estimated_hours' },
     { label: 'Due Date', isFixed: false, value: 'due_date' }
   ],
-  apiKey: undefined,
   endpoint: undefined
 };
 

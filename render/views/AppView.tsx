@@ -15,7 +15,6 @@ import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
-// import storage from '../../common/storage';
 
 import { hoursToDuration } from '../datetime';
 import { useOvermindState } from '../store';
@@ -77,7 +76,6 @@ const AppView = ({
         name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       }
     });
-    // storage.delete('time_tracking');
   };
 
   const closeTimeEntryModal = () => {

@@ -34,7 +34,7 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ effects, st
   });
 
   if (response.success) {
-    state.users.currentUser = response.data;
+    state.users.currentUser = response.payload;
   }
 
   return response;

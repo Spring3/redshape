@@ -13,7 +13,6 @@ import MockAdapter from 'axios-mock-adapter';
 import actions from '../../actions';
 import { USER_LOGIN } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
-import storage from '../../../common/storage';
 import axios from '../../../common/request';
 
 import theme from '../../theme';
@@ -31,7 +30,6 @@ describe('Login view', () => {
   afterEach(() => {
     cleanup();
     axiosMock.reset();
-    storage.clear();
   });
 
   afterAll(() => {
@@ -75,7 +73,6 @@ describe('Login view', () => {
 
   it('should not make a redmine api request if the form has errors', (done) => {
     const store = mockStore({ user: {} });
-    const storageSetSpy = jest.spyOn(storage, 'set');
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200]));
     const { getAllByText } = render(
       <Provider store={store}>
@@ -93,9 +90,7 @@ describe('Login view', () => {
     fireEvent.submit(submitButton);
     setTimeout(() => {
       expect(getAllByText(/is not allowed to be empty$/).length).toBeGreaterThan(0);
-      expect(storageSetSpy).not.toHaveBeenCalled();
       expect(store.getActions()).toHaveLength(0);
-      storageSetSpy.mockRestore();
       done();
     }, 100);
   });

@@ -14,8 +14,8 @@ type CreateOvermindConfigParams = {
   endpoint: string;
 }
 
-type Response = {
-  data: any;
+type Response<T = any> = {
+  payload: T;
   success: boolean;
   error?: Error;
 }
