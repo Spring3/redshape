@@ -9,7 +9,7 @@ type SaveArgs = {
   currentUser: Context['state']['users']['currentUser'];
 };
 
-const save = ({ settings, currentUser }: SaveArgs): Promise<Response> => {
+const saveActiveSession = ({ settings, currentUser }: SaveArgs): Promise<Response> => {
   const id = crypto.randomBytes(10).toString('hex');
   const { endpoint, ...appSettings } = settings;
 
@@ -43,7 +43,7 @@ type ReadArgs = {
   endpoint: string;
 };
 
-const read = (payload: ReadArgs): Promise<Response<Context['state']['settings'] | undefined>> => {
+const getSession = (payload: ReadArgs): Promise<Response<Context['state']['settings'] | undefined>> => {
   const id = crypto.randomBytes(10).toString('hex');
 
   return new Promise((resolve) => {
@@ -67,7 +67,21 @@ const read = (payload: ReadArgs): Promise<Response<Context['state']['settings'] 
   });
 };
 
+const resetActiveSession = (): Promise<Response> => {
+  const id = crypto.randomBytes(10).toString('hex');
+
+  return new Promise((resolve) => {
+    ipcRenderer.send('storage', JSON.stringify({ action: StorageAction.RESET, id }));
+
+    ipcRenderer.once(`storage:${id}`, (event, response) => {
+      console.log('storage:reset', response);
+      resolve(response);
+    });
+  });
+};
+
 export {
-  save,
-  read
+  saveActiveSession,
+  getSession,
+  resetActiveSession
 };

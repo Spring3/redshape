@@ -23,7 +23,8 @@ type Response<T = any> = {
 // eslint-disable-next-line no-shadow
 enum StorageAction {
   READ = 'READ',
-  SAVE = 'SAVE'
+  SAVE = 'SAVE',
+  RESET = 'RESET'
 }
 
 export {

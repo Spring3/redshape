@@ -8,6 +8,9 @@ const storage = new Store({
   encryptionKey: ENCRYPTION_KEY
 });
 
+console.log(JSON.stringify(storage.get('activeSession'), null, 2));
+console.log(JSON.stringify(storage.get('persistedSessions'), null, 2));
+
 const updateSavedSession = (persistedSessions, activeSession) => {
   const savedActiveSessionIndex = persistedSessions.findIndex((session) => session.token === activeSession.token
       && session.endpoint === activeSession.endpoint);
@@ -80,8 +83,10 @@ const saveSession = (session) => {
 const eventHandlers = (event, message) => {
   const { action, payload, id } = JSON.parse(message);
 
+  console.log('Received storage event', JSON.stringify(message, null, 2));
+
   switch (action) {
-    case 'read': {
+    case 'READ': {
       const { token, ...sessionWithoutToken } = getSession({
         token: payload.token,
         endpoint: payload.endpoint
@@ -93,9 +98,13 @@ const eventHandlers = (event, message) => {
       });
       break;
     }
-    case 'save': {
+    case 'SAVE': {
       saveSession(payload);
       event.reply(`storage:${id}`, { success: true });
+      break;
+    }
+    case 'RESET': {
+      resetActiveSession();
       break;
     }
     default: {

@@ -1,4 +1,4 @@
-import type { IAction, Context } from 'overmind';
+import type { IAction, Context, IReaction } from 'overmind';
 import { Response } from '../../../types';
 
 type LoginActionProps = {
@@ -35,16 +35,31 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ effects, st
 
   if (response.success) {
     state.users.currentUser = response.payload;
+    sessionStorage.setItem('token', response.payload.api_key);
   }
 
   return response;
 };
 
-const logout = () => {
-  /* noop */
+const logout: IAction<void, void> = ({ state, actions }: Context) => {
+  state.users.currentUser = undefined;
+  actions.settings.reset();
+};
+
+const onInitializeOvermind: IAction<Context, void> = ({ effects }: Context, overmind) => {
+  overmind.reaction(
+    (state) => state.users.currentUser,
+    async (user) => {
+      if (user === undefined) {
+        sessionStorage.removeItem('token');
+        await effects.storage.resetActiveSession();
+      }
+    }
+  );
 };
 
 export {
   login,
-  logout
+  logout,
+  onInitializeOvermind
 };
