@@ -46,11 +46,9 @@ const getAllSettings = () => {
 const getSession = ({ token, endpoint }) => {
   const { activeSession, persistedSessions } = getAllSettings();
 
-  if (token === activeSession.token) {
+  if (token === activeSession?.token) {
     return getActiveSession();
   }
-
-  updateSavedSession(persistedSessions, activeSession);
 
   const targetSession = persistedSessions.find(session => session.token === token && session.endpoint === endpoint);
 
@@ -77,20 +75,29 @@ const saveSession = (session) => {
   };
 
   storage.set('activeSession', sessionObject);
-  updateSavedSession(storage.get('persistedSessions'), sessionObject);
+  updateSavedSession(storage.get('persistedSessions', []), sessionObject);
 };
 
 const eventHandlers = (event, message) => {
   const { action, payload, id } = JSON.parse(message);
 
-  console.log('Received storage event', JSON.stringify(message, null, 2));
+  console.log('Received storage event', message);
 
   switch (action) {
     case 'READ': {
-      const { token, ...sessionWithoutToken } = getSession({
+      const session = getSession({
         token: payload.token,
         endpoint: payload.endpoint
       });
+
+      if (!session) {
+        event.reply(`storage:${id}`, {
+          success: false
+        });
+        break;
+      }
+
+      const { token, ...sessionWithoutToken } = session;
 
       event.reply(`storage:${id}`, {
         success: true,
@@ -105,6 +112,7 @@ const eventHandlers = (event, message) => {
     }
     case 'RESET': {
       resetActiveSession();
+      event.reply(`storage:${id}`, { success: true });
       break;
     }
     default: {

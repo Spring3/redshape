@@ -4,9 +4,15 @@ const transform = (route, responseBody) => {
   switch (route) {
     case 'users/current.json': {
       const {
-        _login, _admin, _api_key, ...userPayload
+        // eslint-disable-next-line camelcase
+        login, admin, api_key, last_login_on, ...userPayload
       } = user;
-      return userPayload;
+      return {
+        id: userPayload.id,
+        firstName: userPayload.firstname,
+        lastName: userPayload.lastname,
+        createdOn: userPayload.created_on
+      };
     }
     default:
       return responseBody;

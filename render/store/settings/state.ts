@@ -1,12 +1,12 @@
 import type { IssueHeader } from '../../../types';
 
-type State = {
+type SettingsState = {
   showClosedIssues: boolean;
   issueHeaders: IssueHeader[];
   endpoint?: string;
 }
 
-const state: State = {
+const defaultSettingsState = {
   showClosedIssues: false,
   issueHeaders: [
     { label: 'Id', isFixed: true, value: 'id' },
@@ -21,10 +21,15 @@ const state: State = {
   endpoint: undefined
 };
 
+const state: SettingsState = {
+  ...defaultSettingsState
+};
+
 export {
   state,
+  defaultSettingsState
 };
 
 export type {
-  State
+  SettingsState
 };

@@ -1,14 +1,13 @@
-type State = {
+type UserState = {
   currentUser?: {
     id: string;
     firstName: string;
     lastName: string;
-    createdOn: Date;
-    lastLoggedOn: Date;
+    createdOn: string;
   }
 }
 
-const state: State = {
+const state: UserState = {
   currentUser: undefined
 };
 
@@ -17,5 +16,5 @@ export {
 };
 
 export type {
-  State
+  UserState
 };

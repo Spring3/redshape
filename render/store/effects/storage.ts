@@ -38,12 +38,12 @@ const saveActiveSession = ({ settings, currentUser }: SaveArgs): Promise<Respons
   });
 };
 
-type ReadArgs = {
-  userId: string;
+type GetSessionArgs = {
+  token: string;
   endpoint: string;
 };
 
-const getSession = (payload: ReadArgs): Promise<Response<Context['state']['settings'] | undefined>> => {
+const getSession = (payload: GetSessionArgs): Promise<Response<Context['state']['settings'] | undefined>> => {
   const id = crypto.randomBytes(10).toString('hex');
 
   return new Promise((resolve) => {

@@ -1,9 +1,9 @@
 import type { IAction, Context } from 'overmind';
-import type { State } from './state';
+import type { SettingsState } from './state';
 
 import { Response } from '../../../types';
 
-const save: IAction<State, Promise<Response>> = ({ state, effects }: Context, settings) => {
+const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: Context, settings) => {
   state.settings = {
     ...settings
   };
@@ -14,17 +14,30 @@ const save: IAction<State, Promise<Response>> = ({ state, effects }: Context, se
   });
 };
 
-const restore: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
+type RestoreSettingsArgs = {
+  token: string;
+  endpoint: string;
+};
+
+const restore: IAction<Partial<RestoreSettingsArgs>, Promise<{ success: boolean }>> = async ({ state, effects }: Context, payload) => {
   const response = await effects.storage.getSession({
-    userId: state.users.currentUser?.id as string,
-    endpoint: state.settings.endpoint as string
+    token: payload.token || localStorage.getItem('token') as string,
+    endpoint: payload.endpoint || state.settings.endpoint as string
   });
 
   if (response.success && response.payload) {
+    const saveResponse = await effects.storage.saveActiveSession({ settings: response.payload, currentUser: state.users.currentUser });
+
+    if (!saveResponse.success) {
+      return { success: false };
+    }
+
     state.settings = {
       ...response.payload
     };
   }
+
+  return { success: response.success };
 };
 
 const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Context) => {
@@ -47,7 +60,7 @@ const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Conte
 };
 
 export {
-  save,
+  update,
   restore,
   reset
 };
