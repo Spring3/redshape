@@ -10,7 +10,6 @@ import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
 
-import { USER_LOGOUT } from '../../actions/user.actions';
 import { PROJECT_GET_ALL } from '../../actions/project.actions';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
@@ -208,7 +207,6 @@ describe('AppView', () => {
     expect(historyMock.push).toHaveBeenCalledWith('/');
     const actions = store.getActions();
     expect(actions.length).toBeGreaterThan(0);
-    expect(actions.pop()).toEqual({ type: USER_LOGOUT });
   });
 
   it('should open the modal with a new timeEntry if timer stops and wipe the storage', (done) => {

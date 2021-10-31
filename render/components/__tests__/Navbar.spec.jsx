@@ -6,8 +6,7 @@ import thunk from 'redux-thunk';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import { USER_LOGOUT } from '../../actions/user.actions';
-import Navbar from '../Navbar';
+import { Navbar } from '../Navbar';
 
 const mockStore = configureStore([thunk]);
 
@@ -58,8 +57,5 @@ describe('Navbar component', () => {
     expect(signoutBtn).toBeDefined();
     fireEvent.click(signoutBtn);
     expect(store.getActions().length).toBe(2);
-    expect(store.getActions().pop()).toEqual({
-      type: USER_LOGOUT
-    });
   });
 });

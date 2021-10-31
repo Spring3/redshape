@@ -11,7 +11,6 @@ import { ThemeProvider } from 'styled-components';
 import MockAdapter from 'axios-mock-adapter';
 
 import actions from '../../actions';
-import { USER_LOGIN } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
 import axios from '../../../common/request';
 
@@ -163,13 +162,6 @@ describe('Login view', () => {
         .toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
       expect(store.getActions()).toHaveLength(3);
-      expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
-      expect(store.getActions()[1]).toEqual(notify.ok(USER_LOGIN, {
-        user: {
-          ...userData,
-          redmineEndpoint: returnedValues.redmineEndpoint
-        }
-      }));
 
       store.clearActions();
       done();
@@ -239,13 +231,6 @@ describe('Login view', () => {
       expect(axiosMock.history.get[0].url).toBe('/users/current.json');
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(returnedValues.apiKey);
       expect(store.getActions()).toHaveLength(3);
-      expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
-      expect(store.getActions()[1]).toEqual(notify.ok(USER_LOGIN, {
-        user: {
-          ...userData,
-          redmineEndpoint: returnedValues.redmineEndpoint
-        }
-      }));
 
       store.clearActions();
       done();
@@ -308,8 +293,6 @@ describe('Login view', () => {
       expect(queryAllByText('Something went wrong').length).toBeGreaterThan(0);
       const reduxActions = store.getActions();
       expect(reduxActions).toHaveLength(2);
-      expect(reduxActions[0]).toEqual(notify.start(USER_LOGIN));
-      expect(reduxActions[1]).toEqual(notify.nok(USER_LOGIN, new Error(`Error (${expectedError.message})`)));
 
       store.clearActions();
       loginActionSpy.mockRestore();

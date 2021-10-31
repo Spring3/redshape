@@ -11,7 +11,7 @@ const storage = new Store({
 console.log(JSON.stringify(storage.get('activeSession'), null, 2));
 console.log(JSON.stringify(storage.get('persistedSessions'), null, 2));
 
-const updateSavedSession = (persistedSessions, activeSession) => {
+const upsertSavedSession = (persistedSessions, activeSession) => {
   const savedActiveSessionIndex = persistedSessions.findIndex((session) => session.token === activeSession.token
       && session.endpoint === activeSession.endpoint);
 
@@ -19,6 +19,9 @@ const updateSavedSession = (persistedSessions, activeSession) => {
     const persistedSessionsCopy = [...persistedSessions];
     persistedSessionsCopy[savedActiveSessionIndex] = activeSession;
     storage.set('persistedSessions', persistedSessionsCopy);
+  } else {
+    const updatedPersistedSessions = [...persistedSessions, activeSession];
+    storage.set('persistedSessions', updatedPersistedSessions);
   }
 };
 
@@ -75,7 +78,7 @@ const saveSession = (session) => {
   };
 
   storage.set('activeSession', sessionObject);
-  updateSavedSession(storage.get('persistedSessions', []), sessionObject);
+  upsertSavedSession(storage.get('persistedSessions', []), sessionObject);
 };
 
 const eventHandlers = (event, message) => {

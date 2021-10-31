@@ -9,7 +9,7 @@ import moment from 'moment';
 import { ipcRenderer } from 'electron';
 
 import actions from '../actions';
-import Navbar from '../components/Navbar';
+import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
@@ -115,7 +115,6 @@ AppView.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired,
-  logout: PropTypes.func.isRequired,
   resetTimer: PropTypes.func.isRequired,
   getProjectData: PropTypes.func.isRequired,
   projects: PropTypes.shape({
@@ -141,7 +140,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset())
 });
