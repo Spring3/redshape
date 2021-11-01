@@ -14,16 +14,8 @@ const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: C
   });
 };
 
-type RestoreSettingsArgs = {
-  token: string;
-  endpoint: string;
-};
-
-const restore: IAction<Partial<RestoreSettingsArgs>, Promise<{ success: boolean }>> = async ({ state, effects }: Context, payload) => {
-  const response = await effects.storage.getSession({
-    token: payload.token || localStorage.getItem('token') as string,
-    endpoint: payload.endpoint || state.settings.endpoint as string
-  });
+const restore: IAction<Partial<string>, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
+  const response = await effects.storage.getSession(token || localStorage.getItem('token') as string);
 
   if (response.success && response.payload) {
     const saveResponse = await effects.storage.saveActiveSession({ settings: response.payload, currentUser: state.users.currentUser });

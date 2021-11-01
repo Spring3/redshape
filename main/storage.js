@@ -1,6 +1,8 @@
 const os = require('os');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
+const crypto = require('crypto');
+
 const { ENCRYPTION_KEY } = require('./env');
 
 const storage = new Store({
@@ -8,12 +10,13 @@ const storage = new Store({
   encryptionKey: ENCRYPTION_KEY
 });
 
+const hashToken = (token) => crypto.createHash('sha256').update(token, 'utf8').digest('hex');
+
 console.log(JSON.stringify(storage.get('activeSession'), null, 2));
 console.log(JSON.stringify(storage.get('persistedSessions'), null, 2));
 
 const upsertSavedSession = (persistedSessions, activeSession) => {
-  const savedActiveSessionIndex = persistedSessions.findIndex((session) => session.token === activeSession.token
-      && session.endpoint === activeSession.endpoint);
+  const savedActiveSessionIndex = persistedSessions.findIndex((session) => session.hash === activeSession.hash);
 
   if (savedActiveSessionIndex !== -1) {
     const persistedSessionsCopy = [...persistedSessions];
@@ -46,14 +49,15 @@ const getAllSettings = () => {
   };
 };
 
-const getSession = ({ token, endpoint }) => {
+const getSession = (token) => {
   const { activeSession, persistedSessions } = getAllSettings();
+  const hash = hashToken(token);
 
-  if (token === activeSession?.token) {
+  if (hash === activeSession?.hash) {
     return getActiveSession();
   }
 
-  const targetSession = persistedSessions.find(session => session.token === token && session.endpoint === endpoint);
+  const targetSession = persistedSessions.find(session => session.hash === hash);
 
   return targetSession;
 };
@@ -63,7 +67,10 @@ const resetActiveSession = () => {
 };
 
 const saveSession = (session) => {
+  const sessionHash = hashToken(session.token);
+
   const sessionObject = {
+    hash: sessionHash,
     user: {
       id: session.user.id,
       firstName: session.user.firstName,
@@ -71,7 +78,6 @@ const saveSession = (session) => {
       createdOn: session.user.createdOn
     },
     endpoint: session.endpoint,
-    token: session.token,
     settings: {
       ...session.settings
     }
@@ -88,10 +94,7 @@ const eventHandlers = (event, message) => {
 
   switch (action) {
     case 'READ': {
-      const session = getSession({
-        token: payload.token,
-        endpoint: payload.endpoint
-      });
+      const session = getSession(payload.token);
 
       if (!session) {
         event.reply(`storage:${id}`, {
@@ -100,11 +103,11 @@ const eventHandlers = (event, message) => {
         break;
       }
 
-      const { token, ...sessionWithoutToken } = session;
+      const { hash, ...sessionWithoutHash } = session;
 
       event.reply(`storage:${id}`, {
         success: true,
-        payload: sessionWithoutToken
+        payload: sessionWithoutHash
       });
       break;
     }

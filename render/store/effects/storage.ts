@@ -1,6 +1,7 @@
 import { ipcRenderer, remote } from 'electron';
 import type { Context } from 'overmind';
 import { Response, StorageAction } from '../../../types';
+import { getStoredToken } from '../../helpers/utils';
 
 const crypto = remote.require('crypto');
 
@@ -24,6 +25,7 @@ const saveActiveSession = ({ settings, currentUser }: SaveArgs): Promise<Respons
           createdOn: currentUser?.createdOn
         },
         endpoint,
+        token: getStoredToken(),
         settings: {
           ...appSettings
         }
@@ -38,16 +40,11 @@ const saveActiveSession = ({ settings, currentUser }: SaveArgs): Promise<Respons
   });
 };
 
-type GetSessionArgs = {
-  token: string;
-  endpoint: string;
-};
-
-const getSession = (payload: GetSessionArgs): Promise<Response<Context['state']['settings'] | undefined>> => {
+const getSession = (token: string): Promise<Response<Context['state']['settings'] | undefined>> => {
   const id = crypto.randomBytes(10).toString('hex');
 
   return new Promise((resolve) => {
-    ipcRenderer.send('storage', JSON.stringify({ action: StorageAction.READ, payload, id }));
+    ipcRenderer.send('storage', JSON.stringify({ action: StorageAction.READ, payload: { token }, id }));
 
     ipcRenderer.once(`storage:${id}`, (event, response) => {
       console.log('storage:read', response);
@@ -74,6 +71,9 @@ const resetActiveSession = (): Promise<Response> => {
     ipcRenderer.send('storage', JSON.stringify({ action: StorageAction.RESET, id }));
 
     ipcRenderer.once(`storage:${id}`, (event, response) => {
+      if (response.success) {
+        localStorage.removeItem('token');
+      }
       console.log('storage:reset', response);
       resolve(response);
     });
