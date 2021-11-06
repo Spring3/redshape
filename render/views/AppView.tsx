@@ -111,7 +111,6 @@ const AppView = ({
 };
 
 AppView.propTypes = {
-  api_key: PropTypes.string.isRequired,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired,
@@ -131,7 +130,6 @@ AppView.propTypes = {
 };
 
 const mapStateToProps = (state: any) => ({
-  api_key: state.user.api_key,
   projects: state.projects.data,
   idleBehavior: state.settings.idleBehavior,
   discardIdleTime: state.settings.discardIdleTime,

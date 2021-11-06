@@ -50,7 +50,7 @@ const getSession = (token: string): Promise<Response<Context['state']['settings'
       console.log('storage:read', response);
       const settings = response.success
         ? {
-          endpoint: response.payload.redmine.endpoint,
+          endpoint: response.payload.endpoint,
           ...response.payload.settings
         }
         : undefined;

@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import request, {
-  IssueFilter, notify, login, logout
+  IssueFilter, notify
 } from '../helper';
 import axios from '../../../common/request';
 
@@ -23,8 +23,6 @@ describe('Helper module', () => {
   it('should expose all the necesary items', () => {
     expect(request).toBeTruthy();
     expect(notify).toBeTruthy();
-    expect(login).toBeTruthy();
-    expect(logout).toBeTruthy();
     expect(IssueFilter).toBeTruthy();
   });
 
@@ -138,11 +136,6 @@ describe('Helper module', () => {
 
       axiosMock.onGet('/user').replyOnce(() => Promise.resolve([200, response]));
 
-      await expect(login({
-        redmineEndpoint: 'redmine.test.com',
-        url: '/user'
-      })).resolves.toEqual({ data: response });
-
       expect(axios.getInstance()).toBeTruthy();
       expect(axiosMock.history.get.length).toBe(1);
       expect(axiosMock.history.get[0].url).toBe('/user');
@@ -168,32 +161,11 @@ describe('Helper module', () => {
       axiosInstanceMock.restore();
       axios.reset();
     });
-
-    it('should throw if failed', async () => {
-      expect(axios.getInstance()).toBe(undefined);
-
-      const error = new Error('Test response error');
-      axiosMock.onGet('/user').replyOnce(() => Promise.reject(error));
-
-      try {
-        await login({
-          redmineEndpoint: 'redmine.test.com',
-          url: '/user'
-        });
-      } catch (e) {
-        expect(e).toBeInstanceOf(Error);
-        expect(e.message).toBe('Error (Test response error)');
-      }
-
-      expect(axios.getInstance()).toBe(undefined);
-      expect(axiosMock.history.get.length).toBe(1);
-    });
   });
 
   describe('Logout action', () => {
     it('should reset the axios instnace', () => {
       const spy = jest.spyOn(axios, 'reset');
-      logout();
       expect(spy).toHaveBeenCalled();
     });
   });
