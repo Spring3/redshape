@@ -90,7 +90,7 @@ const AppView = ({
       {!state.users.currentUser && (<Redirect to="/" />)}
       <Navbar />
       <Content>
-        <Route exact path={`${match.path}/summary`} component={(props: any) => <SummaryPage {...props} />} />
+        <Route exact path={`${match.path}/`} component={(props: any) => <SummaryPage {...props} />} />
         <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
         <Timer
           onStop={onTrackingStop}

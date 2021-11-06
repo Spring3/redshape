@@ -81,7 +81,7 @@ const Routes = ({ dispatch }) => {
     const restoreLastSession = async () => {
       const response = await actions.settings.restore(getStoredToken());
       if (response.success) {
-        history.push('/app', { replace: true });
+        history.replace('/app');
       }
 
       setIsReady(true);
@@ -97,7 +97,7 @@ const Routes = ({ dispatch }) => {
   return (
     <Switch>
       <Route path="/" exact component={LoginView} />
-      <Route path="/app" component={(props) => <AppView {...props} />} />
+      <Route path="/app" exact component={(props) => <AppView {...props} />} />
     </Switch>
   );
 };

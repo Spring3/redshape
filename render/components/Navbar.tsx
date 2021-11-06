@@ -88,13 +88,13 @@ const Navbar = () => {
     <StyledNavbar>
       <ul>
         <li>
-          <NavLink to="/app/summary">Summary</NavLink>
+          <NavLink to="/app">Summary</NavLink>
         </li>
         {/* <li>Issues</li> */}
       </ul>
       <ul>
         <li>
-          <Link to="/app/summary">{userName}</Link>
+          <Link to="/app">{userName}</Link>
         </li>
         <li>
           <GhostButton id="signout" onClick={actions.users.logout}>
