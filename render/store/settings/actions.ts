@@ -30,39 +30,39 @@ const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: C
   });
 };
 
-const restore: IAction<Partial<string>, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
+const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
   const response = await effects.mainProcess.session({
     action: SessionAction.READ,
     payload: {
-      token: token || getStoredToken()
+      token
     }
   });
 
   if (response.success && response.payload) {
-    const currentUser = state.users.currentUser as User;
+    const { endpoint, ...settings } = response.payload;
+    const currentUser = response.payload.user as User;
 
-    const { endpoint, ...appSettings } = response.payload;
-
+    // replacing the active session
     const saveResponse = await effects.mainProcess.session({
       action: SessionAction.SAVE,
       payload: {
         user: {
-          id: currentUser?.id,
-          firstName: currentUser?.firstName,
-          lastName: currentUser?.lastName,
-          createdOn: currentUser?.createdOn
+          id: currentUser.id,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          createdOn: currentUser.createdOn
         },
         endpoint,
         token: getStoredToken(),
-        settings: {
-          ...appSettings
-        }
+        settings
       }
     });
 
     if (!saveResponse.success) {
       return { success: false };
     }
+
+    state.users.currentUser = { ...currentUser };
 
     state.settings = {
       endpoint: response.payload.endpoint,

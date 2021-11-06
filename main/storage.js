@@ -5,12 +5,14 @@ const crypto = require('crypto');
 
 const { ENCRYPTION_KEY } = require('./env');
 
+const TOKEN_FALLBACK = '';
+
 const storage = new Store({
   name: isDev ? 'config-dev' : 'config',
   encryptionKey: ENCRYPTION_KEY
 });
 
-const hashToken = (token) => crypto.createHash('sha256').update(token, 'utf8').digest('hex');
+const hashToken = (token) => crypto.createHash('sha256').update(token || TOKEN_FALLBACK, 'utf8').digest('hex');
 
 console.log(JSON.stringify(storage.get('activeSession'), null, 2));
 console.log(JSON.stringify(storage.get('persistedSessions'), null, 2));

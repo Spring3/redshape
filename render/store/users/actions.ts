@@ -42,7 +42,7 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ actions, ef
     const restoreResponse = await actions.settings.restore(loginResponse.payload.token);
 
     if (!restoreResponse.success) {
-      await actions.settings.update({ ...defaultSettingsState });
+      await actions.settings.update({ ...defaultSettingsState, endpoint: redmineEndpoint });
     }
   }
 

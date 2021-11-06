@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import cleanStack from 'clean-stack';
@@ -11,7 +11,8 @@ import { ipcRenderer } from "electron";
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
 import Notification from './components/Notification';
-import actions from './actions';
+import { useOvermindActions } from './store';
+import { getStoredToken } from './helpers/utils';
 
 toast.configure({
   autoClose: 3000,
@@ -22,6 +23,11 @@ toast.configure({
 });
 
 const Routes = ({ dispatch }) => {
+  const [isReady, setIsReady] = useState(false);
+
+  const actions = useOvermindActions();
+  const history = useHistory();
+
   const handleRejection = useCallback(debounce((event) => {
     event.preventDefault();
     if (event.reason) {
@@ -70,6 +76,23 @@ const Routes = ({ dispatch }) => {
       ipcRenderer.removeListener('settings', settingsEventHandler);
     };
   }, [handleError, handleRejection, settingsEventHandler]);
+
+  useEffect(() => {
+    const restoreLastSession = async () => {
+      const response = await actions.settings.restore(getStoredToken());
+      if (response.success) {
+        history.push('/app', { replace: true });
+      }
+
+      setIsReady(true);
+    };
+
+    restoreLastSession();
+  }, []);
+
+  if (!isReady) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <Switch>
