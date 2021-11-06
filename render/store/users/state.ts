@@ -1,10 +1,7 @@
+import type { User } from '../../../types';
+
 type UserState = {
-  currentUser?: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    createdOn: string;
-  }
+  currentUser?: User
 }
 
 const state: UserState = {

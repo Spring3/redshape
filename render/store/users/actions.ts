@@ -26,12 +26,10 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ actions, ef
     Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
   };
 
-  const loginResponse = await effects.request.query({
+  const loginResponse = await effects.mainProcess.system({
+    action: 'login',
     payload: {
       headers,
-      route: 'users/current.json',
-    },
-    config: {
       endpoint: redmineEndpoint,
       token
     }
@@ -51,26 +49,19 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ actions, ef
   return loginResponse;
 };
 
-const logout: IAction<void, Promise<void>> = async ({ state, actions }: Context) => {
-  const response = await actions.settings.reset();
+const logout: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
+  const response = await effects.mainProcess.system({
+    action: 'logout',
+    payload: {}
+  });
+
   if (response.success) {
+    localStorage.removeItem('token');
     state.users.currentUser = undefined;
   }
 };
 
-const onInitializeOvermind: IAction<Context, void> = ({ effects }: Context, overmind) => {
-  overmind.reaction(
-    (state) => state.users.currentUser,
-    async (user) => {
-      if (user === undefined) {
-        await effects.storage.resetActiveSession();
-      }
-    }
-  );
-};
-
 export {
   login,
-  logout,
-  onInitializeOvermind
+  logout
 };

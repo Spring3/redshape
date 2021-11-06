@@ -90,14 +90,14 @@ const saveSession = (session) => {
 const eventHandlers = (event, message) => {
   const { action, payload, id } = JSON.parse(message);
 
-  console.log('Received storage event', message);
+  console.log('Received session event', message);
 
   switch (action) {
     case 'READ': {
       const session = getSession(payload.token);
 
       if (!session) {
-        event.reply(`storage:${id}`, {
+        event.reply(`session-response:${id}`, {
           success: false
         });
         break;
@@ -105,7 +105,7 @@ const eventHandlers = (event, message) => {
 
       const { hash, ...sessionWithoutHash } = session;
 
-      event.reply(`storage:${id}`, {
+      event.reply(`session-response:${id}`, {
         success: true,
         payload: sessionWithoutHash
       });
@@ -113,16 +113,11 @@ const eventHandlers = (event, message) => {
     }
     case 'SAVE': {
       saveSession(payload);
-      event.reply(`storage:${id}`, { success: true });
-      break;
-    }
-    case 'RESET': {
-      resetActiveSession();
-      event.reply(`storage:${id}`, { success: true });
+      event.reply(`session-response:${id}`, { success: true });
       break;
     }
     default: {
-      event.reply(`storage:${id}`, {
+      event.reply(`session-response:${id}`, {
         success: false,
         error: new Error('Unable to process the requested action', action)
       });
@@ -130,18 +125,18 @@ const eventHandlers = (event, message) => {
   }
 };
 
-const initializeStorageEvents = (ipcMain) => {
-  ipcMain.on('storage', eventHandlers);
+const initializeSessionEvents = (ipcMain) => {
+  ipcMain.on('session-request', eventHandlers);
 };
 
-const disposeStorageEvents = (ipcMain) => {
-  ipcMain.off('storage', eventHandlers);
+const disposeSessionEvents = (ipcMain) => {
+  ipcMain.off('session-request', eventHandlers);
 };
 
 module.exports = {
   getActiveSession,
   getAllSettings,
   resetActiveSession,
-  initializeStorageEvents,
-  disposeStorageEvents
+  initializeSessionEvents,
+  disposeSessionEvents
 };

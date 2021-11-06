@@ -1,38 +1,76 @@
 const got = require('got');
 const { transform } = require('./transformers/index');
 
-const createRequestClient = (initConfig = {}) => {
-  let isInitialized = false;
+const createRequestClient = () => {
   let instance;
-
-  const initialize = (config) => {
-    isInitialized = Boolean(config.endpoint && config.token && config.token !== 'undefined');
-    const configuration = config.token
-      ? {
-        prefixUrl: config.endpoint,
-        headers: { 'X-Redmine-API-Key': config.token },
-        responseType: 'json'
-      }
-      : {
-        prefixUrl: config.endpoint,
-        responseType: 'json'
-      };
-
-    instance = got.extend(configuration);
-  };
+  let isInitialized;
 
   const handleUnsuccessfulRequest = (error) => ({
     success: false,
     error
   });
 
+  const initialize = async (data) => {
+    if (isInitialized) {
+      reset();
+    }
+
+    const route = 'users/current.json';
+
+    const configuration = data.token
+      ? {
+        prefixUrl: data.endpoint,
+        headers: { 'X-Redmine-API-Key': data.token },
+        responseType: 'json'
+      }
+      : {
+        prefixUrl: data.endpoint,
+        headers: {
+          Authorization: data.headers.Authorization
+        },
+        responseType: 'json'
+      };
+
+    try {
+      const response = await got(route, {
+        method: 'GET',
+        ...configuration
+      });
+
+      console.log(response.statusCode, response.body);
+
+      const loginSuccess = response.statusCode === 200;
+      isInitialized = loginSuccess;
+
+      if (loginSuccess) {
+        const payload = transform(route, response.body);
+
+        instance = got.extend({
+          ...configuration,
+          headers: {
+            'X-Redmine-API-Key': payload.token
+          }
+        });
+
+        return {
+          success: true,
+          payload
+        };
+      }
+
+      return handleUnsuccessfulRequest(response.body);
+    } catch (error) {
+      return handleUnsuccessfulRequest(error);
+    }
+  };
+
   const reset = () => {
     isInitialized = false;
-    instance = got;
+    instance = undefined;
   };
 
   const send = async (data) => {
-    if (!instance && !data.headers?.Authorization) {
+    if (!isInitialized) {
       throw new Error('Http client is not initialized.');
     }
 
@@ -46,19 +84,10 @@ const createRequestClient = (initConfig = {}) => {
       console.log(response.statusCode, response.body);
 
       if (response.statusCode === 200) {
-        if (!isInitialized && data.route === 'users/current.json' && response.body.user?.api_key) {
-          initialize({ endpoint: initConfig.endpoint, token: response.body.user?.api_key });
-        }
-
         return {
           payload: transform(data.route, response.body),
           success: true,
         };
-      }
-
-      // prevents the instance from being stuck because some random value was set as a token
-      if (response.statusCode === 401 && isInitialized) {
-        reset();
       }
 
       return handleUnsuccessfulRequest(response.body);
@@ -66,8 +95,6 @@ const createRequestClient = (initConfig = {}) => {
       return handleUnsuccessfulRequest(error);
     }
   };
-
-  initialize(initConfig);
 
   return {
     initialize,

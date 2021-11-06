@@ -7,15 +7,14 @@ import { merge, namespaced } from 'overmind/config';
 import * as settings from './settings';
 import * as users from './users';
 
-import { request, storage } from './effects';
+import { mainProcess } from './effects';
 
 const overmindStoreConfig = merge(
   {
     state: {},
     actions: {},
     effects: {
-      request,
-      storage
+      mainProcess,
     }
   },
   namespaced({

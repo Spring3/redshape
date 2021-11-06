@@ -1,12 +1,4 @@
-const getStoredToken = () => {
-  const token = localStorage.getItem('token');
-
-  if (!token || token === 'undefined') {
-    return undefined;
-  }
-
-  return token;
-};
+const getStoredToken = () => localStorage.getItem('token');
 
 export {
   getStoredToken

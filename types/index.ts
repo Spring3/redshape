@@ -21,18 +21,26 @@ type Response<T = any> = {
 }
 
 // eslint-disable-next-line no-shadow
-enum StorageAction {
+enum SessionAction {
   READ = 'READ',
   SAVE = 'SAVE',
   RESET = 'RESET'
 }
 
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  createdOn: string;
+}
+
 export {
-  StorageAction
+  SessionAction
 };
 
 export type {
   IssueHeader,
   CreateOvermindConfigParams,
-  Response
+  Response,
+  User
 };

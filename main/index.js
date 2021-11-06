@@ -349,18 +349,47 @@ const initialize = () => {
     generateMenu({ settings });
   });
 
-  storage.initializeStorageEvents(ipcMain);
+  storage.initializeSessionEvents(ipcMain);
 
   ipcMain.on('request', async (event, message) => {
-    const { payload, config, id } = JSON.parse(message);
-    console.log('Received a request for query', { payload, config });
+    const { payload, id } = JSON.parse(message);
+    console.log('Received a request for query', { payload });
+
     if (!redmineClient.isInitialized()) {
-      redmineClient.initialize(config);
+      const error = new Error('Unauthorized');
+      error.status = 401;
+      event.reply(`response:${id}`, { success: false, error });
+      return;
     }
 
     const response = await redmineClient.send(payload);
 
     event.reply(`response:${id}`, response);
+  });
+
+  ipcMain.on('system-request', async (event, message) => {
+    const { action, payload, id } = JSON.parse(message);
+    console.log(`Received system request for ${action}`, { payload });
+
+    switch (action.toLowerCase()) {
+      case 'login': {
+        const response = await redmineClient.initialize({
+          endpoint: payload.endpoint,
+          token: payload.token,
+          headers: payload.headers
+        });
+        event.reply(`system-response:${id}`, response);
+        break;
+      }
+      case 'logout': {
+        redmineClient.reset();
+        await storage.resetActiveSession();
+        event.reply(`system-response:${id}`, { success: true });
+        break;
+      }
+      default:
+        break;
+    }
   });
 };
 
@@ -395,7 +424,7 @@ app.once('ready', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    storage.disposeStorageEvents(ipcMain);
+    storage.disposeSessionEvents(ipcMain);
     app.quit();
   }
 });

@@ -1,31 +1,72 @@
 import type { IAction, Context } from 'overmind';
-import type { SettingsState } from './state';
+import { defaultSettingsState, SettingsState } from './state';
 
-import { Response } from '../../../types';
+import { Response, SessionAction, User } from '../../../types';
+import { getStoredToken } from '../../helpers/utils';
 
 const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: Context, settings) => {
   state.settings = {
     ...settings
   };
 
-  return effects.storage.saveActiveSession({
-    settings,
-    currentUser: state.users.currentUser
+  const { endpoint, ...appSettings } = settings;
+  const currentUser = state.users.currentUser as User;
+
+  return effects.mainProcess.session({
+    action: SessionAction.SAVE,
+    payload: {
+      user: {
+        id: currentUser.id,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        createdOn: currentUser.createdOn
+      },
+      endpoint,
+      token: getStoredToken(),
+      settings: {
+        ...appSettings
+      }
+    }
   });
 };
 
 const restore: IAction<Partial<string>, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
-  const response = await effects.storage.getSession(token || localStorage.getItem('token') as string);
+  const response = await effects.mainProcess.session({
+    action: SessionAction.READ,
+    payload: {
+      token: token || getStoredToken()
+    }
+  });
 
   if (response.success && response.payload) {
-    const saveResponse = await effects.storage.saveActiveSession({ settings: response.payload, currentUser: state.users.currentUser });
+    const currentUser = state.users.currentUser as User;
+
+    const { endpoint, ...appSettings } = response.payload;
+
+    const saveResponse = await effects.mainProcess.session({
+      action: SessionAction.SAVE,
+      payload: {
+        user: {
+          id: currentUser?.id,
+          firstName: currentUser?.firstName,
+          lastName: currentUser?.lastName,
+          createdOn: currentUser?.createdOn
+        },
+        endpoint,
+        token: getStoredToken(),
+        settings: {
+          ...appSettings
+        }
+      }
+    });
 
     if (!saveResponse.success) {
       return { success: false };
     }
 
     state.settings = {
-      ...response.payload
+      endpoint: response.payload.endpoint,
+      ...response.payload.settings
     };
   }
 
@@ -33,22 +74,27 @@ const restore: IAction<Partial<string>, Promise<{ success: boolean }>> = async (
 };
 
 const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Context) => {
-  state.settings = {
-    showClosedIssues: false,
-    issueHeaders: [
-      { label: 'Id', isFixed: true, value: 'id' },
-      { label: 'Subject', isFixed: true, value: 'subject' },
-      { label: 'Project', isFixed: false, value: 'project.name' },
-      { label: 'Tracker', isFixed: false, value: 'tracker.name' },
-      { label: 'Status', isFixed: false, value: 'status.name' },
-      { label: 'Priority', isFixed: false, value: 'priority.name' },
-      { label: 'Estimation', isFixed: false, value: 'estimated_hours' },
-      { label: 'Due Date', isFixed: false, value: 'due_date' }
-    ],
-    endpoint: undefined
-  };
+  state.settings = { ...defaultSettingsState };
 
-  return effects.storage.resetActiveSession();
+  const { endpoint, ...appSettings } = defaultSettingsState;
+  const currentUser = state.users.currentUser as User;
+
+  return effects.mainProcess.session({
+    action: SessionAction.SAVE,
+    payload: {
+      user: {
+        id: currentUser?.id,
+        firstName: currentUser?.firstName,
+        lastName: currentUser?.lastName,
+        createdOn: currentUser?.createdOn
+      },
+      endpoint,
+      token: getStoredToken(),
+      settings: {
+        ...appSettings
+      }
+    }
+  });
 };
 
 export {
