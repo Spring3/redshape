@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import PropTypes from 'prop-types';
 
 const flipAnimation = keyframes`
   50% {
@@ -11,43 +10,31 @@ const flipAnimation = keyframes`
   }
 `;
 
-const ProcessIndicator = styled.div`
+const StyledProcessIndicator = styled.div`
   display: flex;
   align-items: center;
-
-  span {
-    white-space: nowrap;
-    padding-left: 20px;
-    vertical-align: middle;
-  }
 `;
 
 const Square = styled.div`
-  width: 2em;
-  height: 2em;
   background-color: ${(props) => props.theme.main};
   transform: rotate(0);
   animation: ${flipAnimation} 1s infinite;
 `;
 
-const ProcessIndicatorComponent = ({ className }) => (
-  <ProcessIndicator className={className}>
-    <Square />
-    <span>
-      Please Wait...
-    </span>
-  </ProcessIndicator>
+type ProcessIndicatorProps = {
+  className?: string;
+  size?: string;
+  children: JSX.Element;
+}
+
+const ProcessIndicator = ({ className, size = '2em', children }: ProcessIndicatorProps) => (
+  <StyledProcessIndicator className={className}>
+    <Square style={{ width: size, height: size }} />
+    {children}
+  </StyledProcessIndicator>
 );
 
-ProcessIndicatorComponent.propTypes = {
-  className: PropTypes.string
-};
-
-ProcessIndicatorComponent.defaultProps = {
-  className: null
-};
-
-export const OverlayProcessIndicator = styled(ProcessIndicatorComponent)`
+const OverlayProcessIndicator = styled(ProcessIndicator)`
   justify-content: center;
   position: absolute;
   top: 45%;
@@ -59,4 +46,7 @@ export const OverlayProcessIndicator = styled(ProcessIndicatorComponent)`
   border-radius: 3px;
 `;
 
-export default ProcessIndicatorComponent;
+export {
+  ProcessIndicator,
+  OverlayProcessIndicator
+};

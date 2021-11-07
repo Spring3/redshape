@@ -39,7 +39,7 @@ const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, 
   });
 
   if (response.success && response.payload) {
-    const { endpoint, ...settings } = response.payload;
+    const { endpoint, settings } = response.payload;
     const currentUser = response.payload.user as User;
 
     // replacing the active session
@@ -66,7 +66,7 @@ const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, 
 
     state.settings = {
       endpoint: response.payload.endpoint,
-      ...response.payload.settings
+      ...settings
     };
   }
 

@@ -13,6 +13,7 @@ import LoginView from './views/LoginView';
 import Notification from './components/Notification';
 import { useOvermindActions } from './store';
 import { getStoredToken } from './helpers/utils';
+import { LoadingOverlay } from './components/LoadingOverlay';
 
 toast.configure({
   autoClose: 3000,
@@ -91,7 +92,7 @@ const Routes = ({ dispatch }) => {
   }, []);
 
   if (!isReady) {
-    return <h1>Loading...</h1>;
+    return <LoadingOverlay />;
   }
 
   return (
