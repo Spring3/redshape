@@ -12,7 +12,7 @@ const electronUtils = require('electron-util');
 const isDev = require('electron-is-dev');
 const logger = require('electron-log');
 
-const storage = require('../common/storage');
+const storage = require('./storage');
 const { redmineClient } = require('./redmine');
 
 const Tray = require('./tray');
@@ -344,31 +344,52 @@ const initialize = () => {
     notification.show();
   });
 
-  ipcMain.on('menu', (event, { settings }) => {
+  ipcMain.on('menu', (event, message) => {
+    const { settings } = JSON.stringify(message);
     generateMenu({ settings });
   });
 
-  ipcMain.on('storage', (event, message) => {
-    const { action, data } = JSON.parse(message);
-    if (action === 'read') {
-      event.reply('storage', storage.settings.get());
-    } else if (action === 'save') {
-      storage.settings.set(data);
-    } else {
-      throw new Error('Unable to process the requested action', action);
-    }
-  });
+  storage.initializeSessionEvents(ipcMain);
 
   ipcMain.on('request', async (event, message) => {
-    const { payload, config, id } = JSON.parse(message);
-    console.log('Received a request for query', { payload, config });
+    const { payload, id } = JSON.parse(message);
+    console.log('Received a request for query', { payload });
+
     if (!redmineClient.isInitialized()) {
-      redmineClient.initialize(config);
+      const error = new Error('Unauthorized');
+      error.status = 401;
+      event.reply(`response:${id}`, { success: false, error });
+      return;
     }
 
     const response = await redmineClient.send(payload);
 
     event.reply(`response:${id}`, response);
+  });
+
+  ipcMain.on('system-request', async (event, message) => {
+    const { action, payload, id } = JSON.parse(message);
+    console.log(`Received system request for ${action}`, { payload });
+
+    switch (action.toLowerCase()) {
+      case 'login': {
+        const response = await redmineClient.initialize({
+          endpoint: payload.endpoint,
+          token: payload.token,
+          headers: payload.headers
+        });
+        event.reply(`system-response:${id}`, response);
+        break;
+      }
+      case 'logout': {
+        redmineClient.reset();
+        await storage.resetActiveSession();
+        event.reply(`system-response:${id}`, { success: true });
+        break;
+      }
+      default:
+        break;
+    }
   });
 };
 
@@ -391,15 +412,8 @@ app.once('ready', () => {
   }
 
   // eslint-disable-next-line global-require
-  const config = require('../common/config');
+  const config = require('./env');
   PORT = config.PORT;
-  // eslint-disable-next-line global-require
-  require('../common/request'); // to initialize from storage
-
-  if (!storage.settings.isDefined()) {
-    // sets defaul value that storage.settings.get returns as a fallback
-    storage.settings.set(storage.settings.get());
-  }
 
   initialize();
   generateMenu();
@@ -410,6 +424,7 @@ app.once('ready', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    storage.disposeSessionEvents(ipcMain);
     app.quit();
   }
 });

@@ -421,7 +421,11 @@ const IssueDetailsPage = ({
         )}
       </Section>
     )
-    : <OverlayProcessIndicator />;
+    : (
+      <OverlayProcessIndicator>
+        <span>Please wait...</span>
+      </OverlayProcessIndicator>
+    );
 };
 
 IssueDetailsPage.propTypes = {

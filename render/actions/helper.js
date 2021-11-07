@@ -109,26 +109,6 @@ const request = ({
   return axios.authorizedRequest(requestConfig);
 };
 
-const login = ({
-  redmineEndpoint,
-  url,
-  headers
-}) => axios.request({
-  baseURL: redmineEndpoint,
-  timeout: 20000,
-  headers: headers || {},
-  url,
-  method: 'GET'
-}).then((res) => {
-  const { api_key } = res.data.user || {};
-  if (api_key) {
-    axios.initialize(redmineEndpoint, api_key);
-  }
-  return { data: res.data };
-});
-
-const logout = () => axios.reset();
-
 const notify = {
   start: (type, info = {}) => ({ type, status: 'START', info }),
   ok: (type, data, info = {}) => ({
@@ -143,8 +123,6 @@ const notify = {
 export {
   IssueFilter,
   notify,
-  login,
-  logout
 };
 
 export default request;

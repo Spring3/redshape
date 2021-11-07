@@ -11,9 +11,7 @@ import { ThemeProvider } from 'styled-components';
 import MockAdapter from 'axios-mock-adapter';
 
 import actions from '../../actions';
-import { USER_LOGIN } from '../../actions/user.actions';
 import { notify } from '../../actions/helper';
-import storage from '../../../common/storage';
 import axios from '../../../common/request';
 
 import theme from '../../theme';
@@ -31,7 +29,6 @@ describe('Login view', () => {
   afterEach(() => {
     cleanup();
     axiosMock.reset();
-    storage.clear();
   });
 
   afterAll(() => {
@@ -75,7 +72,6 @@ describe('Login view', () => {
 
   it('should not make a redmine api request if the form has errors', (done) => {
     const store = mockStore({ user: {} });
-    const storageSetSpy = jest.spyOn(storage, 'set');
     axiosMock.onGet('/users/current.json').reply(() => Promise.resolve([200]));
     const { getAllByText } = render(
       <Provider store={store}>
@@ -93,9 +89,7 @@ describe('Login view', () => {
     fireEvent.submit(submitButton);
     setTimeout(() => {
       expect(getAllByText(/is not allowed to be empty$/).length).toBeGreaterThan(0);
-      expect(storageSetSpy).not.toHaveBeenCalled();
       expect(store.getActions()).toHaveLength(0);
-      storageSetSpy.mockRestore();
       done();
     }, 100);
   });
@@ -168,13 +162,6 @@ describe('Login view', () => {
         .toBe(`Basic ${btoa(`${returnedValues.username}:${returnedValues.password}`)}`);
 
       expect(store.getActions()).toHaveLength(3);
-      expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
-      expect(store.getActions()[1]).toEqual(notify.ok(USER_LOGIN, {
-        user: {
-          ...userData,
-          redmineEndpoint: returnedValues.redmineEndpoint
-        }
-      }));
 
       store.clearActions();
       done();
@@ -244,13 +231,6 @@ describe('Login view', () => {
       expect(axiosMock.history.get[0].url).toBe('/users/current.json');
       expect(axiosMock.history.get[0].headers['X-Redmine-API-Key']).toBe(returnedValues.apiKey);
       expect(store.getActions()).toHaveLength(3);
-      expect(store.getActions()[0]).toEqual(notify.start(USER_LOGIN));
-      expect(store.getActions()[1]).toEqual(notify.ok(USER_LOGIN, {
-        user: {
-          ...userData,
-          redmineEndpoint: returnedValues.redmineEndpoint
-        }
-      }));
 
       store.clearActions();
       done();
@@ -313,8 +293,6 @@ describe('Login view', () => {
       expect(queryAllByText('Something went wrong').length).toBeGreaterThan(0);
       const reduxActions = store.getActions();
       expect(reduxActions).toHaveLength(2);
-      expect(reduxActions[0]).toEqual(notify.start(USER_LOGIN));
-      expect(reduxActions[1]).toEqual(notify.nok(USER_LOGIN, new Error(`Error (${expectedError.message})`)));
 
       store.clearActions();
       loginActionSpy.mockRestore();

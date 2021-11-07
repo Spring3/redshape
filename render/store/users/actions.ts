@@ -1,5 +1,7 @@
 import type { IAction, Context } from 'overmind';
 import { Response } from '../../../types';
+import { getStoredToken } from '../../helpers/utils';
+import { defaultSettingsState } from '../settings/state';
 
 type LoginActionProps = {
   useApiKey: boolean;
@@ -9,39 +11,54 @@ type LoginActionProps = {
   redmineEndpoint?: string;
 };
 
-const login: IAction<LoginActionProps, Promise<Response>> = async ({ effects, state }: Context, {
+const login: IAction<LoginActionProps, Promise<Response>> = async ({ actions, effects, state }: Context, {
   apiKey, username, password, redmineEndpoint
 }) => {
   if (!redmineEndpoint) {
     throw new Error('Unable to send a request to an undefined redmine endpoint');
   }
 
-  const headers: Record<any, string> = apiKey ? {
-    'X-Redmine-API-Key': apiKey
+  const token = apiKey || getStoredToken() || undefined;
+
+  const headers: Record<any, string> = token ? {
+    'X-Redmine-API-Key': token
   } : {
     Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
   };
 
-  const response = await effects.request.query({
+  const loginResponse = await effects.mainProcess.system({
+    action: 'login',
     payload: {
       headers,
-      route: 'users/current.json',
-    },
-    config: {
       endpoint: redmineEndpoint,
-      token: apiKey
+      token
     }
   });
 
-  if (response.success) {
-    state.users.currentUser = response.data;
+  if (loginResponse.success) {
+    state.users.currentUser = loginResponse.payload;
+    localStorage.setItem('token', loginResponse.payload.token);
+
+    const restoreResponse = await actions.settings.restore(loginResponse.payload.token);
+
+    if (!restoreResponse.success) {
+      await actions.settings.update({ ...defaultSettingsState, endpoint: redmineEndpoint });
+    }
   }
 
-  return response;
+  return loginResponse;
 };
 
-const logout = () => {
-  /* noop */
+const logout: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
+  const response = await effects.mainProcess.system({
+    action: 'logout',
+    payload: {}
+  });
+
+  if (response.success) {
+    localStorage.removeItem('token');
+    state.users.currentUser = undefined;
+  }
 };
 
 export {

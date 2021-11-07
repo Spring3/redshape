@@ -1,14 +1,10 @@
-type State = {
-  currentUser?: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    createdOn: Date;
-    lastLoggedOn: Date;
-  }
+import type { User } from '../../../types';
+
+type UserState = {
+  currentUser?: User
 }
 
-const state: State = {
+const state: UserState = {
   currentUser: undefined
 };
 
@@ -17,5 +13,5 @@ export {
 };
 
 export type {
-  State
+  UserState
 };

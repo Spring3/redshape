@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { report } from '../../common/reporter';
-
 const NotifyButton = styled.button`
   position: absolute;
   width: 92%;
@@ -18,7 +16,7 @@ const NotifyButton = styled.button`
 class Notification extends Component {
   reportError = () => {
     const { error } = this.props;
-    report(error);
+    // report(error);
   }
 
   render() {

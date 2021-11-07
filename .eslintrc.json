@@ -21,7 +21,7 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "@emotion"],
   "rules": {
     "class-methods-use-this": "off",
     "comma-dangle": "off",

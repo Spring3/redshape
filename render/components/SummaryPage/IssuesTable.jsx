@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
+import { css as emotionCss } from '@emotion/react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled, { withTheme, css } from 'styled-components';
@@ -8,7 +9,7 @@ import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
 import InfiniteScroll from '../InfiniteScroll';
-import ProcessIndicator, { OverlayProcessIndicator } from '../ProcessIndicator';
+import { ProcessIndicator, OverlayProcessIndicator } from '../ProcessIndicator';
 import Date from '../Date';
 
 const Table = styled.table`
@@ -89,6 +90,14 @@ const ColorfulSpan = styled.span`
 }
 `;
 
+const styles = {
+  processIndicatorText: emotionCss`
+    white-space: nowrap;
+    padding-left: 20px;
+    vertical-align: middle;
+  `
+};
+
 const colorMap = {
   closed: 'red',
   high: 'yellow',
@@ -157,7 +166,7 @@ class IssuesTable extends Component {
     const userTasks = issues.data;
     return (
       <>
-        { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator />) }
+        { (!userTasks.length && issues.isFetching) && (<OverlayProcessIndicator><span css={styles.processIndicatorText}>Please wait...</span></OverlayProcessIndicator>) }
         <Table>
           <thead>
             <tr>
@@ -187,7 +196,9 @@ class IssuesTable extends Component {
               loadIndicator={(
                 <ProcessIndicatorContainer>
                   <td>
-                    <ProcessIndicator className="container" />
+                    <ProcessIndicator className="container">
+                      <span css={styles.processIndicatorText}>Please wait...</span>
+                    </ProcessIndicator>
                   </td>
                 </ProcessIndicatorContainer>
               )}

@@ -6,7 +6,6 @@ import {
   TRACKING_SAVE,
   TRACKING_RESET
 } from '../actions/tracking.actions';
-// import storage from '../../common/storage';
 
 export const initialState = {
   issue: {},

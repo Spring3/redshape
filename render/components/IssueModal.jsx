@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
+import { css } from '@emotion/react';
 
 import ClockIcon from 'mdi-react/ClockIcon';
 import RawSlider from 'rc-slider';
@@ -9,7 +10,7 @@ import { Input, Label } from './Input';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
-import ProcessIndicator from './ProcessIndicator';
+import { ProcessIndicator } from './ProcessIndicator';
 import Tooltip from './Tooltip';
 import DatePicker from './DatePicker';
 
@@ -66,6 +67,14 @@ const DurationIcon = (
     </Tooltip>
   </LabelIcon>
 );
+
+const styles = {
+  processIndicatorText: css`
+    white-space: nowrap;
+    padding-left: 20px;
+    vertical-align: middle;
+  `
+};
 
 class IssueModal extends Component {
   constructor(props) {
@@ -322,7 +331,7 @@ class IssueModal extends Component {
             >
               Submit
             </Button>
-            { issue.isFetching && (<ProcessIndicator />) }
+            { issue.isFetching && (<ProcessIndicator><span css={styles.processIndicatorText}>Please wait...</span></ProcessIndicator>) }
           </OptionButtons>
         </>
       </Modal>

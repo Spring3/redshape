@@ -1,7 +1,5 @@
-import * as request from './request';
-import * as storage from './storage';
+import * as mainProcess from './mainProcess';
 
 export {
-  request,
-  storage
+  mainProcess
 };

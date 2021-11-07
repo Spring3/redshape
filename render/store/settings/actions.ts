@@ -1,22 +1,104 @@
 import type { IAction, Context } from 'overmind';
-import type { State } from './state';
+import { defaultSettingsState, SettingsState } from './state';
 
-const update: IAction<State, void> = ({ state, effects }: Context, settings) => {
+import { Response, SessionAction, User } from '../../../types';
+import { getStoredToken } from '../../helpers/utils';
+
+const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: Context, settings) => {
   state.settings = {
     ...settings
   };
-  effects.storage.save(state.settings);
+
+  const { endpoint, ...appSettings } = settings;
+  const currentUser = state.users.currentUser as User;
+
+  return effects.mainProcess.session({
+    action: SessionAction.SAVE,
+    payload: {
+      user: {
+        id: currentUser.id,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        createdOn: currentUser.createdOn
+      },
+      endpoint,
+      token: getStoredToken(),
+      settings: {
+        ...appSettings
+      }
+    }
+  });
 };
 
-const restore: IAction<void, Promise<void>> = async ({ state, effects }: Context) => {
-  const settings = await effects.storage.read({
-    userId: state.users.currentUser?.id as string,
-    endpoint: state.settings.endpoint as string
+const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
+  const response = await effects.mainProcess.session({
+    action: SessionAction.READ,
+    payload: {
+      token
+    }
   });
-  state.settings = { ...settings };
+
+  if (response.success && response.payload) {
+    const { endpoint, settings } = response.payload;
+    const currentUser = response.payload.user as User;
+
+    // replacing the active session
+    const saveResponse = await effects.mainProcess.session({
+      action: SessionAction.SAVE,
+      payload: {
+        user: {
+          id: currentUser.id,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          createdOn: currentUser.createdOn
+        },
+        endpoint,
+        token: getStoredToken(),
+        settings
+      }
+    });
+
+    if (!saveResponse.success) {
+      return { success: false };
+    }
+
+    state.users.currentUser = { ...currentUser };
+
+    state.settings = {
+      endpoint: response.payload.endpoint,
+      ...settings
+    };
+  }
+
+  return { success: response.success };
+};
+
+const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Context) => {
+  state.settings = { ...defaultSettingsState };
+
+  const { endpoint, ...appSettings } = defaultSettingsState;
+  const currentUser = state.users.currentUser as User;
+
+  return effects.mainProcess.session({
+    action: SessionAction.SAVE,
+    payload: {
+      user: {
+        id: currentUser?.id,
+        firstName: currentUser?.firstName,
+        lastName: currentUser?.lastName,
+        createdOn: currentUser?.createdOn
+      },
+      endpoint,
+      token: getStoredToken(),
+      settings: {
+        ...appSettings
+      }
+    }
+  });
 };
 
 export {
   update,
-  restore
+  restore,
+  reset
 };

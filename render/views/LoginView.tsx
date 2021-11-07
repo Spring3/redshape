@@ -107,7 +107,7 @@ const LoginView = () => {
       if (error) {
         setLoginError(error);
       } else if (success) {
-        history.push('/app/summary');
+        history.push('/app');
       }
     });
   };

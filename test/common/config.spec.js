@@ -29,10 +29,6 @@ describe('Config', () => {
   });
 
   it('overwrite default env data with user settings', () => {
-    const storage = require('../../common/storage.js'); // eslint-disable-line
-    const storageHasSpy = jest.spyOn(storage, 'has');
-    const storageGetSpy = jest.spyOn(storage, 'get');
-
     const config = require('../../common/config.js'); // eslint-disable-line
 
     expect(config).toEqual({
@@ -41,10 +37,5 @@ describe('Config', () => {
       NODE_ENV: 'test',
       platform: process.platform
     });
-    expect(storageHasSpy).toHaveBeenCalledWith('settings');
-    expect(storageGetSpy).toHaveBeenCalledWith('settings', {});
-
-    storageHasSpy.mockRestore();
-    storageGetSpy.mockRestore();
   });
 });

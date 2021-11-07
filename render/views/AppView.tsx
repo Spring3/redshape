@@ -9,13 +9,12 @@ import moment from 'moment';
 import { ipcRenderer } from 'electron';
 
 import actions from '../actions';
-import Navbar from '../components/Navbar';
+import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
 import SummaryPage from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
-// import storage from '../../common/storage';
 
 import { hoursToDuration } from '../datetime';
 import { useOvermindState } from '../store';
@@ -77,7 +76,6 @@ const AppView = ({
         name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       }
     });
-    // storage.delete('time_tracking');
   };
 
   const closeTimeEntryModal = () => {
@@ -92,7 +90,7 @@ const AppView = ({
       {!state.users.currentUser && (<Redirect to="/" />)}
       <Navbar />
       <Content>
-        <Route exact path={`${match.path}/summary`} component={(props: any) => <SummaryPage {...props} />} />
+        <Route exact path={`${match.path}/`} component={(props: any) => <SummaryPage {...props} />} />
         <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
         <Timer
           onStop={onTrackingStop}
@@ -113,11 +111,9 @@ const AppView = ({
 };
 
 AppView.propTypes = {
-  api_key: PropTypes.string.isRequired,
   match: PropTypes.shape({
     path: PropTypes.string.isRequired
   }).isRequired,
-  logout: PropTypes.func.isRequired,
   resetTimer: PropTypes.func.isRequired,
   getProjectData: PropTypes.func.isRequired,
   projects: PropTypes.shape({
@@ -134,7 +130,6 @@ AppView.propTypes = {
 };
 
 const mapStateToProps = (state: any) => ({
-  api_key: state.user.api_key,
   projects: state.projects.data,
   idleBehavior: state.settings.idleBehavior,
   discardIdleTime: state.settings.discardIdleTime,
@@ -143,7 +138,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  logout: () => dispatch(actions.user.logout()),
   getProjectData: () => dispatch(actions.projects.getAll()),
   resetTimer: () => dispatch(actions.tracking.trackingReset())
 });

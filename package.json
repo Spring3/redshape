@@ -87,6 +87,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
+    "@emotion/eslint-plugin": "^11.5.0",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^9.4.0",
     "@types/hapi__joi": "^17.1.7",
@@ -138,6 +139,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.5.0",
     "@hapi/joi": "^17.1.0",
     "axios": "^0.19.2",
     "clean-stack": "^2.2.0",
@@ -148,6 +150,7 @@
     "electron-updater": "^4.2.2",
     "electron-util": "^0.14.0",
     "emotion": "^11.0.0",
+    "emotion-theming": "^11.0.0",
     "ensure-error": "^2.0.0",
     "formik": "^2.1.4",
     "got": "^11.8.2",

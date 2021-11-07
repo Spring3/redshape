@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import styled, { withTheme } from 'styled-components';
+import { css } from '@emotion/react';
 
 import ClockIcon from 'mdi-react/ClockIcon';
 import { Input, Label } from './Input';
@@ -13,7 +14,7 @@ import MarkdownEditor from './MarkdownEditor';
 import ErrorMessage from './ErrorMessage';
 import DatePicker from './DatePicker';
 import Modal from './Modal';
-import ProcessIndicator from './ProcessIndicator';
+import { ProcessIndicator } from './ProcessIndicator';
 import Tooltip from './Tooltip';
 
 import actions from '../actions';
@@ -64,6 +65,14 @@ const DurationIcon = (
     </Tooltip>
   </LabelIcon>
 );
+
+const styles = {
+  processIndicatorText: css`
+    white-space: nowrap;
+    padding-left: 20px;
+    vertical-align: middle;
+  `
+};
 
 const selectStyles = {
   container: (base) => ({ ...base })
@@ -364,7 +373,7 @@ class TimeEntryModal extends Component {
                 >
                   Submit
                 </Button>
-                { time.isFetching && (<ProcessIndicator />) }
+                { time.isFetching && (<ProcessIndicator><span css={styles.processIndicatorText}>Please wait...</span></ProcessIndicator>) }
               </OptionButtons>
             )
             : (
@@ -377,7 +386,7 @@ class TimeEntryModal extends Component {
                 >
                   Submit
                 </Button>
-                { time.isFetching && (<ProcessIndicator />) }
+                { time.isFetching && (<ProcessIndicator><span css={styles.processIndicatorText}>Please wait...</span></ProcessIndicator>) }
               </OptionButtons>
             )}
         </>
