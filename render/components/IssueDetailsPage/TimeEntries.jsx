@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { css as emotionCss } from '@emotion/react';
 import styled, { css, withTheme } from 'styled-components';
 
 import PlusIcon from 'mdi-react/PlusIcon';
-import CloseIcon from 'mdi-react/CloseIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
 import InfiniteScroll from '../InfiniteScroll';
-import ProcessIndicator from '../ProcessIndicator';
-import Button, { GhostButton } from '../Button';
+import { ProcessIndicator } from '../ProcessIndicator';
+import Button from '../Button';
 import DateComponent from '../Date';
-import Dialog from '../Dialog';
 import actions from '../../actions';
 
 const HeaderContainer = styled.div`
@@ -125,14 +124,19 @@ const ProcessIndicatorWrapper = styled.li`
     position: absolute;
     left: 24%;
     bottom: 0;
-
-    span {
-      position: relative;
-      bottom: 5px;
-      left: 60px;
-    }
   }
 `;
+
+const styles = {
+  processIndicatorText: emotionCss`
+    white-space: nowrap;
+    padding-left: 20px;
+    vertical-align: middle;
+    position: relative;
+    bottom: 5px;
+    left: 60px;
+  `
+};
 
 class TimeEntries extends Component {
   constructor(props) {
@@ -206,7 +210,13 @@ class TimeEntries extends Component {
             isEnd={spentTime.data.length === spentTime.totalCount}
             // eslint-disable-next-line
             hasMore={!spentTime.isFetching && !spentTime.error && spentTime.data.length < spentTime.totalCount}
-            loadIndicator={<ProcessIndicatorWrapper><ProcessIndicator /></ProcessIndicatorWrapper>}
+            loadIndicator={(
+              <ProcessIndicatorWrapper>
+                <ProcessIndicator>
+                  <span css={styles.processIndicatorText}>Please wait...</span>
+                </ProcessIndicator>
+              </ProcessIndicatorWrapper>
+            )}
             container={this.listRef.current}
             immediate={true}
           >
