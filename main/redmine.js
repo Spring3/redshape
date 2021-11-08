@@ -78,7 +78,8 @@ const createRequestClient = () => {
       const response = await instance(data.route, {
         method: data.method || 'GET',
         headers: data.headers,
-        json: data.body
+        json: data.body,
+        serchParams: data.query
       });
 
       console.log(response.statusCode, response.body);
