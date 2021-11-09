@@ -117,6 +117,7 @@ const colorMap = {
 type SortingDirection = 'asc' | 'desc';
 
 const IssuesTable = ({ search }: { search?: string }) => {
+  const [isFetching, setFetching] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState<Error>();
   const [sortBy, setSortBy] = useState<string>('');
@@ -127,14 +128,14 @@ const IssuesTable = ({ search }: { search?: string }) => {
   const actions = useOvermindActions();
   const issues = state.issues.list;
 
-  const isFetching = state.issues.status === 'fetching';
-
   const onSort = (sortingBy: string, sortingDirection: SortingDirection) => {
     setSortBy(sortingBy);
     setSortDirection(sortingDirection);
   };
 
   const sendFetchIssues = useCallback(async () => {
+    setFetching(true);
+
     const queryFilter = new IssueFilter()
       .assignee(state.users.currentUser?.id as string)
       .status({ open: true, closed: state.settings.showClosedIssues })
@@ -148,6 +149,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
     });
 
     setHasMore(res.hasMore);
+    setFetching(false);
 
     if (res.success) {
       setError(undefined);

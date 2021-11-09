@@ -1,4 +1,5 @@
 import type { Context, IAction } from 'overmind';
+import { indexById } from '../helpers';
 
 type GetManyIssueArgs = {
   filters: {
@@ -18,7 +19,7 @@ type ManyIssuesResponse = {
   error?: Error;
 }
 
-const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({ effects }: Context, { filters, offset = 0, limit = 20 }) => {
+const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
   const query = {
     limit: limit ? Math.abs(limit) : undefined,
     offset: offset ? Math.abs(offset) : 0,
@@ -35,6 +36,11 @@ const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({
   });
 
   if (response.success) {
+    state.issues.byId = {
+      ...state.issues.byId,
+      ...indexById(response.payload.issues)
+    };
+
     return {
       success: true,
       data: response.payload.issues,
