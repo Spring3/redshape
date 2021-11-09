@@ -8,15 +8,26 @@ type MainProcessEventData = {
   action: string;
 }
 
+type MainProcessRequestEventPayoad = {
+  payload: {
+    route: string;
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    headers?: Record<string, string>,
+    body?: Record<string, any>;
+    query?: Record<string, any>;
+  }
+}
+
 type MainProcessEventTags = {
   reqEvent: string;
   resEvent: string;
 }
 
-const query = ({ reqEvent, resEvent }: MainProcessEventTags, payload: MainProcessEventData): Promise<Response> => {
+const query = <T>({ reqEvent, resEvent }: MainProcessEventTags, payload: T): Promise<Response> => {
   const id = crypto.randomBytes(10).toString('hex');
 
   return new Promise((resolve) => {
+    console.log('sending', payload);
     ipcRenderer.send(reqEvent, JSON.stringify({ ...payload, id }));
 
     ipcRenderer.once(`${resEvent}:${id}`, (event, response) => {
@@ -26,9 +37,9 @@ const query = ({ reqEvent, resEvent }: MainProcessEventTags, payload: MainProces
   });
 };
 
-const request = (payload: MainProcessEventData) => query({ reqEvent: 'request', resEvent: 'response' }, payload);
-const system = (payload: MainProcessEventData) => query({ reqEvent: 'system-request', resEvent: 'system-response' }, payload);
-const session = (payload: MainProcessEventData) => query({ reqEvent: 'session-request', resEvent: 'session-response' }, payload);
+const request = (payload: MainProcessRequestEventPayoad) => query<MainProcessRequestEventPayoad>({ reqEvent: 'request', resEvent: 'response' }, payload);
+const system = (payload: MainProcessEventData) => query<MainProcessEventData>({ reqEvent: 'system-request', resEvent: 'system-response' }, payload);
+const session = (payload: MainProcessEventData) => query<MainProcessEventData>({ reqEvent: 'session-request', resEvent: 'session-response' }, payload);
 
 export {
   request,

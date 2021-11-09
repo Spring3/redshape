@@ -6,6 +6,7 @@ import { merge, namespaced } from 'overmind/config';
 
 import * as settings from './settings';
 import * as users from './users';
+import * as issues from './issues';
 
 import { mainProcess } from './effects';
 
@@ -18,6 +19,7 @@ const overmindStoreConfig = merge(
     }
   },
   namespaced({
+    issues,
     settings,
     users
   })

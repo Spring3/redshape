@@ -30,7 +30,7 @@ const update: IAction<SettingsState, Promise<Response>> = ({ state, effects }: C
   });
 };
 
-const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, effects }: Context, token) => {
+const restore: IAction<string, Promise<Response<Context['state']['settings']>>> = async ({ state, effects }: Context, token) => {
   const response = await effects.mainProcess.session({
     action: SessionAction.READ,
     payload: {
@@ -59,7 +59,7 @@ const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, 
     });
 
     if (!saveResponse.success) {
-      return { success: false };
+      return { success: false, error: saveResponse.error };
     }
 
     state.users.currentUser = { ...currentUser };
@@ -70,7 +70,7 @@ const restore: IAction<string, Promise<{ success: boolean }>> = async ({ state, 
     };
   }
 
-  return { success: response.success };
+  return { success: response.success, payload: response.payload };
 };
 
 const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Context) => {
