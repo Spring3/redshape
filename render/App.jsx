@@ -80,9 +80,16 @@ const Routes = ({ dispatch }) => {
 
   useEffect(() => {
     const restoreLastSession = async () => {
-      const response = await actions.settings.restore(getStoredToken());
+      const token = getStoredToken();
+      const response = await actions.settings.restore(token);
       if (response.success) {
-        history.replace('/app');
+        const loginResponse = await actions.users.login({
+          apiKey: token,
+          redmineEndpoint: response.payload.endpoint
+        });
+        if (loginResponse.success) {
+          history.replace('/app');
+        }
       }
 
       setIsReady(true);

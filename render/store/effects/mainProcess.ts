@@ -9,11 +9,13 @@ type MainProcessEventData = {
 }
 
 type MainProcessRequestEventPayoad = {
-  route: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  headers?: Record<string, string>,
-  body?: Record<string, any>;
-  query?: Record<string, any>;
+  payload: {
+    route: string;
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    headers?: Record<string, string>,
+    body?: Record<string, any>;
+    query?: Record<string, any>;
+  }
 }
 
 type MainProcessEventTags = {
@@ -25,6 +27,7 @@ const query = <T>({ reqEvent, resEvent }: MainProcessEventTags, payload: T): Pro
   const id = crypto.randomBytes(10).toString('hex');
 
   return new Promise((resolve) => {
+    console.log('sending', payload);
     ipcRenderer.send(reqEvent, JSON.stringify({ ...payload, id }));
 
     ipcRenderer.once(`${resEvent}:${id}`, (event, response) => {

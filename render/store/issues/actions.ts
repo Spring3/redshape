@@ -27,9 +27,11 @@ const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({
   };
 
   const response = await effects.mainProcess.request({
-    route: 'issues.json',
-    method: 'GET',
-    query
+    payload: {
+      route: 'issues.json',
+      method: 'GET',
+      query
+    }
   });
 
   if (response.success) {

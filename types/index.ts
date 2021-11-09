@@ -15,7 +15,7 @@ type CreateOvermindConfigParams = {
 }
 
 type Response<T = any> = {
-  payload: T;
+  payload?: T;
   success: boolean;
   error?: Error;
 }
