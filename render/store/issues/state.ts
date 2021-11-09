@@ -1,10 +1,14 @@
+import { derived } from 'overmind';
+
 type IssuesState = {
-  list: [];
+  list: any[];
+  byId: Record<string, any>,
   status: 'idle' | 'fetching';
 }
 
 const state: IssuesState = {
-  list: [],
+  list: derived((issuesState: IssuesState) => Object.values(issuesState.byId)),
+  byId: {},
   status: 'idle',
 };
 

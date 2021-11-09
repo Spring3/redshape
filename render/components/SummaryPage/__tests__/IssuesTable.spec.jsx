@@ -8,7 +8,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 
-import IssuesTable from '../IssuesTable';
+import { IssuesTable } from '../IssuesTable';
 import { getInstance, reset, initialize } from '../../../../common/request';
 import theme from '../../../theme';
 

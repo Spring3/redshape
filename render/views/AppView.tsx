@@ -11,7 +11,7 @@ import { ipcRenderer } from 'electron';
 import actions from '../actions';
 import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
-import SummaryPage from './AppViewPages/SummaryPage';
+import { SummaryPage } from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
