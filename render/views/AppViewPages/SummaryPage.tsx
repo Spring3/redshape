@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import debounce from 'lodash/debounce';
 import styled, { useTheme } from 'styled-components';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import { Input } from '../../components/Input';
 import { IssuesTable } from '../../components/SummaryPage/IssuesTable';
-import OptionsBlock from '../../components/SummaryPage/OptionsBlock';
-import ColumnHeadersSelect from '../../components/SummaryPage/ColumnHeadersSelect';
+import { Flex } from '../../components/Flex';
+import { useOvermindActions, useOvermindState } from '../../store';
 
 const Grid = styled.div`
   display: grid;
@@ -40,12 +39,21 @@ const GridRow = styled.div`
 `;
 
 const SummaryPage = () => {
-  const [search, setSearch] = useState<string | undefined>();
+  const [search, setSearch] = useState<string>('');
 
   const theme = useTheme();
+  const state = useOvermindState();
+  const actions = useOvermindActions();
 
   const onSearchChange = (e: any) => {
     setSearch(e.target.value);
+  };
+
+  const toggleClosedIssues = async () => {
+    await actions.settings.update({
+      ...state.settings,
+      showClosedIssues: !state.settings.showClosedIssues
+    });
   };
 
   return (
@@ -53,21 +61,29 @@ const SummaryPage = () => {
       <IssuesSection>
         <h2>Issues assigned to me</h2>
         <OptionsGrid>
-          <OptionsBlock />
-          <ColumnHeadersSelect />
           <GridRow>
-            <Input
-              icon={(
-                <MagnifyIcon
-                  xmlns="http://www.w3.org/2000/svg"
-                  color={(theme as any).main}
+            <Flex alignItems="center">
+              <Input
+                icon={(
+                  <MagnifyIcon
+                    xmlns="http://www.w3.org/2000/svg"
+                    color={(theme as any).main}
+                  />
+                  )}
+                type="text"
+                name="search"
+                placeholder="Search..."
+                onChange={onSearchChange}
+              />
+              <label>
+                <Input
+                  type="checkbox"
+                  checked={state.settings.showClosedIssues}
+                  onChange={toggleClosedIssues}
                 />
-                )}
-              type="text"
-              name="search"
-              placeholder="Search..."
-              onChange={onSearchChange}
-            />
+                <span>Include closed</span>
+              </label>
+            </Flex>
           </GridRow>
         </OptionsGrid>
         <IssuesTable search={search} />

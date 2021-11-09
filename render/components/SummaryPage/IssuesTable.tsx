@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { css as emotionCss } from '@emotion/react';
+import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 
@@ -79,39 +79,12 @@ const ProcessIndicatorContainer = styled.tr`
   }
 `;
 
-const ColorfulSpan = styled.span`
-  ${props => (props.color
-    ? css`
-          padding-bottom: 2px;
-          background: linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 90%,
-            ${props.color} 90%,
-            ${props.color} 100%
-          );
-        `
-    : null)}
-`;
-
 const styles = {
-  processIndicatorText: emotionCss`
+  processIndicatorText: css`
     white-space: nowrap;
     padding-left: 20px;
     vertical-align: middle;
   `
-};
-
-const colorMap = {
-  closed: 'red',
-  high: 'yellow',
-  urgent: 'red',
-  immediate: 'red',
-  critical: 'red',
-  open: 'green',
-  low: 'green',
-  pending: 'yellow',
-  normal: 'yellow'
 };
 
 type SortingDirection = 'asc' | 'desc';
@@ -249,7 +222,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
                     {date ? (
                       <Date date={date} />
                     ) : (
-                      <ColorfulSpan>{forcedValue || get(task, header.value)}</ColorfulSpan>
+                      <span>{forcedValue || get(task, header.value)}</span>
                     )}
                   </td>
                 );
