@@ -14,7 +14,7 @@ import actions from '../../actions';
 import { notify } from '../../actions/helper';
 import axios from '../../../common/request';
 
-import theme from '../../theme';
+import { theme } from '../../theme';
 import LoginView from '../LoginView';
 
 let axiosMock;

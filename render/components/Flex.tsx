@@ -6,30 +6,26 @@ type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'sp
 type FlexProps = {
   children?: ReactNode;
   className?: string;
-  direction?: 'horizontal' | 'vertical';
+  direction?: 'row' | 'column';
   justifyContent?: FlexAlignment;
   alignItems?: FlexAlignment;
   gap?: string;
-};
-
-const styles = {
-  flexbox: (props: Omit<FlexProps, 'children' | 'className'>) => css`
-    display: flex;
-    direction: ${props.direction};
-    justifyContent: ${props.justifyContent};
-    alignItems: ${props.alignItems};
-    gap: ${props.gap};
-  `
+  grow?: string;
 };
 
 const Flex = ({
-  children, className, direction = 'horizontal', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'auto'
+  children, className, direction = 'row', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'auto', grow,
 }: FlexProps) => (
   <div
     className={className}
-    css={styles.flexbox({
-      direction, justifyContent, alignItems, gap
-    })}
+    css={css`
+      display: flex;
+      flex-direction: ${direction};
+      justify-content: ${justifyContent};
+      align-items: ${alignItems};
+      gap: ${gap};
+      flex-grow: ${grow};
+    `}
   >
     {children}
   </div>

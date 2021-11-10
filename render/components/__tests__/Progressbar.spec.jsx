@@ -3,7 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import Progressbar from '../Progressbar';
-import theme from '../../theme';
+import { theme } from '../../theme';
 
 describe('Progressbar component', () => {
   afterEach(cleanup);

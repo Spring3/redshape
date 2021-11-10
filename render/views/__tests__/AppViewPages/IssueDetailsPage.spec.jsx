@@ -10,7 +10,7 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import theme from '../../../theme';
+import { theme } from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
 import { ISSUES_GET, ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';

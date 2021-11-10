@@ -7,7 +7,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { createOvermind } from 'overmind';
 import store from './reduxStore';
-import theme from './theme';
+import { theme } from './theme';
 import App from './App';
 import { overmindStoreConfig } from './store/index';
 

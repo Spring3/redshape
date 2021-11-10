@@ -1,4 +1,4 @@
-export default {
+const theme = {
   bg: '#FFFFFF',
   bgDark: '#F9F9F9',
   bgDarker: '#E9E9E9',
@@ -16,4 +16,8 @@ export default {
   green: '#6CCA51',
   shadow: '#D0D0D0',
   transitionTime: '.2s'
+};
+
+export {
+  theme
 };

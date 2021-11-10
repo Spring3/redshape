@@ -3,7 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import DatePicker from '../DatePicker';
-import theme from '../../theme';
+import { theme } from '../../theme';
 
 describe('Date Picker', () => {
   afterEach(cleanup);

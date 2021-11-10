@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { version } from '../../../package.json';
 
 import AboutPage from '../AboutPage';
-import theme from '../../theme';
+import { theme } from '../../theme';
 
 describe('About page', () => {
   afterEach(cleanup);
