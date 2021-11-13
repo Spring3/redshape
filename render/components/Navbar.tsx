@@ -1,6 +1,6 @@
-import React, { useCallback, MouseEventHandler } from 'react';
+import React, { useCallback } from 'react';
 import { useTheme } from 'styled-components';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { css } from '@emotion/react';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 import ChevronUpIcon from 'mdi-react/ChevronUpIcon';
@@ -42,18 +42,19 @@ const Navbar = () => {
     font-size: 1rem;
     text-decoration: none;
     font-weight: semibold;
+    border-bottom: 2px solid transparent;
     color: ${theme.normalText};
     transition: color ease ${theme.transitionTime};
     padding-bottom: 5px;
 
     &:active {
       color: ${theme.main};
-      border-bottom: 2px solid ${theme.main};
     }
 
     &:hover {
       cursor: pointer;
       color: ${theme.main};
+      border-bottom: 2px solid ${theme.main};
     }
   `;
 
@@ -61,7 +62,7 @@ const Navbar = () => {
     <a css={navLinkStyles} onClick={toggle} href="#">
       {userName}
       {' '}
-      {isOpen ? <ChevronUpIcon css={styles.icon} /> : <ChevronDownIcon css={styles.icon} />}
+      {isOpen ? <ChevronUpIcon size={20} css={styles.icon} /> : <ChevronDownIcon size={20} css={styles.icon} />}
     </a>
   ), []);
 
@@ -74,7 +75,7 @@ const Navbar = () => {
       <Flex gap="1rem">
         <NavLink css={[navLinkStyles, css`margin-right: 1rem`]} to="/app">Backlog</NavLink>
         <Dropdown getDropdownToggleElement={getDropdownToggleElement}>
-          <GhostButton id="signout" onClick={actions.users.logout}>
+          <GhostButton fullWidth id="signout" onClick={actions.users.logout}>
             Sign out
           </GhostButton>
         </Dropdown>
