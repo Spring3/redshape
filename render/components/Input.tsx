@@ -1,9 +1,11 @@
 import React, {
   ChangeEventHandler,
   FocusEventHandler,
+  FocusEvent,
   KeyboardEventHandler,
   MouseEventHandler,
-  ReactNode
+  ReactNode,
+  useCallback
 } from 'react';
 import { css as emotionCss } from '@emotion/react';
 import styled, { css, useTheme } from 'styled-components';
@@ -42,8 +44,9 @@ const StyledInput = styled.input`
     }
   `}}
 
-  ${props => props.disabled
-    && css`
+  ${props =>
+    props.disabled &&
+    css`
       background: ${props.theme.bgDisabled};
       border-color: ${props.theme.bgDarker};
       color: ${props.theme.minorText};
@@ -72,7 +75,7 @@ const StyledCheckbox = styled.div`
   width: 16px;
   height: 16px;
   transition: background ${props => props.theme.transitionTime};
-  border: 2px solid transparent;
+  border: 2px solid ${props => props.theme.main};
   border-radius: 3px;
   cursor: pointer;
 
@@ -84,7 +87,7 @@ const StyledCheckbox = styled.div`
 
   ${HiddenCheckbox}:not(:disabled):hover + &,
   ${HiddenCheckbox}:focus + & {
-    box-shadow: 0px 0px 5px 1px ${props => props.theme.mainLight};
+    border-color: ${props => props.theme.main};
   }
 
   ${HiddenCheckbox}:disabled + & {
@@ -140,13 +143,14 @@ const Label = ({
           font-weight: bold !important;
           margin-bottom: 0.25rem !important;
         `}
-          htmlFor={htmlFor}
-        >
+          htmlFor={htmlFor}>
           {label}
           {rightOfLabel}
         </label>
       ) : (
-        <label css={emotionCss`color: ${theme.minorText}; margin-bottom: 0.25rem !important;`} htmlFor={htmlFor}>
+        <label
+          css={emotionCss`color: ${theme.minorText}; margin-bottom: 0.25rem !important;`}
+          htmlFor={htmlFor}>
           {label}
           {rightOfLabel}
         </label>
@@ -204,34 +208,35 @@ const Input = ({
     return typedValue;
   };
 
+  const moveFocusToCustomCheckbox = useCallback((e: FocusEvent<HTMLElement>) => {
+    e.target.nextSibling?.focus();
+  }, []);
+
   if (type === 'checkbox') {
     return (
       <CheckboxContainer className={className}>
         <HiddenCheckbox
           onChange={onChange}
           onBlur={onBlur}
+          onFocusCapture={moveFocusToCustomCheckbox}
           checked={checked}
           disabled={disabled}
           id={id}
           name={name}
         />
         <StyledCheckbox
-          css={emotionCss`
-          background: ${checked ? theme.main : theme.bgDark};
-          border: 2px solid ${theme.minorText} !important;
-          ${
+          tabIndex={0}
+          css={
             checked
               ? emotionCss`
-          background: ${theme.main} !important;
-          border-color: ${theme.main} !important;
-        `
+              background: ${theme.main};
+              border-color: ${theme.main};
+            `
               : emotionCss`
-        background: white !important;
-        border-color: ${theme.main} !important;
-        `
-          }
-        `}
-        >
+              background: ${theme.bgDark};
+              border-color: grey;
+            `
+          }>
           <CheckIcon
             css={emotionCss`visibility: ${checked ? 'visible' : 'hidden'}`}
             size="18"
