@@ -47,7 +47,8 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
       className={className}
       css={css`
         position: relative;
-      `}>
+      `}
+    >
       <div className="dropdown-header">{Toggle}</div>
       <div
         css={css`
@@ -61,7 +62,8 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
           box-shadow: 0px 2px 5px ${theme.bgDarker};
           width: 100%;
           top: 2rem;
-        `}>
+        `}
+      >
         {Children.map(children, child => (
           <div
             css={css`
@@ -76,7 +78,8 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
             `}
             type="button"
             onClick={toggleViaChild}
-            className="dropdown-list-item">
+            className="dropdown-list-item"
+          >
             {child}
           </div>
         ))}

@@ -1,4 +1,5 @@
 import type { Context, IAction } from 'overmind';
+import { Issue, PaginatedActionResponse } from '../../../types';
 import { indexById } from '../helpers';
 
 type GetManyIssueArgs = {
@@ -12,14 +13,7 @@ type GetManyIssueArgs = {
   limit?: number;
 }
 
-type ManyIssuesResponse = {
-  success: boolean;
-  data: [];
-  hasMore: boolean;
-  error?: Error;
-}
-
-const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
   const query = {
     limit: limit ? Math.abs(limit) : undefined,
     offset: offset ? Math.abs(offset) : 0,
@@ -41,16 +35,28 @@ const getMany: IAction<GetManyIssueArgs, Promise<ManyIssuesResponse>> = async ({
       ...indexById(response.payload.issues)
     };
 
+    console.log('payload', response.payload);
+
     return {
       success: true,
-      data: response.payload.issues,
+      data: {
+        items: response.payload.issues,
+        total: response.payload.total,
+        limit: response.payload.limit,
+        offset: response.payload.offset
+      },
       hasMore: response.payload.total > response.payload.issues.length,
     };
   }
 
   return {
     success: false,
-    data: [],
+    data: {
+      items: [],
+      total: 0,
+      limit,
+      offset
+    },
     hasMore: false,
     error: response.error
   };

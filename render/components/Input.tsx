@@ -44,9 +44,8 @@ const StyledInput = styled.input`
     }
   `}}
 
-  ${props =>
-    props.disabled &&
-    css`
+  ${props => props.disabled
+    && css`
       background: ${props.theme.bgDisabled};
       border-color: ${props.theme.bgDarker};
       color: ${props.theme.minorText};
@@ -143,14 +142,16 @@ const Label = ({
           font-weight: bold !important;
           margin-bottom: 0.25rem !important;
         `}
-          htmlFor={htmlFor}>
+          htmlFor={htmlFor}
+        >
           {label}
           {rightOfLabel}
         </label>
       ) : (
         <label
           css={emotionCss`color: ${theme.minorText}; margin-bottom: 0.25rem !important;`}
-          htmlFor={htmlFor}>
+          htmlFor={htmlFor}
+        >
           {label}
           {rightOfLabel}
         </label>
@@ -236,7 +237,8 @@ const Input = ({
               background: ${theme.bgDark};
               border-color: grey;
             `
-          }>
+          }
+        >
           <CheckIcon
             css={emotionCss`visibility: ${checked ? 'visible' : 'hidden'}`}
             size="18"

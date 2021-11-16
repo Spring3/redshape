@@ -78,7 +78,9 @@ class Button extends Component {
   };
 
   render() {
-    const { id, children, type, disabled, block, onClick, theme, className } = this.props;
+    const {
+      id, children, type, disabled, block, onClick, theme, className
+    } = this.props;
     return (
       <StyledButton
         id={id}
@@ -88,7 +90,8 @@ class Button extends Component {
         theme={theme}
         disabled={disabled}
         block={block}
-        className={className}>
+        className={className}
+      >
         {children}
       </StyledButton>
     );
@@ -116,7 +119,9 @@ Button.defaultProps = {
   className: undefined
 };
 
-const GhostButton = ({ onClick, id, children, disabled, className, fullWidth }) => {
+const GhostButton = ({
+  onClick, id, children, disabled, className, fullWidth
+}) => {
   const theme = useTheme();
   return (
     <button
@@ -134,7 +139,8 @@ const GhostButton = ({ onClick, id, children, disabled, className, fullWidth }) 
       id={id}
       onClick={onClick}
       disabled={disabled}
-      className={className}>
+      className={className}
+    >
       {children}
     </button>
   );
