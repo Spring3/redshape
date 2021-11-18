@@ -14,7 +14,7 @@ type FlexProps = {
 };
 
 const Flex = ({
-  children, className, direction = 'row', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'auto', grow,
+  children, className, direction = 'row', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'initial', grow,
 }: FlexProps) => (
   <div
     className={className}

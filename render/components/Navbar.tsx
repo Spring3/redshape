@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 import ChevronUpIcon from 'mdi-react/ChevronUpIcon';
 
-import { GhostButton } from './Button';
+import { GhostButton } from './GhostButton';
 import { useOvermindActions, useOvermindState } from '../store';
 import { Flex } from './Flex';
 import { Dropdown } from './Dropdown';
@@ -73,7 +73,17 @@ const Navbar = () => {
         {/* <li>Issues</li> */}
       </Flex>
       <Flex gap="1rem">
-        <NavLink css={[navLinkStyles, css`margin-right: 1rem`]} to="/app">Backlog</NavLink>
+        <NavLink
+          css={[navLinkStyles, css`margin-right: 1rem`]}
+          to="/app"
+          activeStyle={{
+            color: theme.main,
+            borderBottom: `2px solid ${theme.main}`
+          }}
+        >
+          Backlog
+
+        </NavLink>
         <Dropdown getDropdownToggleElement={getDropdownToggleElement}>
           <GhostButton fullWidth id="signout" onClick={actions.users.logout}>
             Sign out

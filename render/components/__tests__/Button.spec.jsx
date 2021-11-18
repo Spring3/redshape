@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import Button, { GhostButton } from '../Button';
+import Button from '../Button';
+import { GhostButton } from '../GhostButton';
 import { theme } from '../../theme';
 
 // using mount instead of shallow due to https://github.com/airbnb/enzyme/issues/1908

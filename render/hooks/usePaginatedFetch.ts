@@ -2,7 +2,7 @@ import { throttle } from 'lodash';
 import React, {
   useState, useEffect, useCallback, RefObject
 } from 'react';
-import { useScroll } from 'react-use';
+import useInView from 'react-cool-inview';
 import { Issue, PaginatedActionResponse } from '../../types';
 
 type PaginatedQueryParams = {
@@ -14,7 +14,7 @@ type PaginatedQueryParams = {
 type UsePaginatedFetchProps = {
   request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<any>>;
   filters: any;
-  containerRef: RefObject<HTMLElement>;
+  containerRef?: RefObject<HTMLElement>;
 }
 
 type FetchBatchArgs = {
@@ -27,14 +27,12 @@ const usePaginatedFetch = ({ request, filters, containerRef }: UsePaginatedFetch
   const [items, setItems] = useState<Issue[]>([]);
   const [error, setError] = useState<Error>();
 
-  const { y } = useScroll(containerRef);
-
   const fetchBatch = useCallback(throttle(async ({ initialFetch }: FetchBatchArgs = {}) => {
     setFetching(true);
 
     const offset = initialFetch ? 0 : items.length;
 
-    const response = await request({ offset, filters, limit: 2 });
+    const response = await request({ offset, filters });
     if (response.success) {
       setError(undefined);
 
@@ -52,27 +50,24 @@ const usePaginatedFetch = ({ request, filters, containerRef }: UsePaginatedFetch
     setFetching(false);
   }, 200), [items.length, request, filters]);
 
-  useEffect(() => {
-    console.log('[Resetting] changed.', filters);
-    fetchBatch({ initialFetch: true });
-  }, [filters, request, containerRef]);
+  const { observe: fetchTriggerElementRef } = useInView({
+    root: containerRef?.current,
+    rootMargin: '20px 0px',
+    onEnter: async ({ unobserve, observe }) => {
+      unobserve();
+      if (!isFetching && hasMore) {
+        await fetchBatch({ initialFetch: false });
+      }
+      observe();
+    },
+  });
 
   useEffect(() => {
-    console.log('[Fetching] Changed');
-    const { clientHeight = 0, scrollHeight = 0 } = containerRef.current || {};
-    const nextBatchFits = scrollHeight === clientHeight && hasMore;
-    const scrolledToBottom = (y + clientHeight) >= scrollHeight;
-    // console.log('hasMore', hasMore);
-    console.log(scrolledToBottom);
-    console.log('y', y);
-    console.log('clientHeight', containerRef.current?.clientHeight);
-    console.log('scrollHeight', containerRef.current?.scrollHeight);
-    if (!isFetching && hasMore && (nextBatchFits || scrolledToBottom)) {
-      fetchBatch({ initialFetch: false });
-    }
-  }, [y, hasMore, isFetching]);
+    fetchBatch({ initialFetch: true });
+  }, [filters, request]);
 
   return {
+    fetchTriggerElementRef,
     isFetching,
     items,
     error,

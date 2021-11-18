@@ -1,109 +1,54 @@
 import React, {
-  useState, useEffect, useCallback, useMemo, useRef
+  useState, useMemo, useCallback
 } from 'react';
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
-import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
+import { useTheme } from 'styled-components';
 
 import { get } from 'lodash';
+import { theme as Theme } from '../../theme';
 import { ProcessIndicator, OverlayProcessIndicator } from '../ProcessIndicator';
 import Date from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { IssueFilter } from '../../actions/helper';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
-
-const Table = styled.table`
-  position: relative;
-  min-height: 200px;
-  width: 100%;
-  border: 2px solid ${props => props.theme.bgDark};
-  border-spacing: 0px;
-
-  tbody {
-    text-align: center;
-    font-size: 14px;
-    overflow-y: scroll;
-    max-height: 60vh;
-
-    tr {
-      td {
-        border-bottom: 2px solid ${props => props.theme.bgDark};
-        padding: 15px 5px;
-        transition: background ease ${props => props.theme.transitionTime};
-      }
-
-      &:hover {
-        cursor: pointer;
-
-        td {
-          background: ${props => props.theme.bgDark};
-        }
-      }
-
-      td.due_date {
-        white-space: nowrap;
-      }
-    }
-  }
-
-  thead {
-    z-index: 1;
-    tr {
-      th {
-        padding: 15px 5px;
-        background: ${props => props.theme.bgDark};
-        border-bottom: 2px solid ${props => props.theme.bgDarker};
-        transition: color ease ${props => props.theme.transitionTime};
-        &:hover {
-          cursor: pointer;
-          color: ${props => props.theme.main};
-        }
-
-        svg {
-          vertical-align: middle;
-        }
-      }
-    }
-  }
-`;
-
-const ProcessIndicatorContainer = styled.tr`
-  position: absolute;
-  width: 100%;
-  text-align: center;
-
-  div.container {
-    position: absolute;
-    top: 15px;
-    left: 45%;
-  }
-`;
+import { issueHeaders } from '../constants';
+import { IssuesTableHead } from './IssuesTableHead';
+import { IssueHeader, SortingDirection } from '../../../types';
+import { IssuesTableEmptyState } from './IssuesTableEmptyState';
 
 const styles = {
   processIndicatorText: css`
     white-space: nowrap;
     padding-left: 20px;
     vertical-align: middle;
+  `,
+  tableBody: css`
+    text-align: center;
+    font-size: 14px;
+    overflow-y: scroll;
+    max-height: 60vh;
+  `,
+  processIndicatorWrapper: css`
+    position: absolute;
+    width: 100%;
+    display: flex;
+    margin-top: 1.5rem;
+  `,
+  processIndicatorContainer: css`
+    margin: 0 auto;
   `
 };
 
-type SortingDirection = 'asc' | 'desc';
-
 const IssuesTable = ({ search }: { search?: string }) => {
-  const containerRef = useRef(null);
-  const [sortBy, setSortBy] = useState<string>('');
+  const [sortBy, setSortBy] = useState<IssueHeader['value']>();
   const [sortDirection, setSortDirection] = useState<SortingDirection>('asc');
 
   const history = useHistory();
   const state = useOvermindState();
   const actions = useOvermindActions();
 
-  const onSort = (sortingBy: string, sortingDirection: SortingDirection) => {
-    setSortBy(sortingBy);
-    setSortDirection(sortingDirection);
-  };
+  const theme = useTheme() as typeof Theme;
 
   const filters = useMemo(
     () => new IssueFilter()
@@ -115,30 +60,25 @@ const IssuesTable = ({ search }: { search?: string }) => {
     [state.users.currentUser, state.settings.showClosedIssues, search, sortBy, sortDirection]
   );
 
-  const { isFetching, items: issues, error } = usePaginatedFetch({
+  const {
+    isFetching, items: issues, error, fetchTriggerElementRef
+  } = usePaginatedFetch({
     request: actions.issues.getMany,
     filters,
-    containerRef
   });
 
-  const sortTable = (by: string) => {
+  const sortTable = useCallback((by: IssueHeader['value']) => {
     if (sortBy !== by) {
       setSortBy(by);
       setSortDirection('asc');
     } else {
       setSortDirection(sortDir => (sortDir === 'asc' ? 'desc' : 'asc'));
     }
-  };
-
-  useEffect(() => {
-    onSort(sortBy, sortDirection);
-  }, [sortBy, sortDirection]);
+  }, [sortBy]);
 
   const showIssueDetails = (id: number) => {
     history.push(`/app/issue/${id}/`);
   };
-
-  const { issueHeaders } = state.settings;
 
   if (!issues.length && isFetching) {
     return (
@@ -148,27 +88,49 @@ const IssuesTable = ({ search }: { search?: string }) => {
     );
   }
 
+  if (!issues.length) {
+    return (
+      <>
+        <table css={css`
+          position: relative;
+          width: 100%;
+          margin-top: 0.5rem;
+          border: 2px solid ${theme.bgDark};
+          border-spacing: 0px;
+        `}
+        >
+          <IssuesTableHead />
+        </table>
+        <IssuesTableEmptyState />
+      </>
+    );
+  }
+
   return (
-    <Table>
-      <thead>
-        <tr>
-          {issueHeaders.map(header => (
-            <th key={header.value} onClick={() => sortTable(header.value)}>
-              {header.label}
-              &nbsp;
-              {sortBy === header.value && sortDirection === 'asc' && (
-                <SortAscendingIcon size={14} />
-              )}
-              {sortBy === header.value && sortDirection === 'desc' && (
-                <SortDescendingIcon size={14} />
-              )}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody ref={containerRef}>
-        {issues.map(task => (
-          <tr key={task.id} onClick={() => showIssueDetails(task.id)}>
+    <table css={css`
+    position: relative;
+    width: 100%;
+    margin-top: 0.5rem;
+    border: 2px solid ${theme.bgDark};
+    border-spacing: 0px;
+  `}>
+      <IssuesTableHead sortBy={sortBy} sortDirection={sortDirection} onSort={sortTable} />
+      <tbody css={styles.tableBody}>
+        {issues.map((task, index) => (
+          <tr
+            css={css`
+              &:hover {
+                cursor: pointer;
+          
+                td {
+                  background: ${theme.bgDark};
+                }
+              }
+            `}
+            ref={index === issues.length - 1 ? fetchTriggerElementRef : null}
+            key={task.id}
+            onClick={() => showIssueDetails(task.id)}
+          >
             {issueHeaders.map(header => {
               const date = header.value === 'due_date' && get(task, header.value);
               let forcedValue;
@@ -177,7 +139,19 @@ const IssuesTable = ({ search }: { search?: string }) => {
                 forcedValue = Number(estimated_hours.toFixed(2));
               }
               return (
-                <td key={header.value} className={header.value === 'due_date' ? header.value : ''}>
+                <td
+                  css={
+                  css`
+                    cursor: pointer;
+                    border-bottom: 2px solid ${theme.bgDark};
+                    padding: 15px 5px;
+                    transition: background ease ${theme.transitionTime};
+                    ${header.value === 'due_date' ? 'white-space: nowrap' : ''};
+                    ${header.value === 'subject' ? 'text-align: start' : ''};
+                  `
+                }
+                  key={header.value}
+                >
                   {date ? (
                     <Date date={date} />
                   ) : (
@@ -189,16 +163,16 @@ const IssuesTable = ({ search }: { search?: string }) => {
           </tr>
         ))}
         {isFetching ? (
-          <ProcessIndicatorContainer>
-            <td>
+          <tr css={styles.processIndicatorWrapper}>
+            <td css={styles.processIndicatorContainer}>
               <ProcessIndicator className="container">
-                <span css={styles.processIndicatorText}>Please wait...</span>
+                <span css={styles.processIndicatorText}>Fetching more...</span>
               </ProcessIndicator>
             </td>
-          </ProcessIndicatorContainer>
+          </tr>
         ) : null}
       </tbody>
-    </Table>
+    </table>
   );
 };
 

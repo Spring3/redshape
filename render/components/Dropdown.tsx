@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, {
   ReactNode,
   Children,
@@ -7,6 +9,7 @@ import React, {
   MouseEventHandler,
   useMemo
 } from 'react';
+import FocusLock from 'react-focus-lock';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
 import { theme as Theme } from '../theme';
@@ -34,8 +37,8 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
 
   const toggleViaChild = useCallback((e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    if (e.target.children.length) {
-      e.target.children[0].click();
+    if ((e.target as HTMLElement).children.length) {
+      ((e.target as HTMLElement).children[0] as HTMLElement).click();
     }
     setOpen(isOpenNow => !isOpenNow);
   }, []);
@@ -50,10 +53,13 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
       `}
     >
       <div className="dropdown-header">{Toggle}</div>
-      <div
-        css={css`
+      <FocusLock>
+        <ul
+          css={css`
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
           background: white;
-          padding: 0.7rem 0rem;
           border: 1px solid ${theme.bgDarker};
           border-radius: 5px;
           display: ${isOpen ? 'flex' : 'none'};
@@ -63,10 +69,10 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
           width: 100%;
           top: 2rem;
         `}
-      >
-        {Children.map(children, child => (
-          <div
-            css={css`
+        >
+          {Children.map(children, child => (
+            <li
+              css={css`
               padding: 0.5rem 0.2rem;
               background: transparent;
               border: none;
@@ -76,14 +82,14 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
                 background: ${theme.bgDarker};
               }
             `}
-            type="button"
-            onClick={toggleViaChild}
-            className="dropdown-list-item"
-          >
-            {child}
-          </div>
-        ))}
-      </div>
+              onClick={toggleViaChild}
+              className="dropdown-list-item"
+            >
+              {child}
+            </li>
+          ))}
+        </ul>
+      </FocusLock>
     </div>
   );
 };

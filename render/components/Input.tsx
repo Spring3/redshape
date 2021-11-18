@@ -210,7 +210,7 @@ const Input = ({
   };
 
   const moveFocusToCustomCheckbox = useCallback((e: FocusEvent<HTMLElement>) => {
-    e.target.nextSibling?.focus();
+    (e.target.nextSibling as HTMLElement)?.focus();
   }, []);
 
   if (type === 'checkbox') {

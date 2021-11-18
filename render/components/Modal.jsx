@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
 import CloseIcon from 'mdi-react/CloseIcon';
 import Dialog from './Dialog';
-import { GhostButton } from './Button';
+import { GhostButton } from './GhostButton';
 
 const GhostButtonRight = styled(GhostButton)`
   float: right;

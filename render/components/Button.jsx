@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled, { css, withTheme, useTheme } from 'styled-components';
-import { css as emotionCss } from '@emotion/react';
+import styled, { css, withTheme } from 'styled-components';
 
 const StyledButton = styled.button`
   border-radius: 3px;
@@ -118,34 +117,5 @@ Button.defaultProps = {
   onClick: undefined,
   className: undefined
 };
-
-const GhostButton = ({
-  onClick, id, children, disabled, className, fullWidth
-}) => {
-  const theme = useTheme();
-  return (
-    <button
-      type="button"
-      css={emotionCss`
-        background: transparent;
-        transition: color ease ${theme.transitionTime};
-        transition: background ease ${theme.transitionTime};
-        width: ${fullWidth ? '100%' : 'auto'};
-        border: none;
-        cursor: ${disabled ? 'not-allowed' : 'pointer'};
-        font-size: .85rem;
-        color: ${theme.main};
-      `}
-      id={id}
-      onClick={onClick}
-      disabled={disabled}
-      className={className}
-    >
-      {children}
-    </button>
-  );
-};
-
-export { GhostButton };
 
 export default withTheme(Button);

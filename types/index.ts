@@ -1,8 +1,10 @@
 type IssueHeader = {
   label: string;
   isFixed: boolean;
-  value: string;
+  value: 'id' | 'subject' | 'project.name' | 'tracker.name' | 'status.name' | 'priority.name' | 'estimated_hours' | 'due_date';
 };
+
+type SortingDirection = 'asc' | 'desc';
 
 type AuthenticationHeader = {
   'X-Redmine-API-Key': string;
@@ -85,5 +87,6 @@ export type {
   PaginatedActionResponse,
   User,
   Issue,
-  Pointer
+  Pointer,
+  SortingDirection
 };
