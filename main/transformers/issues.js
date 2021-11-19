@@ -9,7 +9,7 @@ const transform = (route, responseBody) => {
           project: issue.project,
           tracker: issue.tracker,
           status: issue.status,
-          proprity: issue.priority,
+          priority: issue.priority,
           author: issue.author,
           assignee: issue.assigned_to,
           subject: issue.subject,

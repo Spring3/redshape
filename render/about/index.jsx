@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 
 import AboutPage from './AboutPage';
-import theme from '../theme';
+import { theme } from '../theme';
 
 try {
   // eslint-disable-next-line import/no-extraneous-dependencies, global-require

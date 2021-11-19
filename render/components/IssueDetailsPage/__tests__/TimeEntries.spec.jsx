@@ -11,7 +11,7 @@ import { TIME_ENTRY_DELETE } from '../../../actions/timeEntry.actions';
 import { ISSUES_TIME_ENTRY_GET } from '../../../actions/issues.actions';
 import { TRACKING_START } from '../../../actions/tracking.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';
-import theme from '../../../theme';
+import { theme } from '../../../theme';
 import TimeEntries from '../TimeEntries';
 
 const redmineEndpoint = 'redmine.test.test';

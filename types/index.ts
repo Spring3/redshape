@@ -1,8 +1,10 @@
 type IssueHeader = {
   label: string;
   isFixed: boolean;
-  value: string;
+  value: 'id' | 'subject' | 'project.name' | 'tracker.name' | 'status.name' | 'priority.name' | 'estimated_hours' | 'due_date';
 };
+
+type SortingDirection = 'asc' | 'desc';
 
 type AuthenticationHeader = {
   'X-Redmine-API-Key': string;
@@ -20,6 +22,20 @@ type Response<T = any> = {
   error?: Error;
 }
 
+type Collection<T = any> = {
+  items: T[];
+  total: number;
+  offset: number;
+  limit: number;
+}
+
+type PaginatedActionResponse<T = any> = {
+  success: boolean;
+  data: Collection<T>;
+  hasMore: boolean;
+  error?: Error;
+};
+
 // eslint-disable-next-line no-shadow
 enum SessionAction {
   READ = 'READ',
@@ -34,13 +50,43 @@ type User = {
   createdOn: string;
 }
 
+type Pointer = {
+  id: number;
+  name: string;
+}
+
+type Issue = {
+  id: number;
+  project: Pointer;
+  tracker: Pointer;
+  status: Pointer;
+  priority: Pointer;
+  author: Pointer;
+  assignee: Pointer;
+  subject: string;
+  description: string;
+  startDate?: string;
+  dueDate?: string;
+  doneRatio: number;
+  isPrivate: boolean;
+  estimatedHours?: number;
+  createdOn: string;
+  updatedOn: string;
+  closedOn?: string;
+}
+
 export {
   SessionAction
 };
 
 export type {
+  Collection,
   IssueHeader,
   CreateOvermindConfigParams,
   Response,
-  User
+  PaginatedActionResponse,
+  User,
+  Issue,
+  Pointer,
+  SortingDirection
 };

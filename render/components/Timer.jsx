@@ -16,7 +16,7 @@ import FastForward1Icon from './icons/FastForward1Icon';
 
 import actions from '../actions';
 
-import { GhostButton } from './Button';
+import { GhostButton } from './GhostButton';
 import { animationSlideUp } from '../animations';
 import Link from './Link';
 

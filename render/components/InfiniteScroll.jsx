@@ -10,7 +10,7 @@ class InfiniteScroll extends Component {
       isLoading: false
     };
 
-    this.throttledScrollHandler = throttle(this.onScroll, 100);
+    this.throttledScrollHandler = throttle(this.onScroll, 200);
   }
 
   // eslint-disable-next-line

@@ -1,108 +1,98 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { useTheme } from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import { css } from '@emotion/react';
+import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
+import ChevronUpIcon from 'mdi-react/ChevronUpIcon';
 
-import { GhostButton } from './Button';
+import { GhostButton } from './GhostButton';
 import { useOvermindActions, useOvermindState } from '../store';
+import { Flex } from './Flex';
+import { Dropdown } from './Dropdown';
+import { theme as Theme } from '../theme';
+import { useNavbar } from '../contexts/NavbarContext';
 
-const StyledNavbar = styled.nav`
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  z-index: 2;
-  height: 50px;
-  background: linear-gradient(to bottom, ${props => props.theme.bg} 85%, transparent);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 40px 0px 40px;
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+const styles = {
+  nav: css`
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 2;
+    height: 50px;
+    background: linear-gradient(to bottom, white 85%, transparent);
     display: flex;
     align-items: center;
-
-    li {
-      display: inline;
-      font-size: 15px;
-      font-weight: bold;
-      ${({ theme }) => css`
-        color: ${theme.normalText};
-        transition: color ease ${theme.transitionTime};
-
-        a {
-          text-decoration: none;
-          color: ${theme.normalText};
-          transition: color ease ${theme.transitionTime};
-          padding-bottom: 5px;
-        }
-
-        a.active {
-          color: ${theme.main};
-          border-bottom: 2px solid ${theme.main};
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: ${theme.main};
-
-          a {
-            color: ${theme.main};
-          }
-        }
-      `}
-    }
-  }
-
-  ul:first-child {
-    li {
-      margin: 0px 20px;
-    }
-
-    li:first-child {
-      margin-left: 0;
-    }
-  }
-
-  ul:last-child {
-    li {
-      margin: 0px 20px;
-    }
-
-    li:last-child {
-      margin-right: 0px;
-    }
-  }
-`;
+    justify-content: space-between;
+    padding: 20px 1.5rem 0px 1.5rem;
+  `,
+  icon: css`
+    vertical-align: middle;
+  `
+};
 
 const Navbar = () => {
+  const navbarState = useNavbar();
   const state = useOvermindState();
   const actions = useOvermindActions();
 
   const userName = `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`;
 
+  const theme = useTheme() as typeof Theme;
+
+  const navLinkStyles = css`
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: semibold;
+    border-bottom: 2px solid transparent;
+    color: ${theme.normalText};
+    transition: color ease ${theme.transitionTime};
+    padding-bottom: 5px;
+
+    &:active {
+      color: ${theme.main};
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: ${theme.main};
+      border-bottom: 2px solid ${theme.main};
+    }
+  `;
+
+  const getDropdownToggleElement = useCallback(({ toggle, isOpen }) => (
+    <a css={navLinkStyles} onClick={toggle} href="#">
+      {userName}
+      {' '}
+      {isOpen ? <ChevronUpIcon size={20} css={styles.icon} /> : <ChevronDownIcon size={20} css={styles.icon} />}
+    </a>
+  ), []);
+
   return (
-    <StyledNavbar>
-      <ul>
-        <li>
-          <NavLink to="/app">Summary</NavLink>
-        </li>
+    <nav css={styles.nav}>
+      <Flex>
+        <h2>{navbarState.title}</h2>
         {/* <li>Issues</li> */}
-      </ul>
-      <ul>
-        <li>
-          <Link to="/app">{userName}</Link>
-        </li>
-        <li>
-          <GhostButton id="signout" onClick={actions.users.logout}>
+      </Flex>
+      <Flex gap="1rem">
+        <NavLink
+          css={[navLinkStyles, css`margin-right: 1rem`]}
+          to="/app"
+          activeStyle={{
+            color: theme.main,
+            borderBottom: `2px solid ${theme.main}`
+          }}
+        >
+          Backlog
+
+        </NavLink>
+        <Dropdown getDropdownToggleElement={getDropdownToggleElement}>
+          <GhostButton fullWidth id="signout" onClick={actions.users.logout}>
             Sign out
           </GhostButton>
-        </li>
-      </ul>
-    </StyledNavbar>
+        </Dropdown>
+      </Flex>
+    </nav>
   );
 };
 

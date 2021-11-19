@@ -23,7 +23,7 @@ import CardBulletedOutlineIcon from 'mdi-react/CardBulletedOutlineIcon';
 import { openExternalUrl, xssFilter } from '../../common/utils';
 
 import TextArea from './TextArea';
-import { GhostButton } from './Button';
+import { GhostButton } from './GhostButton';
 import Tooltip from './Tooltip';
 
 const MarkdownOption = styled.li`

@@ -8,7 +8,7 @@ import configureStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import { ThemeProvider } from 'styled-components';
 
-import theme from '../../../theme';
+import { theme } from '../../../theme';
 import { SummaryPage } from '../../AppViewPages/SummaryPage';
 import issueActions, { ISSUES_GET_PAGE } from '../../../actions/issues.actions';
 import { initialize, getInstance, reset } from '../../../../common/request';

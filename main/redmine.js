@@ -79,7 +79,7 @@ const createRequestClient = () => {
         method: data.method || 'GET',
         headers: data.headers,
         json: data.body,
-        serchParams: data.query
+        searchParams: data.query
       });
 
       console.log(response.statusCode, response.body);

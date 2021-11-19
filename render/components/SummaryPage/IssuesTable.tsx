@@ -1,193 +1,85 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { css as emotionCss } from '@emotion/react';
+import React, {
+  useState, useMemo, useCallback
+} from 'react';
+import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components';
-import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
-import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
+import { useTheme } from 'styled-components';
 
-import { debounce, get } from 'lodash';
-import InfiniteScroll from '../InfiniteScroll';
+import { get } from 'lodash';
+import { theme as Theme } from '../../theme';
 import { ProcessIndicator, OverlayProcessIndicator } from '../ProcessIndicator';
 import Date from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { IssueFilter } from '../../actions/helper';
+import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
+import { issueHeaders } from '../constants';
+import { IssuesTableHead } from './IssuesTableHead';
+import { IssueHeader, SortingDirection } from '../../../types';
+import { IssuesTableEmptyState } from './IssuesTableEmptyState';
+import { IssuesTableEmptySearchState } from './IssuesTableEmptySearchState';
 
-const Table = styled.table`
-  position: relative;
-  min-height: 200px;
-  width: 100%;
-  border: 2px solid ${props => props.theme.bgDark};
-  border-spacing: 0px;
-
-  tbody {
+const styles = {
+  processIndicatorText: css`
+    white-space: nowrap;
+    padding-left: 20px;
+    vertical-align: middle;
+  `,
+  tableBody: css`
     text-align: center;
     font-size: 14px;
     overflow-y: scroll;
     max-height: 60vh;
-
-    tr {
-      td {
-        border-bottom: 2px solid ${props => props.theme.bgDark};
-        padding: 15px 5px;
-        transition: background ease ${props => props.theme.transitionTime};
-      }
-
-      &:hover {
-        cursor: pointer;
-
-        td {
-          background: ${props => props.theme.bgDark};
-        }
-      }
-
-      td.due_date {
-        white-space: nowrap;
-      }
-    }
-  }
-
-  thead {
-    z-index: 1;
-    tr {
-      th {
-        padding: 15px 5px;
-        background: ${props => props.theme.bgDark};
-        border-bottom: 2px solid ${props => props.theme.bgDarker};
-        transition: color ease ${props => props.theme.transitionTime};
-        &:hover {
-          cursor: pointer;
-          color: ${props => props.theme.main};
-        }
-
-        svg {
-          vertical-align: middle;
-        }
-      }
-    }
-  }
-`;
-
-const ProcessIndicatorContainer = styled.tr`
-  position: absolute;
-  width: 100%;
-  text-align: center;
-
-  div.container {
+  `,
+  processIndicatorWrapper: css`
     position: absolute;
-    top: 15px;
-    left: 45%;
-  }
-`;
-
-const ColorfulSpan = styled.span`
-  ${props => (props.color
-    ? css`
-          padding-bottom: 2px;
-          background: linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 90%,
-            ${props.color} 90%,
-            ${props.color} 100%
-          );
-        `
-    : null)}
-`;
-
-const styles = {
-  processIndicatorText: emotionCss`
-    white-space: nowrap;
-    padding-left: 20px;
-    vertical-align: middle;
+    width: 100%;
+    display: flex;
+    margin-top: 1.5rem;
+  `,
+  processIndicatorContainer: css`
+    margin: 0 auto;
   `
 };
 
-const colorMap = {
-  closed: 'red',
-  high: 'yellow',
-  urgent: 'red',
-  immediate: 'red',
-  critical: 'red',
-  open: 'green',
-  low: 'green',
-  pending: 'yellow',
-  normal: 'yellow'
-};
-
-type SortingDirection = 'asc' | 'desc';
-
 const IssuesTable = ({ search }: { search?: string }) => {
-  const [isFetching, setFetching] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [error, setError] = useState<Error>();
-  const [sortBy, setSortBy] = useState<string>('');
+  const [sortBy, setSortBy] = useState<IssueHeader['value']>();
   const [sortDirection, setSortDirection] = useState<SortingDirection>('asc');
 
   const history = useHistory();
   const state = useOvermindState();
   const actions = useOvermindActions();
-  const issues = state.issues.list;
 
-  const onSort = (sortingBy: string, sortingDirection: SortingDirection) => {
-    setSortBy(sortingBy);
-    setSortDirection(sortingDirection);
-  };
+  const theme = useTheme() as typeof Theme;
 
-  const sendFetchIssues = useCallback(async () => {
-    setFetching(true);
-
-    const queryFilter = new IssueFilter()
+  const filters = useMemo(
+    () => new IssueFilter()
       .assignee(state.users.currentUser?.id as string)
       .status({ open: true, closed: state.settings.showClosedIssues })
       .title(search)
       .sort(sortBy, sortDirection)
-      .build();
+      .build(),
+    [state.users.currentUser, state.settings.showClosedIssues, search, sortBy, sortDirection]
+  );
 
-    const res = await actions.issues.getMany({
-      filters: queryFilter,
-      offset: issues.length
-    });
+  const {
+    isFetching, items: issues, error, fetchTriggerElementRef
+  } = usePaginatedFetch({
+    request: actions.issues.getMany,
+    filters,
+  });
 
-    setHasMore(res.hasMore);
-    setFetching(false);
-
-    if (res.success) {
-      setError(undefined);
-      return res.data;
-    }
-
-    setError(res.error);
-    return null;
-  }, [issues.length, state.settings.showClosedIssues]);
-
-  useEffect(() => {
-    sendFetchIssues();
-  }, []);
-
-  const deboucedFetch = debounce(sendFetchIssues, 500);
-
-  useEffect(() => {
-    deboucedFetch();
-  }, [search, sortBy, sortDirection]);
-
-  const sortTable = (by: string) => {
+  const sortTable = useCallback((by: IssueHeader['value']) => {
     if (sortBy !== by) {
       setSortBy(by);
       setSortDirection('asc');
     } else {
-      setSortDirection((sortDir) => (sortDir === 'asc' ? 'desc' : 'asc'));
+      setSortDirection(sortDir => (sortDir === 'asc' ? 'desc' : 'asc'));
     }
-  };
+  }, [sortBy]);
 
-  useEffect(() => {
-    onSort(sortBy, sortDirection);
-  }, [sortBy, sortDirection]);
-
-  const showIssueDetails = (id: string) => {
+  const showIssueDetails = (id: number) => {
     history.push(`/app/issue/${id}/`);
   };
-
-  const { issueHeaders } = state.settings;
 
   if (!issues.length && isFetching) {
     return (
@@ -197,68 +89,109 @@ const IssuesTable = ({ search }: { search?: string }) => {
     );
   }
 
-  return (
-    <Table>
-      <thead>
-        <tr>
-          {issueHeaders.map(header => (
-            <th key={header.value} onClick={() => sortTable(header.value)}>
-              {header.label}
-              &nbsp;
-              {sortBy === header.value && sortDirection === 'asc' && (
-                <SortAscendingIcon size={14} />
-              )}
-              {sortBy === header.value && sortDirection === 'desc' && (
-                <SortDescendingIcon size={14} />
-              )}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <InfiniteScroll
-          load={sendFetchIssues}
-          isEnd={!hasMore}
-          hasMore={!isFetching && !error && hasMore}
-          container={window}
-          loadIndicator={(
-            <ProcessIndicatorContainer>
-              <td>
-                <ProcessIndicator className="container">
-                  <span css={styles.processIndicatorText}>Please wait...</span>
-                </ProcessIndicator>
-              </td>
-            </ProcessIndicatorContainer>
-          )}
-          immediate={true}
+  if (!issues.length && !search) {
+    return (
+      <>
+        <table css={css`
+          position: relative;
+          width: 100%;
+          margin-top: 0.5rem;
+          border: 2px solid ${theme.bgDark};
+          border-spacing: 0px;
+        `}
         >
-          {issues.map(task => (
-            <tr key={task.id} onClick={() => showIssueDetails(task.id)}>
-              {issueHeaders.map(header => {
-                const date = header.value === 'due_date' && get(task, header.value);
-                let forcedValue;
-                const estimated_hours = header.value === 'estimated_hours' && get(task, header.value);
-                if (estimated_hours) {
-                  forcedValue = Number(estimated_hours.toFixed(2));
+          <IssuesTableHead />
+        </table>
+        <IssuesTableEmptyState />
+      </>
+    );
+  }
+
+  if (!issues.length && search) {
+    return (
+      <>
+        <table css={css`
+          position: relative;
+          width: 100%;
+          margin-top: 0.5rem;
+          border: 2px solid ${theme.bgDark};
+          border-spacing: 0px;
+        `}
+        >
+          <IssuesTableHead />
+        </table>
+        <IssuesTableEmptySearchState />
+      </>
+    );
+  }
+
+  return (
+    <table css={css`
+    position: relative;
+    width: 100%;
+    margin-top: 0.5rem;
+    border: 2px solid ${theme.bgDark};
+    border-spacing: 0px;
+  `}>
+      <IssuesTableHead sortBy={sortBy} sortDirection={sortDirection} onSort={sortTable} />
+      <tbody css={styles.tableBody}>
+        {issues.map((task, index) => (
+          <tr
+            css={css`
+              &:hover {
+                cursor: pointer;
+          
+                td {
+                  background: ${theme.bgDark};
                 }
-                return (
-                  <td
-                    key={header.value}
-                    className={header.value === 'due_date' ? header.value : ''}
-                  >
-                    {date ? (
-                      <Date date={date} />
-                    ) : (
-                      <ColorfulSpan>{forcedValue || get(task, header.value)}</ColorfulSpan>
-                    )}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </InfiniteScroll>
+              }
+            `}
+            ref={index === issues.length - 1 ? fetchTriggerElementRef : null}
+            key={task.id}
+            onClick={() => showIssueDetails(task.id)}
+          >
+            {issueHeaders.map(header => {
+              const date = header.value === 'due_date' && get(task, header.value);
+              let forcedValue;
+              const estimated_hours = header.value === 'estimated_hours' && get(task, header.value);
+              if (estimated_hours) {
+                forcedValue = Number(estimated_hours.toFixed(2));
+              }
+              return (
+                <td
+                  css={
+                  css`
+                    cursor: pointer;
+                    border-bottom: 2px solid ${theme.bgDark};
+                    padding: 15px 5px;
+                    transition: background ease ${theme.transitionTime};
+                    ${header.value === 'due_date' ? 'white-space: nowrap' : ''};
+                    ${header.value === 'subject' ? 'text-align: start' : ''};
+                  `
+                }
+                  key={header.value}
+                >
+                  {date ? (
+                    <Date date={date} />
+                  ) : (
+                    <span>{forcedValue || get(task, header.value)}</span>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+        {isFetching ? (
+          <tr css={styles.processIndicatorWrapper}>
+            <td css={styles.processIndicatorContainer}>
+              <ProcessIndicator className="container">
+                <span css={styles.processIndicatorText}>Fetching more...</span>
+              </ProcessIndicator>
+            </td>
+          </tr>
+        ) : null}
       </tbody>
-    </Table>
+    </table>
   );
 };
 

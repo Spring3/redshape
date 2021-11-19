@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { noop } from 'lodash';
 
 import CommentsSection from '../CommentsSection';
-import theme from '../../../theme';
+import { theme } from '../../../theme';
 
 describe('IssueDetails => CommentsSEction componnet', () => {
   afterEach(cleanup);

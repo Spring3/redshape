@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
@@ -18,6 +17,7 @@ import DragArea from '../components/DragArea';
 
 import { hoursToDuration } from '../datetime';
 import { useOvermindState } from '../store';
+import { NavbarContextProvider } from '../contexts/NavbarContext';
 
 const Grid = styled.div`
   height: 100%;
@@ -32,12 +32,16 @@ const Content = styled.div`
 `;
 
 type AppViewProps = {
-
+  getProjectData: () => void;
+  projects: any[];
+  resetTimer: () => void;
+  history: any;
+  match: any;
 }
 
 const AppView = ({
   getProjectData, projects, resetTimer, history, match
-}: any) => {
+}: AppViewProps) => {
   const [activities, setActivities] = useState([]);
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
@@ -88,53 +92,32 @@ const AppView = ({
     <Grid>
       <DragArea />
       {!state.users.currentUser && (<Redirect to="/" />)}
-      <Navbar />
-      <Content>
-        <Route exact path={`${match.path}/`} component={(props: any) => <SummaryPage {...props} />} />
-        <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
-        <Timer
-          onStop={onTrackingStop}
-          history={history}
-        />
-        <TimeEntryModal
-          isOpen={showTimeEntryModal}
-          isEditable={true}
-          activities={activities}
-          isUserAuthor={true}
-          timeEntry={timeEntry}
-          initialVolatileContent={true}
-          onClose={closeTimeEntryModal}
-        />
-      </Content>
+      <NavbarContextProvider>
+        <Navbar />
+        <Content>
+          <Route exact path={`${match.path}/`} component={(props: any) => <SummaryPage {...props} />} />
+          <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
+          <Timer
+            onStop={onTrackingStop}
+            history={history}
+          />
+          <TimeEntryModal
+            isOpen={showTimeEntryModal}
+            isEditable={true}
+            activities={activities}
+            isUserAuthor={true}
+            timeEntry={timeEntry}
+            initialVolatileContent={true}
+            onClose={closeTimeEntryModal}
+          />
+        </Content>
+      </NavbarContextProvider>
     </Grid>
   );
 };
 
-AppView.propTypes = {
-  match: PropTypes.shape({
-    path: PropTypes.string.isRequired
-  }).isRequired,
-  resetTimer: PropTypes.func.isRequired,
-  getProjectData: PropTypes.func.isRequired,
-  projects: PropTypes.shape({
-    activities: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired).isRequired
-  }).isRequired,
-  idleBehavior: PropTypes.number.isRequired,
-  discardIdleTime: PropTypes.bool.isRequired,
-  advancedTimerControls: PropTypes.bool.isRequired,
-  progressWithStep1: PropTypes.bool.isRequired,
-  history: PropTypes.object.isRequired
-};
-
 const mapStateToProps = (state: any) => ({
   projects: state.projects.data,
-  idleBehavior: state.settings.idleBehavior,
-  discardIdleTime: state.settings.discardIdleTime,
-  advancedTimerControls: state.settings.advancedTimerControls,
-  progressWithStep1: state.settings.progressWithStep1,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from '@hapi/joi';
 import { useHistory } from 'react-router-dom';
+import { css } from '@emotion/react';
 
 import { Input, Label } from '../components/Input';
 import Button from '../components/Button';
@@ -45,12 +46,16 @@ const SubmitButton = styled(Button)`
   margin: 25px auto 0px auto;
 `;
 
+const rowStyle = css`
+  margin-bottom: 0.5rem;
+`;
+
 type ValidateArgs = {
   apiKey: string;
   username: string;
   password: string;
   redmineEndpoint: string;
-}
+};
 
 const LoginView = () => {
   const [useApiKey, setUseApiKey] = useState(false);
@@ -135,32 +140,38 @@ const LoginView = () => {
           <LoginForm onSubmit={handleSubmit}>
             <Headline>Redshape</Headline>
 
-            <Label label="Redmine Endpoint" htmlFor="redmineEndpoint">
-              <Input
-                name="redmineEndpoint"
-                placeholder="https://redmine.example.com"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.redmineEndpoint}
-              />
-            </Label>
-            <ErrorMessage show={Boolean(errors.redmineEndpoint && touched.redmineEndpoint)}>
-              {errors.redmineEndpoint}
-            </ErrorMessage>
-
-            <Label label="Login mode" htmlFor="loginMode">
-              <label>
+            <div css={rowStyle}>
+              <Label label="Redmine Endpoint" htmlFor="redmineEndpoint">
                 <Input
-                  type="checkbox"
-                  name="loginMode"
-                  checked={useApiKey}
-                  onChange={onToggleLoginMode}
+                  name="redmineEndpoint"
+                  placeholder="https://redmine.example.com"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.redmineEndpoint}
                 />
-                <span>Use API Key</span>
-              </label>
-            </Label>
+              </Label>
+              <ErrorMessage show={Boolean(errors.redmineEndpoint && touched.redmineEndpoint)}>
+                {errors.redmineEndpoint}
+              </ErrorMessage>
+            </div>
+
+            <div css={rowStyle}>
+              <Label label="Login mode" htmlFor="loginMode">
+                <div>
+                  <label>
+                    <Input
+                      type="checkbox"
+                      name="loginMode"
+                      checked={useApiKey}
+                      onChange={onToggleLoginMode}
+                    />
+                    <span>Use API Key</span>
+                  </label>
+                </div>
+              </Label>
+            </div>
             {useApiKey ? (
-              <>
+              <div css={rowStyle}>
                 <Label label="API Key" htmlFor="apiKey">
                   <Input
                     type="text"
@@ -170,34 +181,40 @@ const LoginView = () => {
                     value={values.apiKey}
                   />
                 </Label>
-                <ErrorMessage show={Boolean(errors.apiKey && touched.apiKey)}>{errors.apiKey}</ErrorMessage>
-              </>
+                <ErrorMessage show={Boolean(errors.apiKey && touched.apiKey)}>
+                  {errors.apiKey}
+                </ErrorMessage>
+              </div>
             ) : (
               <>
-                <Label label="Login" htmlFor="username">
-                  <Input
-                    type="text"
-                    name="username"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.username}
-                  />
-                </Label>
-                <ErrorMessage show={Boolean(errors.username && touched.username)}>
-                  {errors.username}
-                </ErrorMessage>
-                <Label label="Password" htmlFor="password">
-                  <Input
-                    type="password"
-                    name="password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.password}
-                  />
-                </Label>
-                <ErrorMessage show={Boolean(errors.password && touched.password)}>
-                  {errors.password}
-                </ErrorMessage>
+                <div css={rowStyle}>
+                  <Label label="Login" htmlFor="username">
+                    <Input
+                      type="text"
+                      name="username"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                    />
+                  </Label>
+                  <ErrorMessage show={Boolean(errors.username && touched.username)}>
+                    {errors.username}
+                  </ErrorMessage>
+                </div>
+                <div>
+                  <Label label="Password" htmlFor="password">
+                    <Input
+                      type="password"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                    />
+                  </Label>
+                  <ErrorMessage show={Boolean(errors.password && touched.password)}>
+                    {errors.password}
+                  </ErrorMessage>
+                </div>
               </>
             )}
 

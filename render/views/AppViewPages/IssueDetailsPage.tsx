@@ -19,7 +19,7 @@ import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
 import { animationSlideRight } from '../../animations';
 
-import { GhostButton } from '../../components/Button';
+import { GhostButton } from '../../components/GhostButton';
 
 import actions from '../../actions';
 import { useOvermindState } from '../../store';

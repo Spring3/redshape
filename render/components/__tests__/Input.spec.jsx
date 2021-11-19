@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Input, Label } from '../Input';
-import theme from '../../theme';
+import { theme } from '../../theme';
 
 afterEach(cleanup);
 

@@ -8,24 +8,24 @@ const StyledButton = styled.button`
   font-size: 14px;
   outline: none;
   text-align: center;
-  
-  ${(props) => css`
+
+  ${props => css`
     background: ${props.theme.bg};
     transition: color ease ${props.theme.transitionTime};
     transition: background ease ${props.theme.transitionTime};
     width: ${props.block ? '100%' : 'auto'};
   `}
 
-  ${(props) => {
+  ${props => {
     if (!props.disabled) {
       return css`
-        border: 2px solid ${props.palette.light};    
+        border: 2px solid ${props.palette.light};
         color: ${props.palette.light};
         cursor: pointer;
-    
+
         &:hover,
         &:focus {
-          background: ${props.palette.light}; 
+          background: ${props.palette.light};
           color: ${props.theme.hoverText} !important;
 
           svg {
@@ -46,42 +46,7 @@ const StyledButton = styled.button`
         fill: ${props.theme.minorText};
       }
     `;
-  }
-}
-`;
-
-const StyledLink = styled.a`
-  text-decoration: none;
-  color: ${(props) => props.theme.main};
-  transition: color ease ${(props) => props.theme.transitionTime};
-
-  ${(props) => {
-    if (!props.disabled) {
-      return css`
-          &:hover {
-            color: ${props.theme.mainDark};
-
-            svg {
-              fill: ${props.theme.mainDark}
-            }
-          }
-        `;
-    }
-    return css`
-        color: ${props.theme.minorText};
-        
-        svg {
-          fill: ${props.theme.minorText};
-        }
-      `;
-  }
-}
-
-  &:active,
-  &:focus,
-  &:visited {
-    background: transparent;
-  }
+  }}
 `;
 
 class Button extends Component {
@@ -109,18 +74,11 @@ class Button extends Component {
           dark: theme.mainDark
         };
     }
-  }
+  };
 
   render() {
     const {
-      id,
-      children,
-      type,
-      disabled,
-      block,
-      onClick,
-      theme,
-      className
+      id, children, type, disabled, block, onClick, theme, className
     } = this.props;
     return (
       <StyledButton
@@ -140,10 +98,7 @@ class Button extends Component {
 }
 
 Button.propTypes = {
-  id: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   theme: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['button', 'submit']),
@@ -161,56 +116,6 @@ Button.defaultProps = {
   block: false,
   onClick: undefined,
   className: undefined
-};
-
-class GhostButton extends Component {
-  preventDefault = (e) => {
-    e.preventDefault();
-    e.persist();
-    const { onClick, disabled } = this.props;
-    if (onClick && !disabled) {
-      onClick(e);
-    }
-  }
-
-  render() {
-    const {
-      id, children, disabled, className
-    } = this.props;
-    return (
-      <StyledLink
-        id={id}
-        onClick={this.preventDefault}
-        href="#"
-        disabled={disabled}
-        className={className}
-      >
-        {children}
-      </StyledLink>
-    );
-  }
-}
-
-GhostButton.propTypes = {
-  id: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
-  children: PropTypes.node.isRequired,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-};
-
-GhostButton.defaultProps = {
-  id: undefined,
-  disabled: false,
-  onClick: undefined,
-  className: undefined
-};
-
-export {
-  GhostButton
 };
 
 export default withTheme(Button);

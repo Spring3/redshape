@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { ThemeProvider } from 'styled-components';
 import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
 import utils from '../../../common/utils';
-import theme from '../../theme';
+import { theme } from '../../theme';
 
 describe('MarkdownEditor component', () => {
   afterEach(cleanup);
