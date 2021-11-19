@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { debounce } from 'lodash';
@@ -6,12 +6,18 @@ import { Input } from '../../components/Input';
 import { IssuesTable } from '../../components/SummaryPage/IssuesTable';
 import { Flex } from '../../components/Flex';
 import { useOvermindActions, useOvermindState } from '../../store';
+import { useNavbar } from '../../contexts/NavbarContext';
 
 const SummaryPage = () => {
   const [search, setSearch] = useState<string>('');
 
   const state = useOvermindState();
   const actions = useOvermindActions();
+  const navbarState = useNavbar();
+
+  useEffect(() => {
+    navbarState.setTitle('My Backlog');
+  }, [navbarState.setTitle]);
 
   const onSearchChange = debounce((e: any) => {
     setSearch(e.target.value);

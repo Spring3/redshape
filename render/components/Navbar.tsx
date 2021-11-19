@@ -10,6 +10,7 @@ import { useOvermindActions, useOvermindState } from '../store';
 import { Flex } from './Flex';
 import { Dropdown } from './Dropdown';
 import { theme as Theme } from '../theme';
+import { useNavbar } from '../contexts/NavbarContext';
 
 const styles = {
   nav: css`
@@ -31,6 +32,7 @@ const styles = {
 };
 
 const Navbar = () => {
+  const navbarState = useNavbar();
   const state = useOvermindState();
   const actions = useOvermindActions();
 
@@ -69,7 +71,7 @@ const Navbar = () => {
   return (
     <nav css={styles.nav}>
       <Flex>
-        <h2>My Backlog</h2>
+        <h2>{navbarState.title}</h2>
         {/* <li>Issues</li> */}
       </Flex>
       <Flex gap="1rem">
