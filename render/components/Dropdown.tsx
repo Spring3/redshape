@@ -7,9 +7,10 @@ import React, {
   useCallback,
   MouseEvent,
   MouseEventHandler,
-  useMemo
+  useMemo,
+  useEffect,
+  useRef,
 } from 'react';
-import FocusLock from 'react-focus-lock';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
 import { theme as Theme } from '../theme';
@@ -28,6 +29,7 @@ type DropdownProps = {
 
 const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownProps) => {
   const [isOpen, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const theme = useTheme() as typeof Theme;
 
   const toggle = useCallback((e: MouseEvent<HTMLElement>) => {
@@ -43,19 +45,35 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
     setOpen(isOpenNow => !isOpenNow);
   }, []);
 
+  useEffect(() => {
+    const handleClick = (event: any) => {
+      if (dropdownRef.current && isOpen && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [dropdownRef, isOpen, setOpen]);
+
   const Toggle = useMemo(() => getDropdownToggleElement({ toggle, isOpen }), []);
 
   return (
     <div
+      ref={dropdownRef}
       className={className}
       css={css`
         position: relative;
       `}
     >
       <div className="dropdown-header">{Toggle}</div>
-      <FocusLock>
-        <ul
-          css={css`
+
+      <ul
+        onBlur={() => setOpen(false)}
+        css={css`
           list-style-type: none;
           margin: 0;
           padding: 0;
@@ -69,10 +87,10 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
           width: 100%;
           top: 2rem;
         `}
-        >
-          {Children.map(children, child => (
-            <li
-              css={css`
+      >
+        {Children.map(children, child => (
+          <li
+            css={css`
               padding: 0.5rem 0.2rem;
               background: transparent;
               border: none;
@@ -82,14 +100,14 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
                 background: ${theme.bgDarker};
               }
             `}
-              onClick={toggleViaChild}
-              className="dropdown-list-item"
-            >
-              {child}
-            </li>
-          ))}
-        </ul>
-      </FocusLock>
+            onClick={toggleViaChild}
+            className="dropdown-list-item"
+          >
+            {child}
+          </li>
+        ))}
+      </ul>
+
     </div>
   );
 };
