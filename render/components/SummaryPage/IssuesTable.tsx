@@ -16,6 +16,7 @@ import { issueHeaders } from '../constants';
 import { IssuesTableHead } from './IssuesTableHead';
 import { IssueHeader, SortingDirection } from '../../../types';
 import { IssuesTableEmptyState } from './IssuesTableEmptyState';
+import { IssuesTableEmptySearchState } from './IssuesTableEmptySearchState';
 
 const styles = {
   processIndicatorText: css`
@@ -88,7 +89,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
     );
   }
 
-  if (!issues.length) {
+  if (!issues.length && !search) {
     return (
       <>
         <table css={css`
@@ -102,6 +103,24 @@ const IssuesTable = ({ search }: { search?: string }) => {
           <IssuesTableHead />
         </table>
         <IssuesTableEmptyState />
+      </>
+    );
+  }
+
+  if (!issues.length && search) {
+    return (
+      <>
+        <table css={css`
+          position: relative;
+          width: 100%;
+          margin-top: 0.5rem;
+          border: 2px solid ${theme.bgDark};
+          border-spacing: 0px;
+        `}
+        >
+          <IssuesTableHead />
+        </table>
+        <IssuesTableEmptySearchState />
       </>
     );
   }
