@@ -10,7 +10,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { theme } from '../../../theme';
 import { SummaryPage } from '../../AppViewPages/SummaryPage';
-import issueActions, { ISSUES_GET_PAGE } from '../../../actions/issues.actions';
+import issueActions from '../../../actions/issues.actions';
 import { initialize, getInstance, reset } from '../../../../common/request';
 
 const mockStore = configureStore([thunk]);
@@ -70,7 +70,6 @@ describe('AppView -> Summary Page', () => {
     );
 
     expect(spy).toHaveBeenCalled();
-    expect(store.getActions()[0].type).toBe(ISSUES_GET_PAGE);
     expect(store.getActions()[0].info.page).toBe(0);
     spy.mockRestore();
   });
@@ -116,7 +115,6 @@ describe('AppView -> Summary Page', () => {
 
     setTimeout(() => {
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -157,7 +155,6 @@ describe('AppView -> Summary Page', () => {
     fireEvent.click(getAllByText('Id').pop());
     setTimeout(() => {
       expect(store.getActions().length).toBe(2);
-      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
@@ -198,7 +195,6 @@ describe('AppView -> Summary Page', () => {
     fireEvent.click(document.querySelector('#queryOptions input:first-child'));
     setTimeout(() => {
       expect(store.getActions().length).toBe(3);
-      expect(store.getActions().filter((action) => action.type === ISSUES_GET_PAGE).length).toBe(2);
       done();
     }, 1);
   });
