@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import {
-  ISSUES_GET,
   ISSUES_COMMENTS_SEND,
   ISSUES_RESET_SELECTION,
   ISSUES_TIME_ENTRY_GET
@@ -32,20 +31,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case ISSUES_RESET_SELECTION: {
       return initialState;
-    }
-    case ISSUES_GET: {
-      if (action.status === 'START') {
-        return { ...state, isFetching: true };
-      }
-      if (action.status === 'OK') {
-        return {
-          ...state, isFetching: false, data: _.get(action.data, 'issue', {}), error: undefined
-        };
-      }
-      if (action.status === 'NOK') {
-        return { ...state, isFetching: false, error: action.data };
-      }
-      return state;
     }
     case ISSUES_COMMENTS_SEND: {
       if (action.status === 'START') {

@@ -3,27 +3,9 @@ import moment from 'moment';
 
 import request, { notify } from './helper';
 
-export const ISSUES_GET = 'ISSUES_GET';
 export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
 export const ISSUES_RESET_SELECTION = 'ISSUES_RESET_SELECTION';
 export const ISSUES_TIME_ENTRY_GET = 'ISSUES_TIME_ENTRY_GET';
-
-const get = (id) => (dispatch) => {
-  dispatch(notify.start(ISSUES_GET));
-
-  return request({
-    url: `/issues/${id}.json`,
-    query: {
-      include: 'attachments,children,relations,journals'
-    },
-    id: `getIssueDetails:${id}`
-  }).then(({ data }) => dispatch(notify.ok(ISSUES_GET, data)))
-    .catch((error) => {
-      // eslint-disable-next-line
-      console.error(`Error when trying to get the issue with id ${id}:`, error.message);
-      dispatch(notify.nok(ISSUES_GET, error));
-    });
-};
 
 const sendComments = (issueId, comments) => (dispatch, getState) => {
   const { user = {} } = getState();
@@ -92,7 +74,6 @@ const getTimeEntriesPage = (issueId, projectId, pageNumber, batchSize) => (dispa
 const resetSelected = () => ({ type: ISSUES_RESET_SELECTION });
 
 export default {
-  get,
   getTimeEntriesPage,
   sendComments,
   resetSelected

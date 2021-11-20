@@ -21,8 +21,8 @@ import { animationSlideRight } from '../../animations';
 
 import { GhostButton } from '../../components/GhostButton';
 
-import actions from '../../actions';
-import { useOvermindState } from '../../store';
+import reduxActions from '../../actions';
+import { useOvermindActions, useOvermindState } from '../../store';
 
 const Flex = styled.div`
   display: flex;
@@ -142,45 +142,44 @@ const FlexWrapper = styled(Wrapper)`
 `;
 
 const IssueDetailsPage = ({
-  match, fetchIssueDetails, resetSelectedIssue, selectedIssueState, projects, history, postComments
+  match, projects, history, postComments
 }: any) => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [showIssueModal, setShowIssueModal] = useState(false);
 
-  useEffect(() => {
-    fetchIssueDetails(match.params.id);
-
-    return () => {
-      resetSelectedIssue();
-    };
-  }, []);
-
   const state = useOvermindState();
+  const actions = useOvermindActions();
   const theme = useTheme();
+  const issueId = match.params.id;
+
+  useEffect(() => {
+    actions.issues.getOne({ id: issueId });
+  }, [issueId]);
+
+  const currentIssue = state.issues.byId[issueId];
 
   const triggerTimeEntryModal = (timeEntry: any) => {
-    const selectedIssue = selectedIssueState.data;
     const newSelectedTimeEntry = timeEntry || {
       user: {
         id: state.users.currentUser?.id,
         name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       },
       issue: {
-        id: selectedIssue.id
+        id: currentIssue.id
       },
       activity: {},
       project: {
-        id: selectedIssue.project.id,
-        name: selectedIssue.project.name
+        id: currentIssue.project.id,
+        name: currentIssue.project.name
       },
       hours: undefined,
       duration: '',
       spent_on: moment().format('YYYY-MM-DD')
     };
-    newSelectedTimeEntry.issue.name = selectedIssue.subject;
-    const existingActivities = _.get(projects[selectedIssue.project.id], 'activities', []);
+    newSelectedTimeEntry.issue.name = currentIssue.subject;
+    const existingActivities = _.get(projects[currentIssue.project.id], 'activities', []);
     setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
     setSelectedTimeEntry(newSelectedTimeEntry);
     setShowTimeEntryModal(true);
@@ -202,13 +201,12 @@ const IssueDetailsPage = ({
     setShowIssueModal(true);
   };
 
-  const getIssueComments = () => selectedIssueState.data.journals.filter((entry: any) => entry.notes);
+  const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes);
 
-  const selectedIssue = selectedIssueState.data;
-  const cfields = selectedIssue.custom_fields;
+  const cfields = currentIssue.customFields;
   // eslint-disable-next-line react/prop-types
-  const subtasks = selectedIssue.children;
-  return selectedIssue.id
+  const subtasks = currentIssue.subTasks || [];
+  return currentIssue.id
     ? (
       <Section>
         <Flex>
@@ -222,46 +220,46 @@ const IssueDetailsPage = ({
             <h2>
               <span>
                 #
-                {selectedIssue.id}
+                {currentIssue.id}
 &nbsp;
               </span>
-              <span>{selectedIssue.subject}</span>
+              <span>{currentIssue.subject}</span>
               <IconButton onClick={openIssueModal}>
                 <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
               </IconButton>
             </h2>
             <SmallNotice>
               Created by&nbsp;
-              <Link href="#">{selectedIssue.author.name}</Link>
-              <DateComponent date={selectedIssue.created_on} />
+              <Link href="#">{currentIssue.author.name}</Link>
+              <DateComponent date={currentIssue.createdOn} />
             </SmallNotice>
-            {selectedIssue.closed_on && (
+            {currentIssue.createdOn && (
             <SmallNotice>
               Closed
-              <DateComponent date={selectedIssue.closed_on} />
+              <DateComponent date={currentIssue.createdOn} />
             </SmallNotice>
             )}
             <Wrapper>
               <ColumnList>
                 <li>
                   <div>Tracker: </div>
-                  <div>{selectedIssue.tracker.name}</div>
+                  <div>{currentIssue.tracker.name}</div>
                 </li>
                 <li>
                   <div>Status:</div>
-                  <div>{selectedIssue.status.name}</div>
+                  <div>{currentIssue.status.name}</div>
                 </li>
                 <li>
                   <div>Priority: </div>
-                  <div>{selectedIssue.priority.name}</div>
+                  <div>{currentIssue.priority.name}</div>
                 </li>
                 <li>
                   <div>Assignee: </div>
-                  <div>{selectedIssue.assigned_to.name}</div>
+                  <div>{currentIssue.assignee.name}</div>
                 </li>
                 <li>
                   <div>Project: </div>
-                  <div>{_.get(selectedIssue, 'project.name')}</div>
+                  <div>{_.get(currentIssue, 'project.name')}</div>
                 </li>
                 <li>
                   <div>Progress: </div>
@@ -270,7 +268,7 @@ const IssueDetailsPage = ({
                       className={undefined}
                       id={undefined}
                       height={5}
-                      percent={selectedIssue.done_ratio}
+                      percent={currentIssue.doneRatio}
                       background={(theme as any).main}
                     />
                   </div>
@@ -279,33 +277,33 @@ const IssueDetailsPage = ({
               <ColumnList>
                 <li>
                   <div>Target version: </div>
-                  <div>{_.get(selectedIssue, 'fixed_version.name')}</div>
+                  <div>{_.get(currentIssue, 'fixed_version.name')}</div>
                 </li>
                 <li>
                   <div>Start date: </div>
-                  <DateComponent date={selectedIssue.start_date} />
+                  <DateComponent date={currentIssue.startDate} />
                 </li>
                 <li>
                   <div>Due date: </div>
-                  <DateComponent date={selectedIssue.due_date} />
+                  <DateComponent date={currentIssue.dueDate} />
                 </li>
                 <li>
                   <div>Estimation: </div>
                   <div>
                     {
-                        selectedIssue.estimated_hours
-                          ? `${selectedIssue.estimated_hours.toFixed(2)} h`
+                        currentIssue.estimatedHours
+                          ? `${currentIssue.estimatedHours.toFixed(2)} h`
                           : undefined
                       }
                     {
                         (
-                          selectedIssue.total_estimated_hours !== selectedIssue.estimated_hours
-                          && selectedIssue.total_estimated_hours >= 0
+                          currentIssue.totalEstimatedHours && currentIssue.totalEstimatedHours !== currentIssue.estimatedHours
+                          && currentIssue.totalEstimatedHours >= 0
                         ) && (
                           <span>
                             {' '}
                             (Total:
-                            {selectedIssue.total_estimated_hours.toFixed(2)}
+                            {currentIssue.totalEstimatedHours.toFixed(2)}
                             {' '}
                             h)
                           </span>
@@ -316,16 +314,16 @@ const IssueDetailsPage = ({
                 <li>
                   <div>Time spent: </div>
                   <div>
-                    {selectedIssue.spent_hours ? `${selectedIssue.spent_hours.toFixed(2)} h` : undefined}
+                    {currentIssue.spentHours ? `${currentIssue.spentHours.toFixed(2)} h` : undefined}
                     {
                         (
-                          selectedIssue.total_spent_hours !== selectedIssue.spent_hours
-                          && selectedIssue.total_spent_hours >= 0
+                          currentIssue.totalSpentHours && currentIssue.totalSpentHours !== currentIssue.spentHours
+                          && currentIssue.totalSpentHours >= 0
                         ) && (
                           <span>
                             {' '}
                             (Total:
-                            {selectedIssue.total_spent_hours.toFixed(2)}
+                            {currentIssue.totalSpentHours.toFixed(2)}
                             {' '}
                             h)
                           </span>
@@ -340,7 +338,7 @@ const IssueDetailsPage = ({
                       className={undefined}
                       id={undefined}
                       height={5}
-                      percent={selectedIssue.total_spent_hours / selectedIssue.total_estimated_hours * 100}
+                      percent={currentIssue.totalSpentHours && currentIssue.totalEstimatedHours ? currentIssue.totalSpentHours / currentIssue.totalEstimatedHours * 100 : 0}
                       background={(theme as any).main}
                     />
                   </div>
@@ -388,7 +386,7 @@ const IssueDetailsPage = ({
             </FlexWrapper>
             <div>
               <h3>Description</h3>
-              <MarkdownText markdownText={selectedIssue.description} />
+              <MarkdownText markdownText={currentIssue.description} />
             </div>
           </IssueDetails>
           <TimeEntries
@@ -398,7 +396,7 @@ const IssueDetailsPage = ({
         <CommentsSection
           journalEntries={getIssueComments()}
           publishComments={postComments}
-          issueId={selectedIssue.id}
+          issueId={currentIssue.id}
         />
         { selectedTimeEntry && (
         <TimeEntryModal
@@ -410,12 +408,12 @@ const IssueDetailsPage = ({
           onClose={closeTimeEntryModal}
         />
         )}
-        {selectedIssue && (
+        {currentIssue && (
           <IssueModal
             isOpen={showIssueModal}
-            isEditable={selectedIssue.assigned_to.id === state.users.currentUser?.id}
-            isUserAuthor={selectedIssue.author.id === state.users.currentUser?.id}
-            issueEntry={selectedIssue}
+            isEditable={currentIssue.assignee.id === state.users.currentUser?.id}
+            isUserAuthor={currentIssue.author.id === state.users.currentUser?.id}
+            issueEntry={currentIssue}
             onClose={closeIssueModal}
           />
         )}
@@ -429,58 +427,7 @@ const IssueDetailsPage = ({
 };
 
 IssueDetailsPage.propTypes = {
-  selectedIssueState: PropTypes.shape({
-    data: PropTypes.shape({
-      children: PropTypes.array,
-      created_on: PropTypes.string,
-      closed_on: PropTypes.string,
-      estimated_hours: PropTypes.number,
-      id: PropTypes.number.isRequired,
-      subject: PropTypes.string.isRequired,
-      journals: PropTypes.arrayOf(PropTypes.object).isRequired,
-      description: PropTypes.string,
-      project: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      priority: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      assigned_to: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      done_ratio: PropTypes.number.isRequired,
-      start_date: PropTypes.string.isRequired,
-      due_date: PropTypes.string.isRequired,
-      total_estimated_hours: PropTypes.number,
-      total_spent_hours: PropTypes.number,
-      spent_hours: PropTypes.number,
-      tracker: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      status: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      author: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      custom_fields: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired
-      }))
-    }),
-    isFetching: PropTypes.bool.isRequired,
-    error: PropTypes.instanceOf(Error)
-  }).isRequired,
-  fetchIssueDetails: PropTypes.func.isRequired,
   postComments: PropTypes.func.isRequired,
-  resetSelectedIssue: PropTypes.func.isRequired,
   match: PropTypes.object,
   projects: PropTypes.object,
   history: PropTypes.object
@@ -488,13 +435,10 @@ IssueDetailsPage.propTypes = {
 
 const mapStateToProps = (state: any) => ({
   projects: state.projects.data,
-  selectedIssueState: state.issues.selected
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  fetchIssueDetails: (issueId: any) => dispatch(actions.issues.get(issueId)),
-  postComments: (issueId: any, comments: any) => dispatch(actions.issues.sendComments(issueId, comments)),
-  resetSelectedIssue: () => dispatch(actions.issues.resetSelected())
+  postComments: (issueId: any, comments: any) => dispatch(reduxActions.issues.sendComments(issueId, comments)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);

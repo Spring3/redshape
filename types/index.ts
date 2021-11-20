@@ -44,7 +44,7 @@ enum SessionAction {
 }
 
 type User = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   createdOn: string;
@@ -53,6 +53,18 @@ type User = {
 type Pointer = {
   id: number;
   name: string;
+}
+
+type JournalEntry = {
+  id: string;
+  user: Pointer;
+  createdOn: string;
+  notes?: string[];
+}
+
+type CustomField = {
+  name: string;
+  value: string;
 }
 
 type Issue = {
@@ -70,6 +82,12 @@ type Issue = {
   doneRatio: number;
   isPrivate: boolean;
   estimatedHours?: number;
+  totalEstimatedHours?: number;
+  spentHours?: number;
+  totalSpentHours?: number;
+  subTasks?: Issue[];
+  journals?: JournalEntry[];
+  customFields?: CustomField[];
   createdOn: string;
   updatedOn: string;
   closedOn?: string;

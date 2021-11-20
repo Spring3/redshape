@@ -3,7 +3,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { notify } from '../../actions/helper';
 import {
   ISSUES_RESET_SELECTION,
-  ISSUES_GET,
   ISSUES_COMMENTS_SEND,
   ISSUES_TIME_ENTRY_GET
 } from '../../actions/issues.actions';
@@ -29,66 +28,6 @@ describe('Selected issue reducer', () => {
         { type: ISSUES_RESET_SELECTION }
       )
     ).toEqual(initialState);
-  });
-
-  describe('ISSUES_GET', () => {
-    it('status START', () => {
-      expect(
-        reducer(
-          _cloneDeep(initialState),
-          notify.start(ISSUES_GET)
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        isFetching: true
-      });
-    });
-
-    it('status OK', () => {
-      const data = {
-        issue: {
-          hello: 'world'
-        }
-      };
-      const error = new Error('Whoops');
-      expect(
-        reducer(
-          {
-            ..._cloneDeep(initialState),
-            isFetching: true,
-            error
-          },
-          notify.ok(ISSUES_GET, data)
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        data: data.issue,
-        isFetching: false,
-        error: undefined
-      });
-    });
-
-    it('status NOK', () => {
-      const error = new Error('Whoops');
-      const data = {
-        hello: 'world'
-      };
-      expect(
-        reducer(
-          {
-            ..._cloneDeep(initialState),
-            data,
-            isFetching: true
-          },
-          notify.nok(ISSUES_GET, error)
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        data,
-        isFetching: false,
-        error
-      });
-    });
   });
 
   describe('ISSUES_COMMENTS_SEND', () => {

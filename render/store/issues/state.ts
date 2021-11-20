@@ -1,8 +1,9 @@
 import { derived } from 'overmind';
+import { Issue } from '../../../types';
 
 type IssuesState = {
-  list: any[];
-  byId: Record<string, any>,
+  list: Issue[];
+  byId: Record<string, Issue>,
 }
 
 const state: IssuesState = {
