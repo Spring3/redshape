@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import styled, { css, useTheme } from 'styled-components';
 
@@ -142,7 +143,7 @@ const FlexWrapper = styled(Wrapper)`
 `;
 
 const IssueDetailsPage = ({
-  match, history, postComments
+  postComments
 }: any) => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
@@ -152,14 +153,18 @@ const IssueDetailsPage = ({
   const state = useOvermindState();
   const actions = useOvermindActions();
   const theme = useTheme();
-  const issueId = match.params.id;
+  const { id: issueId } = useParams();
+  const navigate = useNavigate();
+
   const projects = state.projects.list;
 
   useEffect(() => {
-    actions.issues.getOne({ id: issueId });
+    if (issueId) {
+      actions.issues.getOne({ id: issueId });
+    }
   }, [issueId]);
 
-  const currentIssue = state.issues.byId[issueId];
+  const currentIssue = state.issues.byId[issueId as string];
 
   const triggerTimeEntryModal = (timeEntry: any) => {
     const newSelectedTimeEntry = timeEntry || {
@@ -202,7 +207,7 @@ const IssueDetailsPage = ({
     setShowIssueModal(true);
   };
 
-  const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes);
+  const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes) ?? [];
 
   const cfields = currentIssue.customFields;
   // eslint-disable-next-line react/prop-types
@@ -214,7 +219,7 @@ const IssueDetailsPage = ({
           <IssueDetails>
             <Buttons className="buttons">
               { /* eslint-disable-next-line react/jsx-no-bind */ }
-              <BackButton onClick={history.goBack.bind(this)}>
+              <BackButton onClick={() => navigate('..')}>
                 <ArrowLeftIcon size={30} />
               </BackButton>
             </Buttons>
@@ -357,7 +362,7 @@ const IssueDetailsPage = ({
                             <Link
                               href="#"
                               key={i}
-                              onClick={() => history.push(`/app/issue/${subtask.id}/`)}
+                              onClick={() => navigate(`../${subtask.id}`)}
                             >
                               {`#${subtask.id} - ${subtask.subject}`}
                             </Link>
@@ -431,8 +436,6 @@ const IssueDetailsPage = ({
 
 IssueDetailsPage.propTypes = {
   postComments: PropTypes.func.isRequired,
-  match: PropTypes.object,
-  history: PropTypes.object
 };
 
 const mapDispatchToProps = (dispatch: any) => ({

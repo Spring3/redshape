@@ -1,15 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Route, Redirect, useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate, Route, Routes } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
 
 import reduxActions from '../actions';
 import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
-import { SummaryPage } from './AppViewPages/SummaryPage';
-import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 
@@ -17,6 +15,8 @@ import { hoursToDuration } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
+import { SummaryPage } from './AppViewPages/SummaryPage';
+import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
 
 const Grid = styled.div`
   height: 100%;
@@ -32,8 +32,6 @@ const Content = styled.div`
 
 type AppViewProps = {
   resetTimer: () => void;
-  history: any;
-  match: any;
 }
 
 const AppView = ({
@@ -43,8 +41,7 @@ const AppView = ({
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
 
-  const history = useHistory();
-  const match = useRouteMatch();
+  const navigate = useNavigate();
   const state = useOvermindState();
   const actions = useOvermindActions();
 
@@ -83,20 +80,23 @@ const AppView = ({
     resetTimer();
   };
 
-  console.log('match', match);
+  if (!state.users.currentUser) {
+    navigate('../', { replace: true });
+    return null;
+  }
 
   return (
     <Grid>
       <DragArea />
-      {!state.users.currentUser && (<Redirect to="/" />)}
       <NavbarContextProvider>
         <Navbar />
         <Content>
-          <Route exact path={`${match.path}/`} component={(props: any) => <SummaryPage {...props} />} />
-          <Route path={`${match.path}/issue/:id`} component={(props: any) => <IssueDetailsPage {...props} />} />
+          <Routes>
+            <Route path="/" element={<SummaryPage />} />
+            <Route path="/:id" element={<IssueDetailsPage />} />
+          </Routes>
           <Timer
             onStop={onTrackingStop}
-            history={history}
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}

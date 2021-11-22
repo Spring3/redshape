@@ -385,8 +385,8 @@ class Timer extends Component {
 
   redirectToTrackedLink = (event) => {
     event.preventDefault();
-    const { history, trackedIssue } = this.props;
-    history.push(`/app/issue/${trackedIssue.id}`);
+    // const { history, trackedIssue } = this.props;
+    // history.push(`/app/issue/${trackedIssue.id}`);
   }
 
   onCommentsChange = (ev) => {
@@ -515,7 +515,6 @@ Timer.propTypes = {
   pauseTimer: PropTypes.func.isRequired,
   continueTimer: PropTypes.func.isRequired,
   stopTimer: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
   idleBehavior: PropTypes.number.isRequired,
   discardIdleTime: PropTypes.bool.isRequired,
   advancedTimerControls: PropTypes.bool.isRequired,
