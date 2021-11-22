@@ -77,10 +77,15 @@ const Navbar = () => {
       <Flex gap="1rem">
         <NavLink
           css={[navLinkStyles, css`margin-right: 1rem`]}
-          to="/app"
-          activeStyle={{
-            color: theme.main,
-            borderBottom: `2px solid ${theme.main}`
+          to="/issues"
+          style={({ isActive }) => {
+            if (isActive) {
+              return ({
+                color: theme.main,
+                borderBottom: `2px solid ${theme.main}`
+              });
+            }
+            return {};
           }}
         >
           Backlog

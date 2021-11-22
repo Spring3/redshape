@@ -12,7 +12,7 @@ import '@testing-library/jest-dom/extend-expect';
 
 import { theme } from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
-import { ISSUES_GET, ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
+import { ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';
 
 const mockStore = configureStore([thunk]);
@@ -178,8 +178,6 @@ describe('IssueDetails page', () => {
         </HashRouter>
       </Provider>
     );
-
-    expect(store.getActions()[0].type).toBe(ISSUES_GET);
   });
 
   it('should reset the selected issue on unmount', () => {

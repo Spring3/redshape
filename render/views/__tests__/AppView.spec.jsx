@@ -10,7 +10,6 @@ import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
 
-import { PROJECT_GET_ALL } from '../../actions/project.actions';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
 import { theme } from '../../theme';
@@ -119,7 +118,6 @@ describe('AppView', () => {
     );
 
     expect(store.getActions().length).toBeGreaterThan(0);
-    expect(store.getActions()[0].type).toBe(PROJECT_GET_ALL);
   });
 
   it('should logout when a user clicks the button', () => {

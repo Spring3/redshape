@@ -83,12 +83,12 @@ class IssueModal extends Component {
     let issueEntry = {};
     if (propsIssueEntry) {
       const {
-        estimated_hours, done_ratio, due_date, children
+        estimatedHours, doneRatio, dueDate, children
       } = propsIssueEntry;
       issueEntry = {
-        estimated_duration: hoursToDuration(estimated_hours),
-        progress: done_ratio,
-        due_date: due_date || '',
+        estimated_duration: hoursToDuration(estimatedHours),
+        progress: doneRatio,
+        due_date: dueDate || '',
         children: children ? children.length : 0
       };
     }
@@ -107,19 +107,19 @@ class IssueModal extends Component {
 
       if (issueEntry) {
         const {
-          estimated_hours, done_ratio, due_date, children
+          estimatedHours, doneRatio, dueDate, children
         } = issueEntry;
         // eslint-disable-next-line
         this.setState({
           // issueEntry,
           issueEntry: {
-            estimated_duration: hoursToDuration(estimated_hours),
-            progress: done_ratio,
-            due_date: due_date || '',
+            estimated_duration: hoursToDuration(estimatedHours),
+            progress: doneRatio,
+            due_date: dueDate || '',
             children: children ? children.length : 0
           },
           instance: new Date().getTime(),
-          progress_info: done_ratio,
+          progress_info: doneRatio,
           wasModified: false
         });
       }
@@ -139,8 +139,8 @@ class IssueModal extends Component {
 
     validateBeforeUpdate({
       progress: issueEntry.progress,
-      estimated_duration: issueEntry.estimated_duration,
-      due_date: issueEntry.due_date,
+      estimated_duration: issueEntry.estimatedDuration,
+      due_date: issueEntry.dueDate,
     }, checkFields);
   }
 
@@ -197,7 +197,7 @@ class IssueModal extends Component {
     this.setState({
       issueEntry: {
         ...issueEntry,
-        estimated_duration: duration.replace(',', '.'),
+        estimatedDuration: duration.replace(',', '.'),
       },
       wasModified: true
     });
@@ -216,7 +216,7 @@ class IssueModal extends Component {
       issueEntry, wasModified, progress_info, instance
     } = this.state;
     const {
-      progress, estimated_duration, due_date, children
+      progress, estimatedDuration, dueDate, children
     } = issueEntry;
     const validationErrors = issue.error && issue.error.isJoi
       ? {
@@ -226,8 +226,8 @@ class IssueModal extends Component {
       }
       : {};
     let estimatedDurationInfo = '';
-    if (estimated_duration) {
-      const hours = durationToHours(estimated_duration);
+    if (estimatedDuration) {
+      const hours = durationToHours(estimatedDuration);
       if (hours > 0) {
         estimatedDurationInfo = `${Number(hours.toFixed(2))} hours`;
       }
@@ -242,7 +242,7 @@ class IssueModal extends Component {
       >
         <>
           <Label htmlFor="assignee" label="Assignee">
-            <div name="assignee">{propsIssueEntry.assigned_to.name}</div>
+            <div name="assignee">{propsIssueEntry.assignee.name}</div>
           </Label>
           <Label htmlFor="issue" label="Issue">
             <div name="issue">
@@ -258,7 +258,7 @@ class IssueModal extends Component {
                   <Input
                     type="text"
                     name="estimated_duration"
-                    value={estimated_duration}
+                    value={estimatedDuration}
                     onBlur={() => this.runValidation(['estimated_duration'])}
                     disabled={!isEditable || !isUserAuthor}
                     onChange={this.onEstimatedDurationChange}
@@ -277,7 +277,7 @@ class IssueModal extends Component {
                   <DatePicker
                     key={instance}
                     name="due_date"
-                    value={due_date}
+                    value={dueDate}
                     isDisabled={!isEditable || !isUserAuthor}
                     onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
                   />

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import cleanStack from 'clean-stack';
@@ -23,11 +23,11 @@ toast.configure({
   draggable: true,
 });
 
-const Routes = ({ dispatch }) => {
+const App = ({ dispatch }) => {
   const [isReady, setIsReady] = useState(false);
 
   const actions = useOvermindActions();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleRejection = useCallback(debounce((event) => {
     event.preventDefault();
@@ -88,7 +88,7 @@ const Routes = ({ dispatch }) => {
           redmineEndpoint: response.payload.endpoint
         });
         if (loginResponse.success) {
-          history.replace('/app');
+          navigate('/issues', { replace: true });
         }
       }
 
@@ -103,15 +103,15 @@ const Routes = ({ dispatch }) => {
   }
 
   return (
-    <Switch>
-      <Route path="/" exact component={LoginView} />
-      <Route path="/app" exact component={AppView} />
-    </Switch>
+    <Routes>
+      <Route path="/" exact element={<LoginView />} />
+      <Route path="/issues/*" element={<AppView />} />
+    </Routes>
   );
 };
 
-Routes.propTypes = {
+App.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default Routes;
+export default App;

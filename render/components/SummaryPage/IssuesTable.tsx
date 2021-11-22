@@ -2,7 +2,7 @@ import React, {
   useState, useMemo, useCallback
 } from 'react';
 import { css } from '@emotion/react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
 import { get } from 'lodash';
@@ -45,7 +45,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
   const [sortBy, setSortBy] = useState<IssueHeader['value']>();
   const [sortDirection, setSortDirection] = useState<SortingDirection>('asc');
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const state = useOvermindState();
   const actions = useOvermindActions();
 
@@ -53,7 +53,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
 
   const filters = useMemo(
     () => new IssueFilter()
-      .assignee(state.users.currentUser?.id as string)
+      .assignee(state.users.currentUser?.id)
       .status({ open: true, closed: state.settings.showClosedIssues })
       .title(search)
       .sort(sortBy, sortDirection)
@@ -78,7 +78,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
   }, [sortBy]);
 
   const showIssueDetails = (id: number) => {
-    history.push(`/app/issue/${id}/`);
+    navigate(`${id}`);
   };
 
   if (!issues.length && isFetching) {

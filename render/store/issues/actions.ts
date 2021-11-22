@@ -1,5 +1,5 @@
 import type { Context, IAction } from 'overmind';
-import { Issue, PaginatedActionResponse } from '../../../types';
+import { Issue, PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
 
 type GetManyIssueArgs = {
@@ -17,7 +17,7 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
   const query = {
     limit: limit ? Math.abs(limit) : undefined,
     offset: offset ? Math.abs(offset) : 0,
-    include: 'attachments,children,relations,journals',
+    include: 'attachments,relations',
     ...filters
   };
 
@@ -62,6 +62,37 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
   };
 };
 
+type GetOneIssueArgs = {
+  id: string;
+}
+
+const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      route: `issues/${id}.json`,
+      method: 'GET',
+      query: {
+        include: 'attachments,children,relations,journals',
+      }
+    }
+  });
+
+  if (response.success) {
+    const issue = response.payload as Issue;
+    state.issues.byId[id] = issue;
+    return {
+      success: true,
+      data: issue
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 export {
+  getOne,
   getMany
 };

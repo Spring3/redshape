@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from '@hapi/joi';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 
 import { Input, Label } from '../components/Input';
@@ -64,11 +64,11 @@ const LoginView = () => {
   const actions = useOvermindActions();
   const state = useOvermindState();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (state.users.currentUser?.id) {
-      history.push('/app/summary');
+      navigate('/issues', { replace: true });
     }
   }, [state.users.currentUser]);
 
@@ -112,7 +112,7 @@ const LoginView = () => {
       if (error) {
         setLoginError(error);
       } else if (success) {
-        history.push('/app');
+        navigate('/issues', { replace: true });
       }
     });
   };
