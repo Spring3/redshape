@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, useHistory, useRouteMatch } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
-// eslint-disable-next-line
-import { ipcRenderer } from 'electron';
 
-import actions from '../actions';
+import reduxActions from '../actions';
 import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
 import { SummaryPage } from './AppViewPages/SummaryPage';
@@ -16,8 +14,9 @@ import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 
 import { hoursToDuration } from '../datetime';
-import { useOvermindState } from '../store';
+import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
+import { useFetchAll } from '../hooks/useFetchAll';
 
 const Grid = styled.div`
   height: 100%;
@@ -32,29 +31,25 @@ const Content = styled.div`
 `;
 
 type AppViewProps = {
-  getProjectData: () => void;
-  projects: any[];
   resetTimer: () => void;
   history: any;
   match: any;
 }
 
 const AppView = ({
-  getProjectData, projects, resetTimer, history, match
+  resetTimer
 }: AppViewProps) => {
   const [activities, setActivities] = useState([]);
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
 
+  const history = useHistory();
+  const match = useRouteMatch();
   const state = useOvermindState();
+  const actions = useOvermindActions();
 
-  useEffect(() => {
-    ipcRenderer.send('menu', { settings: {} });
-
-    return () => {
-      getProjectData();
-    };
-  }, []);
+  const requestProjects = useCallback(({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }), [actions.projects.getManyProjects]);
+  const { items: projects, isFetching, error } = useFetchAll({ request: requestProjects });
 
   const onTrackingStop = (trackedIssue: any, value: any, comments: any) => {
     const existingActivities = _get(projects[trackedIssue.project.id], 'activities', []);
@@ -88,6 +83,8 @@ const AppView = ({
     resetTimer();
   };
 
+  console.log('match', match);
+
   return (
     <Grid>
       <DragArea />
@@ -116,13 +113,8 @@ const AppView = ({
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  projects: state.projects.data,
-});
-
 const mapDispatchToProps = (dispatch: any) => ({
-  getProjectData: () => dispatch(actions.projects.getAll()),
-  resetTimer: () => dispatch(actions.tracking.trackingReset())
+  resetTimer: () => dispatch(reduxActions.tracking.trackingReset())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppView);
+export default connect(() => ({}), mapDispatchToProps)(AppView);

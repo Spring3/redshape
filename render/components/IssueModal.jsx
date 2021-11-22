@@ -345,49 +345,49 @@ IssueModal.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.instanceOf(Error)
   }).isRequired,
-  issueEntry: PropTypes.shape({
-    progress: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    subject: PropTypes.string.isRequired,
-    journals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    description: PropTypes.string,
-    project: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    priority: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    assigned_to: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    done_ratio: PropTypes.number.isRequired,
-    start_date: PropTypes.string.isRequired,
-    due_date: PropTypes.string.isRequired,
-    estimated_hours: PropTypes.number,
-    estimated_duration: PropTypes.string,
-    spent_hours: PropTypes.number,
-    tracker: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    status: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    author: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    custom_fields: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
-    })),
-    children: PropTypes.array
-  }),
+  // issueEntry: PropTypes.shape({
+  //   progress: PropTypes.number.isRequired,
+  //   id: PropTypes.number.isRequired,
+  //   subject: PropTypes.string.isRequired,
+  //   journals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  //   description: PropTypes.string,
+  //   project: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   priority: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   assigned_to: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   done_ratio: PropTypes.number.isRequired,
+  //   start_date: PropTypes.string.isRequired,
+  //   due_date: PropTypes.string.isRequired,
+  //   estimated_hours: PropTypes.number,
+  //   estimated_duration: PropTypes.string,
+  //   spent_hours: PropTypes.number,
+  //   tracker: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   status: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   author: PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired
+  //   }).isRequired,
+  //   custom_fields: PropTypes.arrayOf(PropTypes.shape({
+  //     id: PropTypes.number.isRequired,
+  //     name: PropTypes.string.isRequired,
+  //     value: PropTypes.string.isRequired
+  //   })),
+  //   children: PropTypes.array
+  // }),
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool,

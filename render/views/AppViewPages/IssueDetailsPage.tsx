@@ -142,7 +142,7 @@ const FlexWrapper = styled(Wrapper)`
 `;
 
 const IssueDetailsPage = ({
-  match, projects, history, postComments
+  match, history, postComments
 }: any) => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
@@ -153,6 +153,7 @@ const IssueDetailsPage = ({
   const actions = useOvermindActions();
   const theme = useTheme();
   const issueId = match.params.id;
+  const projects = state.projects.list;
 
   useEffect(() => {
     actions.issues.getOne({ id: issueId });
@@ -413,6 +414,8 @@ const IssueDetailsPage = ({
             isOpen={showIssueModal}
             isEditable={currentIssue.assignee.id === state.users.currentUser?.id}
             isUserAuthor={currentIssue.author.id === state.users.currentUser?.id}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             issueEntry={currentIssue}
             onClose={closeIssueModal}
           />
@@ -429,16 +432,11 @@ const IssueDetailsPage = ({
 IssueDetailsPage.propTypes = {
   postComments: PropTypes.func.isRequired,
   match: PropTypes.object,
-  projects: PropTypes.object,
   history: PropTypes.object
 };
-
-const mapStateToProps = (state: any) => ({
-  projects: state.projects.data,
-});
 
 const mapDispatchToProps = (dispatch: any) => ({
   postComments: (issueId: any, comments: any) => dispatch(reduxActions.issues.sendComments(issueId, comments)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(IssueDetailsPage);
+export default connect(() => ({}), mapDispatchToProps)(IssueDetailsPage);

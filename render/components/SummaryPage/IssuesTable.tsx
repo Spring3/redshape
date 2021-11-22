@@ -53,7 +53,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
 
   const filters = useMemo(
     () => new IssueFilter()
-      .assignee(state.users.currentUser?.id as string)
+      .assignee(state.users.currentUser?.id)
       .status({ open: true, closed: state.settings.showClosedIssues })
       .title(search)
       .sort(sortBy, sortDirection)

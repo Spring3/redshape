@@ -67,6 +67,19 @@ type CustomField = {
   value: string;
 }
 
+type Project = {
+  id: number;
+  name: string;
+  identified: string;
+  description: string;
+  status: number;
+  isPublic: boolean;
+  inheritMembers: boolean;
+  timeEntryActivities: Pointer[];
+  createdOn: string;
+  updatedOn: string;
+}
+
 type Issue = {
   id: number;
   project: Pointer;
@@ -103,6 +116,7 @@ export type {
   CreateOvermindConfigParams,
   Response,
   PaginatedActionResponse,
+  Project,
   User,
   Issue,
   Pointer,
