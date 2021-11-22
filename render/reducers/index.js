@@ -3,7 +3,6 @@ import settingsReducer from './settings.reducer';
 import issueReducer from './issue.reducer';
 import selectedIssueReducer from './issue.selected.reducer';
 import trackingReducer from './tracking.reducer';
-import projectReducer from './project.reducer';
 import timeEntryReducer from './timeEntry.reducer';
 
 const appReducer = combineReducers({
@@ -12,7 +11,6 @@ const appReducer = combineReducers({
     selected: selectedIssueReducer
   }),
   issue: issueReducer,
-  projects: projectReducer,
   tracking: trackingReducer,
   timeEntry: timeEntryReducer
 });
