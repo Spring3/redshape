@@ -1,15 +1,12 @@
 import React, {
   ChangeEventHandler,
   FocusEventHandler,
-  FocusEvent,
   KeyboardEventHandler,
   MouseEventHandler,
   ReactNode,
-  useCallback
 } from 'react';
 import { css as emotionCss } from '@emotion/react';
 import styled, { css, useTheme } from 'styled-components';
-import CheckIcon from 'mdi-react/CheckIcon';
 import { theme as Theme } from '../theme';
 
 const StyledInput = styled.input`
@@ -54,55 +51,6 @@ const StyledInput = styled.input`
         border-color: ${props.theme.bgDarker};
       }
     `}
-`;
-
-const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
-  border: 0;
-  clip: rect(0 0 0 0);
-  clippath: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-`;
-
-const StyledCheckbox = styled.div`
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  transition: background ${props => props.theme.transitionTime};
-  border: 2px solid ${props => props.theme.main};
-  border-radius: 3px;
-  cursor: pointer;
-
-  svg {
-    position: relative;
-    vertical-align: middle;
-    bottom: 3px;
-  }
-
-  ${HiddenCheckbox}:not(:disabled):hover + &,
-  ${HiddenCheckbox}:focus + & {
-    border-color: ${props => props.theme.main};
-  }
-
-  ${HiddenCheckbox}:disabled + & {
-    background: ${props => props.theme.bgDark};
-    border-color: lightgrey;
-  }
-`;
-
-const CheckboxContainer = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-
-  & + span {
-    margin-left: 10px;
-    vertical-align: middle;
-  }
 `;
 
 const FormGroup = styled.div`
@@ -163,9 +111,7 @@ const Label = ({
 
 type InputProps = {
   maxWidth?: string;
-  type?: 'email' | 'checkbox' | 'text' | 'number' | 'password';
-  checked?: boolean;
-  className?: string;
+  type?: 'email' | 'text' | 'number' | 'password';
   placeholder?: string;
   onChange?: ChangeEventHandler<HTMLElement>;
   onBlur?: FocusEventHandler<HTMLElement>;
@@ -181,8 +127,6 @@ type InputProps = {
 const Input = ({
   maxWidth,
   type = 'text',
-  checked,
-  className,
   placeholder,
   onChange,
   onBlur,
@@ -194,7 +138,6 @@ const Input = ({
   name,
   disabled
 }: InputProps) => {
-  const theme = useTheme() as typeof Theme;
   const ensureNumber = (typedValue: string | number | undefined) => {
     if (typeof typedValue === 'string') {
       if (/,|./.test(typedValue)) {
@@ -208,46 +151,6 @@ const Input = ({
     }
     return typedValue;
   };
-
-  const moveFocusToCustomCheckbox = useCallback((e: FocusEvent<HTMLElement>) => {
-    (e.target.nextSibling as HTMLElement)?.focus();
-  }, []);
-
-  if (type === 'checkbox') {
-    return (
-      <CheckboxContainer className={className}>
-        <HiddenCheckbox
-          onChange={onChange}
-          onBlur={onBlur}
-          onFocusCapture={moveFocusToCustomCheckbox}
-          checked={checked}
-          disabled={disabled}
-          id={id}
-          name={name}
-        />
-        <StyledCheckbox
-          tabIndex={0}
-          css={
-            checked
-              ? emotionCss`
-              background: ${theme.main};
-              border-color: ${theme.main};
-            `
-              : emotionCss`
-              background: ${theme.bgDark};
-              border-color: grey;
-            `
-          }
-        >
-          <CheckIcon
-            css={emotionCss`visibility: ${checked ? 'visible' : 'hidden'}`}
-            size="18"
-            color="white"
-          />
-        </StyledCheckbox>
-      </CheckboxContainer>
-    );
-  }
 
   return (
     <StyledInput

@@ -7,6 +7,7 @@ import { IssuesTable } from '../../components/SummaryPage/IssuesTable';
 import { Flex } from '../../components/Flex';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { useNavbar } from '../../contexts/NavbarContext';
+import { Checkbox } from '../../components/Checkbox';
 
 const SummaryPage = () => {
   const [search, setSearch] = useState<string>('');
@@ -54,14 +55,11 @@ const SummaryPage = () => {
           <Input type="text" name="search" placeholder="Search..." onChange={onSearchChange} />
         </div>
         <div css={css`margin-left: 1rem;`}>
-          <label>
-            <Input
-              type="checkbox"
-              checked={state.settings.showClosedIssues}
-              onChange={toggleClosedIssues}
-            />
-            <span>Include closed</span>
-          </label>
+          <Checkbox
+            checked={state.settings.showClosedIssues}
+            onChange={toggleClosedIssues}
+            label="Include closed"
+          />
         </div>
       </Flex>
       <IssuesTable search={search} />

@@ -11,6 +11,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import Copyrights from '../components/Copyrights';
 import DragArea from '../components/DragArea';
 import { useOvermindActions, useOvermindState } from '../store';
+import { Checkbox } from '../components/Checkbox';
 
 const Container = styled.div`
   display: grid;
@@ -158,15 +159,12 @@ const LoginView = () => {
             <div css={rowStyle}>
               <Label label="Login mode" htmlFor="loginMode">
                 <div>
-                  <label>
-                    <Input
-                      type="checkbox"
-                      name="loginMode"
-                      checked={useApiKey}
-                      onChange={onToggleLoginMode}
-                    />
-                    <span>Use API Key</span>
-                  </label>
+                  <Checkbox
+                    name="loginMode"
+                    checked={useApiKey}
+                    onChange={onToggleLoginMode}
+                    label="Use API Key"
+                  />
                 </div>
               </Label>
             </div>
