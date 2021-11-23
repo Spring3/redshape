@@ -33,7 +33,6 @@ describe('Time actions', () => {
     expect(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_UPDATE).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_DELETE).toBeTruthy();
-    expect(timeEntryActions.TIME_ENTRY_RESET).toBeTruthy();
 
     expect(timeEntryActions.default.validateBeforePublish).toBeTruthy();
     expect(timeEntryActions.default.publish).toBeTruthy();
@@ -534,14 +533,6 @@ describe('Time actions', () => {
           new Error(`Error ${response.status} (${response.message})`)
         )
       );
-    });
-  });
-
-  describe('reset action', () => {
-    it('should reset state', () => {
-      expect(timeEntryActions.default.reset()).toEqual({
-        type: timeEntryActions.TIME_ENTRY_RESET
-      });
     });
   });
 });

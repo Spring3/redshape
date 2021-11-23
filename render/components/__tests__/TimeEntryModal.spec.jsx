@@ -631,6 +631,5 @@ describe('TimeEntryModal Component', () => {
     const actionSpy = jest.spyOn(actions.default, 'reset');
     wrapper.unmount();
     expect(actionSpy).toHaveBeenCalled();
-    expect(store.getActions().pop().type).toBe(actions.TIME_ENTRY_RESET);
   });
 });

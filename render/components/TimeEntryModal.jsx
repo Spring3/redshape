@@ -108,7 +108,7 @@ class TimeEntryModal extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    const { isOpen, resetValidation } = this.props;
+    const { isOpen } = this.props;
     if (oldProps.isOpen !== isOpen && isOpen) {
       const { timeEntry, initialVolatileContent } = this.props;
 
@@ -119,14 +119,7 @@ class TimeEntryModal extends Component {
           wasModified: !!initialVolatileContent
         });
       }
-    } else if (oldProps.isOpen !== isOpen && !isOpen) {
-      resetValidation();
     }
-  }
-
-  componentWillUnmount() {
-    const { resetValidation } = this.props;
-    resetValidation();
   }
 
   runValidation = (checkFields) => {
@@ -433,7 +426,6 @@ TimeEntryModal.propTypes = {
   isEditable: PropTypes.bool,
   publishTimeEntry: PropTypes.func.isRequired,
   updateTimeEntry: PropTypes.func.isRequired,
-  resetValidation: PropTypes.func.isRequired,
   initialVolatileContent: PropTypes.bool,
   validateBeforePublish: PropTypes.func.isRequired,
   validateBeforeUpdate: PropTypes.func.isRequired,
@@ -452,8 +444,7 @@ const mapDispatchToProps = (dispatch) => ({
   ),
   validateBeforeUpdate: (changes, checkFields) => dispatch(
     actions.timeEntry.validateBeforeUpdate(changes, checkFields)
-  ),
-  resetValidation: () => dispatch(actions.timeEntry.reset())
+  )
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(TimeEntryModal));

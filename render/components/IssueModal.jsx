@@ -101,7 +101,7 @@ class IssueModal extends Component {
   }
 
   componentDidUpdate(oldProps) {
-    const { isOpen, resetValidation } = this.props;
+    const { isOpen } = this.props;
     if (oldProps.isOpen !== isOpen && isOpen) {
       const { issueEntry } = this.props;
 
@@ -123,14 +123,7 @@ class IssueModal extends Component {
           wasModified: false
         });
       }
-    } else if (oldProps.isOpen !== isOpen && !isOpen) {
-      resetValidation();
     }
-  }
-
-  componentWillUnmount() {
-    const { resetValidation } = this.props;
-    resetValidation();
   }
 
   runValidation = (checkFields) => {
@@ -394,7 +387,6 @@ IssueModal.propTypes = {
   issueGet: PropTypes.func.isRequired,
   updateIssueEntry: PropTypes.func.isRequired,
   validateBeforeUpdate: PropTypes.func.isRequired,
-  resetValidation: PropTypes.func.isRequired,
   progressWithStep1: PropTypes.bool.isRequired,
   theme: PropTypes.object.isRequired
 };
@@ -408,7 +400,6 @@ const mapDispatchToProps = (dispatch) => ({
   issueGet: (id) => dispatch(actions.issues.get(id)),
   updateIssueEntry: (issueEntry, changes) => dispatch(actions.issue.update(issueEntry, changes)),
   validateBeforeUpdate: (changes, checkFields) => dispatch(actions.issue.validateBeforeUpdate(changes, checkFields)),
-  resetValidation: () => dispatch(actions.issue.reset())
 });
 
 export default withTheme(connect(mapStateToProps, mapDispatchToProps)(IssueModal));

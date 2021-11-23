@@ -24,9 +24,6 @@ export default (state = initialState, action) => {
       }
       return state;
     }
-    case ISSUE_RESET: {
-      return initialState;
-    }
     case ISSUE_UPDATE_VALIDATION_FAILED: {
       return { ...state, error: action.data };
     }

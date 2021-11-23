@@ -4,7 +4,6 @@ import {
   TIME_ENTRY_DELETE,
   TIME_ENTRY_PUBLISH_VALIDATION_FAILED,
   TIME_ENTRY_UPDATE_VALIDATION_FAILED,
-  TIME_ENTRY_RESET,
   TIME_ENTRY_PUBLISH_VALIDATION_PASSED,
   TIME_ENTRY_UPDATE_VALIDATION_PASSED,
 } from '../actions/timeEntry.actions';
@@ -33,9 +32,6 @@ export default (state = initialState, action) => {
     case TIME_ENTRY_PUBLISH_VALIDATION_FAILED:
     case TIME_ENTRY_UPDATE_VALIDATION_FAILED: {
       return { ...state, error: action.data };
-    }
-    case TIME_ENTRY_RESET: {
-      return initialState;
     }
     // Update state to render and clean the message errors:
     case TIME_ENTRY_PUBLISH_VALIDATION_PASSED:

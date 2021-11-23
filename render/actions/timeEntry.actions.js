@@ -12,7 +12,6 @@ export const TIME_ENTRY_UPDATE_VALIDATION_FAILED = 'TIME_ENTRY_UPDATE_VALIDATION
 export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION_PASSED';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
-export const TIME_ENTRY_RESET = 'TIME_ENTRY_RESET';
 
 const validateDuration = (value, helpers) => {
   const hours = durationToHours(value);
@@ -180,13 +179,10 @@ const remove = (timeEntryId, issueId) => (dispatch) => {
     });
 };
 
-const reset = () => ({ type: TIME_ENTRY_RESET });
-
 export default {
   publish,
   update,
   remove,
   validateBeforePublish,
   validateBeforeUpdate,
-  reset
 };

@@ -163,16 +163,4 @@ describe('Time Entry reducer', () => {
       error
     });
   });
-
-  it('should handle TIME_ENTRY_RESET action', () => {
-    expect(
-      reducer(
-        {
-          ..._cloneDeep(initialState),
-          isFetching: true
-        },
-        { type: actions.TIME_ENTRY_RESET }
-      )
-    ).toEqual(initialState);
-  });
 });
