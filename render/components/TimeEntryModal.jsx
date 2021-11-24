@@ -8,7 +8,8 @@ import styled, { withTheme } from 'styled-components';
 import { css } from '@emotion/react';
 
 import ClockIcon from 'mdi-react/ClockIcon';
-import { Input, Label } from './Input';
+import { Input } from './Input';
+import { FormField } from './FormField';
 import Button from './Button';
 import MarkdownEditor from './MarkdownEditor';
 import ErrorMessage from './ErrorMessage';
@@ -276,17 +277,17 @@ class TimeEntryModal extends Component {
         center={true}
       >
         <>
-          <Label htmlFor="author" label="Author">
+          <FormField htmlFor="author" label="Author">
             <div name="author">{timeEntry.user.name}</div>
-          </Label>
-          <Label htmlFor="issue" label="Issue">
+          </FormField>
+          <FormField htmlFor="issue" label="Issue">
             <div name="issue" data-testId="time-entry-modal-title">
               #
               {timeEntry.issue.id}
               {timeEntry.issue.name}
             </div>
-          </Label>
-          <Label htmlFor="activity" label="Activity">
+          </FormField>
+          <FormField htmlFor="activity" label="Activity">
             <Select
               name="activity"
               options={activities}
@@ -305,13 +306,13 @@ class TimeEntryModal extends Component {
                 },
               })}
             />
-          </Label>
+          </FormField>
           <ErrorMessage show={!!validationErrors.activity}>
             {this.getErrorMessage(validationErrors.activity)}
           </ErrorMessage>
           <FlexRow>
             <DurationField>
-              <Label htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
+              <FormField htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
                 <FlexRow>
                   <Input
                     type="text"
@@ -323,13 +324,13 @@ class TimeEntryModal extends Component {
                   />
                   <DurationInfo>{durationInfo}</DurationInfo>
                 </FlexRow>
-              </Label>
+              </FormField>
               <ErrorMessage show={!!validationErrors.duration || validationErrors.hours}>
                 {this.getErrorMessage(validationErrors.duration || validationErrors.hours)}
               </ErrorMessage>
             </DurationField>
             <div>
-              <Label htmlFor="spent_on" label="Date">
+              <FormField htmlFor="spent_on" label="Date">
                 <DatePicker
                   name="date"
                   value={new Date(spent_on)}
@@ -337,13 +338,13 @@ class TimeEntryModal extends Component {
                   onBlur={() => this.runValidation('spent_on')}
                   onChange={this.onDateChange}
                 />
-              </Label>
+              </FormField>
               <ErrorMessage show={!!validationErrors.spentOn}>
                 {this.getErrorMessage(validationErrors.spentOn)}
               </ErrorMessage>
             </div>
           </FlexRow>
-          <Label label="Comments" htmlFor="comments">
+          <FormField label="Comments" htmlFor="comments">
             <MarkdownEditor
               isDisabled={!isUserAuthor}
               onChange={this.debouncedCommentsChange}
@@ -351,7 +352,7 @@ class TimeEntryModal extends Component {
               initialValue={comments}
               maxLength={255}
             />
-          </Label>
+          </FormField>
           <ErrorMessage show={!!validationErrors.comments}>
             {this.getErrorMessage(validationErrors.comments)}
           </ErrorMessage>

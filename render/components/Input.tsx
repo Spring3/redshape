@@ -3,13 +3,12 @@ import React, {
   FocusEventHandler,
   KeyboardEventHandler,
   MouseEventHandler,
-  ReactNode,
 } from 'react';
-import { css as emotionCss } from '@emotion/react';
-import styled, { css, useTheme } from 'styled-components';
+import { css } from '@emotion/react';
+import { useTheme } from 'styled-components';
 import { theme as Theme } from '../theme';
 
-const StyledInput = styled.input`
+const inputStyles = (theme: typeof Theme) => css`
   display: block;
   width: 100%;
   border-radius: 3px;
@@ -20,94 +19,35 @@ const StyledInput = styled.input`
   outline: none;
   font-weight: bold;
 
-  ${({ theme }) => css`
-    transition: background ${theme.transitionTime};
-    border: 1px solid ${theme.minorText};
-    color: ${theme.main};
-    background: white;
+  transition: background ${theme.transitionTime};
+  border: 1px solid ${theme.minorText};
+  color: ${theme.main};
+  background: white;
+
+  &:hover {
+    border: 1px solid ${theme.main};
+  }
+
+  &:focus {
+    border-color: ${theme.main};
+    box-shadow: 0px 0px 0px 1px ${theme.main};
+  }
+
+  &::placeholder {
+    color: ${theme.minorText};
+    font-weight: 500;
+  }
+
+  &:disabled {
+    background: ${theme.bgDisabled};
+    border-color: ${theme.bgDarker};
+    color: ${theme.minorText};
 
     &:hover {
-      border: 1px solid ${theme.main};
+      border-color: ${theme.bgDarker};
     }
-
-    &:focus {
-      border-color: ${theme.main};
-      box-shadow: 0px 0px 0px 1px ${theme.main};
-    }
-
-    &::placeholder {
-      color: ${theme.minorText};
-      font-weight: 500;
-    }
-  `}}
-
-  ${props => props.disabled
-    && css`
-      background: ${props.theme.bgDisabled};
-      border-color: ${props.theme.bgDarker};
-      color: ${props.theme.minorText};
-
-      &:hover {
-        border-color: ${props.theme.bgDarker};
-      }
-    `}
-`;
-
-const FormGroup = styled.div`
-  h4 {
-    margin-bottom: 10px;
-    color: ${props => props.theme.minorText};
   }
 `;
-
-type LabelProps = {
-  label: string;
-  htmlFor: string;
-  children: ReactNode;
-  className?: string;
-  inline?: boolean;
-  rightToLeft?: boolean;
-  rightOfLabel?: boolean;
-};
-
-const Label = ({
-  label,
-  htmlFor,
-  children,
-  className,
-  inline = false,
-  rightToLeft = false,
-  rightOfLabel
-}: LabelProps) => {
-  const theme = useTheme() as typeof Theme;
-  return (
-    <FormGroup className={`form-group ${className}`}>
-      {rightToLeft === true && children}
-      {inline === false ? (
-        <label
-          css={emotionCss`
-          color: ${theme.minorText} !important;
-          font-weight: bold !important;
-          margin-bottom: 0.25rem !important;
-        `}
-          htmlFor={htmlFor}
-        >
-          {label}
-          {rightOfLabel}
-        </label>
-      ) : (
-        <label
-          css={emotionCss`color: ${theme.minorText}; margin-bottom: 0.25rem !important;`}
-          htmlFor={htmlFor}
-        >
-          {label}
-          {rightOfLabel}
-        </label>
-      )}
-      {rightToLeft === false && children}
-    </FormGroup>
-  );
-};
 
 type InputProps = {
   maxWidth?: string;
@@ -138,6 +78,8 @@ const Input = ({
   name,
   disabled
 }: InputProps) => {
+  const theme = useTheme() as typeof Theme;
+
   const ensureNumber = (typedValue: string | number | undefined) => {
     if (typeof typedValue === 'string') {
       if (/,|./.test(typedValue)) {
@@ -153,11 +95,14 @@ const Input = ({
   };
 
   return (
-    <StyledInput
+    <input
       type={type}
-      css={emotionCss`
-        max-width: ${maxWidth};
-      `}
+      css={[
+        inputStyles(theme),
+        css`
+          max-width: ${maxWidth};
+        `
+      ]}
       placeholder={placeholder}
       onChange={onChange}
       onBlur={onBlur}
@@ -172,4 +117,4 @@ const Input = ({
   );
 };
 
-export { Input, Label };
+export { Input };

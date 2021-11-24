@@ -5,13 +5,14 @@ import Joi from '@hapi/joi';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 
-import { Input, Label } from '../components/Input';
+import { Input } from '../components/Input';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Copyrights from '../components/Copyrights';
 import DragArea from '../components/DragArea';
 import { useOvermindActions, useOvermindState } from '../store';
 import { Checkbox } from '../components/Checkbox';
+import { FormField } from '../components/FormField';
 
 const Container = styled.div`
   display: grid;
@@ -44,11 +45,7 @@ const CopyrightsContainer = styled.div`
 
 const SubmitButton = styled(Button)`
   padding: 10px 5px;
-  margin: 25px auto 0px auto;
-`;
-
-const rowStyle = css`
-  margin-bottom: 0.5rem;
+  margin: 0.75rem auto 0px auto;
 `;
 
 type ValidateArgs = {
@@ -141,36 +138,33 @@ const LoginView = () => {
           <LoginForm onSubmit={handleSubmit}>
             <Headline>Redshape</Headline>
 
-            <div css={rowStyle}>
-              <Label label="Redmine Endpoint" htmlFor="redmineEndpoint">
-                <Input
-                  name="redmineEndpoint"
-                  placeholder="https://redmine.example.com"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.redmineEndpoint}
-                />
-              </Label>
-              <ErrorMessage show={Boolean(errors.redmineEndpoint && touched.redmineEndpoint)}>
-                {errors.redmineEndpoint}
-              </ErrorMessage>
-            </div>
+            <FormField label="Redmine Endpoint" htmlFor="redmineEndpoint">
+              <Input
+                name="redmineEndpoint"
+                placeholder="https://redmine.example.com"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.redmineEndpoint}
+              />
+            </FormField>
+            <ErrorMessage show={Boolean(errors.redmineEndpoint && touched.redmineEndpoint)}>
+              {errors.redmineEndpoint}
+            </ErrorMessage>
 
-            <div css={rowStyle}>
-              <Label label="Login mode" htmlFor="loginMode">
-                <div>
-                  <Checkbox
-                    name="loginMode"
-                    checked={useApiKey}
-                    onChange={onToggleLoginMode}
-                    label="Use API Key"
-                  />
-                </div>
-              </Label>
-            </div>
+            <FormField label="Login mode" htmlFor="loginMode">
+              <div>
+                <Checkbox
+                  name="loginMode"
+                  checked={useApiKey}
+                  onChange={onToggleLoginMode}
+                  label="Use API Key"
+                />
+              </div>
+            </FormField>
+
             {useApiKey ? (
-              <div css={rowStyle}>
-                <Label label="API Key" htmlFor="apiKey">
+              <>
+                <FormField label="API Key" htmlFor="apiKey">
                   <Input
                     type="text"
                     name="apiKey"
@@ -178,41 +172,40 @@ const LoginView = () => {
                     onBlur={handleBlur}
                     value={values.apiKey}
                   />
-                </Label>
+                </FormField>
                 <ErrorMessage show={Boolean(errors.apiKey && touched.apiKey)}>
                   {errors.apiKey}
                 </ErrorMessage>
-              </div>
+              </>
             ) : (
               <>
-                <div css={rowStyle}>
-                  <Label label="Login" htmlFor="username">
-                    <Input
-                      type="text"
-                      name="username"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.username}
-                    />
-                  </Label>
-                  <ErrorMessage show={Boolean(errors.username && touched.username)}>
-                    {errors.username}
-                  </ErrorMessage>
-                </div>
-                <div>
-                  <Label label="Password" htmlFor="password">
-                    <Input
-                      type="password"
-                      name="password"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                    />
-                  </Label>
-                  <ErrorMessage show={Boolean(errors.password && touched.password)}>
-                    {errors.password}
-                  </ErrorMessage>
-                </div>
+
+                <FormField label="Login" htmlFor="username">
+                  <Input
+                    type="text"
+                    name="username"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.username}
+                  />
+                </FormField>
+                <ErrorMessage show={Boolean(errors.username && touched.username)}>
+                  {errors.username}
+                </ErrorMessage>
+
+                <FormField label="Password" htmlFor="password">
+                  <Input
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                  />
+                </FormField>
+                <ErrorMessage show={Boolean(errors.password && touched.password)}>
+                  {errors.password}
+                </ErrorMessage>
+
               </>
             )}
 

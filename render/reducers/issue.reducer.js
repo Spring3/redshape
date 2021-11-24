@@ -1,6 +1,5 @@
 import {
   ISSUE_UPDATE,
-  ISSUE_RESET,
   ISSUE_UPDATE_VALIDATION_FAILED,
   ISSUE_UPDATE_VALIDATION_PASSED
 } from '../actions/issue.actions';

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const StyledError = styled.p`
-  margin: 15px auto 5px auto;
+  margin: 0px;
   font-size: 14px;
   background: #FF7079;
   color: white;
