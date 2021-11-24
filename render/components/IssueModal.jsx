@@ -6,9 +6,10 @@ import { css } from '@emotion/react';
 
 import ClockIcon from 'mdi-react/ClockIcon';
 import RawSlider from 'rc-slider';
-import { Input, Label } from './Input';
+import { Input } from './Input';
+import { FormField } from './FormField';
 import Button from './Button';
-import ErrorMessage from './ErrorMessage';
+import { ErrorMessage } from './ErrorMessage';
 import Modal from './Modal';
 import { ProcessIndicator } from './ProcessIndicator';
 import Tooltip from './Tooltip';
@@ -234,19 +235,19 @@ class IssueModal extends Component {
         center={true}
       >
         <>
-          <Label htmlFor="assignee" label="Assignee">
+          <FormField htmlFor="assignee" label="Assignee">
             <div name="assignee">{propsIssueEntry.assignee.name}</div>
-          </Label>
-          <Label htmlFor="issue" label="Issue">
+          </FormField>
+          <FormField htmlFor="issue" label="Issue">
             <div name="issue">
               #
               {propsIssueEntry.id}
               {propsIssueEntry.subject}
             </div>
-          </Label>
+          </FormField>
           <FlexRow>
             <DurationField>
-              <Label htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
+              <FormField htmlFor="estimated_duration" label="Estimation" rightOfLabel={DurationIcon}>
                 <FlexRow>
                   <Input
                     type="text"
@@ -258,7 +259,7 @@ class IssueModal extends Component {
                   />
                   <FieldAdjacentInfo>{estimatedDurationInfo}</FieldAdjacentInfo>
                 </FlexRow>
-              </Label>
+              </FormField>
               <ErrorMessage show={!!validationErrors.estimated_duration}>
                 {this.getErrorMessage(validationErrors.estimated_duration)}
               </ErrorMessage>
@@ -266,7 +267,7 @@ class IssueModal extends Component {
             {
               !children && (
               <div>
-                <Label htmlFor="due_date" label="Due date">
+                <FormField htmlFor="due_date" label="Due date">
                   <DatePicker
                     key={instance}
                     name="due_date"
@@ -274,7 +275,7 @@ class IssueModal extends Component {
                     isDisabled={!isEditable || !isUserAuthor}
                     onChange={(value) => this.onDueDateChange(value) && this.runValidation('due_date')}
                   />
-                </Label>
+                </FormField>
                 <ErrorMessage show={!!validationErrors.due_date}>
                   {this.getErrorMessage(validationErrors.due_date)}
                 </ErrorMessage>
@@ -286,7 +287,7 @@ class IssueModal extends Component {
             !children && (
               <FlexRow>
                 <div>
-                  <Label htmlFor="progress" label="Progress">
+                  <FormField htmlFor="progress" label="Progress">
                     <FlexRow>
                       <Slider
                         style={{ width: 180 }}
@@ -307,7 +308,7 @@ class IssueModal extends Component {
                       />
                       <FieldAdjacentInfo>{progressInfo}</FieldAdjacentInfo>
                     </FlexRow>
-                  </Label>
+                  </FormField>
                   <ErrorMessage show={!!validationErrors.progress}>
                     {this.getErrorMessage(validationErrors.progress)}
                   </ErrorMessage>

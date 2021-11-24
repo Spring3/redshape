@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 
 import { Input } from '../components/Input';
 import Button from '../components/Button';
-import ErrorMessage from '../components/ErrorMessage';
+import { ErrorMessage } from '../components/ErrorMessage';
 import Copyrights from '../components/Copyrights';
 import DragArea from '../components/DragArea';
 import { useOvermindActions, useOvermindState } from '../store';

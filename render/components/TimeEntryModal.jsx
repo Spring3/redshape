@@ -12,7 +12,7 @@ import { Input } from './Input';
 import { FormField } from './FormField';
 import Button from './Button';
 import MarkdownEditor from './MarkdownEditor';
-import ErrorMessage from './ErrorMessage';
+import { ErrorMessage } from './ErrorMessage';
 import DatePicker from './DatePicker';
 import Modal from './Modal';
 import { ProcessIndicator } from './ProcessIndicator';
