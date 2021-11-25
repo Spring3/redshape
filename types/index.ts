@@ -44,10 +44,23 @@ enum SessionAction {
 }
 
 // eslint-disable-next-line no-shadow
-enum TimeTrackingStatus {
-  IDLE = 'IDLE',
-  TRACKING = 'TRACKING',
-  PAUSED = 'PAUSED'
+enum TimeTrackingAction {
+  START = 'START',
+  PAUSE = 'PAUSE',
+  CONTINUE = 'CONTINUE',
+  STOP = 'STOP'
+}
+
+type TimeEntryNode = {
+  isoDate: string;
+  note: string;
+}
+
+type TimeTrackingRecord = {
+  action: TimeTrackingAction;
+  ticketId: number;
+  isoDate: string;
+  notes: TimeEntryNode[];
 }
 
 type User = {
@@ -115,18 +128,19 @@ type Issue = {
 
 export {
   SessionAction,
-  TimeTrackingStatus
+  TimeTrackingAction
 };
 
 export type {
   Collection,
-  IssueHeader,
   CreateOvermindConfigParams,
-  Response,
-  PaginatedActionResponse,
-  Project,
-  User,
   Issue,
+  IssueHeader,
+  PaginatedActionResponse,
   Pointer,
-  SortingDirection
+  Project,
+  Response,
+  SortingDirection,
+  TimeTrackingRecord,
+  User,
 };

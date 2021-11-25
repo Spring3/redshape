@@ -1,20 +1,17 @@
-import { TimeTrackingStatus } from '../../../types';
+import type { TimeTrackingRecord } from '../../../types';
 
 type TimeTrackingState = {
-  status: TimeTrackingStatus
-  ticketId?: number;
-  timeMs: number;
+  records: TimeTrackingRecord[];
 };
 
 const state: TimeTrackingState = {
-  status: TimeTrackingStatus.IDLE,
-  timeMs: 0
+  records: []
 };
 
 export {
-  state
+  state,
 };
 
 export type {
-  TimeTrackingState
+  TimeTrackingState,
 };

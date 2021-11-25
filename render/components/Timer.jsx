@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // eslint-disable-next-line
 import { remote, ipcRenderer } from 'electron';
 import moment from 'moment';
@@ -110,6 +110,8 @@ const MaskedLink = styled(Link)`
 `;
 
 const Timer = () => {
+  const interval = useRef();
+  
   constructor(props) {
     super(props);
 
@@ -118,22 +120,9 @@ const Timer = () => {
       timestamp: null, // used only when store/restore to/from timestamp (window hidden)
       comments: props.trackedComments || '',
     };
-
-    this.interval = null;
-    this.idleCheckInterval = null;
-    this.warningTimeout = null;
-  }
-
-  // eslint-disable-next-line
-  UNSAFE_componentWillMount() {
-    window.addEventListener('beforeunload', this.cleanup);
   }
 
   componentDidMount() {
-    ipcRenderer.on('timer', this.timerEventHandler);
-    ipcRenderer.on('tray-action', this.trayActionHandler);
-    ipcRenderer.on('window', this.windowEventHandler);
-
     const { isEnabled, isPaused, trackedIssue } = this.props;
 
     if (isEnabled) {
@@ -158,10 +147,6 @@ const Timer = () => {
     if (isEnabled && !isPaused) {
       this.onContinue();
     }
-  }
-
-  componentWillUnmount() {
-    this.cleanup();
   }
 
   timerEventHandler = (ev, { action, mainWindowHidden }) => {
@@ -305,23 +290,6 @@ const Timer = () => {
       clearTimeout((this.warningTimeout));
       this.warningTimeout = undefined;
     }
-  }
-
-  cleanup = () => {
-    const { isEnabled, isPaused, saveTimer } = this.props;
-    const { value, comments } = this.state;
-    if (isEnabled) {
-      if (!isPaused) {
-        this.onPause();
-      } else {
-        saveTimer(value, comments);
-      }
-    }
-    this.stopInterval();
-    ipcRenderer.removeListener('timer', this.timerEventHandler);
-    ipcRenderer.removeListener('tray-action', this.trayActionHandler);
-    ipcRenderer.removeListener('window', this.windowEventHandler);
-    window.removeEventListener('beforeunload', this.cleanup);
   }
 
   onPause = () => {

@@ -1,4 +1,4 @@
-import { state } from './state';
+import { state, TimeTrackingStatus } from './state';
 import type { TimeTrackingState } from './state';
 import * as actions from './actions';
 
@@ -8,5 +8,6 @@ export {
 };
 
 export type {
-  TimeTrackingState
+  TimeTrackingState,
+  TimeTrackingStatus
 };
