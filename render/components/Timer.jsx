@@ -8,11 +8,6 @@ import styled from 'styled-components';
 import PlayIcon from 'mdi-react/PlayIcon';
 import PauseIcon from 'mdi-react/PauseIcon';
 import StopIcon from 'mdi-react/StopIcon';
-import Rewind5Icon from 'mdi-react/Rewind5Icon';
-import FastForward5Icon from 'mdi-react/FastForward5Icon';
-import { Input } from './Input';
-import Rewind1Icon from './icons/Rewind1Icon';
-import FastForward1Icon from './icons/FastForward1Icon';
 
 import actions from '../actions';
 
@@ -394,9 +389,9 @@ class Timer extends Component {
   }
 
   render() {
-    const { value, comments } = this.state;
+    const { value } = this.state;
     const {
-      isEnabled, trackedIssue, isPaused, advancedTimerControls, saveTimer
+      isEnabled, trackedIssue, isPaused
     } = this.props;
     const timeString = moment.utc(value).format('HH:mm:ss');
     return (
@@ -443,44 +438,7 @@ class Timer extends Component {
             <div className="time">
               <span>{timeString}</span>
             </div>
-            { advancedTimerControls && (
-              <div className="buttons buttons-advanced">
-                <StyledButton
-                  onClick={() => this.onBackward(5)}
-                >
-                  <Rewind5Icon size={25} />
-                </StyledButton>
-                <StyledButton
-                  onClick={() => this.onBackward(1)}
-                >
-                  <Rewind1Icon size={25} />
-                </StyledButton>
-                <StyledButton
-                  onClick={() => this.onForward(1)}
-                >
-                  <FastForward1Icon size={25} />
-                </StyledButton>
-                <StyledButton
-                  onClick={() => this.onForward(5)}
-                >
-                  <FastForward5Icon size={25} />
-                </StyledButton>
-              </div>
-            )}
           </div>
-          { advancedTimerControls && isEnabled && (
-            <Input
-              type="text"
-              name="comment"
-              value={comments}
-              placeholder="Leave your WIP comment here"
-              onChange={this.onCommentsChange}
-              onBlur={() => {
-                saveTimer(value, comments);
-              }}
-              maxLength={255}
-            />
-          )}
         </ActiveTimer>
       </>
     );
@@ -517,7 +475,6 @@ Timer.propTypes = {
   stopTimer: PropTypes.func.isRequired,
   idleBehavior: PropTypes.number.isRequired,
   discardIdleTime: PropTypes.bool.isRequired,
-  advancedTimerControls: PropTypes.bool.isRequired,
   saveTimer: PropTypes.func.isRequired
 };
 

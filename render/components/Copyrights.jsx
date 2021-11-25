@@ -12,10 +12,10 @@ export default () => (
     Created by&nbsp;
     <Link
       type="external"
-      href="https://www.dvasylenko.com"
+      href="https://www.dvasylenko.com/redshape"
       testId="copyrights-link"
     >
-      Daniyil Vasylenko
+      danv
     </Link>
   </Copyrights>
 );

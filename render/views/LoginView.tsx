@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 import Joi from '@hapi/joi';
 import { useNavigate } from 'react-router-dom';
-import { css } from '@emotion/react';
 
 import { Input } from '../components/Input';
 import Button from '../components/Button';

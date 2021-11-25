@@ -43,6 +43,13 @@ enum SessionAction {
   RESET = 'RESET'
 }
 
+// eslint-disable-next-line no-shadow
+enum TimeTrackingStatus {
+  IDLE = 'IDLE',
+  TRACKING = 'TRACKING',
+  PAUSED = 'PAUSED'
+}
+
 type User = {
   id: number;
   firstName: string;
@@ -107,7 +114,8 @@ type Issue = {
 }
 
 export {
-  SessionAction
+  SessionAction,
+  TimeTrackingStatus
 };
 
 export type {
