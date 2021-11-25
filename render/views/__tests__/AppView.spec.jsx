@@ -13,7 +13,7 @@ import { ThemeProvider } from 'styled-components';
 import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
 import { theme } from '../../theme';
-import AppView from '../AppView';
+import { AppView } from '../AppView';
 
 jest.mock('electron-store');
 

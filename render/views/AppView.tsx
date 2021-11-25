@@ -1,11 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
 
-import reduxActions from '../actions';
 import { Navbar } from '../components/Navbar';
 import Timer from '../components/Timer';
 import TimeEntryModal from '../components/TimeEntryModal';
@@ -31,12 +29,10 @@ const Content = styled.div`
 `;
 
 type AppViewProps = {
-  resetTimer: () => void;
+  // resetTimer: () => void;
 }
 
-const AppView = ({
-  resetTimer
-}: AppViewProps) => {
+const AppView = () => {
   const [activities, setActivities] = useState([]);
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
@@ -77,7 +73,7 @@ const AppView = ({
   const closeTimeEntryModal = () => {
     setShowTimeEntryModal(false);
     setTimeEntry(null);
-    resetTimer();
+    // resetTimer();
   };
 
   if (!state.users.currentUser) {
@@ -113,8 +109,4 @@ const AppView = ({
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  resetTimer: () => dispatch(reduxActions.tracking.trackingReset())
-});
-
-export default connect(() => ({}), mapDispatchToProps)(AppView);
+export { AppView };

@@ -8,7 +8,7 @@ import cleanStack from 'clean-stack';
 // eslint-disable-next-line
 import { ipcRenderer } from "electron";
 
-import AppView from './views/AppView';
+import { AppView } from './views/AppView';
 import LoginView from './views/LoginView';
 import Notification from './components/Notification';
 import { useOvermindActions } from './store';
