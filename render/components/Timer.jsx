@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line
 import { remote, ipcRenderer } from 'electron';
 import moment from 'moment';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import PlayIcon from 'mdi-react/PlayIcon';
 import PauseIcon from 'mdi-react/PauseIcon';
 import StopIcon from 'mdi-react/StopIcon';
-
-import actions from '../actions';
 
 import { GhostButton } from './GhostButton';
 import { animationSlideUp } from '../animations';
@@ -112,7 +109,7 @@ const MaskedLink = styled(Link)`
   text-decoration: none;
 `;
 
-class Timer extends Component {
+const Timer = () => {
   constructor(props) {
     super(props);
 
@@ -478,28 +475,6 @@ Timer.propTypes = {
   saveTimer: PropTypes.func.isRequired
 };
 
-Timer.defaultProps = {
-  initialValue: 0,
-  isEnabled: false,
-  isPaused: false
+export {
+  Timer
 };
-
-const mapStateToProps = (state) => ({
-  isEnabled: state.tracking.isEnabled,
-  isPaused: state.tracking.isPaused,
-  trackedTime: state.tracking.duration,
-  trackedIssue: state.tracking.issue,
-  trackedComments: state.tracking.comments,
-  idleBehavior: state.settings.idleBehavior,
-  discardIdleTime: state.settings.discardIdleTime,
-  advancedTimerControls: state.settings.advancedTimerControls,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  pauseTimer: (duration, comments) => dispatch(actions.tracking.trackingPause(duration, comments)),
-  continueTimer: (duration, comments) => dispatch(actions.tracking.trackingContinue(duration, comments)),
-  stopTimer: (duration, comments) => dispatch(actions.tracking.trackingStop(duration, comments)),
-  saveTimer: (duration, comments) => dispatch(actions.tracking.trackingSave(duration, comments))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Timer);

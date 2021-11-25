@@ -3,10 +3,12 @@ import { TimeTrackingStatus } from '../../../types';
 type TimeTrackingState = {
   status: TimeTrackingStatus
   ticketId?: number;
+  timeMs: number;
 };
 
 const state: TimeTrackingState = {
-  status: TimeTrackingStatus.IDLE
+  status: TimeTrackingStatus.IDLE,
+  timeMs: 0
 };
 
 export {
