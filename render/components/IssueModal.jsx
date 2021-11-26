@@ -10,7 +10,7 @@ import { Input } from './Input';
 import { FormField } from './FormField';
 import Button from './Button';
 import { ErrorMessage } from './ErrorMessage';
-import Modal from './Modal';
+import { Modal } from './Modal';
 import { ProcessIndicator } from './ProcessIndicator';
 import Tooltip from './Tooltip';
 import DatePicker from './DatePicker';

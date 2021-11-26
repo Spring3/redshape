@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useCallback
 } from 'react';
 import range from 'lodash/range';
-import { Issue, PaginatedActionResponse } from '../../types';
+import { PaginatedActionResponse } from '../../types';
 
 type PaginatedQueryParams = {
   offset: number;
@@ -10,16 +10,16 @@ type PaginatedQueryParams = {
   limit?: number;
 };
 
-type UsePaginatedFetchProps = {
-  request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<any>>;
+type UsePaginatedFetchProps<T> = {
+  request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<T>>;
   filters?: any;
 }
 
 const limit = 100;
 
-const useFetchAll = ({ request, filters }: UsePaginatedFetchProps) => {
+const useFetchAll = <T>({ request, filters }: UsePaginatedFetchProps<T>) => {
   const [isFetching, setFetching] = useState(false);
-  const [items, setItems] = useState<Issue[]>([]);
+  const [items, setItems] = useState<T[]>([]);
   const [error, setError] = useState<Error>();
 
   const fetchAll = useCallback(async () => {

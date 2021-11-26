@@ -1,4 +1,4 @@
-import { state, IssuesState } from './state';
+import { state, TicketsState } from './state';
 import * as actions from './actions';
 
 export {
@@ -7,5 +7,5 @@ export {
 };
 
 export type {
-  IssuesState
+  TicketsState
 };

@@ -5,7 +5,7 @@ import _get from 'lodash/get';
 import moment from 'moment';
 
 import { Navbar } from '../components/Navbar';
-import Timer from '../components/Timer';
+import { Timer } from '../components/Timer';
 import TimeEntryModal from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 
@@ -15,6 +15,7 @@ import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import { Project, Ticket } from '../../types';
 
 const Grid = styled.div`
   height: 100%;
@@ -42,25 +43,25 @@ const AppView = () => {
   const actions = useOvermindActions();
 
   const requestProjects = useCallback(({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }), [actions.projects.getManyProjects]);
-  const { items: projects, isFetching, error } = useFetchAll({ request: requestProjects });
+  const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
 
-  const onTrackingStop = (trackedIssue: any, value: any, comments: any) => {
-    const existingActivities = _get(projects[trackedIssue.project.id], 'activities', []);
-    const hours = parseFloat((value / 3600000).toFixed(3));
+  const onTrackingStop = ({ ticket, recordedTime }: { ticket: Ticket, recordedTime: number }) => {
+    const existingActivities = _get(projects[ticket.project.id], 'activities', []);
+    const hours = parseFloat((recordedTime / 3600000).toFixed(3));
     setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
     setShowTimeEntryModal(true);
     setTimeEntry({
       activity: {},
       issue: {
-        id: trackedIssue.id,
-        name: trackedIssue.subject
+        id: ticket.id,
+        name: ticket.subject
       },
       hours,
       duration: hoursToDuration(hours),
-      comments: comments || '',
+      comments: '',
       project: {
-        id: trackedIssue.project.id,
-        name: trackedIssue.project.name
+        id: ticket.project.id,
+        name: ticket.project.name
       },
       spent_on: moment().format('YYYY-MM-DD'),
       user: {
@@ -92,6 +93,7 @@ const AppView = () => {
             <Route path="/:id" element={<IssueDetailsPage />} />
           </Routes>
           <Timer
+            autoStart
             onStop={onTrackingStop}
           />
           <TimeEntryModal

@@ -1,8 +1,8 @@
 import type { Context, IAction } from 'overmind';
-import { Issue, PaginatedActionResponse, Response } from '../../../types';
+import { Ticket, PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
 
-type GetManyIssueArgs = {
+type GetManyTicketsArgs = {
   filters: {
     assigned_to_id?: number | string;
     status_id?: '*' | 'open' | 'closed';
@@ -13,7 +13,7 @@ type GetManyIssueArgs = {
   limit?: number;
 }
 
-const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+const getMany: IAction<GetManyTicketsArgs, Promise<PaginatedActionResponse<Ticket>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
   const query = {
     limit: limit ? Math.abs(limit) : undefined,
     offset: offset ? Math.abs(offset) : 0,
@@ -30,8 +30,8 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
   });
 
   if (response.success) {
-    state.issues.byId = {
-      ...state.issues.byId,
+    state.tickets.byId = {
+      ...state.tickets.byId,
       ...indexById(response.payload.issues)
     };
 
@@ -62,11 +62,11 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
   };
 };
 
-type GetOneIssueArgs = {
+type GetOneTicketArgs = {
   id: string;
 }
 
-const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id }) => {
+const getOne: IAction<GetOneTicketArgs, Promise<Response<Ticket>>> = async ({ effects, state }: Context, { id }) => {
   const response = await effects.mainProcess.request({
     payload: {
       route: `issues/${id}.json`,
@@ -78,11 +78,11 @@ const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effe
   });
 
   if (response.success) {
-    const issue = response.payload as Issue;
-    state.issues.byId[id] = issue;
+    const ticket = response.payload as Ticket;
+    state.tickets.byId[id] = ticket;
     return {
       success: true,
-      data: issue
+      data: ticket
     };
   }
 

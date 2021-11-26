@@ -14,7 +14,7 @@ import { IssueFilter } from '../../actions/helper';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
 import { issueHeaders } from '../constants';
 import { IssuesTableHead } from './IssuesTableHead';
-import { IssueHeader, SortingDirection } from '../../../types';
+import { IssueHeader, SortingDirection, Ticket } from '../../../types';
 import { IssuesTableEmptyState } from './IssuesTableEmptyState';
 import { IssuesTableEmptySearchState } from './IssuesTableEmptySearchState';
 
@@ -62,9 +62,9 @@ const IssuesTable = ({ search }: { search?: string }) => {
   );
 
   const {
-    isFetching, items: issues, error, fetchTriggerElementRef
-  } = usePaginatedFetch({
-    request: actions.issues.getMany,
+    isFetching, items: tickets, error, fetchTriggerElementRef
+  } = usePaginatedFetch<Ticket>({
+    request: actions.tickets.getMany,
     filters,
   });
 
@@ -81,7 +81,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
     navigate(`${id}`);
   };
 
-  if (!issues.length && isFetching) {
+  if (!tickets.length && isFetching) {
     return (
       <OverlayProcessIndicator>
         <span css={styles.processIndicatorText}>Please wait...</span>
@@ -89,7 +89,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
     );
   }
 
-  if (!issues.length && !search) {
+  if (!tickets.length && !search) {
     return (
       <>
         <table css={css`
@@ -107,7 +107,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
     );
   }
 
-  if (!issues.length && search) {
+  if (!tickets.length && search) {
     return (
       <>
         <table css={css`
@@ -135,7 +135,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
   `}>
       <IssuesTableHead sortBy={sortBy} sortDirection={sortDirection} onSort={sortTable} />
       <tbody css={styles.tableBody}>
-        {issues.map((task, index) => (
+        {tickets.map((task, index) => (
           <tr
             css={css`
               &:hover {
@@ -146,7 +146,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
                 }
               }
             `}
-            ref={index === issues.length - 1 ? fetchTriggerElementRef : null}
+            ref={index === tickets.length - 1 ? fetchTriggerElementRef : null}
             key={task.id}
             onClick={() => showIssueDetails(task.id)}
           >

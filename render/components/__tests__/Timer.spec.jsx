@@ -4,11 +4,10 @@ import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { TRACKING_PAUSE } from '../../actions/tracking.actions';
 
 // using mount instead of shallow due to https://github.com/airbnb/enzyme/issues/1908
 
-import Timer from '../Timer';
+import { Timer } from '../Timer';
 
 const mockStore = configureStore([thunk]);
 
@@ -61,13 +60,6 @@ describe('Timer component', () => {
     expect(buttons.lastElementChild).toHaveAttribute('id', 'pause-timer');
     fireEvent.click(buttons.lastElementChild);
     expect(onPause).toHaveBeenCalled();
-    expect(store.getActions()[0]).toEqual({
-      type: TRACKING_PAUSE,
-      data: {
-        duration: state.tracking.duration + 1000,
-        comments: state.tracking.comments
-      }
-    });
   });
 
   it('should start the counter from the initialValue if given', async () => {
@@ -105,13 +97,6 @@ describe('Timer component', () => {
 
     await waitSeconds(1);
     fireEvent.click(document.querySelector('.buttons').lastElementChild);
-    expect(store.getActions()[0]).toEqual({
-      type: TRACKING_PAUSE,
-      data: {
-        duration: initialValue + 1000,
-        comments: ''
-      }
-    });
     unmount();
   });
 

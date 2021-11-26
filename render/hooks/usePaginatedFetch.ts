@@ -3,7 +3,7 @@ import React, {
   useState, useEffect, useCallback, RefObject
 } from 'react';
 import useInView from 'react-cool-inview';
-import { Issue, PaginatedActionResponse } from '../../types';
+import { PaginatedActionResponse } from '../../types';
 
 type PaginatedQueryParams = {
   offset: number;
@@ -11,8 +11,8 @@ type PaginatedQueryParams = {
   limit?: number;
 };
 
-type UsePaginatedFetchProps = {
-  request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<any>>;
+type UsePaginatedFetchProps<T> = {
+  request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<T>>;
   filters: any;
   containerRef?: RefObject<HTMLElement>;
 }
@@ -21,10 +21,10 @@ type FetchBatchArgs = {
   initialFetch?: boolean;
 }
 
-const usePaginatedFetch = ({ request, filters, containerRef }: UsePaginatedFetchProps) => {
+const usePaginatedFetch = <T>({ request, filters, containerRef }: UsePaginatedFetchProps<T>) => {
   const [isFetching, setFetching] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const [items, setItems] = useState<Issue[]>([]);
+  const [items, setItems] = useState<T[]>([]);
   const [error, setError] = useState<Error>();
 
   const fetchBatch = useCallback(throttle(async ({ initialFetch }: FetchBatchArgs = {}) => {

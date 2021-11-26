@@ -100,7 +100,7 @@ type Project = {
   updatedOn: string;
 }
 
-type Issue = {
+type Ticket = {
   id: number;
   project: Pointer;
   tracker: Pointer;
@@ -118,7 +118,7 @@ type Issue = {
   totalEstimatedHours?: number;
   spentHours?: number;
   totalSpentHours?: number;
-  subTasks?: Issue[];
+  subTasks?: Ticket[];
   journals?: JournalEntry[];
   customFields?: CustomField[];
   createdOn: string;
@@ -134,7 +134,7 @@ export {
 export type {
   Collection,
   CreateOvermindConfigParams,
-  Issue,
+  Ticket,
   IssueHeader,
   PaginatedActionResponse,
   Pointer,

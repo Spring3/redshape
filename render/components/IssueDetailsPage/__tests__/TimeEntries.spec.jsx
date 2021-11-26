@@ -9,7 +9,6 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { TIME_ENTRY_DELETE } from '../../../actions/timeEntry.actions';
 import { ISSUES_TIME_ENTRY_GET } from '../../../actions/issues.actions';
-import { TRACKING_START } from '../../../actions/tracking.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';
 import { theme } from '../../../theme';
 import TimeEntries from '../TimeEntries';
@@ -190,7 +189,6 @@ describe('IssueDetails => TimeEntries componnet', () => {
       </Provider>
     );
     fireEvent.click(document.querySelector('#track'));
-    expect(store.getActions().pop().type).toBe(TRACKING_START);
   });
 
   it('should remove the time entry if the button is clicked', () => {
