@@ -4,7 +4,8 @@ import React, {
   FocusEvent,
   useCallback,
   useRef,
-  KeyboardEventHandler
+  KeyboardEventHandler,
+  MouseEventHandler
 } from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
@@ -74,8 +75,14 @@ const Checkbox = ({
     (e.target.nextSibling as HTMLElement)?.focus();
   }, []);
 
-  const toggleCheckbox: KeyboardEventHandler<HTMLDivElement> = useCallback((e) => {
+  const toggleCheckboxOnKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((e) => {
     if (e.key === ' ' && onChange) {
+      (hiddenCheckboxRef.current as HTMLInputElement | null)?.click();
+    }
+  }, [onChange]);
+
+  const toggleCheckboxOnMouseClick: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
+    if (onChange) {
       (hiddenCheckboxRef.current as HTMLInputElement | null)?.click();
     }
   }, [onChange]);
@@ -85,7 +92,8 @@ const Checkbox = ({
       tabIndex={0}
       role="checkbox"
       aria-checked={checked}
-      onKeyPress={toggleCheckbox}
+      onKeyPress={toggleCheckboxOnKeyPress}
+      onClick={toggleCheckboxOnMouseClick}
       onBlur={onBlur}
       onFocusCapture={moveFocusToCustomCheckbox}
       css={styles.container}
