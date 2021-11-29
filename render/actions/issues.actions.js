@@ -4,7 +4,6 @@ import moment from 'moment';
 import request, { notify } from './helper';
 
 export const ISSUES_COMMENTS_SEND = 'ISSUES_COMMENTS_SEND';
-export const ISSUES_RESET_SELECTION = 'ISSUES_RESET_SELECTION';
 export const ISSUES_TIME_ENTRY_GET = 'ISSUES_TIME_ENTRY_GET';
 
 const sendComments = (issueId, comments) => (dispatch, getState) => {
@@ -71,10 +70,7 @@ const getTimeEntriesPage = (issueId, projectId, pageNumber, batchSize) => (dispa
     });
 };
 
-const resetSelected = () => ({ type: ISSUES_RESET_SELECTION });
-
 export default {
   getTimeEntriesPage,
   sendComments,
-  resetSelected
 };

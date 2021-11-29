@@ -160,11 +160,11 @@ const IssueDetailsPage = ({
 
   useEffect(() => {
     if (issueId) {
-      actions.tickets.getOne({ id: issueId });
+      actions.issues.getOne({ id: issueId });
     }
   }, [issueId]);
 
-  const currentTicket = state.tickets.byId[issueId as string];
+  const currentIssue = state.issues.byId[issueId as string];
 
   const triggerTimeEntryModal = (timeEntry: any) => {
     const newSelectedTimeEntry = timeEntry || {
@@ -173,19 +173,19 @@ const IssueDetailsPage = ({
         name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
       },
       issue: {
-        id: currentTicket.id
+        id: currentIssue.id
       },
       activity: {},
       project: {
-        id: currentTicket.project.id,
-        name: currentTicket.project.name
+        id: currentIssue.project.id,
+        name: currentIssue.project.name
       },
       hours: undefined,
       duration: '',
       spent_on: moment().format('YYYY-MM-DD')
     };
-    newSelectedTimeEntry.issue.name = currentTicket.subject;
-    const existingActivities = _.get(projects[currentTicket.project.id], 'activities', []);
+    newSelectedTimeEntry.issue.name = currentIssue.subject;
+    const existingActivities = _.get(projects[currentIssue.project.id], 'activities', []);
     setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
     setSelectedTimeEntry(newSelectedTimeEntry);
     setShowTimeEntryModal(true);
@@ -207,12 +207,12 @@ const IssueDetailsPage = ({
     setShowIssueModal(true);
   };
 
-  const getIssueComments = () => currentTicket.journals?.filter((entry: any) => entry.notes) ?? [];
+  const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes) ?? [];
 
-  const cfields = currentTicket.customFields;
+  const cfields = currentIssue.customFields;
   // eslint-disable-next-line react/prop-types
-  const subtasks = currentTicket.subTasks || [];
-  return currentTicket.id
+  const subtasks = currentIssue.subTasks || [];
+  return currentIssue.id
     ? (
       <Section>
         <Flex>
@@ -226,46 +226,46 @@ const IssueDetailsPage = ({
             <h2>
               <span>
                 #
-                {currentTicket.id}
+                {currentIssue.id}
 &nbsp;
               </span>
-              <span>{currentTicket.subject}</span>
+              <span>{currentIssue.subject}</span>
               <IconButton onClick={openIssueModal}>
                 <EditIcon size={20} style={{ marginLeft: '.5rem', verticalAlign: 'bottom' }} />
               </IconButton>
             </h2>
             <SmallNotice>
               Created by&nbsp;
-              <Link href="#">{currentTicket.author.name}</Link>
-              <DateComponent date={currentTicket.createdOn} />
+              <Link href="#">{currentIssue.author.name}</Link>
+              <DateComponent date={currentIssue.createdOn} />
             </SmallNotice>
-            {currentTicket.createdOn && (
+            {currentIssue.createdOn && (
             <SmallNotice>
               Closed
-              <DateComponent date={currentTicket.createdOn} />
+              <DateComponent date={currentIssue.createdOn} />
             </SmallNotice>
             )}
             <Wrapper>
               <ColumnList>
                 <li>
                   <div>Tracker: </div>
-                  <div>{currentTicket.tracker.name}</div>
+                  <div>{currentIssue.tracker.name}</div>
                 </li>
                 <li>
                   <div>Status:</div>
-                  <div>{currentTicket.status.name}</div>
+                  <div>{currentIssue.status.name}</div>
                 </li>
                 <li>
                   <div>Priority: </div>
-                  <div>{currentTicket.priority.name}</div>
+                  <div>{currentIssue.priority.name}</div>
                 </li>
                 <li>
                   <div>Assignee: </div>
-                  <div>{currentTicket.assignee.name}</div>
+                  <div>{currentIssue.assignee.name}</div>
                 </li>
                 <li>
                   <div>Project: </div>
-                  <div>{_.get(currentTicket, 'project.name')}</div>
+                  <div>{_.get(currentIssue, 'project.name')}</div>
                 </li>
                 <li>
                   <div>Progress: </div>
@@ -274,7 +274,7 @@ const IssueDetailsPage = ({
                       className={undefined}
                       id={undefined}
                       height={5}
-                      percent={currentTicket.doneRatio}
+                      percent={currentIssue.doneRatio}
                       background={(theme as any).main}
                     />
                   </div>
@@ -283,33 +283,33 @@ const IssueDetailsPage = ({
               <ColumnList>
                 <li>
                   <div>Target version: </div>
-                  <div>{_.get(currentTicket, 'fixed_version.name')}</div>
+                  <div>{_.get(currentIssue, 'fixed_version.name')}</div>
                 </li>
                 <li>
                   <div>Start date: </div>
-                  <DateComponent date={currentTicket.startDate} />
+                  <DateComponent date={currentIssue.startDate} />
                 </li>
                 <li>
                   <div>Due date: </div>
-                  <DateComponent date={currentTicket.dueDate} />
+                  <DateComponent date={currentIssue.dueDate} />
                 </li>
                 <li>
                   <div>Estimation: </div>
                   <div>
                     {
-                        currentTicket.estimatedHours
-                          ? `${currentTicket.estimatedHours.toFixed(2)} h`
+                        currentIssue.estimatedHours
+                          ? `${currentIssue.estimatedHours.toFixed(2)} h`
                           : undefined
                       }
                     {
                         (
-                          currentTicket.totalEstimatedHours && currentTicket.totalEstimatedHours !== currentTicket.estimatedHours
-                          && currentTicket.totalEstimatedHours >= 0
+                          currentIssue.totalEstimatedHours && currentIssue.totalEstimatedHours !== currentIssue.estimatedHours
+                          && currentIssue.totalEstimatedHours >= 0
                         ) && (
                           <span>
                             {' '}
                             (Total:
-                            {currentTicket.totalEstimatedHours.toFixed(2)}
+                            {currentIssue.totalEstimatedHours.toFixed(2)}
                             {' '}
                             h)
                           </span>
@@ -320,16 +320,16 @@ const IssueDetailsPage = ({
                 <li>
                   <div>Time spent: </div>
                   <div>
-                    {currentTicket.spentHours ? `${currentTicket.spentHours.toFixed(2)} h` : undefined}
+                    {currentIssue.spentHours ? `${currentIssue.spentHours.toFixed(2)} h` : undefined}
                     {
                         (
-                          currentTicket.totalSpentHours && currentTicket.totalSpentHours !== currentTicket.spentHours
-                          && currentTicket.totalSpentHours >= 0
+                          currentIssue.totalSpentHours && currentIssue.totalSpentHours !== currentIssue.spentHours
+                          && currentIssue.totalSpentHours >= 0
                         ) && (
                           <span>
                             {' '}
                             (Total:
-                            {currentTicket.totalSpentHours.toFixed(2)}
+                            {currentIssue.totalSpentHours.toFixed(2)}
                             {' '}
                             h)
                           </span>
@@ -344,7 +344,7 @@ const IssueDetailsPage = ({
                       className={undefined}
                       id={undefined}
                       height={5}
-                      percent={currentTicket.totalSpentHours && currentTicket.totalEstimatedHours ? currentTicket.totalSpentHours / currentTicket.totalEstimatedHours * 100 : 0}
+                      percent={currentIssue.totalSpentHours && currentIssue.totalEstimatedHours ? currentIssue.totalSpentHours / currentIssue.totalEstimatedHours * 100 : 0}
                       background={(theme as any).main}
                     />
                   </div>
@@ -392,17 +392,18 @@ const IssueDetailsPage = ({
             </FlexWrapper>
             <div>
               <h3>Description</h3>
-              <MarkdownText markdownText={currentTicket.description} />
+              <MarkdownText markdownText={currentIssue.description} />
             </div>
           </IssueDetails>
           <TimeEntries
+            issueId={currentIssue.id}
             showTimeEntryModal={triggerTimeEntryModal}
           />
         </Flex>
         <CommentsSection
           journalEntries={getIssueComments()}
           publishComments={postComments}
-          issueId={currentTicket.id}
+          issueId={currentIssue.id}
         />
         { selectedTimeEntry && (
         <TimeEntryModal
@@ -414,14 +415,14 @@ const IssueDetailsPage = ({
           onClose={closeTimeEntryModal}
         />
         )}
-        {currentTicket && (
+        {currentIssue && (
           <IssueModal
             isOpen={showIssueModal}
-            isEditable={currentTicket.assignee.id === state.users.currentUser?.id}
-            isUserAuthor={currentTicket.author.id === state.users.currentUser?.id}
+            isEditable={currentIssue.assignee.id === state.users.currentUser?.id}
+            isUserAuthor={currentIssue.author.id === state.users.currentUser?.id}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            issueEntry={currentTicket}
+            issueEntry={currentIssue}
             onClose={closeIssueModal}
           />
         )}

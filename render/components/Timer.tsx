@@ -12,7 +12,7 @@ import { GhostButton } from './GhostButton';
 import { animationSlideUp } from '../animations';
 import Link from './Link';
 import { useOvermindActions, useOvermindState } from '../store';
-import { Ticket, TimeTrackingAction } from '../../types';
+import { Issue, TimeTrackingAction } from '../../types';
 
 const ActiveTimer = styled.div`
   animation: ${animationSlideUp} .7s ease-in;
@@ -109,7 +109,7 @@ const MaskedLink = styled(Link)`
   text-decoration: none;
 `;
 
-type TimerEventHook = (args: { ticket: Ticket, recordedTime: number }) => void;
+type TimerEventHook = (args: { issue: Issue, recordedTime: number }) => void;
 
 type TimerProps = {
   startFrom?: number;
@@ -127,8 +127,8 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
   const actions = useOvermindActions();
 
   const [lastTimeRecord] = state.timeTracking.records.slice(-1);
-  const ticketId = lastTimeRecord?.ticketId;
-  const targetTicket = state.tickets.byId[ticketId];
+  const issueId = lastTimeRecord?.issueId;
+  const targetIssue = state.issues.byId[issueId];
 
   const isCounting = [TimeTrackingAction.CONTINUE, TimeTrackingAction.START].includes(lastTimeRecord?.action);
   const isPaused = lastTimeRecord?.action === TimeTrackingAction.PAUSE;
@@ -140,15 +140,15 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
 
   const start = useCallback(() => {
     if (isPaused || isStopped) {
-      actions.timeTracking.track({ ticketId });
+      actions.timeTracking.track({ issueId });
       if (!interval.current) {
         interval.current = setInterval(tick, 1000);
       }
       if (onStart) {
-        onStart({ ticket: targetTicket, recordedTime: timeMs });
+        onStart({ issue: targetIssue, recordedTime: timeMs });
       }
     }
-  }, [actions.timeTracking.track, ticketId, tick, targetTicket, onStart, timeMs]);
+  }, [actions.timeTracking.track, issueId, tick, targetIssue, onStart, timeMs]);
 
   const stop = useCallback(() => {
     if (isCounting) {
@@ -157,10 +157,10 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
         clearInterval(interval.current);
       }
       if (onStop) {
-        onStop({ ticket: targetTicket, recordedTime: timeMs });
+        onStop({ issue: targetIssue, recordedTime: timeMs });
       }
     }
-  }, [actions.timeTracking.stop, onStop, targetTicket, timeMs]);
+  }, [actions.timeTracking.stop, onStop, targetIssue, timeMs]);
 
   const pause = useCallback(() => {
     if (isCounting) {
@@ -169,10 +169,10 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
         clearInterval(interval.current);
       }
       if (onPause) {
-        onPause({ ticket: targetTicket, recordedTime: timeMs });
+        onPause({ issue: targetIssue, recordedTime: timeMs });
       }
     }
-  }, [actions.timeTracking.pause, onPause, targetTicket, timeMs]);
+  }, [actions.timeTracking.pause, onPause, targetIssue, timeMs]);
 
   const unpaunse = useCallback(() => {
     if (isPaused) {
@@ -181,10 +181,10 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
         interval.current = setInterval(tick, 1000);
       }
       if (onContinue) {
-        onContinue({ ticket: targetTicket, recordedTime: timeMs });
+        onContinue({ issue: targetIssue, recordedTime: timeMs });
       }
     }
-  }, [actions.timeTracking.unpause, tick, onContinue, targetTicket, timeMs]);
+  }, [actions.timeTracking.unpause, tick, onContinue, targetIssue, timeMs]);
 
   useEffect(() => {
     if (isCounting) {
@@ -231,7 +231,7 @@ const Timer = ({ startFrom = 0, autoStart = false, onStop, onStart, onPause, onC
                 <MaskedLink
                   href="#"
                 >
-                  {targetTicket?.subject}
+                  {targetIssue?.subject}
                 </MaskedLink>
               )
               : null}

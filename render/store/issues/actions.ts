@@ -1,8 +1,8 @@
 import type { Context, IAction } from 'overmind';
-import { Ticket, PaginatedActionResponse, Response } from '../../../types';
+import { Issue, PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
 
-type GetManyTicketsArgs = {
+type GetManyIssuesArgs = {
   filters: {
     assigned_to_id?: number | string;
     status_id?: '*' | 'open' | 'closed';
@@ -13,7 +13,7 @@ type GetManyTicketsArgs = {
   limit?: number;
 }
 
-const getMany: IAction<GetManyTicketsArgs, Promise<PaginatedActionResponse<Ticket>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
   const query = {
     limit: limit ? Math.abs(limit) : undefined,
     offset: offset ? Math.abs(offset) : 0,
@@ -30,8 +30,8 @@ const getMany: IAction<GetManyTicketsArgs, Promise<PaginatedActionResponse<Ticke
   });
 
   if (response.success) {
-    state.tickets.byId = {
-      ...state.tickets.byId,
+    state.issues.byId = {
+      ...state.issues.byId,
       ...indexById(response.payload.issues)
     };
 
@@ -45,7 +45,7 @@ const getMany: IAction<GetManyTicketsArgs, Promise<PaginatedActionResponse<Ticke
         limit: response.payload.limit,
         offset: response.payload.offset
       },
-      hasMore: response.payload.total > response.payload.issues.length,
+      hasMore: response.payload.total > (response.payload.offset + response.payload.issues.length),
     };
   }
 
@@ -62,11 +62,11 @@ const getMany: IAction<GetManyTicketsArgs, Promise<PaginatedActionResponse<Ticke
   };
 };
 
-type GetOneTicketArgs = {
+type GetOneIssueArgs = {
   id: string;
 }
 
-const getOne: IAction<GetOneTicketArgs, Promise<Response<Ticket>>> = async ({ effects, state }: Context, { id }) => {
+const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id }) => {
   const response = await effects.mainProcess.request({
     payload: {
       route: `issues/${id}.json`,
@@ -78,11 +78,11 @@ const getOne: IAction<GetOneTicketArgs, Promise<Response<Ticket>>> = async ({ ef
   });
 
   if (response.success) {
-    const ticket = response.payload as Ticket;
-    state.tickets.byId[id] = ticket;
+    const issue = response.payload as Issue;
+    state.issues.byId[id] = issue;
     return {
       success: true,
-      data: ticket
+      data: issue
     };
   }
 

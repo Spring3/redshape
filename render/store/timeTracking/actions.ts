@@ -1,27 +1,27 @@
 import type { Context, IAction } from 'overmind';
 import { TimeTrackingAction } from '../../../types';
 
-const track: IAction<{ ticketId: number }, void> = ({ state, actions }: Context, { ticketId }) => {
+const track: IAction<{ issueId: number }, void> = ({ state, actions }: Context, { issueId }) => {
   const [lastRecord] = state.timeTracking.records.slice(-1);
   const isoDate = new Date().toISOString();
 
-  const isSameTicketThatWasStopped = (lastRecord && lastRecord.action === TimeTrackingAction.STOP && lastRecord.ticketId === ticketId);
-  const isDifferentTicketThatWasStopped = (lastRecord && lastRecord.action === TimeTrackingAction.STOP && lastRecord.ticketId !== ticketId);
+  const isSameIssueThatWasStopped = (lastRecord && lastRecord.action === TimeTrackingAction.STOP && lastRecord.issueId === issueId);
+  const isDifferentIssueThatWasStopped = (lastRecord && lastRecord.action === TimeTrackingAction.STOP && lastRecord.issueId !== issueId);
 
-  if (!lastRecord || isSameTicketThatWasStopped || isDifferentTicketThatWasStopped) {
+  if (!lastRecord || isSameIssueThatWasStopped || isDifferentIssueThatWasStopped) {
     state.timeTracking.records.push({
       action: TimeTrackingAction.START,
-      ticketId,
+      issueId,
       isoDate,
       notes: []
     });
-  } else if (lastRecord.ticketId === ticketId && lastRecord.action === TimeTrackingAction.PAUSE) {
+  } else if (lastRecord.issueId === issueId && lastRecord.action === TimeTrackingAction.PAUSE) {
     actions.timeTracking.unpause();
-  } else if (lastRecord.ticketId !== ticketId) {
+  } else if (lastRecord.issueId !== issueId) {
     actions.timeTracking.stop();
     state.timeTracking.records.push({
       action: TimeTrackingAction.START,
-      ticketId,
+      issueId,
       isoDate,
       notes: []
     });
@@ -34,7 +34,7 @@ const pause: IAction<void, void> = ({ state }: Context) => {
     const isoDate = new Date().toISOString();
     state.timeTracking.records.push({
       action: TimeTrackingAction.PAUSE,
-      ticketId: lastRecord.ticketId,
+      issueId: lastRecord.issueId,
       isoDate,
       notes: []
     });
@@ -47,7 +47,7 @@ const unpause: IAction<void, void> = ({ state }: Context) => {
     const isoDate = new Date().toISOString();
     state.timeTracking.records.push({
       action: TimeTrackingAction.CONTINUE,
-      ticketId: lastRecord.ticketId,
+      issueId: lastRecord.issueId,
       isoDate,
       notes: []
     });
@@ -60,7 +60,7 @@ const stop: IAction<void, void> = ({ state }: Context) => {
     const isoDate = new Date().toISOString();
     state.timeTracking.records.push({
       action: TimeTrackingAction.STOP,
-      ticketId: lastRecord.ticketId,
+      issueId: lastRecord.issueId,
       isoDate,
       notes: []
     });

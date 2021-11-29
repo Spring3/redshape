@@ -15,7 +15,7 @@ import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './AppViewPages/SummaryPage';
 import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
-import { Project, Ticket } from '../../types';
+import { Project, Issue } from '../../types';
 
 const Grid = styled.div`
   height: 100%;
@@ -45,23 +45,23 @@ const AppView = () => {
   const requestProjects = useCallback(({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }), [actions.projects.getManyProjects]);
   const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
 
-  const onTrackingStop = ({ ticket, recordedTime }: { ticket: Ticket, recordedTime: number }) => {
-    const existingActivities = _get(projects[ticket.project.id], 'activities', []);
+  const onTrackingStop = ({ issue, recordedTime }: { issue: Issue, recordedTime: number }) => {
+    const existingActivities = _get(projects[issue.project.id], 'activities', []);
     const hours = parseFloat((recordedTime / 3600000).toFixed(3));
     setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
     setShowTimeEntryModal(true);
     setTimeEntry({
       activity: {},
       issue: {
-        id: ticket.id,
-        name: ticket.subject
+        id: issue.id,
+        name: issue.subject
       },
       hours,
       duration: hoursToDuration(hours),
       comments: '',
       project: {
-        id: ticket.project.id,
-        name: ticket.project.name
+        id: issue.project.id,
+        name: issue.project.name
       },
       spent_on: moment().format('YYYY-MM-DD'),
       user: {

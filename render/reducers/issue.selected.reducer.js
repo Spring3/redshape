@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import {
   ISSUES_COMMENTS_SEND,
-  ISSUES_RESET_SELECTION,
   ISSUES_TIME_ENTRY_GET
 } from '../actions/issues.actions';
 
@@ -29,9 +28,6 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ISSUES_RESET_SELECTION: {
-      return initialState;
-    }
     case ISSUES_COMMENTS_SEND: {
       if (action.status === 'START') {
         return {

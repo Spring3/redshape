@@ -12,7 +12,6 @@ import '@testing-library/jest-dom/extend-expect';
 
 import { theme } from '../../../theme';
 import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
-import { ISSUES_RESET_SELECTION } from '../../../actions/issues.actions';
 import { getInstance, reset, initialize } from '../../../../common/request';
 
 const mockStore = configureStore([thunk]);
@@ -206,7 +205,6 @@ describe('IssueDetails page', () => {
 
     const actions = store.getActions();
     actions.pop();
-    expect(actions.pop().type).toBe(ISSUES_RESET_SELECTION);
   });
 
   it('should show the selected time entry in a modal', () => {

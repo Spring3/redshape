@@ -58,7 +58,7 @@ type TimeEntryNode = {
 
 type TimeTrackingRecord = {
   action: TimeTrackingAction;
-  ticketId: number;
+  issueId: number;
   isoDate: string;
   notes: TimeEntryNode[];
 }
@@ -100,7 +100,7 @@ type Project = {
   updatedOn: string;
 }
 
-type Ticket = {
+type Issue = {
   id: number;
   project: Pointer;
   tracker: Pointer;
@@ -118,7 +118,7 @@ type Ticket = {
   totalEstimatedHours?: number;
   spentHours?: number;
   totalSpentHours?: number;
-  subTasks?: Ticket[];
+  subTasks?: Issue[];
   journals?: JournalEntry[];
   customFields?: CustomField[];
   createdOn: string;
@@ -134,7 +134,7 @@ export {
 export type {
   Collection,
   CreateOvermindConfigParams,
-  Ticket,
+  Issue,
   IssueHeader,
   PaginatedActionResponse,
   Pointer,

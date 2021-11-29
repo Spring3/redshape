@@ -2,7 +2,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 import { notify } from '../../actions/helper';
 import {
-  ISSUES_RESET_SELECTION,
   ISSUES_COMMENTS_SEND,
   ISSUES_TIME_ENTRY_GET
 } from '../../actions/issues.actions';
@@ -16,18 +15,6 @@ import reducer, { initialState } from '../issue.selected.reducer';
 describe('Selected issue reducer', () => {
   it('should return the initial state if the action was not recognized', () => {
     expect(reducer(undefined, { type: 'WEIRD' })).toEqual(initialState);
-  });
-
-  it('ISSUES_RESET_SELECTION', () => {
-    expect(
-      reducer(
-        {
-          ..._cloneDeep(initialState),
-          error: new Error('Error')
-        },
-        { type: ISSUES_RESET_SELECTION }
-      )
-    ).toEqual(initialState);
   });
 
   describe('ISSUES_COMMENTS_SEND', () => {
