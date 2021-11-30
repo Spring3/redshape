@@ -30,7 +30,7 @@ const transform = (route, responseBody) => {
     };
   }
 
-  if (/issues\/\d\.json/.test(route)) {
+  if (/issues\/\d{1,}\.json/.test(route)) {
     const { issue } = responseBody;
     return {
       id: issue.id,
@@ -53,13 +53,13 @@ const transform = (route, responseBody) => {
       createdOn: issue.created_on,
       updatedOn: issue.updated_on,
       subTasks: issue.children,
-      customFields: issue.custom_fields,
+      customFields: issue.custom_fields || [],
       journals: issue.journals?.map((journal) => ({
         id: journal.id,
         user: journal.user,
         createdOn: journal.created_on,
         notes: journal.notes
-      })),
+      })) || [],
       closedOn: issue.closed_on
     };
   }

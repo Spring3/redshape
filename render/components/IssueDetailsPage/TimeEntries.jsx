@@ -155,15 +155,15 @@ const TimeEntries = ({ issueId, spentTime }) => {
   const trackedIssueId = lastRecord?.issueId;
 
   const requestTimeEntries = useCallback(
-    queryParams => {
-      overmindActions.timeEntries.getManyTimeEntries({
-        filters: {
-          issueId,
-          projectId: 0
-        },
-        ...queryParams
-      });
-    },
+    params => overmindActions.timeEntries.getManyTimeEntries({
+      filters: {
+        issueId,
+        projectId: 0,
+        ...params.filters
+      },
+      limit: params.limit,
+      offset: params.offset
+    }),
     [issueId]
   );
 
