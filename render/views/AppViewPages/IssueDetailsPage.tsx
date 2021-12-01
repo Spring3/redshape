@@ -24,6 +24,7 @@ import { GhostButton } from '../../components/GhostButton';
 
 import reduxActions from '../../actions';
 import { useOvermindActions, useOvermindState } from '../../store';
+import { useNavbar } from '../../contexts/NavbarContext';
 
 const Flex = styled.div`
   display: flex;
@@ -150,6 +151,7 @@ const IssueDetailsPage = ({
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [showIssueModal, setShowIssueModal] = useState(false);
 
+  const navbar = useNavbar();
   const state = useOvermindState();
   const actions = useOvermindActions();
   const theme = useTheme();
@@ -157,6 +159,7 @@ const IssueDetailsPage = ({
   const navigate = useNavigate();
 
   const projects = state.projects.list;
+  const currentIssue = state.issues.byId[issueId as string];
 
   useEffect(() => {
     if (issueId) {
@@ -164,7 +167,11 @@ const IssueDetailsPage = ({
     }
   }, [issueId]);
 
-  const currentIssue = state.issues.byId[issueId as string];
+  useEffect(() => {
+    if (currentIssue) {
+      navbar.setTitle(currentIssue.subject);
+    }
+  }, [currentIssue, navbar]);
 
   const triggerTimeEntryModal = (timeEntry: any) => {
     const newSelectedTimeEntry = timeEntry || {

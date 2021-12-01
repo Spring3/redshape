@@ -51,7 +51,7 @@ enum TimeTrackingAction {
   STOP = 'STOP'
 }
 
-type TimeEntryNode = {
+type TimeEntryNote = {
   isoDate: string;
   note: string;
 }
@@ -60,7 +60,7 @@ type TimeTrackingRecord = {
   action: TimeTrackingAction;
   issueId: number;
   isoDate: string;
-  notes: TimeEntryNode[];
+  notes: TimeEntryNote[];
 }
 
 type User = {
@@ -68,6 +68,10 @@ type User = {
   firstName: string;
   lastName: string;
   createdOn: string;
+}
+
+type Identifier = {
+  id: number;
 }
 
 type Pointer = {
@@ -126,6 +130,19 @@ type Issue = {
   closedOn?: string;
 }
 
+type TimeEntry = {
+  id: string;
+  project: Pointer;
+  issue: Identifier;
+  user: Pointer;
+  activity: Pointer;
+  hours: number;
+  comments: string;
+  spentOn: string;
+  createdOn: string;
+  updatedOn: string;
+}
+
 export {
   SessionAction,
   TimeTrackingAction
@@ -141,6 +158,7 @@ export type {
   Project,
   Response,
   SortingDirection,
+  TimeEntry,
   TimeTrackingRecord,
   User,
 };

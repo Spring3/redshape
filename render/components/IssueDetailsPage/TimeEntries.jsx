@@ -7,7 +7,6 @@ import styled, { css, useTheme } from 'styled-components';
 import PlusIcon from 'mdi-react/PlusIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
-import InfiniteScroll from '../InfiniteScroll';
 import { ProcessIndicator } from '../ProcessIndicator';
 import Button from '../Button';
 import DateComponent from '../Date';
@@ -157,14 +156,14 @@ const TimeEntries = ({ issueId, spentTime }) => {
   const requestTimeEntries = useCallback(
     params => overmindActions.timeEntries.getManyTimeEntries({
       filters: {
-        issueId,
-        projectId: 0,
+        issueId: selectedIssue.id,
+        projectId: selectedIssue.project.id,
         ...params.filters
       },
       limit: params.limit,
       offset: params.offset
     }),
-    [issueId]
+    [selectedIssue]
   );
 
   const { items: timeEntries } = usePaginatedFetch({

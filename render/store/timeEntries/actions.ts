@@ -1,5 +1,6 @@
 import type { IAction, Context } from 'overmind';
 import { Response } from '../../../types';
+import { indexById } from '../helpers';
 
 type GetManyTimeEntriesParams = {
   filters: {
@@ -25,6 +26,14 @@ const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any
   });
 
   if (response.success) {
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [filters.issueId]: {
+        ...(state.timeEntries.mapByIssueId[filters.issueId] || {}),
+        ...indexById(response.payload.timeEntries)
+      }
+    };
+
     return {
       success: true,
       data: {
@@ -33,7 +42,7 @@ const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any
         limit: response.payload.limit,
         offset: response.payload.offset
       },
-      hasMore: response.payload.total > (response.payload.offset + response.payload.issues.length),
+      hasMore: response.payload.total > (response.payload.offset + response.payload.timeEntries.length),
     };
   }
 
