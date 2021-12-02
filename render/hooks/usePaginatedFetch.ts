@@ -13,7 +13,7 @@ type PaginatedQueryParams = {
 
 type UsePaginatedFetchProps<T> = {
   request: (queryParams: PaginatedQueryParams) => Promise<PaginatedActionResponse<T>>;
-  filters: any;
+  filters?: any;
   containerRef?: RefObject<HTMLElement>;
 }
 

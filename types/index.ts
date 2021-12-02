@@ -80,7 +80,7 @@ type Pointer = {
 }
 
 type JournalEntry = {
-  id: string;
+  id: number;
   user: Pointer;
   createdOn: string;
   notes?: string[];
@@ -131,7 +131,7 @@ type Issue = {
 }
 
 type TimeEntry = {
-  id: string;
+  id: number;
   project: Pointer;
   issue: Identifier;
   user: Pointer;

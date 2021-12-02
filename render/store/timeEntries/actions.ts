@@ -1,5 +1,5 @@
 import type { IAction, Context } from 'overmind';
-import { Response } from '../../../types';
+import { PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
 
 type GetManyTimeEntriesParams = {
@@ -11,7 +11,7 @@ type GetManyTimeEntriesParams = {
   limit?: number;
 }
 
-const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any>>> = async ({ effects, state }: Context, { filters, offset, limit }) => {
+const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse<any>>> = async ({ effects, state }: Context, { filters, offset, limit = 20 }) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'GET',
@@ -40,7 +40,7 @@ const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any
         items: response.payload.timeEntries,
         total: response.payload.total,
         limit: response.payload.limit,
-        offset: response.payload.offset
+        offset: response.payload.offset ?? 0
       },
       hasMore: response.payload.total > (response.payload.offset + response.payload.timeEntries.length),
     };
@@ -52,7 +52,7 @@ const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any
       items: [],
       total: 0,
       limit,
-      offset
+      offset: offset ?? 0
     },
     hasMore: false,
     error: response.error
