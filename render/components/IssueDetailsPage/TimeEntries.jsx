@@ -1,20 +1,19 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { css as emotionCss } from '@emotion/react';
 import styled, { css, useTheme } from 'styled-components';
 
 import PlusIcon from 'mdi-react/PlusIcon';
 import TimerIcon from 'mdi-react/TimerIcon';
 
-import { ProcessIndicator } from '../ProcessIndicator';
+import CloseIcon from 'mdi-react/CloseIcon';
 import Button from '../Button';
 import DateComponent from '../Date';
-import actions from '../../actions';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
 import { theme as Theme } from '../../theme';
 import { TimeTrackingAction } from '../../../types';
+import Dialog from '../Dialog';
+import { GhostButton } from '../GhostButton';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -121,31 +120,11 @@ const TimeEntriesList = styled.ul`
   }
 `;
 
-const ProcessIndicatorWrapper = styled.li`
-  position: relative;
-  div {
-    position: absolute;
-    left: 24%;
-    bottom: 0;
-  }
-`;
-
-const styles = {
-  processIndicatorText: emotionCss`
-    white-space: nowrap;
-    padding-left: 20px;
-    vertical-align: middle;
-    position: relative;
-    bottom: 5px;
-    left: 60px;
-  `
-};
-
 const TimeEntries = ({ issueId }) => {
   const listRef = useRef();
 
   const state = useOvermindState();
-  const overmindActions = useOvermindActions();
+  const actions = useOvermindActions();
   const theme = useTheme();
 
   const selectedIssue = state.issues.byId[issueId];
@@ -154,7 +133,7 @@ const TimeEntries = ({ issueId }) => {
   const trackedIssueId = lastRecord?.issueId;
 
   const requestTimeEntries = useCallback(
-    params => overmindActions.timeEntries.getManyTimeEntries({
+    params => actions.timeEntries.getManyTimeEntries({
       filters: {
         issueId: selectedIssue.id,
         projectId: selectedIssue.project.id,
@@ -171,29 +150,14 @@ const TimeEntries = ({ issueId }) => {
     request: requestTimeEntries
   });
 
-  console.log('timeEntries', timeEntries);
-
   // openModal = (timeEntry) => () => {
   //   const { showTimeEntryModal } = this.props;
   //   showTimeEntryModal(timeEntry);
   // }
 
   const startTimeTracking = () => {
-    overmindActions.timeTracking.track({ issueId });
+    actions.timeTracking.track({ issueId });
   };
-
-  // removeTimeEntry = (timeEntryId) => (e) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   const { selectedIssue, removeTimeEntry } = this.props;
-  //   removeTimeEntry(timeEntryId, selectedIssue.id);
-  // }
-
-  // loadSpentTime = () => {
-  //   const { spentTime, selectedIssue, fetchIssueTimeEntries } = this.props;
-  //   const { page } = spentTime;
-  //   fetchIssueTimeEntries(selectedIssue.id, page + 1);
-  // }
 
   return (
     <TimeEntriesContainer>
@@ -220,7 +184,6 @@ const TimeEntries = ({ issueId }) => {
         </div>
       </HeaderContainer>
       <TimeEntriesList ref={listRef} data-testId="time-entries">
-        {/* eslint-disable-next-line */}
         {timeEntries.map(timeEntry => (
           // eslint-disable-next-line
           <li
@@ -238,14 +201,14 @@ const TimeEntries = ({ issueId }) => {
                 </span>
                 <DateComponent className="date" date={timeEntry.spent_on} />
               </div>
-              {/* {
-                    userId === timeEntry.user.id && (
-                      <Dialog title="Please Confirm" message="Are you sure you want to delete this time entry?">
+              {
+                    state.users.currentUser.id === timeEntry.user.id && (
+                      <Dialog onConfirm={() => actions.timeEntries.removeTimeEntry({ id: timeEntry.id })} title="Please Confirm" message="Are you sure you want to delete this time entry?">
                         {
                           (requestConfirmation) => (
                             <GhostButton
                               id="confirmDeletion"
-                              onClick={requestConfirmation(this.removeTimeEntry(timeEntry.id))}
+                              onClick={requestConfirmation}
                             >
                               <CloseIcon color={theme.normalText} />
                             </GhostButton>
@@ -253,7 +216,7 @@ const TimeEntries = ({ issueId }) => {
                         }
                       </Dialog>
                     )
-                  } */}
+                  }
             </div>
             <p>{timeEntry.comments}</p>
           </li>
@@ -262,56 +225,6 @@ const TimeEntries = ({ issueId }) => {
     </TimeEntriesContainer>
   );
 };
-
-TimeEntries.propTypes = {
-  selectedIssue: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    subject: PropTypes.string.isRequired,
-    journals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    project: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    author: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired,
-  // userId: PropTypes.number.isRequired,
-  spentTime: PropTypes.arrayOf(
-    PropTypes.shape({
-      activity: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      comments: PropTypes.string,
-      created_on: PropTypes.string.isRequired,
-      hours: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-      issue: PropTypes.shape({
-        id: PropTypes.number.isRequired
-      }).isRequired,
-      project: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      spent_on: PropTypes.string.isRequired,
-      user: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired,
-      data: PropTypes.arrayOf(PropTypes.object).isRequired
-    })
-  ).isRequired,
-  removeTimeEntry: PropTypes.func.isRequired,
-  fetchIssueTimeEntries: PropTypes.func.isRequired,
-  showTimeEntryModal: PropTypes.func.isRequired
+export {
+  TimeEntries
 };
-
-const mapDispatchToProps = dispatch => ({
-  fetchIssueTimeEntries: (issueId, page) => dispatch(actions.issues.getTimeEntriesPage(issueId, undefined, page)),
-  startTimeTracking: selectedIssue => dispatch(actions.tracking.trackingStart(selectedIssue)),
-  removeTimeEntry: (timeEntryId, issueId) => dispatch(actions.timeEntry.remove(timeEntryId, issueId))
-});
-
-export default connect(() => ({}), mapDispatchToProps)(TimeEntries);

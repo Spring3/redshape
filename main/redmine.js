@@ -39,7 +39,7 @@ const createRequestClient = () => {
 
       console.log(response.statusCode, response.body);
 
-      const loginSuccess = response.statusCode === 200;
+      const loginSuccess = [204, 200].includes(response.statusCode);
       isInitialized = loginSuccess;
 
       if (loginSuccess) {

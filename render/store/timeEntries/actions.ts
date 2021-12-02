@@ -59,6 +59,31 @@ const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<Response<any
   };
 };
 
+type RemoveTimeEntryArgs = {
+  id: number;
+}
+
+const removeTimeEntry: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ effects }: Context, { id }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      method: 'DELETE',
+      route: `time_entries/${id}.json`
+    }
+  });
+
+  if (response.success) {
+    return {
+      success: true,
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 export {
-  getManyTimeEntries
+  getManyTimeEntries,
+  removeTimeEntry
 };

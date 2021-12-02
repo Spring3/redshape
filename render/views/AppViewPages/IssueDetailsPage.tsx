@@ -14,7 +14,7 @@ import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
 import IssueModal from '../../components/IssueModal';
-import TimeEntries from '../../components/IssueDetailsPage/TimeEntries';
+import { TimeEntries } from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
