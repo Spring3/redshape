@@ -1,6 +1,7 @@
 import { keyframes } from 'styled-components';
+import { keyframes as emotionKeyframes } from '@emotion/react';
 
-export const animationSlideRight = keyframes`
+export const animationSlideRight = emotionKeyframes`
   0% {
     transform: translateX(0px);
   }

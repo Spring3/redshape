@@ -6,29 +6,27 @@ import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import styled, { css, useTheme } from 'styled-components';
 
-import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
-
 import EditIcon from 'mdi-react/EditIcon';
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
 import TimeEntryModal from '../../components/TimeEntryModal';
-import IssueModal from '../../components/IssueModal';
+import { IssueModal } from '../../components/IssueModal';
 import { TimeEntries } from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../../components/Date';
 import { OverlayProcessIndicator } from '../../components/ProcessIndicator';
-import { animationSlideRight } from '../../animations';
 
 import { GhostButton } from '../../components/GhostButton';
 
 import reduxActions from '../../actions';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { useNavbar } from '../../contexts/NavbarContext';
+import { Issue } from '../../../types';
 
 const Flex = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 0px 1rem 1rem 1rem;
 `;
 
 const Section = styled.section`
@@ -95,23 +93,6 @@ const IconButton = styled(GhostButton)`
         border: 2px solid ${theme.main};
       }
     `}
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  a:first-child {
-    margin-right: 2rem;
-  }
-`;
-
-const BackButton = styled(IconButton)`
-  svg {
-    animation: ${animationSlideRight} 2s ease-in infinite;
-    &:hover {
-      animation-play-state: paused;
-    }
   }
 `;
 
@@ -214,6 +195,10 @@ const IssueDetailsPage = ({
     setShowIssueModal(true);
   };
 
+  const handleIssueUpdate = (issue: Issue) => {
+    // TBD;
+  };
+
   const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes) ?? [];
 
   const cfields = currentIssue.customFields;
@@ -224,12 +209,6 @@ const IssueDetailsPage = ({
       <Section>
         <Flex>
           <IssueDetails>
-            <Buttons className="buttons">
-              { /* eslint-disable-next-line react/jsx-no-bind */ }
-              <BackButton onClick={() => navigate('..')}>
-                <ArrowLeftIcon size={30} />
-              </BackButton>
-            </Buttons>
             <h2>
               <span>
                 #
@@ -424,13 +403,11 @@ const IssueDetailsPage = ({
         )}
         {currentIssue && (
           <IssueModal
+            issueId={currentIssue.id}
             isOpen={showIssueModal}
             isEditable={currentIssue.assignee.id === state.users.currentUser?.id}
-            isUserAuthor={currentIssue.author.id === state.users.currentUser?.id}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            issueEntry={currentIssue}
             onClose={closeIssueModal}
+            onConfirm={handleIssueUpdate}
           />
         )}
       </Section>

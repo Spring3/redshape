@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useTheme } from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useMatch } from 'react-router-dom';
 import { css } from '@emotion/react';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 import ChevronUpIcon from 'mdi-react/ChevronUpIcon';
@@ -11,6 +11,7 @@ import { Flex } from './Flex';
 import { Dropdown } from './Dropdown';
 import { theme as Theme } from '../theme';
 import { useNavbar } from '../contexts/NavbarContext';
+import { BackButton } from './BackButton';
 
 const styles = {
   nav: css`
@@ -39,6 +40,8 @@ const Navbar = () => {
   const userName = `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`;
 
   const theme = useTheme() as typeof Theme;
+
+  const isIssuesPage = Boolean(useMatch('/issues/'));
 
   const navLinkStyles = css`
     font-size: 1rem;
@@ -70,7 +73,8 @@ const Navbar = () => {
 
   return (
     <nav css={styles.nav}>
-      <Flex>
+      <Flex alignItems="center">
+        {!isIssuesPage ? <BackButton /> : null}
         <h2>{navbarState.title}</h2>
         {/* <li>Issues</li> */}
       </Flex>

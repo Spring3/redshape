@@ -21,7 +21,6 @@ const Modal = ({ isShown = false, children, onClose } : ModalProps) => {
       zIndex: '98' // react-confirm-alert is 99
     },
     modal: {
-      boxShadow: `0px 0px 20px ${theme.shadow}`,
       background: theme.bg,
       borderRadius: 3,
     }

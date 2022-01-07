@@ -93,7 +93,6 @@ const TimeEntries = ({ issueId }: TimeEntriesProps) => {
   return (
     <div css={emotionCss`
       background: white;
-      padding-top: 35px;
       max-height: 550px;
       min-width: 350px;
     `}
