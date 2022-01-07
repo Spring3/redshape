@@ -7,36 +7,12 @@ import { animationSlideRight } from '../animations';
 import { GhostButton } from './GhostButton';
 import { theme as Theme } from '../theme';
 
-// const IconButton = styled(GhostButton)`
-//   svg {
-//     border-radius: 3px;
-//     ${({ theme }) => css`
-//       color: ${theme.main};
-//       border: 2px solid transparent;
-//       transition: all ease ${theme.transitionTime};
-
-//       &:hover {
-//         color: ${theme.main};
-//         border: 2px solid ${theme.main};
-//       }
-//     `}
-//   }
-// `;
-// styled(IconButton)`
-//   svg {
-//     animation: ${animationSlideRight} 2s ease-in infinite;
-//     &:hover {
-//       animation-play-state: paused;
-//     }
-//   }
-// `;
-
 const BackButton = () => {
   const navigate = useNavigate();
   const theme = useTheme() as typeof Theme;
 
   const goBack = useCallback(() => {
-    navigate('..');
+    navigate(-1);
   }, [navigate]);
 
   return (
