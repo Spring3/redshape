@@ -169,7 +169,6 @@
     "react-dom": "^17.0.2",
     "react-focus-lock": "^2.6.0",
     "react-redux": "^6.0.1",
-    "react-responsive-modal": "^3.6.0",
     "react-router-dom": "^6.0.2",
     "react-select": "^2.4.1",
     "react-tabs": "^3.1.0",

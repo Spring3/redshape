@@ -10,7 +10,7 @@ import EditIcon from 'mdi-react/EditIcon';
 import Link from '../../components/Link';
 import Progressbar from '../../components/Progressbar';
 import { MarkdownText } from '../../components/MarkdownEditor';
-import TimeEntryModal from '../../components/TimeEntryModal';
+import { TimeEntryModal } from '../../components/TimeEntryModal';
 import { IssueModal } from '../../components/IssueModal';
 import { TimeEntries } from '../../components/IssueDetailsPage/TimeEntries';
 import CommentsSection from '../../components/IssueDetailsPage/CommentsSection';
@@ -394,7 +394,6 @@ const IssueDetailsPage = ({
         { selectedTimeEntry && (
         <TimeEntryModal
           isOpen={showTimeEntryModal}
-          isEditable={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
           activities={activities}
           isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
           timeEntry={selectedTimeEntry}

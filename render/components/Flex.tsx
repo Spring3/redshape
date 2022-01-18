@@ -6,7 +6,7 @@ type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'sp
 type FlexProps = {
   children?: ReactNode;
   className?: string;
-  direction?: 'row' | 'column';
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   justifyContent?: FlexAlignment;
   alignItems?: FlexAlignment;
   gap?: string;

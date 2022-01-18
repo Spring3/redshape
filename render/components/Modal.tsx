@@ -1,57 +1,81 @@
 import React, {
-  useEffect, ReactNode, useMemo
+  ReactNode, useCallback, KeyboardEvent
 } from 'react';
-import ModalWindow from 'react-responsive-modal';
 import { useTheme } from 'styled-components';
+import { css } from '@emotion/react';
+import ReactFocusLock from 'react-focus-lock';
+import CloseIcon from 'mdi-react/CloseIcon';
 import { theme as Theme } from '../theme';
+import { Flex } from './Flex';
+import { Portal } from './Portal';
+import { GhostButton } from './GhostButton';
 
-type ModalProps = {
-  isShown?: boolean;
-  children: ReactNode;
-  onClose: () => void;
-
+// eslint-disable-next-line no-shadow
+enum ModalWidth {
+  NARROW = '30%',
+  DEFAULT = '50%',
+  WIDE = '80%'
 }
 
-const Modal = ({ isShown = false, children, onClose } : ModalProps) => {
+type ModalProps = {
+  width?: ModalWidth;
+  isOpen?: boolean;
+  title?: string;
+  children: ReactNode;
+  closeIcon?: boolean;
+  onClose: () => void;
+}
+
+const Modal = ({
+  isOpen = false, width = ModalWidth.DEFAULT, children, onClose, title, closeIcon = true
+} : ModalProps) => {
   const theme = useTheme() as typeof Theme;
 
-  const modalStyles = useMemo(() => ({
-    overlay: {
-      background: 'rgba(55, 55, 55, 0.9)',
-      zIndex: '98' // react-confirm-alert is 99
-    },
-    modal: {
-      background: theme.bg,
-      borderRadius: 3,
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
     }
-  }), []);
-
-  useEffect(() => {
-    if (isShown) {
-      const root = document.getElementById('root');
-      if (root) {
-        root.classList.add('react-confirm-alert-blur');
-      }
-    }
-
-    return () => {
-      const root = document.getElementById('root');
-      if (root) {
-        root.classList.remove('react-confirm-alert-blur');
-      }
-    };
-  }, [isShown]);
+  }, [onClose]);
 
   return (
-    <ModalWindow
-      open={isShown}
-      styles={modalStyles}
-      showCloseIcon={false}
-      onClose={onClose}
-      onEscKeyDown={onClose}
+    <Portal
+      active={isOpen}
     >
-      {children}
-    </ModalWindow>
+      <ReactFocusLock>
+        <Flex
+          alignItems="center"
+          justifyContent="center"
+          css={css`
+          background: rgba(55, 55, 55, 0.9);
+          z-index: 98;
+          position: absolute;
+          
+          top: ${window.scrollY};
+          left: 0;
+          right: 0;
+          bottom: 0;
+        `}
+        >
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+          <div
+            role="dialog"
+            onKeyDown={handleKeyDown}
+            css={css`
+              background: ${theme.bg};
+              border-radius: 3px;
+              width: ${width};
+              padding: 1.5rem 2rem;
+            `}
+          >
+            <Flex direction="row-reverse">
+              {title ? <h1>{title}</h1> : null}
+              {closeIcon ? <GhostButton onClick={onClose}><CloseIcon color={theme.normalText} /></GhostButton> : null}
+            </Flex>
+            {children}
+          </div>
+        </Flex>
+      </ReactFocusLock>
+    </Portal>
   );
 };
 

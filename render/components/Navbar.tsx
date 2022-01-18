@@ -76,7 +76,6 @@ const Navbar = () => {
       <Flex alignItems="center">
         {!isIssuesPage ? <BackButton /> : null}
         <h2>{navbarState.title}</h2>
-        {/* <li>Issues</li> */}
       </Flex>
       <Flex gap="1rem">
         <NavLink

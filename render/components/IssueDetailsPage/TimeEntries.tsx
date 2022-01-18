@@ -64,7 +64,7 @@ const TimeEntries = ({ issueId }: TimeEntriesProps) => {
   const trackedIssueId = lastRecord?.issueId;
 
   const requestTimeEntries = useCallback(
-    params => actions.timeEntries.getManyTimeEntries({
+    params => actions.timeEntries.getMany({
       filters: {
         issueId: selectedIssue.id,
         projectId: selectedIssue.project.id,
@@ -201,7 +201,7 @@ const TimeEntries = ({ issueId }: TimeEntriesProps) => {
               </div>
               {state.users.currentUser?.id === timeEntry.user.id && (
                 <Dialog
-                  onConfirm={() => actions.timeEntries.removeTimeEntry({ id: timeEntry.id })}
+                  onConfirm={() => actions.timeEntries.remove({ id: timeEntry.id })}
                   title="Please Confirm"
                   message="Are you sure you want to delete this time entry?"
                 >

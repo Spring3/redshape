@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import { Navbar } from '../components/Navbar';
 import { Timer } from '../components/Timer';
-import TimeEntryModal from '../components/TimeEntryModal';
+import { TimeEntryModal } from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 
 import { hoursToDuration } from '../datetime';
@@ -98,7 +98,6 @@ const AppView = () => {
           />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
-            isEditable={true}
             activities={activities}
             isUserAuthor={true}
             timeEntry={timeEntry}

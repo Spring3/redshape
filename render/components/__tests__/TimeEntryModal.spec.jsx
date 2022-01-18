@@ -9,7 +9,7 @@ import { mount } from 'enzyme';
 import * as actions from '../../actions/timeEntry.actions';
 import { theme } from '../../theme';
 import { initialize, getInstance, reset } from '../../../common/request';
-import TimeEntryModal from '../TimeEntryModal';
+import { TimeEntryModal } from '../TimeEntryModal';
 
 let axiosMock;
 const mockStore = configureStore([thunk]);

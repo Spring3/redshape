@@ -3,20 +3,20 @@ const issues = require('./issues');
 const projects = require('./projects');
 const timeEntries = require('./timeEntries');
 
-const transform = (route, responseBody) => {
+const transform = ({ route, method }, responseBody) => {
   const [entity] = route.split('/')[0].split('.');
 
   console.log('entity', entity);
 
   switch (entity) {
     case 'users':
-      return users.transform(route, responseBody);
+      return users.transform({ route, method }, responseBody);
     case 'issues':
-      return issues.transform(route, responseBody);
+      return issues.transform({ route, method }, responseBody);
     case 'projects':
-      return projects.transform(route, responseBody);
+      return projects.transform({ route, method }, responseBody);
     case 'time_entries':
-      return timeEntries.transform(route, responseBody);
+      return timeEntries.transform({ route, method }, responseBody);
     default:
       return responseBody;
   }

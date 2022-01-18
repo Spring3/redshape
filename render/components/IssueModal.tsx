@@ -155,7 +155,7 @@ const IssueModal = ({
   const progressInfo = `${currentIssue.doneRatio.toFixed(0)}%`;
 
   return (
-    <Modal isShown={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} closeIcon>
       <FormField htmlFor="assignee" label="Assignee">
         <div id="assignee">{currentIssue.assignee.name}</div>
       </FormField>

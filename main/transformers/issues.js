@@ -1,4 +1,4 @@
-const transform = (route, responseBody) => {
+const transform = ({ route }, responseBody) => {
   if (route === 'issues.json') {
     const { issues } = responseBody;
     return {

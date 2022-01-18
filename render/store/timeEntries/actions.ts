@@ -1,5 +1,6 @@
+import moment from 'moment';
 import type { IAction, Context } from 'overmind';
-import { PaginatedActionResponse, Response } from '../../../types';
+import { PaginatedActionResponse, Response, TimeEntry } from '../../../types';
 import { indexById } from '../helpers';
 
 type GetManyTimeEntriesParams = {
@@ -11,7 +12,7 @@ type GetManyTimeEntriesParams = {
   limit?: number;
 }
 
-const getManyTimeEntries: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse<any>>> = async ({ effects, state }: Context, { filters, offset, limit = 20 }) => {
+const getMany: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse<any>>> = async ({ effects, state }: Context, { filters, offset, limit = 20 }) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'GET',
@@ -63,7 +64,7 @@ type RemoveTimeEntryArgs = {
   id: number;
 }
 
-const removeTimeEntry: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ effects }: Context, { id }) => {
+const remove: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ effects }: Context, { id }) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'DELETE',
@@ -83,7 +84,64 @@ const removeTimeEntry: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = a
   };
 };
 
+const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects }: Context, timeEntry) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      method: 'POST',
+      route: 'time_entries.json',
+      body: {
+        time_entry: {
+          issue_id: timeEntry.issue.id,
+          spent_on: moment(timeEntry.spentOn).format('YYYY-MM-DD'),
+          hours: timeEntry.hours,
+          activity_id: timeEntry.activity.id,
+          comments: timeEntry.comments,
+          user_id: timeEntry.user.id
+        }
+      }
+    }
+  });
+
+  if (response.success) {
+    return {
+      success: true,
+      payload: response.payload.timeEntry
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
+const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects }: Context, timeEntry) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      method: 'PUT',
+      route: `time_entries/${timeEntry.id}.json`,
+      body: {
+        time_entry: timeEntry
+      }
+    }
+  });
+
+  if (response.success) {
+    return {
+      success: true,
+      payload: response.payload.timeEntry
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 export {
-  getManyTimeEntries,
-  removeTimeEntry
+  publish,
+  getMany,
+  remove,
+  update
 };

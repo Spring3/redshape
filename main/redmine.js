@@ -43,7 +43,7 @@ const createRequestClient = () => {
       isInitialized = loginSuccess;
 
       if (loginSuccess) {
-        const payload = transform(route, response.body);
+        const payload = transform({ route, method: 'GET' }, response.body);
 
         instance = got.extend({
           ...configuration,
@@ -86,7 +86,7 @@ const createRequestClient = () => {
 
       if (response.statusCode === 200) {
         return {
-          payload: transform(data.route, response.body),
+          payload: transform({ route: data.route, method: data.method }, response.body),
           success: true,
         };
       }
