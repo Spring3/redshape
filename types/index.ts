@@ -130,6 +130,12 @@ type Issue = {
   closedOn?: string;
 }
 
+type IssueStatus = {
+  id: string;
+  name: string;
+  isClosed: boolean;
+}
+
 type TimeEntry = {
   id: number;
   project: Pointer;
@@ -170,6 +176,7 @@ export type {
   CreateOvermindConfigParams,
   Issue,
   IssueHeader,
+  IssueStatus,
   PaginatedActionResponse,
   Pointer,
   Project,
