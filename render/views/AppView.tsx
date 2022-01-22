@@ -15,7 +15,7 @@ import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './SummaryPage';
 import IssueDetailsPage from './IssueDetailsPage';
-import { Project, Issue } from '../../types';
+import { Project, Issue, IssueStatus } from '../../types';
 
 const Grid = styled.div`
   height: 100%;
@@ -31,7 +31,7 @@ const Content = styled.div`
 
 type AppViewProps = {
   // resetTimer: () => void;
-}
+};
 
 const AppView = () => {
   const [activities, setActivities] = useState([]);
@@ -42,13 +42,26 @@ const AppView = () => {
   const state = useOvermindState();
   const actions = useOvermindActions();
 
-  const requestProjects = useCallback(({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }), [actions.projects.getManyProjects]);
+  const requestProjects = useCallback(
+    ({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }),
+    [actions.projects.getManyProjects]
+  );
+
   const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
 
-  const onTrackingStop = ({ issue, recordedTime }: { issue: Issue, recordedTime: number }) => {
+  const requestIssueStatuses = useCallback(({ limit, offset }) => actions.issueStatuses.getAll({ limit, offset }), [actions.issueStatuses.getAll]);
+
+  useFetchAll<IssueStatus>(({ request: requestIssueStatuses }));
+
+  const onTrackingStop = ({ issue, recordedTime }: { issue: Issue; recordedTime: number }) => {
     const existingActivities = _get(projects[issue.project.id], 'activities', []);
     const hours = parseFloat((recordedTime / 3600000).toFixed(3));
-    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
+    setActivities(
+      existingActivities.map(({ id, name }: { id: string; name: string }) => ({
+        value: id,
+        label: name
+      }))
+    );
     setShowTimeEntryModal(true);
     setTimeEntry({
       activity: {},
@@ -92,10 +105,7 @@ const AppView = () => {
             <Route path="/" element={<SummaryPage />} />
             <Route path="/:id" element={<IssueDetailsPage />} />
           </Routes>
-          <Timer
-            autoStart
-            onStop={onTrackingStop}
-          />
+          <Timer autoStart onStop={onTrackingStop} />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             activities={activities}

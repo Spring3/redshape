@@ -8,14 +8,17 @@ type GetManyProjectsArgs = {
 }
 
 const getManyProjects: IAction<GetManyProjectsArgs, Promise<PaginatedActionResponse<any>>> = async ({ state, effects }: Context, { offset = 0, limit = 20 }) => {
+  const normalizedOffset = offset ? Math.abs(offset) : 0;
+  const normalizedLimit = limit ? Math.abs(limit) : undefined;
+
   const response = await effects.mainProcess.request({
     payload: {
       route: 'projects.json',
       method: 'GET',
       query: {
-        offset: offset ? Math.abs(offset) : 0,
+        offset: normalizedOffset,
         include: 'time_entry_activities',
-        limit: limit ? Math.abs(limit) : undefined
+        limit: normalizedLimit
       }
     }
   });
@@ -45,8 +48,8 @@ const getManyProjects: IAction<GetManyProjectsArgs, Promise<PaginatedActionRespo
     data: {
       items: [],
       total: 0,
-      limit,
-      offset
+      limit: response.payload.limit,
+      offset: response.payload.offset
     },
     hasMore: false,
     error: response.error

@@ -14,9 +14,12 @@ type GetManyIssuesArgs = {
 }
 
 const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+  const normalizedOffset = offset ? Math.abs(offset) : 0;
+  const normalizedLimit = limit ? Math.abs(limit) : undefined;
+
   const query = {
-    limit: limit ? Math.abs(limit) : undefined,
-    offset: offset ? Math.abs(offset) : 0,
+    limit: normalizedLimit,
+    offset: normalizedOffset,
     include: 'attachments,relations',
     ...filters
   };
@@ -54,8 +57,8 @@ const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>
     data: {
       items: [],
       total: 0,
-      limit,
-      offset
+      limit: response.payload.limit,
+      offset: response.payload.offset
     },
     hasMore: false,
     error: response.error

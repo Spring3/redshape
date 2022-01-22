@@ -4,7 +4,8 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
-import styled, { useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
+import { css } from '@emotion/react';
 
 import Link from '../components/Link';
 import Progressbar from '../components/Progressbar';
@@ -18,91 +19,37 @@ import { OverlayProcessIndicator } from '../components/ProcessIndicator';
 import reduxActions from '../actions';
 import { useOvermindActions, useOvermindState } from '../store';
 import { useNavbar } from '../contexts/NavbarContext';
+import { Flex } from '../components/Flex';
 
-const Flex = styled.div`
-  display: flex;
-  padding: 0px 1rem 1rem 1rem;
-`;
-
-const Section = styled.section`
-  background: white;
-  padding: 20px;
-  margin-top: 2rem;
-  margin-bottom: 60px;
-`;
-
-const ColumnList = styled.ul`
-  list-style-type: none;
-  font-weight: 500;
-  margin: 0;
-  padding: 0;
-  width: auto;
-  float: left;
-  padding-right: 20px;
-  border-radius: 3px;
-
-  li {
-    columns: 2;
-    margin-bottom: 10px;
-    padding: 5px 0px 5px 0px;
+const styles = {
+  subTask: css`
+    padding: 10px 5px;
+    margin-right: 1rem;
+    margin-bottom: 0.75rem;
+    background: lightgrey;
+    border-radius: 3px;
+  `,
+  pageWrapper: css`
+    padding: 1rem 3rem;
+    margin: 2rem auto;
+  `,
+  sidebar: css`
     display: flex;
-    align-items: center;
-  }
-
-  li div {
-    width: 220px;
-  }
-
-  li div:first-child {
-    font-weight: bold;
-    width: 150px;
-  }
-`;
-
-const SmallNotice = styled.p`
-  font-size: 12px;
-  margin-top: 0px;
-  color: ${props => props.theme.minorText};
-
-  a {
-    font-size: inherit !important;
-    margin-right: 5px;
-  }
-`;
-
-const Wrapper = styled.div`
-  display: inline-block;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const IssueDetails = styled.div`
-  flex-grow: 1;
-`;
-
-const Subtasks = styled.div`
-  display: inline-block;
-`;
-
-const Subtask = styled.div`
-  padding: 10px 5px;
-  margin-right: 1rem;
-  margin-bottom: 0.75rem;
-  box-shadow: 0px 0px 5px ${props => props.theme.shadow};
-  border-radius: 3px;
-`;
-
-const CustomFields = styled.ul`
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-`;
-
-const FlexWrapper = styled(Wrapper)`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-`;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    min-width: 30%;
+  `,
+  sidebarSection: css`
+    padding: 1.5rem 2rem;
+    border-radius: 3px;
+    border: solid 1px lightgrey;
+  `,
+  sidebarSectionHeader: css`
+    margin-top: 10px;
+    margin-bottom: 10px;
+  `
+};
 
 const IssueDetailsPage = ({ postComments }: any) => {
   const [activities, setActivities] = useState([]);
@@ -182,160 +129,193 @@ const IssueDetailsPage = ({ postComments }: any) => {
   }
 
   return (
-    <Section>
-      <Flex>
-        <IssueDetails>
-          <SmallNotice>
-            Created on:&nbsp;
-            <DateComponent date={currentIssue.createdOn} />
-            &nbsp;by&nbsp;
-            <Link href="#">{currentIssue.author.name}</Link>
-          </SmallNotice>
-          {currentIssue.createdOn && (
-            <SmallNotice>
-              Closed on:&nbsp;
-              <DateComponent date={currentIssue.createdOn} />
-            </SmallNotice>
+    <div
+      css={styles.pageWrapper}
+    >
+      <Flex justifyContent="space-between">
+        <Flex
+          css={css`
+            margin-right: 2rem;
+          `}
+          grow="1"
+          direction="column"
+        >
+          <h3>Description</h3>
+          <MarkdownText markdownText={currentIssue.description} />
+          {subtasks && subtasks.length && (
+            <>
+              <h3>Subtasks:</h3>
+              <Flex direction="column">
+                {subtasks.map((subtask: any, i: number) => (
+                  <div key={subtask.id} css={styles.subTask}>
+                    <Link href="#" key={i} onClick={() => navigate(`../${subtask.id}`)}>
+                      {`#${subtask.id} - ${subtask.subject}`}
+                    </Link>
+                  </div>
+                ))}
+              </Flex>
+            </>
           )}
-          <Wrapper>
-            <ColumnList>
-              <li>
-                <div>Tracker: </div>
-                <div>{currentIssue.tracker.name}</div>
-              </li>
-              <li>
-                <div>Status:</div>
-                <div>{currentIssue.status.name}</div>
-              </li>
-              <li>
-                <div>Priority: </div>
-                <div>{currentIssue.priority.name}</div>
-              </li>
-              <li>
-                <div>Assignee: </div>
-                <div>{currentIssue.assignee.name}</div>
-              </li>
-              <li>
-                <div>Project: </div>
-                <div>{_.get(currentIssue, 'project.name')}</div>
-              </li>
-              <li>
-                <div>Progress: </div>
-                <div>
-                  <Progressbar
-                    className={undefined}
-                    id={undefined}
-                    height={5}
-                    percent={currentIssue.doneRatio}
-                    background={(theme as any).main}
-                  />
-                </div>
-              </li>
-            </ColumnList>
-            <ColumnList>
-              <li>
-                <div>Target version: </div>
-                <div>{_.get(currentIssue, 'fixed_version.name')}</div>
-              </li>
-              <li>
-                <div>Start date: </div>
-                <DateComponent date={currentIssue.startDate} />
-              </li>
-              <li>
-                <div>Due date: </div>
-                <DateComponent date={currentIssue.dueDate} />
-              </li>
-              <li>
-                <div>Estimation: </div>
-                <div>
-                  {currentIssue.estimatedHours
-                    ? `${currentIssue.estimatedHours.toFixed(2)} h`
-                    : undefined}
-                  {currentIssue.totalEstimatedHours &&
-                    currentIssue.totalEstimatedHours !== currentIssue.estimatedHours &&
-                    currentIssue.totalEstimatedHours >= 0 && (
-                      <span>
-                        {' '}
-                        (Total:
-                        {currentIssue.totalEstimatedHours.toFixed(2)} h)
-                      </span>
-                    )}
-                </div>
-              </li>
-              <li>
-                <div>Time spent: </div>
-                <div>
-                  {currentIssue.spentHours ? `${currentIssue.spentHours.toFixed(2)} h` : undefined}
-                  {currentIssue.totalSpentHours &&
-                    currentIssue.totalSpentHours !== currentIssue.spentHours &&
-                    currentIssue.totalSpentHours >= 0 && (
-                      <span>
-                        {' '}
-                        (Total:
-                        {currentIssue.totalSpentHours.toFixed(2)} h)
-                      </span>
-                    )}
-                </div>
-              </li>
-              <li>
-                <div>Time cap: </div>
-                <div>
-                  <Progressbar
-                    className={undefined}
-                    id={undefined}
-                    height={5}
-                    percent={
-                      currentIssue.totalSpentHours && currentIssue.totalEstimatedHours
-                        ? (currentIssue.totalSpentHours / currentIssue.totalEstimatedHours) * 100
-                        : 0
-                    }
-                    background={(theme as any).main}
-                  />
-                </div>
-              </li>
-            </ColumnList>
-          </Wrapper>
-          <FlexWrapper>
-            {subtasks && subtasks.length && (
-              <ColumnList>
-                <h3>Subtasks:</h3>
-                <Subtasks>
-                  {subtasks.map((subtask: any, i: number) => (
-                    <Subtask>
-                      <Link href="#" key={i} onClick={() => navigate(`../${subtask.id}`)}>
-                        {`#${subtask.id} - ${subtask.subject}`}
-                      </Link>
-                    </Subtask>
-                  ))}
-                </Subtasks>
-              </ColumnList>
-            )}
+          <CommentsSection
+            journalEntries={getIssueComments()}
+            publishComments={postComments}
+            issueId={currentIssue.id}
+          />
+        </Flex>
+        <aside
+          css={styles.sidebar}
+        >
+          <Flex
+            css={styles.sidebarSection}
+            direction="column"
+          >
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Tracker: </h4>
+              <span>{currentIssue.tracker.name}</span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Assignee: </h4>
+              <span>{currentIssue.assignee.name}</span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Status:</h4>
+              <span>{currentIssue.status.name}</span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Priority: </h4>
+              <span>{currentIssue.priority.name}</span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Due date: </h4>
+              <DateComponent date={currentIssue.dueDate} />
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Project: </h4>
+              <span>{_.get(currentIssue, 'project.name')}</span>
+            </Flex>
+            <Flex>
+              <h4 css={styles.sidebarSectionHeader}>Target version: </h4>
+              <span>{_.get(currentIssue, 'fixed_version.name')}</span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Start date: </h4>
+              <DateComponent date={currentIssue.startDate} />
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Estimation: </h4>
+              <span>
+                {currentIssue.estimatedHours
+                  ? `${currentIssue.estimatedHours.toFixed(2)} h`
+                  : undefined}
+                {currentIssue.totalEstimatedHours
+                  && currentIssue.totalEstimatedHours !== currentIssue.estimatedHours
+                  && currentIssue.totalEstimatedHours >= 0 && (
+                    <span>
+                      {' '}
+                      (Total:
+                      {currentIssue.totalEstimatedHours.toFixed(2)}
+                      {' '}
+                      h)
+                    </span>
+                )}
+              </span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Time spent: </h4>
+              <span>
+                {currentIssue.spentHours ? `${currentIssue.spentHours.toFixed(2)} h` : undefined}
+                {currentIssue.totalSpentHours
+                  && currentIssue.totalSpentHours !== currentIssue.spentHours
+                  && currentIssue.totalSpentHours >= 0 && (
+                    <span>
+                      {' '}
+                      (Total:
+                      {currentIssue.totalSpentHours.toFixed(2)}
+                      {' '}
+                      h)
+                    </span>
+                )}
+              </span>
+            </Flex>
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Time cap: </h4>
+              <Progressbar
+                className={undefined}
+                id={undefined}
+                height={5}
+                percent={
+                  currentIssue.totalSpentHours && currentIssue.totalEstimatedHours
+                    ? (currentIssue.totalSpentHours / currentIssue.totalEstimatedHours) * 100
+                    : 0
+                }
+                background={(theme as any).main}
+              />
+            </Flex>
             {cfields && cfields.length && (
-              <ColumnList>
+              <>
                 <h3>Custom Fields:</h3>
-                <CustomFields>
+                <Flex direction="column">
                   {cfields.map((el: any, i: number) => (
-                    <li key={i}>
-                      <div>{el.name}: </div>
-                      <div>{el.value}</div>
-                    </li>
+                    <Flex alignItems="center">
+                      <h4 css={styles.sidebarSectionHeader}>
+                        {el.name}
+                        :
+                        {' '}
+                      </h4>
+                      <span>{el.value}</span>
+                    </Flex>
                   ))}
-                </CustomFields>
-              </ColumnList>
+                </Flex>
+              </>
             )}
-          </FlexWrapper>
-          <div>
-            <h3>Description</h3>
-            <MarkdownText markdownText={currentIssue.description} />
-          </div>
-        </IssueDetails>
-        <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} />
+          </Flex>
+          <Flex direction="column">
+            <p css={css`
+              font-size: 12px;
+              margin-top: 0px;
+              color: ${theme.minorText};
+            
+              a {
+                font-size: inherit !important;
+                margin-right: 5px;
+              }
+            `}
+            >
+              Created on:&nbsp;
+              <DateComponent date={currentIssue.createdOn} />
+              &nbsp;by&nbsp;
+              <Link href="#">{currentIssue.author.name}</Link>
+            </p>
+            {currentIssue.closedOn && (
+              <p css={css`
+                font-size: 12px;
+                margin-top: 0px;
+                color: ${theme.minorText};
+              
+                a {
+                  font-size: inherit !important;
+                  margin-right: 5px;
+                }
+              `}
+              >
+                Closed on:&nbsp;
+                <DateComponent date={currentIssue.closedOn} />
+              </p>
+            )}
+            <Flex alignItems="center">
+              <h4 css={styles.sidebarSectionHeader}>Progress:</h4>
+              <Progressbar
+                className={undefined}
+                id={undefined}
+                height={5}
+                percent={currentIssue.doneRatio}
+                background={(theme as any).main}
+              />
+            </Flex>
+          </Flex>
+        </aside>
+        {/* <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} /> */}
       </Flex>
-      <CommentsSection
-        journalEntries={getIssueComments()}
-        publishComments={postComments}
-        issueId={currentIssue.id}
-      />
       {selectedTimeEntry && (
         <TimeEntryModal
           isOpen={showTimeEntryModal}
@@ -345,7 +325,7 @@ const IssueDetailsPage = ({ postComments }: any) => {
           onClose={closeTimeEntryModal}
         />
       )}
-    </Section>
+    </div>
   );
 };
 
@@ -354,8 +334,7 @@ IssueDetailsPage.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  postComments: (issueId: any, comments: any) =>
-    dispatch(reduxActions.issues.sendComments(issueId, comments))
+  postComments: (issueId: any, comments: any) => dispatch(reduxActions.issues.sendComments(issueId, comments))
 });
 
 export default connect(() => ({}), mapDispatchToProps)(IssueDetailsPage);

@@ -2,11 +2,23 @@ import { IAction, Context } from 'overmind';
 import { IssueStatus, PaginatedActionResponse } from '../../../types';
 import { indexById } from '../helpers';
 
-const getAll: IAction<void, Promise<PaginatedActionResponse<IssueStatus>>> = async ({ effects, state }: Context) => {
+type GetAllIssueStatusesArgs = {
+  offset?: number;
+  limit?: number;
+};
+
+const getAll: IAction<GetAllIssueStatusesArgs, Promise<PaginatedActionResponse<IssueStatus>>> = async ({ effects, state }: Context, { offset, limit }) => {
+  const normalizedOffset = offset ? Math.abs(offset) : 0;
+  const normalizedLimit = limit ? Math.abs(limit) : undefined;
+
   const response = await effects.mainProcess.request({
     payload: {
       method: 'GET',
-      route: 'issue_statuses.json'
+      route: 'issue_statuses.json',
+      query: {
+        offset: normalizedOffset,
+        limit: normalizedLimit
+      }
     }
   });
 
