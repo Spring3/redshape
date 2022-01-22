@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { debounce } from 'lodash';
-import { Input } from '../../components/Input';
-import { IssuesTable } from '../../components/SummaryPage/IssuesTable';
-import { Flex } from '../../components/Flex';
-import { useOvermindActions, useOvermindState } from '../../store';
-import { useNavbar } from '../../contexts/NavbarContext';
-import { Checkbox } from '../../components/Checkbox';
+import { Input } from '../components/Input';
+import { IssuesTable } from '../components/SummaryPage/IssuesTable';
+import { Flex } from '../components/Flex';
+import { useOvermindActions, useOvermindState } from '../store';
+import { useNavbar } from '../contexts/NavbarContext';
+import { Checkbox } from '../components/Checkbox';
 
 const SummaryPage = () => {
   const [search, setSearch] = useState<string>('');
@@ -35,7 +35,7 @@ const SummaryPage = () => {
     <Flex
       css={css`
         margin-bottom: 2rem;
-        margin-top: 2rem;
+        margin-top: 3.5rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
       `}

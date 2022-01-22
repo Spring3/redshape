@@ -67,9 +67,9 @@ const Modal = ({
               padding: 1.5rem 2rem;
             `}
           >
-            <Flex direction="row-reverse">
-              {title ? <h1>{title}</h1> : null}
+            <Flex direction="row-reverse" justifyContent="space-between">
               {closeIcon ? <GhostButton onClick={onClose}><CloseIcon color={theme.normalText} /></GhostButton> : null}
+              {title ? <h2>{title}</h2> : null}
             </Flex>
             {children}
           </div>

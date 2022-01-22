@@ -21,11 +21,12 @@ const styles = {
     right: 0px;
     z-index: 2;
     height: 50px;
-    background: linear-gradient(to bottom, white 85%, transparent);
+    background: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 1.5rem 0px 1.5rem;
+    box-shadow: 0px 0px 5px 0px lightgrey;
+    padding: 20px 1.5rem 10px 1.5rem;
   `,
   icon: css`
     vertical-align: middle;

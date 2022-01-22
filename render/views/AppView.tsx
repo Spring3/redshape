@@ -13,8 +13,8 @@ import { hoursToDuration } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
-import { SummaryPage } from './AppViewPages/SummaryPage';
-import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import { SummaryPage } from './SummaryPage';
+import IssueDetailsPage from './IssueDetailsPage';
 import { Project, Issue } from '../../types';
 
 const Grid = styled.div`
@@ -99,9 +99,7 @@ const AppView = () => {
           <TimeEntryModal
             isOpen={showTimeEntryModal}
             activities={activities}
-            isUserAuthor={true}
             timeEntry={timeEntry}
-            initialVolatileContent={true}
             onClose={closeTimeEntryModal}
           />
         </Content>

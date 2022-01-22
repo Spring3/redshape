@@ -10,9 +10,9 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import { theme } from '../../../theme';
-import IssueDetailsPage from '../../AppViewPages/IssueDetailsPage';
-import { getInstance, reset, initialize } from '../../../../common/request';
+import { theme } from '../../theme';
+import IssueDetailsPage from '../IssueDetailsPage';
+import { getInstance, reset, initialize } from '../../../common/request';
 
 const mockStore = configureStore([thunk]);
 const redmineEndpoint = 'redmine.test.test';
