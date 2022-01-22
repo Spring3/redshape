@@ -92,7 +92,61 @@ const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effe
   };
 };
 
+type UpdateIssueArgs = {
+  id: number;
+  projectId?: number;
+  trackerId?: number;
+  statusId?: number;
+  priorityId?: number;
+  assigneeId?: number;
+  subject?: string;
+  description?: string;
+  dueDate?: Date | string;
+  doneRatio?: number;
+  estimatedHours?: number;
+  spentHours?: number;
+  closedOn?: Date | string;
+}
+
+const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id, ...updates }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      route: `issues/${id}.json`,
+      method: 'PUT',
+      body: {
+        tracker_id: updates.trackerId,
+        project_id: updates.projectId,
+        status_id: updates.statusId,
+        priority_id: updates.priorityId,
+        assigned_to_id: updates.assigneeId,
+        subject: updates.subject,
+        description: updates.description,
+        due_date: updates.dueDate,
+        done_ratio: updates.doneRatio,
+        estimated_hours: updates.estimatedHours,
+        spent_hours: updates.spentHours,
+        closed_on: updates.closedOn
+      }
+    }
+  });
+
+  if (response.success) {
+    const issue = response.payload as Issue;
+    state.issues.byId[id] = issue;
+    return {
+      success: true,
+      data: issue
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 export {
   getOne,
-  getMany
+  getMany,
+  update
 };

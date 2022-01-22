@@ -10,6 +10,7 @@ import * as issues from './issues';
 import * as projects from './projects';
 import * as timeTracking from './timeTracking';
 import * as timeEntries from './timeEntries';
+import * as versions from './versions';
 
 import { mainProcess } from './effects';
 
@@ -28,6 +29,7 @@ const overmindStoreConfig = merge(
     users,
     timeEntries,
     timeTracking,
+    versions
   })
 );
 

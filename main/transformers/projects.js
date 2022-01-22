@@ -19,6 +19,27 @@ const transform = ({ route }, responseBody) => {
       limit: responseBody.limit
     };
   }
+
+  if (/projects\/\w{1,}\/versions\.json/.test(route)) {
+    const { versions } = responseBody;
+    return {
+      versions: versions.map((version) => ({
+        id: version.id,
+        project: version.project,
+        name: version.name,
+        description: version.description,
+        status: version.status,
+        dueDate: version.due_date,
+        sharing: version.sharing,
+        createdOn: version.created_on,
+        updatedOn: version.updated_on,
+        wikiPageTitle: version.wiki_page_title
+      })),
+      total: responseBody.total_count,
+      offset: responseBody.offset,
+      limit: responseBody.limit
+    };
+  }
   return responseBody;
 };
 

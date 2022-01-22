@@ -193,7 +193,7 @@ const IssueDetailsPage = ({ postComments }: any) => {
           </SmallNotice>
           {currentIssue.createdOn && (
             <SmallNotice>
-              Closed:&nbsp;
+              Closed on:&nbsp;
               <DateComponent date={currentIssue.createdOn} />
             </SmallNotice>
           )}

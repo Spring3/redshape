@@ -94,7 +94,7 @@ type CustomField = {
 type Project = {
   id: number;
   name: string;
-  identified: string;
+  identifier: string;
   description: string;
   status: number;
   isPublic: boolean;
@@ -143,6 +143,23 @@ type TimeEntry = {
   updatedOn: string;
 }
 
+type VersionStatus = 'open' | 'locked' | 'closed';
+
+type VersionSharing = 'none' | 'descendants' | 'hierarchy' | 'tree' | 'system';
+
+type Version = {
+  id: number;
+  project: Pointer;
+  name: string;
+  description: string;
+  status: VersionStatus;
+  dueDate: string;
+  sharing: VersionSharing;
+  createdOn: string;
+  updatedOn: string;
+  wikiPageTitle: string;
+}
+
 export {
   SessionAction,
   TimeTrackingAction
@@ -161,4 +178,5 @@ export type {
   TimeEntry,
   TimeTrackingRecord,
   User,
+  Version
 };
