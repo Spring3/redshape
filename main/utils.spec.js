@@ -1,9 +1,8 @@
-const utils = require('../../common/utils');
+const utils = require('./utils');
 
 describe('utils', () => {
   it('should expose the utils functions', () => {
     expect(utils.openExternalUrl).toBeTruthy();
-    expect(utils.xssFilter).toBeTruthy();
   });
 
   describe('openExternalUrl', () => {

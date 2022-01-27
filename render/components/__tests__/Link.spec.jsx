@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { mount } from 'enzyme';
 
-import utils from '../../../common/utils';
+import utils from '../../../main/utils';
 import Link from '../Link';
 
 jest.mock('electron');

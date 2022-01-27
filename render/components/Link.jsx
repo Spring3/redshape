@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { noop } from 'lodash';
 
 import { openExternalUrl } from '../../common/utils';
+import { useOvermindEffects } from '../store';
 
 const StyledLink = styled.a`
   color: ${(props) => props.theme.main};
@@ -21,10 +22,16 @@ const StyledLink = styled.a`
 const Link = ({
   onClick, type, href, children, className, testId
 }) => {
+  const effects = useOvermindEffects();
   const clickHandler = (event) => {
     event.preventDefault();
     if (type === 'external') {
-      openExternalUrl(href);
+      await effects.mainProcess.system({
+        payload: {
+          url: href
+        },
+        action: 'open-url'
+      });
     } else if (onClick) {
       onClick(event);
     }

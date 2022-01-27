@@ -3,9 +3,14 @@ import { Response } from '../../../types';
 
 const crypto = remote.require('crypto');
 
-type MainProcessEventData = {
+type SystemRequestEventPayload = {
   payload: Record<string, any>;
-  action: string;
+  action: 'open-url' | 'login' | 'logout';
+}
+
+type SessionRequestEventPayload = {
+  payload: Record<string, any>;
+  action: 'READ' | 'SAVE';
 }
 
 type MainProcessRequestEventPayoad = {
@@ -38,8 +43,8 @@ const query = <T>({ reqEvent, resEvent }: MainProcessEventTags, payload: T): Pro
 };
 
 const request = (payload: MainProcessRequestEventPayoad) => query<MainProcessRequestEventPayoad>({ reqEvent: 'request', resEvent: 'response' }, payload);
-const system = (payload: MainProcessEventData) => query<MainProcessEventData>({ reqEvent: 'system-request', resEvent: 'system-response' }, payload);
-const session = (payload: MainProcessEventData) => query<MainProcessEventData>({ reqEvent: 'session-request', resEvent: 'session-response' }, payload);
+const system = (payload: SystemRequestEventPayload) => query<SystemRequestEventPayload>({ reqEvent: 'system-request', resEvent: 'system-response' }, payload);
+const session = (payload: SessionRequestEventPayload) => query<SessionRequestEventPayload>({ reqEvent: 'session-request', resEvent: 'session-response' }, payload);
 
 export {
   request,
