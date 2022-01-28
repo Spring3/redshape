@@ -349,14 +349,14 @@ const MarkdownText = ({ markdownText, name, className }: MarkdownTextProps) => {
       body {
         margin: 0;
         font-family: Roboto,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;
-        font-size: 14px;
+        font-size: 1rem;
         font-weight: 500;
         color: ${theme.normalText};
       }
 
       a {
         color: ${theme.main};
-        font-size: 14px;
+        font-size: 1rem;
         padding: 2px;
         cursor: pointer;
       }
@@ -390,13 +390,14 @@ const MarkdownText = ({ markdownText, name, className }: MarkdownTextProps) => {
   const adjustIframeSize = () => {
     const iframe = iframeRef.current;
     if (iframe) {
-      iframe.setAttribute('height', `${iframe.contentDocument?.body.scrollHeight as number + 35}`);
+      iframe.height = `${iframe.contentDocument?.body.scrollHeight || 0 + 35}`;
     }
   };
 
   const throttledAdjustIframeSize = useCallback(throttle(adjustIframeSize, 300), []);
 
   const markdown = xss(converter.makeHtml(markdownText));
+
   return (
     <Iframe
       ref={iframeRef}

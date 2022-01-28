@@ -141,8 +141,8 @@ const IssueDetailsPage = ({ postComments }: any) => {
           direction="column"
         >
           <h3>Description</h3>
-          <MarkdownText markdownText={currentIssue.description} />
-          {subtasks && subtasks.length && (
+          <MarkdownText name="description" markdownText={currentIssue.description} />
+          {subtasks && subtasks.length ? (
             <>
               <h3>Subtasks:</h3>
               <Flex direction="column">
@@ -155,7 +155,7 @@ const IssueDetailsPage = ({ postComments }: any) => {
                 ))}
               </Flex>
             </>
-          )}
+          ): null}
           <CommentsSection
             journalEntries={getIssueComments()}
             publishComments={postComments}

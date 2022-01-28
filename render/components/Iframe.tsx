@@ -8,9 +8,9 @@ type IframeProps = {
   name: string;
   className?: string;
   html: string;
-  width: string;
+  width?: string;
   cssCode?: string;
-  onResize: () => void;
+  onResize?: () => void;
 }
 
 const styles = {
@@ -25,9 +25,20 @@ const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
 }: IframeProps, ref) => {
   const effects = useOvermindEffects();
 
+  const handleResize = useCallback(() => {
+    if (ref.current) {
+      ref.current.height = ref.current.contentDocument.body.scrollHeight || 0;
+      ref.current.width = width ? width : ref.current.contentDocument.body.scrollWidth || 0;
+    }
+
+    if (onResize) {
+      onResize();
+    }
+  }, [onResize, width]);
+
   useEffect(() => () => {
-    window.removeEventListener('resize', onResize);
-  }, [onResize]);
+    window.removeEventListener('resize', handleResize);
+  }, [handleResize]);
 
   const onLoad = useCallback(() => {
     const interceptIframeInternalRedirect: MouseEventHandler<HTMLElement> = (e) => {
@@ -58,10 +69,10 @@ const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
         cssContainer.innerText = cssCode;
         ref.current.contentDocument?.head.appendChild(cssContainer);
       }
-      onResize();
-      window.addEventListener('resize', onResize);
+      handleResize();
+      window.addEventListener('resize', handleResize);
     }
-  }, [cssCode, onResize]);
+  }, [cssCode, handleResize]);
 
   return (
     <iframe
@@ -69,6 +80,7 @@ const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
       title={name}
       frameBorder="0"
       width={width}
+      height={html ? undefined : 20}
       ref={ref}
       className={className}
       srcDoc={html}

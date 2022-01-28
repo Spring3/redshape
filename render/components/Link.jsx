@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import { noop } from 'lodash';
 
-import { openExternalUrl } from '../../common/utils';
 import { useOvermindEffects } from '../store';
 
 const StyledLink = styled.a`
@@ -23,7 +22,7 @@ const Link = ({
   onClick, type, href, children, className, testId
 }) => {
   const effects = useOvermindEffects();
-  const clickHandler = (event) => {
+  const clickHandler = async (event) => {
     event.preventDefault();
     if (type === 'external') {
       await effects.mainProcess.system({
