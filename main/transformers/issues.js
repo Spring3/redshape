@@ -22,6 +22,14 @@ const transform = ({ route }, responseBody) => {
         totalSpentHours: issue.total_spent_hours,
         createdOn: issue.created_on,
         updatedOn: issue.updated_on,
+        journals: issue.journals?.map((journal) => ({
+          id: journal.id,
+          user: journal.user,
+          createdOn: journal.created_on,
+          notes: journal.notes,
+          privateNotes: journal.private_notes,
+          details: journal.details
+        })) || [],
         closedOn: issue.closed_on
       })),
       total: responseBody.total_count,
@@ -58,7 +66,9 @@ const transform = ({ route }, responseBody) => {
         id: journal.id,
         user: journal.user,
         createdOn: journal.created_on,
-        notes: journal.notes
+        notes: journal.notes,
+        privateNotes: journal.private_notes,
+        details: journal.details
       })) || [],
       closedOn: issue.closed_on
     };

@@ -72,11 +72,11 @@ type MarkdownEditorProps = {
   className?: string;
   id?: string;
   name: string;
-  onBlur: FocusEventHandler<HTMLTextAreaElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>;
   disabled?: boolean;
   maxLength?: number;
   onChange?: (value: string) => void;
-  onSubmit?: KeyboardEventHandler<HTMLTextAreaElement>;
+  onSubmit?: (value: string) => void;
 }
 
 const MarkdownEditor = ({
@@ -411,6 +411,4 @@ const MarkdownText = ({ markdownText, name, className }: MarkdownTextProps) => {
   );
 };
 
-export { MarkdownText };
-
-export default MarkdownEditor;
+export { MarkdownText, MarkdownEditor };

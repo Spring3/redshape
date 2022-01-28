@@ -54,7 +54,7 @@ const createRequestClient = () => {
 
         return {
           success: true,
-          payload
+          data: payload
         };
       }
 
@@ -86,8 +86,14 @@ const createRequestClient = () => {
 
       if (response.statusCode === 200) {
         return {
-          payload: transform({ route: data.route, method: data.method }, response.body),
+          data: transform({ route: data.route, method: data.method }, response.body),
           success: true,
+        };
+      }
+
+      if (data.method === 'PUT' && response.statusCode === 204) {
+        return {
+          success: true
         };
       }
 

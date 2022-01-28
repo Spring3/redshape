@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import Copyrights from '../Copyrights';
+import { Copyrights } from '../Copyrights';
 
 describe('Copyrights Component', () => {
   afterEach(cleanup);

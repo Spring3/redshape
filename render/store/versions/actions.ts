@@ -35,19 +35,19 @@ const getForProject: IAction<GetProjectVersionsArgs, Promise<PaginatedActionResp
       ...state.versions.byProjectId,
       [targetProject!.id]: {
         ...savedVersionMap,
-        ...indexById(response.payload.versions)
+        ...indexById(response.data.versions)
       }
     };
 
     return {
       success: true,
       data: {
-        items: response.payload.versions,
-        total: response.payload.total,
-        limit: response.payload.limit,
-        offset: response.payload.offset,
+        items: response.data.versions,
+        total: response.data.total,
+        limit: response.data.limit,
+        offset: response.data.offset,
       },
-      hasMore: response.payload.total > (response.payload.offset + response.payload.versions.length)
+      hasMore: response.data.total > (response.data.offset + response.data.versions.length)
     };
   }
 
@@ -56,8 +56,8 @@ const getForProject: IAction<GetProjectVersionsArgs, Promise<PaginatedActionResp
     data: {
       items: [],
       total: 0,
-      limit: limit || response.payload.limit,
-      offset: offset || response.payload.offset,
+      limit: limit || response.data.limit,
+      offset: offset || response.data.offset,
     },
     hasMore: false,
     error: response.error

@@ -85,7 +85,7 @@ const App = ({ dispatch }) => {
       if (response.success) {
         const loginResponse = await actions.users.login({
           apiKey: token,
-          redmineEndpoint: response.payload.endpoint
+          redmineEndpoint: response.data.endpoint
         });
         if (loginResponse.success) {
           navigate('/issues', { replace: true });

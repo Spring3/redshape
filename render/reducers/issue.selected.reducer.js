@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import {
-  ISSUES_COMMENTS_SEND,
   ISSUES_TIME_ENTRY_GET
 } from '../actions/issues.actions';
 
@@ -28,52 +27,6 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ISSUES_COMMENTS_SEND: {
-      if (action.status === 'START') {
-        return {
-          ...state,
-          updates: {
-            ...state.updateStatus,
-            [action.info.subject]: {
-              ok: false,
-              isUpdating: true,
-              error: undefined
-            }
-          }
-        };
-      }
-      if (action.status === 'OK') {
-        return {
-          ...state,
-          data: {
-            ...state.data,
-            journals: [...state.data.journals, action.data]
-          },
-          updates: {
-            ...state.updates,
-            [action.info.subject]: {
-              ok: true,
-              isUpdating: false,
-              error: undefined
-            }
-          }
-        };
-      }
-      if (action.status === 'NOK') {
-        return {
-          ...state,
-          updates: {
-            ...state.updates,
-            [action.info.subject]: {
-              ok: false,
-              isUpdating: false,
-              error: action.data
-            }
-          }
-        };
-      }
-      return state;
-    }
     case ISSUES_TIME_ENTRY_GET: {
       if (action.status === 'START') {
         return {

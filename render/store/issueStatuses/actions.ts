@@ -25,18 +25,18 @@ const getAll: IAction<GetAllIssueStatusesArgs, Promise<PaginatedActionResponse<I
   if (response.success) {
     state.issueStatuses.byId = {
       ...state.issueStatuses,
-      ...indexById(response.payload.issueStatuses)
+      ...indexById(response.data.issueStatuses)
     };
 
     return {
       success: true,
       data: {
-        items: response.payload.issueStatuses,
-        total: response.payload.total,
-        limit: response.payload.limit,
-        offset: response.payload.offset
+        items: response.data.issueStatuses,
+        total: response.data.total,
+        limit: response.data.limit,
+        offset: response.data.offset
       },
-      hasMore: response.payload.total > (response.payload.offset + response.payload.issueStatuses.length)
+      hasMore: response.data.total > (response.data.offset + response.data.issueStatuses.length)
     };
   }
 
@@ -45,8 +45,8 @@ const getAll: IAction<GetAllIssueStatusesArgs, Promise<PaginatedActionResponse<I
     data: {
       items: [],
       total: 0,
-      limit: response.payload.limit,
-      offset: response.payload.offset
+      limit: response.data.limit,
+      offset: response.data.offset
     },
     hasMore: false,
     error: response.error

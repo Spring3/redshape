@@ -1,3 +1,4 @@
+import moment from 'moment';
 import type { Context, IAction } from 'overmind';
 import { Issue, PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
@@ -35,20 +36,20 @@ const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>
   if (response.success) {
     state.issues.byId = {
       ...state.issues.byId,
-      ...indexById(response.payload.issues)
+      ...indexById(response.data.issues)
     };
 
-    console.log('payload', response.payload);
+    console.log('payload', response.data);
 
     return {
       success: true,
       data: {
-        items: response.payload.issues,
-        total: response.payload.total,
-        limit: response.payload.limit,
-        offset: response.payload.offset
+        items: response.data.issues,
+        total: response.data.total,
+        limit: response.data.limit,
+        offset: response.data.offset
       },
-      hasMore: response.payload.total > (response.payload.offset + response.payload.issues.length),
+      hasMore: response.data.total > (response.data.offset + response.data.issues.length),
     };
   }
 
@@ -57,8 +58,8 @@ const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>
     data: {
       items: [],
       total: 0,
-      limit: response.payload.limit,
-      offset: response.payload.offset
+      limit: response.data.limit,
+      offset: response.data.offset
     },
     hasMore: false,
     error: response.error
@@ -66,7 +67,7 @@ const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>
 };
 
 type GetOneIssueArgs = {
-  id: string;
+  id: number;
 }
 
 const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id }) => {
@@ -81,7 +82,7 @@ const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effe
   });
 
   if (response.success) {
-    const issue = response.payload as Issue;
+    const issue = response.data as Issue;
     state.issues.byId[id] = issue;
     return {
       success: true,
@@ -104,14 +105,14 @@ type UpdateIssueArgs = {
   assigneeId?: number;
   subject?: string;
   description?: string;
-  dueDate?: Date | string;
+  dueDate?: string;
   doneRatio?: number;
   estimatedHours?: number;
   spentHours?: number;
-  closedOn?: Date | string;
+  closedOn?: string;
 }
 
-const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id, ...updates }) => {
+const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effects, state, actions }: Context, { id, ...updates }) => {
   const response = await effects.mainProcess.request({
     payload: {
       route: `issues/${id}.json`,
@@ -134,12 +135,53 @@ const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effe
   });
 
   if (response.success) {
-    const issue = response.payload as Issue;
-    state.issues.byId[id] = issue;
-    return {
-      success: true,
-      data: issue
-    };
+    const refetchResponse = await actions.issues.getOne({ id });
+    if (refetchResponse.success) {
+      const issue = refetchResponse.data as Issue;
+      state.issues.byId[id] = issue;
+
+      return {
+        success: true,
+        data: issue
+      };
+    }
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
+type GetCommentsArgs = {
+  issueId: number;
+  comments: string;
+}
+
+const publishComments: IAction<GetCommentsArgs, Promise<Response<Issue>>> = async ({ effects, state, actions }: Context, { issueId, comments }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      route: `issues/${issueId}.json`,
+      method: 'PUT',
+      body: {
+        issue: {
+          notes: comments
+        }
+      }
+    }
+  });
+
+  if (response.success) {
+    const refetchResponse = await actions.issues.getOne({ id: issueId });
+    if (refetchResponse.success) {
+      const issue = refetchResponse.data as Issue;
+      state.issues.byId[issueId] = issue;
+
+      return {
+        success: true,
+        data: issue
+      };
+    }
   }
 
   return {
@@ -151,5 +193,6 @@ const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effe
 export {
   getOne,
   getMany,
-  update
+  update,
+  publishComments
 };

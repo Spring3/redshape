@@ -10,7 +10,7 @@ import StopIcon from 'mdi-react/StopIcon';
 
 import { GhostButton } from './GhostButton';
 import { animationSlideUp } from '../animations';
-import Link from './Link';
+import { Link } from './Link';
 import { useOvermindActions, useOvermindState } from '../store';
 import { Issue, TimeTrackingAction } from '../../types';
 

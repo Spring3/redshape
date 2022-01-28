@@ -31,19 +31,19 @@ const getMany: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse
       ...state.timeEntries.mapByIssueId,
       [filters.issueId]: {
         ...(state.timeEntries.mapByIssueId[filters.issueId] || {}),
-        ...indexById(response.payload.timeEntries)
+        ...indexById(response.data.timeEntries)
       }
     };
 
     return {
       success: true,
       data: {
-        items: response.payload.timeEntries,
-        total: response.payload.total,
-        limit: response.payload.limit,
-        offset: response.payload.offset ?? 0
+        items: response.data.timeEntries,
+        total: response.data.total,
+        limit: response.data.limit,
+        offset: response.data.offset ?? 0
       },
-      hasMore: response.payload.total > (response.payload.offset + response.payload.timeEntries.length),
+      hasMore: response.data.total > (response.data.offset + response.data.timeEntries.length),
     };
   }
 
@@ -105,7 +105,7 @@ const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effec
   if (response.success) {
     return {
       success: true,
-      payload: response.payload.timeEntry
+      data: response.data.timeEntry
     };
   }
 
@@ -129,7 +129,7 @@ const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effect
   if (response.success) {
     return {
       success: true,
-      payload: response.payload.timeEntry
+      data: response.data.timeEntry
     };
   }
 

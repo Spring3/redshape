@@ -14,7 +14,7 @@ import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './SummaryPage';
-import IssueDetailsPage from './IssueDetailsPage';
+import { IssueDetailsPage } from './IssueDetailsPage';
 import { Project, Issue, IssueStatus } from '../../types';
 
 const Grid = styled.div`

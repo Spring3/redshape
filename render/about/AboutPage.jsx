@@ -8,7 +8,7 @@ import { version, name } from '../../package.json';
 import LogoIcon from '../../assets/icon.png';
 
 import DragArea from '../components/DragArea';
-import Link from '../components/Link';
+import { Link } from '../components/Link';
 // import { report } from '../../common/reporter';
 import License from './License';
 
@@ -141,7 +141,7 @@ class AboutPage extends Component {
               <IconContainer>
                 <Link
                   href="https://www.dvasylenko.com/redshape/"
-                  type="external"
+                  external
                 >
                   <img alt="App icon" height="70" src={LogoIcon} />
                 </Link>
@@ -163,7 +163,7 @@ class AboutPage extends Component {
                   <span>&nbsp;issues/proposals on Github or </span>
                   <Link
                     href="mailto:redshape.app@gmail.com"
-                    type="external"
+                    external
                   >
                     by e-mail
                   </Link>
@@ -172,7 +172,7 @@ class AboutPage extends Component {
                   <span>Visit the Redshape</span>
                   <Link
                     href="https://www.dvasylenko.com/redshape/"
-                    type="external"
+                    external
                   >
                     homepage
                   </Link>
@@ -187,14 +187,14 @@ class AboutPage extends Component {
                   Copyright © 2020&nbsp;
                   <Link
                     href="https://www.dvasylenko.com/redshape/"
-                    type="external"
+                    external
                   >
                     Daniyil Vasylenko
                   </Link>
                   &
                   <Link
                     href="https://github.com/Spring3/redshape/graphs/contributors"
-                    type="external"
+                    external
                   >
                     Contributors
                   </Link>

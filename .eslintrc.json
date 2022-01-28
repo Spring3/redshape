@@ -81,6 +81,7 @@
     "max-classes-per-file": "off",
     "no-use-before-define": "off",
     "arrow-parens": "off",
+    "consistent-return": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

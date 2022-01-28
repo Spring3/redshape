@@ -17,7 +17,7 @@ type CreateOvermindConfigParams = {
 }
 
 type Response<T = any> = {
-  payload?: T;
+  data?: T;
   success: boolean;
   error?: Error;
 }
@@ -83,7 +83,9 @@ type JournalEntry = {
   id: number;
   user: Pointer;
   createdOn: string;
-  notes?: string[];
+  notes?: string;
+  privateNotes: boolean;
+  details?: [];
 }
 
 type CustomField = {
@@ -182,6 +184,7 @@ export type {
   Project,
   Response,
   SortingDirection,
+  JournalEntry,
   TimeEntry,
   TimeTrackingRecord,
   User,

@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
 
-import Link from '../components/Link';
+import { Link } from '../components/Link';
 import Progressbar from '../components/Progressbar';
 import { MarkdownText } from '../components/MarkdownEditor';
 import { TimeEntryModal } from '../components/TimeEntryModal';
 import { TimeEntries } from '../components/IssueDetailsPage/TimeEntries';
-import CommentsSection from '../components/IssueDetailsPage/CommentsSection';
+import { CommentsSection } from '../components/IssueDetailsPage/CommentsSection';
 import DateComponent from '../components/Date';
 import { OverlayProcessIndicator } from '../components/ProcessIndicator';
 
-import reduxActions from '../actions';
 import { useOvermindActions, useOvermindState } from '../store';
 import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
@@ -51,7 +48,7 @@ const styles = {
   `
 };
 
-const IssueDetailsPage = ({ postComments }: any) => {
+const IssueDetailsPage = () => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
@@ -114,8 +111,6 @@ const IssueDetailsPage = ({ postComments }: any) => {
     setShowTimeEntryModal(false);
   };
 
-  const getIssueComments = () => currentIssue.journals?.filter((entry: any) => entry.notes) ?? [];
-
   const cfields = currentIssue.customFields;
   // eslint-disable-next-line react/prop-types
   const subtasks = currentIssue.subTasks || [];
@@ -127,6 +122,8 @@ const IssueDetailsPage = ({ postComments }: any) => {
       </OverlayProcessIndicator>
     );
   }
+
+  console.log('currentIssue', JSON.stringify(currentIssue, null, 2));
 
   return (
     <div
@@ -157,8 +154,6 @@ const IssueDetailsPage = ({ postComments }: any) => {
             </>
           ): null}
           <CommentsSection
-            journalEntries={getIssueComments()}
-            publishComments={postComments}
             issueId={currentIssue.id}
           />
         </Flex>
@@ -329,12 +324,6 @@ const IssueDetailsPage = ({ postComments }: any) => {
   );
 };
 
-IssueDetailsPage.propTypes = {
-  postComments: PropTypes.func.isRequired
+export {
+  IssueDetailsPage
 };
-
-const mapDispatchToProps = (dispatch: any) => ({
-  postComments: (issueId: any, comments: any) => dispatch(reduxActions.issues.sendComments(issueId, comments))
-});
-
-export default connect(() => ({}), mapDispatchToProps)(IssueDetailsPage);
