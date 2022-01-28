@@ -123,8 +123,6 @@ const IssueDetailsPage = () => {
     );
   }
 
-  console.log('currentIssue', JSON.stringify(currentIssue, null, 2));
-
   return (
     <div
       css={styles.pageWrapper}

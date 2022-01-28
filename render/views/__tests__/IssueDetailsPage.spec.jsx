@@ -11,7 +11,7 @@ import {
 import '@testing-library/jest-dom/extend-expect';
 
 import { theme } from '../../theme';
-import IssueDetailsPage from '../IssueDetailsPage';
+import { IssueDetailsPage } from '../IssueDetailsPage';
 import { getInstance, reset, initialize } from '../../../common/request';
 
 const mockStore = configureStore([thunk]);

@@ -342,21 +342,20 @@ type MarkdownTextProps = {
 }
 
 const MarkdownText = ({ markdownText, name, className }: MarkdownTextProps) => {
-  const iframeRef = createRef<HTMLIFrameElement>();
   const theme = useTheme() as typeof Theme;
 
   const genericIframeStyles = `
       body {
         margin: 0;
         font-family: Roboto,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;
-        font-size: 1rem;
+        font-size: 14px;
         font-weight: 500;
         color: ${theme.normalText};
       }
 
       a {
         color: ${theme.main};
-        font-size: 1rem;
+        font-size: 14px;
         padding: 2px;
         cursor: pointer;
       }
@@ -387,26 +386,15 @@ const MarkdownText = ({ markdownText, name, className }: MarkdownTextProps) => {
       }
     `;
 
-  const adjustIframeSize = () => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      iframe.height = `${iframe.contentDocument?.body.scrollHeight || 0 + 35}`;
-    }
-  };
-
-  const throttledAdjustIframeSize = useCallback(throttle(adjustIframeSize, 300), []);
-
   const markdown = xss(converter.makeHtml(markdownText));
 
   return (
     <Iframe
-      ref={iframeRef}
       className={className}
       width="100%"
       name={name}
       html={markdown}
       cssCode={genericIframeStyles}
-      onResize={throttledAdjustIframeSize}
     />
   );
 };

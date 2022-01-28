@@ -1,7 +1,8 @@
 import React, {
-  useEffect, forwardRef, useCallback, MouseEventHandler
+  useEffect, useCallback, MouseEventHandler, useState
 } from 'react';
 import { css } from '@emotion/react';
+import throttle from 'lodash/throttle';
 import { useOvermindEffects } from '../store';
 
 type IframeProps = {
@@ -10,7 +11,7 @@ type IframeProps = {
   html: string;
   width?: string;
   cssCode?: string;
-  onResize?: () => void;
+  onResize?: (iframe: HTMLIFrameElement | null) => void;
 }
 
 const styles = {
@@ -20,27 +21,43 @@ const styles = {
   `
 };
 
-const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
+const Iframe = ({
   className, html, cssCode, onResize, name, width
-}: IframeProps, ref) => {
+}: IframeProps) => {
   const effects = useOvermindEffects();
+  const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
+  const [isLoaded, setLoaded] = useState(false);
 
-  const handleResize = useCallback(() => {
-    if (ref.current) {
-      ref.current.height = ref.current.contentDocument.body.scrollHeight || 0;
-      ref.current.width = width ? width : ref.current.contentDocument.body.scrollWidth || 0;
+  const handleResize = useCallback(throttle(() => {
+    if (iframe) {
+      iframe.height = iframe.contentDocument.body.scrollHeight + 30;
+      iframe.width = width ? width : iframe.contentDocument.body.scrollWidth || 0;
     }
 
     if (onResize) {
-      onResize();
+      onResize(iframe);
     }
-  }, [onResize, width]);
+  }, 300), [onResize, width, html, iframe]);
 
-  useEffect(() => () => {
-    window.removeEventListener('resize', handleResize);
-  }, [handleResize]);
+  const handleFocus = useCallback(() => {
+    if (iframe) {
+      iframe.contentWindow?.getSelection()?.empty();
+    }
+  }, [iframe]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isLoaded, handleResize]);
 
   const onLoad = useCallback(() => {
+    setLoaded(true);
     const interceptIframeInternalRedirect: MouseEventHandler<HTMLElement> = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -57,22 +74,27 @@ const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
       }
     };
 
-    if (ref.current) {
-      for (const elem of ref.current.contentDocument?.body.querySelectorAll(['a', 'img', 'button', 'input']) ?? []) {
+    if (iframe) {
+      for (const elem of iframe.contentDocument?.body.querySelectorAll(['a', 'img', 'button', 'input']) ?? []) {
         elem.removeEventListener('click', interceptIframeInternalRedirect);
         elem.addEventListener('click', interceptIframeInternalRedirect);
       }
+
+      iframe.contentWindow?.addEventListener('blur', handleFocus);
+      iframe.contentWindow?.onbeforeunload = () => {
+        iframe.contentWindow?.removeEventListener('blur', handleFocus);
+      };
 
       if (cssCode) {
         const cssContainer = document.createElement('style');
         // styles.type = 'text/css';
         cssContainer.innerText = cssCode;
-        ref.current.contentDocument?.head.appendChild(cssContainer);
+        iframe.contentDocument?.head.appendChild(cssContainer);
       }
+
       handleResize();
-      window.addEventListener('resize', handleResize);
     }
-  }, [cssCode, handleResize]);
+  }, [cssCode, setLoaded, handleResize, handleFocus]);
 
   return (
     <iframe
@@ -80,14 +102,13 @@ const Iframe = forwardRef<HTMLIFrameElement, IframeProps>(({
       title={name}
       frameBorder="0"
       width={width}
-      height={html ? undefined : 20}
-      ref={ref}
+      ref={setIframe}
       className={className}
       srcDoc={html}
       onLoad={onLoad}
     />
   );
-});
+};
 
 export {
   Iframe
