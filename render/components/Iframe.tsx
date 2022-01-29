@@ -31,7 +31,7 @@ const Iframe = ({
   const handleResize = useCallback(throttle(() => {
     if (iframe) {
       iframe.height = iframe.contentDocument.body.scrollHeight + 30;
-      iframe.width = width ? width : iframe.contentDocument.body.scrollWidth || 0;
+      iframe.width = width || iframe.contentDocument.body.scrollWidth || 0;
     }
 
     if (onResize) {

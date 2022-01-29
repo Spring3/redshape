@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between';
+type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between' | 'stretch';
 
 type FlexProps = {
   children?: ReactNode;

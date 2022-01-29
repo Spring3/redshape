@@ -10,6 +10,7 @@ import DateComponent from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { theme as Theme } from '../../theme';
 import type { Issue } from '../../../types';
+import { Flex } from '../Flex';
 
 const styles = {
   form: (theme: typeof Theme) => css`
@@ -38,29 +39,23 @@ const styles = {
   `,
   commentsList: (theme: typeof Theme) => css`
     width: 100%;
-    list-style-type: none;
     padding: 20px 0px;
     margin: 0px;
     border-radius: 3px;
     background: ${theme.bgDark};
   `,
-  commentFirst: css`
-    margin-top: 20px;
-  `,
   comment: css`
-    margin: 40px 20px 20px 20px;
-    display: flex;
-    justify-content: space-around;
+    flex-grow: 1;
+    margin: 1rem 1rem 1rem 1rem;
   `,
   commentHeader: css`
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
     min-width: 20%;
+    margin-right: 1rem;
   `,
   commentAuthorName: (theme: typeof Theme) => css`
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-bottom: 10px;
     color: ${theme.main};
   `,
   commentDate: (theme: typeof Theme) => css`
@@ -109,18 +104,18 @@ const CommentsSection = ({ issueId }: CommentsSectionProps) => {
 
   return (
     <>
-      <h2>Comments</h2>
-      <ul css={styles.commentsList(theme)}>
-        {journalEntries.map((entry, index) => (
-          <li css={index === 0 ? [styles.comment, styles.commentFirst] : [styles.comment]} key={entry.id}>
-            <div css={styles.commentHeader}>
-              <h3 css={styles.commentAuthorName(theme)}>{entry.user.name}</h3>
+      <h3>Comments</h3>
+      <Flex alignItems="stretch" direction="column" css={styles.commentsList(theme)}>
+        {journalEntries.map((entry) => (
+          <Flex justifyContent="center" css={styles.comment} key={entry.id}>
+            <Flex direction="column" css={styles.commentHeader}>
+              <h4 css={styles.commentAuthorName(theme)}>{entry.user.name}</h4>
               <DateComponent className="date" date={entry.createdOn} />
-            </div>
+            </Flex>
             <MarkdownText css={styles.markdown(theme)} name={`comment-${entry.id}`} markdownText={entry.notes as string} />
-          </li>
+          </Flex>
         ))}
-      </ul>
+      </Flex>
       <div css={styles.form(theme)}>
         <MarkdownEditor id="comments-form" name="comments-form" onSubmit={sendComments} />
         <div>

@@ -18,4 +18,4 @@ const Copyrights = () => (
 
 export {
   Copyrights
-}
+};
