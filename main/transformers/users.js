@@ -1,4 +1,4 @@
-const transform = (route, responseBody) => {
+const transform = ({ route }, responseBody) => {
   const { user } = responseBody;
 
   switch (route) {

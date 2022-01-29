@@ -1,6 +1,5 @@
 import {
   ISSUE_UPDATE,
-  ISSUE_RESET,
   ISSUE_UPDATE_VALIDATION_FAILED,
   ISSUE_UPDATE_VALIDATION_PASSED
 } from '../actions/issue.actions';
@@ -23,9 +22,6 @@ export default (state = initialState, action) => {
         return { ...state, isFetching: false, error: action.data };
       }
       return state;
-    }
-    case ISSUE_RESET: {
-      return initialState;
     }
     case ISSUE_UPDATE_VALIDATION_FAILED: {
       return { ...state, error: action.data };

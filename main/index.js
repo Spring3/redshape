@@ -18,6 +18,7 @@ const { redmineClient } = require('./redmine');
 const Tray = require('./tray');
 
 const utils = require('./utils');
+const { openExternalUrl } = require('./utils');
 require('./exceptionCatcher')();
 
 app.setAppUserModelId('app.spring3.redshape');
@@ -385,6 +386,10 @@ const initialize = () => {
         redmineClient.reset();
         await storage.resetActiveSession();
         event.reply(`system-response:${id}`, { success: true });
+        break;
+      }
+      case 'open-url': {
+        await openExternalUrl(payload.url);
         break;
       }
       default:

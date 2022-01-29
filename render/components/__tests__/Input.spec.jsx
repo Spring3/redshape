@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
-import { Input, Label } from '../Input';
+import { Input } from '../Input';
+import { FormField } from '../FormField';
 import { theme } from '../../theme';
 
 afterEach(cleanup);
@@ -159,9 +160,9 @@ describe('Input component', () => {
     it('should wrap the input with label', () => {
       const changeHandler = jest.fn();
       render(
-        <Label theme={theme} htmlFor="username" label="Username">
+        <FormField theme={theme} htmlFor="username" label="Username">
           <Input theme={theme} name="username" onChange={changeHandler} />
-        </Label>
+        </FormField>
       );
       const results = document.querySelectorAll('.form-group');
       expect(results.length).toBe(1);
@@ -177,9 +178,9 @@ describe('Input component', () => {
 
     it('should be displayed either inline or as block', () => {
       const { rerender } = render(
-        <Label theme={theme} htmlFor="test" label="Test" inline={true}>
+        <FormField theme={theme} htmlFor="test" label="Test" inline={true}>
           <button type="button">Click me</button>
-        </Label>
+        </FormField>
       );
       const results = document.querySelectorAll('.form-group');
       expect(results.length).toBe(1);
@@ -190,9 +191,9 @@ describe('Input component', () => {
       expect(input.nodeName).toBe('BUTTON');
 
       rerender(
-        <Label theme={theme} htmlFor="test" label="Test" inline={false}>
+        <FormField theme={theme} htmlFor="test" label="Test" inline={false}>
           <button type="button">Click me</button>
-        </Label>
+        </FormField>
       );
 
       expect(wrapper.firstChild.nodeName).toBe('H4');
@@ -201,9 +202,9 @@ describe('Input component', () => {
 
     it('should be displayed either left to right or right to left', () => {
       const { rerender } = render(
-        <Label theme={theme} htmlFor="test" label="Test" rightToLeft={true}>
+        <FormField theme={theme} htmlFor="test" label="Test" rightToLeft={true}>
           <button type="button">Click me</button>
-        </Label>
+        </FormField>
       );
       const results = document.querySelectorAll('.form-group');
       expect(results.length).toBe(1);
@@ -213,9 +214,9 @@ describe('Input component', () => {
       expect(wrapper.lastChild.innerHTML).toBe('Test');
 
       rerender(
-        <Label theme={theme} htmlFor="test" label="Test" rightToLeft={false}>
+        <FormField theme={theme} htmlFor="test" label="Test" rightToLeft={false}>
           <button type="button">Click me</button>
-        </Label>
+        </FormField>
       );
 
       expect(wrapper.firstChild.nodeName).toBe('H4');

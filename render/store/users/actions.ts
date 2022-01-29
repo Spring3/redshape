@@ -36,10 +36,10 @@ const login: IAction<LoginActionProps, Promise<Response>> = async ({ actions, ef
   });
 
   if (loginResponse.success) {
-    state.users.currentUser = loginResponse.payload;
-    localStorage.setItem('token', loginResponse.payload.token);
+    state.users.currentUser = loginResponse.data;
+    localStorage.setItem('token', loginResponse.data.token);
 
-    const restoreResponse = await actions.settings.restore(loginResponse.payload.token);
+    const restoreResponse = await actions.settings.restore(loginResponse.data.token);
 
     if (!restoreResponse.success) {
       await actions.settings.update({ ...defaultSettingsState, endpoint: redmineEndpoint });

@@ -1,4 +1,4 @@
-const transform = (route, responseBody) => {
+const transform = ({ route }, responseBody) => {
   if (route === 'issues.json') {
     const { issues } = responseBody;
     return {
@@ -22,6 +22,14 @@ const transform = (route, responseBody) => {
         totalSpentHours: issue.total_spent_hours,
         createdOn: issue.created_on,
         updatedOn: issue.updated_on,
+        journals: issue.journals?.map((journal) => ({
+          id: journal.id,
+          user: journal.user,
+          createdOn: journal.created_on,
+          notes: journal.notes,
+          privateNotes: journal.private_notes,
+          details: journal.details
+        })) || [],
         closedOn: issue.closed_on
       })),
       total: responseBody.total_count,
@@ -30,7 +38,7 @@ const transform = (route, responseBody) => {
     };
   }
 
-  if (/issues\/\d\.json/.test(route)) {
+  if (/issues\/\d{1,}\.json/.test(route)) {
     const { issue } = responseBody;
     return {
       id: issue.id,
@@ -53,13 +61,15 @@ const transform = (route, responseBody) => {
       createdOn: issue.created_on,
       updatedOn: issue.updated_on,
       subTasks: issue.children,
-      customFields: issue.custom_fields,
+      customFields: issue.custom_fields || [],
       journals: issue.journals?.map((journal) => ({
         id: journal.id,
         user: journal.user,
         createdOn: journal.created_on,
-        notes: journal.notes
-      })),
+        notes: journal.notes,
+        privateNotes: journal.private_notes,
+        details: journal.details
+      })) || [],
       closedOn: issue.closed_on
     };
   }

@@ -16,7 +16,6 @@ const TooltipText = styled.p`
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
-  box-shadow: 0px 2px 7px ${(props) => props.theme.minorText};
 
   &::after {
     content: ' ';

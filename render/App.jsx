@@ -8,7 +8,7 @@ import cleanStack from 'clean-stack';
 // eslint-disable-next-line
 import { ipcRenderer } from "electron";
 
-import AppView from './views/AppView';
+import { AppView } from './views/AppView';
 import LoginView from './views/LoginView';
 import Notification from './components/Notification';
 import { useOvermindActions } from './store';
@@ -85,7 +85,7 @@ const App = ({ dispatch }) => {
       if (response.success) {
         const loginResponse = await actions.users.login({
           apiKey: token,
-          redmineEndpoint: response.payload.endpoint
+          redmineEndpoint: response.data.endpoint
         });
         if (loginResponse.success) {
           navigate('/issues', { replace: true });

@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Link from '../components/Link';
+import { Link } from '../components/Link';
 
 const Container = styled.div`
   text-align: justify;
@@ -15,7 +15,7 @@ export default () => (
     <p align="center">Version 3, 29 June 2007</p>
     <p>
       Copyright &copy; 2007 Free Software Foundation, Inc. &lt;
-      <Link href="http://fsf.org/" type="external">http://fsf.org/</Link>
+      <Link href="http://fsf.org/" external>http://fsf.org/</Link>
       &gt;
     </p>
     <p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>

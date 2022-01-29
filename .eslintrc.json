@@ -28,6 +28,7 @@
     "object-curly-newline": "warn",
     "no-plusplus": "off",
     "no-param-reassign": "warn",
+    "prefer-destructuring": "off",
     "no-underscore-dangle": [
       "error",
       {
@@ -80,6 +81,7 @@
     "max-classes-per-file": "off",
     "no-use-before-define": "off",
     "arrow-parens": "off",
+    "consistent-return": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

@@ -38,9 +38,9 @@ const restore: IAction<string, Promise<Response<Context['state']['settings']>>> 
     }
   });
 
-  if (response.success && response.payload) {
-    const { endpoint, settings } = response.payload;
-    const currentUser = response.payload.user as User;
+  if (response.success && response.data) {
+    const { endpoint, settings } = response.data;
+    const currentUser = response.data.user as User;
 
     // replacing the active session
     const saveResponse = await effects.mainProcess.session({
@@ -65,12 +65,12 @@ const restore: IAction<string, Promise<Response<Context['state']['settings']>>> 
     state.users.currentUser = { ...currentUser };
 
     state.settings = {
-      endpoint: response.payload.endpoint,
+      endpoint: response.data.endpoint,
       ...settings
     };
   }
 
-  return { success: response.success, payload: response.payload };
+  return { success: response.success, data: response.data };
 };
 
 const reset: IAction<void, Promise<Response>> = async ({ effects, state }: Context) => {

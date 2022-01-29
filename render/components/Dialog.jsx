@@ -12,15 +12,8 @@ const PaddedButton = styled(Button)`
 `;
 
 class Dialog extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      onConfirm: null
-    };
-  }
-
   confirm = (closeModal) => () => {
-    const { onConfirm } = this.state;
+    const { onConfirm } = this.props;
     onConfirm();
     closeModal();
   }
@@ -61,19 +54,10 @@ class Dialog extends Component {
     });
   }
 
-  displayDialog = (onConfirm) => (event) => {
+  displayDialog = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const eventClone = {
-      ...event,
-      preventDefault: () => { /* noop */ },
-      stopPropagation: () => { /* noop */ },
-      target: { ...event.target, value: event.target.value }
-    };
-
-    this.setState({
-      onConfirm: () => onConfirm(eventClone)
-    }, () => this.renderDialog());
+    this.renderDialog();
   }
 
   render() {
@@ -90,6 +74,7 @@ Dialog.propTypes = {
   title: PropTypes.string,
   message: PropTypes.string,
   onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
   children: PropTypes.func.isRequired,
   theme: PropTypes.object
 };

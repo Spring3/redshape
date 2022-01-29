@@ -109,7 +109,7 @@ const eventHandlers = (event, message) => {
 
       event.reply(`session-response:${id}`, {
         success: true,
-        payload: sessionWithoutHash
+        data: sessionWithoutHash
       });
       break;
     }

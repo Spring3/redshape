@@ -1,22 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 import _get from 'lodash/get';
 import moment from 'moment';
 
-import reduxActions from '../actions';
 import { Navbar } from '../components/Navbar';
-import Timer from '../components/Timer';
-import TimeEntryModal from '../components/TimeEntryModal';
+import { Timer } from '../components/Timer';
+import { TimeEntryModal } from '../components/TimeEntryModal';
 import DragArea from '../components/DragArea';
 
 import { hoursToDuration } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
-import { SummaryPage } from './AppViewPages/SummaryPage';
-import IssueDetailsPage from './AppViewPages/IssueDetailsPage';
+import { SummaryPage } from './SummaryPage';
+import { IssueDetailsPage } from './IssueDetailsPage';
+import { Project, Issue, IssueStatus } from '../../types';
 
 const Grid = styled.div`
   height: 100%;
@@ -31,12 +30,10 @@ const Content = styled.div`
 `;
 
 type AppViewProps = {
-  resetTimer: () => void;
-}
+  // resetTimer: () => void;
+};
 
-const AppView = ({
-  resetTimer
-}: AppViewProps) => {
+const AppView = () => {
   const [activities, setActivities] = useState([]);
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [timeEntry, setTimeEntry] = useState<any>(null);
@@ -45,26 +42,39 @@ const AppView = ({
   const state = useOvermindState();
   const actions = useOvermindActions();
 
-  const requestProjects = useCallback(({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }), [actions.projects.getManyProjects]);
-  const { items: projects, isFetching, error } = useFetchAll({ request: requestProjects });
+  const requestProjects = useCallback(
+    ({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }),
+    [actions.projects.getManyProjects]
+  );
 
-  const onTrackingStop = (trackedIssue: any, value: any, comments: any) => {
-    const existingActivities = _get(projects[trackedIssue.project.id], 'activities', []);
-    const hours = parseFloat((value / 3600000).toFixed(3));
-    setActivities(existingActivities.map(({ id, name }: { id: string, name: string }) => ({ value: id, label: name })));
+  const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
+
+  const requestIssueStatuses = useCallback(({ limit, offset }) => actions.issueStatuses.getAll({ limit, offset }), [actions.issueStatuses.getAll]);
+
+  useFetchAll<IssueStatus>(({ request: requestIssueStatuses }));
+
+  const onTrackingStop = ({ issue, recordedTime }: { issue: Issue; recordedTime: number }) => {
+    const existingActivities = _get(projects[issue.project.id], 'activities', []);
+    const hours = parseFloat((recordedTime / 3600000).toFixed(3));
+    setActivities(
+      existingActivities.map(({ id, name }: { id: string; name: string }) => ({
+        value: id,
+        label: name
+      }))
+    );
     setShowTimeEntryModal(true);
     setTimeEntry({
       activity: {},
       issue: {
-        id: trackedIssue.id,
-        name: trackedIssue.subject
+        id: issue.id,
+        name: issue.subject
       },
       hours,
       duration: hoursToDuration(hours),
-      comments: comments || '',
+      comments: '',
       project: {
-        id: trackedIssue.project.id,
-        name: trackedIssue.project.name
+        id: issue.project.id,
+        name: issue.project.name
       },
       spent_on: moment().format('YYYY-MM-DD'),
       user: {
@@ -77,7 +87,7 @@ const AppView = ({
   const closeTimeEntryModal = () => {
     setShowTimeEntryModal(false);
     setTimeEntry(null);
-    resetTimer();
+    // resetTimer();
   };
 
   if (!state.users.currentUser) {
@@ -95,16 +105,11 @@ const AppView = ({
             <Route path="/" element={<SummaryPage />} />
             <Route path="/:id" element={<IssueDetailsPage />} />
           </Routes>
-          <Timer
-            onStop={onTrackingStop}
-          />
+          <Timer autoStart onStop={onTrackingStop} />
           <TimeEntryModal
             isOpen={showTimeEntryModal}
-            isEditable={true}
             activities={activities}
-            isUserAuthor={true}
             timeEntry={timeEntry}
-            initialVolatileContent={true}
             onClose={closeTimeEntryModal}
           />
         </Content>
@@ -113,8 +118,4 @@ const AppView = ({
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  resetTimer: () => dispatch(reduxActions.tracking.trackingReset())
-});
-
-export default connect(() => ({}), mapDispatchToProps)(AppView);
+export { AppView };

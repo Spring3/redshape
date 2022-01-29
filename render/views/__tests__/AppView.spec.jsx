@@ -10,10 +10,9 @@ import '@testing-library/jest-dom/extend-expect';
 import configureStore from 'redux-mock-store';
 import { ThemeProvider } from 'styled-components';
 
-import { TRACKING_RESET } from '../../actions/tracking.actions';
 import * as axios from '../../../common/request';
 import { theme } from '../../theme';
-import AppView from '../AppView';
+import { AppView } from '../AppView';
 
 jest.mock('electron-store');
 
@@ -293,11 +292,5 @@ describe('AppView', () => {
 
     fireEvent.click(document.querySelector('#stop-timer'));
     fireEvent.click(document.querySelector('#btn-add'));
-    setTimeout(() => {
-      expect(
-        store.getActions().find((action) => action.type === TRACKING_RESET)
-      ).toBeDefined();
-      done();
-    }, 1);
   });
 });

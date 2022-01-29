@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between';
+type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between' | 'stretch';
 
 type FlexProps = {
   children?: ReactNode;
   className?: string;
-  direction?: 'row' | 'column';
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   justifyContent?: FlexAlignment;
   alignItems?: FlexAlignment;
   gap?: string;

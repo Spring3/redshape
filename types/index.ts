@@ -17,7 +17,7 @@ type CreateOvermindConfigParams = {
 }
 
 type Response<T = any> = {
-  payload?: T;
+  data?: T;
   success: boolean;
   error?: Error;
 }
@@ -43,11 +43,35 @@ enum SessionAction {
   RESET = 'RESET'
 }
 
+// eslint-disable-next-line no-shadow
+enum TimeTrackingAction {
+  START = 'START',
+  PAUSE = 'PAUSE',
+  CONTINUE = 'CONTINUE',
+  STOP = 'STOP'
+}
+
+type TimeEntryNote = {
+  isoDate: string;
+  note: string;
+}
+
+type TimeTrackingRecord = {
+  action: TimeTrackingAction;
+  issueId: number;
+  isoDate: string;
+  notes: TimeEntryNote[];
+}
+
 type User = {
   id: number;
   firstName: string;
   lastName: string;
   createdOn: string;
+}
+
+type Identifier = {
+  id: number;
 }
 
 type Pointer = {
@@ -56,10 +80,12 @@ type Pointer = {
 }
 
 type JournalEntry = {
-  id: string;
+  id: number;
   user: Pointer;
   createdOn: string;
-  notes?: string[];
+  notes?: string;
+  privateNotes: boolean;
+  details?: [];
 }
 
 type CustomField = {
@@ -70,7 +96,7 @@ type CustomField = {
 type Project = {
   id: number;
   name: string;
-  identified: string;
+  identifier: string;
   description: string;
   status: number;
   isPublic: boolean;
@@ -106,19 +132,61 @@ type Issue = {
   closedOn?: string;
 }
 
+type IssueStatus = {
+  id: string;
+  name: string;
+  isClosed: boolean;
+}
+
+type TimeEntry = {
+  id: number;
+  project: Pointer;
+  issue: Identifier;
+  user: Pointer;
+  activity: Pointer;
+  hours: number;
+  comments: string;
+  spentOn: string;
+  createdOn: string;
+  updatedOn: string;
+}
+
+type VersionStatus = 'open' | 'locked' | 'closed';
+
+type VersionSharing = 'none' | 'descendants' | 'hierarchy' | 'tree' | 'system';
+
+type Version = {
+  id: number;
+  project: Pointer;
+  name: string;
+  description: string;
+  status: VersionStatus;
+  dueDate: string;
+  sharing: VersionSharing;
+  createdOn: string;
+  updatedOn: string;
+  wikiPageTitle: string;
+}
+
 export {
-  SessionAction
+  SessionAction,
+  TimeTrackingAction
 };
 
 export type {
   Collection,
-  IssueHeader,
   CreateOvermindConfigParams,
-  Response,
-  PaginatedActionResponse,
-  Project,
-  User,
   Issue,
+  IssueHeader,
+  IssueStatus,
+  PaginatedActionResponse,
   Pointer,
-  SortingDirection
+  Project,
+  Response,
+  SortingDirection,
+  JournalEntry,
+  TimeEntry,
+  TimeTrackingRecord,
+  User,
+  Version
 };

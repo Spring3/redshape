@@ -27,15 +27,12 @@ describe('Issue actions', () => {
     expect(issuesActions).toBeTruthy();
     expect(issuesActions.ISSUES_GET_PAGE).toBeTruthy();
     expect(issuesActions.ISSUES_GET).toBeTruthy();
-    expect(issuesActions.ISSUES_COMMENTS_SEND).toBeTruthy();
-    expect(issuesActions.ISSUES_RESET_SELECTION).toBeTruthy();
     expect(issuesActions.ISSUES_TIME_ENTRY_GET).toBeTruthy();
 
     expect(issuesActions.default.getPage).toBeTruthy();
     expect(issuesActions.default.get).toBeTruthy();
     expect(issuesActions.default.getTimeEntriesPage).toBeTruthy();
     expect(issuesActions.default.sendComments).toBeTruthy();
-    expect(issuesActions.default.resetSelected).toBeTruthy();
   });
 
   describe('getPage action', () => {
@@ -292,12 +289,6 @@ describe('Issue actions', () => {
           { subject: 'comments' }
         )
       );
-    });
-  });
-
-  describe('resetSelected action', () => {
-    expect(issuesActions.default.resetSelected()).toEqual({
-      type: issuesActions.ISSUES_RESET_SELECTION
     });
   });
 });

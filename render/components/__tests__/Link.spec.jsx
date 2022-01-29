@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { mount } from 'enzyme';
 
-import utils from '../../../common/utils';
-import Link from '../Link';
+import utils from '../../../main/utils';
+import { Link } from '../Link';
 
 jest.mock('electron');
 
@@ -30,7 +30,7 @@ describe('Link Component', () => {
     const shellSpy = jest.spyOn(utils, 'openExternalUrl').mockImplementationOnce(() => Promise.resolve());
 
     wrapper = mount(
-      <Link href="https://google.com" type="external" />
+      <Link href="https://google.com" external />
     );
     wrapper.simulate('click');
     expect(shellSpy).toHaveBeenCalledWith(wrapper.prop('href'));

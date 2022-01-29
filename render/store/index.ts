@@ -7,7 +7,11 @@ import { merge, namespaced } from 'overmind/config';
 import * as settings from './settings';
 import * as users from './users';
 import * as issues from './issues';
+import * as issueStatuses from './issueStatuses';
 import * as projects from './projects';
+import * as timeTracking from './timeTracking';
+import * as timeEntries from './timeEntries';
+import * as versions from './versions';
 
 import { mainProcess } from './effects';
 
@@ -21,9 +25,13 @@ const overmindStoreConfig = merge(
   },
   namespaced({
     issues,
+    issueStatuses,
     projects,
     settings,
     users,
+    timeEntries,
+    timeTracking,
+    versions
   })
 );
 

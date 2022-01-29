@@ -4,8 +4,8 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { ThemeProvider } from 'styled-components';
-import MarkdownEditor, { MarkdownText } from '../MarkdownEditor';
-import utils from '../../../common/utils';
+import { MarkdownText, MarkdownEditor } from '../MarkdownEditor';
+import utils from '../../../main/utils';
 import { theme } from '../../theme';
 
 describe('MarkdownEditor component', () => {

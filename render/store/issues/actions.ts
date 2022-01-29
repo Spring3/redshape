@@ -1,8 +1,9 @@
+import moment from 'moment';
 import type { Context, IAction } from 'overmind';
 import { Issue, PaginatedActionResponse, Response } from '../../../types';
 import { indexById } from '../helpers';
 
-type GetManyIssueArgs = {
+type GetManyIssuesArgs = {
   filters: {
     assigned_to_id?: number | string;
     status_id?: '*' | 'open' | 'closed';
@@ -13,10 +14,13 @@ type GetManyIssueArgs = {
   limit?: number;
 }
 
-const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+const getMany: IAction<GetManyIssuesArgs, Promise<PaginatedActionResponse<Issue>>> = async ({ effects, state }: Context, { filters, offset = 0, limit = 20 }) => {
+  const normalizedOffset = offset ? Math.abs(offset) : 0;
+  const normalizedLimit = limit ? Math.abs(limit) : undefined;
+
   const query = {
-    limit: limit ? Math.abs(limit) : undefined,
-    offset: offset ? Math.abs(offset) : 0,
+    limit: normalizedLimit,
+    offset: normalizedOffset,
     include: 'attachments,relations',
     ...filters
   };
@@ -32,20 +36,20 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
   if (response.success) {
     state.issues.byId = {
       ...state.issues.byId,
-      ...indexById(response.payload.issues)
+      ...indexById(response.data.issues)
     };
 
-    console.log('payload', response.payload);
+    console.log('payload', response.data);
 
     return {
       success: true,
       data: {
-        items: response.payload.issues,
-        total: response.payload.total,
-        limit: response.payload.limit,
-        offset: response.payload.offset
+        items: response.data.issues,
+        total: response.data.total,
+        limit: response.data.limit,
+        offset: response.data.offset
       },
-      hasMore: response.payload.total > response.payload.issues.length,
+      hasMore: response.data.total > (response.data.offset + response.data.issues.length),
     };
   }
 
@@ -54,8 +58,8 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
     data: {
       items: [],
       total: 0,
-      limit,
-      offset
+      limit: response.data.limit,
+      offset: response.data.offset
     },
     hasMore: false,
     error: response.error
@@ -63,7 +67,7 @@ const getMany: IAction<GetManyIssueArgs, Promise<PaginatedActionResponse<Issue>>
 };
 
 type GetOneIssueArgs = {
-  id: string;
+  id: number;
 }
 
 const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effects, state }: Context, { id }) => {
@@ -78,7 +82,7 @@ const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effe
   });
 
   if (response.success) {
-    const issue = response.payload as Issue;
+    const issue = response.data as Issue;
     state.issues.byId[id] = issue;
     return {
       success: true,
@@ -92,7 +96,103 @@ const getOne: IAction<GetOneIssueArgs, Promise<Response<Issue>>> = async ({ effe
   };
 };
 
+type UpdateIssueArgs = {
+  id: number;
+  projectId?: number;
+  trackerId?: number;
+  statusId?: number;
+  priorityId?: number;
+  assigneeId?: number;
+  subject?: string;
+  description?: string;
+  dueDate?: string;
+  doneRatio?: number;
+  estimatedHours?: number;
+  spentHours?: number;
+  closedOn?: string;
+}
+
+const update: IAction<UpdateIssueArgs, Promise<Response<Issue>>> = async ({ effects, state, actions }: Context, { id, ...updates }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      route: `issues/${id}.json`,
+      method: 'PUT',
+      body: {
+        tracker_id: updates.trackerId,
+        project_id: updates.projectId,
+        status_id: updates.statusId,
+        priority_id: updates.priorityId,
+        assigned_to_id: updates.assigneeId,
+        subject: updates.subject,
+        description: updates.description,
+        due_date: updates.dueDate,
+        done_ratio: updates.doneRatio,
+        estimated_hours: updates.estimatedHours,
+        spent_hours: updates.spentHours,
+        closed_on: updates.closedOn
+      }
+    }
+  });
+
+  if (response.success) {
+    const refetchResponse = await actions.issues.getOne({ id });
+    if (refetchResponse.success) {
+      const issue = refetchResponse.data as Issue;
+      state.issues.byId[id] = issue;
+
+      return {
+        success: true,
+        data: issue
+      };
+    }
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
+type GetCommentsArgs = {
+  issueId: number;
+  comments: string;
+}
+
+const publishComments: IAction<GetCommentsArgs, Promise<Response<Issue>>> = async ({ effects, state, actions }: Context, { issueId, comments }) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      route: `issues/${issueId}.json`,
+      method: 'PUT',
+      body: {
+        issue: {
+          notes: comments
+        }
+      }
+    }
+  });
+
+  if (response.success) {
+    const refetchResponse = await actions.issues.getOne({ id: issueId });
+    if (refetchResponse.success) {
+      const issue = refetchResponse.data as Issue;
+      state.issues.byId[issueId] = issue;
+
+      return {
+        success: true,
+        data: issue
+      };
+    }
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 export {
   getOne,
-  getMany
+  getMany,
+  update,
+  publishComments
 };

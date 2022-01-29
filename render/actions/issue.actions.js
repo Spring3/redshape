@@ -5,7 +5,6 @@ import request, { notify } from './helper';
 import { durationToHours } from '../datetime';
 
 export const ISSUE_UPDATE = 'ISSUE_UPDATE';
-export const ISSUE_RESET = 'ISSUE_RESET';
 export const ISSUE_UPDATE_VALIDATION_FAILED = 'ISSUE_UPDATE_VALIDATION_FAILED';
 export const ISSUE_UPDATE_VALIDATION_PASSED = 'ISSUE_UPDATE_VALIDATION_PASSED';
 
@@ -110,10 +109,7 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
     });
 };
 
-const reset = () => ({ type: ISSUE_RESET });
-
 export default {
   validateBeforeUpdate,
-  update,
-  reset,
+  update
 };

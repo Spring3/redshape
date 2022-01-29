@@ -2,8 +2,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 import { notify } from '../../actions/helper';
 import {
-  ISSUES_RESET_SELECTION,
-  ISSUES_COMMENTS_SEND,
   ISSUES_TIME_ENTRY_GET
 } from '../../actions/issues.actions';
 import {
@@ -16,117 +14,6 @@ import reducer, { initialState } from '../issue.selected.reducer';
 describe('Selected issue reducer', () => {
   it('should return the initial state if the action was not recognized', () => {
     expect(reducer(undefined, { type: 'WEIRD' })).toEqual(initialState);
-  });
-
-  it('ISSUES_RESET_SELECTION', () => {
-    expect(
-      reducer(
-        {
-          ..._cloneDeep(initialState),
-          error: new Error('Error')
-        },
-        { type: ISSUES_RESET_SELECTION }
-      )
-    ).toEqual(initialState);
-  });
-
-  describe('ISSUES_COMMENTS_SEND', () => {
-    it('status START', () => {
-      expect(
-        reducer(
-          _cloneDeep(initialState),
-          notify.start(ISSUES_COMMENTS_SEND, { subject: 'comments' })
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        updates: {
-          comments: {
-            ok: false,
-            isUpdating: true,
-            error: undefined
-          }
-        }
-      });
-    });
-
-    it('status OK', () => {
-      const data = {
-        hello: 'world'
-      };
-      expect(
-        reducer(
-          {
-            ..._cloneDeep(initialState),
-            data: {
-              journals: ['hello', 'world']
-            },
-            updates: {
-              something: {
-                ok: true,
-                isUpdating: false,
-                error: undefined
-              },
-              comments: {
-                ok: false,
-                isUpdating: true,
-                error: undefined
-              }
-            }
-          },
-          notify.ok(ISSUES_COMMENTS_SEND, data, { subject: 'comments' })
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        data: {
-          journals: ['hello', 'world', data]
-        },
-        updates: {
-          something: {
-            ok: true,
-            isUpdating: false,
-            error: undefined
-          },
-          comments: {
-            ok: true,
-            isUpdating: false,
-            error: undefined
-          }
-        }
-      });
-    });
-
-    it('status NOK', () => {
-      const error = new Error('Whoops');
-      expect(
-        reducer(
-          {
-            ..._cloneDeep(initialState),
-            updates: {
-              something: {
-                ok: true,
-                isUpdating: false,
-                error: undefined
-              }
-            }
-          },
-          notify.nok(ISSUES_COMMENTS_SEND, error, { subject: 'comments' })
-        )
-      ).toEqual({
-        ..._cloneDeep(initialState),
-        updates: {
-          something: {
-            ok: true,
-            isUpdating: false,
-            error: undefined
-          },
-          comments: {
-            ok: false,
-            isUpdating: false,
-            error
-          }
-        }
-      });
-    });
   });
 
   describe('ISSUES_TIME_ENTRY_GET', () => {

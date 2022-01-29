@@ -14,7 +14,7 @@ import { IssueFilter } from '../../actions/helper';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
 import { issueHeaders } from '../constants';
 import { IssuesTableHead } from './IssuesTableHead';
-import { IssueHeader, SortingDirection } from '../../../types';
+import { IssueHeader, SortingDirection, Issue } from '../../../types';
 import { IssuesTableEmptyState } from './IssuesTableEmptyState';
 import { IssuesTableEmptySearchState } from './IssuesTableEmptySearchState';
 
@@ -63,7 +63,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
 
   const {
     isFetching, items: issues, error, fetchTriggerElementRef
-  } = usePaginatedFetch({
+  } = usePaginatedFetch<Issue>({
     request: actions.issues.getMany,
     filters,
   });
