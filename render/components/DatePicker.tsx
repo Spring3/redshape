@@ -1,15 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
+import { css } from '@emotion/react';
+import { DayModifiers } from 'react-day-picker';
 
 import MenuLeftIcon from 'mdi-react/MenuLeftIcon';
 import MenuRightIcon from 'mdi-react/MenuRightIcon';
 
 import { Input } from './Input';
+import { theme as Theme } from '../theme';
 
-const StyledDatePicker = styled.div`
+const styles = ({
+  buttonLeft,
+  buttonRight,
+  theme
+}: {
+  buttonLeft: string;
+  buttonRight: string;
+  theme: typeof Theme;
+}) => css`
   .DayPicker {
     display: inline-block;
     font-size: 1rem;
@@ -63,12 +73,12 @@ const StyledDatePicker = styled.div`
     margin-right: 1.5em;
     left: 1.5em;
     right: unset;
-    background-image: url('data:image/svg+xml;utf8,${(props) => props.buttonLeft}');
+    background-image: url('data:image/svg+xml;utf8,${buttonLeft}');
     background-size: 1.5rem;
   }
 
   .DayPicker-NavButton--next {
-    background-image: url('data:image/svg+xml;utf8,${(props) => props.buttonRight}');
+    background-image: url('data:image/svg+xml;utf8,${buttonRight}');
     background-size: 1.5rem;
   }
 
@@ -100,7 +110,7 @@ const StyledDatePicker = styled.div`
   .DayPicker-Weekday {
     display: table-cell;
     padding: 0.5em;
-    color: ${(props) => props.theme.normalText};
+    color: ${theme.normalText};
     font-weight: bold;
     text-align: center;
     font-size: 0.875em;
@@ -138,28 +148,28 @@ const StyledDatePicker = styled.div`
 
 
   .DayPicker-Day--today {
-    color: ${(props) => props.theme.main};
+    color: ${theme.main};
     font-weight: 700;
   }
 
   .DayPicker-Day--disabled {
-    color: ${(props) => props.theme.minorText};
+    color: ${theme.minorText};
     cursor: default;
   }
 
 
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
-    background-color: ${(props) => props.theme.normalText};
-    color: ${(props) => props.theme.hoverText};
+    background-color: ${theme.normalText};
+    color: ${theme.hoverText};
     font-weight: bold;
   }
 
 
   .DayPicker:not(.DayPicker--interactionDisabled)
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-      background-color: ${(props) => props.theme.bgDark};
-      color: ${(props) => props.theme.normalText};
+      background-color: ${theme.bgDark};
+      color: ${theme.normalText};
   }
 
   .DayPickerInput {
@@ -177,60 +187,44 @@ const StyledDatePicker = styled.div`
     left: 0;
     z-index: 1;
 
-    background: ${(props) => props.theme.bg};
+    background: ${theme.bg};
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 `;
 
-class DatePicker extends Component {
-  render() {
-    const {
-      theme, value, name, isDisabled, onChange
-    } = this.props;
-    return (
-      <StyledDatePicker
-        buttonLeft={
-          encodeURIComponent(
-            renderToStaticMarkup(<MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
-          )
-        }
-        buttonRight={
-          encodeURIComponent(
-            renderToStaticMarkup(<MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />)
-          )
-        }
-      >
-        <DayPickerInput
-          styles={this.styles}
-          name={name}
-          value={value}
-          inputProps={{
-            disabled: isDisabled
-          }}
-          disabled={isDisabled}
-          onDayChange={onChange}
-          component={(props) => (<Input {...props} />)}
-        />
-      </StyledDatePicker>
-    );
-  }
+type DatePickerProps = {
+  value?: string;
+  name?: string;
+  disabled?: boolean;
+  onChange?: (day: Date, dayModifiers: DayModifiers, dayPickerInput: DayPickerInput) => void;
 }
 
-DatePicker.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string
-  ]),
-  isDisabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  name: PropTypes.string,
-  theme: PropTypes.object.isRequired
+const DatePicker = ({ value, disabled = false, onChange }: DatePickerProps) => {
+  const theme = useTheme() as typeof Theme;
+  const buttonLeft = encodeURIComponent(
+    renderToStaticMarkup(
+      <MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />
+    )
+  );
+  const buttonRight = encodeURIComponent(
+    renderToStaticMarkup(
+      <MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />
+    )
+  );
+  return (
+    <div css={styles({ buttonLeft, buttonRight, theme })}>
+      <DayPickerInput
+        value={value}
+        inputProps={{
+          disabled
+        }}
+        onDayChange={onChange}
+        component={(props: any) => <Input {...props} />}
+      />
+    </div>
+  );
 };
 
-DatePicker.defaultProps = {
-  value: new Date(),
-  isDisabled: false,
-  name: null
+export {
+  DatePicker
 };
-
-export default withTheme(DatePicker);

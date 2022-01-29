@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, createRef, useCallback, FocusEventHandler, KeyboardEventHandler
+  useState, useEffect, createRef, useCallback, FocusEventHandler, KeyboardEvent
 } from 'react';
 import { useTheme } from 'styled-components';
 import showdown from 'showdown';
@@ -26,7 +26,7 @@ import xss from 'xss';
 import { css } from '@emotion/react';
 import { TextArea } from './TextArea';
 import { GhostButton } from './GhostButton';
-import Tooltip from './Tooltip';
+import { Tooltip } from './Tooltip';
 import { Iframe } from './Iframe';
 import { theme as Theme } from '../theme';
 
@@ -63,8 +63,6 @@ const converter = new showdown.Converter({
   emoji: true,
   simplifiedAutoLink: true
 });
-
-const KEY_ENTER = 13;
 
 type MarkdownEditorProps = {
   initialValue?: string;
@@ -211,16 +209,16 @@ const MarkdownEditor = ({
     setPreview((showPreview) => !showPreview);
   };
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (remote.process.platform === 'darwin') {
-      if (e.metaKey && e.keyCode === KEY_ENTER) {
+      if (e.metaKey && e.key === 'Enter') {
         if (onSubmit) {
           onSubmit(xss(value));
         }
-      } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+      } else if (e.ctrlKey && e.key === 'Enter') {
         applyMarkdown('\r\n');
       }
-    } else if (e.ctrlKey && e.keyCode === KEY_ENTER) {
+    } else if (e.ctrlKey && e.key === 'Enter') {
       if (onSubmit) {
         onSubmit(xss(value));
       }
