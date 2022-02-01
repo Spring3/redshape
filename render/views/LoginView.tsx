@@ -5,10 +5,10 @@ import Joi from '@hapi/joi';
 import { useNavigate } from 'react-router-dom';
 
 import { Input } from '../components/Input';
-import Button from '../components/Button';
+import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { Copyrights } from '../components/Copyrights';
-import DragArea from '../components/DragArea';
+import { DragArea } from '../components/DragArea';
 import { useOvermindActions, useOvermindState } from '../store';
 import { Checkbox } from '../components/Checkbox';
 import { FormField } from '../components/FormField';

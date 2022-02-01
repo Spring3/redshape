@@ -56,7 +56,7 @@ const styles = {
 };
 
 type DateComponentProps = {
-  date?: Date;
+  date?: string;
   className?: string;
 };
 
@@ -83,7 +83,8 @@ const DateComponent = ({ date, className }: DateComponentProps) => {
             ? [styles.span, styles.formattedDate, styles.formattedDateAnimated]
             : [styles.span, styles.formattedDate]
         }
-        className={className}>
+        className={className}
+      >
         {moment(date).format('MMM DD YYYY')}
       </span>
     </span>

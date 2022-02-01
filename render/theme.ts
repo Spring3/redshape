@@ -1,4 +1,5 @@
 const theme = {
+  font: "Roboto,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif",
   bg: '#FFFFFF',
   bgDark: '#F9F9F9',
   bgDarker: '#E9E9E9',

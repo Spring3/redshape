@@ -10,7 +10,7 @@ import { ipcRenderer } from "electron";
 
 import { AppView } from './views/AppView';
 import LoginView from './views/LoginView';
-import Notification from './components/Notification';
+import { Notification } from './components/Notification';
 import { useOvermindActions } from './store';
 import { getStoredToken } from './helpers/utils';
 import { LoadingOverlay } from './components/LoadingOverlay';

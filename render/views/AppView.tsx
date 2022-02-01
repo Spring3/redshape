@@ -7,7 +7,7 @@ import moment from 'moment';
 import { Navbar } from '../components/Navbar';
 import { Timer } from '../components/Timer';
 import { TimeEntryModal } from '../components/TimeEntryModal';
-import DragArea from '../components/DragArea';
+import { DragArea } from '../components/DragArea';
 
 import { hoursToDuration } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';

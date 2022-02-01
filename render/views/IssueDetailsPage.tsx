@@ -4,19 +4,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
+import * as Tabs from '@radix-ui/react-tabs';
+import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
+import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
 
 import { Link } from '../components/Link';
-import Progressbar from '../components/Progressbar';
+import { Progressbar } from '../components/Progressbar';
 import { MarkdownText } from '../components/MarkdownEditor';
 import { TimeEntryModal } from '../components/TimeEntryModal';
-import { TimeEntries } from '../components/IssueDetailsPage/TimeEntries';
 import { CommentsSection } from '../components/IssueDetailsPage/CommentsSection';
-import DateComponent from '../components/Date';
+import { DateComponent } from '../components/Date';
 import { OverlayProcessIndicator } from '../components/ProcessIndicator';
+import { tabsHeaderList, tabsTrigger, tabsTriggerActive } from '../components/Tabs';
 
 import { useOvermindActions, useOvermindState } from '../store';
 import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
+import { TimeEntriesSection } from '../components/TimeEntriesSection';
 
 const styles = {
   subTask: css`
@@ -52,6 +56,7 @@ const IssueDetailsPage = () => {
   const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('comments');
 
   const navbar = useNavbar();
   const state = useOvermindState();
@@ -65,7 +70,7 @@ const IssueDetailsPage = () => {
 
   useEffect(() => {
     if (issueId) {
-      actions.issues.getOne({ id: issueId });
+      actions.issues.getOne({ id: +issueId });
     }
   }, [issueId]);
 
@@ -150,10 +155,33 @@ const IssueDetailsPage = () => {
                 ))}
               </Flex>
             </>
-          ): null}
-          <CommentsSection
-            issueId={currentIssue.id}
-          />
+          ) : null}
+          <Tabs.Root css={tabsHeaderList} value={activeTab} orientation='horizontal' onValueChange={setActiveTab}>
+            <Tabs.List aria-label='tabs'>
+              <Tabs.Trigger css={activeTab === 'comments' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="comments">
+                <Flex alignItems='center'>
+                  <CommentsTextOutlineIcon size={20} />
+                  Comments
+                </Flex>
+              </Tabs.Trigger>
+              <Tabs.Trigger css={activeTab === 'time entries' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="time entries">
+                <Flex alignItems='center'>
+                  <ClockOutlineIcon size={20} />
+                  Time Entries
+                </Flex>
+              </Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="comments">
+              <CommentsSection
+                issueId={currentIssue.id}
+              />
+            </Tabs.Content>
+            <Tabs.Content value="time entries">
+              <TimeEntriesSection
+                issueId={currentIssue.id}
+              />
+            </Tabs.Content>
+          </Tabs.Root>
         </Flex>
         <aside
           css={styles.sidebar}
