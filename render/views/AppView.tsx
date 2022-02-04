@@ -16,6 +16,7 @@ import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './SummaryPage';
 import { IssueDetailsPage } from './IssueDetailsPage';
 import { Project, Issue, IssueStatus } from '../../types';
+import { ModalContextProvider } from '../contexts/ModalContext';
 
 const Grid = styled.div`
   height: 100%;
@@ -49,9 +50,12 @@ const AppView = () => {
 
   const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
 
-  const requestIssueStatuses = useCallback(({ limit, offset }) => actions.issueStatuses.getAll({ limit, offset }), [actions.issueStatuses.getAll]);
+  const requestIssueStatuses = useCallback(
+    ({ limit, offset }) => actions.issueStatuses.getAll({ limit, offset }),
+    [actions.issueStatuses.getAll]
+  );
 
-  useFetchAll<IssueStatus>(({ request: requestIssueStatuses }));
+  useFetchAll<IssueStatus>({ request: requestIssueStatuses });
 
   const onTrackingStop = ({ issue, recordedTime }: { issue: Issue; recordedTime: number }) => {
     const existingActivities = _get(projects[issue.project.id], 'activities', []);
@@ -98,22 +102,24 @@ const AppView = () => {
   return (
     <Grid>
       <DragArea />
-      <NavbarContextProvider>
-        <Navbar />
-        <Content>
-          <Routes>
-            <Route path="/" element={<SummaryPage />} />
-            <Route path="/:id" element={<IssueDetailsPage />} />
-          </Routes>
-          <Timer autoStart onStop={onTrackingStop} />
-          <TimeEntryModal
-            isOpen={showTimeEntryModal}
-            activities={activities}
-            timeEntry={timeEntry}
-            onClose={closeTimeEntryModal}
-          />
-        </Content>
-      </NavbarContextProvider>
+      <ModalContextProvider>
+        <NavbarContextProvider>
+          <Navbar />
+          <Content>
+            <Routes>
+              <Route path="/" element={<SummaryPage />} />
+              <Route path="/:id" element={<IssueDetailsPage />} />
+            </Routes>
+            <Timer autoStart onStop={onTrackingStop} />
+            <TimeEntryModal
+              isOpen={showTimeEntryModal}
+              activities={activities}
+              timeEntry={timeEntry}
+              onClose={closeTimeEntryModal}
+            />
+          </Content>
+        </NavbarContextProvider>
+      </ModalContextProvider>
     </Grid>
   );
 };

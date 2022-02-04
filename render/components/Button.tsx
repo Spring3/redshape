@@ -13,6 +13,7 @@ const styles = {
     background: ${theme.bg};
     transition: color ease ${theme.transitionTime};
     transition: background ease ${theme.transitionTime};
+    padding: 0.4rem 0.6rem;
   `,
   block: css`
     width: '100%';
@@ -53,7 +54,7 @@ type ButtonProps = {
   block?: boolean;
   onClick?: MouseEventHandler;
   className?: string;
-  palette: 'success' | 'warning' | 'danger';
+  palette?: 'success' | 'warning' | 'danger' | 'default' | 'mute';
 };
 
 const Button = ({
@@ -64,7 +65,7 @@ const Button = ({
   block = false,
   onClick,
   className,
-  palette
+  palette = 'default'
 }: ButtonProps) => {
   const theme = useTheme() as typeof Theme;
 
@@ -84,6 +85,11 @@ const Button = ({
         return {
           light: theme.red,
           dark: theme.darkRed
+        };
+      case 'mute':
+        return {
+          light: '#222222',
+          dark: '#000'
         };
       default:
         return {

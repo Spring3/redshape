@@ -6,6 +6,10 @@ type PortalProps = {
   active?: boolean;
 }
 
+enum Portals {
+  MODALS = 'modals-portal'
+}
+
 const Portal = ({ children, active }: PortalProps) => {
   const container = document.createElement('div');
 
@@ -13,7 +17,7 @@ const Portal = ({ children, active }: PortalProps) => {
     let portal: HTMLElement;
 
     if (active) {
-      portal = document.getElementById('modals-portal') as HTMLElement;
+      portal = document.getElementById(Portals.MODALS) as HTMLElement;
       portal?.appendChild(container);
       document.querySelector('body')?.setAttribute('style', 'overflow: hidden;');
     }
@@ -35,5 +39,6 @@ const Portal = ({ children, active }: PortalProps) => {
 };
 
 export {
-  Portal
+  Portal,
+  Portals
 };
