@@ -60,19 +60,23 @@ const getMany: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse
   };
 };
 
-type RemoveTimeEntryArgs = {
-  id: number;
-}
-
-const remove: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ effects }: Context, { id }) => {
+const remove: IAction<TimeEntry, Promise<Response<void>>> = async ({ effects, state }: Context, timeEntry) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'DELETE',
-      route: `time_entries/${id}.json`
+      route: `time_entries/${timeEntry.id}.json`
     }
   });
 
   if (response.success) {
+    const existingEntriesForIssue = state.timeEntries.mapByIssueId[timeEntry.issue.id] || {};
+    delete existingEntriesForIssue[timeEntry.id];
+
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [timeEntry.issue.id]: existingEntriesForIssue,
+    };
+
     return {
       success: true,
     };

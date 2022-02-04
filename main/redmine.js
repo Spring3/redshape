@@ -91,7 +91,7 @@ const createRequestClient = () => {
         };
       }
 
-      if (data.method === 'PUT' && response.statusCode === 204) {
+      if (['PUT', 'DELETE'].includes(data.method) && response.statusCode === 204) {
         return {
           success: true
         };
