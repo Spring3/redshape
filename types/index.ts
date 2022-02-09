@@ -74,6 +74,12 @@ type Identifier = {
   id: number;
 }
 
+type Activity = {
+  id: number;
+  name: string;
+  isDefault: boolean;
+}
+
 type Pointer = {
   id: number;
   name: string;
@@ -174,6 +180,7 @@ export {
 };
 
 export type {
+  Activity,
   Collection,
   CreateOvermindConfigParams,
   Issue,

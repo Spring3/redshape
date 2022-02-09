@@ -1,5 +1,5 @@
 import { derived } from 'overmind';
-import { TimeEntry } from '../../../types';
+import { TimeEntry, Activity } from '../../../types';
 
 type TimeEntriesState = {
   mapByIssueId: Record<string, Record<number, TimeEntry>>;
@@ -10,7 +10,7 @@ const state: TimeEntriesState = {
   listByIssueId: derived(
     (currentState: TimeEntriesState) => Object.fromEntries(Object.entries(currentState.mapByIssueId).map(([issueId, timeEntryMap]) => ([issueId, Object.values(timeEntryMap)])))
   ),
-  mapByIssueId: {}
+  mapByIssueId: {},
 };
 
 export {
