@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
+import PlusIcon from 'mdi-react/PlusIcon';
 
 import { Link } from '../components/Link';
 import { Progressbar } from '../components/Progressbar';
@@ -21,6 +22,8 @@ import { useOvermindActions, useOvermindState } from '../store';
 import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
 import { TimeEntriesSection } from '../components/TimeEntriesSection';
+import { GhostButton } from '../components/GhostButton';
+import { useModalContext } from '../contexts/ModalContext';
 
 const styles = {
   subTask: css`
@@ -53,11 +56,11 @@ const styles = {
 };
 
 const IssueDetailsPage = () => {
-  const [activities, setActivities] = useState([]);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('comments');
 
+  const modalContext = useModalContext();
   const navbar = useNavbar();
   const state = useOvermindState();
   const actions = useOvermindActions();
@@ -71,6 +74,7 @@ const IssueDetailsPage = () => {
   useEffect(() => {
     if (issueId) {
       actions.issues.getOne({ id: +issueId });
+      actions.enumerations.fetchActivities();
     }
   }, [issueId]);
 
@@ -100,25 +104,24 @@ const IssueDetailsPage = () => {
     };
     newSelectedTimeEntry.issue.name = currentIssue.subject;
     const existingActivities = _.get(projects[currentIssue.project.id], 'activities', []);
-    setActivities(
-      existingActivities.map(({ id, name }: { id: string; name: string }) => ({
-        value: id,
-        label: name
-      }))
-    );
     setSelectedTimeEntry(newSelectedTimeEntry);
     setShowTimeEntryModal(true);
   };
 
   const closeTimeEntryModal = () => {
-    setActivities([]);
     setSelectedTimeEntry(undefined);
     setShowTimeEntryModal(false);
+  };
+
+  const createTimeEntry = async () => {
+    const { timeEntryData } = await modalContext.openTimeEntryCreationModal({ activities: state.enumerations.activities });
+    console.log('timeEntryData', timeEntryData);
   };
 
   const cfields = currentIssue.customFields;
   // eslint-disable-next-line react/prop-types
   const subtasks = currentIssue.subTasks || [];
+  const activities = state.enumerations.activities;
 
   if (!currentIssue.id) {
     return (
@@ -168,6 +171,10 @@ const IssueDetailsPage = () => {
                 <Flex alignItems='center'>
                   <ClockOutlineIcon size={20} />
                   Time Entries
+                  {' '}
+                  <GhostButton onClick={createTimeEntry}>
+                    <PlusIcon size={20} />
+                  </GhostButton>
                 </Flex>
               </Tabs.Trigger>
             </Tabs.List>
@@ -327,10 +334,7 @@ const IssueDetailsPage = () => {
               <h4 css={styles.sidebarSectionHeader}>Progress:</h4>
               <Progressbar
                 className={undefined}
-                id={undefined}
-                height={5}
                 percent={currentIssue.doneRatio}
-                background={(theme as any).main}
               />
             </Flex>
           </Flex>

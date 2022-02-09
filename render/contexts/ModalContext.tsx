@@ -4,14 +4,17 @@ import React, {
 import { render, unmountComponentAtNode } from 'react-dom';
 import { ThemeProvider, useTheme } from 'styled-components';
 import { ConfirmationModal, ConfirmationModalProps } from '../components/ConfirmationModal';
+import { CreateTimeEntryModal, CreateTimeEntryModalProps } from '../components/CreateTimeEntryModal';
 import { Portals } from '../components/Portal';
 
 const ModalContext = createContext<ReturnType<typeof useModalContextApi>>({
-  openConfirmationModal: () => Promise.resolve({ confirmed: false })
+  openConfirmationModal: () => Promise.resolve({ confirmed: false }),
+  openTimeEntryCreationModal: () => Promise.resolve({ timeEntryData: null })
 });
 
 enum ModalTypes {
-  CONFIRMATION = 'confirmation'
+  CONFIRMATION = 'confirmation',
+  NEW_TIME_ENTRY = 'newTimeEntry'
 }
 
 type ActiveModal = {
@@ -29,10 +32,23 @@ const useModalContextApi = () => {
     }
   };
 
+  const onTimeEntryCreationClosed = () => {
+    if (activeModal) {
+      activeModal.resolve({ timeEntry: null });
+    }
+  };
+
   const resolveExistingModals = () => {
     if (activeModal) {
-      if (activeModal.type === ModalTypes.CONFIRMATION) {
-        onConfirmationModalClose();
+      switch (activeModal.type) {
+        case ModalTypes.CONFIRMATION:
+          onConfirmationModalClose();
+          break;
+        case ModalTypes.NEW_TIME_ENTRY:
+          onTimeEntryCreationClosed();
+          break;
+        default:
+          break;
       }
       setActiveModal(undefined);
       unmountComponentAtNode(document.getElementById(Portals.MODALS) as HTMLElement);
@@ -63,8 +79,32 @@ const useModalContextApi = () => {
     }
   );
 
+  const openTimeEntryCreationModal = ({ activities, issue, user }: Omit<CreateTimeEntryModalProps, 'onClose'>) => new Promise((resolve) => {
+    resolveExistingModals();
+    const onRender = () => {
+      setActiveModal({ type: ModalTypes.NEW_TIME_ENTRY, resolve });
+    };
+
+    render(
+      <ThemeProvider theme={theme}>
+        <CreateTimeEntryModal
+          onClose={({ timeEntryData }) => {
+            resolve({ timeEntryData });
+            resolveExistingModals();
+          }}
+          activities={activities}
+          issue={issue}
+          user={user}
+        />
+      </ThemeProvider>,
+      document.getElementById(Portals.MODALS),
+      onRender
+    );
+  });
+
   return {
-    openConfirmationModal
+    openConfirmationModal,
+    openTimeEntryCreationModal
   };
 };
 
