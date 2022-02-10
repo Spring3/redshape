@@ -14,14 +14,27 @@ const styles = {
     line-height: 1.5rem;
     box-sizing: border-box;
     background: ${theme.bg};
+    border: 1px solid ${theme.minorText};
+    border-radius: 3px;
+
+    &:hover {
+      border: 1px solid ${theme.main};
+    }
+
+    &:active,
+    &:focus {
+      border: 1px solid ${theme.main};
+      box-shadow: 0px 0px 0px 1px ${theme.main};
+      outline: none;
+    }
   `,
   disabled: (theme: typeof Theme) => css`
     background: ${theme.bgDisabled};
-    border-color: ${theme.bgDarker} !important;
+    border: 1px solid ${theme.bgDarker} !important;
     color: ${theme.minorText};
 
     &:hover {
-      border-color: ${theme.bgDarker} !important;
+      border: 1px solid ${theme.bgDarker} !important;
     }
   `
 };

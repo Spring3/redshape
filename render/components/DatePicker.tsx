@@ -193,13 +193,14 @@ const styles = ({
 `;
 
 type DatePickerProps = {
+  id?: string;
   value?: string;
   name?: string;
   disabled?: boolean;
   onChange?: (day: Date, dayModifiers: DayModifiers, dayPickerInput: DayPickerInput) => void;
 }
 
-const DatePicker = ({ value, disabled = false, onChange }: DatePickerProps) => {
+const DatePicker = ({ id, value, disabled = false, onChange }: DatePickerProps) => {
   const theme = useTheme() as typeof Theme;
   const buttonLeft = encodeURIComponent(
     renderToStaticMarkup(
@@ -212,7 +213,7 @@ const DatePicker = ({ value, disabled = false, onChange }: DatePickerProps) => {
     )
   );
   return (
-    <div css={styles({ buttonLeft, buttonRight, theme })}>
+    <div id={id} css={styles({ buttonLeft, buttonRight, theme })}>
       <DayPickerInput
         value={value}
         inputProps={{

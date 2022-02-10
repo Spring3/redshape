@@ -1,7 +1,8 @@
 const toExternalActivity = (activity) => ({
   id: activity.id,
   name: activity.name,
-  isDefault: activity.is_default
+  isDefault: activity.is_default,
+  active: activity.active
 });
 
 const transform = ({ route }, responseBody) => {

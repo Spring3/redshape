@@ -10,7 +10,7 @@ const fetchActivities: IAction<void, Promise<Response<Activity[]>>> = async ({ e
   });
 
   if (response.success) {
-    state.enumerations.activities = response.data as Activity[] ?? [];
+    state.enumerations.activities = response.data.activities as Activity[] ?? [];
     return {
       success: true,
       data: state.enumerations.activities,
