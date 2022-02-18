@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import * as Dropdown from '@radix-ui/react-dropdown-menu';
 import { css } from '@emotion/react';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
-import { Button } from './Button';
 
 type SelectOption = {
   id: number;
@@ -17,6 +16,8 @@ type SelectProps = {
 }
 
 const styles = {
+  root: css`
+  `,
   trigger: css`
     padding: 5px 10px;
     background: white;
@@ -37,8 +38,17 @@ const styles = {
   triggerOpen: css`
     border: 1px solid #FF7079;
     box-shadow: 0px 0px 0px 1px #FF7079;
+  `,
+  content: css`
+    background: white;
+    box-shadow: 0px 0px 10px 2px lightgrey;
+    padding: 0.3rem 1rem;
+    border-radius: 3px;
+  `,
+  item: css`
+    cursor: pointer;
   `
-}
+};
 
 const Select = ({
   id, options, initialValue, onChange
@@ -60,9 +70,9 @@ const Select = ({
         {value}
         <ChevronDownIcon css={css`vertical-align: middle;`} />
       </Dropdown.Trigger>
-      <Dropdown.Content>
+      <Dropdown.Content css={styles.content}>
         {options.map((option) => (
-          <Dropdown.Item onSelect={handleSelect}>{option.name}</Dropdown.Item>
+          <Dropdown.Item css={styles.item} onSelect={handleSelect}>{option.name}</Dropdown.Item>
         ))}
       </Dropdown.Content>
     </Dropdown.Root>

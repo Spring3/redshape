@@ -9,6 +9,7 @@ const styles = {
     resize: none;
     overflow: hidden;
     height: auto;
+    padding: 0.5rem;
     font-family: inherit;
     width: 100%;
     line-height: 1.5rem;

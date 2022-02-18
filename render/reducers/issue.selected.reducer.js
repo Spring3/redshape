@@ -7,7 +7,6 @@ import {
 import {
   TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
-  TIME_ENTRY_DELETE,
 } from '../actions/timeEntry.actions';
 
 export const initialState = {
@@ -99,28 +98,6 @@ export default (state = initialState, action) => {
               data: [...state.spentTime.data].map(
                 (entry) => (entry.id === action.data.id ? action.data : entry)
               )
-            }
-          };
-          const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);
-          nextState.data = {
-            ...nextState.data,
-            spent_hours: newTotalTimeSpent,
-            total_spent_hours: newTotalTimeSpent
-          };
-          return nextState;
-        }
-      }
-      return state;
-    }
-    case TIME_ENTRY_DELETE: {
-      if (action.status === 'OK') {
-        const { issueId, timeEntryId } = action.data;
-        if (issueId === state.data.id) {
-          const nextState = {
-            ...state,
-            spentTime: {
-              ...state.spentTime,
-              data: [...state.spentTime.data.filter(({ id }) => id !== timeEntryId)]
             }
           };
           const newTotalTimeSpent = nextState.spentTime.data.reduce((acc, entry) => acc + entry.hours, 0);

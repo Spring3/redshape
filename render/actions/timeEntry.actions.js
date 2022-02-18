@@ -11,7 +11,6 @@ export const TIME_ENTRY_PUBLISH = 'TIME_ENTRY_PUBLISH';
 export const TIME_ENTRY_UPDATE_VALIDATION_FAILED = 'TIME_ENTRY_UPDATE_VALIDATION_FAILED';
 export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION_PASSED';
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
-export const TIME_ENTRY_DELETE = 'TIME_ENTRY_DELETE';
 
 const validateDuration = (value, helpers) => {
   const hours = durationToHours(value);
@@ -162,27 +161,9 @@ const update = (originalTimeEntry, changes) => (dispatch) => {
     });
 };
 
-const remove = (timeEntryId, issueId) => (dispatch) => {
-  dispatch(notify.start(TIME_ENTRY_DELETE));
-  if (!issueId) {
-    dispatch(notify.nok(TIME_ENTRY_DELETE, new Error('issueId is required to delete the time entry')));
-  }
-
-  return request({
-    url: `/time_entries/${timeEntryId}.json`,
-    method: 'DELETE'
-  }).then(() => dispatch(notify.ok(TIME_ENTRY_DELETE, { timeEntryId, issueId })))
-    .catch((error) => {
-      // eslint-disable-next-line
-      console.log(`Error when deleting the time entry with id ${timeEntryId}`, error);
-      dispatch(notify.nok(TIME_ENTRY_DELETE, error));
-    });
-};
-
 export default {
   publish,
   update,
-  remove,
   validateBeforePublish,
   validateBeforeUpdate,
 };

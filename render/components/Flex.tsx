@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 type FlexAlignment = 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between' | 'stretch';
 
 type FlexProps = {
+  id?: string;
   children?: ReactNode;
   className?: string;
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
@@ -14,9 +15,10 @@ type FlexProps = {
 };
 
 const Flex = ({
-  children, className, direction = 'row', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'initial', grow,
+  children, className, id, direction = 'row', justifyContent = 'flex-start', alignItems = 'flex-start', gap = 'initial', grow,
 }: FlexProps) => (
   <div
+    id={id}
     className={className}
     css={css`
       display: flex;

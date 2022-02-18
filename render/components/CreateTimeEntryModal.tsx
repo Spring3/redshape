@@ -5,15 +5,15 @@ import { Button } from './Button';
 import { DatePicker } from './DatePicker';
 import { Flex } from './Flex';
 import { FormField } from './FormField';
-import { Input } from './Input';
 import { Modal } from './Modal';
 import { Select } from './Select';
 import { TextArea } from './TextArea';
+import { TimePicker } from './TimePicker';
 
 type TimeEntryData = {
-  spentOn: string;
-  hours: number;
-  activityId: number;
+  spentOn?: string;
+  hours?: number;
+  activityId?: number;
   comments?: string;
 }
 
@@ -26,7 +26,7 @@ type CreateTimeEntryModalProps = {
 
 const CreateTimeEntryModal = ({ onClose, activities, issue, user }: CreateTimeEntryModalProps) => {
   const [isOpen, setOpen] = useState(true);
-  const [timeEntryData, setTimeEntryData] = useState<TimeEntryData>();
+  const [timeEntryData, setTimeEntryData] = useState<TimeEntryData>({});
 
   const handleCreate = () => {
     onClose({ timeEntryData: null });
@@ -38,24 +38,43 @@ const CreateTimeEntryModal = ({ onClose, activities, issue, user }: CreateTimeEn
     setOpen(false);
   };
 
-  const handleActivityChange = (value) => {
-    console.log('value', value);
+  const handleActivityChange = (e) => {
+    const activityName = e.name;
+    const activity = activities.find(a => a.name === activityName);
+    setTimeEntryData({
+      ...timeEntryData,
+      activityId: activity?.id as number
+    });
+  };
+
+  const handleDateChange = (day) => {
+    console.log('selected date', day);
+  };
+
+  const handleTimeSpentChange = ({ hours, minutes }) => {
+    console.log('time spent', `${hours}:${minutes}`);
+  };
+
+  const handleCommentsChange = (e) => {
+    console.log('comments', e.target.value);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={handleCancel} title="Create new time entry">
       <Flex direction='column'>
-        <FormField label="Activity" htmlFor='activity'>
-          <Select id='activity' options={activities} initialValue={activities[0].name} onChange={handleActivityChange} />
-        </FormField>
-        <FormField label="Date" htmlFor='spentOn'>
-          <DatePicker name="spentOn" />
-        </FormField>
-        <FormField label="Time" htmlFor="time">
-          <Input name="time" placeholder="Eg: 1:05 for 1h 5m" />
-        </FormField>
-        <FormField label="Comments" htmlFor='comments'>
-          <TextArea rows={5} name='comments' />
+        <Flex>
+          <FormField css={css`margin-right: 1rem;`} label="Date" htmlFor='spentOn'>
+            <DatePicker onChange={handleDateChange} name="spentOn" />
+          </FormField>
+          <FormField css={css`margin-right: 1rem;`} label="Time Spent" htmlFor="timeSpent">
+            <TimePicker id="timeSpent" onChange={handleTimeSpentChange} />
+          </FormField>
+          <FormField label="Activity" htmlFor='activity'>
+            <Select id='activity' options={activities} initialValue={activities[0].name} onChange={handleActivityChange} />
+          </FormField>
+        </Flex>
+        <FormField css={css`width: 100%;`} label="Comments" htmlFor='comments'>
+          <TextArea onChange={handleCommentsChange} rows={5} name='comments' />
         </FormField>
       </Flex>
       <Flex justifyContent='flex-end'>

@@ -32,13 +32,11 @@ describe('Time actions', () => {
     expect(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_PASSED).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_UPDATE_VALIDATION_FAILED).toBeTruthy();
     expect(timeEntryActions.TIME_ENTRY_UPDATE).toBeTruthy();
-    expect(timeEntryActions.TIME_ENTRY_DELETE).toBeTruthy();
 
     expect(timeEntryActions.default.validateBeforePublish).toBeTruthy();
     expect(timeEntryActions.default.publish).toBeTruthy();
     expect(timeEntryActions.default.validateBeforeUpdate).toBeTruthy();
     expect(timeEntryActions.default.update).toBeTruthy();
-    expect(timeEntryActions.default.remove).toBeTruthy();
     expect(timeEntryActions.default.reset).toBeTruthy();
   });
 
@@ -510,8 +508,6 @@ describe('Time actions', () => {
       expect(axiosMock.history.delete[0].url).toBe(`/time_entries/${timeEntryId}.json`);
       expect(axiosMock.history.delete[0].headers['X-Redmine-API-Key']).toBe(token);
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
-      expect(dispatch).toHaveBeenCalledWith(notify.ok(timeEntryActions.TIME_ENTRY_DELETE, { timeEntryId, issueId }));
     });
 
     it('should pass the error further with dispatch', async () => {
@@ -526,13 +522,6 @@ describe('Time actions', () => {
       expect(axiosMock.history.delete.length).toBe(1);
       expect(axiosMock.history.delete[0].url).toBe(`/time_entries/${timeEntryId}.json`);
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch).toHaveBeenCalledWith(notify.start(timeEntryActions.TIME_ENTRY_DELETE));
-      expect(dispatch).toHaveBeenCalledWith(
-        notify.nok(
-          timeEntryActions.TIME_ENTRY_DELETE,
-          new Error(`Error ${response.status} (${response.message})`)
-        )
-      );
     });
   });
 });

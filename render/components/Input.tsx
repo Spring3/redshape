@@ -50,7 +50,11 @@ const inputStyles = (theme: typeof Theme) => css`
 `;
 
 type InputProps = {
+  title?: string;
   maxWidth?: string;
+  maxLength?: number;
+  max?: string;
+  min?: string;
   type?: 'email' | 'text' | 'number' | 'password';
   placeholder?: string;
   onChange?: ChangeEventHandler<HTMLElement>;
@@ -58,6 +62,7 @@ type InputProps = {
   onFocus?: FocusEventHandler<HTMLElement>;
   onKeyUp?: KeyboardEventHandler<HTMLElement>;
   onClick?: MouseEventHandler<HTMLElement>;
+  pattern?: string;
   value?: string | number;
   id?: string;
   name?: string;
@@ -65,8 +70,13 @@ type InputProps = {
 };
 
 const Input = ({
+  title,
   maxWidth,
+  maxLength,
+  max,
+  min,
   type = 'text',
+  pattern,
   placeholder,
   onChange,
   onBlur,
@@ -80,20 +90,6 @@ const Input = ({
 }: InputProps) => {
   const theme = useTheme() as typeof Theme;
 
-  const ensureNumber = (typedValue: string | number | undefined) => {
-    if (typeof typedValue === 'string') {
-      if (/,|./.test(typedValue)) {
-        return parseFloat(typedValue.replace(',', '.'));
-      }
-      return parseInt(typedValue, 10);
-    }
-
-    if (Number.isNaN(typedValue) || !Number.isFinite(typedValue)) {
-      return undefined;
-    }
-    return typedValue;
-  };
-
   return (
     <input
       type={type}
@@ -104,13 +100,18 @@ const Input = ({
         `
       ]}
       placeholder={placeholder}
+      title={title}
+      max={max}
+      min={min}
+      maxLength={maxLength}
+      pattern={pattern}
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
       onKeyUp={onKeyUp}
       onClick={onClick}
       disabled={disabled}
-      value={type === 'number' ? ensureNumber(value) : value}
+      value={value}
       id={id}
       name={name}
     />
