@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
 import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
@@ -23,7 +22,9 @@ import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
 import { TimeEntriesSection } from '../components/TimeEntriesSection';
 import { GhostButton } from '../components/GhostButton';
-import { useModalContext } from '../contexts/ModalContext';
+import { CreateTimeEntryModal } from '../components/CreateTimeEntryModal';
+import type { TimeEntryData } from '../components/CreateTimeEntryModal';
+import { Activity, User } from '../../types';
 
 const styles = {
   subTask: css`
@@ -58,9 +59,9 @@ const styles = {
 const IssueDetailsPage = () => {
   const [selectedTimeEntry, setSelectedTimeEntry] = useState();
   const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
+  const [showCreateTimeEntryModal, setShowCreateTimeEntryModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('comments');
 
-  const modalContext = useModalContext();
   const navbar = useNavbar();
   const state = useOvermindState();
   const actions = useOvermindActions();
@@ -68,8 +69,13 @@ const IssueDetailsPage = () => {
   const { id: issueId } = useParams();
   const navigate = useNavigate();
 
-  const projects = state.projects.list;
   const currentIssue = state.issues.byId[issueId as string];
+  const cfields = currentIssue.customFields;
+  // eslint-disable-next-line react/prop-types
+  const subtasks = currentIssue.subTasks || [];
+  const activities = state.enumerations.activities;
+  const user = state.users.currentUser as User;
+  const project = state.projects.byId[currentIssue.project.id];
 
   useEffect(() => {
     if (issueId) {
@@ -84,44 +90,39 @@ const IssueDetailsPage = () => {
     }
   }, [currentIssue, navbar]);
 
-  const triggerTimeEntryModal = (timeEntry: any) => {
-    const newSelectedTimeEntry = timeEntry || {
-      user: {
-        id: state.users.currentUser?.id,
-        name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
+  const handleCreateTimeEntry = useCallback(async (timeEntryData: TimeEntryData) => {
+    await actions.timeEntries.create({
+      activity: {
+        id: timeEntryData.activity.id,
+        name: timeEntryData.activity.name
       },
       issue: {
         id: currentIssue.id
       },
-      activity: {},
+      comments: timeEntryData.comments || '',
+      spentOn: timeEntryData.spentOn,
+      hours: timeEntryData.hours,
       project: {
-        id: currentIssue.project.id,
-        name: currentIssue.project.name
+        id: project.id,
+        name: project.name
       },
-      hours: undefined,
-      duration: '',
-      spent_on: moment().format('YYYY-MM-DD')
-    };
-    newSelectedTimeEntry.issue.name = currentIssue.subject;
-    const existingActivities = _.get(projects[currentIssue.project.id], 'activities', []);
-    setSelectedTimeEntry(newSelectedTimeEntry);
-    setShowTimeEntryModal(true);
-  };
+      user: {
+        id: user.id,
+        name: `${user.firstName} ${user.lastName}`
+      }
+    });
+  }, [user, currentIssue, project]);
 
   const closeTimeEntryModal = () => {
     setSelectedTimeEntry(undefined);
     setShowTimeEntryModal(false);
   };
 
-  const createTimeEntry = async () => {
-    const { timeEntryData } = await modalContext.openTimeEntryCreationModal({ activities: state.enumerations.activities });
-    console.log('timeEntryData', timeEntryData);
+  const toggleCreateTimeEntryModal = () => {
+    setShowCreateTimeEntryModal(true);
+    // const { timeEntryData } = await modalContext.openTimeEntryCreationModal({ activities: state.enumerations.activities });
+    // console.log('timeEntryData', timeEntryData);
   };
-
-  const cfields = currentIssue.customFields;
-  // eslint-disable-next-line react/prop-types
-  const subtasks = currentIssue.subTasks || [];
-  const activities = state.enumerations.activities;
 
   if (!currentIssue.id) {
     return (
@@ -172,7 +173,7 @@ const IssueDetailsPage = () => {
                   <ClockOutlineIcon size={20} />
                   Time Entries
                   {' '}
-                  <GhostButton onClick={createTimeEntry}>
+                  <GhostButton onClick={toggleCreateTimeEntryModal}>
                     <PlusIcon size={20} />
                   </GhostButton>
                 </Flex>
@@ -186,6 +187,7 @@ const IssueDetailsPage = () => {
             <Tabs.Content value="time entries">
               <TimeEntriesSection
                 issueId={currentIssue.id}
+                timeEntries={state.timeEntries.listByIssueId[currentIssue.id] || []}
               />
             </Tabs.Content>
           </Tabs.Root>
@@ -341,6 +343,14 @@ const IssueDetailsPage = () => {
         </aside>
         {/* <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} /> */}
       </Flex>
+      {showCreateTimeEntryModal && (
+        <CreateTimeEntryModal
+          onCreate={handleCreateTimeEntry}
+          activities={activities}
+          issue={currentIssue}
+          user={state.users.currentUser as User}
+        />
+      )}
       {selectedTimeEntry && (
         <TimeEntryModal
           isOpen={showTimeEntryModal}

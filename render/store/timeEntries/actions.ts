@@ -88,7 +88,7 @@ const remove: IAction<TimeEntry, Promise<Response<void>>> = async ({ effects, st
   };
 };
 
-const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects }: Context, timeEntry) => {
+const create: IAction<Omit<TimeEntry, 'id' | 'createdOn' | 'updatedOn'>, Promise<Response<TimeEntry>>> = async ({ effects, state }: Context, timeEntry) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'POST',
@@ -107,6 +107,17 @@ const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effec
   });
 
   if (response.success) {
+    const createdTimeEntry = response.data.timeEntry as TimeEntry;
+    const timeEntriesForCurrentIssue = state.timeEntries.mapByIssueId[timeEntry.issue.id] ?? {};
+
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [timeEntry.issue.id]: {
+        ...timeEntriesForCurrentIssue,
+        [createdTimeEntry.id]: createdTimeEntry
+      }
+    };
+
     return {
       success: true,
       data: response.data.timeEntry
@@ -144,7 +155,7 @@ const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effect
 };
 
 export {
-  publish,
+  create,
   getMany,
   remove,
   update

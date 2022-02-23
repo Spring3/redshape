@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { Activity, Issue, User } from '../../types';
+import { toHours } from '../helpers/utils';
 import { Button } from './Button';
 import { DatePicker } from './DatePicker';
 import { Flex } from './Flex';
@@ -10,53 +12,88 @@ import { Select } from './Select';
 import { TextArea } from './TextArea';
 import { TimePicker } from './TimePicker';
 
-type TimeEntryData = {
-  spentOn?: string;
-  hours?: number;
-  activityId?: number;
+export type TimeEntryData = {
+  spentOn: string;
+  hours: number;
+  activity: Activity;
+  comments?: string;
+}
+
+type TimeEntryDataState = {
+  spentOn?: Date;
+  time?: { hours?: string, minutes?: string, seconds?: string },
+  activityName?: string;
   comments?: string;
 }
 
 type CreateTimeEntryModalProps = {
   activities: Activity[];
-  issue: Issue;
-  user: User;
-  onClose: ({ timeEntryData }: { timeEntryData: TimeEntryData | null }) => void;
+  onCreate: (timeEntryData: TimeEntryData) => Promise<void>;
 }
 
-const CreateTimeEntryModal = ({ onClose, activities, issue, user }: CreateTimeEntryModalProps) => {
-  const [isOpen, setOpen] = useState(true);
-  const [timeEntryData, setTimeEntryData] = useState<TimeEntryData>({});
+const toTime = (time: { hours?: string, minutes?: string, seconds?: string } = {}) => {
+  const hours = time.hours ?? '0';
+  const minutes = time.minutes ?? '0';
+  const seconds = time.seconds ?? '0';
 
-  const handleCreate = () => {
-    onClose({ timeEntryData: null });
+  const res = `${hours}:${minutes}:${seconds}`;
+
+  if (res === '0:0:0') {
+    return undefined;
+  }
+
+  return res;
+};
+
+const CreateTimeEntryModal = ({ activities, onCreate }: CreateTimeEntryModalProps) => {
+  const [isOpen, setOpen] = useState(true);
+  const [state, setState] = useState<TimeEntryDataState>({});
+
+  const handleCreate = async () => {
+    console.log(activities);
+    const activity = state.activityName ? activities.find((ac) => ac.name === state.activityName) : activities[0];
+    const timeEntryData = {
+      activity: activity as Activity,
+      spentOn: moment(state.spentOn).format('YYYY-MM-DD'),
+      hours: toHours(state.time),
+      comments: state.comments
+    };
+    console.log('timeEntryData', timeEntryData);
+    await onCreate(timeEntryData);
     setOpen(false);
   };
 
   const handleCancel = () => {
-    onClose({ timeEntryData: null });
     setOpen(false);
   };
 
   const handleActivityChange = (e) => {
     const activityName = e.name;
-    const activity = activities.find(a => a.name === activityName);
-    setTimeEntryData({
-      ...timeEntryData,
-      activityId: activity?.id as number
+    setState({
+      ...state,
+      activityName
     });
   };
 
-  const handleDateChange = (day) => {
-    console.log('selected date', day);
+  const handleDateChange = (date: Date) => {
+    setState({
+      ...state,
+      spentOn: date
+    });
   };
 
-  const handleTimeSpentChange = ({ hours, minutes }) => {
-    console.log('time spent', `${hours}:${minutes}`);
+  const handleTimeSpentChange = ({ hours, minutes, seconds }: { hours?: string, minutes?: string, seconds?: string }) => {
+    setState({
+      ...state,
+      time: { hours, minutes, seconds }
+    });
   };
 
   const handleCommentsChange = (e) => {
-    console.log('comments', e.target.value);
+    setState({
+      ...state,
+      comments: e.target.value
+    });
   };
 
   return (
@@ -64,17 +101,17 @@ const CreateTimeEntryModal = ({ onClose, activities, issue, user }: CreateTimeEn
       <Flex direction='column'>
         <Flex>
           <FormField css={css`margin-right: 1rem;`} label="Date" htmlFor='spentOn'>
-            <DatePicker onChange={handleDateChange} name="spentOn" />
+            <DatePicker value={state.spentOn} onChange={handleDateChange} name="spentOn" />
           </FormField>
           <FormField css={css`margin-right: 1rem;`} label="Time Spent" htmlFor="timeSpent">
-            <TimePicker id="timeSpent" onChange={handleTimeSpentChange} />
+            <TimePicker initialValue={toTime(state.time)} id="timeSpent" onChange={handleTimeSpentChange} />
           </FormField>
           <FormField label="Activity" htmlFor='activity'>
             <Select id='activity' options={activities} initialValue={activities[0].name} onChange={handleActivityChange} />
           </FormField>
         </Flex>
         <FormField css={css`width: 100%;`} label="Comments" htmlFor='comments'>
-          <TextArea onChange={handleCommentsChange} rows={5} name='comments' />
+          <TextArea value={state.comments} onChange={handleCommentsChange} rows={5} name='comments' />
         </FormField>
       </Flex>
       <Flex justifyContent='flex-end'>

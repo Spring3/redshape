@@ -2,22 +2,21 @@ import Joi from '@hapi/joi';
 import moment from 'moment';
 import request, { notify } from './helper';
 
-import { durationToHours } from '../datetime';
 
 export const ISSUE_UPDATE = 'ISSUE_UPDATE';
 export const ISSUE_UPDATE_VALIDATION_FAILED = 'ISSUE_UPDATE_VALIDATION_FAILED';
 export const ISSUE_UPDATE_VALIDATION_PASSED = 'ISSUE_UPDATE_VALIDATION_PASSED';
 
 const validateEstimatedDuration = (value, helpers) => {
-  const hours = durationToHours(value);
-  if (hours == null) {
-    return helpers.message(`
-      "estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string
-    `);
-  } if (hours <= 0) {
-    return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
-  }
-  return hours;
+  // const hours = durationToHours(value);
+  // if (hours == null) {
+  //   return helpers.message(`
+  //     "estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string
+  //   `);
+  // } if (hours <= 0) {
+  //   return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
+  // }
+  // return hours;
 };
 
 const validateDate = (value, helpers) => {
@@ -71,11 +70,11 @@ const update = (originalIssueEntry, changes) => (dispatch) => {
 
   const updates = {};
 
-  const estimated_hours = durationToHours(changes.estimated_duration);
+  // const estimated_hours = durationToHours(changes.estimated_duration);
   const hours = originalIssueEntry.estimated_hours;
-  if (hours !== estimated_hours) {
-    updates.estimated_hours = estimated_hours;
-  }
+  // if (hours !== estimated_hours) {
+  //   updates.estimated_hours = estimated_hours;
+  // }
   const due_date = changes.due_date || null;
   if (originalIssueEntry.due_date !== due_date) {
     updates.due_date = due_date;

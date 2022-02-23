@@ -1,6 +1,5 @@
 import _debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
 import styled, { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
 
@@ -15,7 +14,6 @@ import { Modal } from './Modal';
 import { ProcessIndicator } from './ProcessIndicator';
 import { Tooltip } from './Tooltip';
 
-import { durationToHours } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';
 import { TimeEntry } from '../../types';
 

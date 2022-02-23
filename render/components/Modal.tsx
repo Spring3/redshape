@@ -1,5 +1,5 @@
 import React, {
-  ReactNode, useCallback, KeyboardEvent
+  ReactNode, useCallback, KeyboardEvent, memo
 } from 'react';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
@@ -28,7 +28,13 @@ type ModalProps = {
 }
 
 const Modal = ({
-  isOpen, width = ModalWidth.DEFAULT, description, children, onClose, title, closeIcon = true
+  isOpen,
+  width = ModalWidth.DEFAULT,
+  description,
+  children,
+  onClose,
+  title,
+  closeIcon = true
 } : ModalProps) => {
   const theme = useTheme() as typeof Theme;
 

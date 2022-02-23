@@ -8,9 +8,10 @@ import { TimeEntryCard } from './TimeEntryCard';
 
 type TimeEntriesSectionProps = {
   issueId: number;
+  timeEntries: TimeEntry[];
 }
 
-const TimeEntriesSection = ({ issueId } : TimeEntriesSectionProps) => {
+const TimeEntriesSection = ({ issueId, timeEntries } : TimeEntriesSectionProps) => {
   const actions = useOvermindActions();
   const state = useOvermindState();
   const modalContext = useModalContext();
@@ -44,7 +45,6 @@ const TimeEntriesSection = ({ issueId } : TimeEntriesSectionProps) => {
     request: requestTimeEntries
   });
 
-  const timeEntries = state.timeEntries.listByIssueId[issueId] ?? [];
 
   if (!timeEntries.length) {
     return (

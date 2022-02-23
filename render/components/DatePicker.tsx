@@ -194,7 +194,7 @@ const styles = ({
 
 type DatePickerProps = {
   id?: string;
-  value?: string;
+  value?: string | Date;
   name?: string;
   disabled?: boolean;
   onChange?: (day: Date, dayModifiers: DayModifiers, dayPickerInput: DayPickerInput) => void;
@@ -216,12 +216,12 @@ const DatePicker = ({ id, value, disabled = false, onChange }: DatePickerProps) 
     <div id={id} css={styles({ buttonLeft, buttonRight, theme })}>
       <DayPickerInput
         value={value}
-        placeholder='yyyy-MM-dd'
+        placeholder='YYYY-MM-DD'
         inputProps={{
           disabled
         }}
         onDayChange={onChange}
-        component={(props: any) => <Input maxWidth='150px' {...props} />}
+        component={(props: any) => <Input key="day-picker-input" maxWidth='150px' {...props} />}
       />
     </div>
   );

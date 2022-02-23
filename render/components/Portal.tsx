@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 type PortalProps = {
@@ -11,7 +11,7 @@ enum Portals {
 }
 
 const Portal = ({ children, active }: PortalProps) => {
-  const container = document.createElement('div');
+  const container = useMemo(() => document.createElement('div'), []);
 
   useEffect(() => {
     let portal: HTMLElement;
@@ -37,6 +37,8 @@ const Portal = ({ children, active }: PortalProps) => {
 
   return createPortal(children, container);
 };
+
+Portal.displayName = 'Portal';
 
 export {
   Portal,

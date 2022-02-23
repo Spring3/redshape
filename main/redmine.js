@@ -84,7 +84,7 @@ const createRequestClient = () => {
 
       console.log(response.statusCode, response.body);
 
-      if (response.statusCode === 200) {
+      if (response.statusCode === 200 || response.statusCode === 201) {
         return {
           data: transform({ route: data.route, method: data.method }, response.body),
           success: true,

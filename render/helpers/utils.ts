@@ -14,7 +14,17 @@ const toNumber = (typedValue: string | number | undefined) => {
   return typedValue;
 };
 
+type ToHoursType = { hours?: string, minutes?: string, seconds?: string };
+const toHours = ({ hours, minutes, seconds }: ToHoursType = {}) => {
+  const hoursInt = parseInt(hours || '0', 10);
+  const minutesInt = parseInt(minutes || '0', 10);
+  const secondsInt = parseInt(seconds || '0', 10);
+
+  return parseFloat(((hoursInt * 3600 + minutesInt * 60 + secondsInt) / 3600).toFixed(2));
+};
+
 export {
   getStoredToken,
-  toNumber
+  toNumber,
+  toHours
 };

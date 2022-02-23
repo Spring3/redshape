@@ -3,8 +3,6 @@ import moment from 'moment';
 import Joi from '@hapi/joi';
 import request, { notify } from './helper';
 
-import { durationToHours } from '../datetime';
-
 export const TIME_ENTRY_PUBLISH_VALIDATION_FAILED = 'TIME_ENTRY_PUBLISH_VALIDATION_FAILED';
 export const TIME_ENTRY_PUBLISH_VALIDATION_PASSED = 'TIME_ENTRY_PUBLISH_VALIDATION_PASSED';
 export const TIME_ENTRY_PUBLISH = 'TIME_ENTRY_PUBLISH';
@@ -13,14 +11,14 @@ export const TIME_ENTRY_UPDATE_VALIDATION_PASSED = 'TIME_ENTRY_UPDATE_VALIDATION
 export const TIME_ENTRY_UPDATE = 'TIME_ENTRY_UPDATE';
 
 const validateDuration = (value, helpers) => {
-  const hours = durationToHours(value);
-  if (hours == null) {
-    return helpers.message('"duration" requires a value in hours or a duration string (eg. 34m, 1 day 5m)');
-  }
-  if (hours <= 0.0) {
-    return helpers.message(`"duration" requires a positive duration (${hours} hours)`);
-  }
-  return hours;
+  // const hours = durationToHours(value);
+  // if (hours == null) {
+  //   return helpers.message('"duration" requires a value in hours or a duration string (eg. 34m, 1 day 5m)');
+  // }
+  // if (hours <= 0.0) {
+  //   return helpers.message(`"duration" requires a positive duration (${hours} hours)`);
+  // }
+  // return hours;
 };
 
 const validateBeforeCommon = (timeEntry, checkFields) => {

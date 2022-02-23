@@ -1,7 +1,6 @@
 import Joi from '@hapi/joi';
 import moment from 'moment';
 import { Issue } from '../types';
-import { durationToHours } from './datetime';
 
 const validateIssue = ({ issue, checkFields }: { issue: Issue, checkFields: string[] }) => {
   let schema: Record<string, any> = {};
@@ -37,16 +36,16 @@ const validateIssue = ({ issue, checkFields }: { issue: Issue, checkFields: stri
 };
 
 const validateEstimatedDuration = (value: string, helpers: any) => {
-  const hours = durationToHours(value);
-  if (hours == null) {
-    return helpers.message(`
-      "estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string
-    `);
-  }
-  if (hours <= 0) {
-    return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
-  }
-  return hours;
+  // const hours = durationToHours(value);
+  // if (hours == null) {
+  //   return helpers.message(`
+  //     "estimation" requires a value in hours, a duration string (eg. 34m, 1 day 5m) or an empty string
+  //   `);
+  // }
+  // if (hours <= 0) {
+  //   return helpers.message(`"estimation" requires a positive duration (${hours} hours)`);
+  // }
+  // return hours;
 };
 
 const validateDate = (value: string, helpers: any) => {

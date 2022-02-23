@@ -9,7 +9,6 @@ import { Timer } from '../components/Timer';
 import { TimeEntryModal } from '../components/TimeEntryModal';
 import { DragArea } from '../components/DragArea';
 
-import { hoursToDuration } from '../datetime';
 import { useOvermindActions, useOvermindState } from '../store';
 import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
@@ -74,7 +73,7 @@ const AppView = () => {
         name: issue.subject
       },
       hours,
-      duration: hoursToDuration(hours),
+      // duration: hoursToDuration(hours),
       comments: '',
       project: {
         id: issue.project.id,
