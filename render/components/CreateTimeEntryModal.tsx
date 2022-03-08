@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Activity } from '../../types';
 import { toHours } from '../helpers/utils';
 import { Button } from './Button';
@@ -20,7 +20,7 @@ export type TimeEntryData = {
 }
 
 type TimeEntryDataState = {
-  spentOn: Date;
+  spentOn?: Date;
   time?: { hours?: string, minutes?: string, seconds?: string },
   activityName?: string;
   comments?: string;
@@ -48,9 +48,13 @@ const toTime = (time: { hours?: string, minutes?: string, seconds?: string } = {
 };
 
 const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateTimeEntryModalProps) => {
-  const [state, setState] = useState<TimeEntryDataState>({
-    spentOn: new Date()
-  });
+  const [state, setState] = useState<TimeEntryDataState>({});
+
+  useEffect(() => {
+    if (isOpen === false) {
+      setState({});
+    }
+  }, [isOpen]);
 
   const handleCreate = async () => {
     console.log(activities);
@@ -98,7 +102,7 @@ const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateT
     });
   };
 
-  if (!activities.length) {
+  if (!isOpen || !activities.length) {
     return null;
   }
 
@@ -107,7 +111,7 @@ const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateT
       <Flex direction='column'>
         <Flex>
           <FormField css={css`margin-right: 1rem;`} label="Date" htmlFor='spentOn'>
-            <DatePicker onChange={handleDateChange} name="spentOn" />
+            <DatePicker initialValue={state.spentOn} onChange={handleDateChange} name="spentOn" />
           </FormField>
           <FormField css={css`margin-right: 1rem;`} label="Time Spent" htmlFor="timeSpent">
             <TimePicker initialValue={toTime(state.time)} id="timeSpent" onChange={handleTimeSpentChange} />
