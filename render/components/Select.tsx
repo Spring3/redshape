@@ -40,13 +40,14 @@ const styles = {
     box-shadow: 0px 0px 0px 1px #FF7079;
   `,
   content: css`
+    top: 5px;
     background: white;
-    box-shadow: 0px 0px 10px 2px lightgrey;
-    padding: 0.3rem 1rem;
+    box-shadow: 0px 0px 10px 0px lightgrey;
     border-radius: 3px;
   `,
   item: css`
     cursor: pointer;
+    padding: 0.5rem;
   `
 };
 

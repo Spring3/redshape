@@ -4,13 +4,14 @@ import { createPortal } from 'react-dom';
 type PortalProps = {
   children: ReactNode;
   active?: boolean;
+  id?: string;
 }
 
 enum Portals {
   MODALS = 'modals-portal'
 }
 
-const Portal = ({ children, active }: PortalProps) => {
+const Portal = ({ children, active, id }: PortalProps) => {
   const container = useMemo(() => document.createElement('div'), []);
 
   useEffect(() => {
@@ -35,10 +36,8 @@ const Portal = ({ children, active }: PortalProps) => {
     };
   }, [container, active]);
 
-  return createPortal(children, container);
+  return createPortal(children, container, id);
 };
-
-Portal.displayName = 'Portal';
 
 export {
   Portal,

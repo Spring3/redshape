@@ -1,5 +1,5 @@
 import React, {
-  ReactNode, useCallback, KeyboardEvent, memo
+  ReactNode, useCallback, KeyboardEvent
 } from 'react';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
@@ -18,6 +18,7 @@ enum ModalWidth {
 }
 
 type ModalProps = {
+  id?: string;
   width?: ModalWidth;
   isOpen: boolean;
   title?: string;
@@ -28,6 +29,7 @@ type ModalProps = {
 }
 
 const Modal = ({
+  id,
   isOpen,
   width = ModalWidth.DEFAULT,
   description,
@@ -46,6 +48,7 @@ const Modal = ({
 
   return (
     <Portal
+      id={id}
       active={isOpen}
     >
       <ReactFocusLock>

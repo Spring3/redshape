@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import moment from 'moment';
 import React, { useState } from 'react';
-import { Activity, Issue, User } from '../../types';
+import { Activity } from '../../types';
 import { toHours } from '../helpers/utils';
 import { Button } from './Button';
 import { DatePicker } from './DatePicker';
@@ -20,15 +20,17 @@ export type TimeEntryData = {
 }
 
 type TimeEntryDataState = {
-  spentOn?: Date;
+  spentOn: Date;
   time?: { hours?: string, minutes?: string, seconds?: string },
   activityName?: string;
   comments?: string;
 }
 
 type CreateTimeEntryModalProps = {
+  isOpen: boolean;
   activities: Activity[];
   onCreate: (timeEntryData: TimeEntryData) => Promise<void>;
+  onClose: () => void;
 }
 
 const toTime = (time: { hours?: string, minutes?: string, seconds?: string } = {}) => {
@@ -45,9 +47,10 @@ const toTime = (time: { hours?: string, minutes?: string, seconds?: string } = {
   return res;
 };
 
-const CreateTimeEntryModal = ({ activities, onCreate }: CreateTimeEntryModalProps) => {
-  const [isOpen, setOpen] = useState(true);
-  const [state, setState] = useState<TimeEntryDataState>({});
+const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateTimeEntryModalProps) => {
+  const [state, setState] = useState<TimeEntryDataState>({
+    spentOn: new Date()
+  });
 
   const handleCreate = async () => {
     console.log(activities);
@@ -60,11 +63,10 @@ const CreateTimeEntryModal = ({ activities, onCreate }: CreateTimeEntryModalProp
     };
     console.log('timeEntryData', timeEntryData);
     await onCreate(timeEntryData);
-    setOpen(false);
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    onClose();
   };
 
   const handleActivityChange = (e) => {
@@ -96,12 +98,16 @@ const CreateTimeEntryModal = ({ activities, onCreate }: CreateTimeEntryModalProp
     });
   };
 
+  if (!activities.length) {
+    return null;
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={handleCancel} title="Create new time entry">
+    <Modal id="create-time-entry" isOpen={isOpen} onClose={handleCancel} title="Create new time entry">
       <Flex direction='column'>
         <Flex>
           <FormField css={css`margin-right: 1rem;`} label="Date" htmlFor='spentOn'>
-            <DatePicker value={state.spentOn} onChange={handleDateChange} name="spentOn" />
+            <DatePicker onChange={handleDateChange} name="spentOn" />
           </FormField>
           <FormField css={css`margin-right: 1rem;`} label="Time Spent" htmlFor="timeSpent">
             <TimePicker initialValue={toTime(state.time)} id="timeSpent" onChange={handleTimeSpentChange} />

@@ -111,6 +111,7 @@ const IssueDetailsPage = () => {
         name: `${user.firstName} ${user.lastName}`
       }
     });
+    setShowCreateTimeEntryModal(false);
   }, [user, currentIssue, project]);
 
   const closeTimeEntryModal = () => {
@@ -119,7 +120,7 @@ const IssueDetailsPage = () => {
   };
 
   const toggleCreateTimeEntryModal = () => {
-    setShowCreateTimeEntryModal(true);
+    setShowCreateTimeEntryModal(isOpen => !isOpen);
     // const { timeEntryData } = await modalContext.openTimeEntryCreationModal({ activities: state.enumerations.activities });
     // console.log('timeEntryData', timeEntryData);
   };
@@ -343,14 +344,12 @@ const IssueDetailsPage = () => {
         </aside>
         {/* <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} /> */}
       </Flex>
-      {showCreateTimeEntryModal && (
-        <CreateTimeEntryModal
-          onCreate={handleCreateTimeEntry}
-          activities={activities}
-          issue={currentIssue}
-          user={state.users.currentUser as User}
-        />
-      )}
+      <CreateTimeEntryModal
+        isOpen={showCreateTimeEntryModal}
+        onCreate={handleCreateTimeEntry}
+        activities={activities}
+        onClose={toggleCreateTimeEntryModal}
+      />
       {selectedTimeEntry && (
         <TimeEntryModal
           isOpen={showTimeEntryModal}

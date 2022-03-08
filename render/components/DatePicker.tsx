@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { FocusEventHandler, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { formatDate,
+  parseDate } from 'react-day-picker/moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
-import { DayModifiers } from 'react-day-picker';
 
 import MenuLeftIcon from 'mdi-react/MenuLeftIcon';
 import MenuRightIcon from 'mdi-react/MenuRightIcon';
@@ -194,14 +195,16 @@ const styles = ({
 
 type DatePickerProps = {
   id?: string;
-  value?: string | Date;
+  initialValue?: Date;
   name?: string;
   disabled?: boolean;
-  onChange?: (day: Date, dayModifiers: DayModifiers, dayPickerInput: DayPickerInput) => void;
-}
+  onChange: (day: Date) => void;
+};
 
-const DatePicker = ({ id, value, disabled = false, onChange }: DatePickerProps) => {
+const DatePicker = ({ id, initialValue, disabled = false, name, onChange }: DatePickerProps) => {
+  const [value, setValue] = useState<Date>(() => initialValue || new Date());
   const theme = useTheme() as typeof Theme;
+
   const buttonLeft = encodeURIComponent(
     renderToStaticMarkup(
       <MenuLeftIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />
@@ -212,21 +215,29 @@ const DatePicker = ({ id, value, disabled = false, onChange }: DatePickerProps) 
       <MenuRightIcon xmlns="http://www.w3.org/2000/svg" color={theme.normalText} />
     )
   );
+
+  const handleDateChange = (date: Date) => {
+    setValue(date);
+    onChange(date);
+  };
+
   return (
     <div id={id} css={styles({ buttonLeft, buttonRight, theme })}>
       <DayPickerInput
         value={value}
-        placeholder='YYYY-MM-DD'
+        formatDate={formatDate}
+        parseDate={parseDate}
+        placeholder="YYYY-MM-DD"
+        format="YYYY-MM-DD"
         inputProps={{
-          disabled
+          disabled,
+          name
         }}
-        onDayChange={onChange}
-        component={(props: any) => <Input key="day-picker-input" maxWidth='150px' {...props} />}
+        onDayChange={handleDateChange}
+        component={Input}
       />
     </div>
   );
 };
 
-export {
-  DatePicker
-};
+export { DatePicker };

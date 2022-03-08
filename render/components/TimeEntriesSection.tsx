@@ -45,7 +45,6 @@ const TimeEntriesSection = ({ issueId, timeEntries } : TimeEntriesSectionProps) 
     request: requestTimeEntries
   });
 
-
   if (!timeEntries.length) {
     return (
       <Flex>
