@@ -24,7 +24,7 @@ import { TimeEntriesSection } from '../components/TimeEntriesSection';
 import { GhostButton } from '../components/GhostButton';
 import { CreateTimeEntryModal } from '../components/CreateTimeEntryModal';
 import type { TimeEntryData } from '../components/CreateTimeEntryModal';
-import { Activity, User } from '../../types';
+import { User } from '../../types';
 
 const styles = {
   subTask: css`
@@ -121,8 +121,6 @@ const IssueDetailsPage = () => {
 
   const toggleCreateTimeEntryModal = () => {
     setShowCreateTimeEntryModal(isOpen => !isOpen);
-    // const { timeEntryData } = await modalContext.openTimeEntryCreationModal({ activities: state.enumerations.activities });
-    // console.log('timeEntryData', timeEntryData);
   };
 
   if (!currentIssue.id) {

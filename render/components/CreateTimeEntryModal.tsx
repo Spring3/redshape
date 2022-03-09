@@ -57,7 +57,6 @@ const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateT
   }, [isOpen]);
 
   const handleCreate = async () => {
-    console.log(activities);
     const activity = state.activityName ? activities.find((ac) => ac.name === state.activityName) : activities[0];
     const timeEntryData = {
       activity: activity as Activity,
@@ -65,7 +64,6 @@ const CreateTimeEntryModal = ({ isOpen, activities, onCreate, onClose }: CreateT
       hours: toHours(state.time),
       comments: state.comments
     };
-    console.log('timeEntryData', timeEntryData);
     await onCreate(timeEntryData);
   };
 
