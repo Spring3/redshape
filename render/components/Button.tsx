@@ -52,7 +52,7 @@ type ButtonProps = {
   type?: HTMLButtonElement['type'];
   disabled?: boolean;
   block?: boolean;
-  onClick?: MouseEventHandler;
+  onClick?: MouseEventHandler<HTMLElement>;
   className?: string;
   palette?: 'success' | 'warning' | 'danger' | 'default' | 'mute';
 };

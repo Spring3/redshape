@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FocusEventHandler, useEffect, useState } from 'react';
 import { Input } from './Input';
 
 type TimeData = { hours: string, minutes: string, seconds: string };
@@ -9,10 +9,13 @@ type TimePickerProps = {
   name?: string;
   disabled?: boolean;
   onChange?: ({ hours, minutes, seconds }: TimeData) => void;
+  onBlur?: FocusEventHandler;
 }
 
+const TIME_PATTERN_REGEXP = /^\d{0,2}:?\d{0,2}:?\d{0,2}$/;
+
 const TimePicker = ({
-  id, initialValue, name, disabled = false, onChange
+  id, initialValue, name, disabled = false, onChange, onBlur
 }: TimePickerProps) => {
   const [enteredValue, setEnteredValue] = useState('');
   const [selectedTime, setSelectedTime] = useState<TimeData>({
@@ -53,13 +56,25 @@ const TimePicker = ({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const modifiedSelection = { ...selectedTime };
 
-    let typedValue = e.target.value;
+    let typedValue = e.target.value?.trim();
 
-    if (typedValue === ':' || !new RegExp('^\\d{0,2}:?\\d{0,2}:?\\d{0,2}$', 'g').test(typedValue)) {
+    if (!typedValue) {
+      setEnteredValue('');
+      const selectedTimeData = {
+        hours: '',
+        minutes: '',
+        seconds: ''
+      };
+      setSelectedTime(selectedTimeData);
+      if (onChange) {
+        onChange(selectedTimeData);
+      }
       return;
     }
 
-    console.log('passed 1');
+    if (typedValue === ':' || !TIME_PATTERN_REGEXP.test(typedValue)) {
+      return;
+    }
 
     // if not ##: then insert : after the first two characters
     if (typedValue.length > 2 && !typedValue.includes(':')) {
@@ -71,26 +86,31 @@ const TimePicker = ({
       typedValue = `${typedValue.slice(0, 5)}:${typedValue.slice(5)}`;
     }
 
-    console.log('passed 2');
-
     const [hours = '', minutes = '', seconds = ''] = typedValue.split(':');
 
-    console.log('hours', hours);
-    console.log('minutes', minutes);
-    console.log('seconds', seconds);
+    const intHoursValue = parseInt(hours, 10);
+    const intMinutesValue = parseInt(minutes, 10);
+    const intSecondsValue = parseInt(seconds, 10);
 
-    const intHoursValue = parseInt(hours, 10) || 0;
-    const intMinutesValue = parseInt(minutes, 10) || 0;
-    const intSecondsValue = parseInt(seconds, 10) || 0;
+    let modified = false;
 
-    console.log('intHoursValue', intHoursValue);
-    console.log('intMinutesValue', intMinutesValue);
-    console.log('intSecondsValue', intSecondsValue);
-
-    if (intHoursValue <= 23 && intMinutesValue <= 59 && intSecondsValue <= 59) {
+    if (intHoursValue <= 23) {
       modifiedSelection.hours = `${intHoursValue}`;
+      modified = true;
+    }
+
+    if (intMinutesValue <= 59) {
       modifiedSelection.minutes = `${intMinutesValue}`;
+      modified = true;
+    }
+
+    if (intSecondsValue <= 59) {
       modifiedSelection.seconds = `${intSecondsValue}`;
+      modified = true;
+    }
+
+    if (modified) {
+      // TODO: merge entered value with typed value
       setEnteredValue(typedValue);
     } else {
       setEnteredValue(enteredValue);
@@ -98,7 +118,7 @@ const TimePicker = ({
 
     setSelectedTime(modifiedSelection);
     if (onChange) {
-      onChange(selectedTime);
+      onChange(modifiedSelection);
     }
   };
 
@@ -112,6 +132,7 @@ const TimePicker = ({
       value={enteredValue}
       name={name}
       onChange={handleChange}
+      onBlur={onBlur}
     />
   );
 };

@@ -11,6 +11,8 @@ import MenuRightIcon from 'mdi-react/MenuRightIcon';
 
 import { Input } from './Input';
 import { theme as Theme } from '../theme';
+import { DayPickerInputProps } from 'react-day-picker';
+import moment from 'moment';
 
 const styles = ({
   buttonLeft,
@@ -195,14 +197,19 @@ const styles = ({
 
 type DatePickerProps = {
   id?: string;
-  initialValue?: Date;
+  initialValue?: Date | string;
   name?: string;
   disabled?: boolean;
-  onChange: (day: Date) => void;
+  onChange: (dateTime: string) => void;
+  onBlur?: FocusEventHandler;
 };
 
-const DatePicker = ({ id, initialValue, disabled = false, name, onChange }: DatePickerProps) => {
-  const [value, setValue] = useState<Date>(() => initialValue || new Date());
+const DatePicker = ({ id, initialValue, disabled = false, name, onChange, onBlur }: DatePickerProps) => {
+  const [value, setValue] = useState<string>(() => {
+    const initial = initialValue ?? new Date();
+
+    return moment(initial).format('YYYY-MM-DD');
+  });
   const theme = useTheme() as typeof Theme;
 
   const buttonLeft = encodeURIComponent(
@@ -216,9 +223,10 @@ const DatePicker = ({ id, initialValue, disabled = false, name, onChange }: Date
     )
   );
 
-  const handleDateChange = (date: Date) => {
-    setValue(date);
-    onChange(date);
+  const handleDateChange: DayPickerInputProps['onDayChange'] = (date: Date) => {
+    const dateString = moment(date).format('YYYY-MM-DD');
+    setValue(dateString);
+    onChange(dateString);
   };
 
   return (
@@ -231,7 +239,8 @@ const DatePicker = ({ id, initialValue, disabled = false, name, onChange }: Date
         format="YYYY-MM-DD"
         inputProps={{
           disabled,
-          name
+          name,
+          onBlur
         }}
         onDayChange={handleDateChange}
         component={Input}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FocusEventHandler, useState } from 'react';
 import * as Dropdown from '@radix-ui/react-dropdown-menu';
 import { css } from '@emotion/react';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
@@ -13,6 +13,7 @@ type SelectProps = {
   options: SelectOption[];
   initialValue?: string | number;
   onChange: (value: any) => void;
+  onBlur?: FocusEventHandler;
 }
 
 const styles = {
@@ -52,7 +53,7 @@ const styles = {
 };
 
 const Select = ({
-  id, options, initialValue, onChange
+  id, options, initialValue, onChange, onBlur
 }: SelectProps) => {
   const [isOpen, setOpen] = useState(false);
   const [value, setValue] = useState(initialValue || options[0].name);
@@ -65,15 +66,16 @@ const Select = ({
   return (
     <Dropdown.Root onOpenChange={setOpen}>
       <Dropdown.Trigger
+        onBlur={onBlur}
         id={id}
         css={isOpen ? [styles.trigger, styles.triggerOpen] : [styles.trigger]}
       >
         {value}
         <ChevronDownIcon css={css`vertical-align: middle;`} />
       </Dropdown.Trigger>
-      <Dropdown.Content css={styles.content}>
+      <Dropdown.Content onBlur={onBlur} css={styles.content}>
         {options.map((option) => (
-          <Dropdown.Item css={styles.item} onSelect={handleSelect}>{option.name}</Dropdown.Item>
+          <Dropdown.Item key={option.name} css={styles.item} onSelect={handleSelect}>{option.name}</Dropdown.Item>
         ))}
       </Dropdown.Content>
     </Dropdown.Root>
