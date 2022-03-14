@@ -1,18 +1,17 @@
 import React, { FocusEventHandler, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { formatDate,
-  parseDate } from 'react-day-picker/moment';
+import { formatDate, parseDate } from 'react-day-picker/moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
 
 import MenuLeftIcon from 'mdi-react/MenuLeftIcon';
 import MenuRightIcon from 'mdi-react/MenuRightIcon';
 
+import type { DayPickerInputProps } from 'react-day-picker';
+import moment from 'moment';
 import { Input } from './Input';
 import { theme as Theme } from '../theme';
-import { DayPickerInputProps } from 'react-day-picker';
-import moment from 'moment';
 
 const styles = ({
   buttonLeft,
@@ -204,7 +203,9 @@ type DatePickerProps = {
   onBlur?: FocusEventHandler;
 };
 
-const DatePicker = ({ id, initialValue, disabled = false, name, onChange, onBlur }: DatePickerProps) => {
+const DatePicker = ({
+  id, initialValue, disabled = false, name, onChange, onBlur
+}: DatePickerProps) => {
   const [value, setValue] = useState<string>(() => {
     const initial = initialValue ?? new Date();
 

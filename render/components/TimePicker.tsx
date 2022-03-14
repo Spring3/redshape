@@ -130,7 +130,6 @@ const TimePicker = ({
     }
 
     if (modified) {
-      // TODO: merge entered value with typed value
       const mergedTypedValue = [hours, minutes, seconds].filter((string) => !!string).join(':');
       setEnteredValue(mergedTypedValue);
     } else {

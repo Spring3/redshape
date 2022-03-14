@@ -12,13 +12,14 @@ const errorMessageStypes = css`
 
 type ErrorMessageProps = {
   children: ReactNode;
+  className?: string;
   show?: boolean;
 }
 
-const ErrorMessage = ({ children, show }: ErrorMessageProps) => {
+const ErrorMessage = ({ children, show, className }: ErrorMessageProps) => {
   if (show) {
     return (
-      <p css={errorMessageStypes}>
+      <p className={className} css={errorMessageStypes}>
         {children}
       </p>
     );

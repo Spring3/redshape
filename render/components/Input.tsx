@@ -90,7 +90,7 @@ const Input = ({
   id,
   name,
   disabled,
-  editable,
+  editable = true,
 }: InputProps) => {
   const theme = useTheme() as typeof Theme;
 

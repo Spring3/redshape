@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import moment from 'moment';
 import React from 'react';
-import { Formik, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import Joi from '@hapi/joi';
 import { Activity } from '../../types';
 import { toHours } from '../helpers/utils';
@@ -13,6 +13,7 @@ import { Modal } from './Modal';
 import { Select } from './Select';
 import { TextArea } from './TextArea';
 import { TimePicker } from './TimePicker';
+import { ErrorMessage } from './ErrorMessage';
 
 export type TimeEntryData = {
   spentOn: string;
@@ -34,6 +35,16 @@ type CreateTimeEntryModalProps = {
   onCreate: (timeEntryData: TimeEntryData) => Promise<void>;
   onClose: () => void;
 }
+
+const styles = {
+  vlaidationError: css`
+    margin-top: 5px;
+  `,
+  formField: css`
+    display: flex;
+    flex-direction: column;
+  `
+};
 
 const toTime = ({ hours = '', minutes = '', seconds = '' }: { hours?: string, minutes?: string, seconds?: string } = {}) => {
   const hoursInt = parseInt(hours, 10);
@@ -76,25 +87,26 @@ const CreateTimeEntryModal = ({
         const dateTimeRegexp = /^\d{4}-\d{2}-\d{2}$/;
         const formattedTimeSpent = toTime(values.timeSpent);
 
-        console.log(values);
-
         const errors = {
-          spentOn: Joi.string().trim().pattern(dateTimeRegexp, { name: '"YYYY-MM-DD"' })
+          spentOn: Joi.string().trim().pattern(dateTimeRegexp, { name: '"YYYY-MM-DD"' }).label('date')
             .validate(values.spentOn).error?.message,
           timeSpent: Joi.string().trim().required().pattern(timeSpentRegexp, { name: '"hh:mm:ss"' })
+            .label('time')
             .validate(formattedTimeSpent).error?.message,
-          activityName: Joi.string().trim().required().validate(values.activityName).error?.message,
-          comments: Joi.string().trim().validate(values.comments).error?.message
+          activityName: Joi.string().trim().required().label('activity')
+            .validate(values.activityName).error?.message,
+          comments: Joi.string().trim().allow('').label('comments')
+            .validate(values.comments).error?.message
         };
 
-        console.log(errors);
+        const hasError = Object.values(errors).find(error => typeof error === 'string');
 
-        return errors;
+        return hasError ? errors : undefined;
       }}
       onSubmit={(data) => handleCreate(data)}
     >
       {({
-        values, handleSubmit, handleBlur, isSubmitting, isValid, setFieldValue, handleReset
+        values, handleSubmit, handleBlur, isSubmitting, isValid, errors, submitCount, touched, setFieldValue, handleReset
       }) => (
         <Modal
           id="create-time-entry"
@@ -107,11 +119,15 @@ const CreateTimeEntryModal = ({
         >
           <Flex direction='column'>
             <Flex>
-              <FormField css={css`margin-right: 1rem;`} label="Date" htmlFor='spentOn'>
+              <FormField css={[css`margin-right: 1rem;`, styles.formField]} label="Date" htmlFor='spentOn'>
                 <DatePicker onBlur={handleBlur} initialValue={values.spentOn} onChange={(dateTime: string) => setFieldValue('spentOn', dateTime, true)} name="spentOn" />
-                <ErrorMessage name="spentOn" />
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.spentOn && (touched.spentOn || submitCount))}>
+                    {errors.spentOn}
+                  </ErrorMessage>
+                </div>
               </FormField>
-              <FormField css={css`margin-right: 1rem;`} label="Time Spent" htmlFor="timeSpent">
+              <FormField css={[css`margin-right: 1rem;`, styles.formField]} label="Time Spent" htmlFor="timeSpent">
                 <TimePicker
                   name='timeSpent'
                   onBlur={handleBlur}
@@ -121,9 +137,13 @@ const CreateTimeEntryModal = ({
                     setFieldValue('timeSpent', data, true);
                   }}
                 />
-                <ErrorMessage name="timeSpent" />
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.timeSpent && (touched.timeSpent || submitCount))}>
+                    {errors.timeSpent}
+                  </ErrorMessage>
+                </div>
               </FormField>
-              <FormField label="Activity" htmlFor='activity'>
+              <FormField css={styles.formField} label="Activity" htmlFor='activity'>
                 <Select
                   onBlur={handleBlur}
                   id='activity'
@@ -133,10 +153,14 @@ const CreateTimeEntryModal = ({
                     setFieldValue('activityName', e.name, true);
                   }}
                 />
-                <ErrorMessage name="activityName" />
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.activityName && (touched.activityName || submitCount))}>
+                    {errors.activityName}
+                  </ErrorMessage>
+                </div>
               </FormField>
             </Flex>
-            <FormField css={css`width: 100%;`} label="Comments" htmlFor='comments'>
+            <FormField css={[css`width: 100%;`, styles.formField]} label="Comments" htmlFor='comments'>
               <TextArea
                 onBlur={handleBlur}
                 value={values.comments}
@@ -146,7 +170,11 @@ const CreateTimeEntryModal = ({
                 rows={5}
                 name='comments'
               />
-              <ErrorMessage name="comments" />
+              <div>
+                <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.comments && (touched.comments || submitCount))}>
+                  {errors.comments}
+                </ErrorMessage>
+              </div>
             </FormField>
           </Flex>
           <Flex justifyContent='flex-end'>
