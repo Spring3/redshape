@@ -2,7 +2,9 @@ import React, {
   ChangeEventHandler,
   FocusEventHandler,
   KeyboardEventHandler,
+  KeyboardEvent,
   MouseEventHandler,
+  useCallback,
 } from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
@@ -67,6 +69,7 @@ type InputProps = {
   id?: string;
   name?: string;
   disabled?: boolean;
+  editable?: boolean;
 };
 
 const Input = ({
@@ -86,9 +89,16 @@ const Input = ({
   value,
   id,
   name,
-  disabled
+  disabled,
+  editable,
 }: InputProps) => {
   const theme = useTheme() as typeof Theme;
+
+  const keyEvent = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if ((!e.ctrlKey || !e.metaKey) && !['c', 'v', 'a'].includes(e.key.toLowerCase())) {
+      e.preventDefault();
+    }
+  }, []);
 
   return (
     <input
@@ -108,7 +118,9 @@ const Input = ({
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
-      onKeyUp={onKeyUp}
+      onKeyUp={editable ? onKeyUp : keyEvent}
+      onKeyDown={editable ? undefined : keyEvent}
+      onKeyPress={editable ? undefined : keyEvent}
       onClick={onClick}
       disabled={disabled}
       value={value}

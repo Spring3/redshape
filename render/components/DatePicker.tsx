@@ -224,7 +224,7 @@ const DatePicker = ({ id, initialValue, disabled = false, name, onChange, onBlur
   );
 
   const handleDateChange: DayPickerInputProps['onDayChange'] = (date: Date) => {
-    const dateString = moment(date).format('YYYY-MM-DD');
+    const dateString = date ? moment(date).format('YYYY-MM-DD') : '';
     setValue(dateString);
     onChange(dateString);
   };
@@ -239,6 +239,7 @@ const DatePicker = ({ id, initialValue, disabled = false, name, onChange, onBlur
         format="YYYY-MM-DD"
         inputProps={{
           disabled,
+          editable: false,
           name,
           onBlur
         }}

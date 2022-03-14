@@ -79,7 +79,7 @@ const CreateTimeEntryModal = ({
         console.log(values);
 
         const errors = {
-          spentOn: Joi.string().trim().required().pattern(dateTimeRegexp, { name: '"YYYY-MM-DD"' })
+          spentOn: Joi.string().trim().pattern(dateTimeRegexp, { name: '"YYYY-MM-DD"' })
             .validate(values.spentOn).error?.message,
           timeSpent: Joi.string().trim().required().pattern(timeSpentRegexp, { name: '"hh:mm:ss"' })
             .validate(formattedTimeSpent).error?.message,
