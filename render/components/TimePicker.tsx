@@ -78,12 +78,32 @@ const TimePicker = ({
 
     // if not ##: then insert : after the first two characters
     if (typedValue.length > 2 && !typedValue.includes(':')) {
-      typedValue = `${typedValue.slice(0, 2)}:${typedValue.slice(2)}`;
+      const hours = parseInt(typedValue.slice(0, 2), 10);
+      if (hours < 24) {
+        typedValue = `${hours}:${typedValue.slice(2)}`;
+      } else {
+        typedValue = `${typedValue.charAt(0)}:${typedValue.slice(1)}}`;
+      }
     }
 
     // if not ##:##: then insert : after the first two characters
     if (typedValue.length > 5 && typedValue.split(':').length !== 3) {
-      typedValue = `${typedValue.slice(0, 5)}:${typedValue.slice(5)}`;
+      // 3 to 5 because of : at index 2
+      const typedPiece = parseInt(typedValue.slice(3, 5), 10);
+      if (typedPiece <= 59) {
+        typedValue = `${typedValue.slice(0, 5)}:${typedValue.slice(5)}`;
+      } else {
+        typedValue = `${typedValue.slice(0, 4)}:${typedValue.slice(4)}`;
+      }
+    }
+
+    if (typedValue.length > 6 && typedValue.split(':').length === 3) {
+      const values = typedValue.split(':');
+      const seconds = parseInt(values.pop() as string, 10);
+      if (seconds > 59) {
+        values.push('59');
+        typedValue = values.join(':');
+      }
     }
 
     const [hours = '', minutes = '', seconds = ''] = typedValue.split(':');
@@ -111,7 +131,8 @@ const TimePicker = ({
 
     if (modified) {
       // TODO: merge entered value with typed value
-      setEnteredValue(typedValue);
+      const mergedTypedValue = [hours, minutes, seconds].filter((string) => !!string).join(':');
+      setEnteredValue(mergedTypedValue);
     } else {
       setEnteredValue(enteredValue);
     }

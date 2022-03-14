@@ -71,7 +71,6 @@ const IssueDetailsPage = () => {
 
   const currentIssue = state.issues.byId[issueId as string];
   const cfields = currentIssue.customFields;
-  // eslint-disable-next-line react/prop-types
   const subtasks = currentIssue.subTasks || [];
   const activities = state.enumerations.activities;
   const user = state.users.currentUser as User;
