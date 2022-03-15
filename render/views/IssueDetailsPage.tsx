@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
 import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 import { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
+import * as Tabs from '@radix-ui/react-tabs';
+import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
+import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
+import PlusIcon from 'mdi-react/PlusIcon';
 
 import { Link } from '../components/Link';
-import Progressbar from '../components/Progressbar';
+import { Progressbar } from '../components/Progressbar';
 import { MarkdownText } from '../components/MarkdownEditor';
-import { TimeEntryModal } from '../components/TimeEntryModal';
-import { TimeEntries } from '../components/IssueDetailsPage/TimeEntries';
 import { CommentsSection } from '../components/IssueDetailsPage/CommentsSection';
-import DateComponent from '../components/Date';
+import { DateComponent } from '../components/Date';
 import { OverlayProcessIndicator } from '../components/ProcessIndicator';
+import { tabsHeaderList, tabsTrigger, tabsTriggerActive } from '../components/Tabs';
 
 import { useOvermindActions, useOvermindState } from '../store';
 import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
+import { TimeEntriesSection } from '../components/TimeEntriesSection';
+import { GhostButton } from '../components/GhostButton';
+import { TimeEntry, User } from '../../types';
+import { useModalContext } from '../contexts/ModalContext';
 
 const styles = {
   subTask: css`
@@ -49,9 +55,7 @@ const styles = {
 };
 
 const IssueDetailsPage = () => {
-  const [activities, setActivities] = useState([]);
-  const [selectedTimeEntry, setSelectedTimeEntry] = useState();
-  const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('comments');
 
   const navbar = useNavbar();
   const state = useOvermindState();
@@ -59,13 +63,19 @@ const IssueDetailsPage = () => {
   const theme = useTheme();
   const { id: issueId } = useParams();
   const navigate = useNavigate();
+  const modals = useModalContext();
 
-  const projects = state.projects.list;
   const currentIssue = state.issues.byId[issueId as string];
+  const cfields = currentIssue.customFields;
+  const subtasks = currentIssue.subTasks || [];
+  const activities = state.enumerations.activities;
+  const user = state.users.currentUser as User;
+  const project = state.projects.byId[currentIssue.project.id];
 
   useEffect(() => {
     if (issueId) {
-      actions.issues.getOne({ id: issueId });
+      actions.issues.getOne({ id: +issueId });
+      actions.enumerations.fetchActivities();
     }
   }, [issueId]);
 
@@ -75,45 +85,60 @@ const IssueDetailsPage = () => {
     }
   }, [currentIssue, navbar]);
 
-  const triggerTimeEntryModal = (timeEntry: any) => {
-    const newSelectedTimeEntry = timeEntry || {
-      user: {
-        id: state.users.currentUser?.id,
-        name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
-      },
-      issue: {
-        id: currentIssue.id
-      },
-      activity: {},
-      project: {
-        id: currentIssue.project.id,
-        name: currentIssue.project.name
-      },
-      hours: undefined,
-      duration: '',
-      spent_on: moment().format('YYYY-MM-DD')
-    };
-    newSelectedTimeEntry.issue.name = currentIssue.subject;
-    const existingActivities = _.get(projects[currentIssue.project.id], 'activities', []);
-    setActivities(
-      existingActivities.map(({ id, name }: { id: string; name: string }) => ({
-        value: id,
-        label: name
-      }))
-    );
-    setSelectedTimeEntry(newSelectedTimeEntry);
-    setShowTimeEntryModal(true);
-  };
+  const handleCreateTimeEntry = useCallback(async () => {
+    const { timeEntryData, confirmed } = await modals.openCreateTimeEntryModal({ activities });
 
-  const closeTimeEntryModal = () => {
-    setActivities([]);
-    setSelectedTimeEntry(undefined);
-    setShowTimeEntryModal(false);
-  };
+    if (confirmed && timeEntryData) {
+      await actions.timeEntries.create({
+        activity: {
+          id: timeEntryData.activity.id,
+          name: timeEntryData.activity.name
+        },
+        issue: {
+          id: currentIssue.id
+        },
+        comments: timeEntryData.comments || '',
+        spentOn: timeEntryData.spentOn,
+        hours: timeEntryData.hours,
+        project: {
+          id: project.id,
+          name: project.name
+        },
+        user: {
+          id: user.id,
+          name: `${user.firstName} ${user.lastName}`
+        }
+      });
+    }
+  }, [user, currentIssue, project, modals.openCreateTimeEntryModal, activities]);
 
-  const cfields = currentIssue.customFields;
-  // eslint-disable-next-line react/prop-types
-  const subtasks = currentIssue.subTasks || [];
+  const handleUpdateTimeEntry = useCallback(async (timeEntry: TimeEntry) => {
+    const { timeEntryData, confirmed } = await modals.openUpdateTimeEntryModal({ activities, timeEntry });
+
+    if (confirmed && timeEntryData) {
+      await actions.timeEntries.update({
+        ...timeEntry,
+        activity: {
+          id: timeEntryData.activity.id,
+          name: timeEntryData.activity.name
+        },
+        issue: {
+          id: currentIssue.id
+        },
+        comments: timeEntryData.comments || '',
+        spentOn: timeEntryData.spentOn,
+        hours: timeEntryData.hours,
+        project: {
+          id: project.id,
+          name: project.name
+        },
+        user: {
+          id: user.id,
+          name: `${user.firstName} ${user.lastName}`
+        }
+      });
+    }
+  }, [user, currentIssue, project, actions.timeEntries.update, activities]);
 
   if (!currentIssue.id) {
     return (
@@ -150,10 +175,39 @@ const IssueDetailsPage = () => {
                 ))}
               </Flex>
             </>
-          ): null}
-          <CommentsSection
-            issueId={currentIssue.id}
-          />
+          ) : null}
+          <Tabs.Root css={tabsHeaderList} value={activeTab} orientation='horizontal' onValueChange={setActiveTab}>
+            <Tabs.List aria-label='tabs'>
+              <Tabs.Trigger css={activeTab === 'comments' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="comments">
+                <Flex alignItems='center'>
+                  <CommentsTextOutlineIcon size={20} />
+                  Comments
+                </Flex>
+              </Tabs.Trigger>
+              <Tabs.Trigger css={activeTab === 'time entries' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="time entries">
+                <Flex alignItems='center'>
+                  <ClockOutlineIcon size={20} />
+                  Time Entries
+                  {' '}
+                  <GhostButton onClick={handleCreateTimeEntry}>
+                    <PlusIcon size={20} />
+                  </GhostButton>
+                </Flex>
+              </Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="comments">
+              <CommentsSection
+                issueId={currentIssue.id}
+              />
+            </Tabs.Content>
+            <Tabs.Content value="time entries">
+              <TimeEntriesSection
+                issueId={currentIssue.id}
+                timeEntries={state.timeEntries.listByIssueId[currentIssue.id] || []}
+                onTimeEntryUpdate={handleUpdateTimeEntry}
+              />
+            </Tabs.Content>
+          </Tabs.Root>
         </Flex>
         <aside
           css={styles.sidebar}
@@ -299,25 +353,12 @@ const IssueDetailsPage = () => {
               <h4 css={styles.sidebarSectionHeader}>Progress:</h4>
               <Progressbar
                 className={undefined}
-                id={undefined}
-                height={5}
                 percent={currentIssue.doneRatio}
-                background={(theme as any).main}
               />
             </Flex>
           </Flex>
         </aside>
-        {/* <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} /> */}
       </Flex>
-      {selectedTimeEntry && (
-        <TimeEntryModal
-          isOpen={showTimeEntryModal}
-          activities={activities}
-          isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
-          timeEntry={selectedTimeEntry}
-          onClose={closeTimeEntryModal}
-        />
-      )}
     </div>
   );
 };

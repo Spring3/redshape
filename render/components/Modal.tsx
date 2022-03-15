@@ -18,16 +18,25 @@ enum ModalWidth {
 }
 
 type ModalProps = {
+  id?: string;
   width?: ModalWidth;
-  isOpen?: boolean;
+  isOpen: boolean;
   title?: string;
+  description?: string;
   children: ReactNode;
   closeIcon?: boolean;
   onClose: () => void;
 }
 
 const Modal = ({
-  isOpen = false, width = ModalWidth.DEFAULT, children, onClose, title, closeIcon = true
+  id,
+  isOpen,
+  width = ModalWidth.DEFAULT,
+  description,
+  children,
+  onClose,
+  title,
+  closeIcon = true
 } : ModalProps) => {
   const theme = useTheme() as typeof Theme;
 
@@ -39,6 +48,7 @@ const Modal = ({
 
   return (
     <Portal
+      id={id}
       active={isOpen}
     >
       <ReactFocusLock>
@@ -50,7 +60,7 @@ const Modal = ({
           z-index: 98;
           position: absolute;
           
-          top: ${window.scrollY};
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
@@ -71,6 +81,7 @@ const Modal = ({
               {closeIcon ? <GhostButton onClick={onClose}><CloseIcon color={theme.normalText} /></GhostButton> : null}
               {title ? <h2>{title}</h2> : null}
             </Flex>
+            {description ? <div css={css`margin-bottom: 2rem;`}><p>{description}</p></div> : null}
             {children}
           </div>
         </Flex>

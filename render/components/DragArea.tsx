@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import { css } from '@emotion/react';
 
-const DragArea = styled.div`
+const styles = css`
   position: fixed;
   top: 0;
   left: 0;
@@ -11,4 +11,8 @@ const DragArea = styled.div`
   -webkit-app-region: drag
 `;
 
-export default () => (<DragArea />);
+const DragArea = () => (<div css={styles} />);
+
+export {
+  DragArea
+};

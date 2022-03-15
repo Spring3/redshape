@@ -12,6 +12,7 @@ import * as projects from './projects';
 import * as timeTracking from './timeTracking';
 import * as timeEntries from './timeEntries';
 import * as versions from './versions';
+import * as enumerations from './enumerations';
 
 import { mainProcess } from './effects';
 
@@ -24,6 +25,7 @@ const overmindStoreConfig = merge(
     }
   },
   namespaced({
+    enumerations,
     issues,
     issueStatuses,
     projects,

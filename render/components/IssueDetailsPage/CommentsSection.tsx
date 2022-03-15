@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components';
 
 import { MarkdownEditor, MarkdownText } from '../MarkdownEditor';
 import { Link } from '../Link';
-import DateComponent from '../Date';
+import { DateComponent } from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { theme as Theme } from '../../theme';
 import type { Issue } from '../../../types';
@@ -104,7 +104,6 @@ const CommentsSection = ({ issueId }: CommentsSectionProps) => {
 
   return (
     <>
-      <h3>Comments</h3>
       <Flex alignItems="stretch" direction="column" css={styles.commentsList(theme)}>
         {journalEntries.map((entry) => (
           <Flex justifyContent="center" css={styles.comment} key={entry.id}>

@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components';
 import { get } from 'lodash';
 import { theme as Theme } from '../../theme';
 import { ProcessIndicator, OverlayProcessIndicator } from '../ProcessIndicator';
-import Date from '../Date';
+import { DateComponent } from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { IssueFilter } from '../../actions/helper';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
@@ -172,7 +172,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
                   key={header.value}
                 >
                   {date ? (
-                    <Date date={date} />
+                    <DateComponent date={date} />
                   ) : (
                     <span>{forcedValue || get(task, header.value)}</span>
                   )}

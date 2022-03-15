@@ -2,7 +2,9 @@ import React, {
   ChangeEventHandler,
   FocusEventHandler,
   KeyboardEventHandler,
+  KeyboardEvent,
   MouseEventHandler,
+  useCallback,
 } from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
@@ -50,7 +52,11 @@ const inputStyles = (theme: typeof Theme) => css`
 `;
 
 type InputProps = {
+  title?: string;
   maxWidth?: string;
+  maxLength?: number;
+  max?: string;
+  min?: string;
   type?: 'email' | 'text' | 'number' | 'password';
   placeholder?: string;
   onChange?: ChangeEventHandler<HTMLElement>;
@@ -58,15 +64,22 @@ type InputProps = {
   onFocus?: FocusEventHandler<HTMLElement>;
   onKeyUp?: KeyboardEventHandler<HTMLElement>;
   onClick?: MouseEventHandler<HTMLElement>;
+  pattern?: string;
   value?: string | number;
   id?: string;
   name?: string;
   disabled?: boolean;
+  editable?: boolean;
 };
 
 const Input = ({
+  title,
   maxWidth,
+  maxLength,
+  max,
+  min,
   type = 'text',
+  pattern,
   placeholder,
   onChange,
   onBlur,
@@ -76,23 +89,16 @@ const Input = ({
   value,
   id,
   name,
-  disabled
+  disabled,
+  editable = true,
 }: InputProps) => {
   const theme = useTheme() as typeof Theme;
 
-  const ensureNumber = (typedValue: string | number | undefined) => {
-    if (typeof typedValue === 'string') {
-      if (/,|./.test(typedValue)) {
-        return parseFloat(typedValue.replace(',', '.'));
-      }
-      return parseInt(typedValue, 10);
+  const keyEvent = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if ((!e.ctrlKey || !e.metaKey) && !['c', 'v', 'a'].includes(e.key.toLowerCase())) {
+      e.preventDefault();
     }
-
-    if (Number.isNaN(typedValue) || !Number.isFinite(typedValue)) {
-      return undefined;
-    }
-    return typedValue;
-  };
+  }, []);
 
   return (
     <input
@@ -104,13 +110,20 @@ const Input = ({
         `
       ]}
       placeholder={placeholder}
+      title={title}
+      max={max}
+      min={min}
+      maxLength={maxLength}
+      pattern={pattern}
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
-      onKeyUp={onKeyUp}
+      onKeyUp={editable ? onKeyUp : keyEvent}
+      onKeyDown={editable ? undefined : keyEvent}
+      onKeyPress={editable ? undefined : keyEvent}
       onClick={onClick}
       disabled={disabled}
-      value={type === 'number' ? ensureNumber(value) : value}
+      value={value}
       id={id}
       name={name}
     />

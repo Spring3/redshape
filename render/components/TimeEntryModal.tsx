@@ -1,337 +1,202 @@
-import _debounce from 'lodash/debounce';
-import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
-import styled, { useTheme } from 'styled-components';
 import { css } from '@emotion/react';
-
-import ClockIcon from 'mdi-react/ClockIcon';
-import { Input } from './Input';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { Formik } from 'formik';
+import Joi from '@hapi/joi';
+import { Activity, TimeEntry } from '../../types';
+import { toHours, toTimeSpent } from '../helpers/utils';
+import { Button } from './Button';
+import { DatePicker } from './DatePicker';
+import { Flex } from './Flex';
 import { FormField } from './FormField';
-import Button from './Button';
-import MarkdownEditor from './MarkdownEditor';
-import { ErrorMessage } from './ErrorMessage';
-import DatePicker from './DatePicker';
 import { Modal } from './Modal';
-import { ProcessIndicator } from './ProcessIndicator';
-import Tooltip from './Tooltip';
+import { Select } from './Select';
+import { TextArea } from './TextArea';
+import { TimePicker } from './TimePicker';
+import { ErrorMessage } from './ErrorMessage';
 
-import { durationToHours } from '../datetime';
-import { useOvermindActions, useOvermindState } from '../store';
-import { TimeEntry } from '../../types';
+export type TimeEntryData = {
+  spentOn: string;
+  hours: number;
+  activity: Activity;
+  comments?: string;
+}
 
-const FlexRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+type TimeEntryDataState = {
+  spentOn?: string;
+  timeSpent?: string,
+  activityName?: string;
+  comments?: string;
+}
 
-const OptionButtons = styled.div`
-  position: relative;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 2px solid ${props => props.theme.bgDark};
-  display: flex;
-
-  button {
-    padding: 8px 15px;
-  }
-
-  div {
-    margin-left: 20px;
-  }
-`;
-
-const DurationField = styled.div`
-  max-width: 350px;
-`;
-const DurationInfo = styled.div`
-  align-self: center;
-  color: gray;
-  margin-left: 0.5rem;
-  min-width: 10rem;
-`;
-
-const ClockIconStyled = styled(ClockIcon)`
-  padding-bottom: 1px;
-`;
-const LabelIcon = styled.span`
-  margin-left: 0.2rem;
-`;
-const DurationIcon = (
-  <LabelIcon>
-    <Tooltip text="hours (3.23) or durations (3h 14m, 194 mins)">
-      <ClockIconStyled size={14} />
-    </Tooltip>
-  </LabelIcon>
-);
+type TimeEntryModalProps = {
+  timeEntry?: TimeEntry;
+  activities: Activity[];
+  onSubmit: (timeEntryData: TimeEntryData) => void;
+  onClose: () => void;
+}
 
 const styles = {
-  processIndicatorText: css`
-    white-space: nowrap;
-    padding-left: 20px;
-    vertical-align: middle;
+  vlaidationError: css`
+    margin-top: 5px;
+  `,
+  formField: css`
+    display: flex;
+    flex-direction: column;
   `
 };
 
-const selectStyles = {
-  container: (base: Record<string, any>) => ({ ...base })
-};
-
-type TimeEntryModalProps = {
-  timeEntry?: TimeEntry | null;
-  onClose: () => void;
-  isOpen: boolean;
-}
-
 const TimeEntryModal = ({
-  timeEntry,
-  validateBeforePublish,
-  validateBeforeUpdate,
-  onClose,
-  isOpen,
-  activities,
+  timeEntry, activities, onSubmit, onClose
 }: TimeEntryModalProps) => {
-  const [updates, setUpdates] = useState({});
+  const [isOpen, setOpen] = useState(true);
 
-  const wasModified = Object.keys(updates).length;
-
-  const actions = useOvermindActions();
-  const state = useOvermindState();
-
-  const theme = useTheme();
-
-  useEffect(() => {
-    setUpdates({});
-  }, [isOpen]);
-
-  const runValidation = (checkFields: Record<string, any>) => {
-    if (timeEntry.id) {
-      validateBeforeUpdate(
-        {
-          comments: timeEntry.comments,
-          hours: timeEntry.hours,
-          duration: timeEntry.duration,
-          spentOn: timeEntry.spent_on,
-          activity: timeEntry.activity
-        },
-        checkFields
-      );
-    } else {
-      validateBeforePublish(
-        {
-          activity: timeEntry.activity,
-          comments: timeEntry.comments,
-          hours: timeEntry.hours,
-          duration: timeEntry.duration,
-          issue: timeEntry.issue,
-          spentOn: timeEntry.spent_on
-        },
-        checkFields
-      );
-    }
+  const doSubmit = async (formData: TimeEntryDataState) => {
+    const activity = formData.activityName ? activities.find((ac) => ac.name === formData.activityName) : activities[0];
+    const timeEntryData = {
+      activity: activity as Activity,
+      spentOn: formData.spentOn as string,
+      hours: toHours(formData.timeSpent),
+      comments: formData.comments
+    };
+    onSubmit(timeEntryData);
   };
 
-  const onDateChange = (date: Date) => {
-    setUpdates({
-      ...updates,
-      spentOn: date != null ? date.toISOString().split('T')[0] : null
-    });
-  };
-
-  const onDurationChange = ({ target: { value } }) => {
-    const durationValue = `${value}`.replace(',', '.');
-    setUpdates({
-      ...updates,
-      duration: durationValue
-    });
-
-    onDurationConversionChange(value);
-  };
-
-  const onDurationConversionChange = _debounce((value) => {
-    setUpdates({
-      ...updates,
-      hours: durationToHours(value)
-    });
-  }, 300);
-
-  const debouncedCommentsChange = _debounce((comments) => {
-    setUpdates({
-      ...updates,
-      comments
-    });
-  }, 300);
-
-  const onActivityChange = (activity) => {
-    setUpdates({
-      ...updates,
-      activity: { id: activity.value, name: activity.label }
-    });
-  };
-
-  const onAdd = async () => {
-    const response = await actions.timeEntries.publish({
-      ...timeEntry,
-      ...updates
-    });
-
-    if (response.success) {
-      onClose();
-    }
-  };
-
-  const onUpdate = async () => {
-    if (wasModified) {
-      const response = await actions.timeEntries.update({
-        ...timeEntry,
-        ...updates
-      });
-
-      if (response.success) {
-        onClose();
-      }
-    } else {
-      onClose();
-    }
-  };
-
-  const getErrorMessage = (error: Error) => {
-    if (!error) return null;
-    return error.message.replace(new RegExp(error.context.key, 'g'), error.path[0]);
-  };
-
-  if (!timeEntry) {
+  if (!isOpen || !activities.length) {
     return null;
   }
 
-  const isUserAuthor = timeEntry.user.id === state.users.currentUser?.id;
-  const selectedActivity = { id: timeEntry.activity.id, label: timeEntry.activity.name };
-  const validationErrors = timeEntry.error && timeEntry.error.isJoi
-    ? {
-      comments: timeEntry.error.details.find(error => error.path[0] === 'comments'),
-      activity: timeEntry.error.details.find(error => error.path[0] === 'activity'),
-      hours: timeEntry.error.details.find(error => error.path[0] === 'hours'),
-      duration: timeEntry.error.details.find(error => error.path[0] === 'duration'),
-      spentOn: timeEntry.error.details.find(error => error.path[0] === 'spent_on')
-    }
-    : {};
-
-  let durationInfo = '';
-  if (timeEntry.hours > 0) {
-    durationInfo = `${Number(timeEntry.hours.toFixed(2))} hours`;
-  }
   return (
-    <Modal isOpen={!!isOpen} onClose={onClose} closeIcon>
-      <>
-        <FormField htmlFor="author" label="Author">
-          <div name="author">{timeEntry.user.name}</div>
-        </FormField>
-        <FormField htmlFor="issue" label="Issue">
-          <div name="issue" data-testId="time-entry-modal-title">
-            #{timeEntry.issue.id}
-            {timeEntry.issue.name}
-          </div>
-        </FormField>
-        <FormField htmlFor="activity" label="Activity">
-          <Select
-            name="activity"
-            options={activities}
-            styles={selectStyles}
-            value={selectedActivity}
-            isDisabled={!isUserAuthor}
-            onBlur={() => runValidation('activity')}
-            onChange={onActivityChange}
-            isClearable={false}
-            theme={defaultTheme => ({
-              ...defaultTheme,
-              borderRadius: 3,
-              colors: {
-                ...defaultTheme.colors,
-                primary: theme.main
-              }
-            })}
-          />
-        </FormField>
-        <ErrorMessage show={!!validationErrors.activity}>
-          {getErrorMessage(validationErrors.activity)}
-        </ErrorMessage>
-        <FlexRow>
-          <DurationField>
-            <FormField htmlFor="duration" label="Duration" rightOfLabel={DurationIcon}>
-              <FlexRow>
-                <Input
-                  type="text"
-                  name="duration"
-                  value={timeEntry.duration}
-                  onBlur={() => runValidation(['duration', 'hours'])}
-                  disabled={!isUserAuthor}
-                  onChange={onDurationChange}
+    <Formik<TimeEntryDataState>
+      initialValues={{
+        activityName: timeEntry?.activity.name ?? activities[0].name,
+        spentOn: timeEntry?.spentOn ?? moment().format('YYYY-MM-DD'),
+        timeSpent: toTimeSpent(timeEntry?.hours),
+        comments: timeEntry?.comments,
+      }}
+      validate={(values) => {
+        const timeSpentRegexp = /^\d{0,2}:?\d{0,2}:?\d{0,2}$/;
+        const dateTimeRegexp = /^\d{4}-\d{2}-\d{2}$/;
+        const formattedTimeSpent = values.timeSpent;
+
+        const errors = {
+          spentOn: Joi.string().trim().pattern(dateTimeRegexp, { name: '"YYYY-MM-DD"' }).label('date')
+            .validate(values.spentOn).error?.message,
+          timeSpent: Joi.string().trim().required().pattern(timeSpentRegexp, { name: '"hh:mm:ss"' })
+            .label('time')
+            .validate(formattedTimeSpent).error?.message,
+          activityName: Joi.string().trim().required().label('activity')
+            .validate(values.activityName).error?.message,
+          comments: Joi.string().trim().allow('').label('comments')
+            .validate(values.comments).error?.message
+        };
+
+        const hasError = Object.values(errors).find(error => typeof error === 'string');
+
+        return hasError ? errors : undefined;
+      }}
+      onSubmit={(data) => {
+        doSubmit(data);
+        setOpen(false);
+      }}
+    >
+      {({
+        values, handleSubmit, handleBlur, isSubmitting, isValid, errors, submitCount, touched, setFieldValue, handleReset
+      }) => (
+        <Modal
+          id="create-time-entry"
+          isOpen={isOpen}
+          onClose={() => {
+            handleReset();
+            setOpen(false);
+            onClose();
+          }}
+          title={timeEntry ? 'Update time entry' : 'Create new time entry'}
+        >
+          <Flex direction='column'>
+            <Flex>
+              <FormField css={[css`margin-right: 1rem;`, styles.formField]} label="Date" htmlFor='spentOn'>
+                <DatePicker onBlur={handleBlur} initialValue={values.spentOn} onChange={(dateTime: string) => setFieldValue('spentOn', dateTime, true)} name="spentOn" />
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.spentOn && (touched.spentOn || submitCount))}>
+                    {errors.spentOn}
+                  </ErrorMessage>
+                </div>
+              </FormField>
+              <FormField css={[css`margin-right: 1rem;`, styles.formField]} label="Time Spent" htmlFor="timeSpent">
+                <TimePicker
+                  name='timeSpent'
+                  onBlur={handleBlur}
+                  initialValue={values.timeSpent}
+                  id="timeSpent"
+                  onChange={(time) => {
+                    setFieldValue('timeSpent', time, true);
+                  }}
                 />
-                <DurationInfo>{durationInfo}</DurationInfo>
-              </FlexRow>
-            </FormField>
-            <ErrorMessage show={!!validationErrors.duration || validationErrors.hours}>
-              {getErrorMessage(validationErrors.duration || validationErrors.hours)}
-            </ErrorMessage>
-          </DurationField>
-          <div>
-            <FormField htmlFor="spent_on" label="Date">
-              <DatePicker
-                name="date"
-                value={new Date(timeEntry.spentOn)}
-                isDisabled={!isUserAuthor}
-                onBlur={() => runValidation('spent_on')}
-                onChange={onDateChange}
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.timeSpent && (touched.timeSpent || submitCount))}>
+                    {errors.timeSpent}
+                  </ErrorMessage>
+                </div>
+              </FormField>
+              <FormField css={styles.formField} label="Activity" htmlFor='activity'>
+                <Select
+                  onBlur={handleBlur}
+                  id='activity'
+                  options={activities}
+                  initialValue={values.activityName}
+                  onChange={(e) => {
+                    setFieldValue('activityName', e.name, true);
+                  }}
+                />
+                <div>
+                  <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.activityName && (touched.activityName || submitCount))}>
+                    {errors.activityName}
+                  </ErrorMessage>
+                </div>
+              </FormField>
+            </Flex>
+            <FormField css={[css`width: 100%;`, styles.formField]} label="Comments" htmlFor='comments'>
+              <TextArea
+                onBlur={handleBlur}
+                value={values.comments}
+                onChange={(e) => {
+                  setFieldValue('comments', e.target.value, true);
+                }}
+                rows={5}
+                name='comments'
               />
+              <div>
+                <ErrorMessage css={styles.vlaidationError} show={Boolean(errors.comments && (touched.comments || submitCount))}>
+                  {errors.comments}
+                </ErrorMessage>
+              </div>
             </FormField>
-            <ErrorMessage show={!!validationErrors.spentOn}>
-              {getErrorMessage(validationErrors.spentOn)}
-            </ErrorMessage>
-          </div>
-        </FlexRow>
-        <FormField label="Comments" htmlFor="comments">
-          <MarkdownEditor
-            isDisabled={!isUserAuthor}
-            onChange={debouncedCommentsChange}
-            onBlur={() => runValidation('comments')}
-            initialValue={timeEntry.comments}
-            maxLength={255}
-          />
-        </FormField>
-        <ErrorMessage show={!!validationErrors.comments}>
-          {getErrorMessage(validationErrors.comments)}
-        </ErrorMessage>
-        {timeEntry.id ? (
-          <OptionButtons>
-            <Button id="btn-update" onClick={onUpdate} disabled={timeEntry.isFetching} palette="success">
-              Submit
-            </Button>
-            {timeEntry.isFetching && (
-              <ProcessIndicator>
-                <span css={styles.processIndicatorText}>Please wait...</span>
-              </ProcessIndicator>
-            )}
-          </OptionButtons>
-        ) : (
-          <OptionButtons>
+          </Flex>
+          <Flex justifyContent='flex-end'>
             <Button
-              id="btn-add"
-              disabled={!wasModified || timeEntry.isFetching}
-              onClick={onAdd}
-              palette="success">
-              Submit
+              css={css`margin-right: 1rem`}
+              palette='mute'
+              onClick={() => {
+                handleReset();
+                setOpen(false);
+                onClose();
+              }}
+            >
+              Cancel
             </Button>
-            {timeEntry.isFetching && (
-              <ProcessIndicator>
-                <span css={styles.processIndicatorText}>Please wait...</span>
-              </ProcessIndicator>
-            )}
-          </OptionButtons>
-        )}
-      </>
-    </Modal>
+            <Button onClick={handleSubmit as any} disabled={isSubmitting || !isValid}>{timeEntry ? 'Update' : 'Create'}</Button>
+          </Flex>
+        </Modal>
+      )}
+    </Formik>
   );
 };
 
 export {
   TimeEntryModal
+};
+
+export type {
+  TimeEntryModalProps
 };

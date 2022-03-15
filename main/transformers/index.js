@@ -3,6 +3,7 @@ const issues = require('./issues');
 const issueStatuses = require('./issueStatuses');
 const projects = require('./projects');
 const timeEntries = require('./timeEntries');
+const enumerations = require('./enumerations');
 
 const transform = ({ route, method }, responseBody) => {
   const [entity] = route.split('/')[0].split('.');
@@ -20,6 +21,8 @@ const transform = ({ route, method }, responseBody) => {
       return projects.transform({ route, method }, responseBody);
     case 'time_entries':
       return timeEntries.transform({ route, method }, responseBody);
+    case 'enumerations':
+      return enumerations.transform({ route, method }, responseBody);
     default:
       return responseBody;
   }

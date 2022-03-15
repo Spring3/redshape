@@ -58,6 +58,11 @@ const Iframe = ({
 
   const onLoad = useCallback(() => {
     setLoaded(true);
+
+    const handleScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
     const interceptIframeInternalRedirect: MouseEventHandler<HTMLElement> = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -81,8 +86,11 @@ const Iframe = ({
       }
 
       iframe.contentWindow?.addEventListener('blur', handleFocus);
+      iframe.addEventListener('scroll', handleScroll);
+
       iframe.contentWindow?.onbeforeunload = () => {
         iframe.contentWindow?.removeEventListener('blur', handleFocus);
+        iframe.removeEventListener('scroll', handleScroll);
       };
 
       if (cssCode) {

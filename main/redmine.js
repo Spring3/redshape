@@ -84,14 +84,14 @@ const createRequestClient = () => {
 
       console.log(response.statusCode, response.body);
 
-      if (response.statusCode === 200) {
+      if (response.statusCode === 200 || response.statusCode === 201) {
         return {
           data: transform({ route: data.route, method: data.method }, response.body),
           success: true,
         };
       }
 
-      if (data.method === 'PUT' && response.statusCode === 204) {
+      if (['PUT', 'DELETE'].includes(data.method) && response.statusCode === 204) {
         return {
           success: true
         };

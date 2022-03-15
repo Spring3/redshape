@@ -82,6 +82,7 @@
     "no-use-before-define": "off",
     "arrow-parens": "off",
     "consistent-return": "off",
+    "jsx-quotes": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

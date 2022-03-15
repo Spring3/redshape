@@ -12,6 +12,37 @@ type GetManyTimeEntriesParams = {
   limit?: number;
 }
 
+const getOne: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects, state }: Context, timeEntry) => {
+  const response = await effects.mainProcess.request({
+    payload: {
+      method: 'GET',
+      route: `time_entries/${timeEntry.id}.json`,
+    }
+  });
+
+  if (response.success) {
+    const fetchedTimeEntry = response.data as TimeEntry;
+
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [fetchedTimeEntry.issue.id]: {
+        ...(state.timeEntries.mapByIssueId[fetchedTimeEntry.issue.id] || {}),
+        [fetchedTimeEntry.id]: fetchedTimeEntry
+      }
+    };
+
+    return {
+      success: true,
+      data: fetchedTimeEntry
+    };
+  }
+
+  return {
+    success: false,
+    error: response.error
+  };
+};
+
 const getMany: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse<any>>> = async ({ effects, state }: Context, { filters, offset, limit = 20 }) => {
   const response = await effects.mainProcess.request({
     payload: {
@@ -60,19 +91,23 @@ const getMany: IAction<GetManyTimeEntriesParams, Promise<PaginatedActionResponse
   };
 };
 
-type RemoveTimeEntryArgs = {
-  id: number;
-}
-
-const remove: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ effects }: Context, { id }) => {
+const remove: IAction<TimeEntry, Promise<Response<void>>> = async ({ effects, state }: Context, timeEntry) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'DELETE',
-      route: `time_entries/${id}.json`
+      route: `time_entries/${timeEntry.id}.json`
     }
   });
 
   if (response.success) {
+    const existingEntriesForIssue = state.timeEntries.mapByIssueId[timeEntry.issue.id] || {};
+    delete existingEntriesForIssue[timeEntry.id];
+
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [timeEntry.issue.id]: existingEntriesForIssue,
+    };
+
     return {
       success: true,
     };
@@ -84,7 +119,7 @@ const remove: IAction<RemoveTimeEntryArgs, Promise<Response<void>>> = async ({ e
   };
 };
 
-const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects }: Context, timeEntry) => {
+const create: IAction<Omit<TimeEntry, 'id' | 'createdOn' | 'updatedOn'>, Promise<Response<TimeEntry>>> = async ({ effects, state }: Context, timeEntry) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'POST',
@@ -103,6 +138,17 @@ const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effec
   });
 
   if (response.success) {
+    const createdTimeEntry = response.data.timeEntry as TimeEntry;
+    const timeEntriesForCurrentIssue = state.timeEntries.mapByIssueId[timeEntry.issue.id] ?? {};
+
+    state.timeEntries.mapByIssueId = {
+      ...state.timeEntries.mapByIssueId,
+      [timeEntry.issue.id]: {
+        ...timeEntriesForCurrentIssue,
+        [createdTimeEntry.id]: createdTimeEntry
+      }
+    };
+
     return {
       success: true,
       data: response.data.timeEntry
@@ -115,7 +161,7 @@ const publish: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effec
   };
 };
 
-const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects }: Context, timeEntry) => {
+const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effects, actions }: Context, timeEntry) => {
   const response = await effects.mainProcess.request({
     payload: {
       method: 'PUT',
@@ -127,10 +173,14 @@ const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effect
   });
 
   if (response.success) {
-    return {
-      success: true,
-      data: response.data.timeEntry
-    };
+    const fetchResponse = await actions.timeEntries.getOne(timeEntry);
+
+    if (fetchResponse.success) {
+      return {
+        success: true,
+        data: fetchResponse.data
+      };
+    }
   }
 
   return {
@@ -140,8 +190,9 @@ const update: IAction<TimeEntry, Promise<Response<TimeEntry>>> = async ({ effect
 };
 
 export {
-  publish,
+  create,
   getMany,
+  getOne,
   remove,
   update
 };
