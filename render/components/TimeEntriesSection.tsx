@@ -12,6 +12,7 @@ import { theme as Theme } from '../theme';
 type TimeEntriesSectionProps = {
   issueId: number;
   timeEntries: TimeEntry[];
+  onTimeEntryUpdate: (timeEntry: TimeEntry) => Promise<void>;
 }
 
 const styles = {
@@ -20,7 +21,7 @@ const styles = {
   `
 };
 
-const TimeEntriesSection = ({ issueId, timeEntries } : TimeEntriesSectionProps) => {
+const TimeEntriesSection = ({ issueId, timeEntries, onTimeEntryUpdate } : TimeEntriesSectionProps) => {
   const actions = useOvermindActions();
   const state = useOvermindState();
   const modalContext = useModalContext();
@@ -69,8 +70,10 @@ const TimeEntriesSection = ({ issueId, timeEntries } : TimeEntriesSectionProps) 
         <TimeEntryCard
           key={timeEntry.id}
           timeEntry={timeEntry}
+          currentUserId={state.users.currentUser?.id as number}
           waitForConfirmation={waitForConfirmation}
           onDelete={actions.timeEntries.remove}
+          onEdit={onTimeEntryUpdate}
         />
       ))}
     </Flex>

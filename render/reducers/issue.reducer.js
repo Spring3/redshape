@@ -1,7 +1,5 @@
 import {
   ISSUE_UPDATE,
-  ISSUE_UPDATE_VALIDATION_FAILED,
-  ISSUE_UPDATE_VALIDATION_PASSED
 } from '../actions/issue.actions';
 
 export const initialState = {
@@ -22,12 +20,6 @@ export default (state = initialState, action) => {
         return { ...state, isFetching: false, error: action.data };
       }
       return state;
-    }
-    case ISSUE_UPDATE_VALIDATION_FAILED: {
-      return { ...state, error: action.data };
-    }
-    case ISSUE_UPDATE_VALIDATION_PASSED: {
-      return { ...state, error: undefined };
     }
     default:
       return state;

@@ -1,11 +1,6 @@
 import _ from 'lodash';
 
 import {
-  ISSUES_TIME_ENTRY_GET
-} from '../actions/issues.actions';
-
-import {
-  TIME_ENTRY_PUBLISH,
   TIME_ENTRY_UPDATE,
 } from '../actions/timeEntry.actions';
 
@@ -26,67 +21,6 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ISSUES_TIME_ENTRY_GET: {
-      if (action.status === 'START') {
-        return {
-          ...state,
-          spentTime: {
-            ...state.spentTime,
-            isFetching: true,
-            page: {}.hasOwnProperty.call(action.info, 'page') ? action.info.page : state.spentTime.page
-          }
-        };
-      }
-      if (action.status === 'OK') {
-        return {
-          ...state,
-          spentTime: {
-            ...state.spentTime,
-            isFetching: false,
-            data: action.info.page === 0
-              ? _.get(action.data, 'time_entries', [])
-              : [...state.spentTime.data, ..._.get(action.data, 'time_entries', [])],
-            totalCount: action.data.total_count,
-            error: undefined
-          }
-        };
-      }
-      if (action.status === 'NOK') {
-        return {
-          ...state,
-          spentTime: {
-            ...state.spentTime,
-            isFetching: false,
-            error: action.data
-          }
-        };
-      }
-      return state;
-    }
-    case TIME_ENTRY_PUBLISH: {
-      if (action.status === 'OK') {
-        const timeEntry = _.get(action.data, 'time_entry', {});
-        const issueId = _.get(timeEntry, 'issue.id');
-        if (issueId === state.data.id) {
-          return {
-            ...state,
-            data: {
-              ...state.data,
-              spent_hours: state.data.spent_hours + timeEntry.hours,
-              total_spent_hours: state.data.total_spent_hours + timeEntry.hours
-            },
-            spentTime: {
-              ...state.spentTime,
-              data: [
-                timeEntry,
-                ...state.spentTime.data
-              ]
-            }
-          };
-        }
-      }
-      return state;
-    }
     case TIME_ENTRY_UPDATE: {
       if (action.status === 'OK') {
         const issueId = _.get(action.data, 'issue.id');

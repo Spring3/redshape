@@ -32,6 +32,7 @@ const Portal = ({ children, active, id }: PortalProps) => {
         }, 1000);
       } else if (container.parentNode === portal) {
         portal?.removeChild(container);
+        document.querySelector('body')?.removeAttribute('style');
       }
     };
   }, [container, active]);

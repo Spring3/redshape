@@ -11,7 +11,6 @@ import PlusIcon from 'mdi-react/PlusIcon';
 import { Link } from '../components/Link';
 import { Progressbar } from '../components/Progressbar';
 import { MarkdownText } from '../components/MarkdownEditor';
-import { TimeEntryModal } from '../components/TimeEntryModal';
 import { CommentsSection } from '../components/IssueDetailsPage/CommentsSection';
 import { DateComponent } from '../components/Date';
 import { OverlayProcessIndicator } from '../components/ProcessIndicator';
@@ -22,9 +21,8 @@ import { useNavbar } from '../contexts/NavbarContext';
 import { Flex } from '../components/Flex';
 import { TimeEntriesSection } from '../components/TimeEntriesSection';
 import { GhostButton } from '../components/GhostButton';
-import { CreateTimeEntryModal } from '../components/CreateTimeEntryModal';
-import type { TimeEntryData } from '../components/CreateTimeEntryModal';
-import { User } from '../../types';
+import { TimeEntry, User } from '../../types';
+import { useModalContext } from '../contexts/ModalContext';
 
 const styles = {
   subTask: css`
@@ -57,9 +55,6 @@ const styles = {
 };
 
 const IssueDetailsPage = () => {
-  const [selectedTimeEntry, setSelectedTimeEntry] = useState();
-  const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
-  const [showCreateTimeEntryModal, setShowCreateTimeEntryModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('comments');
 
   const navbar = useNavbar();
@@ -68,6 +63,7 @@ const IssueDetailsPage = () => {
   const theme = useTheme();
   const { id: issueId } = useParams();
   const navigate = useNavigate();
+  const modals = useModalContext();
 
   const currentIssue = state.issues.byId[issueId as string];
   const cfields = currentIssue.customFields;
@@ -89,38 +85,60 @@ const IssueDetailsPage = () => {
     }
   }, [currentIssue, navbar]);
 
-  const handleCreateTimeEntry = useCallback(async (timeEntryData: TimeEntryData) => {
-    await actions.timeEntries.create({
-      activity: {
-        id: timeEntryData.activity.id,
-        name: timeEntryData.activity.name
-      },
-      issue: {
-        id: currentIssue.id
-      },
-      comments: timeEntryData.comments || '',
-      spentOn: timeEntryData.spentOn,
-      hours: timeEntryData.hours,
-      project: {
-        id: project.id,
-        name: project.name
-      },
-      user: {
-        id: user.id,
-        name: `${user.firstName} ${user.lastName}`
-      }
-    });
-    setShowCreateTimeEntryModal(false);
-  }, [user, currentIssue, project]);
+  const handleCreateTimeEntry = useCallback(async () => {
+    const { timeEntryData, confirmed } = await modals.openCreateTimeEntryModal({ activities });
 
-  const closeTimeEntryModal = () => {
-    setSelectedTimeEntry(undefined);
-    setShowTimeEntryModal(false);
-  };
+    if (confirmed && timeEntryData) {
+      await actions.timeEntries.create({
+        activity: {
+          id: timeEntryData.activity.id,
+          name: timeEntryData.activity.name
+        },
+        issue: {
+          id: currentIssue.id
+        },
+        comments: timeEntryData.comments || '',
+        spentOn: timeEntryData.spentOn,
+        hours: timeEntryData.hours,
+        project: {
+          id: project.id,
+          name: project.name
+        },
+        user: {
+          id: user.id,
+          name: `${user.firstName} ${user.lastName}`
+        }
+      });
+    }
+  }, [user, currentIssue, project, modals.openCreateTimeEntryModal, activities]);
 
-  const toggleCreateTimeEntryModal = () => {
-    setShowCreateTimeEntryModal(isOpen => !isOpen);
-  };
+  const handleUpdateTimeEntry = useCallback(async (timeEntry: TimeEntry) => {
+    const { timeEntryData, confirmed } = await modals.openUpdateTimeEntryModal({ activities, timeEntry });
+
+    if (confirmed && timeEntryData) {
+      await actions.timeEntries.update({
+        ...timeEntry,
+        activity: {
+          id: timeEntryData.activity.id,
+          name: timeEntryData.activity.name
+        },
+        issue: {
+          id: currentIssue.id
+        },
+        comments: timeEntryData.comments || '',
+        spentOn: timeEntryData.spentOn,
+        hours: timeEntryData.hours,
+        project: {
+          id: project.id,
+          name: project.name
+        },
+        user: {
+          id: user.id,
+          name: `${user.firstName} ${user.lastName}`
+        }
+      });
+    }
+  }, [user, currentIssue, project, actions.timeEntries.update, activities]);
 
   if (!currentIssue.id) {
     return (
@@ -171,7 +189,7 @@ const IssueDetailsPage = () => {
                   <ClockOutlineIcon size={20} />
                   Time Entries
                   {' '}
-                  <GhostButton onClick={toggleCreateTimeEntryModal}>
+                  <GhostButton onClick={handleCreateTimeEntry}>
                     <PlusIcon size={20} />
                   </GhostButton>
                 </Flex>
@@ -186,6 +204,7 @@ const IssueDetailsPage = () => {
               <TimeEntriesSection
                 issueId={currentIssue.id}
                 timeEntries={state.timeEntries.listByIssueId[currentIssue.id] || []}
+                onTimeEntryUpdate={handleUpdateTimeEntry}
               />
             </Tabs.Content>
           </Tabs.Root>
@@ -339,23 +358,7 @@ const IssueDetailsPage = () => {
             </Flex>
           </Flex>
         </aside>
-        {/* <TimeEntries issueId={currentIssue.id} showTimeEntryModal={triggerTimeEntryModal} /> */}
       </Flex>
-      <CreateTimeEntryModal
-        isOpen={showCreateTimeEntryModal}
-        onCreate={handleCreateTimeEntry}
-        activities={activities}
-        onClose={toggleCreateTimeEntryModal}
-      />
-      {selectedTimeEntry && (
-        <TimeEntryModal
-          isOpen={showTimeEntryModal}
-          activities={activities}
-          isUserAuthor={(selectedTimeEntry as any).user.id === state.users.currentUser?.id}
-          timeEntry={selectedTimeEntry}
-          onClose={closeTimeEntryModal}
-        />
-      )}
     </div>
   );
 };

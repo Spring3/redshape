@@ -4,6 +4,7 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
 import CalendarIcon from 'mdi-react/CalendarIcon';
 import AccountIcon from 'mdi-react/AccountIcon';
+import EditOutlineIcon from 'mdi-react/EditOutlineIcon';
 import { useTheme } from 'styled-components';
 import { TimeEntry } from '../../types';
 import { DateComponent } from './Date';
@@ -14,8 +15,10 @@ import { GhostButton } from './GhostButton';
 
 type TimeEntryCardProps = {
   timeEntry: TimeEntry;
+  currentUserId: number;
   waitForConfirmation: () => Promise<boolean>;
   onDelete: (timeEntry: TimeEntry) => Promise<any>;
+  onEdit: (timeEntry: TimeEntry) => Promise<any>;
 };
 
 const styles = {
@@ -25,7 +28,7 @@ const styles = {
   `
 };
 
-const TimeEntryCard = ({ timeEntry, waitForConfirmation, onDelete }: TimeEntryCardProps) => {
+const TimeEntryCard = ({ timeEntry, currentUserId, waitForConfirmation, onDelete, onEdit }: TimeEntryCardProps) => {
   const theme = useTheme() as typeof Theme;
 
   const handleDelete = async () => {
@@ -33,6 +36,10 @@ const TimeEntryCard = ({ timeEntry, waitForConfirmation, onDelete }: TimeEntryCa
     if (confirmed) {
       await onDelete(timeEntry);
     }
+  };
+
+  const handleEdit = () => {
+    onEdit(timeEntry);
   };
 
   return (
@@ -48,6 +55,7 @@ const TimeEntryCard = ({ timeEntry, waitForConfirmation, onDelete }: TimeEntryCa
         <DateComponent date={timeEntry.spentOn} />
         <AccountIcon size={18} />
         <span css={styles.username(theme)}>{timeEntry.user.name}</span>
+        { currentUserId === timeEntry.user.id ? <GhostButton onClick={handleEdit}><EditOutlineIcon /></GhostButton> : null }
         <GhostButton onClick={handleDelete}><CloseIcon /></GhostButton>
       </Flex>
       <MarkdownText name={`time-entry-${timeEntry.id}`} markdownText={timeEntry.comments} />

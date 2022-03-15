@@ -34,6 +34,10 @@ const transform = ({ route, method }, responseBody) => {
   if (/time_entries\/\d{1,}\.json/.test(route)) {
     const { time_entry } = responseBody;
 
+    if (method === 'GET') {
+      return toExternalTimeEntry(time_entry);
+    }
+
     return {
       timeEntry: toExternalTimeEntry(time_entry)
     };
