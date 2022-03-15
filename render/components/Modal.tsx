@@ -60,7 +60,7 @@ const Modal = ({
           z-index: 98;
           position: absolute;
           
-          top: ${window.scrollY};
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
