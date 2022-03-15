@@ -145,7 +145,7 @@
     "@hapi/joi": "^17.1.0",
     "@radix-ui/react-dropdown-menu": "^0.1.4",
     "@radix-ui/react-tabs": "^0.1.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "clean-stack": "^2.2.0",
     "dotenv": "^8.2.0",
     "electron-is-dev": "^1.1.0",
