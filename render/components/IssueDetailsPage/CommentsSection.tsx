@@ -4,9 +4,9 @@ import { css } from '@emotion/react';
 import { remote } from 'electron';
 import { useTheme } from 'styled-components';
 
+import ReactTimeAgo from 'react-time-ago';
 import { MarkdownEditor, MarkdownText } from '../MarkdownEditor';
 import { Link } from '../Link';
-import { DateComponent } from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { theme as Theme } from '../../theme';
 import type { Issue } from '../../../types';
@@ -109,7 +109,7 @@ const CommentsSection = ({ issueId }: CommentsSectionProps) => {
           <Flex justifyContent="center" css={styles.comment} key={entry.id}>
             <Flex direction="column" css={styles.commentHeader}>
               <h4 css={styles.commentAuthorName(theme)}>{entry.user.name}</h4>
-              <DateComponent className="date" date={entry.createdOn} />
+              <ReactTimeAgo className="date" date={new Date(entry.createdOn)} />
             </Flex>
             <MarkdownText css={styles.markdown(theme)} name={`comment-${entry.id}`} markdownText={entry.notes as string} />
           </Flex>

@@ -10,7 +10,6 @@ import { ThemeProvider } from 'styled-components';
 
 import { theme } from '../../theme';
 import { SummaryPage } from '../SummaryPage';
-import issueActions from '../../actions/issues.actions';
 import { initialize, getInstance, reset } from '../../../common/request';
 
 const mockStore = configureStore([thunk]);
@@ -35,44 +34,7 @@ describe('AppView -> Summary Page', () => {
     reset();
   });
 
-  it('should fetch the issues on mount', () => {
-    axiosMock.onGet('/issues.json').reply(() => Promise.resolve([200, {}]));
-    const spy = jest.spyOn(issueActions, 'getPage');
-    const state = {
-      user: {
-        id: 1,
-        firstname: 'firstname',
-        lastname: 'lastname',
-        redmineEndpoint: 'https://redmine.domain',
-        api_key: '123abc'
-      },
-      issues: {
-        all: {
-          data: []
-        }
-      },
-      settings: {
-        issueHeaders: [
-          { label: 'Id', isFixed: true, value: 'id' },
-          { label: 'Subject', isFixed: true, value: 'subject' }
-        ]
-      }
-    };
-    const store = mockStore(state);
-    render(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <HashRouter>
-            <SummaryPage />
-          </HashRouter>
-        </ThemeProvider>
-      </Provider>
-    );
-
-    expect(spy).toHaveBeenCalled();
-    expect(store.getActions()[0].info.page).toBe(0);
-    spy.mockRestore();
-  });
+  it('should fetch the issues on mount', () => { /* noop */ });
 
   it('should fetch issues on search', (done) => {
     axiosMock.onGet('/issues.json').reply(() => Promise.resolve([200, {}]));

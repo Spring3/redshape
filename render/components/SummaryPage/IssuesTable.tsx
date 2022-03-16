@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
 import { get } from 'lodash';
+import ReactTimeAgo from 'react-time-ago';
 import { theme as Theme } from '../../theme';
 import { ProcessIndicator, OverlayProcessIndicator } from '../ProcessIndicator';
-import { DateComponent } from '../Date';
 import { useOvermindActions, useOvermindState } from '../../store';
 import { IssueFilter } from '../../actions/helper';
 import { usePaginatedFetch } from '../../hooks/usePaginatedFetch';
@@ -172,7 +172,7 @@ const IssuesTable = ({ search }: { search?: string }) => {
                   key={header.value}
                 >
                   {date ? (
-                    <DateComponent date={date} />
+                    <ReactTimeAgo date={date} />
                   ) : (
                     <span>{forcedValue || get(task, header.value)}</span>
                   )}

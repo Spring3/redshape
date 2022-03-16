@@ -8,11 +8,11 @@ import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 
+import ReactTimeAgo from 'react-time-ago';
 import { Link } from '../components/Link';
 import { Progressbar } from '../components/Progressbar';
 import { MarkdownText } from '../components/MarkdownEditor';
 import { CommentsSection } from '../components/IssueDetailsPage/CommentsSection';
-import { DateComponent } from '../components/Date';
 import { OverlayProcessIndicator } from '../components/ProcessIndicator';
 import { tabsHeaderList, tabsTrigger, tabsTriggerActive } from '../components/Tabs';
 
@@ -234,7 +234,7 @@ const IssueDetailsPage = () => {
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Due date: </h4>
-              <DateComponent date={currentIssue.dueDate} />
+              { currentIssue.dueDate ? <ReactTimeAgo date={new Date(currentIssue.dueDate)} /> : null }
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Project: </h4>
@@ -246,7 +246,7 @@ const IssueDetailsPage = () => {
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Start date: </h4>
-              <DateComponent date={currentIssue.startDate} />
+              { currentIssue.startDate ? <ReactTimeAgo date={new Date(currentIssue.startDate)} /> : null }
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Estimation: </h4>
@@ -329,7 +329,7 @@ const IssueDetailsPage = () => {
             `}
             >
               Created on:&nbsp;
-              <DateComponent date={currentIssue.createdOn} />
+              <ReactTimeAgo date={new Date(currentIssue.createdOn)} />
               &nbsp;by&nbsp;
               <Link href="#">{currentIssue.author.name}</Link>
             </p>
@@ -346,7 +346,7 @@ const IssueDetailsPage = () => {
               `}
               >
                 Closed on:&nbsp;
-                <DateComponent date={currentIssue.closedOn} />
+                <ReactTimeAgo date={new Date(currentIssue.closedOn)} />
               </p>
             )}
             <Flex alignItems="center">

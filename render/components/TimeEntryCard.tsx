@@ -6,8 +6,8 @@ import CalendarIcon from 'mdi-react/CalendarIcon';
 import AccountIcon from 'mdi-react/AccountIcon';
 import EditOutlineIcon from 'mdi-react/EditOutlineIcon';
 import { useTheme } from 'styled-components';
+import ReactTimeAgo from 'react-time-ago';
 import { TimeEntry } from '../../types';
-import { DateComponent } from './Date';
 import { Flex } from './Flex';
 import { MarkdownText } from './MarkdownEditor';
 import { theme as Theme } from '../theme';
@@ -28,7 +28,9 @@ const styles = {
   `
 };
 
-const TimeEntryCard = ({ timeEntry, currentUserId, waitForConfirmation, onDelete, onEdit }: TimeEntryCardProps) => {
+const TimeEntryCard = ({
+  timeEntry, currentUserId, waitForConfirmation, onDelete, onEdit
+}: TimeEntryCardProps) => {
   const theme = useTheme() as typeof Theme;
 
   const handleDelete = async () => {
@@ -52,7 +54,7 @@ const TimeEntryCard = ({ timeEntry, currentUserId, waitForConfirmation, onDelete
           hours
         </h4>
         <CalendarIcon size={18} />
-        <DateComponent date={timeEntry.spentOn} />
+        <ReactTimeAgo date={new Date(timeEntry.spentOn)} />
         <AccountIcon size={18} />
         <span css={styles.username(theme)}>{timeEntry.user.name}</span>
         { currentUserId === timeEntry.user.id ? <GhostButton onClick={handleEdit}><EditOutlineIcon /></GhostButton> : null }

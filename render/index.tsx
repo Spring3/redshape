@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 
 import { createOvermind } from 'overmind';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
 import store from './reduxStore';
 import { theme } from './theme';
 import App from './App';
@@ -14,6 +16,8 @@ import { overmindStoreConfig } from './store/index';
 if (module.hot) {
   module.hot.accept();
 }
+
+TimeAgo.addDefaultLocale(en);
 
 const overmindStore = createOvermind(overmindStoreConfig);
 
