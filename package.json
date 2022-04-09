@@ -160,7 +160,7 @@
     "got": "^11.8.2",
     "lodash": "^4.17.15",
     "mdi-react": "^6.7.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
     "overmind": "^28.0.1",
     "overmind-react": "^29.0.1",
