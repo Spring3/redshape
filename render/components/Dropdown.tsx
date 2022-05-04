@@ -86,6 +86,7 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
           box-shadow: 0px 2px 5px ${theme.bgDarker};
           width: 100%;
           top: 2rem;
+          z-index: 1;
         `}
       >
         {Children.map(children, child => (
@@ -93,6 +94,7 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
             css={css`
               padding: 0.5rem 0.2rem;
               background: transparent;
+              background: white;
               border: none;
 
               &:hover {
