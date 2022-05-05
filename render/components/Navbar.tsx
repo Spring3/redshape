@@ -30,6 +30,14 @@ const styles = {
   `,
   icon: css`
     vertical-align: middle;
+  `,
+  title: css`
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  `,
+  titleContainer: css`
+    overflow: hidden;
   `
 };
 
@@ -74,11 +82,11 @@ const Navbar = () => {
 
   return (
     <nav css={styles.nav}>
-      <Flex alignItems="center">
+      <Flex css={styles.titleContainer} alignItems="center">
         {!isIssuesPage ? <BackButton /> : null}
-        <h2>{navbarState.title}</h2>
+        <h2 title={navbarState.title} css={styles.title}>{navbarState.title}</h2>
       </Flex>
-      <Flex gap="1rem">
+      <Flex css={css`flex-shrink: 0;`} gap="1rem">
         <NavLink
           css={[navLinkStyles, css`margin-right: 1rem`]}
           to="/issues"

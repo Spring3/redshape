@@ -76,12 +76,12 @@ const TimeEntryCard = ({
             <span css={styles.username(theme)}>{timeEntry.user.name}</span>
           </div>
           {currentUserId === timeEntry.user.id ? (
-            <Dropdown getDropdownToggleElement={({ toggle }) => (
+            <Dropdown css={css`min-width: 100px;`} getDropdownToggleElement={({ toggle }) => (
               <GhostButton onClick={toggle}><ThreeDotIcon /></GhostButton>
             )}
             >
-              <GhostButton fullWidth onClick={handleEdit}>Edit</GhostButton>
-              <GhostButton fullWidth onClick={handleDelete}>Delete</GhostButton>
+              <GhostButton css={css`min-width: 100px`} fullWidth onClick={handleEdit}>Edit</GhostButton>
+              <GhostButton css={css`min-width: 100px`} fullWidth onClick={handleDelete}>Delete</GhostButton>
             </Dropdown>
           ) : null}
         </Flex>

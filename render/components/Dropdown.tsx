@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from 'styled-components';
+import ReactFocusLock from 'react-focus-lock';
 import { theme as Theme } from '../theme';
 
 type DropdownProps = {
@@ -71,44 +72,46 @@ const Dropdown = ({ className, children, getDropdownToggleElement }: DropdownPro
     >
       <div className="dropdown-header">{Toggle}</div>
 
-      <ul
-        onBlur={() => setOpen(false)}
-        css={css`
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          background: white;
-          border: 1px solid ${theme.bgDarker};
-          border-radius: 5px;
-          display: ${isOpen ? 'flex' : 'none'};
-          flex-direction: column;
-          position: absolute;
-          box-shadow: 0px 2px 5px ${theme.bgDarker};
-          width: 100%;
-          top: 2rem;
-          z-index: 1;
-        `}
-      >
-        {Children.map(children, child => (
-          <li
-            css={css`
-              padding: 0.5rem 0.2rem;
-              background: transparent;
-              background: white;
-              border: none;
+      <ReactFocusLock>
+        <ul
+          onBlur={() => setOpen(false)}
+          css={css`
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background: white;
+            border: 1px solid ${theme.bgDarker};
+            border-radius: 5px;
+            display: ${isOpen ? 'flex' : 'none'};
+            flex-direction: column;
+            position: absolute;
+            box-shadow: 0px 2px 5px ${theme.bgDarker};
+            width: 100%;
+            top: 2rem;
+            z-index: 1;
+          `}
+        >
+          {Children.map(children, child => (
+            <li
+              css={css`
+                padding: 0.5rem 0.2rem;
+                background: transparent;
+                background: white;
+                border: none;
 
-              &:hover {
-                cursor: pointer;
-                background: ${theme.bgDarker};
-              }
-            `}
-            onClick={toggleViaChild}
-            className="dropdown-list-item"
-          >
-            {child}
-          </li>
-        ))}
-      </ul>
+                &:hover {
+                  cursor: pointer;
+                  background: ${theme.bgDarker};
+                }
+              `}
+              onClick={toggleViaChild}
+              className="dropdown-list-item"
+            >
+              {child}
+            </li>
+          ))}
+        </ul>
+      </ReactFocusLock>
 
     </div>
   );
