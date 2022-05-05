@@ -16,6 +16,7 @@ import { SummaryPage } from './SummaryPage';
 import { IssueDetailsPage } from './IssueDetailsPage';
 import { Project, Issue, IssueStatus } from '../../types';
 import { ModalContextProvider } from '../contexts/ModalContext';
+import { TimerContextProvider } from '../contexts/TimerContext';
 
 const Grid = styled.div`
   height: 100%;
@@ -103,20 +104,22 @@ const AppView = () => {
       <DragArea />
       <ModalContextProvider>
         <NavbarContextProvider>
-          <Navbar />
-          <Content>
-            <Routes>
-              <Route path="/" element={<SummaryPage />} />
-              <Route path="/:id" element={<IssueDetailsPage />} />
-            </Routes>
-            <Timer autoStart onStop={onTrackingStop} />
-            <TimeEntryModal
-              isOpen={showTimeEntryModal}
-              activities={activities}
-              timeEntry={timeEntry}
-              onClose={closeTimeEntryModal}
-            />
-          </Content>
+          <TimerContextProvider>
+            <Navbar />
+            <Content>
+              <Routes>
+                <Route path="/" element={<SummaryPage />} />
+                <Route path="/:id" element={<IssueDetailsPage />} />
+              </Routes>
+              <Timer autoStart onStop={onTrackingStop} />
+              <TimeEntryModal
+                isOpen={showTimeEntryModal}
+                activities={activities}
+                timeEntry={timeEntry}
+                onClose={closeTimeEntryModal}
+              />
+            </Content>
+          </TimerContextProvider>
         </NavbarContextProvider>
       </ModalContextProvider>
     </Grid>

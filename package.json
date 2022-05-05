@@ -162,7 +162,6 @@
     "lodash": "^4.17.15",
     "mdi-react": "^6.7.0",
     "moment": "^2.24.0",
-    "moment-duration-format": "^2.3.2",
     "overmind": "^28.0.1",
     "overmind-react": "^29.0.1",
     "prop-types": "^15.7.2",

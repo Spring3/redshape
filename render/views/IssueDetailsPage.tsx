@@ -6,8 +6,10 @@ import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
+import PlayIcon from 'mdi-react/PlayIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 
+import moment from 'moment';
 import ReactTimeAgo from 'react-time-ago';
 import { Link } from '../components/Link';
 import { Progressbar } from '../components/Progressbar';
@@ -23,6 +25,9 @@ import { TimeEntriesSection } from '../components/TimeEntriesSection';
 import { GhostButton } from '../components/GhostButton';
 import { TimeEntry, User } from '../../types';
 import { useModalContext } from '../contexts/ModalContext';
+import { Button } from '../components/Button';
+import { useTimeTracking } from '../contexts/TimerContext';
+import { toTimerFormat } from '../helpers/utils';
 
 const styles = {
   subTask: css`
@@ -64,6 +69,10 @@ const IssueDetailsPage = () => {
   const { id: issueId } = useParams();
   const navigate = useNavigate();
   const modals = useModalContext();
+
+  const timeTrackingContext = useTimeTracking();
+
+  console.log(timeTrackingContext);
 
   const currentIssue = state.issues.byId[issueId as string];
   const cfields = currentIssue.customFields;
@@ -212,6 +221,14 @@ const IssueDetailsPage = () => {
         <aside
           css={styles.sidebar}
         >
+          <Flex css={css`margin-bottom: 1rem;`} justifyContent='center'>
+            <Button onClick={() => timeTrackingContext.track(currentIssue.id)}>
+              <PlayIcon />
+              {' '}
+              Start tracking
+            </Button>
+            <span>{toTimerFormat(timeTrackingContext.trackedTimeMs)}</span>
+          </Flex>
           <Flex
             css={styles.sidebarSection}
             direction="column"
