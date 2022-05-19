@@ -60,7 +60,7 @@ export const useTracking = () => {
       return {
         isTracking: false,
         isPaused: false,
-        isStopped: false,
+        isStopped: true,
         issue: null,
         trackedTimeMs,
         track,

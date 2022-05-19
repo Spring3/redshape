@@ -7,9 +7,10 @@ import * as Tabs from '@radix-ui/react-tabs';
 import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
 import PlayIcon from 'mdi-react/PlayIcon';
+import StopIcon from 'mdi-react/StopIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
+import PauseIcon from 'mdi-react/PauseIcon';
 
-import moment from 'moment';
 import ReactTimeAgo from 'react-time-ago';
 import { Link } from '../components/Link';
 import { Progressbar } from '../components/Progressbar';
@@ -28,6 +29,7 @@ import { useModalContext } from '../contexts/ModalContext';
 import { Button } from '../components/Button';
 import { useTimeTracking } from '../contexts/TimerContext';
 import { toTimerFormat } from '../helpers/utils';
+import { ButtonGroup } from '../components/ButtonGroup';
 
 const styles = {
   subTask: css`
@@ -121,33 +123,39 @@ const IssueDetailsPage = () => {
     }
   }, [user, currentIssue, project, modals.openCreateTimeEntryModal, activities]);
 
-  const handleUpdateTimeEntry = useCallback(async (timeEntry: TimeEntry) => {
-    const { timeEntryData, confirmed } = await modals.openUpdateTimeEntryModal({ activities, timeEntry });
-
-    if (confirmed && timeEntryData) {
-      await actions.timeEntries.update({
-        ...timeEntry,
-        activity: {
-          id: timeEntryData.activity.id,
-          name: timeEntryData.activity.name
-        },
-        issue: {
-          id: currentIssue.id
-        },
-        comments: timeEntryData.comments || '',
-        spentOn: timeEntryData.spentOn,
-        hours: timeEntryData.hours,
-        project: {
-          id: project.id,
-          name: project.name
-        },
-        user: {
-          id: user.id,
-          name: `${user.firstName} ${user.lastName}`
-        }
+  const handleUpdateTimeEntry = useCallback(
+    async (timeEntry: TimeEntry) => {
+      const { timeEntryData, confirmed } = await modals.openUpdateTimeEntryModal({
+        activities,
+        timeEntry
       });
-    }
-  }, [user, currentIssue, project, actions.timeEntries.update, activities]);
+
+      if (confirmed && timeEntryData) {
+        await actions.timeEntries.update({
+          ...timeEntry,
+          activity: {
+            id: timeEntryData.activity.id,
+            name: timeEntryData.activity.name
+          },
+          issue: {
+            id: currentIssue.id
+          },
+          comments: timeEntryData.comments || '',
+          spentOn: timeEntryData.spentOn,
+          hours: timeEntryData.hours,
+          project: {
+            id: project.id,
+            name: project.name
+          },
+          user: {
+            id: user.id,
+            name: `${user.firstName} ${user.lastName}`
+          }
+        });
+      }
+    },
+    [user, currentIssue, project, actions.timeEntries.update, activities]
+  );
 
   if (!currentIssue.id) {
     return (
@@ -158,9 +166,7 @@ const IssueDetailsPage = () => {
   }
 
   return (
-    <div
-      css={styles.pageWrapper}
-    >
+    <div css={styles.pageWrapper}>
       <Flex justifyContent="space-between">
         <Flex
           css={css`
@@ -185,16 +191,29 @@ const IssueDetailsPage = () => {
               </Flex>
             </>
           ) : null}
-          <Tabs.Root css={tabsHeaderList} value={activeTab} orientation='horizontal' onValueChange={setActiveTab}>
-            <Tabs.List aria-label='tabs'>
-              <Tabs.Trigger css={activeTab === 'comments' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="comments">
-                <Flex alignItems='center'>
+          <Tabs.Root
+            css={tabsHeaderList}
+            value={activeTab}
+            orientation="horizontal"
+            onValueChange={setActiveTab}
+          >
+            <Tabs.List aria-label="tabs">
+              <Tabs.Trigger
+                css={activeTab === 'comments' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]}
+                value="comments"
+              >
+                <Flex alignItems="center">
                   <CommentsTextOutlineIcon size={20} />
                   Comments
                 </Flex>
               </Tabs.Trigger>
-              <Tabs.Trigger css={activeTab === 'time entries' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]} value="time entries">
-                <Flex alignItems='center'>
+              <Tabs.Trigger
+                css={
+                  activeTab === 'time entries' ? [tabsTrigger, tabsTriggerActive] : [tabsTrigger]
+                }
+                value="time entries"
+              >
+                <Flex alignItems="center">
                   <ClockOutlineIcon size={20} />
                   Time Entries
                   {' '}
@@ -205,9 +224,7 @@ const IssueDetailsPage = () => {
               </Tabs.Trigger>
             </Tabs.List>
             <Tabs.Content value="comments">
-              <CommentsSection
-                issueId={currentIssue.id}
-              />
+              <CommentsSection issueId={currentIssue.id} />
             </Tabs.Content>
             <Tabs.Content value="time entries">
               <TimeEntriesSection
@@ -218,21 +235,54 @@ const IssueDetailsPage = () => {
             </Tabs.Content>
           </Tabs.Root>
         </Flex>
-        <aside
-          css={styles.sidebar}
-        >
-          <Flex css={css`margin-bottom: 1rem;`} justifyContent='center'>
-            <Button onClick={() => timeTrackingContext.track(currentIssue.id)}>
-              <PlayIcon />
-              {' '}
-              Start tracking
-            </Button>
-            <span>{toTimerFormat(timeTrackingContext.trackedTimeMs)}</span>
-          </Flex>
+        <aside css={styles.sidebar}>
           <Flex
-            css={styles.sidebarSection}
-            direction="column"
+            css={css`
+              margin-bottom: 1rem;
+            `}
+            alignItems="center"
+            justifyContent="center"
           >
+            <h3
+              css={css`
+                margin-right: 1rem;
+              `}
+            >
+              Time spent:
+            </h3>
+            <ButtonGroup label={toTimerFormat(timeTrackingContext.trackedTimeMs)}>
+              {(timeTrackingContext.isPaused || timeTrackingContext.isStopped) && (
+                <Button
+                  onClick={() => {
+                    if (timeTrackingContext.isStopped) {
+                      timeTrackingContext.track(currentIssue.id);
+                    } else if (timeTrackingContext.isTracking) {
+                      timeTrackingContext.stop();
+                    } else if (timeTrackingContext.isPaused) {
+                      timeTrackingContext.unpause();
+                    }
+                  }}
+                >
+                  <PlayIcon />
+                </Button>
+              )}
+              {(timeTrackingContext.isTracking) && (
+                <Button
+                  onClick={() => {
+                    timeTrackingContext.pause();
+                  }}
+                >
+                  <PauseIcon />
+                </Button>
+              )}
+              {!timeTrackingContext.isStopped && (
+                <Button onClick={() => timeTrackingContext.stop()}>
+                  <StopIcon />
+                </Button>
+              )}
+            </ButtonGroup>
+          </Flex>
+          <Flex css={styles.sidebarSection} direction="column">
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Tracker: </h4>
               <span>{currentIssue.tracker.name}</span>
@@ -251,7 +301,7 @@ const IssueDetailsPage = () => {
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Due date: </h4>
-              { currentIssue.dueDate ? <ReactTimeAgo date={new Date(currentIssue.dueDate)} /> : null }
+              {currentIssue.dueDate ? <ReactTimeAgo date={new Date(currentIssue.dueDate)} /> : null}
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Project: </h4>
@@ -263,7 +313,9 @@ const IssueDetailsPage = () => {
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Start date: </h4>
-              { currentIssue.startDate ? <ReactTimeAgo date={new Date(currentIssue.startDate)} /> : null }
+              {currentIssue.startDate ? (
+                <ReactTimeAgo date={new Date(currentIssue.startDate)} />
+              ) : null}
             </Flex>
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Estimation: </h4>
@@ -334,16 +386,17 @@ const IssueDetailsPage = () => {
             )}
           </Flex>
           <Flex direction="column">
-            <p css={css`
-              font-size: 12px;
-              margin-top: 0px;
-              color: ${theme.minorText};
-            
-              a {
-                font-size: inherit !important;
-                margin-right: 5px;
-              }
-            `}
+            <p
+              css={css`
+                font-size: 12px;
+                margin-top: 0px;
+                color: ${theme.minorText};
+
+                a {
+                  font-size: inherit !important;
+                  margin-right: 5px;
+                }
+              `}
             >
               Created on:&nbsp;
               <ReactTimeAgo date={new Date(currentIssue.createdOn)} />
@@ -351,16 +404,17 @@ const IssueDetailsPage = () => {
               <Link href="#">{currentIssue.author.name}</Link>
             </p>
             {currentIssue.closedOn && (
-              <p css={css`
-                font-size: 12px;
-                margin-top: 0px;
-                color: ${theme.minorText};
-              
-                a {
-                  font-size: inherit !important;
-                  margin-right: 5px;
-                }
-              `}
+              <p
+                css={css`
+                  font-size: 12px;
+                  margin-top: 0px;
+                  color: ${theme.minorText};
+
+                  a {
+                    font-size: inherit !important;
+                    margin-right: 5px;
+                  }
+                `}
               >
                 Closed on:&nbsp;
                 <ReactTimeAgo date={new Date(currentIssue.closedOn)} />
@@ -368,10 +422,7 @@ const IssueDetailsPage = () => {
             )}
             <Flex alignItems="center">
               <h4 css={styles.sidebarSectionHeader}>Progress:</h4>
-              <Progressbar
-                className={undefined}
-                percent={currentIssue.doneRatio}
-              />
+              <Progressbar className={undefined} percent={currentIssue.doneRatio} />
             </Flex>
           </Flex>
         </aside>
@@ -380,6 +431,4 @@ const IssueDetailsPage = () => {
   );
 };
 
-export {
-  IssueDetailsPage
-};
+export { IssueDetailsPage };

@@ -4,7 +4,7 @@ import { useTracking } from '../hooks/useTracking';
 export const TimerContext = createContext<ReturnType<typeof useTracking>>({
   isTracking: false,
   isPaused: false,
-  isStopped: false,
+  isStopped: true,
   issue: null,
   trackedTimeMs: 0,
   track: () => { /* noop */ },
