@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Formik } from 'formik';
 import Joi from '@hapi/joi';
 import { Activity, TimeEntry } from '../../types';
-import { toHours, toTimeSpent } from '../helpers/utils';
+import { timeSpentToHours, hoursToTimeSpent } from '../helpers/utils';
 import { Button } from './Button';
 import { DatePicker } from './DatePicker';
 import { Flex } from './Flex';
@@ -56,7 +56,7 @@ const TimeEntryModal = ({
     const timeEntryData = {
       activity: activity as Activity,
       spentOn: formData.spentOn as string,
-      hours: toHours(formData.timeSpent),
+      hours: timeSpentToHours(formData.timeSpent),
       comments: formData.comments
     };
     onSubmit(timeEntryData);
@@ -71,7 +71,7 @@ const TimeEntryModal = ({
       initialValues={{
         activityName: timeEntry?.activity.name ?? activities[0].name,
         spentOn: timeEntry?.spentOn ?? moment().format('YYYY-MM-DD'),
-        timeSpent: toTimeSpent(timeEntry?.hours),
+        timeSpent: hoursToTimeSpent(timeEntry?.hours),
         comments: timeEntry?.comments,
       }}
       validate={(values) => {

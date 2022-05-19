@@ -22,23 +22,23 @@ const styles = {
     margin: 0;
     border-radius: 0px 3px 3px 0px;
     border: 2px solid ${theme.main};
-    border-left: none;
+    border-left: 2px solid ${theme.mainLight};
     padding: 0.4rem 0.6rem;
   `
 };
 
 type ButtonGroupProps = {
   children: ReactNode;
-  label?: string;
+  text?: string;
 }
 
-export const ButtonGroup = ({ children, label }: ButtonGroupProps) => {
+export const ButtonGroup = ({ children, text }: ButtonGroupProps) => {
   const theme = useTheme() as typeof Theme;
 
   return (
     <Flex css={styles.buttonContainer} alignItems='stretch'>
       {children}
-      {label && (<p css={styles.label(theme)}>{label}</p>)}
+      {text && (<p css={styles.label(theme)}>{text}</p>)}
     </Flex>
   );
 };

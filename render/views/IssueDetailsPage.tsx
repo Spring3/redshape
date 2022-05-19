@@ -6,10 +6,7 @@ import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 import CommentsTextOutlineIcon from 'mdi-react/CommentsTextOutlineIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
-import PlayIcon from 'mdi-react/PlayIcon';
-import StopIcon from 'mdi-react/StopIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
-import PauseIcon from 'mdi-react/PauseIcon';
 
 import ReactTimeAgo from 'react-time-ago';
 import { Link } from '../components/Link';
@@ -26,10 +23,8 @@ import { TimeEntriesSection } from '../components/TimeEntriesSection';
 import { GhostButton } from '../components/GhostButton';
 import { TimeEntry, User } from '../../types';
 import { useModalContext } from '../contexts/ModalContext';
-import { Button } from '../components/Button';
 import { useTimeTracking } from '../contexts/TimerContext';
-import { toTimerFormat } from '../helpers/utils';
-import { ButtonGroup } from '../components/ButtonGroup';
+import { TimeTrackerButton } from '../components/TimeTrackerButton';
 
 const styles = {
   subTask: css`
@@ -71,10 +66,6 @@ const IssueDetailsPage = () => {
   const { id: issueId } = useParams();
   const navigate = useNavigate();
   const modals = useModalContext();
-
-  const timeTrackingContext = useTimeTracking();
-
-  console.log(timeTrackingContext);
 
   const currentIssue = state.issues.byId[issueId as string];
   const cfields = currentIssue.customFields;
@@ -157,6 +148,8 @@ const IssueDetailsPage = () => {
     [user, currentIssue, project, actions.timeEntries.update, activities]
   );
 
+  const trackedTimeEntries = state.timeEntries.listByIssueId[currentIssue.id] || [];
+
   if (!currentIssue.id) {
     return (
       <OverlayProcessIndicator>
@@ -229,7 +222,7 @@ const IssueDetailsPage = () => {
             <Tabs.Content value="time entries">
               <TimeEntriesSection
                 issueId={currentIssue.id}
-                timeEntries={state.timeEntries.listByIssueId[currentIssue.id] || []}
+                timeEntries={trackedTimeEntries}
                 onTimeEntryUpdate={handleUpdateTimeEntry}
               />
             </Tabs.Content>
@@ -250,37 +243,7 @@ const IssueDetailsPage = () => {
             >
               Time spent:
             </h3>
-            <ButtonGroup label={toTimerFormat(timeTrackingContext.trackedTimeMs)}>
-              {(timeTrackingContext.isPaused || timeTrackingContext.isStopped) && (
-                <Button
-                  onClick={() => {
-                    if (timeTrackingContext.isStopped) {
-                      timeTrackingContext.track(currentIssue.id);
-                    } else if (timeTrackingContext.isTracking) {
-                      timeTrackingContext.stop();
-                    } else if (timeTrackingContext.isPaused) {
-                      timeTrackingContext.unpause();
-                    }
-                  }}
-                >
-                  <PlayIcon />
-                </Button>
-              )}
-              {(timeTrackingContext.isTracking) && (
-                <Button
-                  onClick={() => {
-                    timeTrackingContext.pause();
-                  }}
-                >
-                  <PauseIcon />
-                </Button>
-              )}
-              {!timeTrackingContext.isStopped && (
-                <Button onClick={() => timeTrackingContext.stop()}>
-                  <StopIcon />
-                </Button>
-              )}
-            </ButtonGroup>
+            <TimeTrackerButton userId={user.id} issueId={currentIssue.id} timeEntries={trackedTimeEntries} />
           </Flex>
           <Flex css={styles.sidebarSection} direction="column">
             <Flex alignItems="center">
