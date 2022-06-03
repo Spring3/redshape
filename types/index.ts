@@ -61,6 +61,7 @@ type TimeTrackingRecord = {
   issueId: number;
   isoDate: string;
   notes: TimeEntryNote[];
+  id: string;
 }
 
 type User = {

@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 // import _get from 'lodash/get';
 
 import reducers from './reducers/index';
-import notificationMiddleware from './middlewares/notification.middleware';
 
 // const user = _get(initialState, 'user', {});
 // const { id, redmineEndpoint } = user;
@@ -16,4 +15,4 @@ import notificationMiddleware from './middlewares/notification.middleware';
 //   tracking: initialState.time_tracking
 // },
 
-export default createStore(reducers, applyMiddleware(thunk, notificationMiddleware));
+export default createStore(reducers, applyMiddleware(thunk));

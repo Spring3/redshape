@@ -1,20 +1,8 @@
+import moment from "moment";
+
 const getStoredToken = () => localStorage.getItem('token');
 
-const toNumber = (typedValue: string | number | undefined) => {
-  if (typeof typedValue === 'string') {
-    if (/,|./.test(typedValue)) {
-      return parseFloat(typedValue.replace(',', '.'));
-    }
-    return parseInt(typedValue, 10);
-  }
-
-  if (Number.isNaN(typedValue) || !Number.isFinite(typedValue)) {
-    return undefined;
-  }
-  return typedValue;
-};
-
-const toHours = (time = '') => {
+const timeSpentToHours = (time = '') => {
   const [hours, minutes, seconds] = time.split(':');
   const hoursInt = parseInt(hours || '0', 10);
   const minutesInt = parseInt(minutes || '0', 10);
@@ -23,7 +11,7 @@ const toHours = (time = '') => {
   return parseFloat(((hoursInt * 3600 + minutesInt * 60 + secondsInt) / 3600).toFixed(3));
 };
 
-const toTimeSpent = (hoursSpent?: number) => {
+const hoursToTimeSpent = (hoursSpent?: number) => {
   if (!hoursSpent) {
     return undefined;
   }
@@ -42,9 +30,11 @@ const toTimeSpent = (hoursSpent?: number) => {
   return `${data.hours}:${data.minutes}:${data.seconds}`;
 };
 
+const toTimerFormat = (time: number) => moment.utc(time).format('HH:mm:ss');
+
 export {
   getStoredToken,
-  toNumber,
-  toHours,
-  toTimeSpent
+  timeSpentToHours,
+  hoursToTimeSpent,
+  toTimerFormat
 };

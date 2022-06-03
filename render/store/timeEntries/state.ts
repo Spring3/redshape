@@ -1,5 +1,5 @@
 import { derived } from 'overmind';
-import { TimeEntry, Activity } from '../../../types';
+import { TimeEntry } from '../../../types';
 
 type TimeEntriesState = {
   mapByIssueId: Record<string, Record<number, TimeEntry>>;

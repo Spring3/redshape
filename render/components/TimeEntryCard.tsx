@@ -1,17 +1,17 @@
 import { css } from '@emotion/react';
 import React from 'react';
-import CloseIcon from 'mdi-react/CloseIcon';
 import ClockOutlineIcon from 'mdi-react/ClockOutlineIcon';
 import CalendarIcon from 'mdi-react/CalendarIcon';
+import ThreeDotIcon from 'mdi-react/MoreHorizIcon';
 import AccountIcon from 'mdi-react/AccountIcon';
-import EditOutlineIcon from 'mdi-react/EditOutlineIcon';
 import { useTheme } from 'styled-components';
+import ReactTimeAgo from 'react-time-ago';
 import { TimeEntry } from '../../types';
-import { DateComponent } from './Date';
 import { Flex } from './Flex';
 import { MarkdownText } from './MarkdownEditor';
 import { theme as Theme } from '../theme';
 import { GhostButton } from './GhostButton';
+import { Dropdown } from './Dropdown';
 
 type TimeEntryCardProps = {
   timeEntry: TimeEntry;
@@ -25,10 +25,23 @@ const styles = {
   username: (theme: typeof Theme) => css`
     font-weight: bold;
     color: ${theme.normalText};
+  `,
+  background: css`
+    background: white;
+    width: 100%;
+  `,
+  actionBar: css`
+    width: 100%;
   `
 };
 
-const TimeEntryCard = ({ timeEntry, currentUserId, waitForConfirmation, onDelete, onEdit }: TimeEntryCardProps) => {
+const TimeEntryCard = ({
+  timeEntry,
+  currentUserId,
+  waitForConfirmation,
+  onDelete,
+  onEdit
+}: TimeEntryCardProps) => {
   const theme = useTheme() as typeof Theme;
 
   const handleDelete = async () => {
@@ -43,26 +56,39 @@ const TimeEntryCard = ({ timeEntry, currentUserId, waitForConfirmation, onDelete
   };
 
   return (
-    <Flex direction='column'>
-      <Flex alignItems='center'>
-        <ClockOutlineIcon size={18} />
-        <h4>
-          {timeEntry.hours}
-          {' '}
-          hours
-        </h4>
-        <CalendarIcon size={18} />
-        <DateComponent date={timeEntry.spentOn} />
-        <AccountIcon size={18} />
-        <span css={styles.username(theme)}>{timeEntry.user.name}</span>
-        { currentUserId === timeEntry.user.id ? <GhostButton onClick={handleEdit}><EditOutlineIcon /></GhostButton> : null }
-        <GhostButton onClick={handleDelete}><CloseIcon /></GhostButton>
+    <Flex css={styles.background} direction="column">
+      <Flex css={styles.actionBar} alignItems="center">
+        <div>
+          <CalendarIcon size={18} />
+          <ReactTimeAgo date={new Date(timeEntry.spentOn)} />
+        </div>
+        <div>
+          <ClockOutlineIcon size={18} />
+          <span>
+            {timeEntry.hours}
+            {' '}
+            hours
+          </span>
+        </div>
+        <Flex alignItems='center'>
+          <div>
+            <AccountIcon size={18} />
+            <span css={styles.username(theme)}>{timeEntry.user.name}</span>
+          </div>
+          {currentUserId === timeEntry.user.id ? (
+            <Dropdown css={css`min-width: 100px;`} getDropdownToggleElement={({ toggle }) => (
+              <GhostButton onClick={toggle}><ThreeDotIcon /></GhostButton>
+            )}
+            >
+              <GhostButton css={css`min-width: 100px`} fullWidth onClick={handleEdit}>Edit</GhostButton>
+              <GhostButton css={css`min-width: 100px`} fullWidth onClick={handleDelete}>Delete</GhostButton>
+            </Dropdown>
+          ) : null}
+        </Flex>
       </Flex>
       <MarkdownText name={`time-entry-${timeEntry.id}`} markdownText={timeEntry.comments} />
     </Flex>
   );
 };
 
-export {
-  TimeEntryCard
-};
+export { TimeEntryCard };

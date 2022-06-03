@@ -1,11 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate, Route, Routes } from 'react-router-dom';
-import _get from 'lodash/get';
-import moment from 'moment';
 
 import { Navbar } from '../components/Navbar';
-import { Timer } from '../components/Timer';
 import { TimeEntryModal } from '../components/TimeEntryModal';
 import { DragArea } from '../components/DragArea';
 
@@ -14,8 +11,9 @@ import { NavbarContextProvider } from '../contexts/NavbarContext';
 import { useFetchAll } from '../hooks/useFetchAll';
 import { SummaryPage } from './SummaryPage';
 import { IssueDetailsPage } from './IssueDetailsPage';
-import { Project, Issue, IssueStatus } from '../../types';
+import { IssueStatus } from '../../types';
 import { ModalContextProvider } from '../contexts/ModalContext';
+import { TimerContextProvider } from '../contexts/TimerContext';
 
 const Grid = styled.div`
   height: 100%;
@@ -34,20 +32,9 @@ type AppViewProps = {
 };
 
 const AppView = () => {
-  const [activities, setActivities] = useState([]);
-  const [showTimeEntryModal, setShowTimeEntryModal] = useState(false);
-  const [timeEntry, setTimeEntry] = useState<any>(null);
-
   const navigate = useNavigate();
   const state = useOvermindState();
   const actions = useOvermindActions();
-
-  const requestProjects = useCallback(
-    ({ limit, offset }) => actions.projects.getManyProjects({ limit, offset }),
-    [actions.projects.getManyProjects]
-  );
-
-  const { items: projects, isFetching, error } = useFetchAll<Project>({ request: requestProjects });
 
   const requestIssueStatuses = useCallback(
     ({ limit, offset }) => actions.issueStatuses.getAll({ limit, offset }),
@@ -55,43 +42,6 @@ const AppView = () => {
   );
 
   useFetchAll<IssueStatus>({ request: requestIssueStatuses });
-
-  const onTrackingStop = ({ issue, recordedTime }: { issue: Issue; recordedTime: number }) => {
-    const existingActivities = _get(projects[issue.project.id], 'activities', []);
-    const hours = parseFloat((recordedTime / 3600000).toFixed(3));
-    setActivities(
-      existingActivities.map(({ id, name }: { id: string; name: string }) => ({
-        value: id,
-        label: name
-      }))
-    );
-    setShowTimeEntryModal(true);
-    setTimeEntry({
-      activity: {},
-      issue: {
-        id: issue.id,
-        name: issue.subject
-      },
-      hours,
-      // duration: hoursToDuration(hours),
-      comments: '',
-      project: {
-        id: issue.project.id,
-        name: issue.project.name
-      },
-      spent_on: moment().format('YYYY-MM-DD'),
-      user: {
-        id: state.users.currentUser?.id,
-        name: `${state.users.currentUser?.firstName} ${state.users.currentUser?.lastName}`
-      }
-    });
-  };
-
-  const closeTimeEntryModal = () => {
-    setShowTimeEntryModal(false);
-    setTimeEntry(null);
-    // resetTimer();
-  };
 
   if (!state.users.currentUser) {
     navigate('../', { replace: true });
@@ -103,20 +53,15 @@ const AppView = () => {
       <DragArea />
       <ModalContextProvider>
         <NavbarContextProvider>
-          <Navbar />
-          <Content>
-            <Routes>
-              <Route path="/" element={<SummaryPage />} />
-              <Route path="/:id" element={<IssueDetailsPage />} />
-            </Routes>
-            <Timer autoStart onStop={onTrackingStop} />
-            <TimeEntryModal
-              isOpen={showTimeEntryModal}
-              activities={activities}
-              timeEntry={timeEntry}
-              onClose={closeTimeEntryModal}
-            />
-          </Content>
+          <TimerContextProvider>
+            <Navbar />
+            <Content>
+              <Routes>
+                <Route path="/" element={<SummaryPage />} />
+                <Route path="/:id" element={<IssueDetailsPage />} />
+              </Routes>
+            </Content>
+          </TimerContextProvider>
         </NavbarContextProvider>
       </ModalContextProvider>
     </Grid>
